@@ -24,6 +24,7 @@ class Award < ApplicationRecord
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
   belongs_to :award_type, touch: true
+  belongs_to :transfer_type, required: true
   belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty

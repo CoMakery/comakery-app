@@ -10,6 +10,10 @@
       <%= button_tag "create a transfer ＋", type: 'button', class: 'transfers-create', data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } %>
     <% end %>
 
+    <% if policy(@project).transfer_types? %>
+      <%= link_to 'manage types', project_dashboard_transfer_types_path(@project), class: 'transfers-manage-types' %>
+    <% end %>
+
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>

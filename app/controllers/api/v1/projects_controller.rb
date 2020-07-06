@@ -12,7 +12,7 @@ class Api::V1::ProjectsController < Api::V1::ApiController
   private
 
     def projects
-      @projects ||= paginate(project_scope.includes(:token, :admins, :account))
+      @projects ||= paginate(project_scope.includes(:token, :admins, :account, :transfer_types))
     end
 
     def project

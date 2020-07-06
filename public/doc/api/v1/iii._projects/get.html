@@ -212,6 +212,14 @@ table th, table td {
               </tr>
               <tr>
                 <td>
+                    <span class="name">transferTypes</span>
+                </td>
+                <td>
+                  <span class="description">array of transfer types</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
                     <span class="name">token[id]</span>
                 </td>
                 <td>
@@ -291,11 +299,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/38?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F38&amp;body[method]=GET&amp;body[nonce]=edff1fcd2230044580ecbb0e2de66a4a&amp;body[timestamp]=1591977971&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=UyP6xBTD4BuMRXxxgykXNuBNRkwpmvpJhkJ9cJK6HFCcYC90jMDGEbehgYlnaFzUmMbw1gg%2B1q%2B5PNknX408Dg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/38?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F38&amp;body[method]=GET&amp;body[nonce]=45d3858cf8b483cffdd18b46b86a0953&amp;body[timestamp]=1594054275&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=WRH7Lg6aU7tCg3LUhPTy5U6aRxU8GkT%2B8WR1NGyj3aH%2BYshH4SMdXuDrjthhjp58MQprTJKxRqmvhGON6gMaBw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/38&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;edff1fcd2230044580ecbb0e2de66a4a&quot;, &quot;timestamp&quot;=&gt;&quot;1591977971&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;UyP6xBTD4BuMRXxxgykXNuBNRkwpmvpJhkJ9cJK6HFCcYC90jMDGEbehgYlnaFzUmMbw1gg+1q+5PNknX408Dg==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/38&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;45d3858cf8b483cffdd18b46b86a0953&quot;, &quot;timestamp&quot;=&gt;&quot;1594054275&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;WRH7Lg6aU7tCg3LUhPTy5U6aRxU8GkT+8WR1NGyj3aH+YshH4SMdXuDrjthhjp58MQprTJKxRqmvhGON6gMaBw==&quot;}</pre>
 
 
 
@@ -303,8 +311,8 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 2
-ETag: W/&quot;279860bb2351b2483e57e8c82cb7e410&quot;
-Last-Modified: Fri, 12 Jun 2020 16:06:11 GMT</pre>
+ETag: W/&quot;78da4db1133f7c657df23b59086690e3&quot;
+Last-Modified: Mon, 06 Jul 2020 16:51:15 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -312,25 +320,43 @@ Last-Modified: Fri, 12 Jun 2020 16:06:11 GMT</pre>
   &quot;id&quot;: 38,
   &quot;title&quot;: &quot;Uber for Cats&quot;,
   &quot;description&quot;: &quot;We are going to build amazing&quot;,
-  &quot;imageUrl&quot;: &quot;/attachments/857bfbed5024e76b30801251f8cb70534b83fe19/store/fill/1000/1000/c0973a11061657bb9ca4bfbedec1078e9ee166fd909fa8bc39f5596dc305/image.png&quot;,
-  &quot;createdAt&quot;: &quot;2020-06-12T16:06:11.149Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-06-12T16:06:11.149Z&quot;,
-  &quot;accountId&quot;: &quot;03dd330b-adde-48f5-a24d-636a4f9da1cc&quot;,
+  &quot;imageUrl&quot;: &quot;/attachments/f097d747749b72c211ee721c0daf0c4574cc0e93/store/fill/1000/1000/2f01a1795f6e50fdf6bd6bb258dc6dd8554cc4ae7e52cc764f4f23a53fa4/image.png&quot;,
+  &quot;createdAt&quot;: &quot;2020-07-06T16:51:15.055Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-07-06T16:51:15.055Z&quot;,
+  &quot;accountId&quot;: &quot;332476bb-7a40-4817-8cf5-9cc101d08cb6&quot;,
   &quot;adminIds&quot;: [
-    &quot;3fdd8d23-2e4c-4e43-bd11-a5d4909f4081&quot;,
-    &quot;388ee2d8-dea4-468f-8b83-1711e2278b9b&quot;,
-    &quot;3e535799-6fd4-473c-8680-980817ab5a6e&quot;
+    &quot;dffba3eb-a446-4f27-b9d7-a4bb516eccd5&quot;,
+    &quot;6802dea4-6a4a-4fd2-a8e3-9919e0cf5057&quot;,
+    &quot;7ee3c020-6595-4585-8b07-3cf74e72ae7d&quot;
+  ],
+  &quot;transferTypes&quot;: [
+    {
+      &quot;id&quot;: 100,
+      &quot;name&quot;: &quot;earned&quot;
+    },
+    {
+      &quot;id&quot;: 101,
+      &quot;name&quot;: &quot;bought&quot;
+    },
+    {
+      &quot;id&quot;: 102,
+      &quot;name&quot;: &quot;mint&quot;
+    },
+    {
+      &quot;id&quot;: 103,
+      &quot;name&quot;: &quot;burn&quot;
+    }
   ],
   &quot;token&quot;: {
     &quot;id&quot;: 49,
-    &quot;name&quot;: &quot;ComakeryToken-d7668962a50f7f67d03b562cf0929bcf86ff6c39&quot;,
-    &quot;symbol&quot;: &quot;XYZ6ab15eda5ec3e5ee09b21debbcee726e533c01bd&quot;,
+    &quot;name&quot;: &quot;ComakeryToken-3daca9a3366a12a09f56c737f9844c1dc9c96404&quot;,
+    &quot;symbol&quot;: &quot;XYZ23b63114a7974400f38c18047e8c028390890011&quot;,
     &quot;network&quot;: &quot;ropsten&quot;,
     &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
     &quot;decimalPlaces&quot;: 18,
-    &quot;logoUrl&quot;: &quot;/attachments/cd3a1972d9bca5d3b86ac70e6fe9d0f9ecf3f718/store/fill/100/100/975f3a63f47dc3bdda50525f8271b3ba0fe9d11b3d4ffc52403943f03e35/dummy_image.png&quot;,
-    &quot;createdAt&quot;: &quot;2020-06-12T16:06:11.059Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-06-12T16:06:11.155Z&quot;
+    &quot;logoUrl&quot;: &quot;/attachments/14d12ebf099c621f5726c713ae292238f60f892b/store/fill/100/100/3e773779663a81357a171ccaac30deea107007f4f44a9874c156b41003c6/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-07-06T16:51:14.918Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-07-06T16:51:15.088Z&quot;
   }
 }</pre>
       </div>

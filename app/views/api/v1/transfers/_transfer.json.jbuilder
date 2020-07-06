@@ -1,7 +1,7 @@
 json.call(
   transfer.decorate,
   :id,
-  :source,
+  :transfer_type_id,
   :amount,
   :quantity,
   :total_amount,

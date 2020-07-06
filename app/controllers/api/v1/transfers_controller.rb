@@ -16,7 +16,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
   def create
     award = project.default_award_type.awards.create(transfer_params)
 
-    award.name = award.source.capitalize
+    award.name = award.transfer_type.name.titlecase
     award.issuer = project.account
     award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer, {}).fetch(:account_id, {}))
     award.status = :accepted
@@ -66,7 +66,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
         :amount,
         :quantity,
         :total_amount,
-        :source,
+        :transfer_type_id,
         :description
       )
     end

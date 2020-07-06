@@ -9,10 +9,10 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
     {
       amount: 2,
       quantity: 2,
-      source: 'bought',
       why: '-',
       description: '-',
       requirements: '-',
+      transfer_type_id: create(:transfer_type, project: project).id.to_s,
       account_id: receiver.to_param
     }
   end
@@ -21,10 +21,10 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
     {
       amount: 2,
       quantity: 2,
-      source: 'bought',
       why: '-',
       description: '-',
       requirements: '-',
+      transfer_type_id: create(:transfer_type, project: project).id.to_s,
       account_id: ''
     }
   end
@@ -56,7 +56,7 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
         end.to change(project.awards, :count).by(1)
 
         award = project.reload.awards.last
-        expect(award.name).to eq('Bought')
+        expect(award.name).to eq(award.transfer_type.name.titlecase)
         expect(award.issuer).to eq(project.account)
         expect(award.status).to eq('accepted')
       end

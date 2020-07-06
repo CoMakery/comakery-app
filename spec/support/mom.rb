@@ -53,6 +53,16 @@ class Mom
     RegGroup.new(defaults.merge(attrs))
   end
 
+  def transfer_type(**attrs)
+    project = attrs[:project] || create(:project)
+
+    defaults = {
+      project: project,
+      name: "Type #{SecureRandom.hex(20)}"
+    }
+    TransferType.new(defaults.merge(attrs))
+  end
+
   def transfer_rule(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
 
@@ -138,6 +148,11 @@ class Mom
   end
 
   def blockchain_transaction__award(**attrs)
+    project = attrs[:award]&.project || create(
+      :project,
+      token: attrs[:token]
+    )
+
     attrs[:award] || create(
       :award,
       amount: attrs[:amount] || 1,
@@ -148,10 +163,11 @@ class Mom
       ),
       award_type: create(
         :award_type,
-        project: create(
-          :project,
-          token: attrs[:token]
-        )
+        project: project
+      ),
+      transfer_type: create(
+        :transfer_type,
+        project: project
       )
     )
   end
@@ -302,6 +318,7 @@ class Mom
     params[:award_type] ||= create(:award_type)
     params[:issuer] ||= create(:account)
     params[:account] ||= create(:account)
+    params[:transfer_type] ||= create(:transfer_type, project: params[:award_type].project)
 
     Award.new(params)
   end
@@ -319,6 +336,7 @@ class Mom
     project = params.delete(:project)
     params[:issuer] ||= create(:account)
     params[:award_type] ||= create(:award_type, project: project)
+    params[:transfer_type] ||= create(:transfer_type, project: params[:award_type].project)
 
     award = Award.new(params)
     award.save!
@@ -344,6 +362,7 @@ class Mom
 
     params[:award_type] ||= create(:award_type, project: create(:project, account: params[:issuer]))
     params[:account] ||= params[:email] ? nil : create(:account)
+    params[:transfer_type] ||= create(:transfer_type, project: params[:award_type].project)
 
     Award.new(params)
   end
@@ -363,6 +382,7 @@ class Mom
     }.merge(attrs)
 
     params[:award_type] ||= create(:project, account: params[:issuer]).default_award_type
+    params[:transfer_type] ||= create(:transfer_type, project: params[:award_type].project)
 
     Award.new(params)
   end

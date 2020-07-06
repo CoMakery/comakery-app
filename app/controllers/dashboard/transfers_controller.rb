@@ -22,7 +22,7 @@ class Dashboard::TransfersController < ApplicationController
     authorize @project, :create_transfer?
 
     @transfer = @award_type.awards.new(transfer_params)
-    @transfer.name = @transfer.source.capitalize
+    @transfer.name = @transfer.transfer_type.name.titlecase
     @transfer.account_id = params[:award][:account_id]
     @transfer.issuer = current_account
     @transfer.status = :accepted
@@ -59,10 +59,10 @@ class Dashboard::TransfersController < ApplicationController
       params.fetch(:award, {}).permit(
         :amount,
         :quantity,
-        :source,
         :why,
         :description,
-        :requirements
+        :requirements,
+        :transfer_type_id
       )
     end
 end
