@@ -46,7 +46,30 @@ We will be using CoMakery to build CoMakery!
 
 Here's where you can connect with the community:
 * Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
-* Create a GitHub issue or comment on one 
+* Create a GitHub issue or comment on one
+
+# Deploying A CoMakery Server
+
+You can deploy the server using the deploy to Heroku Button which relies on the `app.json`. You can also deploy the app using the docker file similarly to the docker development environment setup.
+
+## Deploying to Heroku with app.json
+
+This is useful if you want to create a new environment.
+
+- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+- During setup update API keys and secrets according to environment
+- After deployment manually update formation and addons plans according to environment
+- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
+- Setup DNS and install the following addons for production or staging environments:
+  - https://elements.heroku.com/addons/ssl
+  - https://elements.heroku.com/addons/expeditedssl
+- Update Cloudfront and Airbrake settings
+
+## Basic Auth
+
+Set an environment variable called `BASIC_AUTH` in the format
+`<username>:<password>` (e.g., `chewie:r0000ar`). Basic auth will be enabled if
+that environment variable exists.
 
 # Development Setup
 
@@ -54,7 +77,7 @@ CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and o
   
 ## Configuration
 
-We use environment variables for app "secrets", and values which vary between environments - such as staging and production.
+We use environment variables for app "secrets", and values which vary between environments - such as staging and production. Locally these are stored in a `.env` file at the root of the project. **Don't commit your .env file to any GitHub repository.** On heroku environment variables are defined using [Heroku Config Vars](https://devcenter.heroku.com/articles/config-vars).
 
 ## Local development with Docker
 #### Setup development environment
@@ -76,7 +99,7 @@ $ RAILS_ENV=test bundle exec rspec
 $ NODE_ENV=test yarn test
 ```
 
-## Local development
+## Local Development Without Docker
 
 Prerequisites:
 
@@ -195,9 +218,6 @@ bin/deploy comakery-staging
 
 # deploy the git ref called hot-fix-branch to staging
 bin/deploy comakery-staging hot-fix-branch
-
-# deploy HEAD of current branch to production
-bin/deploy comakery-production
 ```
 
 The `bin/deploy` script does the following:
@@ -227,85 +247,6 @@ rails g data_migration add_this_to_that
 
 More documentation is [here](https://github.com/ilyakatz/data-migrate)
 
-
-## Basic Auth
-
-Set an environment variable called `BASIC_AUTH` in the format
-`<username>:<password>` (e.g., `chewie:r0000ar`). Basic auth will be enabled if
-that environment variable exists.
-
-## Deploying to Heroku with app.json
-
-This is useful if you want to create a new environment.
-
-- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
-- During setup update API keys and secrets according to environment
-- After deployment manually update formation and addons plans according to environment
-- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
-- Setup DNS and install following addons in case of production or staging environment:
-  - https://elements.heroku.com/addons/ssl
-  - https://elements.heroku.com/addons/expeditedssl
-- Update Cloudfront and Airbrake settings
-
-## Sidekiq
-
-Visit <COMAKERY_INSTANCE>/admin/sidekiq
-
-Username admin, password is in heroku app settings
-
-### Clear and regenerate dead sidekiq jobs
-
-If you are getting an out of memory error for Redis. The processed queue can take up a lot of memory. It can be cleared with `Sidekiq::Stats.new.reset`
-
-If the queue gets backed up or the regenerate script starts duplicating jobs, you can clear it out the Sidekiq job queue by running:
-
-```
-Sidekiq::Queue.all.each(&:clear)
-Sidekiq::RetrySet.new.clear
-Sidekiq::ScheduledSet.new.clear
-Sidekiq::Stats.new.reset
-Sidekiq::DeadSet.new.clear
-```
-
-### Redis Configuration On Heroku
-
-You can find the configuration details at the Heroku Overview Redis To Go link. Notice that this is **redis to go** and **NOT Heroku Redis**. This means that Heroku Redis commands will not work.
-
-You might get an error like `Redis::CommandError: OOM command not allowed when used memory > 'maxmemory'.`
-
-To remove old keys you can do the following. Use the correct environment for your needs.
-
-```
-heroku addons -a comakery-staging
-```
-
-You will see something like:
-```
-redistogo (redistogo-spherical-15306)          micro        $5/month   created
- └─ as REDISTOGO
-```
-
-More info with:
-```
-heroku addons:info redistogo-spherical-15306
-```
-
-### Flushing Redis Directly
-
-Hopefully you won't need this...
-
-Consider clearing out the Sidekiq Redis jobs using the `Sidekiq::Queue.all.each(&:clear)` and related Sidekiq methods as described in other sections.
-
-You can connect to Redis To Go CLI with:
-```
-redis-cli -h lab.redistogo.com -p 9968 -a [password]
-```
-
-To flush the old keys
-```
-lab.redistogo.com:9968> flushdb
-```
-
 ## Schema Overview
 
 Mostly up to date partial overview of table relationships.
@@ -318,12 +259,13 @@ Mostly up to date partial overview of table relationships.
 
 ## API documentaion
 
-API documentaion is generated with `rspec_api_documentation` gem from `spec/acceptance/*` specs
+API documentaion is generated with `rspec_api_documentation` gem from [spec/acceptance](./spec/accpetance/) specs
 
-See `config/initializers/rspec_api.rb` for configuration
+See [config/initializers/rspec_api.rb](./config/initializers/rspec_api.rb) for configuration
 
-Generated HTML is located in `/public/doc/api` directory and accessible on `https://www.comakery.com/doc/api/index.html` 
+Generated HTML is located in `/public/doc/api` directory and accessible on https://www.comakery.com/doc/api/v1/index.html
 
+You can generate the docs with
 ```
 rails docs:generate
 ```
