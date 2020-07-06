@@ -203,12 +203,12 @@ Run Rubocop Ruby code metrics with: `bin/rubocop`
 * Develop your code locally in a git feature branch
 * `bin/shipit` to git push your branch to GitHub *only if tests and quality checks pass*. This runs the same checks that CircleCI will run after you push your code to GitHub.
 * On GitHub, create a pull request from your feature Branch to the `acceptance` branch
-* Get your code reviewed by at least one person
-* Merge your PR to `acceptance`
-* Code merged to `acceptance` is automatically deployed to `demo.comakery.com` on Heroku for QA
-* Once code is tested it is manually merged to `master`
-* If CI passes on master, master is manually deployed to `staging.comakery.com` on Heroku
-* If the code looks good on staging then it is manually deployed to `www.comakery.com` on Heroku
+* Get your code reviewed by at least one CoMakery person
+* Noah <@aquabu> will do a final review and merge your PR to `acceptance`
+* Code merged to `acceptance` is automatically deployed to `demo.comakery.com` for QA
+* Once code is tested by CoMakery's QA team it is manually merged to `master`
+* If CI passes on master, master is manually deployed to `staging.comakery.com` for final review
+* If the code looks good on staging then it is manually deployed to `www.comakery.com`
 
 ## Deploying to Heroku Environments
 
