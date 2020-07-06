@@ -48,7 +48,7 @@ Here's where you can connect with the community:
 * Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
 * Create a GitHub issue or comment on one
 
-# Deploying A CoMakery Server
+# Deploying CoMakery Server
 
 You can deploy the server using the deploy to Heroku Button which relies on the `app.json`. You can also deploy the app using the docker file similarly to the docker development environment setup.
 
