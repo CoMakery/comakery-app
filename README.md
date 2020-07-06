@@ -1,6 +1,6 @@
 [![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
 
-## CoMakery helps you gather a tribe to achieve big missions. 
+## CoMakery Helps You Gather a Tribe To Achieve Big Missions. 
 
 To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
 
