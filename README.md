@@ -52,6 +52,10 @@ Here's where you can connect with the community:
 
 You can deploy the server using the deploy to Heroku Button which relies on the `app.json`. You can also deploy the app using the docker file similarly to the docker development environment setup.
 
+## What Branch Should I Deploy From?
+
+You should deploy from the `master` branch. New code is merged into the `acceptance` branch for QA checks before getting merged into `master`.
+
 ## Deploying to Heroku with app.json
 
 This is useful if you want to create a new environment.
