@@ -5,7 +5,7 @@ class BlockchainTransactionAward < BlockchainTransaction
 
   def on_chain
     @on_chain ||= if token.coin_type_token?
-      case blockchain_transactable.source
+      case blockchain_transactable.transfer_type.name
       when 'mint'
         Comakery::Eth::Tx::Erc20::Mint.new(network, tx_hash)
       when 'burn'

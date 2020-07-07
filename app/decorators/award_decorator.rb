@@ -120,7 +120,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def transfer_button_text
-    case source
+    case transfer_type.name
     when 'mint'
       'Mint'
     when 'burn'
@@ -131,11 +131,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def pay_data
-    case source
+    case transfer_type.name
     when 'mint'
-      stimulus_data('comakery-security-token', 'mint')
+      stimulus_data('ethereum', 'mint')
     when 'burn'
-      stimulus_data('comakery-security-token', 'burn')
+      stimulus_data('ethereum', 'burn')
     else
       stimulus_data('ethereum', 'pay')
     end

@@ -14,6 +14,18 @@ export default class extends Controller {
     this._createTransaction()
   }
 
+  async mint() {
+    await this._initialize()
+
+    this._createTransaction('mint')
+  }
+
+  async burn() {
+    await this._initialize()
+
+    this._createTransaction('burn')
+  }
+
   async _initialize() {
     this._markButtonAsCreating()
 

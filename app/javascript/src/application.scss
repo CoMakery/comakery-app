@@ -942,6 +942,25 @@ button.reg-groups-create {
   }
 }
 
+.transfers-manage-types {
+  margin-bottom: 1.5em;
+  border-radius: 6px;
+  border: solid 1px #e6e8ed;
+  height: 35px;
+  padding: 9px 16px 8px 15px;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  background-color: #1560fa;
+  color: white;
+  font-weight: 600;
+  -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+  text-transform: uppercase;
+  margin-right: 15px;
+  min-width: 90px;
+  outline: none;
+}
+
 .transfers-table {
   display: flex;
   flex-direction: column;
@@ -1218,6 +1237,8 @@ button.reg-groups-create {
     }
 
     .transfers-table__transfer__name {
+      min-width: 180px;
+
       h3 {
         margin: 0;
         font-weight: 600;
@@ -1228,7 +1249,6 @@ button.reg-groups-create {
           word-break: break-word;
         }
       }
-      min-width: 180px;
     }
 
     .transfers-table__transfer__trid {

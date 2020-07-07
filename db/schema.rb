@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_08_140014) do
+ActiveRecord::Schema.define(version: 2020_07_03_123516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,10 +194,12 @@ ActiveRecord::Schema.define(version: 2020_06_08_140014) do
     t.integer "source", default: 0
     t.boolean "ethereum_transaction_success"
     t.string "ethereum_transaction_error"
+    t.bigint "transfer_type_id"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
+    t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
   end
 
   create_table "blockchain_transaction_updates", force: :cascade do |t|
@@ -465,6 +467,15 @@ ActiveRecord::Schema.define(version: 2020_06_08_140014) do
     t.index ["token_id"], name: "index_transfer_rules_on_token_id"
   end
 
+  create_table "transfer_types", force: :cascade do |t|
+    t.bigint "project_id"
+    t.string "name"
+    t.boolean "default", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_transfer_types_on_project_id"
+  end
+
   create_table "unsubscriptions", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
@@ -489,6 +500,7 @@ ActiveRecord::Schema.define(version: 2020_06_08_140014) do
   add_foreign_key "account_token_records", "tokens"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "awards", "specialties"
+  add_foreign_key "awards", "transfer_types"
   add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
   add_foreign_key "blockchain_transactions", "awards"
   add_foreign_key "blockchain_transactions", "tokens"
@@ -498,5 +510,6 @@ ActiveRecord::Schema.define(version: 2020_06_08_140014) do
   add_foreign_key "projects", "tokens"
   add_foreign_key "reg_groups", "tokens"
   add_foreign_key "transfer_rules", "tokens"
+  add_foreign_key "transfer_types", "projects"
   add_foreign_key "verifications", "accounts"
 end

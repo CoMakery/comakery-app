@@ -293,12 +293,12 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_stacked_chart' do
-    let!(:project) { create :project }
+    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
 
     before do
-      create(:award, amount: 1, source: :mint, award_type: create(:award_type, project: project))
-      create(:award, amount: 2, source: :mint, award_type: create(:award_type, project: project))
-      create(:award, amount: 5, source: :burn, award_type: create(:award_type, project: project))
+      create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 2, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 5, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project))
     end
 
     it 'sums awards by timeframe' do
@@ -314,15 +314,15 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_donut_chart' do
-    let!(:project) { create :project }
+    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
 
     before do
-      create(:award, amount: 1, source: :mint, award_type: create(:award_type, project: project))
-      create(:award, amount: 2, source: :mint, award_type: create(:award_type, project: project))
-      create(:award, amount: 5, source: :burn, award_type: create(:award_type, project: project))
+      create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 2, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 5, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project))
     end
 
-    it 'sums awards by source' do
+    it 'sums awards by type' do
       r = project.decorate.transfers_donut_chart(project.awards.completed)
       expect(r.find { |x| x[:name] == 'mint' }[:value]).to eq(3)
       expect(r.find { |x| x[:name] == 'burn' }[:value]).to eq(5)

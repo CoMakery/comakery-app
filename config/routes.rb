@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       resources :transfers, only: [:index, :show, :create]
       resources :accounts, only: [:index, :update]
       resources :reg_groups, only: [:create, :update, :destroy]
+      resources :transfer_types, only: [:index, :create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
         collection do
           post :pause

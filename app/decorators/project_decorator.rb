@@ -158,14 +158,14 @@ class ProjectDecorator < Draper::Decorator
     helpers.attachment_url(self, :square_image, :fill, size, size, fallback: 'defaul_project.jpg')
   end
 
-  def transfers_chart_sources
-    Award.sources.keys.map { |k| [k, 0] }.to_h
+  def transfers_chart_types
+    project.transfer_types.pluck(:name).map { |k| [k, 0] }.to_h
   end
 
   def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty)
-    chart = transfers.where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
-      transfers_chart_sources.merge(
-        set.group_by(&:source).map { |k, v| [k, v.sum(&:total_amount)] }.to_h.merge(
+    chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
+      transfers_chart_types.merge(
+        set.group_by(&:transfer_type).map { |k, v| [k.name, v.sum(&:total_amount)] }.to_h.merge(
           timeframe: timeframe.strftime(date_modifier),
           i: timeframe.to_i
         )
@@ -181,7 +181,7 @@ class ProjectDecorator < Draper::Decorator
       10.years.ago,
       :beginning_of_year,
       '%Y',
-      (10.years.ago.year..Time.current.year).map { |k| transfers_chart_sources.merge(timeframe: k.to_s, i: DateTime.strptime(k.to_s, '%Y').to_i) }
+      (10.years.ago.year..Time.current.year).map { |k| transfers_chart_types.merge(timeframe: k.to_s, i: DateTime.strptime(k.to_s, '%Y').to_i) }
     )
   end
 
@@ -191,7 +191,7 @@ class ProjectDecorator < Draper::Decorator
       1.year.ago,
       :beginning_of_month,
       "%b%t'%y",
-      (1.year.ago.beginning_of_month.to_date..Time.current.to_date).select { |d| d.day == 1 }.map { |k| transfers_chart_sources.merge(timeframe: k.strftime("%b%t'%y"), i: k.to_time.to_i) }
+      (1.year.ago.beginning_of_month.to_date..Time.current.to_date).select { |d| d.day == 1 }.map { |k| transfers_chart_types.merge(timeframe: k.strftime("%b%t'%y"), i: k.to_time.to_i) }
     )
   end
 
@@ -201,7 +201,7 @@ class ProjectDecorator < Draper::Decorator
       12.weeks.ago,
       :beginning_of_week,
       '%d%t%b',
-      (12.weeks.ago.beginning_of_week.to_date..Time.current.to_date).each_slice(7).map { |k| transfers_chart_sources.merge(timeframe: k.first.strftime('%d%t%b'), i: k.first.to_time.to_i) }
+      (12.weeks.ago.beginning_of_week.to_date..Time.current.to_date).each_slice(7).map { |k| transfers_chart_types.merge(timeframe: k.first.strftime('%d%t%b'), i: k.first.to_time.to_i) }
     )
   end
 
@@ -211,21 +211,21 @@ class ProjectDecorator < Draper::Decorator
       1.week.ago,
       :beginning_of_day,
       '%a',
-      (1.week.ago.to_date..Time.current.to_date).map { |k| transfers_chart_sources.merge(timeframe: k.strftime('%a'), i: k.to_time.to_i) }
+      (1.week.ago.to_date..Time.current.to_date).map { |k| transfers_chart_types.merge(timeframe: k.strftime('%a'), i: k.to_time.to_i) }
     )
   end
 
   def transfers_donut_chart(transfers)
-    chart = transfers.group_by(&:source).map do |source, set|
+    chart = transfers.includes([:transfer_type]).group_by(&:transfer_type).map do |type, set|
       {
-        name: source,
+        name: type.name,
         value: set.sum(&:total_amount),
         ratio: (set.sum(&:total_amount) / transfers.sum(&:total_amount)).round(2)
       }
     end
 
     chart.concat(
-      transfers_chart_sources.map do |k, _|
+      transfers_chart_types.map do |k, _|
         {
           name: k,
           value: 0,

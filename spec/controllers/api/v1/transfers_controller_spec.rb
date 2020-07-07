@@ -10,8 +10,8 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
       amount: '10.00',
       quantity: '2.00',
       total_amount: '20.00',
-      source: 'bought',
       description: 'investor',
+      transfer_type_id: create(:transfer_type, project: project).id.to_s,
       account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
     }
   end

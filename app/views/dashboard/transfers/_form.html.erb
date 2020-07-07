@@ -5,13 +5,7 @@
     <div class="transfers-table__transfer__name">
       <label>type</label>
 
-      <% if @project.supports_transfer_rules? %>
-        <% options = [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought'], ['Mint Tokens To', 'mint'], ['Burn Tokens From', 'burn']] %>
-      <% else %>
-        <% options = [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought']] %>
-      <% end %>
-
-      <%= f.select(:source, options, required: true) %>
+      <%= f.select(:transfer_type_id, options_for_select(@project.transfer_types.collect { |t| [t.name.titlecase, t.id] }), required: true) %>
     </div>
 
     <div class="transfers-table__transfer__account">

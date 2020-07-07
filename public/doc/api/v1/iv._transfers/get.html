@@ -212,6 +212,14 @@ table th, table td {
               </tr>
               <tr>
                 <td>
+                    <span class="name">transferTypeId</span>
+                </td>
+                <td>
+                  <span class="description">transfer type id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
                     <span class="name">ethereumTransactionAddress</span>
                 </td>
                 <td>
@@ -259,24 +267,24 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/41/transfers/8?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F41%2Ftransfers%2F8&amp;body[method]=GET&amp;body[nonce]=3b9ee0eaae72f6e2ee8f780e69491a42&amp;body[timestamp]=1591977972&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=j%2FYM%2FIZlgwazj6zfY8Sfu0JKRkm6CmGC45akkunsPxt7F1Jd6IsVWnVZ101NhGyX%2FlsI2Yn7fLs5WBCo131lAg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/41/transfers/8?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F41%2Ftransfers%2F8&amp;body[method]=GET&amp;body[nonce]=6c43114aa2c0f0f288c73e273e7d9b33&amp;body[timestamp]=1594054280&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=m%2Bndvt9PWZt4c7GmbUYi6EKIHNg9to7ZP%2BSOF4OrQfPqyqx1PNCLWtynmKv%2BynJYPEe2IO2rbyPpdaFFo4zuAg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/41/transfers/8&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;3b9ee0eaae72f6e2ee8f780e69491a42&quot;, &quot;timestamp&quot;=&gt;&quot;1591977972&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;j/YM/IZlgwazj6zfY8Sfu0JKRkm6CmGC45akkunsPxt7F1Jd6IsVWnVZ101NhGyX/lsI2Yn7fLs5WBCo131lAg==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/41/transfers/8&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;6c43114aa2c0f0f288c73e273e7d9b33&quot;, &quot;timestamp&quot;=&gt;&quot;1594054280&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;m+ndvt9PWZt4c7GmbUYi6EKIHNg9to7ZP+SOF4OrQfPqyqx1PNCLWtynmKv+ynJYPEe2IO2rbyPpdaFFo4zuAg==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;2ea4920121f5691ebd6fb915840b14be&quot;
-Last-Modified: Fri, 12 Jun 2020 16:06:12 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;6f7819e343e2c0f16796a62efed3889e&quot;
+Last-Modified: Mon, 06 Jul 2020 16:51:19 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: 8,
-  &quot;source&quot;: &quot;bought&quot;,
+  &quot;transferTypeId&quot;: 116,
   &quot;amount&quot;: &quot;50.0&quot;,
   &quot;quantity&quot;: &quot;1.0&quot;,
   &quot;totalAmount&quot;: &quot;50.0&quot;,
@@ -284,9 +292,9 @@ Last-Modified: Fri, 12 Jun 2020 16:06:12 GMT</pre>
   &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
   &quot;ethereumTransactionError&quot;: null,
   &quot;status&quot;: &quot;paid&quot;,
-  &quot;createdAt&quot;: &quot;2020-06-12T16:06:12.230Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-06-12T16:06:12.219Z&quot;,
-  &quot;accountId&quot;: &quot;08d8cebd-11c9-4331-b3c2-4fe866590dca&quot;
+  &quot;createdAt&quot;: &quot;2020-07-06T16:51:19.783Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-07-06T16:51:19.724Z&quot;,
+  &quot;accountId&quot;: &quot;e261ace6-38c8-4e33-bd8e-336fc341b1b6&quot;
 }</pre>
       </div>
     </div>

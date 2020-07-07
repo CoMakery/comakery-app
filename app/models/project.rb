@@ -16,6 +16,7 @@ class Project < ApplicationRecord
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
 
+  has_many :transfer_types, dependent: :destroy
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :ready_award_types, -> { where state: 'public' }, source: :award_types, class_name: 'AwardType'
   has_many :awards, through: :award_types, dependent: :destroy
@@ -50,6 +51,7 @@ class Project < ApplicationRecord
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
   after_create :add_owner_as_interested
+  after_create :create_default_transfer_types
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -212,6 +214,10 @@ class Project < ApplicationRecord
 
   def supports_transfer_rules?
     token&.coin_type_comakery?
+  end
+
+  def create_default_transfer_types
+    TransferType.create_defaults_for(self)
   end
 
   private

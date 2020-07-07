@@ -51,6 +51,7 @@ resource 'IV. Transfers' do
       response_field :totalAmount, 'transfer total amount', type: :string
       response_field :description, 'transfer description', type: :string
       response_field :accountId, 'transfer account id', type: :string
+      response_field :transferTypeId, 'transfer type id', type: :string
       response_field :ethereumTransactionAddress, 'transfer ethereum transaction address', type: :string
       response_field :ethereumTransactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
       response_field :status, 'transfer status (accepted paid cancelled)', type: :string
@@ -87,6 +88,7 @@ resource 'IV. Transfers' do
       parameter :quantity, 'transfer quantity (2 decimals)', required: true, type: :string
       parameter :total_amount, 'transfer total_amount (amount times quantity, same decimals as token)', required: true, type: :string
       parameter :account_id, 'transfer account id', required: true, type: :string
+      parameter :transfer_type_id, 'transfer type id', required: true, type: :string
       parameter :description, 'transfer description', type: :string
     end
 
@@ -98,8 +100,8 @@ resource 'IV. Transfers' do
           amount: '1000.00000000',
           quantity: '2.00',
           total_amount: '2000.00000000',
-          source: 'bought',
           description: 'investor',
+          transfer_type_id: create(:transfer_type, project: project).id.to_s,
           account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
         }
       end

@@ -1,0 +1,21 @@
+<div class="reg-groups__groups__group" data-controller="reg-group-edit-form">
+  <h4 data-target="reg-group-edit-form.show"><%= transfer_type.name %></h4>
+
+  <% if transfer_type.default? %>
+    <span data-target="reg-group-edit-form.show">(Default)</span>
+  <% else %>
+    <%= image_tag 'pencil.svg', size: "14x14", alt: "edit type", data: {target: 'reg-group-edit-form.show', action: 'click->reg-group-edit-form#showForm'} %>
+  <% end %>
+
+  <%= form_with model: transfer_type, url: project_dashboard_transfer_type_path(project_id: @project.id, id: transfer_type.id), class: 'reg-groups__form reg-groups__form--edit hidden', data: { target: 'reg-group-edit-form.form' } do |f| %>
+    <%= f.text_field(:name, required: true, placeholder: 'Name') %>
+    <%= f.submit('save', data: {confirm: 'Update type?'}) %>
+    <%= button_tag "cancel", type: 'button', data: {action: 'reg-group-edit-form#hideForm'} %>
+  <% end %>
+
+  <% unless transfer_type.default? %>
+    <%= link_to(project_dashboard_transfer_type_path(project_id: @project.id, id: transfer_type.id), method: :delete, data: {confirm: "Remove #{transfer_type.name} type?", target: 'reg-group-edit-form.show'} ) do %>
+      <%= image_pack_tag 'media/src/images/styleguide/icons/iconTrash.svg', size: "14x14", alt: "remove type" %>
+    <% end %>
+  <% end %>
+</div>
