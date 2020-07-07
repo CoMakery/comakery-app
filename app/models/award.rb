@@ -69,6 +69,7 @@ class Award < ApplicationRecord
   before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
   before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
   before_validation :set_transferred_at, if: -> { status == 'paid' && transferred_at.nil? }
+  before_validation :set_default_transfer_type
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
   after_save :add_account_as_interested, if: -> { account }
@@ -388,6 +389,10 @@ class Award < ApplicationRecord
     def set_transferred_at
       self.updated_at = Time.current
       self.transferred_at = updated_at
+    end
+
+    def set_default_transfer_type
+      self.transfer_type ||= project&.transfer_types&.find_by(name: 'earned')
     end
 
     def cancellation
