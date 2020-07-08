@@ -10,8 +10,8 @@ To achieve your big mission you need to bring people together around a common vi
 * [Join the CoMakery Community](https://www.comakery.com) - follow some projects, get to know us.
 * [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
 * [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
-* [The CoMakery REST API](https://www.comakery.com/doc/api/index.html)
-* [CoMakery Security Token (Open Source ERC-1404)](https://github.com/CoMakery/comakery-security-token)
+* [The CoMakery REST API](https://www.comakery.com/doc/api/v1/index.html)
+* [CoMakery Security Token (Open Source MIT Licensed ERC-1404)](https://github.com/CoMakery/comakery-security-token)
 * [Setting up the CoMakery platform development environment](#development-setup) 
 
 ## Try Out CoMakery
