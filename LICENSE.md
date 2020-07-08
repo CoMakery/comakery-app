@@ -1,8 +1,8 @@
 # Noncommercial Nonviolent Public License 1.0
 
-Contributor: $name
+Contributor: CoMakery, Inc.
 
-Source Code: $address
+Source Code: https://github.com/CoMakery/comakery-server
 
 ## Purpose
 
