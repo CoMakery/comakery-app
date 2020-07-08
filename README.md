@@ -8,6 +8,7 @@ To achieve your big mission you need to bring people together around a common vi
 
 ## Getting Started
 * [Join the CoMakery Community](https://www.comakery.com) - follow some projects, get to know us.
+* [Join the CoMakery Forum](https://forum.comakery.com) - chat with the CoMakery community
 * [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
 * [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
 * [The CoMakery REST API](https://www.comakery.com/doc/api/v1/index.html)
@@ -42,6 +43,8 @@ If you need help customizing the software get in touch with CoMakery about custo
 
 There's no restriction on receiving money to improve the software. If you are a software developer or software development company we look forward to improving the platform and serving the community with you.
 
+Chat with us on the [CoMakery Forum](https://forum.comakery.com) about features and improvements.
+
 ## Get Involved
 
 We will be using CoMakery to build CoMakery! 
@@ -49,6 +52,7 @@ We will be using CoMakery to build CoMakery!
 Here's where you can connect with the community:
 * Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
 * Create a GitHub issue or comment on one
+* Chat with us on the [CoMakery Forum](https://forum.comakery.com)
 
 # Deploying CoMakery Server
 
