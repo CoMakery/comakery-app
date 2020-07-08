@@ -7,7 +7,7 @@
   data-transfers-chart-stacked-chart-data-month=<%= @project.transfers_stacked_chart_month(@transfers_all).to_json %>
   data-transfers-chart-stacked-chart-data-year=<%= @project.transfers_stacked_chart_year(@transfers_all).to_json %>
   data-transfers-chart-donut-chart-data=<%= @project.transfers_donut_chart(@transfers_all).to_json %>
-  data-transfers-chart-token-symbol=<%= @project.token.symbol %>
+  data-transfers-chart-token-symbol=<%= @project.token&.symbol %>
 >
   <h2>transfer types</h2>
   

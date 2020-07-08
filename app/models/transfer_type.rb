@@ -1,6 +1,6 @@
 class TransferType < ApplicationRecord
   belongs_to :project
-  has_many :transfers, class_name: 'Award'
+  has_many :transfers, class_name: 'Award', dependent: :restrict_with_error
 
   validates :name, uniqueness: { scope: :project_id, case_sensitive: false }
 
