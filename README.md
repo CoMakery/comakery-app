@@ -26,17 +26,19 @@ Our [license](LICENSE.md) allows you to use and share this software for noncomme
 
 If you are a company [our license](LICENSE.md) allows you to use this software for free for thirty days.
 
-Get in touch with CoMakery at [license@comakery.com](mailto:license@comakery.com) about: 
+Get in touch with CoMakery at [support@comakery.com](mailto:support@comakery.com) about: 
 * A commercial license for self-hosting
+* Customization of the software for your community
 * White label hosting
-* Platform customization
 * Coop & L3C license discount
 
 Your payments help support the philanthropic organizations who use the platform for free.
 
 ## Improving The Software
 
-You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to. 
+You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to.
+
+If you need help customizing the software get in touch with CoMakery about customization services: [support@comakery.com](mailto:support@comakery.com)
 
 There's no restriction on receiving money to improve the software. If you are a software developer or software development company we look forward to improving the platform and serving the community with you.
 
