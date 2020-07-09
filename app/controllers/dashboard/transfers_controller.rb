@@ -39,6 +39,7 @@ class Dashboard::TransfersController < ApplicationController
     def set_transfers
       @page = (params[:page] || 1).to_i
       @q = @project.awards.completed.ransack(params[:q])
+      @q.sorts = ['created_at desc'] if @q.sorts.empty?
       @transfers_all = @q.result.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
       @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
