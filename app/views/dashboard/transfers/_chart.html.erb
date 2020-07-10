@@ -1,13 +1,14 @@
 <div
   class="transfers-chart transfers-filters"
   data-controller="transfers-chart"
-  data-transfers-chart-stacked-chart-scale-x="Day"
+  data-transfers-chart-stacked-chart-scale-x="Year"
   data-transfers-chart-stacked-chart-data-day=<%= @project.transfers_stacked_chart_day(@transfers_all).to_json %>
   data-transfers-chart-stacked-chart-data-week=<%= @project.transfers_stacked_chart_week(@transfers_all).to_json %>
   data-transfers-chart-stacked-chart-data-month=<%= @project.transfers_stacked_chart_month(@transfers_all).to_json %>
   data-transfers-chart-stacked-chart-data-year=<%= @project.transfers_stacked_chart_year(@transfers_all).to_json %>
   data-transfers-chart-donut-chart-data=<%= @project.transfers_donut_chart(@transfers_all).to_json %>
   data-transfers-chart-token-symbol=<%= @project.token&.symbol %>
+  data-transfers-chart-total=<%= @transfers_all.sum(&:total_amount) %>
 >
   <h2>transfer types</h2>
   
@@ -21,21 +22,11 @@
             data-target="transfers-chart.scales"
             data-action="click->transfers-chart#setStackedChartScaleX"
             data-scale-x="<%= scale_x %>"
-            class=<%= scale_x == 'Day' ? 'transfers-filters--filter--options__active' : nil %>
+            class=<%= scale_x == 'Year' ? 'transfers-filters--filter--options__active' : nil %>
           >
             <%= scale_x %>
           </div>
         <% end %>
-      </div>
-    </div>
-
-    <div class="transfers-filters--filter">
-      <h3>Total tokens transferred</h3>
-
-      <div class="transfers-filters--filter--options">
-        <div class="transfers-filters--filter--options__active">
-          <%= @transfers_all.sum(&:total_amount) %>
-        </div>
       </div>
     </div>
     

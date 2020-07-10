@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = [ 'scales' ]
 
   get stackedChartData() {
-    return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Day'}`))
+    return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}`))
   }
 
   get donutChartData() {
@@ -80,13 +80,22 @@ export default class extends Controller {
 
     const arcs = pie(data)
 
-    let tooltip = svg.append('text')
+    let tooltipFirst = svg.append('text')
       .attr('x', 0)
-      .attr('y', 5)
+      .attr('y', 0)
       .attr('font-weight', '500')
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
+      .attr('class', 'tooltip-first')
       .text('Total')
+
+    let tooltipSecond = svg.append('text')
+      .attr('x', 0)
+      .attr('y', 20)
+      .attr('font-weight', '500')
+      .attr('fill', '#3a3a3a')
+      .attr('text-anchor', 'middle')
+      .text(this.data.get('total') + ' ' + this.data.get('tokenSymbol'))
 
     svg.selectAll('path')
       .data(arcs)
@@ -94,16 +103,18 @@ export default class extends Controller {
         .attr('fill', d => color(d.data.name))
         .attr('d', arc)
         .on('mouseover', function(d) {
-          tooltip.text(d.data.name + ' ' + (d.data.ratio !== 0 ? d.data.ratio * 100 : '< 1') + '% – ' + d.data.value)
+          tooltipFirst.text(d.data.name + ' – ' + (d.data.ratio !== 0 ? d.data.ratio * 100 : '< 1') + '%')
+          tooltipSecond.text(d.data.value + ' ' + this.data.get('tokenSymbol'))
           d3.select(d3.event.target)
             .style('stroke', '#e6e8ed')
             .style('stroke-width', '3px')
-        })
+        }.bind(this))
         .on('mouseout', function() {
-          tooltip.text('Total')
+          tooltipFirst.text('Total')
+          tooltipSecond.text(this.data.get('total') + ' ' + this.data.get('tokenSymbol'))
           d3.select(d3.event.target)
             .style('stroke', 'none')
-        })
+        }.bind(this))
   }
 
   // Extracted from: https://observablehq.com/@d3/stacked-bar-chart
