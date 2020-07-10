@@ -74,6 +74,8 @@ export default class extends Controller {
       .range(d3.quantize(t => d3.interpolateViridis(t * 0.8 + 0.1), data.length).reverse())
       .unknown('#ccc')
 
+    color = d3.scaleOrdinal().range(window.chartColors)
+
     const radius = Math.min(width, height) / 2
 
     let arc = d3.arc().innerRadius(radius * 0.67).outerRadius(radius - 1)
@@ -86,7 +88,6 @@ export default class extends Controller {
       .attr('font-weight', '500')
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
-      .attr('class', 'tooltip-first')
       .text('Total')
 
     let tooltipSecond = svg.append('text')
@@ -95,6 +96,7 @@ export default class extends Controller {
       .attr('font-weight', '500')
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
+      .attr('class', 'tooltip-second')
       .text(this.data.get('total') + ' ' + this.data.get('tokenSymbol'))
 
     svg.selectAll('path')
@@ -150,6 +152,8 @@ export default class extends Controller {
       .domain(series.map(d => d.key))
       .range(d3.quantize(t => d3.interpolateViridis(t * 0.8 + 0.1), series.length).reverse())
       .unknown('#ccc')
+
+    color = d3.scaleOrdinal().range(window.chartColors)
 
     let y = d3.scaleLinear()
       .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
