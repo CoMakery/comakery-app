@@ -303,13 +303,13 @@ describe ProjectDecorator do
 
     it 'sums awards by timeframe' do
       r = project.decorate.transfers_stacked_chart_day(project.awards.completed)
-      expect(r.first['mint']).to eq(3)
-      expect(r.first['burn']).to eq(5)
+      expect(r.last['mint']).to eq(3)
+      expect(r.last['burn']).to eq(5)
     end
 
     it 'sets defaults' do
       r = project.decorate.transfers_stacked_chart_day(project.awards.completed)
-      expect(r.first['earned']).to eq(0)
+      expect(r.last['earned']).to eq(0)
     end
   end
 

@@ -32,6 +32,10 @@
   <% end %>
 
   <div class="transfers-table__transfer__transferred_at">
-    <%= sort_link(@q, :transferred_at, 'transferred at') %>
+    <%= sort_link(@q, :transferred_at, 'transferred') %>
+  </div>
+
+  <div class="transfers-table__transfer__transferred_at">
+    <%= sort_link(@q, :created_at, 'created') %>
   </div>
 </div>

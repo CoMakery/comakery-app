@@ -636,6 +636,7 @@ form.form-with-submit-button {
   flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: 7em;
+  max-width: 1440px;
 
   h2 {
     font-size: 16px;
@@ -703,6 +704,10 @@ form.form-with-submit-button {
       text-transform: capitalize;
       font-weight: 500;
       opacity: 0.75;
+    }
+
+    text.tooltip-second {
+      font-weight: 600;
     }
   }
 
@@ -1237,7 +1242,7 @@ button.reg-groups-create {
     }
 
     .transfers-table__transfer__name {
-      min-width: 180px;
+      min-width: 130px;
 
       h3 {
         margin: 0;

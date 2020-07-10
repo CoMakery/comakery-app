@@ -172,7 +172,7 @@ class ProjectDecorator < Draper::Decorator
       )
     end
 
-    chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| -x[:i] }
+    chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| x[:i] }
   end
 
   def transfers_stacked_chart_year(transfers)

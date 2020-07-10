@@ -36,10 +36,15 @@ class Dashboard::TransfersController < ApplicationController
 
   private
 
+    def query
+      @q = @project.awards.completed.ransack(params[:q])
+      @q.sorts = ['created_at desc'] if @q.sorts.empty?
+      @q
+    end
+
     def set_transfers
       @page = (params[:page] || 1).to_i
-      @q = @project.awards.completed.ransack(params[:q])
-      @transfers_all = @q.result.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
+      @transfers_all = query.result.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
       @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @transfers.out_of_range?
