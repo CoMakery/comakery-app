@@ -9,6 +9,7 @@
   data-transfers-chart-donut-chart-data=<%= @project.transfers_donut_chart(@transfers_all).to_json %>
   data-transfers-chart-token-symbol=<%= @project.token&.symbol %>
   data-transfers-chart-total=<%= @transfers_all.sum(&:total_amount) %>
+  data-transfers-chart-colors=<%= @project.transfers_chart_colors.to_json %>
 >
   <h2>transfer types</h2>
   
@@ -33,7 +34,14 @@
     <div class="transfers-filters--filter">
       <h3>Types</h3>
       
-      <svg id="stacked-chart-legend"></svg>
+      <div class="stacked-chart-legend">
+        <% @project.transfers_chart_colors.each do |type, color| %>
+          <div class="stacked-chart-legend__type">
+            <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
+            <div class="stacked-chart-legend__type__name"><%= type %></div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 
