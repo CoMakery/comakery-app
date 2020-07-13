@@ -20,6 +20,12 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
         }
 
         { !isWhitelabel &&
+          <a href="https://forum.comakery.com" target="_blank">
+            Forum
+          </a>
+        }
+
+        { !isWhitelabel &&
           <a href="https://ledger.comakery.com" target="_blank">
             Blog
           </a>
@@ -74,6 +80,12 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
         { !isWhitelabel &&
           <a href="/tasks" className={currentPath.match(/\/tasks/) ? 'header--nav--links--current' : null}>
             My Tasks
+          </a>
+        }
+
+        { !isWhitelabel &&
+          <a href="https://forum.comakery.com" target="_blank">
+            Forum
           </a>
         }
 
