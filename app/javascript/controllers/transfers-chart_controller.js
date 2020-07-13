@@ -2,14 +2,30 @@ import { Controller } from 'stimulus'
 import * as d3 from 'd3'
 
 export default class extends Controller {
-  static targets = [ 'scales' ]
+  static targets = [ 'scales', 'statuses' ]
 
   get stackedChartData() {
-    return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}`))
+    if (this.data.get('dataStatus') === 'Transferred') {
+      return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}Paid`))
+    } else {
+      return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}`))
+    }
   }
 
   get donutChartData() {
-    return JSON.parse(this.data.get('donutChartData'))
+    if (this.data.get('dataStatus') === 'Transferred') {
+      return JSON.parse(this.data.get('donutChartDataPaid'))
+    } else {
+      return JSON.parse(this.data.get('donutChartData'))
+    }
+  }
+
+  get total() {
+    if (this.data.get('dataStatus') === 'Transferred') {
+      return JSON.parse(this.data.get('totalPaid'))
+    } else {
+      return JSON.parse(this.data.get('total'))
+    }
   }
 
   get colors() {
@@ -55,6 +71,18 @@ export default class extends Controller {
     this.drawStackedChart()
   }
 
+  setDataStatus(e) {
+    this.data.set('dataStatus', e.target.dataset.status)
+
+    this.statusesTargets.forEach((e) => {
+      e.classList.remove('transfers-filters--filter--options__active')
+    })
+    e.target.classList.add('transfers-filters--filter--options__active')
+
+    this.drawStackedChart()
+    this.drawDonutChart()
+  }
+
   // Extracted from: https://observablehq.com/@d3/donut-chart
   drawDonutChart() {
     d3.select('svg#donut-chart').selectAll('*').remove()
@@ -94,7 +122,7 @@ export default class extends Controller {
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
       .attr('class', 'tooltip-second')
-      .text(this.data.get('total') + ' ' + this.data.get('tokenSymbol'))
+      .text(this.total + ' ' + this.data.get('tokenSymbol'))
 
     svg.selectAll('path')
       .data(arcs)
@@ -112,7 +140,7 @@ export default class extends Controller {
         }.bind(this))
         .on('mouseout', function() {
           tooltipFirst.text('Total')
-          tooltipSecond.text(this.data.get('total') + ' ' + this.data.get('tokenSymbol'))
+          tooltipSecond.text(this.total + ' ' + this.data.get('tokenSymbol'))
           d3.select(d3.event.target)
             .style('stroke', 'none')
         }.bind(this))
