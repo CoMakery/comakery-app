@@ -162,6 +162,10 @@ class ProjectDecorator < Draper::Decorator
     project.transfer_types.pluck(:name).map { |k| [k, 0] }.to_h
   end
 
+  def transfers_chart_colors
+    transfers_chart_types.keys.map.with_index { |k, i| [k, Comakery::ChartColors.lookup(i)] }.to_h
+  end
+
   def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty)
     chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(

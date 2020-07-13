@@ -37,6 +37,11 @@ exports[`TaskForm renders correctly without props 1`] = `
       "default": "_",
     }
   }
+  types={
+    Object {
+      "default": "_",
+    }
+  }
   urlOnSuccess="/"
 >
   <ProjectSetup
@@ -1124,6 +1129,96 @@ exports[`TaskForm renders correctly without props 1`] = `
                           onChange={[Function]}
                           required={true}
                           value=""
+                        >
+                          <option
+                            key="_"
+                            value="_"
+                          >
+                            default
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldDropdown>
+                <InputFieldDropdown
+                  eventHandler={[Function]}
+                  name="task[transfer_type_id]"
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "default",
+                        "_",
+                      ],
+                    ]
+                  }
+                  symbolLimit={0}
+                  title="type"
+                  value="_"
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__dropdown"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[transfer_type_id]"
+                    pattern=".*"
+                    placeholder="Please enter value"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "default",
+                          "_",
+                        ],
+                      ]
+                    }
+                    step=""
+                    symbolLimit={0}
+                    title="type"
+                    type="select"
+                    value="_"
+                  >
+                    <div
+                      className="input-field input-field__dropdown"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          type
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <select
+                          className="input-field--content__select"
+                          disabled={false}
+                          name="task[transfer_type_id]"
+                          onChange={[Function]}
+                          required={true}
+                          value="_"
                         >
                           <option
                             key="_"

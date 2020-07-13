@@ -711,6 +711,32 @@ form.form-with-submit-button {
     }
   }
 
+  .stacked-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 300px;
+    justify-content: space-between;
+
+    .stacked-chart-legend__type {
+      display: flex;
+      margin-right: 1em;
+      margin-bottom: 1em;
+      align-items: center;
+
+      .stacked-chart-legend__type__color {
+        height: 1em;
+        width: 1em;
+        margin-right: 0.4em;
+        border-radius: 2px;
+      }
+
+      .stacked-chart-legend__type__name {
+        text-transform: capitalize;
+        font-weight: 500;
+      }
+    }
+  }
+
   #stacked-chart-legend {
     margin-top: -1em;
 
