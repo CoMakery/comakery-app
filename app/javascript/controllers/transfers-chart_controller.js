@@ -165,7 +165,7 @@ export default class extends Controller {
       .attr('class', 'y axis')
 
     let tooltip = d3.select('#stacked-chart-tooltip')
-    
+
     svg.append('g')
       .selectAll('g')
       .data(series)
