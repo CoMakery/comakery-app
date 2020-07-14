@@ -325,6 +325,23 @@ form.project_search {
   min-height: 50vh;
 }
 
+.project_settings__content--modal {
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+  padding: 1em 2em;
+  border-radius: 6px;
+  border: solid 1px #e6e8ed;
+  min-height: 15em;
+  display: flex;
+  flex-direction: column;
+
+  .project_settings__content--modal__icon {
+    align-self: flex-end;
+    margin-bottom: -1em;
+    margin-right: -1em;
+    cursor: pointer;
+  }
+}
+
 .paragraph {
   display: flex;
   flex-direction: column;
