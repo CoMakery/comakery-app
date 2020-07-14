@@ -1,0 +1,11 @@
+<div class="project_settings">
+  <div class="project_settings__content--modal">
+    <img class="icon project_settings__content--modal__icon"
+      src="<%= asset_pack_path 'media/src/images/styleguide/icons/iconCloseCopy.svg' %>"
+      data-controller="goback"
+      data-action="click->goback#goBack"
+    />
+    
+    <%= yield %>
+  </div>
+</div>
