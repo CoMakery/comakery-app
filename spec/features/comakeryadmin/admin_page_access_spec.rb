@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'admin_page_access', js: true do
+describe 'admin_page_access' do
   let!(:account) { create :account }
   let!(:admin_account) { create :account, comakery_admin: true }
 
