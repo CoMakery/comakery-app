@@ -3,14 +3,14 @@
   data-controller="transfers-chart"
   data-transfers-chart-stacked-chart-scale-x="Year"
   data-transfers-chart-stacked-chart-data-status="Created"
-  data-transfers-chart-stacked-chart-data-day=<%= @project.transfers_stacked_chart_day(@transfers_all).to_json %>
-  data-transfers-chart-stacked-chart-data-week=<%= @project.transfers_stacked_chart_week(@transfers_all).to_json %>
-  data-transfers-chart-stacked-chart-data-month=<%= @project.transfers_stacked_chart_month(@transfers_all).to_json %>
-  data-transfers-chart-stacked-chart-data-year=<%= @project.transfers_stacked_chart_year(@transfers_all).to_json %>
-  data-transfers-chart-donut-chart-data=<%= @project.transfers_donut_chart(@transfers_all).to_json %>
-  data-transfers-chart-token-symbol=<%= @project.token&.symbol %>
-  data-transfers-chart-total=<%= @transfers_all.sum(&:total_amount) %>
-  data-transfers-chart-colors=<%= @project.transfers_chart_colors.to_json %>
+  data-transfers-chart-stacked-chart-data-day="<%= @project.transfers_stacked_chart_day(@transfers_all).to_json %>"
+  data-transfers-chart-stacked-chart-data-week="<%= @project.transfers_stacked_chart_week(@transfers_all).to_json %>"
+  data-transfers-chart-stacked-chart-data-month="<%= @project.transfers_stacked_chart_month(@transfers_all).to_json %>"
+  data-transfers-chart-stacked-chart-data-year="<%= @project.transfers_stacked_chart_year(@transfers_all).to_json %>"
+  data-transfers-chart-donut-chart-data="<%= @project.transfers_donut_chart(@transfers_all).to_json %>"
+  data-transfers-chart-token-symbol="<%= @project.token&.symbol %>"
+  data-transfers-chart-total="<%= @transfers_all.sum(&:total_amount) %>"
+  data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
 >
   <h2>transfer types</h2>
   
