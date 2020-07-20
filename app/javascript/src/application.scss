@@ -560,6 +560,14 @@ form.form-with-submit-button {
       flex-wrap: wrap;
       display: flex;
 
+      select {
+        text-transform: capitalize;
+        box-shadow: none;
+        border-radius: 6px;
+        border: solid 1px #e6e8ed;
+        font-family: Montserrat;
+      }
+
       .transfers-filters--filter--options__active {
         background-color: #e6e8ed;
       }
@@ -621,7 +629,7 @@ form.form-with-submit-button {
   }
 
   .transfers-filters--clear {
-    align-self: flex-end;
+    align-self: center;
 
     input {
       border-radius: 6px;
@@ -643,6 +651,40 @@ form.form-with-submit-button {
         background-color: #c7c7c7;
         cursor: not-allowed;
       }
+    }
+  }
+}
+
+.stacked-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 300px;
+  justify-content: space-between;
+
+  .stacked-chart-legend__type {
+    display: flex;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    align-items: center;
+
+    .stacked-chart-legend__type__color {
+      height: 1em;
+      width: 1em;
+      margin-right: 0.4em;
+      border-radius: 2px;
+    }
+
+    .stacked-chart-legend__type__name {
+      text-transform: capitalize;
+      font-weight: 500;
+    }
+  }
+
+  .stacked-chart-legend__type--active {
+    text-decoration: underline;
+
+    .stacked-chart-legend__type__name {
+      font-weight: 600;
     }
   }
 }
@@ -693,7 +735,7 @@ form.form-with-submit-button {
     display: flex;
     align-items: center;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
 
     @media (max-width: 1215px) {
       flex-direction: column;
@@ -705,7 +747,7 @@ form.form-with-submit-button {
   }
 
   #stacked-chart {
-    margin-right: 3em;
+    margin-right: 5em;
     
     text {
       font-size: 12px;
@@ -725,32 +767,6 @@ form.form-with-submit-button {
 
     text.tooltip-second {
       font-weight: 600;
-    }
-  }
-
-  .stacked-chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 300px;
-    justify-content: space-between;
-
-    .stacked-chart-legend__type {
-      display: flex;
-      margin-right: 1em;
-      margin-bottom: 1em;
-      align-items: center;
-
-      .stacked-chart-legend__type__color {
-        height: 1em;
-        width: 1em;
-        margin-right: 0.4em;
-        border-radius: 2px;
-      }
-
-      .stacked-chart-legend__type__name {
-        text-transform: capitalize;
-        font-weight: 500;
-      }
     }
   }
 
@@ -1260,6 +1276,7 @@ button.reg-groups-create {
     min-height: 80px;
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
+    border-left: 4px solid transparent;
 
     & > div {
       box-sizing: border-box;

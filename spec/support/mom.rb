@@ -58,7 +58,7 @@ class Mom
 
     defaults = {
       project: project,
-      name: "Type #{SecureRandom.hex(20)}"
+      name: "Type #{SecureRandom.hex(5)}"
     }
     TransferType.new(defaults.merge(attrs))
   end

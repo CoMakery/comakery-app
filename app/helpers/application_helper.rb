@@ -29,4 +29,13 @@ module ApplicationHelper
   def ethereum_explorer_tx_url(token, tx)
     "https://#{ethereum_explorer_domain(token)}/tx/#{tx}"
   end
+
+  def ransack_filter_present?(query, name, predicate, value)
+    query.conditions.any? do |c|
+      return false unless c.predicate.name == predicate
+      return false unless c.attributes.any? { |a| a.name == name }
+      return false unless c.values.any? { |v| v.value == value }
+      true
+    end
+  end
 end

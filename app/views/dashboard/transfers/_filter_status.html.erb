@@ -2,7 +2,8 @@
   {
     name: 'transferred',
     class_name: 'transfers-filters--filter--options--transferred__active',
-    query: { status_eq: 5 }
+    query: { status_eq: 5, filter: 'transferred' },
+    present: params[:q] && params[:q][:filter] == 'transferred'
   }
 ] %>
 
@@ -15,13 +16,16 @@
         :status_eq => 3,
         "account_#{@project.blockchain_name}_wallet_present" => 1,
         "account_account_token_records_account_frozen_false" => 1,
-        "account_latest_verification_passed_true" => 1
-      }
+        "account_latest_verification_passed_true" => 1,
+        filter: 'ready'
+      },
+      present: params[:q] && params[:q][:filter] == 'ready'
     },
     {
       name: 'needs wallet',
       class_name: 'transfers-filters--filter--options--blocked__active',
-      query: {:status_eq => 3, "account_#{@project.blockchain_name}_wallet_blank" => 1}
+      query: {:status_eq => 3, "account_#{@project.blockchain_name}_wallet_blank" => 1, filter: 'needs_wallet'},
+      present: params[:q] && params[:q][:filter] == 'needs_wallet'
     }
   ] %>
 <% end %>
@@ -30,12 +34,14 @@
   {
     name: 'AML/KYC failed',
     class_name: 'transfers-filters--filter--options--blocked__active',
-    query: {:status_eq => 3, "account_latest_verification_passed_false" => 1}
+    query: {:status_eq => 3, "account_latest_verification_passed_false" => 1, filter: 'aml_kyc_failed'},
+    present: params[:q] && params[:q][:filter] == 'aml_kyc_failed'
   },
   {
     name: 'AML/KYC unknown',
     class_name: 'transfers-filters--filter--options--blocked__active',
-    query: {:status_eq => 3, "account_latest_verification_passed_null" => 1}
+    query: {:status_eq => 3, "account_latest_verification_passed_null" => 1, filter: 'aml_kyc_unknown'},
+    present: params[:q] && params[:q][:filter] == 'aml_kyc_unknown'
   } 
 ] %>
 
@@ -44,21 +50,29 @@
     {
       name: 'account frozen',
       class_name: 'transfers-filters--filter--options--blocked__active',
-      query: {:status_eq => 3, "account_account_token_records_account_frozen_true" => 1, "account_account_token_records_token_id_eq" => @project.token&.id}
+      query: {:status_eq => 3, "account_account_token_records_account_frozen_true" => 1, "account_account_token_records_token_id_eq" => @project.token&.id, filter: 'frozen'},
+      present: params[:q] && params[:q][:filter] == 'frozen'
     }
   ] %>
 <% end %>
 
 <% all_queries = filters.map { |f| f[:query].keys }.flatten %>
+<% current_filter = filters.find { |f| f[:present] } %>
 
 <h3>status</h3>
 
 <div class="transfers-filters--filter--options">
-  <% filters.each do |f| %>
-
-    <div class="<%= f[:query].all? { |k, v| request.params[:q]&.fetch(k, nil) == v.to_s } ? f[:class_name] : nil %>">
-      <%= link_to f[:name], request.params.merge(q: (request.params[:q] || {}).except(*all_queries).merge(f[:query])) %>
-    </div>
-
-  <% end %>
+  <%= select_tag(
+    nil,
+    options_for_select(
+      filters.map { |f| [f[:name], url_for(request.params.merge(q: (request.params[:q] || {}).except(*all_queries).merge(f[:query])))] },
+      current_filter && url_for(request.params.merge(q: (request.params[:q] || {}).except(*all_queries).merge(current_filter[:query])))
+    ),
+    include_blank: 'All',
+    data: {
+      controller: 'gooption',
+      action: 'change->gooption#goOption',
+      gooption_default_url: url_for(request.params.merge(q: (request.params[:q] || {}).except(*all_queries)))
+    }
+  )%>
 </div>

@@ -1,10 +1,10 @@
 <div class="project_settings">
   <div class="project_settings__content--modal">
-    <img class="icon project_settings__content--modal__icon"
-      src="<%= asset_pack_path 'media/src/images/styleguide/icons/iconCloseCopy.svg' %>"
-      data-controller="goback"
-      data-action="click->goback#goBack"
-    />
+    <%= link_to back_path, class: 'project_settings__content--modal__icon' do %>
+      <img class="icon"
+        src="<%= asset_pack_path 'media/src/images/styleguide/icons/iconCloseCopy.svg' %>"
+      />
+    <% end %>
     
     <%= yield %>
   </div>
