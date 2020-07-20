@@ -1,14 +1,6 @@
 <% transfer = transfer.decorate %>
 
-<% if transfer.paid? %>
-  <% state = "transferred" %>
-<% elsif !transfer.payment_blocked? %>
-  <% state = "ready" %>
-<% else %>
-  <% state = "blocked" %>
-<% end %>
-
-<div class="transfers-table__transfer <%= "transfers-table__transfer--#{state}" %>">
+<div class="transfers-table__transfer" style="border-left-color: <%= @project.transfers_chart_colors_objects[transfer.transfer_type] %>">
   <div class="transfers-table__transfer__name">
     <h3>
       <%= link_to transfer.name, project_award_type_award_path(transfer.project, transfer.award_type, transfer) %>

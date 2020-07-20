@@ -5,27 +5,15 @@ export default class extends Controller {
   static targets = [ 'scales', 'statuses' ]
 
   get stackedChartData() {
-    if (this.data.get('dataStatus') === 'Transferred') {
-      return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}Paid`))
-    } else {
-      return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}`))
-    }
+    return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}`))
   }
 
   get donutChartData() {
-    if (this.data.get('dataStatus') === 'Transferred') {
-      return JSON.parse(this.data.get('donutChartDataPaid'))
-    } else {
-      return JSON.parse(this.data.get('donutChartData'))
-    }
+    return JSON.parse(this.data.get('donutChartData'))
   }
 
   get total() {
-    if (this.data.get('dataStatus') === 'Transferred') {
-      return JSON.parse(this.data.get('totalPaid'))
-    } else {
-      return JSON.parse(this.data.get('total'))
-    }
+    return JSON.parse(this.data.get('total'))
   }
 
   get colors() {
@@ -69,18 +57,6 @@ export default class extends Controller {
     e.target.classList.add('transfers-filters--filter--options__active')
 
     this.drawStackedChart()
-  }
-
-  setDataStatus(e) {
-    this.data.set('dataStatus', e.target.dataset.status)
-
-    this.statusesTargets.forEach((e) => {
-      e.classList.remove('transfers-filters--filter--options__active')
-    })
-    e.target.classList.add('transfers-filters--filter--options__active')
-
-    this.drawStackedChart()
-    this.drawDonutChart()
   }
 
   // Extracted from: https://observablehq.com/@d3/donut-chart

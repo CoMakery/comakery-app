@@ -59,7 +59,7 @@ class Comakery::Discord
   private
 
   def result
-    url = "https://discordapp.com/api#{@path}"
+    url = "https://discord.com/api#{@path}"
     res = RestClient.get(url, Authorization: @token)
     JSON.parse(res)
   rescue RestClient::ExceptionWithResponse => e
@@ -68,7 +68,7 @@ class Comakery::Discord
   end
 
   def post_result(parse_json = true)
-    url = "https://discordapp.com/api#{@path}"
+    url = "https://discord.com/api#{@path}"
     header = { Authorization: @token, content_type: :json, accept: :json }
     res = RestClient.post(url, @data, header)
     parse_json ? JSON.parse(res) : res

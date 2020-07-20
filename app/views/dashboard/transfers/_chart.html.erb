@@ -7,15 +7,9 @@
   data-transfers-chart-stacked-chart-data-week=<%= @project.transfers_stacked_chart_week(@transfers_all).to_json %>
   data-transfers-chart-stacked-chart-data-month=<%= @project.transfers_stacked_chart_month(@transfers_all).to_json %>
   data-transfers-chart-stacked-chart-data-year=<%= @project.transfers_stacked_chart_year(@transfers_all).to_json %>
-  data-transfers-chart-stacked-chart-data-day-paid=<%= @project.transfers_stacked_chart_day(@transfers_all.paid).to_json %>
-  data-transfers-chart-stacked-chart-data-week-paid=<%= @project.transfers_stacked_chart_week(@transfers_all.paid).to_json %>
-  data-transfers-chart-stacked-chart-data-month-paid=<%= @project.transfers_stacked_chart_month(@transfers_all.paid).to_json %>
-  data-transfers-chart-stacked-chart-data-year-paid=<%= @project.transfers_stacked_chart_year(@transfers_all.paid).to_json %>
   data-transfers-chart-donut-chart-data=<%= @project.transfers_donut_chart(@transfers_all).to_json %>
-  data-transfers-chart-donut-chart-data-paid=<%= @project.transfers_donut_chart(@transfers_all.paid).to_json %>
   data-transfers-chart-token-symbol=<%= @project.token&.symbol %>
   data-transfers-chart-total=<%= @transfers_all.sum(&:total_amount) %>
-  data-transfers-chart-total-paid=<%= @transfers_all.paid.sum(&:total_amount) %>
   data-transfers-chart-colors=<%= @project.transfers_chart_colors.to_json %>
 >
   <h2>transfer types</h2>
@@ -33,36 +27,6 @@
             class=<%= scale_x == 'Year' ? 'transfers-filters--filter--options__active' : nil %>
           >
             <%= scale_x %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="transfers-filters--filter">
-      <h3>Status</h3>
-
-      <div class="transfers-filters--filter--options">
-        <% ['Created', 'Transferred'].each do |status| %>
-          <div
-            data-target="transfers-chart.statuses"
-            data-action="click->transfers-chart#setDataStatus"
-            data-status="<%= status %>"
-            class=<%= status == 'Created' ? 'transfers-filters--filter--options__active' : nil %>
-          >
-            <%= status %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    
-    <div class="transfers-filters--filter">
-      <h3>Types</h3>
-      
-      <div class="stacked-chart-legend">
-        <% @project.transfers_chart_colors.each do |type, color| %>
-          <div class="stacked-chart-legend__type">
-            <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
-            <div class="stacked-chart-legend__type__name"><%= type %></div>
           </div>
         <% end %>
       </div>
