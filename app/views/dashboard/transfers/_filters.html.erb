@@ -1,5 +1,13 @@
 <div class="transfers-filters">
-  <h2>filters</h2>
+  <h2>
+    filters
+    
+    <% if request.params[:q] %>
+      <div class="transfers-filters--clear">
+        <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
+      </div>
+    <% end %>
+  </h2>
 
   <% if request.params[:q] && request.params[:q][:id_eq] %>
 
@@ -59,8 +67,4 @@
     </div>
     
   <% end %>
-
-  <div class="transfers-filters--clear">
-    <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get, disabled: request.params[:q].nil? %>
-  </div>
 </div>

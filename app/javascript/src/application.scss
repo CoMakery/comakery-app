@@ -496,7 +496,7 @@ form.form-with-submit-button {
   font-size: 12px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 3em;
 
   a {
@@ -520,6 +520,7 @@ form.form-with-submit-button {
     flex-direction: column;
     display: flex;
     max-width: 100%;
+    margin-right: 3em;
 
     h3 {
       text-transform: capitalize;
@@ -630,6 +631,12 @@ form.form-with-submit-button {
 
   .transfers-filters--clear {
     align-self: center;
+    display: inline;
+    margin-left: 1em;
+
+    form {
+      display: inline;
+    }
 
     input {
       border-radius: 6px;
@@ -757,6 +764,8 @@ form.form-with-submit-button {
   }
 
   #donut-chart {
+    margin-top: 2em;
+    
     text {
       font-size: 12px;
       font-family: Montserrat, sans-serif;
@@ -768,6 +777,11 @@ form.form-with-submit-button {
     text.tooltip-second {
       font-weight: 600;
     }
+  }
+
+  .donut-amount {
+    text-align: center;
+    margin-top: 1em;
   }
 
   #stacked-chart-legend {
@@ -816,6 +830,7 @@ form.form-with-submit-button {
     width: 100%;
     justify-content: space-between;
     margin-bottom: 3em;
+    margin-top: 2em;
 
     @media (max-width: 1215px) {
       flex-direction: column;
