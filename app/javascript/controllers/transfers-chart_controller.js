@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus'
+import { Decimal } from 'decimal.js'
 import * as d3 from 'd3'
 
 export default class extends Controller {
@@ -18,6 +19,10 @@ export default class extends Controller {
 
   get colors() {
     return JSON.parse(this.data.get('colors'))
+  }
+
+  get decimals() {
+    return new Decimal(this.data.get('decimals')).toNumber()
   }
 
   get stackedChartTooltip() {
@@ -109,7 +114,7 @@ export default class extends Controller {
         .attr('d', arc)
         .on('mouseover', function(d) {
           tooltipFirst.text(d.data.name)
-          tooltipSecond.text((d.data.ratio > 0.01 ? d.data.ratio * 100 : '< 1') + '%')
+          tooltipSecond.text((d.data.ratio > 0.01 ? Decimal.mul(d.data.ratio, 100).toFixed(0, Decimal.ROUND_DOWN) : '< 1') + '%')
           this.donutAmountTarget.textContent = d.data.value + ' / ' + this.total + ' ' + this.data.get('tokenSymbol')
           d3.select(d3.event.target)
             .style('stroke', '#e6e8ed')
@@ -198,7 +203,7 @@ export default class extends Controller {
           .html(`
             <div class="stacked-chart-tooltip__timeframe">${d.data.timeframe}</div>
             <div class="stacked-chart-tooltip__type">${d.key}</div>
-            <div class="stacked-chart-tooltip__amount">${d[1] - d[0]} ${this.data.get('tokenSymbol')}</div>
+            <div class="stacked-chart-tooltip__amount">${Decimal.sub(d[1], d[0]).toFixed(this.decimals, Decimal.ROUND_DOWN)} ${this.data.get('tokenSymbol')}</div>
           `)
       }.bind(this))
       .on('mouseout', function() {

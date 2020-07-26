@@ -10,6 +10,7 @@
   data-transfers-chart-donut-chart-data="<%= @project.transfers_donut_chart(@transfers_all).to_json %>"
   data-transfers-chart-token-symbol="<%= @project.token&.symbol %>"
   data-transfers-chart-total="<%= @transfers_all.sum(&:total_amount) %>"
+  data-transfers-chart-decimals="<%= @project.token&.decimal_places || 0 %>"
   data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
 >
   <h2>transfer history</h2>
