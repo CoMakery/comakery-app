@@ -47,8 +47,11 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_all = query.result.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
       @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
+
       if (@page > 1) && @transfers.out_of_range?
-        redirect_to project_dashboard_transfers_path(@project), flash: { notice: "Displaying first page of filtered results. Not enough results to display page #{@page}." }
+        flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
+        @page = 1
+        @transfers = @transfers_all.page(@page).per(10)
       end
     rescue ActiveRecord::StatementInvalid
       head 404

@@ -12,8 +12,6 @@ require('turbolinks').start()
 
 import '../src/application.js'
 
-import '../src/application.scss'
-
 import 'slick-carousel/slick/slick.css'
 
 import 'slick-carousel/slick/slick-theme.css'
@@ -28,3 +26,5 @@ ReactRailsUJS.useContext(componentRequireContext)
 import 'controllers'
 
 require.context('../src/images', true)
+
+import '../src/application.scss'
