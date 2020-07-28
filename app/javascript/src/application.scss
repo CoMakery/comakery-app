@@ -567,6 +567,7 @@ form.form-with-submit-button {
         border-radius: 6px;
         border: solid 1px #e6e8ed;
         font-family: Montserrat;
+        font-size: 12px;
       }
 
       .transfers-filters--filter--options__active {
@@ -666,7 +667,7 @@ form.form-with-submit-button {
   display: flex;
   flex-wrap: wrap;
   max-width: 300px;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   .stacked-chart-legend__type {
     display: flex;
@@ -842,6 +843,46 @@ form.form-with-submit-button {
       &:hover {
         text-decoration: underline;
       }
+    }
+  }
+}
+
+.calendar {
+  input {
+    border-radius: 6px;
+    border: solid 1px #e6e8ed;
+    height: 35px;
+    padding: 9px 16px 8px 15px;
+    box-shadow: none;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+  }
+
+  .DateRangePickerInput_arrow {
+    margin: 0 1em;
+  }
+
+  .DateRangePicker_picker {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px 10px;
+  }
+  
+  .DayPicker__withBorder {
+    border-radius: 6px;
+  }
+
+  .CalendarDay__hovered,
+  .CalendarDay__hovered_span,
+  .CalendarDay__selected,
+  .CalendarDay__selected_span {
+    background: #e6e8ed;
+    border: 1px double white;
+    color: black;
+
+    &:hover,
+    &:active {
+      background: #1560fa;
+      border: 1px double #e6e8ed;
+      color: #fff;
     }
   }
 }
@@ -1032,7 +1073,6 @@ button.reg-groups-create {
   background-color: #1560fa;
   color: white;
   font-weight: 600;
-  -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
   text-transform: uppercase;
   margin-right: 15px;

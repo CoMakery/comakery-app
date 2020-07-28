@@ -243,7 +243,7 @@ class Mom
       name: "Token-#{SecureRandom.hex(20)}",
       symbol: "TKN#{SecureRandom.hex(20)}",
       logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
-      coin_type: :eth
+      coin_type: :erc20
     }
     Token.new(defaults.merge(attrs))
   end
