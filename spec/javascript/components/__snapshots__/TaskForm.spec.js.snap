@@ -1155,7 +1155,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                   }
                   symbolLimit={0}
                   title="type"
-                  value="_"
                 >
                   <InputField
                     checkboxText=""
@@ -1190,7 +1189,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     symbolLimit={0}
                     title="type"
                     type="select"
-                    value="_"
+                    value=""
                   >
                     <div
                       className="input-field input-field__dropdown"
@@ -1218,7 +1217,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           name="task[transfer_type_id]"
                           onChange={[Function]}
                           required={true}
-                          value="_"
+                          value=""
                         >
                           <option
                             key="_"

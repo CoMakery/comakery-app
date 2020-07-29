@@ -228,7 +228,8 @@ class ProjectDecorator < Draper::Decorator
       {
         name: type.name,
         value: set.sum(&:total_amount),
-        ratio: (set.sum(&:total_amount) / transfers.sum(&:total_amount)).round(2)
+        ratio: ratio_pretty(set.sum(&:total_amount), awards.completed.sum(&:total_amount)),
+        ratio_filtered: ratio_pretty(set.sum(&:total_amount), transfers.sum(&:total_amount))
       }
     end
 
@@ -241,6 +242,18 @@ class ProjectDecorator < Draper::Decorator
         }
       end
     ).uniq { |x| x[:name] }
+  end
+
+  def ratio_pretty(value, total)
+    ratio = (100 * value / total).round
+
+    if ratio.zero?
+      '< 1 %'
+    elsif ratio == 100
+      "#{ratio} %"
+    else
+      "≈ #{ratio} %"
+    end
   end
 
   private

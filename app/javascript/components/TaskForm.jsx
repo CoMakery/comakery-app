@@ -34,7 +34,7 @@ class TaskForm extends React.Component {
       'task[description]'                   : this.props.task.description || '',
       'task[requirements]'                  : this.props.task.requirements || '',
       'task[experience_level]'              : this.props.task.experienceLevel || '',
-      'task[transfer_type_id]'              : this.props.task.transferTypeId || Object.values(this.props.types)[0],
+      'task[transfer_type_id]'              : this.props.task.transferTypeId || this.props.types['earned'],
       'task[amount]'                        : this.props.task.amount || '',
       'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
       'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,

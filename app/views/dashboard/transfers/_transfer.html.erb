@@ -5,6 +5,10 @@
     <h3>
       <%= link_to transfer.name, project_award_type_award_path(transfer.project, transfer.award_type, transfer) %>
     </h3>
+
+    <div class="transfers-table__transfer__name__type">
+      <%= transfer.transfer_type.name %>
+    </div>
   </div>
 
   <div class="transfers-table__transfer__account">

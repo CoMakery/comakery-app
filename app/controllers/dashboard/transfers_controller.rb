@@ -37,7 +37,8 @@ class Dashboard::TransfersController < ApplicationController
   private
 
     def query
-      @q = @project.awards.completed.ransack(params[:q])
+      @transfers_unfiltered = @project.awards.completed
+      @q = @transfers_unfiltered.ransack(params[:q])
       @q.sorts = ['created_at desc'] if @q.sorts.empty?
       @q
     end
