@@ -1,5 +1,5 @@
 <div
-  class="transfers-chart transfers-filters"
+  class="transfers-chart transfers-filters animated fadeIn faster"
   data-controller="transfers-chart"
   data-transfers-chart-stacked-chart-scale-x="Year"
   data-transfers-chart-stacked-chart-data-status="Created"
@@ -9,7 +9,8 @@
   data-transfers-chart-stacked-chart-data-year="<%= @project.transfers_stacked_chart_year(@transfers_all).to_json %>"
   data-transfers-chart-donut-chart-data="<%= @project.transfers_donut_chart(@transfers_all).to_json %>"
   data-transfers-chart-token-symbol="<%= @project.token&.symbol %>"
-  data-transfers-chart-total="<%= @transfers_all.sum(&:total_amount) %>"
+  data-transfers-chart-total="<%= @transfers_unfiltered.sum(&:total_amount) %>"
+  data-transfers-chart-total-filtered="<%= @transfers_all.sum(&:total_amount) %>"
   data-transfers-chart-decimals="<%= @project.token&.decimal_places || 0 %>"
   data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
 >
@@ -36,7 +37,14 @@
     <svg id="stacked-chart" width="700" height="350"></svg>
     <div>
       <svg id="donut-chart" width="300" height="300"></svg>
-      <div class="donut-amount" data-target='transfers-chart.donutAmount'><%= @transfers_all.sum(&:total_amount).to_s + ' ' + @project.token&.symbol %></div>
+      <div class="donut-amount" data-target='transfers-chart.donutAmountFiltered'>
+        <% if @transfers_all.sum(&:total_amount) != @transfers_unfiltered.sum(&:total_amount) %>
+          <%= @transfers_all.sum(&:total_amount).to_s + ' ' + @project.token&.symbol + ' Filtered Total'  %>
+        <% end %>
+      </div>
+      <div class="donut-amount" data-target='transfers-chart.donutAmount'>
+        <%= @transfers_unfiltered.sum(&:total_amount).to_s + ' ' + @project.token&.symbol + ' Total'  %>
+      </div>
     </div>
     <div id="stacked-chart-tooltip"></div>
   </div>

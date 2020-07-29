@@ -3,7 +3,7 @@ import { Decimal } from 'decimal.js'
 import * as d3 from 'd3'
 
 export default class extends Controller {
-  static targets = [ 'scales', 'statuses', 'donutAmount' ]
+  static targets = [ 'scales', 'statuses', 'donutAmount', 'donutAmountFiltered' ]
 
   get stackedChartData() {
     return JSON.parse(this.data.get(`stackedChartData${this.data.get('stackedChartScaleX') || 'Year'}`))
@@ -15,6 +15,10 @@ export default class extends Controller {
 
   get total() {
     return JSON.parse(this.data.get('total'))
+  }
+
+  get totalFiltered() {
+    return JSON.parse(this.data.get('totalFiltered'))
   }
 
   get colors() {
@@ -94,7 +98,7 @@ export default class extends Controller {
       .attr('font-weight', '500')
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
-      .text('Total')
+      .text('Transfer Type')
 
     let tooltipSecond = svg.append('text')
       .attr('x', 0)
@@ -103,7 +107,7 @@ export default class extends Controller {
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
       .attr('class', 'tooltip-second')
-      .text('100%')
+      .text('Totals')
 
     svg.selectAll('path')
       .data(arcs)
@@ -114,16 +118,27 @@ export default class extends Controller {
         .attr('d', arc)
         .on('mouseover', function(d) {
           tooltipFirst.text(d.data.name)
-          tooltipSecond.text((d.data.ratio > 0.01 ? Decimal.mul(d.data.ratio, 100).toFixed(0, Decimal.ROUND_DOWN) : '< 1') + '%')
-          this.donutAmountTarget.textContent = d.data.value + ' / ' + this.total + ' ' + this.data.get('tokenSymbol')
+          tooltipSecond.text(d.data.value + ' ' + this.data.get('tokenSymbol'))
+          this.donutAmountTarget.textContent = d.data.ratio + ' of ' + this.total + ' ' + this.data.get('tokenSymbol') + ' Total'
+
+          if (d.data.ratio !== d.data['ratio_filtered']) {
+            this.donutAmountFilteredTarget.textContent = d.data['ratio_filtered'] + ' of ' + this.totalFiltered + ' ' + this.data.get('tokenSymbol') + ' Filtered Total'
+          }
+
           d3.select(d3.event.target)
             .style('stroke', '#e6e8ed')
             .style('stroke-width', '3px')
         }.bind(this))
         .on('mouseout', function() {
-          tooltipFirst.text('Total')
-          tooltipSecond.text('100%')
-          this.donutAmountTarget.textContent = this.total + ' ' + this.data.get('tokenSymbol')
+          tooltipFirst.text('Transfer Type')
+          tooltipSecond.text('Totals')
+
+          this.donutAmountTarget.textContent = this.total + ' ' + this.data.get('tokenSymbol') + ' Total'
+
+          if (this.total !== this.totalFiltered) {
+            this.donutAmountFilteredTarget.textContent = this.totalFiltered + ' ' + this.data.get('tokenSymbol') + ' Filtered Total'
+          }
+
           d3.select(d3.event.target)
             .style('stroke', 'none')
         }.bind(this))

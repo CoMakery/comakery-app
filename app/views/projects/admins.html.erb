@@ -13,7 +13,7 @@
     <%= render layout: 'shared/p' do %>
       <%= f.label(:email, "add project admin") %>
       <%= f.email_field(:email, required: true, placeholder: 'Email of CoMakery user') %>
-      <%= f.submit('ADD', data: {confirm: 'Add a new project admin?'}) %>
+      <%= f.submit('ADD') %>
     <% end %>
   <% end %>
 <% end %>
