@@ -16,7 +16,6 @@
         :status_eq => 3,
         "account_#{@project.blockchain_name}_wallet_present" => 1,
         "account_account_token_records_account_frozen_false" => 1,
-        "account_latest_verification_passed_true" => 1,
         filter: 'ready'
       },
       present: params[:q] && params[:q][:filter] == 'ready'
