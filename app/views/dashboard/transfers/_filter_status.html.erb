@@ -21,7 +21,7 @@
       present: params[:q] && params[:q][:filter] == 'ready'
     },
     {
-      name: 'needs wallet',
+      name: 'blocked – needs wallet',
       class_name: 'transfers-filters--filter--options--blocked__active',
       query: {:status_eq => 3, "account_#{@project.blockchain_name}_wallet_blank" => 1, filter: 'needs_wallet'},
       present: params[:q] && params[:q][:filter] == 'needs_wallet'
@@ -31,29 +31,18 @@
 
 <% filters += [
   {
-    name: 'AML/KYC failed',
+    name: 'blocked – AML/KYC failed',
     class_name: 'transfers-filters--filter--options--blocked__active',
     query: {:status_eq => 3, "account_latest_verification_passed_false" => 1, filter: 'aml_kyc_failed'},
     present: params[:q] && params[:q][:filter] == 'aml_kyc_failed'
   },
   {
-    name: 'AML/KYC unknown',
+    name: 'blocked – AML/KYC unknown',
     class_name: 'transfers-filters--filter--options--blocked__active',
     query: {:status_eq => 3, "account_latest_verification_passed_null" => 1, filter: 'aml_kyc_unknown'},
     present: params[:q] && params[:q][:filter] == 'aml_kyc_unknown'
   } 
 ] %>
-
-<% if @project.supports_transfer_rules? %>
-  <% filters += [
-    {
-      name: 'account frozen',
-      class_name: 'transfers-filters--filter--options--blocked__active',
-      query: {:status_eq => 3, "account_account_token_records_account_frozen_true" => 1, "account_account_token_records_token_id_eq" => @project.token&.id, filter: 'frozen'},
-      present: params[:q] && params[:q][:filter] == 'frozen'
-    }
-  ] %>
-<% end %>
 
 <% all_queries = filters.map { |f| f[:query].keys }.flatten %>
 <% current_filter = filters.find { |f| f[:present] } %>

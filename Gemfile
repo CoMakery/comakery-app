@@ -148,3 +148,5 @@ gem 'truncato', '~> 0.7.11'
 gem 'validate_url', '~> 1.0'
 
 gem 'overcommit', '~> 0.53.0'
+
+gem 'fuubar', '~> 2.5'

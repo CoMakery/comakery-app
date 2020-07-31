@@ -32,6 +32,8 @@ RSpec.configure do |config|
     page.driver.restart if defined?(page.driver.restart)
   end
 
+  config.default_formatter = 'Fuubar'
+
   #   # Many RSpec users commonly either run the entire suite or an individual
   #   # file, and it's useful to allow more verbose output when running an
   #   # individual spec file.

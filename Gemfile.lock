@@ -227,6 +227,9 @@ GEM
       railties (>= 3.1.0)
       sass (>= 3.3.0)
       sprockets-es6 (>= 0.9.0)
+    fuubar (2.5.0)
+      rspec-core (~> 3.0)
+      ruby-progressbar (~> 1.4)
     git-storyid (0.4.0)
       jira-ruby
       pivotal-tracker
@@ -690,6 +693,7 @@ DEPENDENCIES
   fortitude
   foundation-icons-sass-rails
   foundation-rails
+  fuubar (~> 2.5)
   git-storyid
   guard-rspec
   heroku-deflater
