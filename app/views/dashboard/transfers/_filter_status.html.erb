@@ -15,7 +15,6 @@
       query: {
         :status_eq => 3,
         "account_#{@project.blockchain_name}_wallet_present" => 1,
-        "account_account_token_records_account_frozen_false" => 1,
         filter: 'ready'
       },
       present: params[:q] && params[:q][:filter] == 'ready'
@@ -57,6 +56,7 @@
       current_filter && url_for(request.params.merge(q: (request.params[:q] || {}).except(*all_queries).merge(current_filter[:query])))
     ),
     include_blank: 'All',
+    id: 'transfers-filters--filter--options--select',
     data: {
       controller: 'gooption',
       action: 'change->gooption#goOption',
