@@ -1,5 +1,13 @@
 <div class="transfers-filters">
-  <h2>filters</h2>
+  <h2>
+    filters
+
+    <% if request.params[:q] %>
+      <div class="transfers-filters--clear">
+        <%= button_to "clear filters ⌫", project_dashboard_accounts_path, method: :get %>
+      </div>
+    <% end %>
+  </h2>
 
   <div class="transfers-filters--filter">
     <h3>account</h3>
@@ -61,16 +69,10 @@
 
     <div class="transfers-filters--filter">
       <h3>lockup ends before</h3>
-
-      <%= search_form_for @q, url: project_dashboard_accounts_path, method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
-        <%= f.date_field :account_token_records_lockup_until_lt, class: 'transfers-filters--filter--input', placeholder: 'dd.mm.yyyy' %>
-        <%= f.hidden_field :account_token_records_token_id_eq, value: @project.token&.id %>
-        <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
-      <% end %>
+      
+      <div class="calendar">
+        <%= react_component('AccountsCalendar', project_token_id: @project.token.id) %>
+      </div>
     </div>
   <% end %>
-
-  <div class="transfers-filters--clear">
-    <%= button_to "clear filters ⌫", project_dashboard_accounts_path, method: :get, disabled: request.params[:q].nil? %>
-  </div>
 </div>
