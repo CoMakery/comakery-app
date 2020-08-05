@@ -1,5 +1,6 @@
 class Dashboard::AccountsController < ApplicationController
   before_action :assign_project
+  before_action :normalize_account_token_records_lockup_until_lt, only: [:index]
   before_action :set_accounts, only: [:index]
   before_action :create_token_records, only: [:index]
   skip_before_action :require_login, only: [:index]
@@ -14,6 +15,11 @@ class Dashboard::AccountsController < ApplicationController
   end
 
   private
+
+    def normalize_account_token_records_lockup_until_lt
+      t = params.fetch(:q, {}).fetch(:account_token_records_lockup_until_lt, nil)
+      params[:q][:account_token_records_lockup_until_lt] = Time.zone.parse(t)&.to_i if t
+    end
 
     def set_accounts
       @page = (params[:page] || 1).to_i
