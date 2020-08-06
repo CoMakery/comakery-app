@@ -65,7 +65,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def cancel_by_admin?
-    pay?
+    pay? || assign?
   end
 
   def project_editable?
