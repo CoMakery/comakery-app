@@ -1,14 +1,114 @@
-# CoMakery
+[![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
 
-CoMakery helps coordinate blockchain missions, projects, tasks and payments.
+## CoMakery Helps You Gather a Tribe To Achieve Big Missions. 
 
+To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
 
+[![About CoMakery](./public/video-preview.png)](https://vimeo.com/345071697)
+
+## Getting Started
+* [Join the CoMakery Community](https://www.comakery.com) - follow some projects, get to know us.
+* [Join the CoMakery Forum](https://forum.comakery.com) - chat with the CoMakery community
+* [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
+* [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
+* [The CoMakery REST API](https://www.comakery.com/doc/api/v1/index.html)
+* [CoMakery Security Token (Open Source MIT Licensed ERC-1404)](https://github.com/CoMakery/comakery-security-token)
+* [Setting up the CoMakery platform development environment](#development-setup) 
+
+## Try Out CoMakery
+
+You can join the CoMakery community and try using the platform for free at [CoMakery.com](https://www.comakery.com) or host your own version for your community.
+
+## Free For Noncommercial Use
+
+Our [license](LICENSE.md) allows you to use and share this software for noncommercial nonviolent purposes for free and to try this software for commercial nonviolent purposes for thirty days. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do with free use of CoMakery. Thank you for your hard work towards benefitting society.
+
+## 30 Day Free Commercial Trial
+
+If you are a company [our license](LICENSE.md) allows you to use this software for free for thirty days.
+
+Get in touch with CoMakery at [support@comakery.com](mailto:support@comakery.com) about: 
+* A commercial license for self-hosting
+* Customization of the software for your community
+* White label hosting
+* Coop & L3C license discount
+
+Your payments help support the philanthropic organizations who use the platform for free.
+
+## Improving The Software
+
+You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to.
+
+If you need help customizing the software get in touch with CoMakery about customization services: [support@comakery.com](mailto:support@comakery.com)
+
+There's no restriction on receiving money to improve the software. If you are a software developer or software development company we look forward to improving the platform and serving the community with you.
+
+Chat with us on the [CoMakery Forum](https://forum.comakery.com) about features and improvements.
+
+## Get Involved
+
+We will be using CoMakery to build CoMakery! 
+
+Here's where you can connect with the community:
+* Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
+* Create a GitHub issue or comment on one
+* Chat with us on the [CoMakery Forum](https://forum.comakery.com)
+
+# Deploying CoMakery Server
+
+You can deploy the server using the deploy to Heroku Button which relies on the `app.json`. You can also deploy the app using the docker file similarly to the docker development environment setup.
+
+## What Branch Should I Deploy From?
+
+You should deploy from the `master` branch. New code is merged into the `acceptance` branch for QA checks before getting merged into `master`.
+
+## Deploying to Heroku with app.json
+
+If you want to deploy a new a new CoMakery Server on Heroku just press this button:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+
+- During setup update API keys and secrets according to environment
+- After deployment manually update formation and addons plans according to environment
+- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
+- Setup DNS and add SSL 
+- Update Cloudfront and Airbrake settings
+
+## Basic Auth
+
+Set an environment variable called `BASIC_AUTH` in the format
+`<username>:<password>` (e.g., `chewie:r0000ar`). Basic auth will be enabled if
+that environment variable exists.
+
+# Development Setup
+
+CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and other blockchains.
+  
 ## Configuration
 
-We use environment variables for app "secrets", and values which vary between environments,
-eg staging and production.
+We use environment variables for app "secrets", and values which vary between environments - such as staging and production. Locally these are stored in a `.env` file at the root of the project. **Don't commit your .env file to any GitHub repository.** On heroku environment variables are defined using [Heroku Config Vars](https://devcenter.heroku.com/articles/config-vars).
 
-## Local development
+## Local development with Docker
+#### Setup development environment
+```
+$ docker-compose run runner bundle exec ./bin/setup
+```
+
+#### Example: Running the app
+```
+$ docker-compose run --service-ports rails
+$ docker-compose run --service-ports webpacker
+$ docker-compose run --service-ports sidekiq
+```
+
+#### Example: Attaching console and running specs
+```
+$ docker-compose run runner
+$ RAILS_ENV=test bundle exec rspec
+$ NODE_ENV=test yarn test
+```
+
+## Local Development Without Docker
 
 Prerequisites:
 
@@ -35,7 +135,6 @@ Basics :
 source .env
 bundle install
 yarn install
-overcommit --install
 rails db:setup
 rails data:migrate
 ```
@@ -110,12 +209,12 @@ Run Rubocop Ruby code metrics with: `bin/rubocop`
 * Develop your code locally in a git feature branch
 * `bin/shipit` to git push your branch to GitHub *only if tests and quality checks pass*. This runs the same checks that CircleCI will run after you push your code to GitHub.
 * On GitHub, create a pull request from your feature Branch to the `acceptance` branch
-* Get your code reviewed by at least one person
-* Merge your PR to `acceptance`
-* Code merged to `acceptance` is automatically deployed to `demo.comakery.com` on Heroku for QA
-* Once code is tested it is manually merged to `master`
-* If CI passes on master, master is manually deployed to `staging.comakery.com` on Heroku
-* If the code looks good on staging then it is manually deployed to `www.comakery.com` on Heroku
+* Get your code reviewed by at least one CoMakery person
+* Noah <@aquabu> will do a final review and merge your PR to `acceptance`
+* Code merged to `acceptance` is automatically deployed to `demo.comakery.com` for QA
+* Once code is tested by CoMakery's QA team it is manually merged to `master`
+* If CI passes on master, master is manually deployed to `staging.comakery.com` for final review
+* If the code looks good on staging then it is manually deployed to `www.comakery.com`
 
 ## Deploying to Heroku Environments
 
@@ -128,9 +227,6 @@ bin/deploy comakery-staging
 
 # deploy the git ref called hot-fix-branch to staging
 bin/deploy comakery-staging hot-fix-branch
-
-# deploy HEAD of current branch to production
-bin/deploy comakery-production
 ```
 
 The `bin/deploy` script does the following:
@@ -141,12 +237,6 @@ The `bin/deploy` script does the following:
 5. Run `rake data:migrate` to migrate data
 6. Restart the apps with `heroku restart`
 7. Turn off the down for maintenance page 
-
-
-The old method of deploying that still can be used as a backup is:
-```
-citizen deploy production master comakery
-```
 
 ## Data migrations
 
@@ -166,85 +256,6 @@ rails g data_migration add_this_to_that
 
 More documentation is [here](https://github.com/ilyakatz/data-migrate)
 
-
-## Basic Auth
-
-Set an environment variable called `BASIC_AUTH` in the format
-`<username>:<password>` (e.g., `chewie:r0000ar`). Basic auth will be enabled if
-that environment variable exists.
-
-## Deploying to Heroku with app.json
-
-This is useful if you want to create a new environment.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
-- During setup update API keys and secrets according to environment
-- After deployment manually update formation and addons plans according to environment
-- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
-- Setup DNS and install following addons in case of production or staging environment:
-  - https://elements.heroku.com/addons/ssl
-  - https://elements.heroku.com/addons/expeditedssl
-- Update Cloudfront and Airbrake settings
-
-## Sidekiq
-
-Visit <COMAKERY_INSTANCE>/admin/sidekiq
-
-Username admin, password is in heroku app settings
-
-### Clear and regenerate dead sidekiq jobs
-
-If you are getting an out of memory error for Redis. The processed queue can take up a lot of memory. It can be cleared with `Sidekiq::Stats.new.reset`
-
-If the queue gets backed up or the regenerate script starts duplicating jobs, you can clear it out the Sidekiq job queue by running:
-
-```
-Sidekiq::Queue.all.each(&:clear)
-Sidekiq::RetrySet.new.clear
-Sidekiq::ScheduledSet.new.clear
-Sidekiq::Stats.new.reset
-Sidekiq::DeadSet.new.clear
-```
-
-### Redis Configuration On Heroku
-
-You can find the configuration details at the Heroku Overview Redis To Go link. Notice that this is **redis to go** and **NOT Heroku Redis**. This means that Heroku Redis commands will not work.
-
-You might get an error like `Redis::CommandError: OOM command not allowed when used memory > 'maxmemory'.`
-
-To remove old keys you can do the following. Use the correct environment for your needs.
-
-```
-heroku addons -a comakery-staging
-```
-
-You will see something like:
-```
-redistogo (redistogo-spherical-15306)          micro        $5/month   created
- └─ as REDISTOGO
-```
-
-More info with:
-```
-heroku addons:info redistogo-spherical-15306
-```
-
-### Flushing Redis Directly
-
-Hopefully you won't need this...
-
-Consider clearing out the Sidekiq Redis jobs using the `Sidekiq::Queue.all.each(&:clear)` and related Sidekiq methods as described in other sections.
-
-You can connect to Redis To Go CLI with:
-```
-redis-cli -h lab.redistogo.com -p 9968 -a [password]
-```
-
-To flush the old keys
-```
-lab.redistogo.com:9968> flushdb
-```
-
 ## Schema Overview
 
 Mostly up to date partial overview of table relationships.
@@ -257,12 +268,13 @@ Mostly up to date partial overview of table relationships.
 
 ## API documentaion
 
-API documentaion is generated with `rspec_api_documentation` gem from `spec/acceptance/*` specs
+API documentaion is generated with `rspec_api_documentation` gem from [spec/acceptance](./spec/accpetance/) specs
 
-See `config/initializers/rspec_api.rb` for configuration
+See [config/initializers/rspec_api.rb](./config/initializers/rspec_api.rb) for configuration
 
-Generated HTML is located in `/public/doc/api/v1` directory and accessible on `https://www.comakery.com/doc/api/v1/index.html` 
+Generated HTML is located in `/public/doc/api` directory and accessible on https://www.comakery.com/doc/api/v1/index.html
 
+You can generate the docs with
 ```
 rails docs:generate
 ```

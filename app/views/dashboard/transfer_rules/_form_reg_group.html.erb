@@ -1,6 +1,6 @@
 <%= form_with model: RegGroup.new, url: project_dashboard_reg_groups_path(@project), class: 'reg-groups__form', data: { target: 'reg-group-form.form' } do |f| %>
   <%= f.text_field(:name, required: true, placeholder: 'Group Name') %>
   <%= f.number_field(:blockchain_id, required: true, placeholder: 'ID', min: 0) %>
-  <%= f.submit('create', data: {confirm: 'Create new group?'}) %>
+  <%= f.submit('create') %>
   <%= button_tag "cancel", type: 'button', data: {action: 'reg-group-form#hideForm'} %>
 <% end %>

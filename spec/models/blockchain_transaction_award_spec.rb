@@ -124,7 +124,9 @@ describe BlockchainTransactionAward, vcr: true do
     context 'with erc20 mint' do
       it 'returns Comakery::Erc20Mint' do
         blockchain_transaction = build(:blockchain_transaction)
-        blockchain_transaction.blockchain_transactable.update(source: :mint)
+        blockchain_transaction.blockchain_transactable.update(
+          transfer_type: blockchain_transaction.blockchain_transactable.project.transfer_types.find_by(name: 'mint')
+        )
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Mint)
       end
@@ -133,7 +135,9 @@ describe BlockchainTransactionAward, vcr: true do
     context 'with erc20 burn' do
       it 'returns Comakery::Erc20Burn' do
         blockchain_transaction = build(:blockchain_transaction)
-        blockchain_transaction.blockchain_transactable.update(source: :burn)
+        blockchain_transaction.blockchain_transactable.update(
+          transfer_type: blockchain_transaction.blockchain_transactable.project.transfer_types.find_by(name: 'burn')
+        )
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Burn)
       end

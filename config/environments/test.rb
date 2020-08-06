@@ -50,13 +50,6 @@ Rails.application.configure do
 
   config.allow_missing_ethereum_bridge = true
 
-  if ENV['NO_LOGS'].presence
-    config.log_level = :warn
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
-
   config.after_initialize do
     Bullet.enable = true
     Bullet.raise = true
@@ -64,4 +57,6 @@ Rails.application.configure do
   end
   config.cache_store = nil
   config.action_controller.perform_caching = false
+
+  config.log_level = :error
 end

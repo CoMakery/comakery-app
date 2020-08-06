@@ -12,17 +12,7 @@ class Views::Projects::Base < Views::Base
 
   def projects_block(projects, project_contributors)
     row do
-      projects.each_slice(3) do |left_project, middle_project, right_project|
-        column('small-12 medium-6 large-4') do
-          project_block(left_project, project_contributors[left_project])
-        end
-        column('small-12 medium-6 large-4') do
-          project_block(middle_project, project_contributors[middle_project]) if middle_project
-        end
-        column('small-12 medium-6 large-4') do
-          project_block(right_project, project_contributors[right_project]) if right_project
-        end
-      end
+      render partial: 'projects_block', collection: projects, as: :project, cached: true, locals: { project_contributors: project_contributors }
     end
   end
 

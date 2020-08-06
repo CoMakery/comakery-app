@@ -22,7 +22,7 @@ class Dashboard::TransfersController < ApplicationController
     authorize @project, :create_transfer?
 
     @transfer = @award_type.awards.new(transfer_params)
-    @transfer.name = @transfer.source.capitalize
+    @transfer.name = @transfer.transfer_type.name.titlecase
     @transfer.account_id = params[:award][:account_id]
     @transfer.issuer = current_account
     @transfer.status = :accepted
@@ -36,13 +36,26 @@ class Dashboard::TransfersController < ApplicationController
 
   private
 
+    def query
+      @transfers_unfiltered = @project.awards.completed
+      @q = @transfers_unfiltered.ransack(params[:q])
+      @q.sorts = ['created_at desc'] if @q.sorts.empty?
+      @q
+    end
+
     def set_transfers
       @page = (params[:page] || 1).to_i
-      @q = @project.awards.completed.ransack(params[:q])
-      @transfers_all = @q.result.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
+      @transfers_all = query.result
+                            .group('awards.id')
+                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
       @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
-      redirect_to '/404.html' if (@page > 1) && @transfers.out_of_range?
+
+      if (@page > 1) && @transfers.out_of_range?
+        flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
+        @page = 1
+        @transfers = @transfers_all.page(@page).per(10)
+      end
     rescue ActiveRecord::StatementInvalid
       head 404
     end
@@ -59,10 +72,10 @@ class Dashboard::TransfersController < ApplicationController
       params.fetch(:award, {}).permit(
         :amount,
         :quantity,
-        :source,
         :why,
         :description,
-        :requirements
+        :requirements,
+        :transfer_type_id
       )
     end
 end

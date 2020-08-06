@@ -34,6 +34,7 @@ class TaskForm extends React.Component {
       'task[description]'                   : this.props.task.description || '',
       'task[requirements]'                  : this.props.task.requirements || '',
       'task[experience_level]'              : this.props.task.experienceLevel || '',
+      'task[transfer_type_id]'              : this.props.task.transferTypeId || this.props.types['earned'],
       'task[amount]'                        : this.props.task.amount || '',
       'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
       'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,
@@ -310,6 +311,17 @@ class TaskForm extends React.Component {
               symbolLimit={0}
             />
 
+            <InputFieldDropdown
+              title='type'
+              required
+              name='task[transfer_type_id]'
+              value={this.state['task[transfer_type_id]']}
+              errorText={this.state.errors['task[transferTypeId]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.types)}
+              symbolLimit={0}
+            />
+
             <InputFieldWhiteDark
               title='how many times can this task be done'
               required
@@ -373,6 +385,7 @@ TaskForm.propTypes = {
   token           : PropTypes.object.isRequired,
   experienceLevels: PropTypes.object.isRequired,
   specialties     : PropTypes.object.isRequired,
+  types           : PropTypes.object.isRequired,
   formUrl         : PropTypes.string.isRequired,
   formAction      : PropTypes.string.isRequired,
   urlOnSuccess    : PropTypes.string.isRequired,
@@ -387,6 +400,7 @@ TaskForm.defaultProps = {
   token           : {'default': '_'},
   experienceLevels: {'default': '_'},
   specialties     : {'default': '_'},
+  types           : {'default': '_'},
   formUrl         : '/',
   formAction      : 'POST',
   urlOnSuccess    : '/',

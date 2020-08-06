@@ -1,0 +1,11 @@
+<div class="project_settings">
+  <div class="project_settings__content--modal">
+    <%= link_to back_path, class: 'project_settings__content--modal__icon' do %>
+      <img class="icon"
+        src="<%= asset_pack_path 'media/src/images/styleguide/icons/iconCloseCopy.svg' %>"
+      />
+    <% end %>
+    
+    <%= yield %>
+  </div>
+</div>

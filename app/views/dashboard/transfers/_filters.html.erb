@@ -1,5 +1,13 @@
 <div class="transfers-filters">
-  <h2>filters</h2>
+  <h2>
+    filters
+    
+    <% if request.params[:q] %>
+      <div class="transfers-filters--clear">
+        <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
+      </div>
+    <% end %>
+  </h2>
 
   <% if request.params[:q] && request.params[:q][:id_eq] %>
 
@@ -26,39 +34,44 @@
     </div>
 
   <% else %>
+    <div class="transfers-filters--filter">
+      <h3>Dates</h3>
+      
+      <div class="calendar">
+        <%= react_component('TransfersCalendar') %>
+      </div>
+    </div>
 
     <div class="transfers-filters--filter">
       <%= render partial: "filter_status" %>
     </div>
 
     <div class="transfers-filters--filter">
-      <h3>type</h3>
-
-      <div class="transfers-filters--filter--options">
-        <div class="<%= request.params[:q]&.fetch(:source_eq, nil) == '1' ? 'transfers-filters--filter--options__active' : nil %>">
-          <%= image_pack_tag "media/src/images/styleguide/icons/bought.svg", size: "12x12" %>
-          <%= link_to 'bought', request.params.merge(q: (request.params[:q] || {}).except(:source_eq).merge(source_eq: 1)) %>
-        </div>
-
-        <div class="<%= request.params[:q]&.fetch(:source_eq, nil) == '0' ? 'transfers-filters--filter--options__active' : nil %>">
-          <%= image_pack_tag "media/src/images/styleguide/icons/earned.svg", size: "12x12" %>
-          <%= link_to 'earned', request.params.merge(q: (request.params[:q] || {}).except(:source_eq).merge(source_eq: 0)) %>
-        </div>
-      </div>
-    </div>
-
-    <div class="transfers-filters--filter">
       <h3>account</h3>
 
       <%= search_form_for @q, url: project_dashboard_transfers_path, method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
-        <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Type name or email', autofocus: true %>
+        <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Type name or email', autofocus: false %>
         <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
       <% end %>
     </div>
+
+    <div class="transfers-filters--filter">
+      <h3>Type</h3>
+      
+      <div class="stacked-chart-legend">
+        <% @project.transfers_chart_colors_objects.each do |type, color| %>
+          <div class="stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
+            <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
+
+            <%= link_to(
+              type.name,
+              request.params.merge(q: (request.params[:q] || {}).except(:transfer_type_id_eq).merge(transfer_type_id_eq: type.id)),
+              class: "stacked-chart-legend__type__name"
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
     
   <% end %>
-
-  <div class="transfers-filters--clear">
-    <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get, disabled: request.params[:q].nil? %>
-  </div>
 </div>

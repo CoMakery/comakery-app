@@ -24,11 +24,11 @@ describe MissionsController do
     end
 
     context 'when logged in without admin flag' do
-      it 'returns no mission' do
+      it 'redirects to root' do
         login(account)
         get :index
-        expect(response.status).to eq(200)
-        expect(assigns[:missions].count).to eq(0)
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
       end
     end
 

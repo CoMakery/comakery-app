@@ -63,6 +63,10 @@ class Footer extends React.Component {
                       About Us
                     </a>
 
+                    <a href="https://forum.comakery.com" target="_blank">
+                      Forum
+                    </a>
+
                     <a href="https://ledger.comakery.com" target="_blank">
                       Blog
                     </a>

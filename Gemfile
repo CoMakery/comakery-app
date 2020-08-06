@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
-ruby '2.6.5'
+ruby '2.7.1'
 
-gem 'actionview', '>= 6.0.2.2'
 gem 'airbrake', '~> 9.4'
 gem 'awesome_print'
 gem 'bcrypt'
@@ -35,7 +34,7 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
 gem 'rack', '>= 2.0.6'
-gem 'rails', '~> 6.0'
+gem 'rails', '~> 6.0.3.2'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
 gem 'rails_autoscale_agent'
@@ -149,3 +148,5 @@ gem 'truncato', '~> 0.7.11'
 gem 'validate_url', '~> 1.0'
 
 gem 'overcommit', '~> 0.53.0'
+
+gem 'fuubar', '~> 2.5'

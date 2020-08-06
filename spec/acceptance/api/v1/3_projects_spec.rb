@@ -51,6 +51,7 @@ resource 'III. Projects' do
       response_field :updatedAt, 'project update timestamp', type: :string
 
       response_field :adminIds, 'array of admin account ids', type: :array, items: { type: :string }
+      response_field :transferTypes, 'array of transfer types', type: :array, items: { type: :string }
 
       response_field 'token[id]', 'token id', type: :integer
       response_field 'token[name]', 'token name', type: :string

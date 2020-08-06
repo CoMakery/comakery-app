@@ -291,4 +291,46 @@ describe ProjectDecorator do
       expect(project.reload.decorate.image_url).to include('defaul_project')
     end
   end
+
+  describe 'transfers_stacked_chart' do
+    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+
+    before do
+      create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 2, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 5, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project))
+    end
+
+    it 'sums awards by timeframe' do
+      r = project.decorate.transfers_stacked_chart_day(project.awards.completed)
+      expect(r.last['mint']).to eq(3)
+      expect(r.last['burn']).to eq(5)
+    end
+
+    it 'sets defaults' do
+      r = project.decorate.transfers_stacked_chart_day(project.awards.completed)
+      expect(r.last['earned']).to eq(0)
+    end
+  end
+
+  describe 'transfers_donut_chart' do
+    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+
+    before do
+      create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 2, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
+      create(:award, amount: 5, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project))
+    end
+
+    it 'sums awards by type' do
+      r = project.decorate.transfers_donut_chart(project.awards.completed)
+      expect(r.find { |x| x[:name] == 'mint' }[:value]).to eq(3)
+      expect(r.find { |x| x[:name] == 'burn' }[:value]).to eq(5)
+    end
+
+    it 'sets defaults' do
+      r = project.decorate.transfers_donut_chart(project.awards.completed)
+      expect(r.find { |x| x[:name] == 'earned' }[:value]).to eq(0)
+    end
+  end
 end

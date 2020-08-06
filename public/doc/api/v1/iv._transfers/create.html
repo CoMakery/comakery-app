@@ -175,6 +175,14 @@ table th, table td {
                 </td>
               </tr>
               <tr>
+                <td class="required">
+                    <span class="name">transfer[transfer_type_id]</span>
+                </td>
+                <td>
+                  <span class="description">transfer type id</span>
+                </td>
+              </tr>
+              <tr>
                 <td>
                     <span class="name">transfer[description]</span>
                 </td>
@@ -215,18 +223,18 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"abacccc4-0d0d-4cb9-90d0-41b2438583d3","amount":"1000.00000000","description":"investor","quantity":"2.00","source":"bought","total_amount":"2000.00000000"}},"method":"POST","nonce":"00f174e7056a7bb169fddc9e5479d940","timestamp":"1591977972","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"epNHSpOB4iXnS8Vq1uX5c2o4UOZ9jJvE7aWwgYT5AjKVVrDrP2/9XsOEFz6/C1iQSpq4vMTDC65uAgdDR7o5CA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"9333460d-fa3b-4f72-ab8d-124affc186d5","amount":"1000.00000000","description":"investor","quantity":"2.00","total_amount":"2000.00000000","transfer_type_id":"123"}},"method":"POST","nonce":"01ea9b1fe814fd9c9280a12e531667da","timestamp":"1594054282","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"6SIkpVYNA9IRvLwkl9C7PiQUl4hFnvlrxlDgckFDGP3jNJ7r6bj/CAwQmHYKYT6hHWo8CGIA3VfCyXS0SbykDg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;2ac4b0ae293d90a03596451dd10b3c0c&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;132a44bf72419902b0c83bb252b34074&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: 13,
-  &quot;source&quot;: &quot;bought&quot;,
+  &quot;transferTypeId&quot;: 123,
   &quot;amount&quot;: &quot;1000.0&quot;,
   &quot;quantity&quot;: &quot;2.0&quot;,
   &quot;totalAmount&quot;: &quot;2000.0&quot;,
@@ -234,9 +242,9 @@ table th, table td {
   &quot;ethereumTransactionAddress&quot;: null,
   &quot;ethereumTransactionError&quot;: null,
   &quot;status&quot;: &quot;accepted&quot;,
-  &quot;createdAt&quot;: &quot;2020-06-12T16:06:12.980Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-06-12T16:06:12.980Z&quot;,
-  &quot;accountId&quot;: &quot;abacccc4-0d0d-4cb9-90d0-41b2438583d3&quot;
+  &quot;createdAt&quot;: &quot;2020-07-06T16:51:22.768Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-07-06T16:51:22.768Z&quot;,
+  &quot;accountId&quot;: &quot;9333460d-fa3b-4f72-ab8d-124affc186d5&quot;
 }</pre>
       </div>
     </div>
