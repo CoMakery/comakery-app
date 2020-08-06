@@ -40,7 +40,13 @@
     class_name: 'transfers-filters--filter--options--blocked__active',
     query: {:status_eq => 3, "account_latest_verification_passed_null" => 1, filter: 'aml_kyc_unknown'},
     present: params[:q] && params[:q][:filter] == 'aml_kyc_unknown'
-  } 
+  },
+  {
+    name: 'cancelled',
+    class_name: 'transfers-filters--filter--options--blocked__active',
+    query: {:status_eq => 6, filter: 'cancelled'},
+    present: params[:q] && params[:q][:filter] == 'cancelled'
+  }
 ] %>
 
 <% all_queries = filters.map { |f| f[:query].keys }.flatten %>

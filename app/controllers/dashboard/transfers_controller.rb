@@ -37,7 +37,12 @@ class Dashboard::TransfersController < ApplicationController
   private
 
     def query
-      @transfers_unfiltered = @project.awards.completed
+      @transfers_unfiltered = @project.awards.completed_or_cancelled
+
+      unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
+        @transfers_unfiltered = @transfers_unfiltered.not_cancelled
+      end
+
       @q = @transfers_unfiltered.ransack(params[:q])
       @q.sorts = ['created_at desc'] if @q.sorts.empty?
       @q

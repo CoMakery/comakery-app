@@ -56,6 +56,18 @@ class AwardPolicy < ApplicationPolicy
     project_editable? && (@award.status == 'accepted')
   end
 
+  def cancel?
+    cancel_by_contributor? || cancel_by_admin?
+  end
+
+  def cancel_by_contributor?
+    submit?
+  end
+
+  def cancel_by_admin?
+    pay?
+  end
+
   def project_editable?
     ProjectPolicy.new(@account, @project).edit?
   end

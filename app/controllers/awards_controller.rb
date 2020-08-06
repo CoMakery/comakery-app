@@ -1,7 +1,7 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
   before_action :unavailable_for_whitelabel, only: %i[index]
-  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
+  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_create, only: %i[create new]
@@ -28,7 +28,7 @@ class AwardsController < ApplicationController
   skip_before_action :require_login, only: %i[confirm show]
   skip_after_action :verify_authorized, only: %i[confirm]
   skip_after_action :verify_policy_scoped, only: %(index)
-  before_action :redirect_back, only: %i[index]
+  before_action :redirect_back_to_session, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
   def index
@@ -154,10 +154,12 @@ class AwardsController < ApplicationController
   end
 
   def destroy
+    authorize @award, :cancel?
+
     if @award.update(status: 'cancelled')
-      redirect_to project_award_types_path, notice: 'Task cancelled'
+      redirect_back(fallback_location: project_award_types_path, notice: 'Task cancelled')
     else
-      redirect_to project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_back(fallback_location: project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') })
     end
   end
 
