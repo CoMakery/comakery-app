@@ -7,24 +7,26 @@ describe 'test_ready_filter', js: true do
   let!(:verification) { create(:verification, account: owner) }
 
   [1, 5, 10].each do |number_of_transfers|
-    it "Ready filter is not duplicating transfers - #{number_of_transfers} transfers" do
-      number_of_transfers.times do
-        create(:transfer, award_type: project_award_type, account: owner)
+    context "With #{number_of_transfers} ready transfers" do
+      it "Doesn't duplicate transfers" do
+        number_of_transfers.times do
+          create(:transfer, award_type: project_award_type, account: owner)
+        end
+
+        login(owner)
+        visit project_path(project)
+        click_link 'transfers'
+        page.find :css, '.transfers-create', wait: 20 # wait for page to load
+
+        # verify number of transfers before applying filter
+        expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
+
+        select('ready', from: 'transfers-filters--filter--options--select')
+        page.find :xpath, '//select[@id="transfers-filters--filter--options--select"]/option[@selected="selected" and contains (text(), "ready")]', wait: 20 # wait for page to reload
+
+        # verify number of transfers after applying filter
+        expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
       end
-
-      login(owner)
-      visit project_path(project)
-      click_link 'transfers'
-      page.find :css, '.transfers-create', wait: 20 # wait for page to load
-
-      # verify number of transfers before applying filter
-      expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
-
-      select('ready', from: 'transfers-filters--filter--options--select')
-      page.find :xpath, '//select[@id="transfers-filters--filter--options--select"]/option[@selected="selected" and contains (text(), "ready")]', wait: 20 # wait for page to reload
-
-      # verify number of transfers after applying filter
-      expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
     end
   end
 end
