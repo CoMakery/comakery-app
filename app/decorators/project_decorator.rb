@@ -163,7 +163,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def transfers_chart_colors
-    transfers_chart_types.keys.map.with_index { |k, i| [k, Comakery::ChartColors.lookup(i)] }.to_h
+    project.transfer_types.pluck(:name).reverse.map.with_index { |t, i| [t, Comakery::ChartColors.lookup(i)] }.to_h
   end
 
   def transfers_chart_colors_objects
