@@ -413,14 +413,18 @@ class AwardsController < ApplicationController
     end
   end
 
+    def account_accessible_channels
+      @project.channels.includes(:team).select { |c| c.team.accounts.include?(current_account) }
+    end
+
     def set_award_props
       @props = {
         task: @award.serializable_hash,
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
-        channels: (@project.channels.includes(:team) + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
-        members: @project.channels.includes(:team).map { |c| [c.id.to_s, c.members.to_h] }.to_h,
+        channels: (account_accessible_channels + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
+        members: account_accessible_channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
         recipient_address_url: project_award_type_award_recipient_address_path(@project, @award_type, @award),
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),
         form_action: 'POST',
