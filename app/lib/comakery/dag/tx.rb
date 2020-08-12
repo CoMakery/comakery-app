@@ -1,17 +1,14 @@
 class Comakery::Dag::Tx
+  attr_reader :constellation
   attr_reader :hash
 
-  def initialize(hash)
+  def initialize(network, hash)
+    @constellation = Comakery::Constellation.new(network)
     @hash = hash
-    @host = if ENV.key?('CONSTELLATION_BLOCK_EXPLORER_URL')
-      ENV.fetch('CONSTELLATION_BLOCK_EXPLORER_URL')
-    else
-      raise 'Please set CONSTELLATION_BLOCK_EXPLORER_URL env variable.'
-    end
   end
 
   def data
-    @data ||= JSON.parse((open "https://#{@host}/transactions/#{@hash}").read)
+    @data ||= constellation.tx(hash)
   end
 
   def sender
@@ -48,5 +45,9 @@ class Comakery::Dag::Tx
     data['checkpointBlock']
   rescue
     nil
+  end
+
+  def valid?
+    hash == data&.fetch('hash', nil)
   end
 end
