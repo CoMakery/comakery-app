@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_123516) do
+ActiveRecord::Schema.define(version: 2020_08_13_141209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_123516) do
     t.string "managed_account_id", limit: 256
     t.bigint "managed_mission_id"
     t.string "ethereum_auth_address", limit: 42
+    t.string "constellation_wallet", limit: 40
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
     t.index ["managed_mission_id", "managed_account_id"], name: "index_accounts_on_managed_mission_id_and_managed_account_id", unique: true
     t.index ["managed_mission_id"], name: "index_accounts_on_managed_mission_id"
