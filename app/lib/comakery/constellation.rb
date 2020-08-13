@@ -19,6 +19,6 @@ class Comakery::Constellation
   private
 
     def explorer_var_name
-      @explorer_var_name ||= "#{network.upcase}_BLOCK_EXPLORER_URL"
+      @explorer_var_name ||= "BLOCK_EXPLORER_URL_#{network.upcase}"
     end
 end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Comakery::Dag::Tx do
   let(:network) { 'constellation_testnet' }
-  let(:explorer_var_name) { "#{network.upcase}_BLOCK_EXPLORER_URL" }
+  let(:explorer_var_name) { "BLOCK_EXPLORER_URL_#{network.upcase}" }
   let(:host) { (ENV[explorer_var_name] ||= 'dummyhost') && ENV[explorer_var_name] }
   let(:tx) { 'dummy_tx' }
 
