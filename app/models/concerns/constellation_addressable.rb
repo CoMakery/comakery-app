@@ -18,10 +18,10 @@ module ConstellationAddressable
     end
 
     def validate_checksum(record, attribute, value)
-      included_checksum = value[3]&.to_i
+      included_checksum = value[3]
       computed_checksum = value[4..-1]&.scan(/\d/)&.map(&:to_i)&.reduce(&:+)&.modulo(9)
 
-      if included_checksum != computed_checksum
+      if included_checksum.to_i != computed_checksum.to_i
         message = options[:message] || 'should include valid checksum'
         record.errors.add attribute, message
       end
