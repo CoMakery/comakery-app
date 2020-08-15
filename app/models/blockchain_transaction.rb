@@ -7,12 +7,13 @@ class BlockchainTransaction < ApplicationRecord
   before_validation :generate_transaction
 
   attr_readonly :amount, :source, :destination, :network, :contract_address, :current_block
-  validates_with EthereumTokenValidator
-  validates :source, :network, :status, :current_block, presence: true
+
+  validates_with TxSupportTokenValidator
+  validates :source, :network, :status, presence: true
   validates :contract_address, presence: true, if: -> { token.coin_type_token? }
   validates :tx_raw, :tx_hash, presence: true, if: -> { token.coin_type_comakery? && nonce.present? }
 
-  enum network: %i[main ropsten kovan rinkeby]
+  enum network: %i[main ropsten kovan rinkeby constellation_mainnet constellation_testnet]
   enum status: %i[created pending cancelled succeed failed]
 
   def self.number_of_confirmations
@@ -80,7 +81,7 @@ class BlockchainTransaction < ApplicationRecord
 
   # @abstract Subclass is expected to implement #on_chain
   # @!method on_chain
-  #    Return Comakery::Eth::Tx:: instance for blockchain_transactable record
+  #    Return a Comakery::*::Tx instance for blockchain_transactable record
 
   def confirmed_on_chain?
     on_chain.confirmed?(self.class.number_of_confirmations)
@@ -90,17 +91,26 @@ class BlockchainTransaction < ApplicationRecord
     on_chain.valid?(self)
   end
 
+  def contract
+    if token.coin_type_on_ethereum?
+      @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, network, nonce)
+    else
+      raise "Contract parsing is not implemented for #{token}"
+    end
+  end
+
   private
 
     def populate_data
       self.token ||= blockchain_transactable.token
-      self.network ||= token.ethereum_network
-      self.contract_address ||= token.ethereum_contract_address
-      self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
-    end
 
-    def contract
-      @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, network, nonce)
+      if token.coin_type_on_ethereum?
+        self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
+        self.contract_address ||= token.ethereum_contract_address
+        self.network ||= token.ethereum_network
+      else
+        self.network ||= token.blockchain_network
+      end
     end
 
     # @abstract Subclass is expected to implement #tx

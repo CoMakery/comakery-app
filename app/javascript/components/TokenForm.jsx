@@ -382,7 +382,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match('qrc20|qtum|ada|btc|eos|xtz') &&
+            {this.state['token[coin_type]'].match('qrc20|qtum|ada|btc|eos|xtz|dag') &&
               <InputFieldDropdownHalfed
                 title='blockchain network'
                 required

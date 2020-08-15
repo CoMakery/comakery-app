@@ -47,7 +47,11 @@ class Comakery::Dag::Tx
     nil
   end
 
-  def valid?
+  def confirmed?(_ = nil)
     hash == data&.fetch('hash', nil)
+  end
+
+  def valid?
+    confirmed?
   end
 end

@@ -273,6 +273,15 @@ class Mom
     Token.new(defaults.merge(attrs))
   end
 
+  def dag_token(**attrs)
+    defaults = {
+      logo_image: dummy_image,
+      coin_type: :dag,
+      blockchain_network: :constellation_testnet
+    }
+    Token.new(defaults.merge(attrs))
+  end
+
   def interest(**attrs)
     params = {
       protocol: 'Moms protocol',
