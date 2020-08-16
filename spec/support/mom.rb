@@ -1,5 +1,4 @@
 require 'refile/file_double'
-require 'rails_helper'
 require 'webmock/rspec'
 include WebMock::API
 
