@@ -1,4 +1,9 @@
 require 'refile/file_double'
+require 'rails_helper'
+require 'webmock/rspec'
+include WebMock::API
+
+WebMock.enable!
 
 class Mom
   def account(**attrs)
@@ -160,6 +165,50 @@ class Mom
       account: create(
         :account,
         ethereum_wallet: attrs[:destination] || build(:ethereum_address_2)
+      ),
+      award_type: create(
+        :award_type,
+        project: project
+      ),
+      transfer_type: create(
+        :transfer_type,
+        project: project
+      )
+    )
+  end
+
+  def blockchain_transaction_dag(**attrs)
+    token = attrs[:token] || create(:dag_token)
+    attrs.delete(:token)
+
+    award = blockchain_transaction__award_dag(attrs.merge(token: token))
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactable: award,
+      amount: 1,
+      source: build(:constellation_address_1),
+      nonce: nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    BlockchainTransaction.create!(defaults.merge(attrs))
+  end
+
+  def blockchain_transaction__award_dag(**attrs)
+    project = attrs[:award]&.project || create(
+      :project,
+      token: attrs[:token]
+    )
+
+    attrs[:award] || create(
+      :award,
+      amount: attrs[:amount] || 1,
+      status: :accepted,
+      account: create(
+        :account,
+        constellation_wallet: attrs[:destination] || build(:constellation_address_2)
       ),
       award_type: create(
         :award_type,
@@ -588,6 +637,33 @@ class Mom
         nonce
       )
     end
+  end
+
+  def constellation_address_1
+    'DAG8LvRqfJchUjkw5Fpm3DohFqgXhqeqRAVUWKKY'
+  end
+
+  def constellation_address_2
+    'DAG8PU6Np9zrCfNEcq5bnEco6NdYKtcKgTDnZYwp'
+  end
+
+  def dag_tx(**attrs)
+    network = attrs[:network] || :constellation_testnet
+    hash = attrs[:hash] || '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d'
+
+    stub_constellation_request(
+      network,
+      hash,
+      'hash' => '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d',
+      'amount' => 0,
+      'receiver' => 'DAG8LvRqfJchUjkw5Fpm3DohFqgXhqeqRAVUWKKY',
+      'sender' => 'DAG8PU6Np9zrCfNEcq5bnEco6NdYKtcKgTDnZYwp'
+    )
+
+    Comakery::Dag::Tx.new(
+      network,
+      hash
+    )
   end
 end
 

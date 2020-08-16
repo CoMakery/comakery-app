@@ -51,7 +51,18 @@ class Comakery::Dag::Tx
     hash == data&.fetch('hash', nil)
   end
 
-  def valid?
-    confirmed?
+  def valid_data?(source, destination, amount_tx)
+    return false unless sender.casecmp?(source)
+    return false unless receiver.casecmp?(destination)
+    return false unless amount == amount_tx
+    true
   end
+
+  def valid?(blockchain_transaction)
+    valid_data?(blockchain_transaction.source, blockchain_transaction.destination, blockchain_transaction.amount)
+  end
+
+  alias source sender
+  alias destination receiver
+  alias value amount
 end

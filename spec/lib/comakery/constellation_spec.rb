@@ -11,12 +11,10 @@ describe Comakery::Constellation do
 
   describe '#tx' do
     let(:network) { 'constellation_testnet' }
-    let(:explorer_var_name) { "BLOCK_EXPLORER_URL_#{network.upcase}" }
-    let(:host) { (ENV[explorer_var_name] ||= 'dummyhost') && ENV[explorer_var_name] }
     let(:tx) { 'dummy_tx' }
 
     before do
-      stub_request(:get, "https://#{host}/transactions/#{tx}").to_return(body: { 'isDummy' => true }.to_json)
+      stub_constellation_request(network, tx, {})
     end
 
     it 'returns transaction details by a given tx hash' do
