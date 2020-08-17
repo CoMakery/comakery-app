@@ -196,6 +196,7 @@ class AccountsController < ApplicationController
       :bitcoin_wallet,
       :eos_wallet,
       :tezos_wallet,
+      :constellation_wallet,
       :first_name,
       :last_name,
       :nickname,
@@ -240,7 +241,7 @@ class AccountsController < ApplicationController
   end
 
   def account_decorate(account)
-    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet]).merge(
+    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet constellation_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
       qtum_address: account.decorate.qtum_wallet_url,
       cardano_address: account.decorate.cardano_wallet_url,

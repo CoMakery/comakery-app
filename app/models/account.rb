@@ -5,12 +5,14 @@ class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
   attachment :image, type: :image
+
   include BitcoinAddressable
   include EthereumAddressable
   include QtumAddressable
   include CardanoAddressable
   include EosAddressable
   include TezosAddressable
+  include ConstellationAddressable
 
   has_many :projects
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
@@ -74,6 +76,7 @@ class Account < ApplicationRecord
   validates :bitcoin_wallet, bitcoin_address: true # see BitcoinAddressable
   validates :eos_wallet, eos_address: true # see EosAddressable
   validates :tezos_wallet, tezos_address: true # see TezosAddressable
+  validates :constellation_wallet, constellation_address: true
   validates :email, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, allow_nil: true
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
   validates :linkedin_url, format: { with: %r{\Ahttps:\/\/www.linkedin.com\/.*\z} }, allow_blank: true

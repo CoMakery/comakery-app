@@ -245,6 +245,8 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def ratio_pretty(value, total)
+    return '100 %' if total.zero?
+
     ratio = (100 * value / total).round
 
     if ratio.zero?

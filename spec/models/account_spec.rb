@@ -174,6 +174,20 @@ describe Account do
       expect(account.tap { |a| a.update(tezos_wallet: "tz1#{'a' * 32}") }.errors.full_messages).to eq([error_message])
       expect(account.tap { |a| a.update(tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9') }).to be_valid
     end
+
+    it 'requires #constellation_wallet to be a valid constellation address' do
+      expect(account.constellation_wallet).to be_blank
+      expect(account).to be_valid
+      error_message = "Constellation wallet should start with 'DAG', followed by 37 characters"
+      error_message_checksum = 'Constellation wallet should include valid checksum'
+
+      expect(account.tap { |a| a.update(constellation_wallet: 'foo') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(constellation_wallet: '0x') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(constellation_wallet: "DAG#{'a' * 36}") }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(constellation_wallet: 'DAG8PU6Np9zrCfNEcq5bnEco5NdYKtcKgTDnZYwp') }.errors.full_messages).to eq([error_message_checksum])
+      expect(account.tap { |a| a.update(constellation_wallet: "DAG0#{'a' * 36}") }).to be_valid
+      expect(account.tap { |a| a.update(constellation_wallet: 'DAG8PU6Np9zrCfNEcq5bnEco6NdYKtcKgTDnZYwp') }).to be_valid
+    end
   end
 
   describe 'callbacks' do

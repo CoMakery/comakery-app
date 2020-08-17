@@ -70,6 +70,7 @@ export default class Account extends React.Component {
     formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
     formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
     formData.append('account[tezos_wallet]', this.state.tezosWallet || '')
+    formData.append('account[constellation_wallet]', this.state.constellationWallet || '')
     formData.append('account[specialty_id]', this.state.specialtyId || '')
     formData.append('account[occupation]', this.state.occupation || '')
     formData.append('account[linkedin_url]', this.state.linkedinUrl || '')
@@ -250,6 +251,8 @@ export default class Account extends React.Component {
 
               <FormField fieldLabel='Tezos Address' fieldName='tezosWallet' fieldValue={this.state.tezosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.tezosWallet} />
 
+              <FormField fieldLabel='Constellation Address' fieldName='constellationWallet' fieldValue={this.state.constellationWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.constellationWallet} />
+
               <div className='columns small-3'>
                 <label>Image</label>
               </div>
@@ -367,6 +370,20 @@ export default class Account extends React.Component {
               <div className='columns medium-9'>
                 {this.state.accountData.tezosWallet && <React.Fragment>
                   <input type='text' value={this.state.accountData.tezosWallet} readOnly className='fake-link copy-source6 fake-link--input' data-href={this.state.accountData.tezosWallet} />
+                  <a className='copiable6 copiable--link'>
+                    <img src={this.props.clippyIcon} width={20} height={20} />
+                  </a>
+                </React.Fragment>}
+              </div>
+            </div>
+
+            <div className='row'>
+              <div className='columns medium-3' style={{ marginTop: 8 }}>
+                Constellation Address
+              </div>
+              <div className='columns medium-9'>
+                {this.state.accountData.constellationWallet && <React.Fragment>
+                  <input type='text' value={this.state.accountData.constellationWallet} readOnly className='fake-link copy-source6 fake-link--input' data-href={this.state.accountData.constellationWallet} />
                   <a className='copiable6 copiable--link'>
                     <img src={this.props.clippyIcon} width={20} height={20} />
                   </a>

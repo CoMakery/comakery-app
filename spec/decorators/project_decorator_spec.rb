@@ -333,4 +333,28 @@ describe ProjectDecorator do
       expect(r.find { |x| x[:name] == 'earned' }[:value]).to eq(0)
     end
   end
+
+  describe 'ratio_pretty' do
+    context 'when total is zero' do
+      it 'returns 100 %' do
+        expect(project.ratio_pretty(1, 0)).to eq('100 %')
+      end
+    end
+
+    context 'when ratio is zero' do
+      it 'returns < 1 %' do
+        expect(project.ratio_pretty(0, 1)).to eq('< 1 %')
+      end
+    end
+
+    context 'when ratio is 100' do
+      it 'returns 100 %' do
+        expect(project.ratio_pretty(1, 1)).to eq('100 %')
+      end
+    end
+
+    it 'returns ratio' do
+      expect(project.ratio_pretty(1, 2)).to eq('≈ 50 %')
+    end
+  end
 end
