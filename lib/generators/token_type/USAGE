@@ -1,0 +1,8 @@
+Description:
+    Creates a template file for a new token type
+
+Example:
+    rails generate token_type Btc
+
+    This will create:
+        app/models/token_type/btc.rb

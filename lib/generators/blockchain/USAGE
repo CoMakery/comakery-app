@@ -1,0 +1,8 @@
+Description:
+    Creates a template file for a new blockchain
+
+Example:
+    rails generate blockchain Bitcoin
+
+    This will create:
+        app/models/blockchain/bitcoin.rb
