@@ -1,23 +1,34 @@
 class TokenType::Qrc20 < TokenType
-  # Template for implementing a new token type
-  # See parent class at `app/models/token_type.rb` for details
+  # Generated template for implementing a new token type subclass
+  # See: rails g token_type -h
 
-  def initialize
-    super
+  # Name of the token type for UI purposes
+  # @return [String] name
+  def name
+    'QRC20'
+  end
 
-    # Name of the token type for UI purposes
-    @name = 'QRC20'
+  # Symbol of the token type for UI purposes
+  # @return [String] symbol
+  def symbol
+    'QRC20'
+  end
 
-    # Symbol of the token type for UI purposes
-    @symbol = 'QRC20'
+  # Number of decimals
+  # @return [Integer] number
+  def decimals
+    0
+  end
 
-    # Number of decimals
-    @decimals = 8
+  # Contract class if implemented
+  # @return [nil]
+  def contract
+    # Comakery::Eth::Contract::Erc20
+  end
 
-    # Contract class if implemented
-    # @contract = Comakery::Eth::Contract::Erc20
-
-    # Transaction class if implemented
-    # @tx = Comakery::Eth::Tx
+  # Transaction class if implemented
+  # @return [nil]
+  def tx
+    # Comakery::Eth::Tx
   end
 end

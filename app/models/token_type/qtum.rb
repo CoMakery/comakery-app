@@ -1,23 +1,34 @@
 class TokenType::Qtum < TokenType
-  # Template for implementing a new token type
-  # See parent class at `app/models/token_type.rb` for details
+  # Generated template for implementing a new token type subclass
+  # See: rails g token_type -h
 
-  def initialize
-    super
+  # Name of the token type for UI purposes
+  # @return [String] name
+  def name
+    'QTUM'
+  end
 
-    # Name of the token type for UI purposes
-    @name = 'QTUM'
+  # Symbol of the token type for UI purposes
+  # @return [String] symbol
+  def symbol
+    'QTUM'
+  end
 
-    # Symbol of the token type for UI purposes
-    @symbol = 'QTUM'
+  # Number of decimals
+  # @return [Integer] number
+  def decimals
+    0
+  end
 
-    # Number of decimals
-    @decimals = 8
+  # Contract class if implemented
+  # @return [nil]
+  def contract
+    # Comakery::Eth::Contract::Erc20
+  end
 
-    # Contract class if implemented
-    # @contract = Comakery::Eth::Contract::Erc20
-
-    # Transaction class if implemented
-    # @tx = Comakery::Eth::Tx
+  # Transaction class if implemented
+  # @return [nil]
+  def tx
+    # Comakery::Eth::Tx
   end
 end

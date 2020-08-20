@@ -6,3 +6,4 @@ Example:
 
     This will create:
         app/models/blockchain/bitcoin.rb
+        spec/models/blockchain/bitcoin_spec.rb

@@ -1,3 +1,3 @@
 class TokenType
-  attr_reader :name, :symbol, :decimals, :contract, :tx
+  # See `app/models/token_type/*`
 end

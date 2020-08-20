@@ -6,3 +6,4 @@ Example:
 
     This will create:
         app/models/token_type/btc.rb
+        spec/models/token_type/btc_spec.rb
