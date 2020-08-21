@@ -17,7 +17,7 @@ class Blockchain::Ethereum < Blockchain
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host
-    'example.org'
+    'etherscan.io'
   end
 
   # Is mainnet?
@@ -29,7 +29,7 @@ class Blockchain::Ethereum < Blockchain
   # Number of confirmations to wait before marking transaction as successful
   # @return [Integer] number
   def number_of_confirmations
-    1
+    3
   end
 
   # Seconds to wait between syncs with block explorer API
@@ -65,7 +65,7 @@ class Blockchain::Ethereum < Blockchain
   # Address url on block explorer website
   # @return [String] url
   def url_for_address_human(addr)
-    "https://#{explorer_human_host}/addr/#{addr}"
+    "https://#{explorer_human_host}/address/#{addr}"
   end
 
   # Address url on block explorer API

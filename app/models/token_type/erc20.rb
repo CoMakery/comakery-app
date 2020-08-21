@@ -11,24 +11,24 @@ class TokenType::Erc20 < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    'ERC20'
+    nil
   end
 
   # Number of decimals
   # @return [Integer] number
   def decimals
-    0
+    nil
   end
 
   # Contract class if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20
+    Comakery::Eth::Contract::Erc20
   end
 
   # Transaction class if implemented
   # @return [nil]
   def tx
-    # Comakery::Eth::Tx
+    Comakery::Eth::Tx::Erc20
   end
 end

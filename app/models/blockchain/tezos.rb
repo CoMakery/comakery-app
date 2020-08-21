@@ -17,7 +17,7 @@ class Blockchain::Tezos < Blockchain
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host
-    'example.org'
+    'tzscan.io'
   end
 
   # Is mainnet?
@@ -53,7 +53,7 @@ class Blockchain::Tezos < Blockchain
   # Transaction url on block explorer website
   # @return [String] url
   def url_for_tx_human(hash)
-    "https://#{explorer_human_host}/tx/#{hash}"
+    "https://#{explorer_human_host}/#{hash}"
   end
 
   # Transaction url on block explorer API
@@ -65,7 +65,7 @@ class Blockchain::Tezos < Blockchain
   # Address url on block explorer website
   # @return [String] url
   def url_for_address_human(addr)
-    "https://#{explorer_human_host}/addr/#{addr}"
+    "https://#{explorer_human_host}/#{addr}"
   end
 
   # Address url on block explorer API

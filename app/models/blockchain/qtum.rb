@@ -17,7 +17,7 @@ class Blockchain::Qtum < Blockchain
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host
-    'example.org'
+    'explorer.qtum.org'
   end
 
   # Is mainnet?
@@ -65,7 +65,7 @@ class Blockchain::Qtum < Blockchain
   # Address url on block explorer website
   # @return [String] url
   def url_for_address_human(addr)
-    "https://#{explorer_human_host}/addr/#{addr}"
+    "https://#{explorer_human_host}/address/#{addr}"
   end
 
   # Address url on block explorer API

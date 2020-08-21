@@ -11,13 +11,13 @@ class Blockchain::Constellation < Blockchain
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    'example.org'
+    ENV['BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET']
   end
 
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host
-    'example.org'
+    explorer_api_host
   end
 
   # Is mainnet?
@@ -29,7 +29,7 @@ class Blockchain::Constellation < Blockchain
   # Number of confirmations to wait before marking transaction as successful
   # @return [Integer] number
   def number_of_confirmations
-    1
+    0
   end
 
   # Seconds to wait between syncs with block explorer API
@@ -53,25 +53,25 @@ class Blockchain::Constellation < Blockchain
   # Transaction url on block explorer website
   # @return [String] url
   def url_for_tx_human(hash)
-    "https://#{explorer_human_host}/tx/#{hash}"
+    "https://#{explorer_human_host}/transactions/#{hash}"
   end
 
   # Transaction url on block explorer API
   # @return [String] url
   def url_for_tx_api(hash)
-    "https://#{explorer_api_host}/tx/#{hash}"
+    "https://#{explorer_api_host}/transactions/#{hash}"
   end
 
   # Address url on block explorer website
   # @return [String] url
   def url_for_address_human(addr)
-    "https://#{explorer_human_host}/addr/#{addr}"
+    url_for_address_api(addr)
   end
 
   # Address url on block explorer API
   # @return [String] url
   def url_for_address_api(addr)
-    "https://#{explorer_api_host}/addr/#{addr}"
+    "https://#{explorer_human_host}/transactions?address=#{addr}"
   end
 
   # Validate blockchain transaction hash

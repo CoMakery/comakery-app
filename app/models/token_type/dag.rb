@@ -17,7 +17,7 @@ class TokenType::Dag < TokenType
   # Number of decimals
   # @return [Integer] number
   def decimals
-    0
+    8
   end
 
   # Contract class if implemented
@@ -29,6 +29,6 @@ class TokenType::Dag < TokenType
   # Transaction class if implemented
   # @return [nil]
   def tx
-    # Comakery::Eth::Tx
+    Comakery::Dag::Tx
   end
 end

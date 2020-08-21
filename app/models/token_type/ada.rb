@@ -17,7 +17,7 @@ class TokenType::Ada < TokenType
   # Number of decimals
   # @return [Integer] number
   def decimals
-    0
+    6
   end
 
   # Contract class if implemented

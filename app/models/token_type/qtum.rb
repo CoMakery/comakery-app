@@ -17,7 +17,7 @@ class TokenType::Qtum < TokenType
   # Number of decimals
   # @return [Integer] number
   def decimals
-    0
+    8
   end
 
   # Contract class if implemented

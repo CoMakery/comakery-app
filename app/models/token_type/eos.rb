@@ -17,7 +17,7 @@ class TokenType::Eos < TokenType
   # Number of decimals
   # @return [Integer] number
   def decimals
-    0
+    18
   end
 
   # Contract class if implemented

@@ -11,19 +11,19 @@ class TokenType::Qrc20 < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    'QRC20'
+    nil
   end
 
   # Number of decimals
   # @return [Integer] number
   def decimals
-    0
+    nil
   end
 
   # Contract class if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20
+    Comakery::Qtum::Contract::Qrc20
   end
 
   # Transaction class if implemented

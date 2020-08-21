@@ -1,34 +1,10 @@
-class TokenType::Comakery < TokenType
+class TokenType::Comakery < TokenType::Erc20
   # Generated template for implementing a new token type subclass
   # See: rails g token_type -h
 
   # Name of the token type for UI purposes
   # @return [String] name
   def name
-    'COMAKERY'
-  end
-
-  # Symbol of the token type for UI purposes
-  # @return [String] symbol
-  def symbol
-    'COMAKERY'
-  end
-
-  # Number of decimals
-  # @return [Integer] number
-  def decimals
-    0
-  end
-
-  # Contract class if implemented
-  # @return [nil]
-  def contract
-    # Comakery::Eth::Contract::Erc20
-  end
-
-  # Transaction class if implemented
-  # @return [nil]
-  def tx
-    # Comakery::Eth::Tx
+    'Comakery Security Token'
   end
 end
