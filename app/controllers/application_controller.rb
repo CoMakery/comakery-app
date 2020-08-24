@@ -34,9 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authenticated(msg = nil)
-    if "#{controller_name}##{action_name}" == 'interests#create' && params[:project_id]
-      session[:interested_in_project] = params[:project_id]
-    end
+    session[:interested_in_project] = params[:project_id] if "#{controller_name}##{action_name}" == 'interests#create' && params[:project_id]
 
     respond_to do |format|
       format.html do
@@ -103,9 +101,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_email_confirmation
-    if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-      redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' }
-    end
+    redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' } if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
   end
 
   def require_build_profile
@@ -122,9 +118,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_age
-    if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
-      redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website'
-    end
+    redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website' if current_account&.valid_and_underage? && controller_name != 'accounts'
   end
 
   def current_account
@@ -213,9 +207,8 @@ class ApplicationController < ActionController::Base
 
   def d(the_proc)
     return if Rails.env.test?
-    unless the_proc.instance_of?(Proc)
-      return STDERR.puts("d expected an instance of Proc, got #{the_proc.try(:inspect)}")
-    end
+    return warn("d expected an instance of Proc, got #{the_proc.try(:inspect)}") unless the_proc.instance_of?(Proc)
+
     source = the_proc.try(:source).try(:match, /\s*proc { (.+) }\s*/).try(:[], 1)
     logger.debug "#{source} ===>>> " if source
     value = the_proc.call
@@ -237,26 +230,26 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def compare_all(*pairs)
-    pairs.map do |a, b|
-      ActiveSupport::SecurityUtils.secure_compare(a, b)
-    end.reduce(:&)
-  end
-
-  def set_whitelabel_mission
-    @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
-  end
-
-  def set_project_scope
-    @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
-  end
-
-  def set_whitelabel_cors
-    if @whitelabel_mission
-      headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
-      headers['Access-Control-Allow-Credentials'] = 'true'
-      headers['Access-Control-Allow-Methods'] = '*'
-      headers['Access-Control-Allow-Headers'] = '*'
+    def compare_all(*pairs)
+      pairs.map do |a, b|
+        ActiveSupport::SecurityUtils.secure_compare(a, b)
+      end.reduce(:&)
     end
-  end
+
+    def set_whitelabel_mission
+      @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
+    end
+
+    def set_project_scope
+      @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
+    end
+
+    def set_whitelabel_cors
+      if @whitelabel_mission
+        headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
+        headers['Access-Control-Allow-Credentials'] = 'true'
+        headers['Access-Control-Allow-Methods'] = '*'
+        headers['Access-Control-Allow-Headers'] = '*'
+      end
+    end
 end

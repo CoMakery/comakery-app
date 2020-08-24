@@ -31,9 +31,7 @@ class Views::Projects::Base < Views::Base
           h5(class: 'project_block--title') do
             a(project.title, href: path)
 
-            if policy(project).edit?
-              a(href: project_award_types_path(project), class: 'project_block--title--edit-link fa fa-cog')
-            end
+            a(href: project_award_types_path(project), class: 'project_block--title--edit-link fa fa-cog') if policy(project).edit?
           end
         end
 

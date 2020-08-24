@@ -70,10 +70,10 @@ describe Authentication do
       let!(:account) { create(:account, email: 'bob@example.com') }
       let!(:authentication) do
         create(:authentication,
-          account_id: account.id,
-          provider: 'slack',
-          uid: 'ACDSF',
-          token: 'slack token')
+               account_id: account.id,
+               provider: 'slack',
+               uid: 'ACDSF',
+               token: 'slack token')
       end
 
       it 'returns the existing authentication' do
@@ -125,10 +125,10 @@ describe Authentication do
       let!(:account) { create(:account, email: 'bob@example.com') }
       let!(:authentication) do
         create(:authentication,
-          account_id: account.id,
-          provider: 'discord',
-          uid: 'discord-user',
-          token: 'discord token')
+               account_id: account.id,
+               provider: 'discord',
+               uid: 'discord-user',
+               token: 'discord token')
       end
 
       it '#find_or_create_by_omniauth' do
@@ -146,10 +146,10 @@ describe Authentication do
       let!(:account) { create(:account, email: 'bob@example.com') }
       let!(:authentication) do
         create(:authentication,
-          account_id: account.id,
-          provider: 'discord',
-          uid: 'discord-user',
-          token: 'discord token')
+               account_id: account.id,
+               provider: 'discord',
+               uid: 'discord-user',
+               token: 'discord token')
       end
 
       it 'return true is be owner' do

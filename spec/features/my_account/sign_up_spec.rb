@@ -69,7 +69,7 @@ describe 'my account', js: true do
   end
 
   scenario 'show email input field if email is empty' do
-    # rubocop:disable SkipsModelValidations
+    # rubocop:disable Rails/SkipsModelValidations
     confirmed_account.update_column('email', nil)
     login(confirmed_account)
     visit build_profile_accounts_path

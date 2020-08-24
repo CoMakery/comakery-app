@@ -13,37 +13,37 @@ class Comakery::Dag::Tx
 
   def sender
     data['sender']
-  rescue
+  rescue StandardError
     nil
   end
 
   def receiver
     data['receiver']
-  rescue
+  rescue StandardError
     nil
   end
 
   def amount
     data['amount'].to_i
-  rescue
+  rescue StandardError
     nil
   end
 
   def fee
     data['fee'].to_i
-  rescue
+  rescue StandardError
     nil
   end
 
   def snapshot_hash
     data['snapshotHash']
-  rescue
+  rescue StandardError
     nil
   end
 
   def checkpoint_block
     data['checkpointBlock']
-  rescue
+  rescue StandardError
     nil
   end
 
@@ -55,6 +55,7 @@ class Comakery::Dag::Tx
     return false unless sender.casecmp?(source)
     return false unless receiver.casecmp?(destination)
     return false unless amount == amount_tx
+
     true
   end
 

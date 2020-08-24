@@ -16,18 +16,18 @@ class Api::V1::RegGroupsController < Api::V1::ApiController
     if reg_group.save
       @reg_group = reg_group
 
-      render 'show.json', status: 201
+      render 'show.json', status: :created
     else
       @errors = reg_group.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 
   # DELETE /api/v1/projects/1/reg_groups/1
   def destroy
     reg_group.destroy
-    render 'index.json', status: 200
+    render 'index.json', status: :ok
   end
 
   private

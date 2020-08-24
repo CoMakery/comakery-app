@@ -37,7 +37,7 @@ Capybara.register_driver :chrome do |app|
   options.add_argument('no-sandbox')
 
   # Run headless by default unless CHROME_HEADLESS specified
-  options.add_argument('headless') unless ENV['CHROME_HEADLESS'] =~ /^(false|no|0)$/i
+  options.add_argument('headless') unless /^(false|no|0)$/i.match?(ENV['CHROME_HEADLESS'])
 
   # Disable /dev/shm use in CI. See https://gitlab.com/gitlab-org/gitlab-ee/issues/4252
   options.add_argument('disable-dev-shm-usage') if ENV['CI'] || ENV['CI_SERVER']
@@ -73,7 +73,7 @@ RSpec.configure do |config|
     unless session.current_window.size == [1240, 1400]
       begin
         session.current_window.resize_to(1240, 1400)
-      rescue
+      rescue StandardError
         nil
       end
     end
@@ -92,9 +92,7 @@ RSpec.configure do |config|
 
   config.append_after(:each) do
     # prevent localStorage from introducing side effects based on test order
-    unless ['', 'about:blank', 'data:,'].include? Capybara.current_session.driver.browser.current_url
-      execute_script('localStorage.clear();')
-    end
+    execute_script('localStorage.clear();') unless ['', 'about:blank', 'data:,'].include? Capybara.current_session.driver.browser.current_url
 
     Capybara.reset_sessions!
   end

@@ -82,57 +82,57 @@ class TokensController < ApplicationController
 
   private
 
-  def redirect_unless_admin
-    redirect_to root_path unless current_account.comakery_admin?
-  end
+    def redirect_unless_admin
+      redirect_to root_path unless current_account.comakery_admin?
+    end
 
-  def set_token
-    @token = Token.find(params[:id]).decorate
-  end
+    def set_token
+      @token = Token.find(params[:id]).decorate
+    end
 
-  def set_coin_types
-    @coin_types = Token.coin_types.invert
-  end
+    def set_coin_types
+      @coin_types = Token.coin_types.invert
+    end
 
-  def set_ethereum_networks
-    @ethereum_networks = Token.ethereum_networks.invert
-  end
+    def set_ethereum_networks
+      @ethereum_networks = Token.ethereum_networks.invert
+    end
 
-  def set_blockchain_networks
-    @blockchain_networks = Token.blockchain_networks.invert
-  end
+    def set_blockchain_networks
+      @blockchain_networks = Token.blockchain_networks.invert
+    end
 
-  def set_generic_props
-    @props = {
-      token: @token&.serializable_hash&.merge(
-        {
-          logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
-        }
-      ),
-      coin_types: @coin_types,
-      ethereum_networks: @ethereum_networks,
-      blockchain_networks: @blockchain_networks,
-      form_url: tokens_path,
-      form_action: 'POST',
-      url_on_success: tokens_path,
-      csrf_token: form_authenticity_token
-    }
-  end
+    def set_generic_props
+      @props = {
+        token: @token&.serializable_hash&.merge(
+          {
+            logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
+          }
+        ),
+        coin_types: @coin_types,
+        ethereum_networks: @ethereum_networks,
+        blockchain_networks: @blockchain_networks,
+        form_url: tokens_path,
+        form_action: 'POST',
+        url_on_success: tokens_path,
+        csrf_token: form_authenticity_token
+      }
+    end
 
-  def token_params
-    params.require(:token).permit(
-      :name,
-      :ethereum_enabled,
-      :logo_image,
-      :coin_type,
-      :denomination,
-      :ethereum_network,
-      :ethereum_contract_address,
-      :blockchain_network,
-      :contract_address,
-      :symbol,
-      :decimal_places,
-      :unlisted
-    )
-  end
+    def token_params
+      params.require(:token).permit(
+        :name,
+        :ethereum_enabled,
+        :logo_image,
+        :coin_type,
+        :denomination,
+        :ethereum_network,
+        :ethereum_contract_address,
+        :blockchain_network,
+        :contract_address,
+        :symbol,
+        :decimal_places,
+        :unlisted
+      )
+    end
 end

@@ -34,8 +34,8 @@ class Project < ApplicationRecord
   enum payment_type: {
     project_token: 1
   }
-  enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
-  enum status: %i[active passive]
+  enum visibility: { member: 0, public_listed: 1, member_unlisted: 2, public_unlisted: 3, archived: 4 }
+  enum status: { active: 0, passive: 1 }
 
   validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
@@ -133,11 +133,11 @@ class Project < ApplicationRecord
     # Vimeo regex from https://stackoverflow.com/questions/41208456/javascript-regex-vimeo-id
 
     case video_url
-    when /youtu\.be\/([^\?]*)/
+    when %r{youtu\.be/([^\?]*)}
       Regexp.last_match(1)
-    when /^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/
+    when %r{^.*((v/)|(embed/)|(watch\?))\??v?=?([^\&\?]*).*}
       Regexp.last_match(5)
-    when /(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)([a-zA-Z0-9_\-]*)?/i
+    when %r{(?:www\.|player\.)?vimeo.com/(?:channels/(?:\w+/)?|groups/(?:[^/]*)/videos/|album/(?:\d+)/video/|video/|)(\d+)([a-zA-Z0-9_\-]*)?}i
       Regexp.last_match(1)
     end
   end
@@ -170,9 +170,7 @@ class Project < ApplicationRecord
     result = []
     recents = awards.completed.includes(:account).limit(max).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
-    if awards.completed.count > max
-      date_groups.delete(recents.first.created_at.strftime('%Y-%m-%d'))
-    end
+    date_groups.delete(recents.first.created_at.strftime('%Y-%m-%d')) if awards.completed.count > max
     contributors = {}
     recents.map(&:account).uniq.each do |a|
       name = a&.decorate&.name || 'Others'
@@ -222,51 +220,51 @@ class Project < ApplicationRecord
 
   private
 
-  def valid_tracker_url
-    validate_url(:tracker)
-  end
+    def valid_tracker_url
+      validate_url(:tracker)
+    end
 
-  def valid_contributor_agreement_url
-    validate_url(:contributor_agreement_url)
-  end
+    def valid_contributor_agreement_url
+      validate_url(:contributor_agreement_url)
+    end
 
-  def valid_video_url
-    validate_url(:video_url)
-    return if errors[:video_url].present?
+    def valid_video_url
+      validate_url(:video_url)
+      return if errors[:video_url].present?
 
-    errors[:video_url] << 'must be a link to Youtube or Vimeo video' if video_id.blank?
-  end
+      errors[:video_url] << 'must be a link to Youtube or Vimeo video' if video_id.blank?
+    end
 
-  def validate_url(attribute_name)
-    uri = URI.parse(send(attribute_name) || '')
-  rescue URI::InvalidURIError
-    uri = nil
-  ensure
-    errors[attribute_name] << 'must be a valid url' unless uri&.absolute?
-    uri
-  end
+    def validate_url(attribute_name)
+      uri = URI.parse(send(attribute_name) || '')
+    rescue URI::InvalidURIError
+      uri = nil
+    ensure
+      errors[attribute_name] << 'must be a valid url' unless uri&.absolute?
+      uri
+    end
 
-  def token_changeable
-    errors.add(:token_id, 'cannot be changed if project has completed tasks') if awards.completed.any?
-  end
+    def token_changeable
+      errors.add(:token_id, 'cannot be changed if project has completed tasks') if awards.completed.any?
+    end
 
-  def terms_should_be_readonly
-    errors.add(:base, 'terms cannot be changed') if terms_readonly?
-  end
+    def terms_should_be_readonly
+      errors.add(:base, 'terms cannot be changed') if terms_readonly?
+    end
 
-  def udpate_awards_if_token_was_added
-    awards.paid.each { |a| a.update(status: :accepted) }
-  end
+    def udpate_awards_if_token_was_added
+      awards.paid.each { |a| a.update(status: :accepted) }
+    end
 
-  def add_owner_as_interested
-    interested << account unless account.interested?(id)
-  end
+    def add_owner_as_interested
+      interested << account unless account.interested?(id)
+    end
 
-  def store_license_hash
-    self.agreed_to_license_hash = Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) }))
-  end
+    def store_license_hash
+      self.agreed_to_license_hash = Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) }))
+    end
 
-  def set_whitelabel
-    self.whitelabel = mission&.whitelabel
-  end
+    def set_whitelabel
+      self.whitelabel = mission&.whitelabel
+    end
 end

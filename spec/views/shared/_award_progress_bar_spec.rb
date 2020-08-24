@@ -8,10 +8,10 @@ describe 'shared/_award_progress_bar.html.rb' do
 
   let(:project) do
     create(:project,
-      title: 'Cats with Lazers Project',
-      description: 'cats with lazers',
-      account: account,
-      public: false)
+           title: 'Cats with Lazers Project',
+           description: 'cats with lazers',
+           account: account,
+           public: false)
   end
 
   before do

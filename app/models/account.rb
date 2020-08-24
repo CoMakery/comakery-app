@@ -99,6 +99,7 @@ class Account < ApplicationRecord
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
       return Account.none if award_types.blank?
+
       select("accounts.*, (select sum(total_amount) from awards where awards.status in(3,5) and awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
     end
 
@@ -119,9 +120,7 @@ class Account < ApplicationRecord
       elsif channel
         account = find_or_create_by(email: fetch_email(uid, channel))
         account.nickname = fetch_nickname(uid, channel)
-        errors = if account.save
-          account.create_authentication_and_build_team(uid, channel)
-        end
+        errors = (account.create_authentication_and_build_team(uid, channel) if account.save)
       end
       [account, errors]
     end
@@ -156,9 +155,7 @@ class Account < ApplicationRecord
       # rubocop:disable Rails/SkipsModelValidations
 
       Account.where.not(nonce: nil).find_each do |a|
-        if a.ethereum_wallet.present? && a.email.present? && !a.email.match?(/0x.+@comakery.com/)
-          a.update_column(:ethereum_auth_address, a.ethereum_wallet)
-        end
+        a.update_column(:ethereum_auth_address, a.ethereum_wallet) if a.ethereum_wallet.present? && a.email.present? && !a.email.match?(/0x.+@comakery.com/)
       end
     end
   end
@@ -292,6 +289,7 @@ class Account < ApplicationRecord
 
   def age
     return nil unless date_of_birth
+
     calculate_age
   end
 
@@ -319,39 +317,39 @@ class Account < ApplicationRecord
 
   private
 
-  def validate_age
-    errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18
-  end
-
-  def calculate_age
-    now = Time.zone.now.to_date
-    result = now.year - date_of_birth.year
-    result -= 1 if now.month < date_of_birth.month || now.month == date_of_birth.month && now.day < date_of_birth.day
-    result
-  end
-
-  def check_email_update
-    set_email_confirm_token if saved_change_to_email?
-  end
-
-  def populate_managed_account_id
-    self.managed_account_id ||= SecureRandom.uuid
-  end
-
-  def normalize_ethereum_auth_address
-    if ethereum_auth_address.present?
-      addr = Eth::Address.new(ethereum_auth_address)
-      self.ethereum_auth_address = addr.checksummed if addr.valid?
+    def validate_age
+      errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18
     end
-  end
 
-  def reset_latest_verification
-    self.latest_verification = nil
-  end
-
-  def populate_awards
-    Award.accepted.where(email: email, account_id: nil).find_each do |a|
-      a.update(account: self, email: nil)
+    def calculate_age
+      now = Time.zone.now.to_date
+      result = now.year - date_of_birth.year
+      result -= 1 if now.month < date_of_birth.month || now.month == date_of_birth.month && now.day < date_of_birth.day
+      result
     end
-  end
+
+    def check_email_update
+      set_email_confirm_token if saved_change_to_email?
+    end
+
+    def populate_managed_account_id
+      self.managed_account_id ||= SecureRandom.uuid
+    end
+
+    def normalize_ethereum_auth_address
+      if ethereum_auth_address.present?
+        addr = Eth::Address.new(ethereum_auth_address)
+        self.ethereum_auth_address = addr.checksummed if addr.valid?
+      end
+    end
+
+    def reset_latest_verification
+      self.latest_verification = nil
+    end
+
+    def populate_awards
+      Award.accepted.where(email: email, account_id: nil).find_each do |a|
+        a.update(account: self, email: nil)
+      end
+    end
 end

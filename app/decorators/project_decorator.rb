@@ -131,9 +131,7 @@ class ProjectDecorator < Draper::Decorator
   def team_top
     team = (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
 
-    if team.size < team_top_limit
-      team += interested.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size)
-    end
+    team += interested.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
 
     team
   end
@@ -159,7 +157,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def transfers_chart_types
-    project.transfer_types.pluck(:name).map { |k| [k, 0] }.to_h
+    project.transfer_types.pluck(:name).index_with { |_k| 0 }
   end
 
   def transfers_chart_colors
@@ -257,8 +255,6 @@ class ProjectDecorator < Draper::Decorator
       "≈ #{ratio} %"
     end
   end
-
-  private
 
   def self.pretty_number(*currency_methods)
     currency_methods.each do |method_name|

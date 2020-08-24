@@ -101,9 +101,7 @@ class AwardsController < ApplicationController
   def assign
     account = Account.find(params[:account_id])
 
-    if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
-      @award = @award.clone_on_assignment
-    end
+    @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
 
     if account && @award.update(account: account, issuer: current_account, status: 'ready')
       TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_assigned.deliver_now
@@ -283,9 +281,7 @@ class AwardsController < ApplicationController
     end
 
     def clone_award_on_start
-      if @award.should_be_cloned? && @award.can_be_cloned_for?(current_account)
-        @award = @award.clone_on_assignment
-      end
+      @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(current_account)
     end
 
     def set_award_type
@@ -303,9 +299,7 @@ class AwardsController < ApplicationController
     def set_default_project_filter
       default_project_id = ENV['DEFAULT_PROJECT_ID']
 
-      if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
-        @project = Project.find_by(id: default_project_id)
-      end
+      @project = Project.find_by(id: default_project_id) if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
     end
 
     def set_project_filter
@@ -323,9 +317,7 @@ class AwardsController < ApplicationController
     def set_awards
       @awards = current_account.accessable_awards(projects_interested).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
-      if @project
-        @awards = @awards.where(award_type: AwardType.where(project: @project))
-      end
+      @awards = @awards.where(award_type: AwardType.where(project: @project)) if @project
     end
 
     def set_page
@@ -387,31 +379,31 @@ class AwardsController < ApplicationController
       }
     end
 
-  def set_show_props
-    @props = if current_account
-      {
-        task: task_to_props(@award),
-        task_allowed_to_start: policy(@award).start?,
-        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-        tasks_to_unlock: current_account.tasks_to_unlock(@award),
-        license_url: contribution_licenses_path(type: 'CP'),
-        my_tasks_path: my_tasks_path,
-        account_name: current_account.decorate.name,
-        csrf_token: form_authenticity_token
-      }
-    else
-      {
-        task: task_to_props(@award),
-        task_allowed_to_start: false,
-        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-        tasks_to_unlock: nil,
-        license_url: contribution_licenses_path(type: 'CP'),
-        my_tasks_path: my_tasks_path,
-        account_name: nil,
-        csrf_token: form_authenticity_token
-      }
+    def set_show_props
+      @props = if current_account
+        {
+          task: task_to_props(@award),
+          task_allowed_to_start: policy(@award).start?,
+          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+          tasks_to_unlock: current_account.tasks_to_unlock(@award),
+          license_url: contribution_licenses_path(type: 'CP'),
+          my_tasks_path: my_tasks_path,
+          account_name: current_account.decorate.name,
+          csrf_token: form_authenticity_token
+        }
+      else
+        {
+          task: task_to_props(@award),
+          task_allowed_to_start: false,
+          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+          tasks_to_unlock: nil,
+          license_url: contribution_licenses_path(type: 'CP'),
+          my_tasks_path: my_tasks_path,
+          account_name: nil,
+          csrf_token: form_authenticity_token
+        }
+      end
     end
-  end
 
     def account_accessible_channels
       @project.channels.includes(:team).select { |c| c.team.accounts.include?(current_account) }
@@ -459,8 +451,8 @@ class AwardsController < ApplicationController
 
     def set_form_props
       @props = {
-        task: (@award ? @award : @award_type.awards.new).serializable_hash&.merge(
-          image_url: Refile.attachment_url(@award ? @award : @award_type.awards.new, :image, :fill, 300, 300)
+        task: (@award || @award_type.awards.new).serializable_hash&.merge(
+          image_url: Refile.attachment_url(@award || @award_type.awards.new, :image, :fill, 300, 300)
         ),
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,
@@ -489,7 +481,7 @@ class AwardsController < ApplicationController
     def error_response(message = nil)
       @error_response = {
         id: @award.id,
-        message: message ? message : @award.errors&.full_messages&.join(', '),
+        message: message || @award.errors&.full_messages&.join(', '),
         errors: @award.errors&.messages&.map { |k, v| ["task[#{k}]", v.to_sentence] }.to_h
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
@@ -536,6 +528,7 @@ class AwardsController < ApplicationController
 
     def confirm_message(project)
       return nil unless project.token&.coin_type?
+
       blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
       send("confirm_message_for_#{blockchain_name}_award")
     end

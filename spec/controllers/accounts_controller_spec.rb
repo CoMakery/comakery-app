@@ -29,7 +29,7 @@ describe AccountsController do
     it 'send email to admin notice about underage' do
       account.update date_of_birth: '2010-01-01'
       put :update, params: { account: { date_of_birth: '01/01/1900' } }
-        expect(response).to redirect_to account_url
+      expect(response).to redirect_to account_url
       expect(flash[:notice]).to eq('Your account details have been updated.')
     end
 

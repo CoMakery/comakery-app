@@ -143,7 +143,7 @@ describe SendAward do
       stub_request(:post, 'https://slack.com/api/users.info')
         .with(body: { 'token' => 'slack token', 'user' => 'U99M9QYFQ' })
         .to_return(status: 200, body: File.read(Rails.root.join('spec', 'fixtures', 'users_info_response.json')), headers: {})
-        recipient.destroy
+      recipient.destroy
     end
 
     it 'creates the auth with the slack details from the project' do

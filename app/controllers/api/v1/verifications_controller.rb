@@ -11,11 +11,11 @@ class Api::V1::VerificationsController < Api::V1::ApiController
     if verification.save
       verifications
 
-      render 'index.json', status: 201
+      render 'index.json', status: :created
     else
       @errors = verification.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 

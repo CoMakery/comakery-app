@@ -40,7 +40,7 @@ class Api::V1::ApiController < ActionController::Base
     if whitelabel_mission.whitelabel_api_key != request.headers['API-Key']
       @errors = { authentication: 'Invalid API key' }
 
-      render 'api/v1/error.json', status: 401
+      render 'api/v1/error.json', status: :unauthorized
     end
   end
 
@@ -54,7 +54,7 @@ class Api::V1::ApiController < ActionController::Base
   rescue Comakery::APISignatureError => e
     @errors = { authentication: e.message }
 
-    return render 'api/v1/error.json', status: 401
+    render 'api/v1/error.json', status: :unauthorized
   end
 
   def verify_public_key_or_policy

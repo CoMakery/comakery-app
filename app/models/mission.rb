@@ -20,7 +20,7 @@ class Mission < ApplicationRecord
   has_many :interested, -> { distinct }, through: :public_projects
   has_many :managed_accounts, class_name: 'Account', foreign_key: 'managed_mission_id'
 
-  enum status: %i[active passive]
+  enum status: { active: 0, passive: 1 }
 
   after_create :assign_display_order
   after_save :set_whitelabel_for_projects
@@ -52,22 +52,22 @@ class Mission < ApplicationRecord
 
   private
 
-  def assign_display_order
-    self.display_order = id
-    save
-  end
+    def assign_display_order
+      self.display_order = id
+      save
+    end
 
-  def set_whitelabel_for_projects
-    projects.update(whitelabel: whitelabel)
-  end
+    def set_whitelabel_for_projects
+      projects.update(whitelabel: whitelabel)
+    end
 
-  def whitelabel_api_public_key_cannot_be_overwritten
-    errors.add(:whitelabel_api_public_key, 'cannot be overwritten')
-  end
+    def whitelabel_api_public_key_cannot_be_overwritten
+      errors.add(:whitelabel_api_public_key, 'cannot be overwritten')
+    end
 
-  def populate_api_key
-    # 24 bytes = 32 characters base64 string
+    def populate_api_key
+      # 24 bytes = 32 characters base64 string
 
-    self.whitelabel_api_key ||= SecureRandom.base64(24)
-  end
+      self.whitelabel_api_key ||= SecureRandom.base64(24)
+    end
 end

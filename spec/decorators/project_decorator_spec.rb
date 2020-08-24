@@ -8,7 +8,7 @@ describe ProjectDecorator do
   describe '#description_html' do
     let(:project) do
       create(:project,
-        description: 'Hi [google](http://www.google.com)')
+             description: 'Hi [google](http://www.google.com)')
         .decorate
     end
 
@@ -20,7 +20,7 @@ describe ProjectDecorator do
   describe '#description_text_truncated' do
     let(:project) do
       create(:project,
-        description: '[Hola](http://google.com) ' + 'a' * 1000)
+             description: '[Hola](http://google.com) ' + 'a' * 1000)
         .decorate
     end
 

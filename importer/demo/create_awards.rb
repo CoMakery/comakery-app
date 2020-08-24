@@ -65,11 +65,11 @@ def make(fixture:, project_model:, owner_name:, team_name:, team_image:, project
       amount.times do
         recipient_auth = auth(name, team_name, team_image)
         award = create :award, recipient_auth, owner.account,
-          award_type: award_type,
-          amount: 100,
-          description: 'Git commit',
-          created_at: date,
-          updated_at: date
+                       award_type: award_type,
+                       amount: 100,
+                       description: 'Git commit',
+                       created_at: date,
+                       updated_at: date
       end
     end
   end
@@ -106,7 +106,7 @@ def project_factory(owner, params)
     slack_team_name: params[:slack_team_name]
   )
   if project
-    project.update_attributes! **params
+    project.update_attributes!(**params)
     project.award_types.each { |award_type| award_type.awards.destroy_all }
     project.award_types.destroy_all
   else

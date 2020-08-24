@@ -9,7 +9,7 @@ require_relative '../spec/support/mom.rb'
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-if Rails.env == 'development'
+if Rails.env.development?
   Account.create(
     email: 'dev@dev.dev',
     password: 'dev',
@@ -56,23 +56,23 @@ if Rails.env == 'development'
     account: Account.last
   )
   create(:project_with_ready_task,
-    name: 'award 1',
-    status: 'ready',
-    project: dummy_project)
+         name: 'award 1',
+         status: 'ready',
+         project: dummy_project)
 
   create(:project_with_ready_task,
-    name: 'award 2',
-    status: 'ready',
-    project: create(:project,
-      title: 'Proj 2',
-      visibility: :public_listed,
-      mission: dummy_mission))
+         name: 'award 2',
+         status: 'ready',
+         project: create(:project,
+                         title: 'Proj 2',
+                         visibility: :public_listed,
+                         mission: dummy_mission))
 
   create(:project_with_ready_task,
-    name: 'award 3',
-    status: 'ready',
-    project: create(:project,
-      title: 'Proj 3',
-      visibility: :public_listed,
-      mission: dummy_mission))
+         name: 'award 3',
+         status: 'ready',
+         project: create(:project,
+                         title: 'Proj 3',
+                         visibility: :public_listed,
+                         mission: dummy_mission))
 end

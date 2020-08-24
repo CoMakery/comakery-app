@@ -15,23 +15,23 @@ class GetAwardableTypes
 
   private
 
-  def award_types
-    if !context.account
-      AwardType.none
-    elsif own_project?(context.account, context.project)
-      context.project.award_types
-    elsif belong_to_project?(context.account, context.project)
-      context.project.community_award_types
-    else
-      AwardType.none
+    def award_types
+      if !context.account
+        AwardType.none
+      elsif own_project?(context.account, context.project)
+        context.project.award_types
+      elsif belong_to_project?(context.account, context.project)
+        context.project.community_award_types
+      else
+        AwardType.none
+      end
     end
-  end
 
-  def own_project?(account, project)
-    project&.account == account
-  end
+    def own_project?(account, project)
+      project&.account == account
+    end
 
-  def belong_to_project?(account, project)
-    account.team_projects.include?(project)
-  end
+    def belong_to_project?(account, project)
+      account.team_projects.include?(project)
+    end
 end

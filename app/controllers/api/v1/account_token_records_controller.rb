@@ -25,18 +25,18 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
       project.safe_add_interested(account_token_record.account)
       @account_token_record = account_token_record
 
-      render 'show.json', status: 201
+      render 'show.json', status: :created
     else
       @errors = account_token_record.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 
   # DELETE /api/v1/projects/1/account_token_records/1
   def destroy
     account_token_record.destroy
-    render 'index.json', status: 200
+    render 'index.json', status: :ok
   end
 
   private

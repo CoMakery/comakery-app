@@ -54,9 +54,7 @@ class GitImporter
       --first-parent master
       --format='%H %x00 %an %x00 %ae %x00 %aI %x00 %s'
     )
-    if @opts[:history].present?
-      git_log += %( --since="#{@opts[:history] + 1} days ago")
-    end
+    git_log += %( --since="#{@opts[:history] + 1} days ago") if @opts[:history].present?
 
     results = run "cd #{repo[:local_repo]} && #{git_log}", quiet: !$DEBUG
     logs = results.split("\n")
@@ -86,11 +84,9 @@ class GitImporter
     author_names = commits.map { |commit| commit[:author_names] }.flatten.uniq.sort
     errors = []
     author_names.each do |author_name|
-      begin
-        slack_user_id(author_name)
-      rescue RecipientError => e
-        errors << e.message
-      end
+      slack_user_id(author_name)
+    rescue RecipientError => e
+      errors << e.message
     end
     raise RecipientError, errors.join("\n") if errors.present?
   end
@@ -119,14 +115,11 @@ class GitImporter
     end
 
     user_name = name_to_user_name[author_name]
-    unless user_name
-      raise RecipientError, "Please add author '#{author_name}' to name_to_user_name map"
-    end
+    raise RecipientError, "Please add author '#{author_name}' to name_to_user_name map" unless user_name
 
     user_id = @slack_user_name_to_slack_id[user_name]
-    unless user_id
-      raise RecipientError, "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'"
-    end
+    raise RecipientError, "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'" unless user_id
+
     user_id
   end
 
@@ -161,7 +154,7 @@ class GitImporter
           CreateEthereumAwards.call(award: award) if @opts[:ethereum]
           awards += 1
         else
-          STDERR.puts result.message
+          warn result.message
         end
       end
     end

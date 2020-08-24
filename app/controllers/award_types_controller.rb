@@ -87,7 +87,7 @@ class AwardTypesController < ApplicationController
         editable: policy(@project).edit?,
         batches: @award_types&.includes(awards: %i[account project assignments])&.map do |batch|
           batch.serializable_hash.merge(
-            diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
+            diagram_url: Refile.attachment_url(batch || @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,
             total_tasks: batch.awards.sum(&:possible_quantity).to_i,
             currency: batch.project.token&.symbol,
@@ -140,8 +140,8 @@ class AwardTypesController < ApplicationController
 
     def set_form_props
       @props = {
-        batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash&.merge(
-          diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
+        batch: (@award_type || @project.award_types.new).serializable_hash&.merge(
+          diagram_url: Refile.attachment_url(@award_type || @project.award_types.new, :diagram, :fill, 300, 300)
         ),
         project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,

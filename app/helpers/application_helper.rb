@@ -35,6 +35,7 @@ module ApplicationHelper
       return false unless c.predicate.name == predicate
       return false unless c.attributes.any? { |a| a.name == name }
       return false unless c.values.any? { |v| v.value == value }
+
       true
     end
   end

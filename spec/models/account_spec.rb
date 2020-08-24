@@ -11,10 +11,10 @@ describe Account do
     describe 'urls' do
       let!(:account) do
         create :account,
-          linkedin_url: 'https://www.linkedin.com/',
-          github_url: 'https://github.com/',
-          dribble_url: 'https://dribbble.com/',
-          behance_url: 'https://www.behance.net/'
+               linkedin_url: 'https://www.linkedin.com/',
+               github_url: 'https://github.com/',
+               dribble_url: 'https://dribbble.com/',
+               behance_url: 'https://www.behance.net/'
       end
 
       it 'validates urls' do

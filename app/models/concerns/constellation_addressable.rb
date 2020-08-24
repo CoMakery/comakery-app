@@ -10,7 +10,7 @@ module ConstellationAddressable
     end
 
     def validate_format(record, attribute, value)
-      if value !~ /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/
+      unless /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/.match?(value)
         message = options[:message] || "should start with 'DAG', " \
           'followed by 37 characters'
         record.errors.add attribute, message

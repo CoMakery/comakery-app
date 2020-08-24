@@ -49,6 +49,7 @@ class GetAwardData
 
     (awards_on_day || []).each do |award|
       next unless award.account
+
       name = award.account.decorate.name
       row[name] ||= 0
       row[name] += award.total_amount

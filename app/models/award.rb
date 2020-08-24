@@ -24,7 +24,7 @@ class Award < ApplicationRecord
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
   belongs_to :award_type, touch: true
-  belongs_to :transfer_type, required: true
+  belongs_to :transfer_type, optional: false
   belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty
@@ -49,9 +49,9 @@ class Award < ApplicationRecord
   validates :requirements, length: { maximum: 1000 }
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
-  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
+  validates :proof_link, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
   validates :submission_url, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
-  validates :submission_url, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { submission_url.present? }
+  validates :submission_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { submission_url.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
   validates :account, presence: true, if: -> { status == 'accepted' && email.blank? }
   validates :expires_in_days, presence: true, numericality: { greater_than: 0 }
@@ -99,8 +99,8 @@ class Award < ApplicationRecord
     end
   }
 
-  enum status: %i[ready started submitted accepted rejected paid cancelled invite_ready]
-  enum source: %i[earned bought mint burn]
+  enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
+  enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }
 
   def self.total_awarded
     completed.sum(:total_amount)
@@ -154,6 +154,7 @@ class Award < ApplicationRecord
 
   def send_award_notifications
     return unless channel
+
     if team.discord?
       discord_client.send_message self
     else
@@ -174,7 +175,7 @@ class Award < ApplicationRecord
   end
 
   def discord?
-    team && team.discord?
+    team&.discord?
   end
 
   def completed?
@@ -339,9 +340,7 @@ class Award < ApplicationRecord
     def total_amount_fits_into_project_budget
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
 
-      if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
-        errors[:base] << "Sorry, you can't exceed the project's budget"
-      end
+      errors[:base] << "Sorry, you can't exceed the project's budget" if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
     end
 
     def abort_destroy
@@ -352,15 +351,11 @@ class Award < ApplicationRecord
     end
 
     def contributor_doesnt_have_too_many_started_tasks
-      if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
-        errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks")
-      end
+      errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks") if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
     end
 
     def contributor_doesnt_reach_maximum_assignments
-      if account && reached_maximum_assignments_for?(account)
-        errors.add(:base, 'Sorry, you already did the task maximum times allowed')
-      end
+      errors.add(:base, 'Sorry, you already did the task maximum times allowed') if account && reached_maximum_assignments_for?(account)
     end
 
     def update_account_experience

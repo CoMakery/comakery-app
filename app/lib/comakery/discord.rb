@@ -31,6 +31,7 @@ class Comakery::Discord
   def webhook(channel_id)
     webhook = webhooks(channel_id).select { |h| h['name'] == 'Comakery' }.first
     return webhook if webhook
+
     @path = "/channels/#{channel_id}/webhooks"
     @data = { name: 'Comakery' }.to_json
     post_result
@@ -58,22 +59,22 @@ class Comakery::Discord
 
   private
 
-  def result
-    url = "https://discord.com/api#{@path}"
-    res = RestClient.get(url, Authorization: @token)
-    JSON.parse(res)
-  rescue RestClient::ExceptionWithResponse => e
-    Rails.logger.error e.response
-    return []
-  end
+    def result
+      url = "https://discord.com/api#{@path}"
+      res = RestClient.get(url, Authorization: @token)
+      JSON.parse(res)
+    rescue RestClient::ExceptionWithResponse => e
+      Rails.logger.error e.response
+      []
+    end
 
-  def post_result(parse_json = true)
-    url = "https://discord.com/api#{@path}"
-    header = { Authorization: @token, content_type: :json, accept: :json }
-    res = RestClient.post(url, @data, header)
-    parse_json ? JSON.parse(res) : res
-  rescue RestClient::ExceptionWithResponse => e
-    Rails.logger.error e.response
-    return {}
-  end
+    def post_result(parse_json = true)
+      url = "https://discord.com/api#{@path}"
+      header = { Authorization: @token, content_type: :json, accept: :json }
+      res = RestClient.post(url, @data, header)
+      parse_json ? JSON.parse(res) : res
+    rescue RestClient::ExceptionWithResponse => e
+      Rails.logger.error e.response
+      {}
+    end
 end

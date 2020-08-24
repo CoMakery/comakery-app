@@ -65,7 +65,7 @@ describe Comakery::Ethereum do
     it 'calls out to the expected server' do
       stub_request(:post, 'https://eth.example.com/token_issue')
         .with(body: hash_including(contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
-                                   recipient:       '0x2222222222222222222222222222222222222222',
+                                   recipient: '0x2222222222222222222222222222222222222222',
                                    amount: 100,
                                    apiKey: 'abc123apikey'))
         .to_return(

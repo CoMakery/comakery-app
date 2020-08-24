@@ -2,8 +2,8 @@ class TransferRule < ApplicationRecord
   include BlockchainTransactable
 
   belongs_to :token
-  belongs_to :sending_group, class_name: 'RegGroup', foreign_key: 'sending_group_id'
-  belongs_to :receiving_group, class_name: 'RegGroup', foreign_key: 'receiving_group_id'
+  belongs_to :sending_group, class_name: 'RegGroup'
+  belongs_to :receiving_group, class_name: 'RegGroup'
 
   after_initialize :set_defaults
   after_save :replace_existing_rule, if: -> { synced? }
@@ -17,7 +17,7 @@ class TransferRule < ApplicationRecord
   validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
   validate :groups_belong_to_same_token
 
-  enum status: %i[created pending synced failed]
+  enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
 
   def lockup_until
     super && Time.zone.at(super)
@@ -34,13 +34,9 @@ class TransferRule < ApplicationRecord
     end
 
     def groups_belong_to_same_token
-      if sending_group&.token != token
-        errors.add(:sending_group, "should belong to #{token.name} token")
-      end
+      errors.add(:sending_group, "should belong to #{token.name} token") if sending_group&.token != token
 
-      if receiving_group&.token != token
-        errors.add(:receiving_group, "should belong to #{token.name} token")
-      end
+      errors.add(:receiving_group, "should belong to #{token.name} token") if receiving_group&.token != token
     end
 
     def replace_existing_rule

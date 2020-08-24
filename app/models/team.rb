@@ -16,6 +16,7 @@ class Team < ApplicationRecord
 
   def members
     return [] unless discord?
+
     d_client = Comakery::Discord.new
     @members ||= d_client.members(self)
   end

@@ -13,9 +13,7 @@ class Views::Shared::Awards < Views::Base
           th(class: 'small-2') { text 'Recipient' } if show_recipient
           th(class: 'small-2') { text 'Contribution' }
           th(class: 'small-2') { text 'Authorized By' }
-          if project.token&.coin_type?
-            th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
-          end
+          th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' } if project.token&.coin_type?
           th(class: 'small-1', style: 'text-align: center') { text 'status' }
         end
         awards.each do |award|
@@ -53,15 +51,13 @@ class Views::Shared::Awards < Views::Base
               end
             end
             td(class: 'small-2') do
-              if award.issuer
-                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
-              end
+              img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;') if award.issuer
               text award.issuer_display_name
             end
             if project.token&.coin_type?
               td(class: 'small-2 blockchain-address') do
                 if award.ethereum_transaction_explorer_url
-                  link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
+                  link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank', rel: 'noopener'
                 elsif award.recipient_address.blank? && current_account == award.account && show_recipient
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?

@@ -58,11 +58,13 @@ class Comakery::Eth::Tx
     return false if from != source.downcase
     return false if to != destination.downcase
     return false if value != amount
+
     true
   end
 
   def valid_block?(n)
     return false if block_number <= n
+
     true
   end
 

@@ -272,7 +272,7 @@ describe ProjectsController do
         expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats'])
       end
     end
-  describe 'logged out'
+    describe 'logged out'
     it 'redirect to signup page if you are not logged in' do
       logout
       get :landing
