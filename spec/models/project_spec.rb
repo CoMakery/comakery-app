@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/api_authorizable_spec'
 
 describe Project do
+  it_behaves_like 'api_authorizable'
+
   describe 'associations' do
     let!(:project) { create :project }
     let!(:account) { create :account }

@@ -57,7 +57,8 @@ class ProjectPolicy < ApplicationPolicy
 
   alias update? edit?
   alias send_award? edit?
-  alias admins? edit?
+  alias accesses? edit?
+  alias regenerate_api_key? edit?
   alias add_admin? edit?
   alias remove_admin? edit?
   alias create_transfer? edit?

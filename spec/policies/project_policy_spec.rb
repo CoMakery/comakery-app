@@ -180,9 +180,9 @@ describe ProjectPolicy do
     end
   end
 
-  describe 'edit? update? send_award? admins? add_admin? remove_admin? create_transfer? edit_reg_groups? edit_transfer_rules? freeze_token? transfer_types?' do
+  describe 'edit? update? send_award? accesses? regenerate_api_key? add_admin? remove_admin? create_transfer? edit_reg_groups? edit_transfer_rules? freeze_token? transfer_types?' do
     it 'only allows managing projects that are owned or administrated by the current account' do
-      %i[edit? update? send_award? admins? add_admin? remove_admin? create_transfer? edit_reg_groups? edit_transfer_rules? freeze_token? transfer_types?].each do |action|
+      %i[edit? update? send_award? accesses? regenerate_api_key? add_admin? remove_admin? create_transfer? edit_reg_groups? edit_transfer_rules? freeze_token? transfer_types?].each do |action|
         expect(described_class.new(nil, my_public_project).send(action)).to be_falsey
         expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
         expect(described_class.new(nil, my_archived_project).send(action)).to be_falsey

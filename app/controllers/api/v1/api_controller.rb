@@ -44,6 +44,14 @@ class Api::V1::ApiController < ActionController::Base
     end
   end
 
+  def verify_transaction_key
+    if project.api_key.nil? || project.api_key.key != request.headers['API-Transaction-Key']
+      @errors = { authentication: 'Invalid API transaction key' }
+
+      render 'api/v1/error.json', status: 401
+    end
+  end
+
   def verify_signature
     Comakery::APISignature.new(
       params.as_json,
@@ -60,6 +68,8 @@ class Api::V1::ApiController < ActionController::Base
   def verify_public_key_or_policy
     if whitelabel_mission && request.headers['API-Key']&.present?
       verify_public_key
+    elsif request.headers['API-Transaction-Key']&.present?
+      verify_transaction_key
     else
       authorize project, :edit?
     end

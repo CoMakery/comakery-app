@@ -235,7 +235,7 @@ describe ProjectDecorator do
       expect(props[:supports_transfer_rules]).to be_falsey
       expect(props_w_comakery[:supports_transfer_rules]).to be_truthy
       expect(props[:image_url]).to include('image.png')
-      expect(props[:admins_url]).to include(project.id.to_s)
+      expect(props[:access_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
       expect(props[:transfers_url]).to include(project.id.to_s)
