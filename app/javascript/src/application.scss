@@ -900,7 +900,10 @@ form.form-with-submit-button {
 
 .reg-groups,
 .frozen-status,
-.transfer-rules {
+.transfer-rules,
+.owner,
+.admins,
+.project-api-key {
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -917,7 +920,8 @@ form.form-with-submit-button {
   }
 
   input[type="text"],
-  input[type="number"] {
+  input[type="number"],
+  input[type="email"] {
     border-radius: 6px;
     border: solid 1px #e6e8ed;
     height: 35px;
@@ -956,6 +960,33 @@ form.form-with-submit-button {
     margin-left: 0;
     margin-right: 0.5em;
     min-width: 0;
+  }
+
+  .project-api-key__create {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+
+    input[type="text"],
+    input[type="email"] {
+      max-width: 25em;
+    }
+
+    a {
+      height: auto;
+      text-transform: uppercase;
+    }
+  }
+
+  .admins__create {
+    input[type="email"] {
+      max-width: 25em;
+    }
+
+    button,
+    input[type="submit"] {
+      display: inline;
+    }
   }
 
   .reg-groups__form {
@@ -1054,7 +1085,9 @@ form.form-with-submit-button {
 
 button.transfers-create,
 button.transfer-rule-create,
-button.reg-groups-create {
+button.reg-groups-create,
+.admins__create input[type="submit"],
+.project-api-key__create a {
   margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;

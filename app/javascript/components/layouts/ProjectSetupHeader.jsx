@@ -200,8 +200,8 @@ class ProjectSetupHeader extends React.Component {
                 </NavLink>
               }
               {owner &&
-              <NavLink current={current === 'admins'} href={project.adminsUrl}>
-                admins
+              <NavLink current={current === 'accesses'} href={project.accessUrl}>
+                access
               </NavLink>
               }
               {owner &&

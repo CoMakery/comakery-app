@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_13_141209) do
+ActiveRecord::Schema.define(version: 2020_08_24_181512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,15 @@ ActiveRecord::Schema.define(version: 2020_08_13_141209) do
     t.bigint "project_id", null: false
     t.index ["account_id", "project_id"], name: "index_accounts_projects_on_account_id_and_project_id"
     t.index ["project_id", "account_id"], name: "index_accounts_projects_on_project_id_and_account_id"
+  end
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string "api_authorizable_type"
+    t.bigint "api_authorizable_id"
+    t.string "key", limit: 32
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_authorizable_type", "api_authorizable_id"], name: "index_api_keys_on_api_authorizable_type_and_api_authorizable_id"
   end
 
   create_table "authentication_teams", force: :cascade do |t|

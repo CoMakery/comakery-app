@@ -1,0 +1,11 @@
+<div class="project-api-key">
+  <h2>API transaction key</h2>
+
+  <div class="project-api-key__create">
+    <%= text_field_tag nil, @project.api_key&.key, placeholder: 'Not generated yet..', disabled: true %>
+
+    <%= link_to(regenerate_api_key_project_dashboard_accesses_path(@project), method: :post, data: {confirm: "Regenerate API Key? Current key will be discarded."} ) do %>
+      Generate
+    <% end %>
+  </div>
+</div>

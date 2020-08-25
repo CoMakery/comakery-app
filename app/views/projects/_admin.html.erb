@@ -1,7 +1,0 @@
-<div>
-  <%= "#{admin.decorate.name} (#{admin.email})" %>
-
-  <%= link_to(remove_admin_project_path(project, account_id: admin.id), method: :delete, data: {confirm: "Remove #{admin.decorate.name} from projects admins?"} ) do %>
-    <%= image_pack_tag 'media/src/images/styleguide/icons/iconTrash.svg', size: "12x12", alt: "remove admin"%>
-  <% end %>
-</div>
