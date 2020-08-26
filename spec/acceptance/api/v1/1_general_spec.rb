@@ -30,7 +30,12 @@ resource 'I. General' do
 
     context '200' do
       example 'AUTHENTICATION' do
-        explanation 'Requests should include `API-Public-Key` header and a correct proof based on `Ed25519Signature2018` in the format described below. All values should be strings. Note: When calculating the signature, request data should be serialized according JSON Canonicalization Scheme.'
+        explanation [
+          'Requests should include `API-Key` header and a correct proof based on `Ed25519Signature2018` in the format described below.' \
+          'All values should be strings.' \
+          'Note 1: When calculating the signature, request data should be serialized according JSON Canonicalization Scheme.' \
+          'Note 2: Blockchain Transactions (VII) endpoints do not require proof and can be accessed with either `API-Key` or `API-Transaction-Key` header. See section VII for examples.'
+        ].join(' ')
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
         do_request(request)
