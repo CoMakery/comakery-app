@@ -19,9 +19,15 @@ describe Api::V1::ApiController do
     end
   end
 
-  let(:invalid_headers) do
+  let(:invalid_api_key_header) do
     {
       'API-Key' => '12345'
+    }
+  end
+
+  let(:invalid_transaction_key_header) do
+    {
+      'API-Transaction-Key' => '12345'
     }
   end
 
@@ -65,10 +71,48 @@ describe Api::V1::ApiController do
       end
 
       it 'denies request' do
-        request.headers.merge! invalid_headers
+        request.headers.merge! invalid_api_key_header
 
         get :index, params: build(:api_signed_request, '', '/dummy_api_policy', 'GET')
         expect(response.status).to eq(401)
+      end
+    end
+
+    context 'request with incorrect project transaction key' do
+      let!(:project) { create(:project) }
+
+      context 'when project doesnt have a key' do
+        it 'denies request' do
+          request.headers.merge! invalid_transaction_key_header
+
+          get :index, params: build(:api_signed_request, '', '/dummy_api_policy', 'GET')
+          expect(response.status).to eq(401)
+        end
+      end
+
+      context 'when project key doesnt match header one' do
+        before do
+          project.regenerate_api_key
+        end
+
+        it 'denies request' do
+          request.headers.merge! invalid_transaction_key_header
+
+          get :index, params: build(:api_signed_request, '', '/dummy_api_policy', 'GET')
+          expect(response.status).to eq(401)
+        end
+      end
+    end
+
+    context 'request with correct project transaction key' do
+      let!(:project) { create(:project) }
+      let!(:transaction_key) { project.regenerate_api_key && project.api_key.key }
+
+      it 'allows request' do
+        request.headers['API-Transaction-Key'] = transaction_key
+
+        get :index, params: build(:api_signed_request, '', '/dummy_api_policy', 'GET')
+        expect(response.status).to eq(200)
       end
     end
   end
