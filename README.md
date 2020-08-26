@@ -1,4 +1,4 @@
-[![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
+[![CoMakery](./public/Logo-Header.svg)](https://www.comakery.com)
 
 ## CoMakery Helps You Gather a Tribe To Achieve Big Missions. 
 
