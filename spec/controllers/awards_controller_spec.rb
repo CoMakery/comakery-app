@@ -677,7 +677,7 @@ RSpec.describe AwardsController, type: :controller do
         receipt: '{"status": true}'
       }
       award.reload
-      expect(award.ethereum_transaction_success).to be_truthy
+      expect(award.transaction_success).to be_truthy
     end
 
     it 'handles tx error' do
@@ -689,7 +689,7 @@ RSpec.describe AwardsController, type: :controller do
         error: 'test error'
       }
       award.reload
-      expect(award.ethereum_transaction_error).to eq 'test error'
+      expect(award.transaction_error).to eq 'test error'
     end
 
     it 'fails' do

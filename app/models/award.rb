@@ -313,11 +313,11 @@ class Award < ApplicationRecord
     success = receipt['status']
     status = success ? :paid : :accepted
 
-    update!(ethereum_transaction_success: success, status: status)
+    update!(transaction_success: success, status: status)
   end
 
   def handle_tx_error(error)
-    update!(ethereum_transaction_error: error, status: :accepted)
+    update!(transaction_error: error, status: :accepted)
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

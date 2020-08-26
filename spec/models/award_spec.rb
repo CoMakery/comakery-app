@@ -1147,12 +1147,12 @@ describe Award do
     end
 
     it 'sets tx success and marks award as paid' do
-      expect(award_succeed.ethereum_transaction_success).to be_truthy
+      expect(award_succeed.transaction_success).to be_truthy
       expect(award_succeed.paid?).to be_truthy
     end
 
     it 'sets tx success and marks award as accepted' do
-      expect(award_failed.ethereum_transaction_success).to be_falsey
+      expect(award_failed.transaction_success).to be_falsey
       expect(award_failed.accepted?).to be_truthy
     end
   end
@@ -1166,7 +1166,7 @@ describe Award do
     end
 
     it 'sets tx error and marks award as accepted' do
-      expect(award_failed.ethereum_transaction_error).to eq('test error')
+      expect(award_failed.transaction_error).to eq('test error')
       expect(award_failed.accepted?).to be_truthy
     end
   end
