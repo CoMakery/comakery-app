@@ -228,7 +228,7 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#destroy' do
-    let!(:award) { create(:award_ready) }
+    let!(:award) { create(:award, status: :accepted) }
 
     it 'sets task status to cancelled and redirects to batches page' do
       login(award.project.account)

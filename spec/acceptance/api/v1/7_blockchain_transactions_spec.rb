@@ -11,12 +11,12 @@ resource 'VII. Blockchain Transactions' do
   let!(:project) { blockchain_transaction.blockchain_transactable.project }
 
   before do
+    header 'API-Key', build(:api_key)
     project.update(mission: active_whitelabel_mission)
   end
 
   explanation 'Generate blockchain transactions for project to process and submit to blockchain.'
 
-  header 'API-Key', build(:api_key)
   header 'Content-Type', 'application/json'
 
   post '/api/v1/projects/:project_id/blockchain_transactions' do
@@ -66,6 +66,22 @@ resource 'VII. Blockchain Transactions' do
         explanation 'Generates a new blockchain transaction for a transactable and locks the transactable for 10 minutes'
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+
+        VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
+          do_request(request)
+        end
+
+        expect(status).to eq(201)
+      end
+
+      example 'GENERATE TRANSACTION – WITH PROJECT TRANSACTION API KEY' do
+        explanation 'Generates a new blockchain transaction for a transactable and locks the transactable for 10 minutes'
+
+        request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+
+        project.regenerate_api_key
+        header 'API-Key', nil
+        header 'API-Transaction-Key', project.api_key.key
 
         VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
           do_request(request)

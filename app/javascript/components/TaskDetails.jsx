@@ -190,6 +190,42 @@ const Review = styled.div`
   }
 `
 
+const CancelButton = styled.a`
+  height: 30px;
+  padding: 6px 12px;
+  margin-right: 15px;
+  min-width: 90px;
+  max-width: 556px;
+  color: white;
+  background-color: #0089f4;
+  -webkit-box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  outline: none;
+  border-radius: 0;
+  -webkit-transition: none;
+  transition: none;
+  cursor: pointer;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid rgba(74, 74, 74, .2);
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  outline: 1px solid #8d9599;
+  outline-offset: -1px;
+  color: #8d9599;
+`
+
 class TaskDetails extends React.Component {
   constructor(props) {
     super(props)
@@ -296,10 +332,12 @@ class TaskDetails extends React.Component {
                     value='submit task'
                   />
 
-                  <ButtonBorderGray
-                    onClick={this.goBack}
-                    value='cancel'
-                  />
+                  <CancelButton
+                    href={this.props.cancelUrl}
+                    data-method='delete'
+                  >
+                    Cancel
+                  </CancelButton>
                 </form>
               </Submission>
             }

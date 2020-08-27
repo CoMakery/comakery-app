@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
     head :unauthorized
   end
 
-  def redirect_back
+  def redirect_back_to_session
     if current_account&.valid? && current_account&.confirmed? && session[:return_to]
       redirect_url = session[:return_to]
       session.delete(:return_to)
@@ -202,6 +202,7 @@ class ApplicationController < ActionController::Base
       submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),
       accept_url: project_award_type_award_accept_path(task.project, task.award_type, task),
       reject_url: project_award_type_award_reject_path(task.project, task.award_type, task),
+      cancel_url: project_award_type_award_path(task.project, task.award_type, task),
       updated_at: helpers.time_ago_in_words(task.updated_at),
       expires_at: task.expires_at ? helpers.distance_of_time_in_words_to_now(task.expires_at) : nil,
       status: task.status.humanize.downcase

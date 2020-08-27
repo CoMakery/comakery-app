@@ -11,7 +11,8 @@ class Token < ApplicationRecord
     ada: 'cardano',
     btc: 'bitcoin',
     eos: 'eos',
-    xtz: 'tezos'
+    xtz: 'tezos',
+    dag: 'constellation'
   }.freeze
 
   COIN_DECIMALS = {
@@ -20,7 +21,8 @@ class Token < ApplicationRecord
     ada: 6,
     btc: 8,
     eos: 18,
-    xtz: 6
+    xtz: 6,
+    dag: 8
   }.freeze
 
   COIN_NAMES = {
@@ -29,7 +31,8 @@ class Token < ApplicationRecord
     ada: 'Cardano',
     btc: 'Bitcoin',
     eos: 'EOSIO',
-    xtz: 'Tezos'
+    xtz: 'Tezos',
+    dag: 'DAG'
   }.freeze
 
   nilify_blanks
@@ -59,7 +62,8 @@ class Token < ApplicationRecord
     btc: 'BTC',
     eos: 'EOS',
     xtz: 'XTZ',
-    comakery: 'Comakery Security Token'
+    comakery: 'Comakery Security Token',
+    dag: 'DAG'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -84,7 +88,9 @@ class Token < ApplicationRecord
     qtum_testnet: 'Test QTUM Network',
     eos_mainnet: 'Main EOS Network',
     eos_testnet: 'Test EOS Network',
-    tezos_mainnet: 'Main Tezos Network'
+    tezos_mainnet: 'Main Tezos Network',
+    constellation_mainnet: 'Main Constellation Network',
+    constellation_testnet: 'Test Constellation Network'
   }
 
   validates :name, :denomination, presence: true

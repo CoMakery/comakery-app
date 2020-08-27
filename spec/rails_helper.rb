@@ -42,6 +42,7 @@ RSpec.configure do |config|
 
   config.include FeatureHelper, type: :feature
   config.include SlackStubs, type: :feature
+  config.include ConstellationStubs, type: :feature
 
   config.include ActiveSupport::Testing::TimeHelpers
 
@@ -127,6 +128,7 @@ def wait_for_turbolinks
 end
 
 include SlackStubs
+include ConstellationStubs
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

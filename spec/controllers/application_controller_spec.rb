@@ -7,7 +7,7 @@ describe ApplicationController do
     skip_before_action :require_login
     skip_after_action :verify_policy_scoped
 
-    before_action :redirect_back, only: %i[index]
+    before_action :redirect_back_to_session, only: %i[index]
     before_action :create_interest_from_session, only: %i[index]
 
     def index
@@ -52,7 +52,7 @@ describe ApplicationController do
     end
   end
 
-  describe 'redirect_back' do
+  describe 'redirect_back_to_session' do
     let!(:account) { create(:account) }
     let!(:invalid_account) { create(:account) }
     let!(:unconfirmed_account) { create(:account) }

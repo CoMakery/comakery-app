@@ -235,7 +235,7 @@ describe ProjectDecorator do
       expect(props[:supports_transfer_rules]).to be_falsey
       expect(props_w_comakery[:supports_transfer_rules]).to be_truthy
       expect(props[:image_url]).to include('image.png')
-      expect(props[:admins_url]).to include(project.id.to_s)
+      expect(props[:access_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
       expect(props[:transfers_url]).to include(project.id.to_s)
@@ -331,6 +331,30 @@ describe ProjectDecorator do
     it 'sets defaults' do
       r = project.decorate.transfers_donut_chart(project.awards.completed)
       expect(r.find { |x| x[:name] == 'earned' }[:value]).to eq(0)
+    end
+  end
+
+  describe 'ratio_pretty' do
+    context 'when total is zero' do
+      it 'returns 100 %' do
+        expect(project.ratio_pretty(1, 0)).to eq('100 %')
+      end
+    end
+
+    context 'when ratio is zero' do
+      it 'returns < 1 %' do
+        expect(project.ratio_pretty(0, 1)).to eq('< 1 %')
+      end
+    end
+
+    context 'when ratio is 100' do
+      it 'returns 100 %' do
+        expect(project.ratio_pretty(1, 1)).to eq('100 %')
+      end
+    end
+
+    it 'returns ratio' do
+      expect(project.ratio_pretty(1, 2)).to eq('≈ 50 %')
     end
   end
 end

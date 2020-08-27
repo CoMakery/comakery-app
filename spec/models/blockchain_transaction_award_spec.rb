@@ -142,6 +142,14 @@ describe BlockchainTransactionAward, vcr: true do
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Burn)
       end
     end
+
+    context 'with DAG transfer' do
+      it 'returns Comakery::Dag::Tx' do
+        blockchain_transaction = build(:blockchain_transaction, token: create(:dag_token))
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Dag::Tx)
+      end
+    end
   end
 
   describe 'confirmed_on_chain?' do

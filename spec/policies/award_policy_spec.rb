@@ -232,6 +232,19 @@ describe AwardPolicy do
     end
   end
 
+  describe 'cancel?' do
+    let(:project) { create :project }
+    let(:award_accepted) { create :award, status: :accepted, award_type: create(:award_type, project: project) }
+    let(:award_ready) { create :award, status: :ready, award_type: create(:award_type, project: project) }
+    let(:award_started) { create :award, status: :started, award_type: create(:award_type, project: project) }
+
+    specify { expect(described_class.new(project.account, award_ready).cancel?).to be_truthy }
+    specify { expect(described_class.new(project.account, award_accepted).cancel?).to be_truthy }
+    specify { expect(described_class.new(project.account, award_started).cancel?).to be_falsey }
+    specify { expect(described_class.new(award_started.account, award_started).cancel?).to be_truthy }
+    specify { expect(described_class.new(award_started.account, award_accepted).cancel?).to be_falsey }
+  end
+
   describe 'project_editable?' do
     let(:project_admin) { create :account }
     let(:project) { create :project }

@@ -28,14 +28,23 @@ describe BlockchainTransaction, vcr: true do
 
   describe 'callbacks' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
+    let!(:blockchain_transaction_dag) { create(:blockchain_transaction, token: create(:dag_token)) }
 
-    it 'populates transaction data from token' do
-      expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
-      expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
+    context 'with an ethereum coin type' do
+      it 'populates contract address and network from token' do
+        expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
+        expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
+      end
+
+      it 'sets current block' do
+        expect(blockchain_transaction.current_block).to eq(7890718)
+      end
     end
 
-    it 'sets current block' do
-      expect(blockchain_transaction.current_block).to eq(7890718)
+    context 'with a dag token' do
+      it 'populates network from token' do
+        expect(blockchain_transaction_dag.network).to eq(blockchain_transaction_dag.token.blockchain_network)
+      end
     end
   end
 
@@ -222,6 +231,23 @@ describe BlockchainTransaction, vcr: true do
       blockchain_transaction.reload
 
       expect(blockchain_transaction.status).to eq('cancelled')
+    end
+  end
+
+  describe 'contract' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
+    let!(:blockchain_transaction_dag) { create(:blockchain_transaction, token: create(:dag_token)) }
+
+    context 'with an ethereum coin type' do
+      it 'returns a contract instance' do
+        expect(blockchain_transaction.contract).to be_a(Comakery::Eth::Contract::Erc20)
+      end
+    end
+
+    context 'with an unsupported coin type' do
+      it 'raises error' do
+        expect { blockchain_transaction_dag.contract }.to raise_error(/Contract parsing is not implemented/)
+      end
     end
   end
 

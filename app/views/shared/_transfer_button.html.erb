@@ -3,6 +3,9 @@
     <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
       <%= link_to transfer.ethereum_transaction_address_short, transfer.ethereum_transaction_explorer_url, target: '_blank' %>
     
+    <% elsif transfer.paid? %>
+      paid
+
     <% elsif transfer.project.token&.token_frozen? %>
       frozen
 
@@ -32,6 +35,8 @@
         <% end %>
       <% end %>
     
+    <% elsif transfer.cancelled? %>
+      cancelled
     <% else %>
       pending
     <% end %>

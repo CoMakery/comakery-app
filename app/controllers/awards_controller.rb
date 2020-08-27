@@ -1,7 +1,7 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
   before_action :unavailable_for_whitelabel, only: %i[index]
-  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
+  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_create, only: %i[create new]
@@ -28,7 +28,7 @@ class AwardsController < ApplicationController
   skip_before_action :require_login, only: %i[confirm show]
   skip_after_action :verify_authorized, only: %i[confirm]
   skip_after_action :verify_policy_scoped, only: %(index)
-  before_action :redirect_back, only: %i[index]
+  before_action :redirect_back_to_session, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
   def index
@@ -154,10 +154,12 @@ class AwardsController < ApplicationController
   end
 
   def destroy
+    authorize @award, :cancel?
+
     if @award.update(status: 'cancelled')
-      redirect_to project_award_types_path, notice: 'Task cancelled'
+      redirect_back(fallback_location: project_award_types_path, notice: 'Task cancelled')
     else
-      redirect_to project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_back(fallback_location: project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') })
     end
   end
 
@@ -411,14 +413,18 @@ class AwardsController < ApplicationController
     end
   end
 
+    def account_accessible_channels
+      @project.channels.includes(:team).select { |c| c.team.accounts.include?(current_account) }
+    end
+
     def set_award_props
       @props = {
         task: @award.serializable_hash,
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
-        channels: (@project.channels.includes(:team) + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
-        members: @project.channels.includes(:team).map { |c| [c.id.to_s, c.members.to_h] }.to_h,
+        channels: (account_accessible_channels + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
+        members: account_accessible_channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
         recipient_address_url: project_award_type_award_recipient_address_path(@project, @award_type, @award),
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),
         form_action: 'POST',

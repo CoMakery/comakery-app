@@ -60,6 +60,10 @@
       <% if transfer.blockchain_transactions.size > 0 %>
         <%= link_to "#{transfer.blockchain_transactions.size} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
       <% end %>
+
+      <% if policy(transfer).cancel? %>
+        <%= link_to "Cancel", project_award_type_award_path(transfer.project, transfer.award_type, transfer), method: :delete, class: 'transfers-table__transfer__button__history' %>
+      <% end %>
     </div>
   <% end %>
 
