@@ -921,6 +921,7 @@ form.form-with-submit-button {
 
   input[type="text"],
   input[type="number"],
+  input[type="password"],
   input[type="email"] {
     border-radius: 6px;
     border: solid 1px #e6e8ed;
@@ -968,8 +969,10 @@ form.form-with-submit-button {
     flex-wrap: wrap;
 
     input[type="text"],
+    input[type="password"],
     input[type="email"] {
       max-width: 25em;
+      min-width: 25em;
     }
 
     a {
@@ -1087,7 +1090,8 @@ button.transfers-create,
 button.transfer-rule-create,
 button.reg-groups-create,
 .admins__create input[type="submit"],
-.project-api-key__create a {
+.project-api-key__create a,
+.project-api-key__create button {
   margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;
