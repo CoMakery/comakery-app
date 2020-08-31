@@ -1,8 +1,9 @@
 class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
-  skip_before_action :verify_signature
-  skip_before_action :verify_public_key
-  skip_before_action :allow_only_whitelabel
-  before_action :verify_public_key_or_policy
+  include Api::V1::Concerns::RequiresAnAuthorization
+  include Api::V1::Concerns::AuthorizableByMissionKey
+  include Api::V1::Concerns::AuthorizableByProjectKey
+  include Api::V1::Concerns::AuthorizableByProjectPolicy
+
   before_action :verify_hash, only: %i[update destroy]
 
   # POST /api/v1/projects/1/blockchain_transactions

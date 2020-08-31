@@ -26,52 +26,6 @@ describe Api::V1::ApiController do
     request.headers.merge! valid_headers
   end
 
-  describe 'allow_only_whitelabel' do
-    it 'available for whitelabel requests' do
-      create(:active_whitelabel_mission)
-
-      get :index, params: build(:api_signed_request, '', '/dummy_api', 'GET')
-      expect(response.status).to eq(200)
-    end
-
-    it 'unavailable for non-whitelabel requests' do
-      get :index
-      expect(response.status).to eq(404)
-    end
-  end
-
-  describe 'verify_public_key' do
-    it 'denies requests with incorrect public key' do
-      create(:active_whitelabel_mission)
-      request.headers.merge! invalid_headers
-
-      get :index, params: build(:api_signed_request, '', '/dummy_api', 'GET')
-      expect(response.status).to eq(401)
-    end
-  end
-
-  describe 'verify_signature' do
-    it 'denies requests with incorrect signature' do
-      create(:active_whitelabel_mission)
-
-      params = build(:api_signed_request, '', '/dummy_api', 'GET')
-      params['proof']['signature'] = 'wrong'
-
-      get :index, params: params
-      expect(response.status).to eq(401)
-    end
-
-    it 'denies requests with non-unique nonce' do
-      mission = create(:active_whitelabel_mission)
-
-      params = build(:api_signed_request, '', '/dummy_api', 'GET')
-      Rails.cache.write("api::v1::nonce_history:#{mission.id}:#{params['body']['nonce']}", true, expires_in: 1.day)
-
-      get :index, params: params
-      expect(response.status).to eq(401)
-    end
-  end
-
   describe 'current_domain' do
     it 'returns request domain including all subdomains' do
       expect(controller.current_domain).to eq('test.host')

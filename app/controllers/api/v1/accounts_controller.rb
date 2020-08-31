@@ -1,4 +1,9 @@
 class Api::V1::AccountsController < Api::V1::ApiController
+  include Api::V1::Concerns::RequiresAnAuthorization
+  include Api::V1::Concerns::RequiresSignature
+  include Api::V1::Concerns::RequiresWhitelabelMission
+  include Api::V1::Concerns::AuthorizableByMissionKey
+
   # GET /api/v1/accounts/1
   def show
     fresh_when account, public: true
