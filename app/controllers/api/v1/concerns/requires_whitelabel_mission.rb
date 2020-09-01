@@ -9,7 +9,7 @@ module Api::V1::Concerns::RequiresWhitelabelMission
       unless whitelabel_mission
         @errors = { authentication: 'Requires whitelabel' }
 
-        render 'api/v1/error.json', status: 401
+        render 'api/v1/error.json', status: :unauthorized
       end
     end
   end
