@@ -1,4 +1,9 @@
 class Api::V1::TransfersController < Api::V1::ApiController
+  include Api::V1::Concerns::AuthorizableByMissionKey
+  include Api::V1::Concerns::RequiresAnAuthorization
+  include Api::V1::Concerns::RequiresSignature
+  include Api::V1::Concerns::RequiresWhitelabelMission
+
   before_action :verify_decimal_params_precision, only: :create
   before_action :verify_total_amount, only: :create
 

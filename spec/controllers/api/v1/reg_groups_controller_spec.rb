@@ -1,6 +1,15 @@
 require 'rails_helper'
+require 'controllers/api/v1/concerns/requires_an_authorization_spec'
+require 'controllers/api/v1/concerns/requires_signature_spec'
+require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
+require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
 RSpec.describe Api::V1::RegGroupsController, type: :controller do
+  it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_whitelabel_mission'
+  it_behaves_like 'authorizable_by_mission_key'
+
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:reg_group) { create(:reg_group) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: reg_group.token) }
@@ -18,22 +27,8 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
     }
   end
 
-  let(:valid_session) { {} }
-
-  let(:valid_headers) do
-    {
-      'API-Key' => build(:api_key)
-    }
-  end
-
-  let(:invalid_headers) do
-    {
-      'API-Key' => '12345'
-    }
-  end
-
   before do
-    request.headers.merge! valid_headers
+    allow(controller).to receive(:authorized).and_return(true)
   end
 
   describe 'GET #index' do
@@ -42,7 +37,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
       params[:project_id] = project.id
       params[:format] = :json
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
     end
 
@@ -50,7 +45,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
       params = build(:api_signed_request, '', api_v1_project_reg_groups_path(project_id: project.id), 'GET')
       params.merge!(project_id: project.id, format: :json, page: 9999)
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
       expect(assigns[:reg_groups]).to eq([])
     end
@@ -61,7 +56,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
       params = build(:api_signed_request, '', api_v1_project_reg_group_path(id: reg_group.id, project_id: project.id), 'GET')
       params.merge!(project_id: project.id, id: reg_group.id, format: :json)
 
-      get :show, params: params, session: valid_session
+      get :show, params: params
       expect(response).to be_successful
     end
   end
@@ -73,7 +68,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
           params = build(:api_signed_request, { reg_group: valid_attributes }, api_v1_project_reg_groups_path(project_id: project.id), 'POST')
           params[:project_id] = project.id
 
-          post :create, params: params, session: valid_session
+          post :create, params: params
         end.to change(project.token.reg_groups, :count).by(1)
       end
 
@@ -81,7 +76,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
         params = build(:api_signed_request, { reg_group: valid_attributes }, api_v1_project_reg_groups_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).to have_http_status(:created)
       end
     end
@@ -91,7 +86,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
         params = build(:api_signed_request, { reg_group: invalid_attributes }, api_v1_project_reg_groups_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -105,7 +100,7 @@ RSpec.describe Api::V1::RegGroupsController, type: :controller do
         params[:project_id] = project.id
         params[:id] = reg_group.id
 
-        delete :destroy, params: params, session: valid_session
+        delete :destroy, params: params
       end.to change(project.token.reg_groups, :count).by(-1)
     end
   end
