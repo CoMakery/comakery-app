@@ -6,10 +6,15 @@ shared_examples 'requires_an_authorization' do
       end
     end
 
+    let!(:project) { create(:project) }
+
     context 'when authorization is present' do
       before do
         allow(controller).to receive(:authorized).and_return(true)
         allow(controller).to receive(:verify_signature).and_return(true)
+        allow(controller).to receive(:project).and_return(project)
+
+        project.regenerate_api_key
       end
 
       it 'does nothing' do
@@ -22,6 +27,7 @@ shared_examples 'requires_an_authorization' do
       before do
         allow(controller).to receive(:authorized).and_return(false)
         allow(controller).to receive(:verify_signature).and_return(true)
+        allow(controller).to receive(:project).and_return(project)
       end
 
       it 'returns an error' do

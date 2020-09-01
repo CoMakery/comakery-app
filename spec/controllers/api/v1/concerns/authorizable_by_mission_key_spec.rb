@@ -6,10 +6,15 @@ shared_examples 'authorizable_by_mission_key' do
       end
     end
 
+    let!(:project) { create(:project) }
+
     context 'when correct mission key is present' do
       before do
         allow(controller).to receive(:mission_key).and_return('key')
         allow(controller).to receive(:request_key).and_return('key')
+        allow(controller).to receive(:project).and_return(project)
+
+        project.regenerate_api_key
       end
 
       it 'sets authorization' do
@@ -21,6 +26,7 @@ shared_examples 'authorizable_by_mission_key' do
     context 'when correct mission key is not present' do
       before do
         allow(controller).to receive(:authorized).and_call_original
+        allow(controller).to receive(:project).and_return(project)
       end
 
       it 'does nothing' do

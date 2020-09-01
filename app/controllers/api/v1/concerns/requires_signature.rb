@@ -16,5 +16,15 @@ module Api::V1::Concerns::RequiresSignature
 
       return render 'api/v1/error.json', status: 401
     end
+
+    def nonce_unique?(nonce)
+      key = "api::v1::nonce_history:#{whitelabel_mission.id}:#{nonce}"
+
+      if Rails.cache.exist?(key)
+        false
+      else
+        Rails.cache.write(key, true, expires_in: 1.day)
+      end
+    end
   end
 end

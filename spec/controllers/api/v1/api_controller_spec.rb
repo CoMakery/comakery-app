@@ -59,9 +59,9 @@ describe Api::V1::ApiController do
       expect(assigns[:project_scope].all).not_to include(project)
     end
 
-    it 'doesnt set project_scope for non-whitelabel requests ' do
+    it 'sets project_scope to all projects for non-whitelabel requests ' do
       get :index
-      expect(assigns[:project_scope]).to be_nil
+      expect(assigns[:project_scope]).to eq(Project.all)
     end
   end
 end

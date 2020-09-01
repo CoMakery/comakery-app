@@ -1,7 +1,7 @@
 class Api::V1::TransferRulesController < Api::V1::ApiController
-  include Api::V1::Concerns::RequiresAnAuthorization
-  include Api::V1::Concerns::AuthorizableByMissionKey
   include Api::V1::Concerns::AuthorizableByProjectPolicy
+  include Api::V1::Concerns::AuthorizableByMissionKey
+  include Api::V1::Concerns::RequiresAnAuthorization
 
   # GET /api/v1/projects/1/transfer_rules
   def index

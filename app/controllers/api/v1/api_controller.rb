@@ -27,16 +27,4 @@ class Api::V1::ApiController < ActionController::Base
   def project_scope
     @project_scope ||= (whitelabel_mission ? whitelabel_mission.projects : Project.all)
   end
-
-  private
-
-    def nonce_unique?(nonce)
-      key = "api::v1::nonce_history:#{whitelabel_mission.id}:#{nonce}"
-
-      if Rails.cache.exist?(key)
-        false
-      else
-        Rails.cache.write(key, true, expires_in: 1.day)
-      end
-    end
 end
