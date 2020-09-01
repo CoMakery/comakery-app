@@ -11,7 +11,7 @@ shared_examples 'authorizable_by_project_key' do
     context 'when correct project key is present' do
       before do
         allow(controller).to receive(:project_key).and_return('key')
-        allow(controller).to receive(:request_key).and_return('key')
+        allow(controller).to receive(:request_project_key).and_return('key')
         allow(controller).to receive(:project).and_return(project)
 
         project.regenerate_api_key

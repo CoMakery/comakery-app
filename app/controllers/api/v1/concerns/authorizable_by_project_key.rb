@@ -10,14 +10,14 @@ module Api::V1::Concerns::AuthorizableByProjectKey
     end
 
     def valid_project_key?
-      project_key.present? && project_key == request_key
+      project_key.present? && project_key == request_project_key
     end
 
     def project_key
       project&.api_key&.key
     end
 
-    def request_key
+    def request_project_key
       request.headers['API-Transaction-Key']
     end
   end
