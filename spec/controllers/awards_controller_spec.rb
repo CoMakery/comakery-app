@@ -169,7 +169,7 @@ RSpec.describe AwardsController, type: :controller do
       end
 
       it 'returns an error' do
-        expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
           post :create, params: {
             project_id: project.to_param,
             award_type_id: award_type.to_param,

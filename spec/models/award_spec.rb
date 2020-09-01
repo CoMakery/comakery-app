@@ -480,8 +480,9 @@ describe Award do
         award.save!
         award.ethereum_transaction_address = nil
         expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
+        expect(award.errors.full_messages.to_sentence).to match(\
           /Ethereum transaction address cannot be changed after it has been set/
+        )
       end
 
       it 'once set it cannot be set to another value' do
@@ -489,8 +490,9 @@ describe Award do
         award.save!
         award.ethereum_transaction_address = '0x' + 'b' * 64
         expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
+        expect(award.errors.full_messages.to_sentence).to match(\
           /Ethereum transaction address cannot be changed after it has been set/
+        )
       end
     end
 
@@ -528,8 +530,9 @@ describe Award do
         award.save!
         award.ethereum_transaction_address = nil
         expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
+        expect(award.errors.full_messages.to_sentence).to match(\
           /Ethereum transaction address cannot be changed after it has been set/
+        )
       end
 
       it 'once set it cannot be set to another value' do
@@ -537,8 +540,9 @@ describe Award do
         award.save!
         award.ethereum_transaction_address = 'b' * 64
         expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
+        expect(award.errors.full_messages.to_sentence).to match(\
           /Ethereum transaction address cannot be changed after it has been set/
+        )
       end
     end
   end

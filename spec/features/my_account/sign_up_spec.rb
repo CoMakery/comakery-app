@@ -88,7 +88,7 @@ describe 'my account', js: true do
 
   scenario 'featured page is available after signup' do
     login(confirmed_account)
-    open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
+    open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file| # rubocop:todo Rails/FilePath
       mission.image = file
     end
     mission.save

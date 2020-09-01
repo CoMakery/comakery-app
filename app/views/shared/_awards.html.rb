@@ -1,7 +1,7 @@
 class Views::Shared::Awards < Views::Base
   needs :project, :awards, :show_recipient, :current_account
 
-  def content
+  def content # rubocop:todo Metrics/PerceivedComplexity
     div(class: 'table-scroll table-box', style: 'margin-right: 0') do
       table(class: 'award-rows') do
         tr(class: 'header-row') do
@@ -34,7 +34,7 @@ class Views::Shared::Awards < Views::Base
               text award.total_amount_pretty
             end
             td(class: 'small-2') do
-              text raw award.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;')
+              text raw award.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;') # rubocop:todo Rails/OutputSafety
             end
             if show_recipient
               td(class: 'small-2 recipient') do
@@ -45,7 +45,9 @@ class Views::Shared::Awards < Views::Base
             td(class: 'small-2 description') do
               strong award.award_type.name.to_s
               span(class: 'help-text') do
+                # rubocop:todo Rails/OutputSafety
                 text raw ": #{markdown_to_html award.description}" if award.description.present?
+                # rubocop:enable Rails/OutputSafety
                 br
                 span award.proof_id
               end

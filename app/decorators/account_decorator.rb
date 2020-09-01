@@ -51,7 +51,7 @@ class AccountDecorator < Draper::Decorator
     blockchain_name && send("#{blockchain_name}_wallet")
   end
 
-  def wallet_address_url_for(project)
+  def wallet_address_url_for(project) # rubocop:todo Metrics/CyclomaticComplexity
     address = wallet_address_for(project)
     network = project.token&.coin_type_on_ethereum? ? project.token&.ethereum_network : project.token&.blockchain_network
 
@@ -76,7 +76,7 @@ class AccountDecorator < Draper::Decorator
     account&.send("#{blockchain_name}_wallet?")
   end
 
-  def can_send_awards?(project)
+  def can_send_awards?(project) # rubocop:todo Metrics/CyclomaticComplexity
     (project&.account == self || project.admins.include?(self)) && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
   end
 

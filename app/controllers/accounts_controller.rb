@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
     @account = Account.new(email: params[:account_email])
   end
 
-  def show
+  def show # rubocop:todo Metrics/CyclomaticComplexity
     @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).includes(:token).per(20)
     @awards = current_account.awards&.includes(:project, :token, :latest_blockchain_transaction)&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
     @projects_count = @projects.total_count
@@ -39,7 +39,7 @@ class AccountsController < ApplicationController
     end
   end
 
-  def create
+  def create # rubocop:todo Metrics/CyclomaticComplexity
     @account = if @whitelabel_mission
       @whitelabel_mission.managed_accounts.new(account_params)
     else
@@ -134,7 +134,7 @@ class AccountsController < ApplicationController
     redirect_to my_tasks_path
   end
 
-  def update
+  def update # rubocop:todo Metrics/CyclomaticComplexity
     @current_account = current_account
     old_age = @current_account.age || 18
     authorize @current_account

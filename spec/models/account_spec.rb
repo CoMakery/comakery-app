@@ -757,7 +757,7 @@ describe Account do
     end
 
     let!(:non_whitelabel_uninterested_project) do
-      project = create(:project, title: 'Non Whitelabel Uninterested Project')
+      project = create(:project, title: 'Non Whitelabel Uninterested Project') # rubocop:todo Lint/UselessAssignment
     end
 
     it 'shows just the non-whitelabel interested task with no whitelabel' do

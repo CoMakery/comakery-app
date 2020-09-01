@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
     head :unauthorized
   end
 
-  def redirect_back_to_session
+  def redirect_back_to_session # rubocop:todo Metrics/CyclomaticComplexity
     if current_account&.valid? && current_account&.confirmed? && session[:return_to]
       redirect_url = session[:return_to]
       session.delete(:return_to)
@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def create_interest_from_session
+  def create_interest_from_session # rubocop:todo Metrics/CyclomaticComplexity
     if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
       current_account.interests.create(
         project: Project.find(session[:interested_in_project].to_i),
@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
-  def not_found(e)
+  def not_found(e) # rubocop:todo Naming/MethodParameterName
     if Rails.env.development?
       raise e
     else
@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
     not_authenticated if session[:account_id].blank?
   end
 
-  def require_email_confirmation
+  def require_email_confirmation # rubocop:todo Metrics/CyclomaticComplexity
     redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' } if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
   end
 
@@ -142,7 +142,8 @@ class ApplicationController < ActionController::Base
     return redirect_to '/404.html' unless @project
   end
 
-  def task_to_props(task)
+  # rubocop:todo Metrics/PerceivedComplexity
+  def task_to_props(task) # rubocop:todo Metrics/CyclomaticComplexity
     task&.serializable_hash&.merge({
       description_html: Comakery::Markdown.to_html(task.description),
       requirements_html: Comakery::Markdown.to_html(task.requirements),
@@ -202,6 +203,7 @@ class ApplicationController < ActionController::Base
       status: task.status.humanize.downcase
     })
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # :nocov:
 
@@ -237,11 +239,15 @@ class ApplicationController < ActionController::Base
     end
 
     def set_whitelabel_mission
+      # rubocop:todo Naming/MemoizedInstanceVariableName
       @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
+      # rubocop:enable Naming/MemoizedInstanceVariableName
     end
 
     def set_project_scope
+      # rubocop:todo Naming/MemoizedInstanceVariableName
       @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
+      # rubocop:enable Naming/MemoizedInstanceVariableName
     end
 
     def set_whitelabel_cors

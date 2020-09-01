@@ -58,8 +58,8 @@ describe Authentication do
 
     context 'when there are missing credentials' do
       it 'blows up' do
-        expect do
-          expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             described_class.find_or_create_by_omniauth({})
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
@@ -78,8 +78,8 @@ describe Authentication do
 
       it 'returns the existing authentication' do
         result = nil
-        expect do
-          expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             result = described_class.find_or_create_by_omniauth(auth_hash)
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
@@ -133,8 +133,8 @@ describe Authentication do
 
       it '#find_or_create_by_omniauth' do
         result = nil
-        expect do
-          expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             result = described_class.find_or_create_by_omniauth(auth_hash)
           end.not_to change { Account.count }
         end.not_to change { described_class.count }

@@ -1,11 +1,8 @@
-inherit_from:
-  - todo.yml
-  - .rubocop_todo.yml
+inherit_from: .rubocop_todo.yml
 
 require:
   - rubocop-performance
   - rubocop-rails
-  - rubocop-rspec
 
 AllCops:
   Exclude:
@@ -65,15 +62,6 @@ Performance/TimesMap:
 
 Rails:
   Enabled: true
-
-RSpec/ExampleLength:
-  Enabled: false
-
-RSpec/LetSetup:
-  Enabled: false
-
-RSpec/NestedGroups:
-  Max: 4
 
 Style/Documentation:
   Enabled: false

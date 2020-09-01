@@ -36,7 +36,7 @@ class AwardPolicy < ApplicationPolicy
     project_editable? && @award.can_be_assigned?
   end
 
-  def start?
+  def start? # rubocop:todo Metrics/CyclomaticComplexity
     @award.status.in?(%w[ready invite_ready]) && (@account&.related_awards&.where(id: @award.id)&.exists? || @account&.accessable_awards&.where(id: @award.id)&.exists?)
   end
 

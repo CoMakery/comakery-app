@@ -12,13 +12,15 @@ class Project < ApplicationRecord
   has_and_belongs_to_many :admins, class_name: 'Account'
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
-  has_many :interests
+  has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
 
   has_many :transfer_types, dependent: :destroy
   has_many :award_types, inverse_of: :project, dependent: :destroy
+  # rubocop:todo Rails/InverseOf
   has_many :ready_award_types, -> { where state: 'public' }, source: :award_types, class_name: 'AwardType'
+  # rubocop:enable Rails/InverseOf
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
@@ -39,7 +41,9 @@ class Project < ApplicationRecord
 
   validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
+  # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
@@ -166,7 +170,7 @@ class Project < ApplicationRecord
     end
   end
 
-  def awards_for_chart(max: 1000)
+  def awards_for_chart(max: 1000) # rubocop:todo Metrics/CyclomaticComplexity
     result = []
     recents = awards.completed.includes(:account).limit(max).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
@@ -261,7 +265,9 @@ class Project < ApplicationRecord
     end
 
     def store_license_hash
+      # rubocop:todo Rails/FilePath
       self.agreed_to_license_hash = Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) }))
+      # rubocop:enable Rails/FilePath
     end
 
     def set_whitelabel

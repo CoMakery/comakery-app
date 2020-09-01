@@ -34,7 +34,7 @@ describe AccountsController do
     end
 
     it 'renders errors for an invalid ethereum address' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         put :update, params: { account: { ethereum_wallet: 'not a valid ethereum address' } }
         expect(response.status).to eq(200)
       end.not_to change { account.reload.ethereum_wallet }
@@ -44,7 +44,7 @@ describe AccountsController do
     end
 
     it 'renders errors for an invalid bitcoin address' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         put :update, params: { account: { bitcoin_wallet: 'not a valid bitcoin address' } }
       end.not_to change { account.reload.bitcoin_wallet }
 
@@ -53,7 +53,7 @@ describe AccountsController do
     end
 
     it 'renders errors for an invalid cardano address' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         put :update, params: { account: { cardano_wallet: 'not a valid bitcoin address' } }
       end.not_to change { account.reload.cardano_wallet }
 
@@ -77,7 +77,7 @@ describe AccountsController do
 
   describe '#create' do
     it 'renders errors for invalid password' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           account: {
             email: 'user@test.st',
@@ -91,7 +91,7 @@ describe AccountsController do
     end
 
     it 'renders errors if email is blank' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           account: {
             email: '',
@@ -188,7 +188,7 @@ describe AccountsController do
 
     it 'renders errors if email has already been taken' do
       Account.create(email: 'user@test.st', password: '12345678')
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           account: {
             email: 'user@test.st',

@@ -9,7 +9,7 @@ class GetAwardData
     }
   end
 
-  def contributions_by_day(awards_scope)
+  def contributions_by_day(awards_scope) # rubocop:todo Metrics/CyclomaticComplexity
     history = 150
     recent_awards = awards_scope
                     .where('awards.updated_at > ?', history.days.ago)

@@ -98,7 +98,7 @@ class AwardsController < ApplicationController
     render component: 'TaskAssign', props: @props
   end
 
-  def assign
+  def assign # rubocop:todo Metrics/CyclomaticComplexity
     account = Account.find(params[:account_id])
 
     @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
@@ -119,7 +119,7 @@ class AwardsController < ApplicationController
     end
   end
 
-  def submit
+  def submit # rubocop:todo Metrics/CyclomaticComplexity
     if submit_params[:submission_url].blank? &&
        submit_params[:submission_comment].blank? &&
        submit_params[:submission_image].blank?
@@ -166,7 +166,7 @@ class AwardsController < ApplicationController
     render json: @recipient_address_response, status: :ok
   end
 
-  def send_award
+  def send_award # rubocop:todo Metrics/CyclomaticComplexity
     result = SendAward.call(
       award: @award,
       quantity: send_award_params[:quantity],
@@ -409,7 +409,7 @@ class AwardsController < ApplicationController
       @project.channels.includes(:team).select { |c| c.team.accounts.include?(current_account) }
     end
 
-    def set_award_props
+    def set_award_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         task: @award.serializable_hash,
         batch: @award_type.serializable_hash,
@@ -427,7 +427,7 @@ class AwardsController < ApplicationController
       }
     end
 
-    def set_assignment_props
+    def set_assignment_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         task: @award.serializable_hash(only: %w[id name]),
         batch: @award_type.serializable_hash(only: %w[id name]),
@@ -449,7 +449,7 @@ class AwardsController < ApplicationController
       }
     end
 
-    def set_form_props
+    def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         task: (@award || @award_type.awards.new).serializable_hash&.merge(
           image_url: Refile.attachment_url(@award || @award_type.awards.new, :image, :fill, 300, 300)
@@ -478,7 +478,7 @@ class AwardsController < ApplicationController
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
-    def error_response(message = nil)
+    def error_response(message = nil) # rubocop:todo Metrics/CyclomaticComplexity
       @error_response = {
         id: @award.id,
         message: message || @award.errors&.full_messages&.join(', '),
@@ -486,7 +486,7 @@ class AwardsController < ApplicationController
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
-    def set_recipient_address_response
+    def set_recipient_address_response # rubocop:todo Metrics/CyclomaticComplexity
       address = (
         if params[:channel_id].blank?
           Account.where('lower(email)=?', params[:email].downcase).first

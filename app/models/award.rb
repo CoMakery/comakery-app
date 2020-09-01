@@ -28,8 +28,12 @@ class Award < ApplicationRecord
   belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty
+  # rubocop:todo Rails/InverseOf
   belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id', counter_cache: :assignments_count, touch: true
-  has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
+  # rubocop:enable Rails/InverseOf
+  # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id' # rubocop:todo Rails/InverseOf
+  # rubocop:enable Rails/HasManyOrHasOneDependent
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
@@ -337,7 +341,7 @@ class Award < ApplicationRecord
       self.status = 'invite_ready'
     end
 
-    def total_amount_fits_into_project_budget
+    def total_amount_fits_into_project_budget # rubocop:todo Metrics/CyclomaticComplexity
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
 
       errors[:base] << "Sorry, you can't exceed the project's budget" if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)

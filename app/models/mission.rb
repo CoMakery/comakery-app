@@ -7,9 +7,11 @@ class Mission < ApplicationRecord
   attachment :whitelabel_logo_dark
   attachment :whitelabel_favicon
 
-  has_many :projects, inverse_of: :mission
+  has_many :projects, inverse_of: :mission # rubocop:todo Rails/HasManyOrHasOneDependent
+  # rubocop:todo Rails/InverseOf
   has_many :unarchived_projects, -> { where.not visibility: :archived }, source: :projects, class_name: 'Project'
-  has_many :public_projects, -> { public_listed }, class_name: 'Project'
+  # rubocop:enable Rails/InverseOf
+  has_many :public_projects, -> { public_listed }, class_name: 'Project' # rubocop:todo Rails/InverseOf
   has_many :leaders, through: :public_projects, source: :account
   has_many :tokens, through: :public_projects, source: :token
   has_many :award_types, through: :projects
@@ -18,7 +20,9 @@ class Mission < ApplicationRecord
   has_many :awards, through: :award_types
   has_many :interests, through: :public_projects
   has_many :interested, -> { distinct }, through: :public_projects
-  has_many :managed_accounts, class_name: 'Account', foreign_key: 'managed_mission_id'
+  # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :managed_accounts, class_name: 'Account', foreign_key: 'managed_mission_id' # rubocop:todo Rails/InverseOf
+  # rubocop:enable Rails/HasManyOrHasOneDependent
 
   enum status: { active: 0, passive: 1 }
 

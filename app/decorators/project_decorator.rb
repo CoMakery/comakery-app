@@ -168,6 +168,7 @@ class ProjectDecorator < Draper::Decorator
     project.transfer_types.map.with_index { |t, i| [t, Comakery::ChartColors.lookup(i)] }.to_h
   end
 
+  # rubocop:todo Metrics/CyclomaticComplexity
   def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty)
     chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(
@@ -180,6 +181,7 @@ class ProjectDecorator < Draper::Decorator
 
     chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| x[:i] }
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def transfers_stacked_chart_year(transfers)
     transfers_stacked_chart(
@@ -221,7 +223,7 @@ class ProjectDecorator < Draper::Decorator
     )
   end
 
-  def transfers_donut_chart(transfers)
+  def transfers_donut_chart(transfers) # rubocop:todo Metrics/CyclomaticComplexity
     chart = transfers.includes([:transfer_type]).group_by(&:transfer_type).map do |type, set|
       {
         name: type.name,

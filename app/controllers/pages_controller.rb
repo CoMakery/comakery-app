@@ -7,7 +7,7 @@ class PagesController < ApplicationController
 
   layout 'legacy', except: %i[styleguide featured]
 
-  def featured
+  def featured # rubocop:todo Metrics/CyclomaticComplexity
     top_missions = Mission.active.first(4)
     more_missions = Mission.active.offset(4)
 

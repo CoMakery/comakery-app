@@ -71,7 +71,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
       )
     end
 
-    def verify_decimal_params_precision
+    def verify_decimal_params_precision # rubocop:todo Metrics/CyclomaticComplexity
       a = Award.new
 
       a.errors[:amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})" if transfer_params[:amount] != helpers.number_with_precision(transfer_params[:amount], precision: project.token&.decimal_places.to_i)
@@ -87,7 +87,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
       end
     end
 
-    def verify_total_amount
+    def verify_total_amount # rubocop:todo Metrics/CyclomaticComplexity
       a = Award.new
       calculated_total_amount = (BigDecimal(transfer_params[:amount] || 0) * BigDecimal(transfer_params[:quantity] || 0)).to_s
 

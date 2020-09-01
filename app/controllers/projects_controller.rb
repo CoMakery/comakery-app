@@ -200,7 +200,7 @@ class ProjectsController < ApplicationController
       @visibilities = Project.visibilities.keys
     end
 
-    def set_teams
+    def set_teams # rubocop:todo Metrics/CyclomaticComplexity
       @teams = current_account&.authentication_teams&.includes(:team, :authentication)&.map do |a_team|
         {
           team: "[#{a_team.team.provider}] #{a_team.team.name}",
@@ -216,7 +216,8 @@ class ProjectsController < ApplicationController
       end
     end
 
-    def set_generic_props
+    # rubocop:todo Metrics/PerceivedComplexity
+    def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         project: @project&.serializable_hash&.merge(
           {
@@ -257,12 +258,13 @@ class ProjectsController < ApplicationController
         is_whitelabel: @whitelabel_mission.present?
       }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     def project_header
       @project ? @project.decorate.header_props : { image_url: helpers.image_url('defaul_project.jpg') }
     end
 
-    def set_show_props
+    def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
           [
@@ -364,7 +366,7 @@ class ProjectsController < ApplicationController
       a
     end
 
-    def project_props(project)
+    def project_props(project) # rubocop:todo Metrics/CyclomaticComplexity
       project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
         description_html: Comakery::Markdown.to_html(project.description),
         show_contributions: policy(project).show_contributions?,

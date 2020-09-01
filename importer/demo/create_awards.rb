@@ -64,7 +64,7 @@ def make(fixture:, project_model:, owner_name:, team_name:, team_image:, project
     data.each do |name, amount|
       amount.times do
         recipient_auth = auth(name, team_name, team_image)
-        award = create :award, recipient_auth, owner.account,
+        award = create :award, recipient_auth, owner.account, # rubocop:todo Lint/UselessAssignment
                        award_type: award_type,
                        amount: 100,
                        description: 'Git commit',

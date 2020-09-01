@@ -62,7 +62,7 @@ class Comakery::Eth::Tx
     true
   end
 
-  def valid_block?(n)
+  def valid_block?(n) # rubocop:todo Naming/MethodParameterName
     return false if block_number <= n
 
     true

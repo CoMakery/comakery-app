@@ -4,7 +4,7 @@ class Comakery::Eth::Tx::Erc20::Transfer < Comakery::Eth::Tx::Erc20
   end
 
   def method_arg_0
-    lookup_method_arg(0)&.to_s(16)&.insert(0, '0x')
+    lookup_method_arg(0)&.to_s(16)&.insert(0, '0x') # rubocop:todo Rails/SkipsModelValidations
   end
 
   def method_arg_1

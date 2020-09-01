@@ -2,7 +2,7 @@ class Views::Layouts::Legacy < Views::Base
   use_instance_variables_for_assigns true
   needs :whitelabel_mission
 
-  def content
+  def content # rubocop:todo Metrics/PerceivedComplexity
     doctype!
     html(lang: 'en') do
       head do

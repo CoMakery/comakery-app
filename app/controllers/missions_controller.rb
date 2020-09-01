@@ -161,7 +161,7 @@ class MissionsController < ApplicationController
       }
     end
 
-    def set_mission_props
+    def set_mission_props # rubocop:todo Metrics/CyclomaticComplexity
       projects = @mission.public_projects.order('interests_count DESC').includes(:token, :interested, :award_types, :ready_award_types, :account, admins: [:specialty], contributors_distinct: [:specialty])
 
       @props = {
@@ -195,7 +195,7 @@ class MissionsController < ApplicationController
       }
     end
 
-    def mission_images
+    def mission_images # rubocop:todo Metrics/CyclomaticComplexity
       {
         logo_url: Refile.attachment_url(@mission, :logo, :fill, 800, 800),
         image_url: Refile.attachment_url(@mission, :image, :fill, 1200, 800),

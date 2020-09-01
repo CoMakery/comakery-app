@@ -82,7 +82,8 @@ class AwardTypesController < ApplicationController
       @award_types = AwardTypePolicy::Scope.new(current_user, @project, @project.award_types).resolve
     end
 
-    def set_index_props
+    # rubocop:todo Metrics/PerceivedComplexity
+    def set_index_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         editable: policy(@project).edit?,
         batches: @award_types&.includes(awards: %i[account project assignments])&.map do |batch|
@@ -111,8 +112,9 @@ class AwardTypesController < ApplicationController
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
-    def task_to_index_props(task, batch)
+    def task_to_index_props(task, batch) # rubocop:todo Metrics/CyclomaticComplexity
       task.serializable_hash.merge(
         batch_name: batch.name,
         image_url: helpers.attachment_url(task, :image),
@@ -138,7 +140,7 @@ class AwardTypesController < ApplicationController
       )
     end
 
-    def set_form_props
+    def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         batch: (@award_type || @project.award_types.new).serializable_hash&.merge(
           diagram_url: Refile.attachment_url(@award_type || @project.award_types.new, :diagram, :fill, 300, 300)

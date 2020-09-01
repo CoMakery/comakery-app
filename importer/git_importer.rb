@@ -22,7 +22,7 @@ class GitImporter
     send_awards commits
   end
 
-  def parse_opts
+  def parse_opts # rubocop:todo Metrics/CyclomaticComplexity
     @opts = Trollop.options do
       opt :github_repo, 'Github owner/repo, eg `ipfs/go-ipfs`', type: :string
       opt :project_id, 'Comakery project ID', type: :integer
@@ -45,7 +45,7 @@ class GitImporter
       run "git clone #{origin} #{local_repo}"
     end
 
-    owner, repo = github_repo.split('/')
+    owner, repo = github_repo.split('/') # rubocop:todo Lint/UselessAssignment
     { local_repo: local_repo }
   end
 
@@ -59,7 +59,7 @@ class GitImporter
     results = run "cd #{repo[:local_repo]} && #{git_log}", quiet: !$DEBUG
     logs = results.split("\n")
 
-    commits = logs.map do |line|
+    commits = logs.map do |line| # rubocop:todo Lint/UselessAssignment
       elements = line.split(" \x00 ")
       git_hash, author_name, author_email, author_date, subject = elements
       {
@@ -80,7 +80,7 @@ class GitImporter
   end
 
   def check_recipients(commits)
-    project = Project.find @opts[:project_id]
+    project = Project.find @opts[:project_id] # rubocop:todo Lint/UselessAssignment
     author_names = commits.map { |commit| commit[:author_names] }.flatten.uniq.sort
     errors = []
     author_names.each do |author_name|
@@ -91,7 +91,7 @@ class GitImporter
     raise RecipientError, errors.join("\n") if errors.present?
   end
 
-  def slack_user_id(author_name)
+  def slack_user_id(author_name) # rubocop:todo Metrics/CyclomaticComplexity
     project = Project.find @opts[:project_id]
     name_to_user_name = {
       'Adam Apollo' => 'adamapollo',
@@ -123,7 +123,7 @@ class GitImporter
     user_id
   end
 
-  def send_awards(commits)
+  def send_awards(commits) # rubocop:todo Metrics/CyclomaticComplexity
     awards = 0
     project = Project.find @opts[:project_id]
     award_type = project.award_types.order(:amount).first # lowest award

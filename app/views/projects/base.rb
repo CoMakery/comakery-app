@@ -35,7 +35,9 @@ class Views::Projects::Base < Views::Base
           end
         end
 
+        # rubocop:todo Rails/Output
         p(class: 'description no-last-award') { text project.description_text_truncated(60) }
+        # rubocop:enable Rails/Output
 
         div(class: 'details') do
           div(class: 'contributors') do

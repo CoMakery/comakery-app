@@ -128,7 +128,7 @@ describe MissionsController do
     end
 
     it 'renders error if param is blank' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           mission: {
             subtitle: 'test2',
@@ -150,14 +150,14 @@ describe MissionsController do
     end
 
     it 'renders error if param is blank' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         put :update, params: { id: mission1, mission: { name: '' } }
         expect(response.status).to eq(422)
       end.not_to change { mission1.name }
     end
 
     it 'renders error if name is too long' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         put :update, params: { id: mission1, mission: { name: 'a' * 101 } }
         expect(response.status).to eq(422)
       end.not_to change { mission1.name }

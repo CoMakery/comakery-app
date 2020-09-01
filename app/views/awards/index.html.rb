@@ -1,7 +1,7 @@
 class Views::Awards::Index < Views::Base
   needs :project, :awards
 
-  def content
+  def content # rubocop:todo Metrics/PerceivedComplexity
     render partial: 'shared/project_header'
     full_row do
       render partial: 'awards/activity'

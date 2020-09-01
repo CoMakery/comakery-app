@@ -102,7 +102,7 @@ class TokensController < ApplicationController
       @blockchain_networks = Token.blockchain_networks.invert
     end
 
-    def set_generic_props
+    def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         token: @token&.serializable_hash&.merge(
           {

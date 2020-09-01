@@ -7,7 +7,9 @@ class Authentication < ApplicationRecord
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     acc, authentication = process_authentication(authentication, auth_hash)
 
+    # rubocop:todo Rails/SkipsModelValidations
     acc&.update_columns agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
+    # rubocop:enable Rails/SkipsModelValidations
     authentication
   end
 

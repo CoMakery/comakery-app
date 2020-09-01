@@ -38,13 +38,13 @@ class Token < ApplicationRecord
   nilify_blanks
   attachment :logo_image, type: :image
 
-  has_many :projects
+  has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :interested
-  has_many :account_token_records
-  has_many :reg_groups
-  has_many :transfer_rules
-  has_many :transfer_rules_synced, -> { where synced: true }
-  has_many :blockchain_transactions
+  has_many :account_token_records # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :reg_groups # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :transfer_rules # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :transfer_rules_synced, -> { where synced: true } # rubocop:todo Rails/InverseOf
+  has_many :blockchain_transactions # rubocop:todo Rails/HasManyOrHasOneDependent
 
   # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
   # has_many :batches
@@ -94,7 +94,7 @@ class Token < ApplicationRecord
   }
 
   validates :name, :denomination, presence: true
-  validates :name, uniqueness: true
+  validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
 
   validate :valid_ethereum_enabled
   validate :check_contract_address_exist_on_blockchain_network
@@ -138,9 +138,13 @@ class Token < ApplicationRecord
 
   def abi
     if coin_type_comakery?
+      # rubocop:todo Rails/FilePath
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
+      # rubocop:enable Rails/FilePath
     else
+      # rubocop:todo Rails/FilePath
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
+      # rubocop:enable Rails/FilePath
     end
   end
 

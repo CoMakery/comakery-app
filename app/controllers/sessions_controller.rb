@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
     redirect_to redirect_path
   end
 
-  def sign_in
+  def sign_in # rubocop:todo Metrics/CyclomaticComplexity
     @account = if @whitelabel_mission
       @whitelabel_mission.managed_accounts.find_by email: params[:email]
     else
@@ -57,7 +57,7 @@ class SessionsController < ApplicationController
       request.env['omniauth.auth']
     end
 
-    def check_discord_oauth
+    def check_discord_oauth # rubocop:todo Metrics/CyclomaticComplexity
       if auth_hash['provider']&.include?('discord') && auth_hash['info'] && !auth_hash['info']['email']&.include?('@')
         flash[:error] = 'Please use Discord account with a valid email address'
         redirect_to new_session_path
@@ -88,7 +88,7 @@ class SessionsController < ApplicationController
       false
     end
 
-    def process_new_award_notice
+    def process_new_award_notice # rubocop:todo Metrics/CyclomaticComplexity
       project = current_account.awards&.completed&.last&.project
       return nil unless project&.token&.coin_type?
 

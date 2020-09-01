@@ -101,7 +101,7 @@ class BlockchainTransaction < ApplicationRecord
 
   private
 
-    def populate_data
+    def populate_data # rubocop:todo Metrics/CyclomaticComplexity
       self.token ||= blockchain_transactable.token
 
       if token.coin_type_on_ethereum?

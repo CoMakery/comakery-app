@@ -17,7 +17,7 @@ module ConstellationAddressable
       end
     end
 
-    def validate_checksum(record, attribute, value)
+    def validate_checksum(record, attribute, value) # rubocop:todo Metrics/CyclomaticComplexity
       included_checksum = value[3]
       computed_checksum = value[4..-1]&.scan(/\d/)&.map(&:to_i)&.reduce(&:+)&.modulo(9)
 
