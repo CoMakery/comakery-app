@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
 
   before_action :assign_current_account
-  before_action :assign_project, only: %i[edit admins add_admin remove_admin show update awards]
+  before_action :assign_project, only: %i[edit show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
 
-  layout 'legacy', except: %i[show unlisted new edit admins]
+  layout 'legacy', except: %i[show unlisted new edit]
 
   def landing
     if current_account
@@ -105,39 +105,6 @@ class ProjectsController < ApplicationController
     @props[:form_url]    = project_path(@project)
 
     render component: 'ProjectForm', props: @props
-  end
-
-  def admins
-    authorize @project
-    @admins = @project.admins
-  end
-
-  def add_admin
-    authorize @project
-    account = Account.find_by(email: params[:email])
-
-    return redirect_to admins_project_path(@project), flash: { error: 'Account is not found on Comakery' } unless account
-
-    return redirect_to admins_project_path(@project), flash: { error: 'Project owner cannot be added as a project admin' } if @project.account == account
-
-    return redirect_to admins_project_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" } if @project.admins.include?(account)
-
-    @project.admins << account
-    @project.interested << account unless account.interested?(@project.id)
-    redirect_to admins_project_path(@project), notice: "#{account.decorate.name} added as a project admin"
-  end
-
-  def remove_admin
-    authorize @project
-
-    account = Account.find_by(id: params[:account_id])
-
-    if account && @project.admins.include?(account)
-      @project.admins.delete(account)
-      redirect_to admins_project_path(@project), notice: "#{account.decorate.name} removed from project admins"
-    else
-      redirect_to admins_project_path(@project), flash: { error: 'Project admin is not found' }
-    end
   end
 
   def update

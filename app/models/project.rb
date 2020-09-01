@@ -2,6 +2,8 @@
 # rubocop:disable Rails/HasAndBelongsToMany
 
 class Project < ApplicationRecord
+  include ApiAuthorizable
+
   nilify_blanks
   attachment :image
 

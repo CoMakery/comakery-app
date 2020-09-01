@@ -1,0 +1,15 @@
+<div class="project-api-key">
+  <h2>API transaction key</h2>
+
+  <div class="project-api-key__create" data-controller="clipboard">
+    <%= password_field_tag nil, @project.api_key&.key, placeholder: 'Not generated yet..', readonly: true, data: { target: 'clipboard.field', action: 'focus->clipboard#showPasswordField blur->clipboard#hidePasswordField' } %>
+    
+    <% if @project.api_key.present? %>
+      <%= button_tag 'copy', type: 'button', data: { action: 'click->clipboard#copy' } %>
+    <% end %>
+
+    <%= link_to(regenerate_api_key_project_dashboard_accesses_path(@project), method: :post, data: {confirm: "Regenerate API Key? Current key will be discarded."} ) do %>
+      Generate
+    <% end %>
+  </div>
+</div>

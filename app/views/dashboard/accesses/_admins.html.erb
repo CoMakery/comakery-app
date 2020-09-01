@@ -1,0 +1,12 @@
+<div class="admins">
+  <h2>admins</h2>
+  
+  <%= render partial: "admin", collection: @admins, as: :admin, cached: true, locals: {project: @project} %>
+
+  <div class="admins__create">
+    <%= form_with url: add_admin_project_dashboard_accesses_path(@project), class: 'form-with-submit-button' do |f| %>
+      <%= f.email_field(:email, required: true, placeholder: 'Email of CoMakery user') %>
+      <%= f.submit('Grant') %>
+    <% end %>
+  </div>
+</div>

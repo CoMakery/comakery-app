@@ -104,7 +104,7 @@ class ProjectDecorator < Draper::Decorator
       owner: legal_project_owner,
       image_url: helpers.attachment_url(self, :panoramic_image, :fill, 1500, 300, fallback: 'defaul_project.jpg'),
       settings_url: edit_project_path(self),
-      admins_url: admins_project_path(self),
+      access_url: project_dashboard_accesses_path(self),
       batches_url: project_award_types_path(self),
       transfers_url: project_dashboard_transfers_path(self),
       accounts_url: project_dashboard_accounts_path(self),
