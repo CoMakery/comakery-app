@@ -17,7 +17,7 @@ describe 'tokens features', js: true do
 
     select('eTH', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'create & close'
     find :css, '.token-index', wait: 10
@@ -34,7 +34,7 @@ describe 'tokens features', js: true do
     select('eRC20', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
     fill_in('token[name]', with: 'erc20 test')
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     stub_web3_fetch
     fill_in('token[ethereum_contract_address]', with: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2')
@@ -64,7 +64,7 @@ describe 'tokens features', js: true do
     select('qRC20', from: 'token[coin_type]', visible: false)
     select('test QTUM Network', from: 'token[blockchain_network]', visible: false)
     fill_in('token[name]', with: 'qrc20 test')
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     stub_qtum_fetch
     fill_in('token[contract_address]', with: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc')
@@ -125,7 +125,7 @@ describe 'tokens features', js: true do
 
     select('eTH', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'save & close'
     find :css, '.token-index', wait: 10

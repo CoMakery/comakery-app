@@ -22,7 +22,7 @@ class GitImporter
     send_awards commits
   end
 
-  def parse_opts
+  def parse_opts # rubocop:todo Metrics/CyclomaticComplexity
     @opts = Trollop.options do
       opt :github_repo, 'Github owner/repo, eg `ipfs/go-ipfs`', type: :string
       opt :project_id, 'Comakery project ID', type: :integer
@@ -30,7 +30,7 @@ class GitImporter
       opt :ethereum, 'Create awards on Ethereum blockchain', default: false
     end
     Trollop.die :github_repo, 'must be of the form `owner/repo`' if @opts[:github_repo]&.split('/')&.length != 2
-    Trollop.die :project_id, 'required' unless @opts[:project_id] && @opts[:project_id] > 0
+    Trollop.die :project_id, 'required' unless @opts[:project_id] && (@opts[:project_id]).positive?
   end
 
   def clone_repo
@@ -45,7 +45,7 @@ class GitImporter
       run "git clone #{origin} #{local_repo}"
     end
 
-    owner, repo = github_repo.split('/')
+    owner, repo = github_repo.split('/') # rubocop:todo Lint/UselessAssignment
     { local_repo: local_repo }
   end
 
@@ -54,14 +54,12 @@ class GitImporter
       --first-parent master
       --format='%H %x00 %an %x00 %ae %x00 %aI %x00 %s'
     )
-    if @opts[:history].present?
-      git_log += %( --since="#{@opts[:history] + 1} days ago")
-    end
+    git_log += %( --since="#{@opts[:history] + 1} days ago") if @opts[:history].present?
 
     results = run "cd #{repo[:local_repo]} && #{git_log}", quiet: !$DEBUG
     logs = results.split("\n")
 
-    commits = logs.map do |line|
+    commits = logs.map do |line| # rubocop:todo Lint/UselessAssignment
       elements = line.split(" \x00 ")
       git_hash, author_name, author_email, author_date, subject = elements
       {
@@ -82,20 +80,18 @@ class GitImporter
   end
 
   def check_recipients(commits)
-    project = Project.find @opts[:project_id]
+    project = Project.find @opts[:project_id] # rubocop:todo Lint/UselessAssignment
     author_names = commits.map { |commit| commit[:author_names] }.flatten.uniq.sort
     errors = []
     author_names.each do |author_name|
-      begin
-        slack_user_id(author_name)
-      rescue RecipientError => e
-        errors << e.message
-      end
+      slack_user_id(author_name)
+    rescue RecipientError => e
+      errors << e.message
     end
     raise RecipientError, errors.join("\n") if errors.present?
   end
 
-  def slack_user_id(author_name)
+  def slack_user_id(author_name) # rubocop:todo Metrics/CyclomaticComplexity
     project = Project.find @opts[:project_id]
     name_to_user_name = {
       'Adam Apollo' => 'adamapollo',
@@ -119,18 +115,15 @@ class GitImporter
     end
 
     user_name = name_to_user_name[author_name]
-    unless user_name
-      raise RecipientError, "Please add author '#{author_name}' to name_to_user_name map"
-    end
+    raise RecipientError, "Please add author '#{author_name}' to name_to_user_name map" unless user_name
 
     user_id = @slack_user_name_to_slack_id[user_name]
-    unless user_id
-      raise RecipientError, "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'"
-    end
+    raise RecipientError, "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'" unless user_id
+
     user_id
   end
 
-  def send_awards(commits)
+  def send_awards(commits) # rubocop:todo Metrics/CyclomaticComplexity
     awards = 0
     project = Project.find @opts[:project_id]
     award_type = project.award_types.order(:amount).first # lowest award
@@ -161,7 +154,7 @@ class GitImporter
           CreateEthereumAwards.call(award: award) if @opts[:ethereum]
           awards += 1
         else
-          STDERR.puts result.message
+          warn result.message
         end
       end
     end

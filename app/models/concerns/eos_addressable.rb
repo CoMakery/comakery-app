@@ -7,7 +7,7 @@ module EosAddressable
     end
 
     def validate_format(record, attribute, value)
-      if value !~ /\A[a-z1-5]{12}\z/
+      unless /\A[a-z1-5]{12}\z/.match?(value)
         message = options[:message] || 'a-z,1-5 are allowed only, the length is 12 characters'
         record.errors.add attribute, message
       end

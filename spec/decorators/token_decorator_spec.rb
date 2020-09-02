@@ -6,7 +6,7 @@ describe TokenDecorator do
   describe 'with ethereum contract' do
     let(:token) do
       build(:token,
-        ethereum_contract_address: '0xa234567890b234567890a234567890b234567890').decorate
+            ethereum_contract_address: '0xa234567890b234567890a234567890b234567890').decorate
     end
 
     specify do
@@ -18,8 +18,8 @@ describe TokenDecorator do
   describe 'with contract_address' do
     let(:token) do
       build(:token,
-        coin_type: 'qrc20', blockchain_network: 'qtum_testnet',
-        contract_address: 'a234567890b234567890a234567890b234567890').decorate
+            coin_type: 'qrc20', blockchain_network: 'qtum_testnet',
+            contract_address: 'a234567890b234567890a234567890b234567890').decorate
     end
 
     specify do

@@ -54,46 +54,46 @@ class UtilitiesService
     "https://tzscan.io/#{wallet}"
   end
 
-  def self.get_transaction_url(network, tx)
+  def self.get_transaction_url(network, tx) # rubocop:todo Naming/MethodParameterName
     case network
     when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet', 'tezos_mainnet'
       UtilitiesService.send("get_transaction_url_on_#{network}", tx)
     end
   end
 
-  def self.get_transaction_url_on_bitcoin_mainnet(tx)
+  def self.get_transaction_url_on_bitcoin_mainnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://live.blockcypher.com/btc/tx/#{tx}"
   end
 
-  def self.get_transaction_url_on_bitcoin_testnet(tx)
+  def self.get_transaction_url_on_bitcoin_testnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://live.blockcypher.com/btc-testnet/tx/#{tx}"
   end
 
-  def self.get_transaction_url_on_cardano_mainnet(tx)
+  def self.get_transaction_url_on_cardano_mainnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://cardanoexplorer.com/tx/#{tx}"
   end
 
-  def self.get_transaction_url_on_cardano_testnet(tx)
+  def self.get_transaction_url_on_cardano_testnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://cardano-explorer.cardano-testnet.iohkdev.io/tx/#{tx}"
   end
 
-  def self.get_transaction_url_on_qtum_mainnet(tx)
+  def self.get_transaction_url_on_qtum_mainnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://explorer.qtum.org/tx/#{tx}"
   end
 
-  def self.get_transaction_url_on_qtum_testnet(tx)
+  def self.get_transaction_url_on_qtum_testnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://testnet.qtum.org/tx/#{tx}"
   end
 
-  def self.get_transaction_url_on_eos_mainnet(tx)
+  def self.get_transaction_url_on_eos_mainnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://explorer.eosvibes.io/transaction/#{tx}"
   end
 
-  def self.get_transaction_url_on_eos_testnet(tx)
+  def self.get_transaction_url_on_eos_testnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://jungle.bloks.io/transaction/#{tx}"
   end
 
-  def self.get_transaction_url_on_tezos_mainnet(tx)
+  def self.get_transaction_url_on_tezos_mainnet(tx) # rubocop:todo Naming/MethodParameterName
     "https://tzscan.io/#{tx}"
   end
 

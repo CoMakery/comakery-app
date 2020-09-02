@@ -1,6 +1,6 @@
 require 'refile/file_double'
 require 'webmock/rspec'
-include WebMock::API
+include WebMock::API # rubocop:todo Style/MixinUsage
 
 WebMock.enable!
 
@@ -151,7 +151,7 @@ class Mom
     end
   end
 
-  def blockchain_transaction__award(**attrs)
+  def blockchain_transaction__award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     project = attrs[:award]&.project || create(
       :project,
       token: attrs[:token]
@@ -195,7 +195,7 @@ class Mom
     BlockchainTransaction.create!(defaults.merge(attrs))
   end
 
-  def blockchain_transaction__award_dag(**attrs)
+  def blockchain_transaction__award_dag(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     project = attrs[:award]&.project || create(
       :project,
       token: attrs[:token]
@@ -247,8 +247,8 @@ class Mom
   end
 
   def authentication(**attrs)
-    @@authentication_count ||= 0
-    @@authentication_count += 1
+    @@authentication_count ||= 0 # rubocop:todo Style/ClassVars
+    @@authentication_count += 1 # rubocop:todo Style/ClassVars
     defaults = {
       provider: 'slack',
       token: 'slack token',

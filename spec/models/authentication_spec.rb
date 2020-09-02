@@ -58,8 +58,8 @@ describe Authentication do
 
     context 'when there are missing credentials' do
       it 'blows up' do
-        expect do
-          expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             described_class.find_or_create_by_omniauth({})
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
@@ -70,16 +70,16 @@ describe Authentication do
       let!(:account) { create(:account, email: 'bob@example.com') }
       let!(:authentication) do
         create(:authentication,
-          account_id: account.id,
-          provider: 'slack',
-          uid: 'ACDSF',
-          token: 'slack token')
+               account_id: account.id,
+               provider: 'slack',
+               uid: 'ACDSF',
+               token: 'slack token')
       end
 
       it 'returns the existing authentication' do
         result = nil
-        expect do
-          expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             result = described_class.find_or_create_by_omniauth(auth_hash)
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
@@ -125,16 +125,16 @@ describe Authentication do
       let!(:account) { create(:account, email: 'bob@example.com') }
       let!(:authentication) do
         create(:authentication,
-          account_id: account.id,
-          provider: 'discord',
-          uid: 'discord-user',
-          token: 'discord token')
+               account_id: account.id,
+               provider: 'discord',
+               uid: 'discord-user',
+               token: 'discord token')
       end
 
       it '#find_or_create_by_omniauth' do
         result = nil
-        expect do
-          expect do
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             result = described_class.find_or_create_by_omniauth(auth_hash)
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
@@ -146,10 +146,10 @@ describe Authentication do
       let!(:account) { create(:account, email: 'bob@example.com') }
       let!(:authentication) do
         create(:authentication,
-          account_id: account.id,
-          provider: 'discord',
-          uid: 'discord-user',
-          token: 'discord token')
+               account_id: account.id,
+               provider: 'discord',
+               uid: 'discord-user',
+               token: 'discord token')
       end
 
       it 'return true is be owner' do

@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
     @account = Account.new(email: params[:account_email])
   end
 
-  def show
+  def show # rubocop:todo Metrics/CyclomaticComplexity
     @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).includes(:token).per(20)
     @awards = current_account.awards&.includes(:project, :token, :latest_blockchain_transaction)&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
     @projects_count = @projects.total_count
@@ -22,6 +22,7 @@ class AccountsController < ApplicationController
     @projects = @projects.map { |project| project_decorate(project, nil) }
     @awards = @awards.map do |award|
       next unless award.project
+
       award.as_json(only: %i[id]).merge(
         total_amount_pretty: award.decorate.total_amount_pretty,
         created_at: award.created_at.strftime('%b %d, %Y'),
@@ -38,7 +39,7 @@ class AccountsController < ApplicationController
     end
   end
 
-  def create
+  def create # rubocop:todo Metrics/CyclomaticComplexity
     @account = if @whitelabel_mission
       @whitelabel_mission.managed_accounts.new(account_params)
     else
@@ -133,15 +134,13 @@ class AccountsController < ApplicationController
     redirect_to my_tasks_path
   end
 
-  def update
+  def update # rubocop:todo Metrics/CyclomaticComplexity
     @current_account = current_account
     old_age = @current_account.age || 18
     authorize @current_account
     respond_to do |format|
       if @current_account.update(account_params.merge(name_required: true))
-        if @current_account.email_confirm_token
-          UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@current_account).deliver
-        end
+        UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@current_account).deliver if @current_account.email_confirm_token
 
         check_date(old_age) if old_age < 18
         format.html { redirect_to account_url, notice: 'Your account details have been updated.' }
@@ -186,69 +185,67 @@ class AccountsController < ApplicationController
 
   protected
 
-  def account_params
-    result = params.require(:account).permit(
-      :email,
-      :ethereum_auth_address,
-      :ethereum_wallet,
-      :qtum_wallet,
-      :cardano_wallet,
-      :bitcoin_wallet,
-      :eos_wallet,
-      :tezos_wallet,
-      :constellation_wallet,
-      :first_name,
-      :last_name,
-      :nickname,
-      :country,
-      :date_of_birth,
-      :image,
-      :password,
-      :specialty_id,
-      :occupation,
-      :linkedin_url,
-      :github_url,
-      :dribble_url,
-      :behance_url
-    )
+    def account_params
+      result = params.require(:account).permit(
+        :email,
+        :ethereum_auth_address,
+        :ethereum_wallet,
+        :qtum_wallet,
+        :cardano_wallet,
+        :bitcoin_wallet,
+        :eos_wallet,
+        :tezos_wallet,
+        :constellation_wallet,
+        :first_name,
+        :last_name,
+        :nickname,
+        :country,
+        :date_of_birth,
+        :image,
+        :password,
+        :specialty_id,
+        :occupation,
+        :linkedin_url,
+        :github_url,
+        :dribble_url,
+        :behance_url
+      )
 
-    if result[:date_of_birth].present?
-      begin
-        result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y')
-      rescue StandardError => e
-        Rails.logger.error(e)
-        result[:date_of_birth] = nil
+      if result[:date_of_birth].present?
+        begin
+          result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y')
+        rescue StandardError => e
+          Rails.logger.error(e)
+          result[:date_of_birth] = nil
+        end
       end
+
+      result
     end
 
-    result
-  end
-
-  def check_date(old_age)
-    if @current_account.age >= 18
-      UserMailer.with(whitelabel_mission: @whitelabel_mission).underage_alert(@current_account, old_age).deliver_now
+    def check_date(old_age)
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).underage_alert(@current_account, old_age).deliver_now if @current_account.age >= 18
     end
-  end
 
-  def project_decorate(project, award = nil)
-    project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
-      awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
-      award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
-      total_awarded: project.decorate.total_awarded_to_user(current_account),
-      ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
-      token: project.token ? project.token.serializable_hash : {}
-    )
-  end
+    def project_decorate(project, award = nil)
+      project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
+        awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
+        award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
+        total_awarded: project.decorate.total_awarded_to_user(current_account),
+        ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
+        token: project.token ? project.token.serializable_hash : {}
+      )
+    end
 
-  def account_decorate(account)
-    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet constellation_wallet]).merge(
-      etherscan_address: account.decorate.etherscan_address,
-      qtum_address: account.decorate.qtum_wallet_url,
-      cardano_address: account.decorate.cardano_wallet_url,
-      bitcoin_address: account.decorate.bitcoin_wallet_url,
-      eos_address: account.decorate.eos_wallet_url,
-      tezos_address: account.decorate.tezos_wallet_url,
-      image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
-    )
-  end
+    def account_decorate(account)
+      account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet constellation_wallet]).merge(
+        etherscan_address: account.decorate.etherscan_address,
+        qtum_address: account.decorate.qtum_wallet_url,
+        cardano_address: account.decorate.cardano_wallet_url,
+        bitcoin_address: account.decorate.bitcoin_wallet_url,
+        eos_address: account.decorate.eos_wallet_url,
+        tezos_address: account.decorate.tezos_wallet_url,
+        image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
+      )
+    end
 end

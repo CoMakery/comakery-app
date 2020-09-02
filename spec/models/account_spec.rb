@@ -11,10 +11,10 @@ describe Account do
     describe 'urls' do
       let!(:account) do
         create :account,
-          linkedin_url: 'https://www.linkedin.com/',
-          github_url: 'https://github.com/',
-          dribble_url: 'https://dribbble.com/',
-          behance_url: 'https://www.behance.net/'
+               linkedin_url: 'https://www.linkedin.com/',
+               github_url: 'https://github.com/',
+               dribble_url: 'https://dribbble.com/',
+               behance_url: 'https://www.behance.net/'
       end
 
       it 'validates urls' do
@@ -757,7 +757,7 @@ describe Account do
     end
 
     let!(:non_whitelabel_uninterested_project) do
-      project = create(:project, title: 'Non Whitelabel Uninterested Project')
+      project = create(:project, title: 'Non Whitelabel Uninterested Project') # rubocop:todo Lint/UselessAssignment
     end
 
     it 'shows just the non-whitelabel interested task with no whitelabel' do

@@ -39,15 +39,15 @@ class PasswordResetsController < ApplicationController
 
   private
 
-  def permitted_param
-    params.require(:account).permit(:password)
-  end
-
-  def set_account
-    @account = Account.find_by reset_password_token: params[:id] if params[:id].present?
-    unless @account
-      flash[:error] = 'Invalid reset password token'
-      redirect_to root_path
+    def permitted_param
+      params.require(:account).permit(:password)
     end
-  end
+
+    def set_account
+      @account = Account.find_by reset_password_token: params[:id] if params[:id].present?
+      unless @account
+        flash[:error] = 'Invalid reset password token'
+        redirect_to root_path
+      end
+    end
 end

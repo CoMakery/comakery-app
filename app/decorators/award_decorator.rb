@@ -11,7 +11,7 @@ class AwardDecorator < Draper::Decorator
     "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
   end
 
-  def ethereum_transaction_explorer_url
+  def ethereum_transaction_explorer_url # rubocop:todo Metrics/CyclomaticComplexity
     if ethereum_transaction_address
       if (network = object.token&.blockchain_network).present?
         UtilitiesService.get_transaction_url(network, ethereum_transaction_address)
@@ -64,7 +64,7 @@ class AwardDecorator < Draper::Decorator
     recipient_auth_team&.name || account.decorate.name
   end
 
-  def issuer_address
+  def issuer_address # rubocop:todo Metrics/CyclomaticComplexity
     if object.token&.coin_type_on_ethereum?
       issuer&.ethereum_wallet
     elsif object.token&.coin_type_on_qtum?
@@ -94,7 +94,7 @@ class AwardDecorator < Draper::Decorator
     BigDecimal(10.pow(project.token&.decimal_places || 0) * total_amount)&.to_s&.to_i
   end
 
-  def stimulus_data(controller_name, action)
+  def stimulus_data(controller_name, action) # rubocop:todo Metrics/CyclomaticComplexity
     case project.token&.coin_type
     when 'erc20', 'eth', 'comakery'
       {
@@ -141,7 +141,7 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
-  def transfer_button_state_class
+  def transfer_button_state_class # rubocop:todo Metrics/CyclomaticComplexity
     case latest_blockchain_transaction&.status
     when 'created'
       'in-progress--metamask' if latest_blockchain_transaction&.waiting_in_created?

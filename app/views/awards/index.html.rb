@@ -1,7 +1,7 @@
 class Views::Awards::Index < Views::Base
   needs :project, :awards
 
-  def content
+  def content # rubocop:todo Metrics/PerceivedComplexity
     render partial: 'shared/project_header'
     full_row do
       render partial: 'awards/activity'
@@ -11,14 +11,14 @@ class Views::Awards::Index < Views::Base
       full_row do
         div(class: 'small-1', style: 'float: left') do
           label do
-            checked = params[:mine] == 'true' ? false : true
+            checked = (params[:mine] != 'true')
             radio_button_tag 'mine', url_for, checked, class: 'toggle-radio'
             text 'all'
           end
         end
         div(class: 'small-1', style: 'float: left') do
           label do
-            checked = params[:mine] == 'true' ? true : false
+            checked = params[:mine] == 'true'
             radio_button_tag 'mine', url_for(mine: true), checked, class: 'toggle-radio'
             text 'mine'
           end

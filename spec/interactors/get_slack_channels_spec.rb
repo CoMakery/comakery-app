@@ -11,7 +11,9 @@ describe GetSlackChannels do
 
   context 'on successful api call' do
     before do
+      # rubocop:todo Rails/FilePath
       stub_request(:post, 'https://slack.com/api/channels.list').to_return(body: File.read(Rails.root.join('spec', 'fixtures', 'channel_list_response.json')))
+      # rubocop:enable Rails/FilePath
     end
 
     describe '#call' do

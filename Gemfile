@@ -9,8 +9,8 @@ gem 'coffee-rails'
 gem 'countries', require: 'countries/global'
 gem 'd3-rails', '~>3.5'
 gem 'draper'
-gem 'font-awesome-rails'
 gem 'font_assets'
+gem 'font-awesome-rails'
 gem 'fortitude'
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails'
@@ -35,9 +35,9 @@ gem 'puma'
 gem 'pundit'
 gem 'rack', '>= 2.0.6'
 gem 'rails', '~> 6.0.3.2'
+gem 'rails_autoscale_agent'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
-gem 'rails_autoscale_agent'
 gem 'react-rails'
 gem 'redcarpet'
 gem 'redis', '~> 4.0'
@@ -73,8 +73,10 @@ group(:development, :test) do
   gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rubocop', '~>0.49.1', require: false
-  gem 'rubocop-rspec', '~>1.15.0'
+  gem 'rubocop', '~> 0.89.1', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group(:development) do

@@ -181,7 +181,7 @@ describe ProjectsController do
         expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats'])
       end
     end
-  describe 'logged out'
+    describe 'logged out'
     it 'redirect to signup page if you are not logged in' do
       logout
       get :landing
@@ -267,8 +267,8 @@ describe ProjectsController do
     end
 
     it 'when invalid, returns 422' do
-      expect do
-        expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
           post :create, params: {
             project: {
               # title: "Project title here",
@@ -328,7 +328,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
       end.to change { Project.count }.by(1)
 
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           project: {
             title: 'Project title here',
@@ -499,7 +499,7 @@ describe ProjectsController do
       context 'with rendered views' do
         render_views
         it 'returns 422 when updating fails' do
-          expect do
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             put :update, params: {
               id: cat_project.to_param,
               project: {

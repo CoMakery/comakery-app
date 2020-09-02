@@ -69,7 +69,7 @@ describe 'my account', js: true do
   end
 
   scenario 'show email input field if email is empty' do
-    # rubocop:disable SkipsModelValidations
+    # rubocop:disable Rails/SkipsModelValidations
     confirmed_account.update_column('email', nil)
     login(confirmed_account)
     visit build_profile_accounts_path
@@ -88,7 +88,7 @@ describe 'my account', js: true do
 
   scenario 'featured page is available after signup' do
     login(confirmed_account)
-    open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
+    File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file| # rubocop:todo Rails/FilePath
       mission.image = file
     end
     mission.save
@@ -100,7 +100,7 @@ describe 'my account', js: true do
     expect(page).to have_selector('.featured-mission__project__interest')
     find('.featured-mission__project__interest').click
     sleep 2
-    expect(confirmed_account.interests.count).to be > 0
+    expect(confirmed_account.interests.count).to be_positive
     expect(page).to have_content('UNFOLLOW')
   end
 

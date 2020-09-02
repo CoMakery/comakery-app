@@ -81,7 +81,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -106,7 +106,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -131,7 +131,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -156,7 +156,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -181,7 +181,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86401
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -206,7 +206,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -231,7 +231,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -256,7 +256,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                      lockup_until: 86400
                    )
                  )
-        )).to be_truthy
+               )).to be_truthy
       end
     end
   end

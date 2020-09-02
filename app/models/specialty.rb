@@ -1,10 +1,10 @@
 # Think of the contents of this table as an enumeration (enum) that can serve as a join between tables
-class Specialty < ActiveRecord::Base
-  has_many :accounts
-  has_many :interests
-  has_many :award_types
+class Specialty < ApplicationRecord
+  has_many :accounts # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :award_types # rubocop:todo Rails/HasManyOrHasOneDependent
 
-  validates :name, uniqueness: true
+  validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
 
   # To be called when the application loads in config/initalizers/specialty_values
   # Must be able to be run every time the application starts up without changing the ids or creating duplicate entries

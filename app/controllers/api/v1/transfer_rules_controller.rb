@@ -20,18 +20,18 @@ class Api::V1::TransferRulesController < Api::V1::ApiController
     if transfer_rule.save
       @transfer_rule = transfer_rule
 
-      render 'show.json', status: 201
+      render 'show.json', status: :created
     else
       @errors = transfer_rule.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 
   # DELETE /api/v1/projects/1/transfer_rules/1
   def destroy
     transfer_rule.destroy
-    render 'index.json', status: 200
+    render 'index.json', status: :ok
   end
 
   private

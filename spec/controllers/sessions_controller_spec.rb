@@ -115,15 +115,15 @@ describe SessionsController do
 
     it 'redirects to new_session_path with error when email is missing from discord oauth' do
       auth_hash['provider'] = 'discord'
-        auth_hash['info']['email'] = nil
+      auth_hash['info']['email'] = nil
 
-        request.env['omniauth.auth'] = auth_hash
-        post :create
+      request.env['omniauth.auth'] = auth_hash
+      post :create
 
-        assert_response :redirect
-        assert_redirected_to new_session_path
-        expect(flash[:error]).to eq('Please use Discord account with a valid email address')
-        expect(session[:account_id]).to be_nil
+      assert_response :redirect
+      assert_redirected_to new_session_path
+      expect(flash[:error]).to eq('Please use Discord account with a valid email address')
+      expect(session[:account_id]).to be_nil
     end
 
     it 'redirects to my_project_path if user already signed in' do

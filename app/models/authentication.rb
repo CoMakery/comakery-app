@@ -7,7 +7,9 @@ class Authentication < ApplicationRecord
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     acc, authentication = process_authentication(authentication, auth_hash)
 
+    # rubocop:todo Rails/SkipsModelValidations
     acc&.update_columns agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
+    # rubocop:enable Rails/SkipsModelValidations
     authentication
   end
 
@@ -25,6 +27,7 @@ class Authentication < ApplicationRecord
 
   def update_info(auth_hash)
     return if auth_hash.blank?
+
     update_account auth_hash
     update oauth_response: auth_hash, token: auth_hash['credentials']['token']
     build_team auth_hash
@@ -51,6 +54,7 @@ class Authentication < ApplicationRecord
 
   def build_slack_team(auth_hash)
     return if auth_hash['info']['team_id'].blank?
+
     team = Team.find_or_create_by team_id: auth_hash['info']['team_id'] do |t|
       t.name = auth_hash['info']['team']
       t.domain = auth_hash['info']['team_domain']
@@ -76,6 +80,7 @@ class Authentication < ApplicationRecord
     return true if owner
     return true if permission ^ 32 < permission
     return true if permission ^ 8 < permission
+
     false
   end
 

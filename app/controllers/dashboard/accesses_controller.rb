@@ -16,17 +16,11 @@ class Dashboard::AccessesController < ApplicationController
     authorize @project
     account = Account.find_by(email: params[:email])
 
-    unless account
-      return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Account is not found on CoMakery' }
-    end
+    return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Account is not found on CoMakery' } unless account
 
-    if @project.account == account
-      return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Project owner cannot be added as a project admin' }
-    end
+    return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Project owner cannot be added as a project admin' } if @project.account == account
 
-    if @project.admins.include?(account)
-      return redirect_to project_dashboard_accesses_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" }
-    end
+    return redirect_to project_dashboard_accesses_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" } if @project.admins.include?(account)
 
     @project.admins << account
     @project.interested << account unless account.interested?(@project.id)

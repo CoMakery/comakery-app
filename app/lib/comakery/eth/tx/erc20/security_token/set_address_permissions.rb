@@ -4,7 +4,7 @@ class Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions < Comakery:
   end
 
   def method_arg_0
-    lookup_method_arg(0) && lookup_method_arg(0).to_s(16).insert(0, '0x')
+    lookup_method_arg(0)&.to_s(16)&.insert(0, '0x') # rubocop:todo Rails/SkipsModelValidations
   end
 
   def method_arg_1
@@ -32,6 +32,7 @@ class Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions < Comakery:
     return false if method_arg_2 != blockchain_transaction.blockchain_transactable.lockup_until.to_i
     return false if method_arg_3 != blockchain_transaction.blockchain_transactable.max_balance
     return false if method_arg_4 != blockchain_transaction.blockchain_transactable.account_frozen
+
     true
   end
 end

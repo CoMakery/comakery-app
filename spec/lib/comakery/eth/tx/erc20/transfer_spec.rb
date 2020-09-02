@@ -49,7 +49,7 @@ describe Comakery::Eth::Tx::Erc20::Transfer, vcr: true do
                    amount: 100,
                    current_block: 2**256 - 1
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -66,7 +66,7 @@ describe Comakery::Eth::Tx::Erc20::Transfer, vcr: true do
                    amount: 5,
                    current_block: 1
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -83,7 +83,7 @@ describe Comakery::Eth::Tx::Erc20::Transfer, vcr: true do
                    amount: 100,
                    current_block: 1
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -100,7 +100,7 @@ describe Comakery::Eth::Tx::Erc20::Transfer, vcr: true do
                    amount: 1,
                    current_block: 1
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -117,7 +117,7 @@ describe Comakery::Eth::Tx::Erc20::Transfer, vcr: true do
                    amount: 100,
                    current_block: 1
                  )
-        )).to be_truthy
+               )).to be_truthy
       end
     end
   end

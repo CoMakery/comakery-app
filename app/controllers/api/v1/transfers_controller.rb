@@ -33,22 +33,22 @@ class Api::V1::TransfersController < Api::V1::ApiController
     if award.save
       @transfer = award
 
-      render 'show.json', status: 201
+      render 'show.json', status: :created
     else
       @errors = award.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 
   # DELETE /api/v1/accounts/1/follows/1
   def destroy
     if transfer.update(status: :cancelled)
-      render 'show.json', status: 200
+      render 'show.json', status: :ok
     else
       @errors = transfer.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 
@@ -76,40 +76,32 @@ class Api::V1::TransfersController < Api::V1::ApiController
       )
     end
 
-    def verify_decimal_params_precision
+    def verify_decimal_params_precision # rubocop:todo Metrics/CyclomaticComplexity
       a = Award.new
 
-      if transfer_params[:amount] != helpers.number_with_precision(transfer_params[:amount], precision: project.token&.decimal_places.to_i)
-        a.errors[:amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})"
-      end
+      a.errors[:amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})" if transfer_params[:amount] != helpers.number_with_precision(transfer_params[:amount], precision: project.token&.decimal_places.to_i)
 
-      if transfer_params[:total_amount] != helpers.number_with_precision(transfer_params[:total_amount], precision: project.token&.decimal_places.to_i)
-        a.errors[:total_amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})"
-      end
+      a.errors[:total_amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})" if transfer_params[:total_amount] != helpers.number_with_precision(transfer_params[:total_amount], precision: project.token&.decimal_places.to_i)
 
-      if transfer_params[:quantity] != helpers.number_with_precision(transfer_params[:quantity], precision: Award::QUANTITY_PRECISION)
-        a.errors[:quantity] << "has incorrect precision (should be #{Award::QUANTITY_PRECISION})"
-      end
+      a.errors[:quantity] << "has incorrect precision (should be #{Award::QUANTITY_PRECISION})" if transfer_params[:quantity] != helpers.number_with_precision(transfer_params[:quantity], precision: Award::QUANTITY_PRECISION)
 
       unless a.errors.empty?
         @errors = a.errors
 
-        return render 'api/v1/error.json', status: 400
+        render 'api/v1/error.json', status: :bad_request
       end
     end
 
-    def verify_total_amount
+    def verify_total_amount # rubocop:todo Metrics/CyclomaticComplexity
       a = Award.new
       calculated_total_amount = (BigDecimal(transfer_params[:amount] || 0) * BigDecimal(transfer_params[:quantity] || 0)).to_s
 
-      if transfer_params[:total_amount] != helpers.number_with_precision(calculated_total_amount, precision: project.token&.decimal_places.to_i)
-        a.errors[:total_amount] << "doesn't equal quantity times amount, possible multiplication error"
-      end
+      a.errors[:total_amount] << "doesn't equal quantity times amount, possible multiplication error" if transfer_params[:total_amount] != helpers.number_with_precision(calculated_total_amount, precision: project.token&.decimal_places.to_i)
 
       unless a.errors.empty?
         @errors = a.errors
 
-        return render 'api/v1/error.json', status: 400
+        render 'api/v1/error.json', status: :bad_request
       end
     end
 end

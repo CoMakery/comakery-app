@@ -1,6 +1,8 @@
-require: rubocop-rspec
+inherit_from: .rubocop_todo.yml
 
-inherit_from: todo.yml
+require:
+  - rubocop-performance
+  - rubocop-rails
 
 AllCops:
   Exclude:
@@ -11,11 +13,8 @@ AllCops:
     - 'node_modules/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
-  Include:
-    - '**/Rakefile'
-    - '**/config.ru'
-  TargetRubyVersion: 2.3
-  TargetRailsVersion: 4.2
+  TargetRubyVersion: 2.7
+  TargetRailsVersion: 6.0
 
 # Avoid complex methods.
 # Complex methods are hard to test and read.
@@ -26,20 +25,20 @@ Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/views/**/*'
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: true
   EnforcedStyle: with_fixed_indentation
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Metrics/PerceivedComplexity:
   Max: 15
 
 Layout/IndentationConsistency:
-  Enabled: false
+  EnforcedStyle: indented_internal_methods
 
-Lint/EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
 Lint/RequireParentheses:
@@ -51,7 +50,7 @@ Metrics/ModuleLength:
 Metrics/BlockLength:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Metrics/ClassLength:
@@ -64,19 +63,10 @@ Performance/TimesMap:
 Rails:
   Enabled: true
 
-RSpec/ExampleLength:
-  Enabled: false
-
-RSpec/LetSetup:
-  Enabled: false
-
-RSpec/NestedGroups:
-  Max: 4
-
 Style/Documentation:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Exclude:
     - 'Gemfile'
     - 'Guardfile'

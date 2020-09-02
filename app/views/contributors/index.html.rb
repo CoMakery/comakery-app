@@ -11,9 +11,7 @@ class Views::Contributors::Index < Views::Projects::Base
       pages
 
       full_row do
-        if contributors.present?
-          text react_component 'ContributorsTable', table_data: table_data
-        end
+        text react_component 'ContributorsTable', table_data: table_data if contributors.present?
       end
 
       pages

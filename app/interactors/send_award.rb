@@ -25,17 +25,16 @@ class SendAward
 
   private
 
-  def find_or_create_account
-    account = Account.where('lower(email)=?', context.email&.downcase).first
-    account, errors = Account.find_or_create_for_authentication(context.uid, context.channel) unless account
-    return unless account
-    context.fail!(message: errors) if errors.present?
-    account
-  end
+    def find_or_create_account
+      account = Account.where('lower(email)=?', context.email&.downcase).first
+      account, errors = Account.find_or_create_for_authentication(context.uid, context.channel) unless account
+      return unless account
 
-  def clone_if_should_be_cloned_for(account)
-    if context.award.should_be_cloned? && context.award.can_be_cloned_for?(account)
-      context.award = context.award.clone_on_assignment
+      context.fail!(message: errors) if errors.present?
+      account
     end
-  end
+
+    def clone_if_should_be_cloned_for(account)
+      context.award = context.award.clone_on_assignment if context.award.should_be_cloned? && context.award.can_be_cloned_for?(account)
+    end
 end

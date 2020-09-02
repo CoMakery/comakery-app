@@ -1,6 +1,6 @@
 module FeatureHelper
   def wut
-    save_and_open_page
+    save_and_open_page # rubocop:todo Lint/Debugger
   end
 
   def login(account)

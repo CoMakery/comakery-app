@@ -17,7 +17,7 @@ class Comakery::Qtum
       contract['qrc20']['symbol'],
       contract['qrc20']['decimals'].to_i
     ]
-  rescue
+  rescue StandardError
     [
       nil,
       nil

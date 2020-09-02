@@ -117,7 +117,9 @@ describe SendAward do
         stub_request(:post, 'https://slack.com/api/users.info')
           .with(body: { 'token' => 'slack token', 'user' => 'U99M9QYFQ_other' },
                 headers: { 'Accept' => 'application/json; charset=utf-8', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Slack Ruby Client/0.11.0' })
+          # rubocop:todo Rails/FilePath
           .to_return(status: 200, body: File.read(Rails.root.join('spec', 'fixtures', 'users_info_response.json')), headers: {})
+        # rubocop:enable Rails/FilePath
 
         result = nil
         expect do
@@ -142,8 +144,10 @@ describe SendAward do
     before do
       stub_request(:post, 'https://slack.com/api/users.info')
         .with(body: { 'token' => 'slack token', 'user' => 'U99M9QYFQ' })
+        # rubocop:todo Rails/FilePath
         .to_return(status: 200, body: File.read(Rails.root.join('spec', 'fixtures', 'users_info_response.json')), headers: {})
-        recipient.destroy
+      # rubocop:enable Rails/FilePath
+      recipient.destroy
     end
 
     it 'creates the auth with the slack details from the project' do

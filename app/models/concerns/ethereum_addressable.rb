@@ -15,7 +15,7 @@ module EthereumAddressable
                 '`validates :my_field, ethereum_address: {type: :account}`'
       end
       length = address.fetch(:length)
-      if value !~ /\A0x[0-9a-fA-F]{#{length}}\z/
+      unless /\A0x[0-9a-fA-F]{#{length}}\z/.match?(value)
         message = options[:message] || "should start with '0x', " \
           "followed by a #{length} character ethereum address"
         record.errors.add attribute, message
@@ -23,9 +23,7 @@ module EthereumAddressable
     end
 
     def validate_immutable(record, attribute)
-      if record.send("#{attribute}_was").present? && record.send("#{attribute}_changed?")
-        record.errors.add attribute, 'cannot be changed after it has been set'
-      end
+      record.errors.add attribute, 'cannot be changed after it has been set' if record.send("#{attribute}_was").present? && record.send("#{attribute}_changed?")
     end
   end
 end
