@@ -2,7 +2,7 @@ class AwardTypesController < ApplicationController
   before_action :assign_project
   before_action :authorize_project_edit, except: %i[index]
   before_action :authorize_project_show, only: %i[index]
-  before_action :set_award_type, only: %i[show edit update destroy]
+  before_action :set_award_type, only: %i[edit update destroy]
   before_action :set_award_types, only: %i[index]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: %i[index]

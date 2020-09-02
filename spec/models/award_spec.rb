@@ -389,7 +389,7 @@ describe Award do
       [0, 2, 3, 10, 10000].each do |level|
         a = create(:award)
         a.experience_level = level
-        if Award::EXPERIENCE_LEVELS.values.include?(level)
+        if Award::EXPERIENCE_LEVELS.value?(level)
           expect(a).to be_valid
         else
           expect(a).not_to be_valid

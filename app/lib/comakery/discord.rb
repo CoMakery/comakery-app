@@ -29,7 +29,7 @@ class Comakery::Discord
   end
 
   def webhook(channel_id)
-    webhook = webhooks(channel_id).select { |h| h['name'] == 'Comakery' }.first
+    webhook = webhooks(channel_id).find { |h| h['name'] == 'Comakery' }
     return webhook if webhook
 
     @path = "/channels/#{channel_id}/webhooks"

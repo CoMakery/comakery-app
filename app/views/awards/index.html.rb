@@ -11,7 +11,7 @@ class Views::Awards::Index < Views::Base
       full_row do
         div(class: 'small-1', style: 'float: left') do
           label do
-            checked = !(params[:mine] == 'true')
+            checked = (params[:mine] != 'true')
             radio_button_tag 'mine', url_for, checked, class: 'toggle-radio'
             text 'all'
           end

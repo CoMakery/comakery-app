@@ -1,5 +1,5 @@
 # Think of the contents of this table as an enumeration (enum) that can serve as a join between tables
-class Specialty < ActiveRecord::Base
+class Specialty < ApplicationRecord
   has_many :accounts # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :award_types # rubocop:todo Rails/HasManyOrHasOneDependent

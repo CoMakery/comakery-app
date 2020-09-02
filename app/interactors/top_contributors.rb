@@ -3,9 +3,7 @@ class TopContributors
 
   def call
     projects = context.projects
-    contributors = projects.index_with do |project|
-      project.top_contributors
-    end
+    contributors = projects.index_with(&:top_contributors)
     context.contributors = contributors
   end
 end

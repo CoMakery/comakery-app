@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
-  skip_after_action :verify_authorized, only: %i[teams landing]
+  skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit show update awards]

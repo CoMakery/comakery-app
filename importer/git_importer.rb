@@ -30,7 +30,7 @@ class GitImporter
       opt :ethereum, 'Create awards on Ethereum blockchain', default: false
     end
     Trollop.die :github_repo, 'must be of the form `owner/repo`' if @opts[:github_repo]&.split('/')&.length != 2
-    Trollop.die :project_id, 'required' unless @opts[:project_id] && @opts[:project_id] > 0
+    Trollop.die :project_id, 'required' unless @opts[:project_id] && (@opts[:project_id]).positive?
   end
 
   def clone_repo

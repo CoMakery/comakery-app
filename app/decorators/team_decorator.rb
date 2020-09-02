@@ -25,7 +25,7 @@ class TeamDecorator < Draper::Decorator
   def channel_name(channel_id)
     return unless channel_id
 
-    channel = channels.select { |c| c['id'] == channel_id }.first
+    channel = channels.find { |c| c['id'] == channel_id }
     channel['name'] if channel
   end
 end

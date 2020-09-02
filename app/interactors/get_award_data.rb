@@ -25,7 +25,7 @@ class GetAwardData
     awards_by_date = recent_awards.group_by { |a| a.created_at.to_date.iso8601 }
 
     start_days_ago = if recent_awards.any?
-      award_age_days = (Time.now - recent_awards.first.created_at) / (60 * 60 * 24)
+      award_age_days = (Time.zone.now - recent_awards.first.created_at) / (60 * 60 * 24)
       [history, award_age_days].min
     else
       history

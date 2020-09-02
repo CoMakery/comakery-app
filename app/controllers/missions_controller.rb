@@ -2,7 +2,7 @@ class MissionsController < ApplicationController
   skip_before_action :require_login, only: %i[show]
 
   before_action :unavailable_for_whitelabel
-  before_action :find_mission_by_id, only: %i[show edit update update_status destroy]
+  before_action :find_mission_by_id, only: %i[show edit update]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_mission_props, only: %i[show]
   before_action :set_missions, only: %i[index rearrange]

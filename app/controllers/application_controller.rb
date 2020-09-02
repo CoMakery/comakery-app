@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   respond_to :html
   # layout 'raw'
   include Pundit
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
+  after_action :verify_authorized, except: :index # rubocop:todo Rails/LexicallyScopedActionFilter
+  after_action :verify_policy_scoped, only: :index # rubocop:todo Rails/LexicallyScopedActionFilter
   after_action :set_whitelabel_cors
 
   # Prevent CSRF attacks by raising an exception.
