@@ -105,6 +105,78 @@ class Token < ApplicationRecord
   before_save :enable_ethereum
   after_create :default_reg_group, if: -> { coin_type_comakery? }
 
+  def blockchain
+    "Blockchain::#{blockchain_network_to_subclass_name}".constantize.new
+  end
+
+  def blockchain_network_to_subclass_name
+    case blockchain_network
+    when 'bitcoin_mainnet'
+      'Bitcoin'
+    when 'bitcoin_testnet'
+      'BitcoinTest'
+    when 'cardano_mainnet'
+      'Cardano'
+    when 'cardano_testnet'
+      'CardanoTest'
+    when 'qtum_mainnet'
+      'Qtum'
+    when 'qtum_testnet'
+      'QtumTest'
+    when 'eos_mainnet'
+      'Eos'
+    when 'eos_testnet'
+      'EosTest'
+    when 'tezos_mainnet'
+      'Tezos'
+    when 'constellation_mainnet'
+      'Constellation'
+    when 'constellation_testnet'
+      'ConstellationTest'
+    when 'main'
+      'Ethereum'
+    when 'ropsten'
+      'EthereumRopsten'
+    when 'kovan'
+      'EthereumKovan'
+    when 'rinkeby'
+      'EthereumRinkeby'
+    else
+      raise 'Token: Unknown blockchain network'
+    end
+  end
+
+  def token_type
+    "TokenType::#{coin_type_to_subclass_name}".constantize.new
+  end
+
+  def coin_type_to_subclass_name
+    case coin_type
+    when 'erc20'
+      'Erc20'
+    when 'eth'
+      'Eth'
+    when 'qrc20'
+      'Qrc20'
+    when 'qtum'
+      'Qtum'
+    when 'ada'
+      'Ada'
+    when 'btc'
+      'Btc'
+    when 'eos'
+      'Eos'
+    when 'xtz'
+      'Xtz'
+    when 'Comakery'
+      'Comakery'
+    when 'dag'
+      'Dag'
+    else
+      raise 'Token: Unknown coin type'
+    end
+  end
+
   def coin_type_token?
     coin_type_erc20? || coin_type_qrc20? || coin_type_comakery?
   end
