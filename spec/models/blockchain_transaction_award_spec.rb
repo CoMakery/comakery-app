@@ -71,7 +71,7 @@ describe BlockchainTransactionAward, vcr: true do
           token: create(
             :token,
             coin_type: :eth,
-            ethereum_network: :ropsten
+            blockchain_network: :ropsten
           )
         )
       end
@@ -105,7 +105,7 @@ describe BlockchainTransactionAward, vcr: true do
           token: create(
             :token,
             coin_type: :eth,
-            ethereum_network: :ropsten
+            blockchain_network: :ropsten
           )
         )
 
@@ -176,7 +176,7 @@ describe BlockchainTransactionAward, vcr: true do
         create(
           :token,
           coin_type: :eth,
-          ethereum_network: :ropsten
+          blockchain_network: :ropsten
         )
       end
 

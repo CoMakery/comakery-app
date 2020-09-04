@@ -18,7 +18,7 @@ describe Token do
       stub_const('Comakery::Ethereum::ADDRESS', {})
       expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
       stub_web3_fetch
-      expect { described_class.create(ethereum_contract_address: '111') }.to raise_error(ArgumentError)
+      expect { described_class.create(contract_address: '111') }.to raise_error(ArgumentError)
     end
 
     describe 'denomination enumeration' do
@@ -52,29 +52,18 @@ describe Token do
 
         expect(token).to be_valid
       end
-
-      # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
-      # it 'cannot be changed after having associated with task' do
-      #   create :task, token: token
-      #   token.reload
-      #   token.denomination = 'ETH'
-      #
-      #   expect(token).to be_invalid
-      #   expect(token.errors[:denomination]).to eq(['cannot be changed if has associated tasks'])
-      # end
     end
 
     describe 'coin_type' do
-      let(:attrs) { { symbol: 'CBB', decimal_places: 8, ethereum_network: 'ropsten', ethereum_contract_address: '0x' + 'a' * 40, contract_address: 'a' * 40, blockchain_network: 'qtum_testnet' } }
+      let(:attrs) { { symbol: 'CBB', decimal_places: 8, blockchain_network: 'ropsten', contract_address: 'a' * 40 } }
 
       it 'eq erc20' do
         token = create :token, attrs.merge(coin_type: 'erc20')
         expect(token).to be_valid
         expect(token.reload.coin_type).to eq 'erc20'
         expect(token.blockchain_network).to be_nil
-        expect(token.contract_address).to be_nil
-        expect(token.ethereum_network).to eq 'ropsten'
-        expect(token.ethereum_contract_address).to eq '0x' + 'a' * 40
+        expect(token.blockchain_network).to eq 'ropsten'
+        expect(token.contract_address).to eq 'a' * 40
         expect(token.symbol).to eq 'CBB'
         expect(token.decimal_places).to eq 8
       end
@@ -85,8 +74,7 @@ describe Token do
         expect(token.reload.coin_type).to eq 'eth'
         expect(token.blockchain_network).to be_nil
         expect(token.contract_address).to be_nil
-        expect(token.ethereum_network).to eq 'ropsten'
-        expect(token.ethereum_contract_address).to be_nil
+        expect(token.blockchain_network).to eq 'ropsten'
         expect(token.symbol).to eq 'ETH'
         expect(token.decimal_places).to eq 18
       end
@@ -97,8 +85,7 @@ describe Token do
         expect(token.reload.coin_type).to eq 'qrc20'
         expect(token.blockchain_network).to eq 'qtum_testnet'
         expect(token.contract_address).to eq 'a' * 40
-        expect(token.ethereum_network).to be_nil
-        expect(token.ethereum_contract_address).to be_nil
+        expect(token.blockchain_network).to be_nil
         expect(token.symbol).to eq 'CBB'
         expect(token.decimal_places).to eq 8
       end
@@ -159,71 +146,6 @@ describe Token do
         token.reload
         expect(token.contract_address).to eq(address)
       end
-
-      # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
-      # it 'once has tasks associated cannot be set to another value' do
-      #   create :task, token: token
-
-      # token.contract_address = address
-      # token.save!
-      # token.reload
-      # token.contract_address = 'c' * 40
-      # expect(token).not_to be_valid
-      # expect(token.errors.full_messages.to_sentence).to match \
-      #   /cannot be changed if has associated tasks/
-      # end
-    end
-
-    describe '#ethereum_contract_address' do
-      let(:token) { create(:token) }
-      let(:address) { '0x' + 'a' * 40 }
-
-      it 'validates with a valid ethereum address' do
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: nil)).to be_valid
-        expect(build(:token, ethereum_contract_address: "0x#{'a' * 40}")).to be_valid
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: "0x#{'A' * 40}")).to be_valid
-      end
-
-      it 'does not validate with an invalid ethereum address' do
-        expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: 'foo').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: '0x').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: "0x#{'a' * 39}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: "0x#{'a' * 41}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_web3_fetch
-        expect(build(:token, ethereum_contract_address: "0x#{'g' * 40}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-      end
-
-      it { expect(token.ethereum_contract_address).to eq(nil) }
-
-      it 'can be set' do
-        stub_web3_fetch
-        token.ethereum_contract_address = address
-        token.save!
-        token.reload
-        expect(token.ethereum_contract_address).to eq(address)
-      end
-
-      # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
-      # it 'once has tasks associated cannot be set to another value' do
-      #   create :task, token: token
-
-      # stub_web3_fetch
-      # token.ethereum_contract_address = address
-      # token.save!
-      # token.reload
-      # token.ethereum_contract_address = 'c' * 40
-      # stub_web3_fetch
-      # expect(token).not_to be_valid
-      # expect(token.errors.full_messages.to_sentence).to match \
-      #   /cannot be changed if has associated tasks/
-      # end
     end
   end
 
@@ -276,7 +198,7 @@ describe Token do
 
     it 'is false if an existing token with an account is transitioned from ethereum_enabled = false to true' do
       stub_web3_fetch
-      token = create(:token, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
+      token = create(:token, ethereum_enabled: false, contract_address: '0x' + '7' * 40)
       token.update!(ethereum_enabled: true)
       expect(token.transitioned_to_ethereum_enabled?).to eq(false)
     end
@@ -285,7 +207,7 @@ describe Token do
   it 'populate_token_symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
     stub_web3_fetch
-    token = create :token, symbol: nil, ethereum_contract_address: contract_address
+    token = create :token, symbol: nil, contract_address: contract_address
     expect token.symbol = 'FCBB'
   end
 
@@ -302,20 +224,10 @@ describe Token do
     end
   end
 
-  it 'check_coin_type' do
-    token = create :token, symbol: 'FCBB', decimal_places: 8, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', blockchain_network: 'qtum_testnet', coin_type: 'eth'
-    expect(token).to be_valid
-    expect(token.contract_address).to be_nil
-    expect(token.ethereum_contract_address).to be_nil
-    expect(token.symbol).to eq 'ETH'
-    expect(token.decimal_places).to eq 18
-    expect(token.blockchain_network).to be_nil
-  end
-
   it 'can manual input symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
     stub_web3_fetch
-    token = create :token, symbol: 'AAA', ethereum_contract_address: contract_address
+    token = create :token, symbol: 'AAA', contract_address: contract_address
     expect token.symbol = 'AAA'
   end
 

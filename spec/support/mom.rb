@@ -110,7 +110,7 @@ class Mom
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token.blockchain_network}/#{token.contract_address}/contract_init") do
       BlockchainTransaction.create!(defaults.merge(attrs))
     end
   end
@@ -128,7 +128,7 @@ class Mom
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token.blockchain_network}/#{token.contract_address}/contract_init") do
       BlockchainTransactionTransferRule.create!(defaults.merge(attrs))
     end
   end
@@ -146,7 +146,7 @@ class Mom
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token.blockchain_network}/#{token.contract_address}/contract_init") do
       BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
     end
   end
@@ -302,8 +302,8 @@ class Mom
       logo_image: dummy_image,
       coin_type: :comakery,
       decimal_places: 18,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+      blockchain_network: :ropsten,
+      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
     }
     Token.new(defaults.merge(attrs))
   end
@@ -313,8 +313,8 @@ class Mom
       name: "ComakeryDummyToken-#{SecureRandom.hex(20)}",
       symbol: "DUM#{SecureRandom.hex(20)}",
       logo_image: dummy_image,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+      blockchain_network: :ropsten,
+      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
       coin_type: :comakery,
       decimal_places: 0
     }
@@ -617,15 +617,15 @@ class Mom
     token = create(
       :token,
       coin_type: :comakery,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: build(:ethereum_contract_address),
+      blockchain_network: :ropsten,
+      contract_address: build(:ethereum_contract_address),
       symbol: 'DUM',
       decimal_places: 0
     )
 
-    contract_address = attrs[:contract_address] || token.ethereum_contract_address
+    contract_address = attrs[:contract_address] || token.contract_address
     abi = attrs[:abi] || token.abi
-    network = attrs[:network] || token.ethereum_network
+    network = attrs[:network] || token.blockchain_network
     nonce = attrs[:nonce] || rand(1_000_000)
 
     VCR.use_cassette("infura/#{network}/#{contract_address}/contract_init") do

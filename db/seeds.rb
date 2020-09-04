@@ -25,8 +25,8 @@ if Rails.env == 'development'
     name: 'Dummy Token',
     symbol: 'DMT',
     decimal_places: 8,
-    ethereum_network: 'ropsten',
-    ethereum_contract_address: '0x' + 'a' * 40,
+    blockchain_network: 'ropsten',
+    contract_address: '0x' + 'a' * 40,
     coin_type: 'erc20',
     logo_image: Refile::FileDouble.new('dummy_logo_image', 'logo_image.png', content_type: 'image/png')
   )

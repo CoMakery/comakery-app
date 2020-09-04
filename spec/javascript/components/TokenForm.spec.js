@@ -42,10 +42,8 @@ describe('TokenForm', () => {
       'id'                     : 0,
       'name'                   : 'ERC-TEST',
       'coinType'               : 'erc20',
-      'ethereumNetwork'        : 'main',
-      'blockchainNetwork'      : null,
-      'contractAddress'        : null,
-      'ethereumContractAddress': '0x00',
+      'blockchainNetwork'      : 'main',
+      'contractAddress'        : '0x00',
       'symbol'                 : 'ERCT',
       'decimalPlaces'          : 2,
       'logoUrl'                : '/ERCT.png'
@@ -65,10 +63,6 @@ describe('TokenForm', () => {
     ).props().imgPreviewUrl).toBe('/ERCT.png')
 
     expect(wrapper.find(
-      'InputFieldHalfed[title="contract address"][required][name="token[ethereum_contract_address]"][placeholder="0x6c6ee5e31d828de241282b9606c8e98ea48526e2"][pattern="0x[a-fA-F0-9]{40}"]'
-    ).props().value).toBe('0x00')
-
-    expect(wrapper.find(
       'InputFieldHalfed[title="token symbol"][required][readOnly][name="token[symbol]"][placeholder="..."]'
     ).props().value).toBe('ERCT')
 
@@ -77,7 +71,7 @@ describe('TokenForm', () => {
     ).props().value).toBe('2')
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[ethereum_network]"]'
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
     ).props().value).toBe('main')
   })
 
@@ -86,10 +80,8 @@ describe('TokenForm', () => {
       'id'                     : 1,
       'name'                   : 'QRC-TEST',
       'coinType'               : 'qrc20',
-      'ethereumNetwork'        : null,
       'blockchainNetwork'      : 'test',
       'contractAddress'        : '0',
-      'ethereumContractAddress': null,
       'symbol'                 : 'QRCT',
       'decimalPlaces'          : 0,
       'logoUrl'                : '/QRCT.png'
@@ -130,10 +122,8 @@ describe('TokenForm', () => {
       'id'                     : 1,
       'name'                   : 'ETH-TEST',
       'coinType'               : 'eth',
-      'ethereumNetwork'        : 'test',
-      'blockchainNetwork'      : null,
+      'blockchainNetwork'      : 'test',
       'contractAddress'        : null,
-      'ethereumContractAddress': null,
       'symbol'                 : null,
       'decimalPlaces'          : null,
       'logoUrl'                : '/ETH.png'
@@ -149,7 +139,7 @@ describe('TokenForm', () => {
     ).props().imgPreviewUrl).toBe('/ETH.png')
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[ethereum_network]"]'
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
     ).props().value).toBe('test')
   })
 
@@ -170,45 +160,13 @@ describe('TokenForm', () => {
     ).props().selectEntries).toEqual(Object.entries(coinTypes))
   })
 
-  it('renders correctly with ethereumNetworks', () => {
-    const token = {
-      'id'                     : 1,
-      'name'                   : 'ETH-TEST',
-      'coinType'               : 'eth',
-      'ethereumNetwork'        : null,
-      'blockchainNetwork'      : null,
-      'contractAddress'        : null,
-      'ethereumContractAddress': null,
-      'symbol'                 : null,
-      'decimalPlaces'          : null,
-      'logoUrl'                : '/ETH.png'
-    }
-    const ethereumNetworks = {
-      'main Ethereum Network': 'main',
-      'ropsten Test Network' : 'ropsten',
-      'kovan Test Network'   : 'kovan',
-      'rinkeby Test Network' : 'rinkeby'
-    }
-    const wrapper = mount(<TokenForm token={token} ethereumNetworks={ethereumNetworks} />)
-
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[ethereum_network]"]'
-    ).props().value).toBe('main')
-
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[ethereum_network]"]'
-    ).props().selectEntries).toEqual(Object.entries(ethereumNetworks))
-  })
-
   it('renders correctly with blockchainNetworks', () => {
     const token = {
       'id'                     : 1,
       'name'                   : 'QRC-TEST',
       'coinType'               : 'qrc20',
-      'ethereumNetwork'        : null,
       'blockchainNetwork'      : null,
       'contractAddress'        : '0',
-      'ethereumContractAddress': null,
       'symbol'                 : 'QRCT',
       'decimalPlaces'          : 0,
       'logoUrl'                : '/QRCT.png'

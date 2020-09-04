@@ -39,7 +39,7 @@ describe AccountDecorator do
 
     context 'on ethereum network' do
       let!(:project) { create :project, payment_type: 'project_token' }
-      let!(:project2) { build :project, payment_type: 'project_token', account: project_owner, token: build(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005') }
+      let!(:project2) { build :project, payment_type: 'project_token', account: project_owner, token: build(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005') }
 
       it 'can send' do
         expect(project_owner.decorate.can_send_awards?(project2)).to be true
@@ -148,9 +148,9 @@ describe AccountDecorator do
   describe 'wallet_address_link_for' do
     let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e', bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
     let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
-    let!(:project_w_token) { create :project, token: create(:token, coin_type: 'eth', ethereum_network: :main) }
+    let!(:project_w_token) { create :project, token: create(:token, coin_type: 'eth', blockchain_network: :main) }
     let!(:project_wo_token) { create :project, token: nil }
-    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, coin_type: :comakery, ethereum_network: :ropsten) }
+    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, coin_type: :comakery, blockchain_network: :ropsten) }
     let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, coin_type: :btc, blockchain_network: :bitcoin_testnet) }
 
     it 'returns link for wallet address if account has address for project token' do

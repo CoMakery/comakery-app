@@ -110,17 +110,6 @@ class TokenIndex extends React.Component {
                   </div>
                 }
 
-                { this.state.selectedToken.ethereumContractAddress &&
-                  <div className='token-index--view--info--item'>
-                    <div className='token-index--view--info--item--name'>
-                      contract address
-                    </div>
-                    <div className='token-index--view--info--item--value'>
-                      {this.state.selectedToken.ethereumContractAddress}
-                    </div>
-                  </div>
-                }
-
                 { this.state.selectedToken.blockchainNetwork &&
                   <div className='token-index--view--info--item'>
                     <div className='token-index--view--info--item--name'>
@@ -135,31 +124,6 @@ class TokenIndex extends React.Component {
                             return 'Test QTUM Network'
                           default:
                             return this.state.selectedToken.blockchainNetwork
-                        }
-                      })()
-                      }
-                    </div>
-                  </div>
-                }
-
-                { this.state.selectedToken.ethereumNetwork &&
-                  <div className='token-index--view--info--item'>
-                    <div className='token-index--view--info--item--name'>
-                      blockchain network
-                    </div>
-                    <div className='token-index--view--info--item--value'>
-                      { (() => {
-                        switch (this.state.selectedToken.ethereumNetwork) {
-                          case 'main':
-                            return 'Main Ethereum Network'
-                          case 'ropsten':
-                            return 'Ropsten Test Network'
-                          case 'kovan':
-                            return 'Kovan Test Network'
-                          case 'rinkeby':
-                            return 'Rinkeby Test Network'
-                          default:
-                            return this.state.selectedToken.ethereumNetwork
                         }
                       })()
                       }

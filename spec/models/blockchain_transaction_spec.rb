@@ -32,8 +32,8 @@ describe BlockchainTransaction, vcr: true do
 
     context 'with an ethereum coin type' do
       it 'populates contract address and network from token' do
-        expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
-        expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
+        expect(blockchain_transaction.network).to eq(blockchain_transaction.token.blockchain_network)
+        expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.contract_address)
       end
 
       it 'sets current block' do

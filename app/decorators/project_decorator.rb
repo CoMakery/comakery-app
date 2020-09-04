@@ -19,10 +19,6 @@ class ProjectDecorator < Draper::Decorator
     helpers.strip_tags(description_html).truncate(max_length)
   end
 
-  def ethereum_contract_explorer_url
-    token&.decorate&.ethereum_contract_explorer_url
-  end
-
   def status_description
     if project.license_finalized?
       'These terms are finalized and legally binding.'

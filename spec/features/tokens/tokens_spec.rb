@@ -16,14 +16,14 @@ describe 'tokens features', js: true do
     expect(page).to have_content 'Create A New Token'
 
     select('eTH', from: 'token[coin_type]', visible: false)
-    select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
+    select('main Ethereum Network', from: 'token[blockchain_network]', visible: false)
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     click_on 'create & close'
     find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
-    expect(Token.last.ethereum_network).to eq 'main'
+    expect(Token.last.blockchain_network).to eq 'main'
   end
 
   scenario 'admin creates an ERC20 token' do
@@ -32,12 +32,12 @@ describe 'tokens features', js: true do
     expect(page).to have_content 'Create A New Token'
 
     select('eRC20', from: 'token[coin_type]', visible: false)
-    select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
+    select('main Ethereum Network', from: 'token[blockchain_network]', visible: false)
     fill_in('token[name]', with: 'erc20 test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     stub_web3_fetch
-    fill_in('token[ethereum_contract_address]', with: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2')
+    fill_in('token[contract_address]', with: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2')
 
     # TODO: we should come up with something better for feature testing react pages than creating a race condition
     sleep 1
@@ -49,9 +49,9 @@ describe 'tokens features', js: true do
     find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'erc20'
-    expect(Token.last.ethereum_network).to eq 'main'
+    expect(Token.last.blockchain_network).to eq 'main'
     expect(Token.last.name).to eq 'erc20 test'
-    expect(Token.last.ethereum_contract_address).to eq '0x6c6ee5e31d828de241282b9606c8e98ea48526e2'
+    expect(Token.last.contract_address).to eq '0x6c6ee5e31d828de241282b9606c8e98ea48526e2'
     expect(Token.last.symbol).to eq 'HOT'
     expect(Token.last.decimal_places).to eq 32
   end
@@ -124,13 +124,13 @@ describe 'tokens features', js: true do
     expect(find_field('token[name]').value).to eq 'ETH'
 
     select('eTH', from: 'token[coin_type]', visible: false)
-    select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
+    select('main Ethereum Network', from: 'token[blockchain_network]', visible: false)
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     click_on 'save & close'
     find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
-    expect(Token.last.ethereum_network).to eq 'main'
+    expect(Token.last.blockchain_network).to eq 'main'
   end
 end

@@ -51,44 +51,6 @@ describe ProjectDecorator do
     end
   end
 
-  describe 'with ethereum contract' do
-    let(:project) do
-      build(
-        :project,
-        token: create(
-          :token,
-          ethereum_contract_address: '0xa234567890b234567890a234567890b234567890',
-          symbol: 'TST',
-          decimal_places: 2
-        )
-      ).decorate
-    end
-
-    specify do
-      expect(project.ethereum_contract_explorer_url)
-        .to include("#{Rails.application.config.ethereum_explorer_site}/token/#{project.token.ethereum_contract_address}")
-    end
-  end
-
-  describe 'with contract_address' do
-    let(:project) do
-      build(
-        :project,
-        token: create(
-          :token,
-          coin_type: 'qrc20',
-          blockchain_network: 'qtum_testnet',
-          contract_address: 'a234567890b234567890a234567890b234567890'
-        )
-      ).decorate
-    end
-
-    specify do
-      expect(project.ethereum_contract_explorer_url)
-        .to include(UtilitiesService.get_contract_url(project.token.blockchain_network, project.token.contract_address))
-    end
-  end
-
   describe '#status_description' do
     specify do
       project.update license_finalized: true
@@ -293,7 +255,7 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_stacked_chart' do
-    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
 
     before do
       create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
@@ -314,7 +276,7 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_donut_chart' do
-    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
 
     before do
       create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))

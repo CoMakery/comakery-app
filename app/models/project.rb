@@ -217,7 +217,7 @@ class Project < ApplicationRecord
   end
 
   def create_default_transfer_types
-    TransferType.create_defaults_for(self)
+    TransferType.create_defaults_for(self) if transfer_types.empty?
   end
 
   private

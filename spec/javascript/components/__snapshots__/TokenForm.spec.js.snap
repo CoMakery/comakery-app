@@ -13,11 +13,6 @@ exports[`TokenForm renders correctly without props 1`] = `
     }
   }
   csrfToken="00"
-  ethereumNetworks={
-    Object {
-      "default": "_",
-    }
-  }
   formAction="POST"
   formUrl="/"
   token={

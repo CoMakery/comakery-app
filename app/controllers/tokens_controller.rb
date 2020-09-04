@@ -2,7 +2,6 @@ class TokensController < ApplicationController
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
   before_action :set_coin_types, only: %i[new show edit]
-  before_action :set_ethereum_networks, only: %i[new show edit]
   before_action :set_blockchain_networks, only: %i[new show edit]
   before_action :set_generic_props, only: %i[new show edit]
 
@@ -94,10 +93,6 @@ class TokensController < ApplicationController
     @coin_types = Token.coin_types.invert
   end
 
-  def set_ethereum_networks
-    @ethereum_networks = Token.ethereum_networks.invert
-  end
-
   def set_blockchain_networks
     @blockchain_networks = Token.blockchain_networks.invert
   end
@@ -110,7 +105,6 @@ class TokensController < ApplicationController
         }
       ),
       coin_types: @coin_types,
-      ethereum_networks: @ethereum_networks,
       blockchain_networks: @blockchain_networks,
       form_url: tokens_path,
       form_action: 'POST',
@@ -126,8 +120,6 @@ class TokensController < ApplicationController
       :logo_image,
       :coin_type,
       :denomination,
-      :ethereum_network,
-      :ethereum_contract_address,
       :blockchain_network,
       :contract_address,
       :symbol,

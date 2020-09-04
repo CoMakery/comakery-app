@@ -231,11 +231,10 @@ class AccountsController < ApplicationController
   end
 
   def project_decorate(project, award = nil)
-    project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
+    project.as_json(only: %i[id title token_symbol]).merge(
       awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
       award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
-      ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
       token: project.token ? project.token.serializable_hash : {}
     )
   end

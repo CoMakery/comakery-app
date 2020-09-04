@@ -83,8 +83,8 @@ describe AwardDecorator do
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
     it 'valid' do
-      award.project.token.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"50.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":50,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null,"tezos_wallet":null},"project":{"id":512},"award_type":{"id":#{award_type.id}},"token":{"id":#{project.token.id},"coin_type":"erc20","ethereum_network":null,"blockchain_network":null,"contract_address":null,"ethereum_contract_address":null}})
+      award.project.token.contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
+      expected = %({"id":521,"total_amount":"50.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":50,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null,"tezos_wallet":null},"project":{"id":512},"award_type":{"id":#{award_type.id}},"token":{"id":#{project.token.id},"coin_type":"erc20","blockchain_network":null,"blockchain_network":null,"contract_address":null,"contract_address":null}})
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
 
@@ -161,7 +161,7 @@ describe AwardDecorator do
   end
 
   describe 'transfer_button_text' do
-    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
     let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
     let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
@@ -174,7 +174,7 @@ describe AwardDecorator do
   end
 
   describe 'pay_data' do
-    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
     let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
     let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
@@ -190,7 +190,7 @@ describe AwardDecorator do
       expect(data['ethereum-address']).to eq(eth_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(eth_award.decorate.total_amount_wei)
       expect(data['ethereum-decimal-places']).to eq(eth_award.project.token&.decimal_places&.to_i)
-      expect(data['ethereum-contract-address']).to eq(eth_award.project.token&.ethereum_contract_address)
+      expect(data['ethereum-contract-address']).to eq(eth_award.project.token&.contract_address)
       expect(data['ethereum-contract-abi']).to eq(eth_award.project.token&.abi&.to_json)
       expect(data['ethereum-transactions-path']).to include(eth_award.project.id.to_s)
       expect(data['info']).not_to be_nil
@@ -206,7 +206,7 @@ describe AwardDecorator do
       expect(data['ethereum-address']).to eq(mint_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(mint_award.decorate.total_amount_wei)
       expect(data['ethereum-decimal-places']).to eq(mint_award.project.token&.decimal_places&.to_i)
-      expect(data['ethereum-contract-address']).to eq(mint_award.project.token&.ethereum_contract_address)
+      expect(data['ethereum-contract-address']).to eq(mint_award.project.token&.contract_address)
       expect(data['ethereum-contract-abi']).to eq(mint_award.project.token&.abi&.to_json)
       expect(data['ethereum-transactions-path']).to include(mint_award.project.id.to_s)
       expect(data['info']).not_to be_nil
@@ -222,7 +222,7 @@ describe AwardDecorator do
       expect(data['ethereum-address']).to eq(burn_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(burn_award.decorate.total_amount_wei)
       expect(data['ethereum-decimal-places']).to eq(burn_award.project.token&.decimal_places&.to_i)
-      expect(data['ethereum-contract-address']).to eq(burn_award.project.token&.ethereum_contract_address)
+      expect(data['ethereum-contract-address']).to eq(burn_award.project.token&.contract_address)
       expect(data['ethereum-contract-abi']).to eq(burn_award.project.token&.abi&.to_json)
       expect(data['ethereum-transactions-path']).to include(burn_award.project.id.to_s)
       expect(data['info']).not_to be_nil

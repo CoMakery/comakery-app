@@ -10,7 +10,7 @@ describe 'shared/_awards.html.rb' do
   let!(:recipient2_auth) { create(:authentication, account: recipient2) }
   let!(:project) do
     stub_token_symbol
-    create(:project, account: issuer, token: create(:token, ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'))
+    create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'))
   end
   let!(:award_type) { create(:award_type, project: project) }
   let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -58,7 +58,7 @@ describe 'shared/_awards.html.rb' do
     describe 'when project is not ethereum enabled' do
       before do
         project.token.ethereum_enabled = false
-        project.token.ethereum_contract_address = nil
+        project.token.contract_address = nil
         project.token.coin_type = nil
       end
       it 'the column header is hidden' do
@@ -87,7 +87,7 @@ describe 'shared/_awards.html.rb' do
           context 'coin_type eq erc20' do
             before do
               recipient1.ethereum_wallet = '0x123'
-              project.token.ethereum_contract_address = '0x' + 'a' * 40
+              project.token.contract_address = '0x' + 'a' * 40
               project.token.coin_type = 'erc20'
             end
             it 'display Metamask icon on Send button' do

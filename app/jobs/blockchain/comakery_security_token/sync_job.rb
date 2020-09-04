@@ -9,7 +9,7 @@ module Blockchain
 
         raise 'Token is not Comakery Type' unless @token.coin_type_comakery?
 
-        @contract = Comakery::Web3.new(@token.ethereum_network).contract(@token.ethereum_contract_address, @token.abi)
+        @contract = Comakery::Web3.new(@token.blockchain_network).contract(@token.contract_address, @token.abi)
 
         save if sync
       end

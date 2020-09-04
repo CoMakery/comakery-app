@@ -23,8 +23,7 @@ describe('eos scatter utils #transferEosCoins', () => {
     },
     'token': {
       'id'                       : 1,
-      'ethereum_contract_address': null,
-      'ethereum_network'         : null,
+      'blockchain_network'         : null,
       'coin_type'                : 'eos',
       'blockchain_network'       : 'eos_testnet',
       'contract_address'         : null

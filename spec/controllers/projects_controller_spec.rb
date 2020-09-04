@@ -137,7 +137,7 @@ describe ProjectsController do
 
       it 'shows metamask awards' do
         stub_token_symbol
-        project.token.update ethereum_contract_address: '0x' + 'a' * 40
+        project.token.update contract_address: '0x' + 'a' * 40
         get :awards, params: { id: project.to_param }
 
         expect(response.status).to eq(200)

@@ -53,7 +53,7 @@ class AccountDecorator < Draper::Decorator
 
   def wallet_address_url_for(project)
     address = wallet_address_for(project)
-    network = project.token&.coin_type_on_ethereum? ? project.token&.ethereum_network : project.token&.blockchain_network
+    network = project.token&.blockchain_network
 
     if address.present? && network.present?
       UtilitiesService.get_wallet_url(network, address)
@@ -78,7 +78,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_send_awards?(project)
-    (project&.account == self || project.admins.include?(self)) && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
+    (project&.account == self || project.admins.include?(self)) && (project&.token&.contract_address? || project.decorate.send_coins?)
   end
 
   def image_url(size = 100)

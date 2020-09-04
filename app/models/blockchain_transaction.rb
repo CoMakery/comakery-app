@@ -103,13 +103,10 @@ class BlockchainTransaction < ApplicationRecord
 
     def populate_data
       self.token ||= blockchain_transactable.token
+      self.network ||= token.blockchain_network
 
       if token.coin_type_on_ethereum?
-        self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
-        self.contract_address ||= token.ethereum_contract_address
-        self.network ||= token.ethereum_network
-      else
-        self.network ||= token.blockchain_network
+        self.current_block ||= Comakery::Eth.new(token.blockchain_network).current_block
       end
     end
 

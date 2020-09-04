@@ -46,11 +46,6 @@ class Token < ApplicationRecord
   has_many :transfer_rules_synced, -> { where synced: true }
   has_many :blockchain_transactions
 
-  # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
-  # has_many :batches
-  # has_many :tasks, through: :batches, dependent: :destroy
-  # has_many :completed_tasks, -> { where.not ethereum_transaction_address: nil }, through: :batches, source: :tasks
-
   scope :listed, -> { where unlisted: false }
 
   enum coin_type: {
@@ -77,7 +72,7 @@ class Token < ApplicationRecord
     ropsten: 'Ropsten Test Network',
     kovan:   'Kovan Test Network',
     rinkeby: 'Rinkeby Test Network'
-  }
+  }, _prefix: :deprecated
 
   enum blockchain_network: {
     bitcoin_mainnet: 'Main Bitcoin Network',
@@ -90,7 +85,11 @@ class Token < ApplicationRecord
     eos_testnet: 'Test EOS Network',
     tezos_mainnet: 'Main Tezos Network',
     constellation_mainnet: 'Main Constellation Network',
-    constellation_testnet: 'Test Constellation Network'
+    constellation_testnet: 'Test Constellation Network',
+    main:    'Main Ethereum Network',
+    ropsten: 'Ropsten Test Network',
+    kovan:   'Kovan Test Network',
+    rinkeby: 'Rinkeby Test Network'
   }
 
   validates :name, :denomination, presence: true
@@ -98,15 +97,9 @@ class Token < ApplicationRecord
 
   validate :valid_ethereum_enabled
   validate :check_contract_address_exist_on_blockchain_network
-  validates :contract_address, qtum_contract_address: true # see QtumContractAddressable
-  validates :ethereum_contract_address, ethereum_address: { type: :account } # see EthereumAddressable
-
-  # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
-  # validate :denomination_changeable, if: -> { tasks.present? }
-  # validate :contract_address_changeable, if: -> { tasks.present? }
+  validates :contract_address, presence: true
 
   before_validation :populate_token_symbol
-  before_validation :check_coin_type
   before_validation :set_predefined_values
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
@@ -133,7 +126,7 @@ class Token < ApplicationRecord
   end
 
   def populate_token?
-    coin_type_on_ethereum? && ethereum_network.present? && ethereum_contract_address.present? && (symbol.blank? || decimal_places.blank?)
+    coin_type_on_ethereum? && blockchain_network.present? && contract_address.present? && (symbol.blank? || decimal_places.blank?)
   end
 
   def abi
@@ -154,22 +147,6 @@ class Token < ApplicationRecord
 
   private
 
-  def check_coin_type
-    check_coin_type_blockchain_network
-    if coin_type_erc20?
-      self.contract_address = nil
-    elsif coin_type_comakery?
-      self.contract_address = nil
-    elsif coin_type_qrc20?
-      self.ethereum_contract_address = nil
-    elsif coin_type?
-      self.contract_address = nil
-      self.ethereum_contract_address = nil
-      self.symbol = nil
-      self.decimal_places = nil
-    end
-  end
-
   def set_predefined_values
     if coin_type && !coin_type_token?
       self.name = COIN_NAMES[coin_type.to_sym]
@@ -178,31 +155,23 @@ class Token < ApplicationRecord
     end
   end
 
-  def check_coin_type_blockchain_network
-    if coin_type_on_ethereum?
-      self.blockchain_network = nil
-    elsif coin_type_on_qtum?
-      self.ethereum_network = nil
-    end
-  end
-
   def populate_token_symbol
     if populate_token?
-      web3 = Comakery::Web3.new(ethereum_network)
-      symbol, decimals = web3.fetch_symbol_and_decimals(ethereum_contract_address)
+      web3 = Comakery::Web3.new(blockchain_network)
+      symbol, decimals = web3.fetch_symbol_and_decimals(contract_address)
       self.symbol = symbol if symbol.blank?
       self.decimal_places = decimals if decimal_places.blank?
-      ethereum_contract_address_exist_on_network?(symbol)
+      contract_address_exist_on_network?(symbol)
     end
   end
 
   def enable_ethereum
-    self.ethereum_enabled = ethereum_contract_address.present? || contract_address? unless ethereum_enabled
+    self.ethereum_enabled = contract_address.present? unless ethereum_enabled
   end
 
   def set_transitioned_to_ethereum_enabled
     @transitioned_to_ethereum_enabled = ethereum_enabled_changed? &&
-                                        ethereum_enabled && ethereum_contract_address.blank?
+                                        ethereum_enabled && contract_address.blank?
     true # don't halt filter
   end
 
@@ -212,9 +181,9 @@ class Token < ApplicationRecord
     end
   end
 
-  def ethereum_contract_address_exist_on_network?(symbol)
-    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol.blank? && ethereum_contract_address?
-      errors[:ethereum_contract_address] << 'should exist on the ethereum network'
+  def contract_address_exist_on_network?(symbol)
+    if (contract_address_changed? || blockchain_network_changed?) && symbol.blank? && contract_address?
+      errors[:contract_address] << 'should exist on the ethereum network'
     end
   end
 
@@ -223,21 +192,4 @@ class Token < ApplicationRecord
       errors[:contract_address] << 'should exist on the qtum network'
     end
   end
-
-  # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
-  # def denomination_changeable
-  #   errors.add(:blockchain_network, 'cannot be changed if has associated tasks') if denomination_changed?
-  # end
-
-  # def contract_address_changeable
-  #   ethereum_contract_address_changeable
-  #   errors.add(:blockchain_network, 'cannot be changed if has associated tasks') if blockchain_network_changed?
-  #   errors.add(:contract_address, 'cannot be changed if has associated tasks') if contract_address_changed?
-  #   errors.add(:decimal_places, 'cannot be changed if has associated tasks') if decimal_places_changed?
-  # end
-
-  # def ethereum_contract_address_changeable
-  #   errors.add(:ethereum_network, 'cannot be changed if has associated tasks') if ethereum_network_changed?
-  #   errors.add(:ethereum_contract_address, 'cannot be changed if has associated tasks') if ethereum_contract_address_changed?
-  # end
 end

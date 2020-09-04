@@ -15,19 +15,8 @@ module ApplicationHelper
     end
   end
 
-  def ethereum_explorer_domain(token)
-    case token&.ethereum_network
-    when nil
-      Rails.application.config.ethereum_explorer_site
-    when 'main'
-      'etherscan.io'
-    else
-      "#{token.ethereum_network}.etherscan.io"
-    end
-  end
-
   def ethereum_explorer_tx_url(token, tx)
-    "https://#{ethereum_explorer_domain(token)}/tx/#{tx}"
+    token.blockchain.url_for_tx_human(tx)
   end
 
   def ransack_filter_present?(query, name, predicate, value)

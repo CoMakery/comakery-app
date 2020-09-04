@@ -503,15 +503,7 @@ class AwardsController < ApplicationController
         end
       )&.send("#{Token::BLOCKCHAIN_NAMES[@project.token.coin_type.to_sym]}_wallet")
 
-      network = (
-        if @project.token.coin_type_on_ethereum?
-          @project.token.ethereum_network.presence || 'main'
-        else
-          @project.token.blockchain_network
-        end
-      )
-
-      wallet_url = address ? UtilitiesService.get_wallet_url(network, address) : nil
+      wallet_url = address ? UtilitiesService.get_wallet_url(@project.token.blockchain_network, address) : nil
 
       @recipient_address_response = {
         address: address,
