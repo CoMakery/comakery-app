@@ -92,6 +92,9 @@ class Token < ApplicationRecord
     rinkeby: 'Rinkeby Test Network'
   }
 
+  enum _blockchain: Blockchain.list, _prefix: :_blockchain
+  enum _token_type: TokenType.list, _prefix: :_token_type
+
   validates :name, :denomination, presence: true
   validates :name, uniqueness: true
 
@@ -106,75 +109,11 @@ class Token < ApplicationRecord
   after_create :default_reg_group, if: -> { coin_type_comakery? }
 
   def blockchain
-    "Blockchain::#{blockchain_network_to_subclass_name}".constantize.new
-  end
-
-  def blockchain_network_to_subclass_name
-    case blockchain_network
-    when 'bitcoin_mainnet'
-      'Bitcoin'
-    when 'bitcoin_testnet'
-      'BitcoinTest'
-    when 'cardano_mainnet'
-      'Cardano'
-    when 'cardano_testnet'
-      'CardanoTest'
-    when 'qtum_mainnet'
-      'Qtum'
-    when 'qtum_testnet'
-      'QtumTest'
-    when 'eos_mainnet'
-      'Eos'
-    when 'eos_testnet'
-      'EosTest'
-    when 'tezos_mainnet'
-      'Tezos'
-    when 'constellation_mainnet'
-      'Constellation'
-    when 'constellation_testnet'
-      'ConstellationTest'
-    when 'main'
-      'Ethereum'
-    when 'ropsten'
-      'EthereumRopsten'
-    when 'kovan'
-      'EthereumKovan'
-    when 'rinkeby'
-      'EthereumRinkeby'
-    else
-      raise 'Token: Unknown blockchain network'
-    end
+    "Blockchain::#{_blockchain.camelize}".constantize.new
   end
 
   def token_type
-    "TokenType::#{coin_type_to_subclass_name}".constantize.new
-  end
-
-  def coin_type_to_subclass_name
-    case coin_type
-    when 'erc20'
-      'Erc20'
-    when 'eth'
-      'Eth'
-    when 'qrc20'
-      'Qrc20'
-    when 'qtum'
-      'Qtum'
-    when 'ada'
-      'Ada'
-    when 'btc'
-      'Btc'
-    when 'eos'
-      'Eos'
-    when 'xtz'
-      'Xtz'
-    when 'Comakery'
-      'Comakery'
-    when 'dag'
-      'Dag'
-    else
-      raise 'Token: Unknown coin type'
-    end
+    "TokenType::#{_token_type.camelize}".constantize.new
   end
 
   def coin_type_token?

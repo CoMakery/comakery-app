@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_26_152838) do
+ActiveRecord::Schema.define(version: 2020_09_07_192634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -454,6 +454,8 @@ ActiveRecord::Schema.define(version: 2020_08_26_152838) do
     t.boolean "unlisted", default: false
     t.boolean "token_frozen", default: false
     t.datetime "synced_at"
+    t.integer "_blockchain", default: 0, null: false
+    t.integer "_token_type", default: 0, null: false
   end
 
   create_table "transfer_rules", force: :cascade do |t|
