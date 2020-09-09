@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'test_aml_ky_unknown_wallet_filter', js: true do
+describe 'test_aml_kyc_failed_wallet_filter', js: true do
   let(:owner) { create :account }
   let!(:project) { create :project, token: create(:comakery_dummy_token), account: owner }
   let!(:project_award_type) { (create :award_type, project: project) }
