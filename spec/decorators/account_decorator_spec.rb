@@ -52,14 +52,14 @@ describe AccountDecorator do
 
     context 'on bitcoin network' do
       let!(:recipient) { create(:account, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
-      let!(:project) { build :project, payment_type: 'project_token', account: project_owner, token: create(:token, coin_type: 'btc') }
+      let!(:project) { build :project, payment_type: 'project_token', account: project_owner, token: create(:token, _token_type: 'btc') }
 
       it 'can send' do
         expect(project_owner.decorate.can_send_awards?(project)).to be true
       end
 
       it 'cannot send' do
-        project.token.coin_type = nil
+        project.token._token_type = nil
         expect(project_owner.decorate.can_send_awards?(project)).to be false
       end
     end
@@ -68,7 +68,7 @@ describe AccountDecorator do
   describe '#can_receive_awards?' do
     context 'on ethereum network' do
       let!(:recipient) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth') }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true
@@ -82,7 +82,7 @@ describe AccountDecorator do
 
     context 'on bitcoin network' do
       let!(:recipient) { create(:account, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, coin_type: 'btc') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'btc') }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true
@@ -96,7 +96,7 @@ describe AccountDecorator do
 
     context 'on cardano network' do
       let!(:recipient) { create(:account, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, coin_type: 'ada') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'ada') }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true
@@ -110,7 +110,7 @@ describe AccountDecorator do
 
     context 'on qtum network' do
       let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, coin_type: 'qrc20') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'qrc20') }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true
@@ -122,9 +122,9 @@ describe AccountDecorator do
       end
     end
 
-    context 'coin_type nil' do
+    context '_token_type nil' do
       let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, coin_type: nil) }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: nil) }
 
       it 'returns false' do
         expect(recipient.decorate.can_receive_awards?(project)).to be false
@@ -148,10 +148,10 @@ describe AccountDecorator do
   describe 'wallet_address_link_for' do
     let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e', bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
     let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
-    let!(:project_w_token) { create :project, token: create(:token, coin_type: 'eth', blockchain_network: :main) }
+    let!(:project_w_token) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum) }
     let!(:project_wo_token) { create :project, token: nil }
-    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, coin_type: :comakery, blockchain_network: :ropsten) }
-    let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, coin_type: :btc, blockchain_network: :bitcoin_testnet) }
+    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, _token_type: :comakery, _blockchain: :ethereum_ropsten) }
+    let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_testnet) }
 
     it 'returns link for wallet address if account has address for project token' do
       expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_wallet.ethereum_wallet)

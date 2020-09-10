@@ -21,7 +21,7 @@ describe('TokenForm', () => {
     expect(wrapper.exists('#token-form--form')).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
+      'InputFieldDropdownHalfed[title="payment type"][required][name="token[_token_type]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -41,8 +41,8 @@ describe('TokenForm', () => {
     const token = {
       'id'                     : 0,
       'name'                   : 'ERC-TEST',
-      'coinType'               : 'erc20',
-      'blockchainNetwork'      : 'main',
+      '_tokenType'               : 'erc20',
+      '_blockchain'      : 'ethereum',
       'contractAddress'        : '0x00',
       'symbol'                 : 'ERCT',
       'decimalPlaces'          : 2,
@@ -51,7 +51,7 @@ describe('TokenForm', () => {
     const wrapper = mount(<TokenForm token={token} />)
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
+      'InputFieldDropdownHalfed[title="payment type"][required][name="token[_token_type]"]'
     ).props().value).toBe('erc20')
 
     expect(wrapper.find(
@@ -71,16 +71,16 @@ describe('TokenForm', () => {
     ).props().value).toBe('2')
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
-    ).props().value).toBe('main')
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
+    ).props().value).toBe('ethereum')
   })
 
   it('renders correctly with qrc token', () => {
     const token = {
       'id'                     : 1,
       'name'                   : 'QRC-TEST',
-      'coinType'               : 'qrc20',
-      'blockchainNetwork'      : 'test',
+      '_tokenType'               : 'qrc20',
+      '_blockchain'      : 'test',
       'contractAddress'        : '0',
       'symbol'                 : 'QRCT',
       'decimalPlaces'          : 0,
@@ -89,7 +89,7 @@ describe('TokenForm', () => {
     const wrapper = mount(<TokenForm token={token} />)
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
+      'InputFieldDropdownHalfed[title="payment type"][required][name="token[_token_type]"]'
     ).props().value).toBe('qrc20')
 
     expect(wrapper.find(
@@ -113,7 +113,7 @@ describe('TokenForm', () => {
     ).props().value).toBe('0')
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
     ).props().value).toBe('test')
   })
 
@@ -121,8 +121,8 @@ describe('TokenForm', () => {
     const token = {
       'id'                     : 1,
       'name'                   : 'ETH-TEST',
-      'coinType'               : 'eth',
-      'blockchainNetwork'      : 'test',
+      '_tokenType'               : 'eth',
+      '_blockchain'      : 'test',
       'contractAddress'        : null,
       'symbol'                 : null,
       'decimalPlaces'          : null,
@@ -131,7 +131,7 @@ describe('TokenForm', () => {
     const wrapper = mount(<TokenForm token={token} />)
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
+      'InputFieldDropdownHalfed[title="payment type"][required][name="token[_token_type]"]'
     ).props().value).toBe('eth')
 
     expect(wrapper.find(
@@ -139,50 +139,50 @@ describe('TokenForm', () => {
     ).props().imgPreviewUrl).toBe('/ETH.png')
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
     ).props().value).toBe('test')
   })
 
-  it('renders correctly with coinTypes', () => {
-    const coinTypes = {
+  it('renders correctly with tokenTypes', () => {
+    const tokenTypes = {
       'ERC20': 'erc20',
       'QRC20': 'qrc20',
       'ETH'  : 'eth'
     }
-    const wrapper = mount(<TokenForm coinTypes={coinTypes} />)
+    const wrapper = mount(<TokenForm tokenTypes={tokenTypes} />)
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
+      'InputFieldDropdownHalfed[title="payment type"][required][name="token[_token_type]"]'
     ).props().value).toBe('erc20')
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
-    ).props().selectEntries).toEqual(Object.entries(coinTypes))
+      'InputFieldDropdownHalfed[title="payment type"][required][name="token[_token_type]"]'
+    ).props().selectEntries).toEqual(Object.entries(tokenTypes))
   })
 
-  it('renders correctly with blockchainNetworks', () => {
+  it('renders correctly with blockchains', () => {
     const token = {
       'id'                     : 1,
       'name'                   : 'QRC-TEST',
-      'coinType'               : 'qrc20',
-      'blockchainNetwork'      : null,
+      '_tokenType'               : 'qrc20',
+      '_blockchain'      : null,
       'contractAddress'        : '0',
       'symbol'                 : 'QRCT',
       'decimalPlaces'          : 0,
       'logoUrl'                : '/QRCT.png'
     }
-    const blockchainNetworks = {
+    const blockchains = {
       'main QTUM Network': 'qtum_mainnet',
       'test QTUM Network': 'qtum_testnet'
     }
-    const wrapper = mount(<TokenForm token={token} blockchainNetworks={blockchainNetworks} />)
+    const wrapper = mount(<TokenForm token={token} blockchains={blockchains} />)
 
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
     ).props().value).toBe('qtum_mainnet')
     expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[blockchain_network]"]'
-    ).props().selectEntries).toEqual(Object.entries(blockchainNetworks))
+      'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
+    ).props().selectEntries).toEqual(Object.entries(blockchains))
   })
 
   it('renders correctly with csrfToken', () => {
@@ -241,7 +241,7 @@ describe('TokenForm', () => {
 
     wrapper.setState({
       errors: {
-        'token[coin_type]' : 'coin_type error',
+        'token[_token_type]' : '_token_type error',
         'token[logo_image]': 'logo_image error'
       }
     })
@@ -249,7 +249,7 @@ describe('TokenForm', () => {
     wrapper.update()
 
     expect(wrapper.exists(
-      'InputFieldDropdownHalfed[errorText="coin_type error"][title="payment type"][required][name="token[coin_type]"]'
+      'InputFieldDropdownHalfed[errorText="_token_type error"][title="payment type"][required][name="token[_token_type]"]'
     )).toBe(true)
 
     expect(wrapper.exists(

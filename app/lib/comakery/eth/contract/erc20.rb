@@ -1,13 +1,13 @@
 class Comakery::Eth::Contract::Erc20
   attr_reader :nonce, :contract, :functions
 
-  def initialize(contract_address, abi, network, nonce)
+  def initialize(contract_address, abi, host, nonce)
     @nonce = nonce
     @contract = Ethereum::Contract.create(
       name: 'Contract',
       address: contract_address,
       abi: abi,
-      client: Comakery::Eth.new(network).client
+      client: Comakery::Eth.new(host).client
     )
     @functions = Ethereum::Abi.parse_abi(contract.abi)[1]
   end

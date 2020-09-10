@@ -4,13 +4,8 @@ require 'json'
 class Comakery::Qtum
   attr_reader :host
 
-  def initialize(network)
-    @host = case network
-            when 'qtum_testnet'
-              'testnet.qtum.info'
-            when 'qtum_mainnet'
-              'qtum.info'
-    end
+  def initialize(host)
+    @host = host
   end
 
   def contract(address)

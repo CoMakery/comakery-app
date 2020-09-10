@@ -1,8 +1,8 @@
 class TokensController < ApplicationController
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
-  before_action :set_coin_types, only: %i[new show edit]
-  before_action :set_blockchain_networks, only: %i[new show edit]
+  before_action :set_token_types, only: %i[new show edit]
+  before_action :set_blockchains, only: %i[new show edit]
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
@@ -67,12 +67,14 @@ class TokensController < ApplicationController
   def fetch_contract_details
     authorize Token.create
 
+    host = Token.blockchain_for(params[:network]).explorer_api_host
+
     case params[:address]
     when /^0x[a-fA-F0-9]{40}$/
-      web3 = Comakery::Web3.new(params[:network])
+      web3 = Comakery::Web3.new(host)
       @symbol, @decimals = web3.fetch_symbol_and_decimals(params[:address])
     when /^[a-fA-F0-9]{40}$/
-      qtum = Comakery::Qtum.new(params[:network])
+      qtum = Comakery::Qtum.new(host)
       @symbol, @decimals = qtum.fetch_symbol_and_decimals(params[:address])
     end
 
@@ -89,12 +91,12 @@ class TokensController < ApplicationController
     @token = Token.find(params[:id]).decorate
   end
 
-  def set_coin_types
-    @coin_types = Token.coin_types.invert
+  def set_token_types
+    @token_types = Token._token_types.invert
   end
 
-  def set_blockchain_networks
-    @blockchain_networks = Token.blockchain_networks.invert
+  def set_blockchains
+    @blockchains = Token._blockchains.invert
   end
 
   def set_generic_props
@@ -104,8 +106,8 @@ class TokensController < ApplicationController
           logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
         }
       ),
-      coin_types: @coin_types,
-      blockchain_networks: @blockchain_networks,
+      token_types: @token_types,
+      blockchains: @blockchains,
       form_url: tokens_path,
       form_action: 'POST',
       url_on_success: tokens_path,
@@ -118,9 +120,9 @@ class TokensController < ApplicationController
       :name,
       :ethereum_enabled,
       :logo_image,
-      :coin_type,
       :denomination,
-      :blockchain_network,
+      :_token_type,
+      :_blockchain,
       :contract_address,
       :symbol,
       :decimal_places,

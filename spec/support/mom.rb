@@ -105,12 +105,12 @@ class Mom
       blockchain_transactable: award,
       amount: 1,
       source: build(:ethereum_address_1),
-      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
       status: :created,
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.blockchain_network}/#{token.contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransaction.create!(defaults.merge(attrs))
     end
   end
@@ -123,12 +123,12 @@ class Mom
       blockchain_transactable: create(:transfer_rule),
       amount: 1,
       source: build(:ethereum_address_1),
-      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
       status: :created,
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.blockchain_network}/#{token.contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionTransferRule.create!(defaults.merge(attrs))
     end
   end
@@ -141,12 +141,12 @@ class Mom
       blockchain_transactable: create(:account_token_record),
       amount: 1,
       source: build(:ethereum_address_1),
-      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
       status: :created,
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.blockchain_network}/#{token.contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
     end
   end
@@ -300,9 +300,9 @@ class Mom
       name: "ComakeryToken-#{SecureRandom.hex(20)}",
       symbol: "XYZ#{SecureRandom.hex(20)}",
       logo_image: dummy_image,
-      coin_type: :comakery,
+      _token_type: :comakery,
       decimal_places: 18,
-      blockchain_network: :ropsten,
+      _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
     }
     Token.new(defaults.merge(attrs))
@@ -313,9 +313,9 @@ class Mom
       name: "ComakeryDummyToken-#{SecureRandom.hex(20)}",
       symbol: "DUM#{SecureRandom.hex(20)}",
       logo_image: dummy_image,
-      blockchain_network: :ropsten,
+      _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
-      coin_type: :comakery,
+      _token_type: :comakery,
       decimal_places: 0
     }
     Token.new(defaults.merge(attrs))
@@ -324,8 +324,8 @@ class Mom
   def dag_token(**attrs)
     defaults = {
       logo_image: dummy_image,
-      coin_type: :dag,
-      blockchain_network: :constellation_testnet
+      _token_type: :dag,
+      _blockchain: :constellation_testnet
     }
     Token.new(defaults.merge(attrs))
   end
@@ -510,15 +510,15 @@ class Mom
   end
 
   def eth_client(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
 
     Comakery::Eth.new(
-      network
+      host
     )
   end
 
   def eth_tx(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
     # From:
@@ -531,13 +531,13 @@ class Mom
     # 100
 
     Comakery::Eth::Tx.new(
-      network,
+      host,
       hash
     )
   end
 
   def erc20_transfer(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
     # From:
@@ -550,33 +550,33 @@ class Mom
     # 100
 
     Comakery::Eth::Tx::Erc20::Transfer.new(
-      network,
+      host,
       hash
     )
   end
 
   def erc20_mint(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x02286b586b53784715e7eda288744e1c14a5f2d691d43160d4e3c4d5f8825ad0'
 
     Comakery::Eth::Tx::Erc20::Mint.new(
-      network,
+      host,
       hash
     )
   end
 
   def erc20_burn(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x1007e9116efab368169683b81ae576bd48e168bef2be1fea5ef096ccc9e5dcc0'
 
     Comakery::Eth::Tx::Erc20::Burn.new(
-      network,
+      host,
       hash
     )
   end
 
   def security_token_set_allow_group_transfer(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582'
 
     # Inputs:
@@ -588,13 +588,13 @@ class Mom
     # 0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b
 
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(
-      network,
+      host,
       hash
     )
   end
 
   def security_token_set_address_permissions(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d'
 
     # Inputs:
@@ -608,7 +608,7 @@ class Mom
     # 0x8599d17ac1cec71ca30264ddfaaca83c334f8451
 
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(
-      network,
+      host,
       hash
     )
   end
@@ -616,8 +616,8 @@ class Mom
   def erc20_contract(**attrs)
     token = create(
       :token,
-      coin_type: :comakery,
-      blockchain_network: :ropsten,
+      _token_type: :comakery,
+      _blockchain: :ethereum_ropsten,
       contract_address: build(:ethereum_contract_address),
       symbol: 'DUM',
       decimal_places: 0
@@ -625,14 +625,14 @@ class Mom
 
     contract_address = attrs[:contract_address] || token.contract_address
     abi = attrs[:abi] || token.abi
-    network = attrs[:network] || token.blockchain_network
+    host = attrs[:host] || 'ropsten.infura.io'
     nonce = attrs[:nonce] || rand(1_000_000)
 
-    VCR.use_cassette("infura/#{network}/#{contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{host.split('.').first}/#{contract_address}/contract_init") do
       Comakery::Eth::Contract::Erc20.new(
         contract_address,
         abi,
-        network,
+        host,
         nonce
       )
     end

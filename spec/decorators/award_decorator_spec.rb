@@ -15,7 +15,7 @@ describe AwardDecorator do
   describe '#issuer_display_name' do
     context 'on ethereum network' do
       let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-      let!(:project) { create :project, account: issuer, token: create(:token, coin_type: 'erc20') }
+      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'erc20') }
       let!(:award_type) { create :award_type, project: project }
       let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
@@ -34,7 +34,7 @@ describe AwardDecorator do
 
     context 'on qtum network' do
       let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', qtum_wallet: 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM' }
-      let!(:project) { create :project, account: issuer, token: create(:token, coin_type: 'qrc20', blockchain_network: 'qtum_testnet') }
+      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'qrc20', _blockchain: 'qtum_testnet') }
       let!(:award_type) { create :award_type, project: project }
       let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
@@ -54,7 +54,7 @@ describe AwardDecorator do
 
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, token: create(:token, coin_type: 'erc20') }
+    let!(:project) { create :project, token: create(:token, _token_type: 'erc20') }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 
@@ -78,13 +78,13 @@ describe AwardDecorator do
   context 'json_for_sending_awards' do
     let!(:recipient) { create :account, id: 529, first_name: 'Account', last_name: 'ABC', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, coin_type: 'erc20') }
+    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, _token_type: 'erc20') }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
     it 'valid' do
       award.project.token.contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"50.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":50,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null,"tezos_wallet":null},"project":{"id":512},"award_type":{"id":#{award_type.id}},"token":{"id":#{project.token.id},"coin_type":"erc20","blockchain_network":null,"blockchain_network":null,"contract_address":null,"contract_address":null}})
+      expected = %({"id":521,"total_amount":"50.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":50,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null,"tezos_wallet":null},"project":{"id":512},"award_type":{"id":#{award_type.id}},"token":{"id":#{project.token.id},"_token_type":"erc20","_blockchain":null,"contract_address":null,"contract_address":null}})
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
 
@@ -105,7 +105,7 @@ describe AwardDecorator do
 
   it 'return ethereum_transaction_explorer_url for qtum' do
     award = create :award, ethereum_transaction_address: 'b808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
-    award.project.token.blockchain_network = 'qtum_testnet'
+    award.project.token._blockchain = 'qtum_testnet'
     expect(award.decorate.ethereum_transaction_explorer_url.include?('/tx/b808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb')).to be_truthy
   end
 
@@ -161,7 +161,7 @@ describe AwardDecorator do
   end
 
   describe 'transfer_button_text' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery)) }
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
     let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
     let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
@@ -174,7 +174,7 @@ describe AwardDecorator do
   end
 
   describe 'pay_data' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery)) }
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
     let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
     let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
@@ -186,7 +186,7 @@ describe AwardDecorator do
       expect(data['target']).to eq('ethereum.button')
       expect(data['action']).to eq('click->ethereum#pay')
       expect(data['ethereum-id']).to eq(eth_award.id)
-      expect(data['ethereum-payment-type']).to eq(eth_award.token.coin_type)
+      expect(data['ethereum-payment-type']).to eq(eth_award.token._token_type)
       expect(data['ethereum-address']).to eq(eth_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(eth_award.decorate.total_amount_wei)
       expect(data['ethereum-decimal-places']).to eq(eth_award.project.token&.decimal_places&.to_i)
@@ -202,7 +202,7 @@ describe AwardDecorator do
       expect(data['target']).to eq('ethereum.button')
       expect(data['action']).to eq('click->ethereum#mint')
       expect(data['ethereum-id']).to eq(mint_award.id)
-      expect(data['ethereum-payment-type']).to eq(mint_award.token.coin_type)
+      expect(data['ethereum-payment-type']).to eq(mint_award.token._token_type)
       expect(data['ethereum-address']).to eq(mint_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(mint_award.decorate.total_amount_wei)
       expect(data['ethereum-decimal-places']).to eq(mint_award.project.token&.decimal_places&.to_i)
@@ -218,7 +218,7 @@ describe AwardDecorator do
       expect(data['target']).to eq('ethereum.button')
       expect(data['action']).to eq('click->ethereum#burn')
       expect(data['ethereum-id']).to eq(burn_award.id)
-      expect(data['ethereum-payment-type']).to eq(burn_award.token.coin_type)
+      expect(data['ethereum-payment-type']).to eq(burn_award.token._token_type)
       expect(data['ethereum-address']).to eq(burn_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(burn_award.decorate.total_amount_wei)
       expect(data['ethereum-decimal-places']).to eq(burn_award.project.token&.decimal_places&.to_i)

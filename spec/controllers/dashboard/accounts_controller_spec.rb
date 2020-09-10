@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::AccountsController, type: :controller do
-  let(:project) { create(:project, visibility: :public_listed, token: create(:token, coin_type: :comakery)) }
+  let(:project) { create(:project, visibility: :public_listed, token: create(:token, _token_type: :comakery)) }
   let(:account) { create(:account_token_record, token: project.token, max_balance: 2) }
 
   describe 'GET #index' do

@@ -33,7 +33,7 @@ class Dashboard::AccountsController < ApplicationController
     end
 
     def create_token_records
-      if @project.token&.coin_type_comakery?
+      if @project.token&._token_type_comakery?
         @project.interested.each { |a| a.account_token_records.find_or_create_by!(token: @project.token) }
       end
     end

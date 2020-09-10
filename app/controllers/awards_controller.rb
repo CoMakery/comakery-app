@@ -501,9 +501,9 @@ class AwardsController < ApplicationController
         else
           Account.find_from_uid_channel(params[:uid], Channel.find_by(id: params[:channel_id]))
         end
-      )&.send("#{Token::BLOCKCHAIN_NAMES[@project.token.coin_type.to_sym]}_wallet")
+      )&.send("#{Token::BLOCKCHAIN_NAMES[@project.token._token_type.to_sym]}_wallet")
 
-      wallet_url = address ? UtilitiesService.get_wallet_url(@project.token.blockchain_network, address) : nil
+      wallet_url = address ? @project.token&.blockchain&.url_for_address_human(address) : nil
 
       @recipient_address_response = {
         address: address,
@@ -527,8 +527,8 @@ class AwardsController < ApplicationController
     end
 
     def confirm_message(project)
-      return nil unless project.token&.coin_type?
-      blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
+      return nil unless project.token&._token_type?
+      blockchain_name = Token::BLOCKCHAIN_NAMES[project.token._token_type.to_sym]
       send("confirm_message_for_#{blockchain_name}_award")
     end
 

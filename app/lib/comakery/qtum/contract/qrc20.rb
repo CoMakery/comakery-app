@@ -1,8 +1,8 @@
 class Comakery::Qtum::Contract::Qrc20
   attr_reader :contract
 
-  def initialize(contract_address, network)
-    @contract = Comakery::Qtum.new(network).contract(contract_address)
+  def initialize(contract_address, host)
+    @contract = Comakery::Qtum.new(host).contract(contract_address)
   end
 
   def symbol

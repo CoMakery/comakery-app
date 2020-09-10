@@ -17,7 +17,7 @@ describe ProjectsController do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20')) }
 
   let!(:token) { create(:token) }
   let!(:mission) { create(:mission, token_id: token.id) }

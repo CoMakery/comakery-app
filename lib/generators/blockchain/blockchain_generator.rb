@@ -8,7 +8,7 @@ class BlockchainGenerator < Rails::Generators::NamedBase
     gsub_file(
       'app/models/blockchain.rb',
       /.+# Populated automatically by BlockchainGenerator/,
-      "    #{Blockchain.append_to_list(file_name.to_sym)} # Populated automatically by BlockchainGenerator"
+      "    h = #{Blockchain.append_to_list(file_name.to_sym)} # Populated automatically by BlockchainGenerator"
     )
   end
 end

@@ -10,7 +10,7 @@ module Blockchain
     private
 
       def comakery_security_tokens
-        Token.coin_type_comakery.each do |token|
+        Token._token_type_comakery.each do |token|
           Blockchain::ComakerySecurityToken::TokenSyncJob.perform_later(token)
         end
       end

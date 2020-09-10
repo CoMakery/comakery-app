@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::TransferRulesController, type: :controller do
-  let!(:token) { create(:token, coin_type: :comakery) }
+  let!(:token) { create(:token, _token_type: :comakery) }
   let!(:project) { create(:project, visibility: :public_listed, token: token) }
   let!(:transfer_rule) { create(:transfer_rule, token: token) }
 

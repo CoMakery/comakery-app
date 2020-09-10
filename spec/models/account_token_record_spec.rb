@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe AccountTokenRecord do
   describe 'associations' do
-    let!(:token) { create(:token, coin_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery) }
     let!(:reg_group) { create(:reg_group, token: token) }
     let!(:account) { create(:account) }
     let!(:account_token_record) { create(:account_token_record, token: token, reg_group: reg_group, account: account) }
@@ -22,7 +22,7 @@ describe AccountTokenRecord do
 
   describe 'callbacks' do
     it 'sets default values' do
-      account_token_record = described_class.new(token: create(:token, coin_type: :comakery))
+      account_token_record = described_class.new(token: create(:token, _token_type: :comakery))
 
       expect(account_token_record.lockup_until).not_to be_nil
       expect(account_token_record.reg_group).not_to be_nil

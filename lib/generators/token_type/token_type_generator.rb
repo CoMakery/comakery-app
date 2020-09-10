@@ -8,7 +8,7 @@ class TokenTypeGenerator < Rails::Generators::NamedBase
     gsub_file(
       'app/models/token_type.rb',
       /.+# Populated automatically by TokenTypeGenerator/,
-      "    #{TokenType.append_to_list(file_name.to_sym)} # Populated automatically by TokenTypeGenerator"
+      "    h = #{TokenType.append_to_list(file_name.to_sym)} # Populated automatically by TokenTypeGenerator"
     )
   end
 end

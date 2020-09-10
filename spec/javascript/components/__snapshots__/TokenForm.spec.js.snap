@@ -2,12 +2,7 @@
 
 exports[`TokenForm renders correctly without props 1`] = `
 <TokenForm
-  blockchainNetworks={
-    Object {
-      "default": "_",
-    }
-  }
-  coinTypes={
+  blockchains={
     Object {
       "default": "_",
     }
@@ -16,6 +11,11 @@ exports[`TokenForm renders correctly without props 1`] = `
   formAction="POST"
   formUrl="/"
   token={
+    Object {
+      "default": "_",
+    }
+  }
+  tokenTypes={
     Object {
       "default": "_",
     }
@@ -101,7 +101,7 @@ exports[`TokenForm renders correctly without props 1`] = `
             >
               <InputFieldDropdownHalfed
                 eventHandler={[Function]}
-                name="token[coin_type]"
+                name="token[_token_type]"
                 required={true}
                 selectEntries={
                   Array [
@@ -130,7 +130,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   max=""
                   min=""
-                  name="token[coin_type]"
+                  name="token[_token_type]"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
@@ -173,7 +173,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                       <select
                         className="input-field--content__select"
                         disabled={false}
-                        name="token[coin_type]"
+                        name="token[_token_type]"
                         onChange={[Function]}
                         required={true}
                         value="_"

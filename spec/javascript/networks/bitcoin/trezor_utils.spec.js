@@ -180,7 +180,7 @@ describe('bitcoin trezor utils #transferBtcCoins', () => {
       'id'                       : 1,
       'contract_address': null,
       'blockchain_network'         : null,
-      'coin_type'                : 'btc',
+      '_token_type'                : 'btc',
       'blockchain_network'       : 'bitcoin_testnet',
       'contract_address'         : null
     }

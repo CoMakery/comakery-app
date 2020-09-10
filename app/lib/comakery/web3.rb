@@ -1,13 +1,7 @@
 require 'web3/eth'
 
 class Comakery::Web3
-  def initialize(network)
-    host = case network
-           when 'main'
-             'mainnet.infura.io'
-           else
-             "#{network}.infura.io"
-    end
+  def initialize(host)
     @web3 = Web3::Eth::Rpc.new(
       host: host,
       port: 443,

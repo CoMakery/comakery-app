@@ -32,7 +32,7 @@ describe BlockchainTransaction, vcr: true do
 
     context 'with an ethereum coin type' do
       it 'populates contract address and network from token' do
-        expect(blockchain_transaction.network).to eq(blockchain_transaction.token.blockchain_network)
+        expect(blockchain_transaction.network).to eq(blockchain_transaction.token._blockchain)
         expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.contract_address)
       end
 
@@ -43,7 +43,7 @@ describe BlockchainTransaction, vcr: true do
 
     context 'with a dag token' do
       it 'populates network from token' do
-        expect(blockchain_transaction_dag.network).to eq(blockchain_transaction_dag.token.blockchain_network)
+        expect(blockchain_transaction_dag.network).to eq(blockchain_transaction_dag.token._blockchain)
       end
     end
   end

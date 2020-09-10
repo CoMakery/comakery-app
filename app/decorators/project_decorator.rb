@@ -91,7 +91,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def send_coins?
-    token&.coin_type? && %w[eth btc ada qtum eos xtz].include?(token&.coin_type)
+    token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
   def header_props
@@ -139,7 +139,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def blockchain_name
-    Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+    Token::BLOCKCHAIN_NAMES[token&._token_type&.to_sym]
   end
 
   def step_for_amount_input

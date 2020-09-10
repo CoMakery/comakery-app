@@ -10,7 +10,7 @@ RSpec.describe AwardsController, type: :controller do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20')) }
   let!(:award_type) { create(:award_type, project: project) }
 
   before do
@@ -520,7 +520,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     context 'on Qtum network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'qrc20')) }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'qrc20')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -545,7 +545,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     context 'on Cardano network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'ada')) }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'ada')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -571,7 +571,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     context 'on Bitcoin network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'btc')) }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'btc')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -597,7 +597,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     context 'on EOS network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'eos')) }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eos')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -623,7 +623,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     context 'on Tezos network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'xtz')) }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'xtz')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -704,7 +704,7 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#recipient_address' do
-    let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+    let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20')) }
     let(:award_type) { create(:award_type, project: project) }
     let(:award) { create(:award, award_type: award_type) }
 
@@ -723,7 +723,7 @@ RSpec.describe AwardsController, type: :controller do
       expect(response.media_type).to eq('application/json')
       expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
 
-      project.token.update(coin_type: 'qrc20')
+      project.token.update(_token_type: 'qrc20')
       award.update(status: 'ready')
 
       post :recipient_address, format: 'js', params: {

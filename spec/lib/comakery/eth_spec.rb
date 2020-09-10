@@ -6,9 +6,8 @@ describe Comakery::Eth do
       expect(build(:eth_client).client.uri.path).to eq("/v3/#{ENV.fetch('INFURA_PROJECT_ID', '')}")
     end
 
-    it 'uses provided network' do
-      expect(build(:eth_client, network: :main).client.uri.host).to eq('mainnet.infura.io')
-      expect(build(:eth_client, network: :ropsten).client.uri.host).to eq('ropsten.infura.io')
+    it 'uses provided host' do
+      expect(build(:eth_client, host: 'mainnet.infura.io').client.uri.host).to eq('mainnet.infura.io')
     end
   end
 

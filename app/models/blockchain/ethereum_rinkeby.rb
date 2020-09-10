@@ -8,6 +8,12 @@ class Blockchain::EthereumRinkeby < Blockchain::Ethereum
     'EthereumRinkeby'
   end
 
+  # Hostname of block explorer API
+  # @return [String] hostname
+  def explorer_api_host
+    'rinkeby.infura.io'
+  end
+
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host

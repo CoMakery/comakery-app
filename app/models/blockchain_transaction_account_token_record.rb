@@ -4,7 +4,7 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
   end
 
   def on_chain
-    @on_chain ||= Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(network, tx_hash)
+    @on_chain ||= Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(token.blockchain.explorer_api_host, tx_hash)
   end
 
   private

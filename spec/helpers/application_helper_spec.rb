@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ApplicationHelper, type: :helper do
   describe 'ethereum_explorer_tx_url' do
     it 'returns exporer url for a transaction' do
-      expect(helper.ethereum_explorer_tx_url(create(:token, blockchain_network: 'ropsten'), '123')).to eq('https://ropsten.etherscan.io/tx/123')
+      expect(helper.ethereum_explorer_tx_url(create(:token, _blockchain: 'ethereum_ropsten'), '123')).to eq('https://ropsten.etherscan.io/tx/123')
     end
   end
 

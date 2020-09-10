@@ -8,6 +8,12 @@ class Blockchain::EthereumRopsten < Blockchain::Ethereum
     'EthereumRopsten'
   end
 
+  # Hostname of block explorer API
+  # @return [String] hostname
+  def explorer_api_host
+    'ropsten.infura.io'
+  end
+
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host

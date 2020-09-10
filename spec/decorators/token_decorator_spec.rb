@@ -21,12 +21,12 @@ describe TokenDecorator do
   end
 
   describe 'eth_data' do
-    let!(:token) { create(:token, coin_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery) }
 
     it 'returns data for ethereum_controller.js' do
       data = token.decorate.eth_data
 
-      expect(data['ethereum-payment-type']).to eq(token.coin_type)
+      expect(data['ethereum-payment-type']).to eq(token._token_type)
       expect(data['ethereum-amount']).to eq(0)
       expect(data['ethereum-decimal-places']).to eq(token.decimal_places&.to_i)
       expect(data['ethereum-contract-address']).to eq(token.contract_address)
@@ -48,10 +48,10 @@ describe TokenDecorator do
   end
 
   describe 'network' do
-    let!(:token_btc) { create(:token, coin_type: :btc) }
+    let!(:token_btc) { create(:token, _token_type: :btc) }
 
-    it 'returns blockchain_network' do
-      expect(token_btc.decorate.network).to eq(token_btc.blockchain_network)
+    it 'returns _blockchain' do
+      expect(token_btc.decorate.network).to eq(token_btc._blockchain)
     end
   end
 end

@@ -33,13 +33,13 @@ class TokenForm extends React.Component {
       formAction                        : this.props.formAction,
       formUrl                           : this.props.formUrl,
       closeOnSuccess                    : false,
-      'token[coin_type]'                : this.props.token.coinType || Object.values(this.props.coinTypes)[0],
+      'token[_token_type]'                : this.props.token._tokenType || Object.values(this.props.tokenTypes)[0],
       'token[unlisted]'                 : this.props.token.unlisted ? 'true' : 'false',
       'token[name]'                     : this.props.token.name || '',
       'token[symbol]'                   : this.props.token.symbol || '',
       'token[contract_address]'         : this.props.token.contractAddress || '',
       'token[decimal_places]'           : (!this.props.token.decimalPlaces && this.props.token.decimalPlaces !== 0 ? '' : this.props.token.decimalPlaces.toString()),
-      'token[blockchain_network]'       : this.props.token.blockchainNetwork || Object.values(this.props.blockchainNetworks)[0]
+      'token[_blockchain]'       : this.props.token._blockchain || Object.values(this.props.blockchains)[0]
     }
   }
 
@@ -75,16 +75,16 @@ class TokenForm extends React.Component {
 
   disableContractFields() {
     this.disable([
-      'token[coin_type]',
-      'token[blockchain_network]',
+      'token[_token_type]',
+      'token[_blockchain]',
       'token[contract_address]'
     ])
   }
 
   enableContractFields() {
     this.enable([
-      'token[coin_type]',
-      'token[blockchain_network]',
+      'token[_token_type]',
+      'token[_blockchain]',
       'token[contract_address]'
     ])
   }
@@ -114,14 +114,14 @@ class TokenForm extends React.Component {
 
     switch (event.target.name) {
       case 'token[contract_address]':
-        this.fetchSymbolAndDecimals(event.target.value, this.state['token[blockchain_network]'])
+        this.fetchSymbolAndDecimals(event.target.value, this.state['token[_blockchain]'])
         break
 
-      case 'token[blockchain_network]':
+      case 'token[_blockchain]':
         this.fetchSymbolAndDecimals(this.state['token[contract_address]'], event.target.value)
         break
 
-      case 'token[coin_type]':
+      case 'token[_token_type]':
         this.setState({
           'token[symbol]'                   : '',
           'token[decimal_places]'           : '',
@@ -273,12 +273,12 @@ class TokenForm extends React.Component {
             <InputFieldDropdownHalfed
               title='payment type'
               required
-              name='token[coin_type]'
-              value={this.state['token[coin_type]']}
-              errorText={this.state.errors['token[coin_type]']}
-              disabled={this.state.disabled['token[coin_type]']}
+              name='token[_token_type]'
+              value={this.state['token[_token_type]']}
+              errorText={this.state.errors['token[_token_type]']}
+              disabled={this.state.disabled['token[_token_type]']}
               eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.props.coinTypes)}
+              selectEntries={Object.entries(this.props.tokenTypes)}
               symbolLimit={0}
             />
 
@@ -295,7 +295,7 @@ class TokenForm extends React.Component {
               })}
             />
 
-            {this.state['token[coin_type]'].match(/erc20|qrc20|comakery/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery/) &&
               <InputFieldHalfed
                 title='token name'
                 required
@@ -308,7 +308,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match(/erc20|comakery|qrc20/) &&
+            {this.state['token[_token_type]'].match(/erc20|comakery|qrc20/) &&
               <InputFieldHalfed
                 title='contract address'
                 required
@@ -323,7 +323,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match(/qrc20|erc20|comakery/) &&
+            {this.state['token[_token_type]'].match(/qrc20|erc20|comakery/) &&
               <InputFieldHalfed
                 title='token symbol'
                 required
@@ -337,7 +337,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match(/qrc20|erc20|comakery/) &&
+            {this.state['token[_token_type]'].match(/qrc20|erc20|comakery/) &&
               <InputFieldHalfed
                 title='decimal places'
                 required
@@ -352,16 +352,16 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match('qrc20|qtum|ada|btc|eos|xtz|dag|eth|erc20|comakery') &&
+            {this.state['token[_token_type]'].match('qrc20|qtum|ada|btc|eos|xtz|dag|eth|erc20|comakery') &&
               <InputFieldDropdownHalfed
                 title='blockchain network'
                 required
-                name='token[blockchain_network]'
-                value={this.state['token[blockchain_network]']}
-                errorText={this.state.errors['token[blockchain_network]']}
-                disabled={this.state.disabled['token[blockchain_network]']}
+                name='token[_blockchain]'
+                value={this.state['token[_blockchain]']}
+                errorText={this.state.errors['token[_blockchain]']}
+                disabled={this.state.disabled['token[_blockchain]']}
                 eventHandler={this.handleFieldChange}
-                selectEntries={Object.entries(this.props.blockchainNetworks)}
+                selectEntries={Object.entries(this.props.blockchains)}
               />
             }
 
@@ -391,8 +391,8 @@ class TokenForm extends React.Component {
 
 TokenForm.propTypes = {
   token             : PropTypes.object.isRequired,
-  coinTypes         : PropTypes.object.isRequired,
-  blockchainNetworks: PropTypes.object.isRequired,
+  tokenTypes         : PropTypes.object.isRequired,
+  blockchains: PropTypes.object.isRequired,
   formUrl           : PropTypes.string.isRequired,
   formAction        : PropTypes.string.isRequired,
   urlOnSuccess      : PropTypes.string.isRequired,
@@ -400,8 +400,8 @@ TokenForm.propTypes = {
 }
 TokenForm.defaultProps = {
   token             : {'default': '_'},
-  coinTypes         : {'default': '_'},
-  blockchainNetworks: {'default': '_'},
+  tokenTypes         : {'default': '_'},
+  blockchains: {'default': '_'},
   formUrl           : '/',
   formAction        : 'POST',
   urlOnSuccess      : '/',

@@ -39,8 +39,8 @@ class Award < ApplicationRecord
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
-  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
-  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
+  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&._token_type_on_ethereum? } # see EthereumAddressable
+  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&._token_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :name, length: { maximum: 100 }
   validates :why, length: { maximum: 500 }
@@ -111,7 +111,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.token.ethereum_enabled && project.token.coin_type_on_ethereum? &&
+    project.token.ethereum_enabled && project.token._token_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
@@ -276,7 +276,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    blockchain_name = Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+    blockchain_name = Token::BLOCKCHAIN_NAMES[token&._token_type&.to_sym]
     blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
   end
 

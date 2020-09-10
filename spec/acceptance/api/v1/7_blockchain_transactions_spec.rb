@@ -67,7 +67,7 @@ resource 'VII. Blockchain Transactions' do
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
-        VCR.use_cassette("infura/#{project.token.blockchain_network}/#{project.token.contract_address}/contract_init") do
+        VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
         end
 
@@ -79,7 +79,7 @@ resource 'VII. Blockchain Transactions' do
 
         request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_id: award.id }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
-        VCR.use_cassette("infura/#{project.token.blockchain_network}/#{project.token.contract_address}/contract_init") do
+        VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
         end
 
@@ -91,7 +91,7 @@ resource 'VII. Blockchain Transactions' do
 
         request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: create(:transfer_rule, token: project.token) && 'TransferRule' }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
-        VCR.use_cassette("infura/#{project.token.blockchain_network}/#{project.token.contract_address}/contract_init") do
+        VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
         end
 

@@ -54,38 +54,35 @@ describe Token do
       end
     end
 
-    describe 'coin_type' do
-      let(:attrs) { { symbol: 'CBB', decimal_places: 8, blockchain_network: 'ropsten', contract_address: 'a' * 40 } }
+    describe '_token_type' do
+      let(:attrs) { { symbol: 'CBB', decimal_places: 8, _blockchain: 'ethereum_ropsten', contract_address: 'a' * 40 } }
 
       it 'eq erc20' do
-        token = create :token, attrs.merge(coin_type: 'erc20')
+        token = create :token, attrs.merge(_token_type: 'erc20')
         expect(token).to be_valid
-        expect(token.reload.coin_type).to eq 'erc20'
-        expect(token.blockchain_network).to be_nil
-        expect(token.blockchain_network).to eq 'ropsten'
+        expect(token.reload._token_type).to eq 'erc20'
+        expect(token._blockchain).to eq 'ethereum_ropsten'
         expect(token.contract_address).to eq 'a' * 40
         expect(token.symbol).to eq 'CBB'
         expect(token.decimal_places).to eq 8
       end
 
       it 'eq eth' do
-        token = create :token, attrs.merge(coin_type: 'eth')
+        token = create :token, attrs.merge(_token_type: 'eth')
         expect(token).to be_valid
-        expect(token.reload.coin_type).to eq 'eth'
-        expect(token.blockchain_network).to be_nil
+        expect(token.reload._token_type).to eq 'eth'
         expect(token.contract_address).to be_nil
-        expect(token.blockchain_network).to eq 'ropsten'
+        expect(token._blockchain).to eq 'ethereum_ropsten'
         expect(token.symbol).to eq 'ETH'
         expect(token.decimal_places).to eq 18
       end
 
       it 'eq qrc20' do
-        token = create :token, attrs.merge(coin_type: 'qrc20')
+        token = create :token, attrs.merge(_token_type: 'qrc20', _blockchain: :qtum)
         expect(token).to be_valid
-        expect(token.reload.coin_type).to eq 'qrc20'
-        expect(token.blockchain_network).to eq 'qtum_testnet'
+        expect(token.reload._token_type).to eq 'qrc20'
+        expect(token._blockchain).to eq 'qtum'
         expect(token.contract_address).to eq 'a' * 40
-        expect(token.blockchain_network).to be_nil
         expect(token.symbol).to eq 'CBB'
         expect(token.decimal_places).to eq 8
       end
@@ -120,11 +117,11 @@ describe Token do
     end
 
     describe '#contract_address' do
-      let(:token) { create(:token, coin_type: 'qrc20') }
+      let(:token) { create(:token, _token_type: 'qrc20') }
       let(:address) { 'b' * 40 }
 
       it 'valid qtum contract address' do
-        expect(build(:token, coin_type: 'qrc20', contract_address: nil)).to be_valid
+        expect(build(:token, _token_type: 'qrc20', contract_address: nil)).to be_valid
         expect(token.tap { |o| o.contract_address = ('a' * 40).to_s }).to be_valid
         expect(token.tap { |o| o.contract_address = ('A' * 40).to_s }).to be_valid
       end
@@ -150,7 +147,7 @@ describe Token do
   end
 
   describe 'associations' do
-    let!(:token) { create(:token, coin_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery) }
     let!(:project) { create(:project, token: token) }
     let!(:account_token_record) { create(:account_token_record, token: token) }
     let!(:reg_group) { create(:reg_group, token: token) }
@@ -213,14 +210,14 @@ describe Token do
 
   it 'set_predefined_values for coins' do
     %w[eth btc qtum ada eos xtz].each do |coin|
-      token = create :token, coin_type: coin, name: nil
+      token = create :token, _token_type: coin, name: nil
       expect(token.name).to eq Token::COIN_NAMES[coin.to_sym]
       expect(token.symbol).to eq coin.upcase
       expect(token.decimal_places).to eq Token::COIN_DECIMALS[coin.to_sym]
     end
 
     %w[qrc20 erc20].each do |token|
-      expect((create :token, coin_type: token).name).to match(/Token/)
+      expect((create :token, _token_type: token).name).to match(/Token/)
     end
   end
 
@@ -232,7 +229,7 @@ describe Token do
   end
 
   describe 'abi' do
-    let!(:comakery_token) { create(:token, coin_type: :comakery) }
+    let!(:comakery_token) { create(:token, _token_type: :comakery) }
     let!(:token) { create(:token) }
 
     it 'returns correct abi for Comakery Token' do
@@ -254,7 +251,7 @@ describe Token do
 
   describe 'default_reg_group' do
     it 'returns default reg group for token' do
-      expect(create(:token, coin_type: :comakery).default_reg_group).to be_a(RegGroup)
+      expect(create(:token, _token_type: :comakery).default_reg_group).to be_a(RegGroup)
     end
   end
 end

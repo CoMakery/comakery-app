@@ -7,10 +7,10 @@ describe 'shared/_project_header.html.rb' do
     assign :current_account, issuer
   end
 
-  context "with coin_type eq 'erc20'" do
+  context "with _token_type eq 'erc20'" do
     let!(:project) do
       stub_token_symbol
-      create(:project, ethereum_enabled: true, token: create(:token, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'))
+      create(:project, ethereum_enabled: true, token: create(:token, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20'))
     end
 
     before do
@@ -23,9 +23,9 @@ describe 'shared/_project_header.html.rb' do
     end
   end
 
-  context "with coin_type eq 'qrc20'" do
+  context "with _token_type eq 'qrc20'" do
     let!(:project) do
-      create(:project, token: create(:token, ethereum_enabled: true, contract_address: '583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'qrc20', blockchain_network: 'qtum_testnet'))
+      create(:project, token: create(:token, ethereum_enabled: true, contract_address: '583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'qrc20', _blockchain: 'qtum_testnet'))
     end
 
     before do

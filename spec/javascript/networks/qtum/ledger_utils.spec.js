@@ -28,7 +28,7 @@ describe('qtum ledger utils #transferQtumCoins', () => {
     'token': {
       'id'                       : 1,
       'blockchain_network'         : null,
-      'coin_type'                : 'qtum',
+      '_token_type'                : 'qtum',
       'blockchain_network'       : 'qtum_testnet',
       'contract_address'         : null
     }

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe RegGroup do
   describe 'associations' do
-    let!(:token) { create(:token, coin_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery) }
     let!(:reg_group) { create(:reg_group, token: token) }
     let!(:account_token_record) { create(:account_token_record, token: token, reg_group: reg_group) }
     let!(:sending_transfer_rule) { create(:transfer_rule, token: token, sending_group: reg_group, receiving_group: create(:reg_group, token: token)) }
@@ -82,7 +82,7 @@ describe RegGroup do
 
   describe 'default_for' do
     it 'returns default reg group for token' do
-      expect(described_class.default_for(create(:token, coin_type: :comakery))).to be_a(described_class)
+      expect(described_class.default_for(create(:token, _token_type: :comakery))).to be_a(described_class)
     end
   end
 end

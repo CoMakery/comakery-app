@@ -21,8 +21,8 @@ describe('TokenIndex', () => {
       {
         'id'                     : 0,
         'name'                   : 'ERC-TEST',
-        'coinType'               : 'erc20',
-        'blockchainNetwork'      : 'main',
+        '_tokenType'               : 'erc20',
+        '_blockchain'      : 'main',
         'contractAddress': '0x00',
         'symbol'                 : 'ERCT',
         'decimalPlaces'          : 2,
@@ -31,8 +31,8 @@ describe('TokenIndex', () => {
       {
         'id'                     : 1,
         'name'                   : 'QRC-TEST',
-        'coinType'               : 'qrc20',
-        'blockchainNetwork'      : 'test',
+        '_tokenType'               : 'qrc20',
+        '_blockchain'      : 'test',
         'contractAddress'        : '0',
         'symbol'                 : 'QRCT',
         'decimalPlaces'          : 0,
@@ -55,8 +55,8 @@ describe('TokenIndex', () => {
       {
         'id'                     : 0,
         'name'                   : 'ERC-TEST',
-        'coinType'               : 'erc20',
-        'blockchainNetwork'      : 'main',
+        '_tokenType'               : 'erc20',
+        '_blockchain'      : 'main',
         'contractAddress': '0x00',
         'symbol'                 : 'ERCT',
         'decimalPlaces'          : 2,
@@ -65,8 +65,8 @@ describe('TokenIndex', () => {
       {
         'id'                     : 1,
         'name'                   : 'QRC-TEST',
-        'coinType'               : 'qrc20',
-        'blockchainNetwork'      : 'test',
+        '_tokenType'               : 'qrc20',
+        '_blockchain'      : 'test',
         'contractAddress'        : 0,
         'symbol'                 : 'QRCT',
         'decimalPlaces'          : 0,

@@ -10,8 +10,8 @@ class BlockchainTransaction < ApplicationRecord
 
   validates_with TxSupportTokenValidator
   validates :source, :network, :status, presence: true
-  validates :contract_address, presence: true, if: -> { token.coin_type_token? }
-  validates :tx_raw, :tx_hash, presence: true, if: -> { token.coin_type_comakery? && nonce.present? }
+  validates :contract_address, presence: true, if: -> { token._token_type_token? }
+  validates :tx_raw, :tx_hash, presence: true, if: -> { token._token_type_comakery? && nonce.present? }
 
   enum network: %i[main ropsten kovan rinkeby constellation_mainnet constellation_testnet]
   enum status: %i[created pending cancelled succeed failed]
@@ -92,8 +92,8 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def contract
-    if token.coin_type_on_ethereum?
-      @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, network, nonce)
+    if token._token_type_on_ethereum?
+      @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, token.blockchain.explorer_api_host, nonce)
     else
       raise "Contract parsing is not implemented for #{token}"
     end
@@ -103,10 +103,10 @@ class BlockchainTransaction < ApplicationRecord
 
     def populate_data
       self.token ||= blockchain_transactable.token
-      self.network ||= token.blockchain_network
+      self.network ||= token._blockchain
 
-      if token.coin_type_on_ethereum?
-        self.current_block ||= Comakery::Eth.new(token.blockchain_network).current_block
+      if token._token_type_on_ethereum?
+        self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block
       end
     end
 
@@ -115,7 +115,7 @@ class BlockchainTransaction < ApplicationRecord
     #    Return a new contract transaction instance for blockchain_transactable record
 
     def generate_transaction
-      if token.coin_type_comakery? && nonce.present?
+      if token._token_type_comakery? && nonce.present?
         self.tx_raw ||= tx.hex
         self.tx_hash ||= tx.hash
       end

@@ -60,9 +60,9 @@ class Project < ApplicationRecord
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(1)' }
 
-  delegate :coin_type, to: :token, allow_nil: true
-  delegate :coin_type_on_ethereum?, to: :token, allow_nil: true
-  delegate :coin_type_on_qtum?, to: :token, allow_nil: true
+  delegate :_token_type, to: :token, allow_nil: true
+  delegate :_token_type_on_ethereum?, to: :token, allow_nil: true
+  delegate :_token_type_on_qtum?, to: :token, allow_nil: true
   delegate :transitioned_to_ethereum_enabled?, to: :token, allow_nil: true
   delegate :decimal_places_value, to: :token, allow_nil: true
   delegate :populate_token?, to: :token, allow_nil: true
@@ -213,7 +213,7 @@ class Project < ApplicationRecord
   end
 
   def supports_transfer_rules?
-    token&.coin_type_comakery?
+    token&._token_type_comakery?
   end
 
   def create_default_transfer_types

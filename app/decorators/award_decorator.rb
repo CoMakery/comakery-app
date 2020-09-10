@@ -12,7 +12,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def ethereum_transaction_explorer_url
-    object.token&.blockchain_network&.url_for_tx_human(ethereum_transaction_address) # TODO: BC
+    token.blockchain.url_for_tx_human(ethereum_transaction_address)
   end
 
   def json_for_sending_awards
@@ -30,7 +30,7 @@ class AwardDecorator < Draper::Decorator
           only: %i[id]
         },
         token: {
-          only: %i[id contract_address coin_type blockchain_network]
+          only: %i[id contract_address _blockchain blockchain_network _token_type]
         }
       }
     )
@@ -57,11 +57,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def issuer_address
-    if object.token&.coin_type_on_ethereum?
+    if object.token&._token_type_on_ethereum?
       issuer&.ethereum_wallet
-    elsif object.token&.coin_type_on_qtum?
+    elsif object.token&._token_type_on_qtum?
       issuer&.qtum_wallet
-    elsif object.token&.coin_type_ada?
+    elsif object.token&._token_type_ada?
       issuer&.cardano_wallet
     end
   end
@@ -87,14 +87,14 @@ class AwardDecorator < Draper::Decorator
   end
 
   def stimulus_data(controller_name, action)
-    case project.token&.coin_type
+    case project.token&._token_type
     when 'erc20', 'eth', 'comakery'
       {
         'controller' => controller_name,
         'target' => "#{controller_name}.button",
         'action' => "click->#{controller_name}##{action}",
         "#{controller_name}-id" => id,
-        "#{controller_name}-payment-type" => project.token&.coin_type,
+        "#{controller_name}-payment-type" => project.token&._token_type,
         "#{controller_name}-address" => account.ethereum_wallet,
         "#{controller_name}-amount" => total_amount_wei,
         "#{controller_name}-decimal-places" => project.token&.decimal_places&.to_i,

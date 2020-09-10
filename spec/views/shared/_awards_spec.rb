@@ -10,7 +10,7 @@ describe 'shared/_awards.html.rb' do
   let!(:recipient2_auth) { create(:authentication, account: recipient2) }
   let!(:project) do
     stub_token_symbol
-    create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'))
+    create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20'))
   end
   let!(:award_type) { create(:award_type, project: project) }
   let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -59,7 +59,7 @@ describe 'shared/_awards.html.rb' do
       before do
         project.token.ethereum_enabled = false
         project.token.contract_address = nil
-        project.token.coin_type = nil
+        project.token._token_type = nil
       end
       it 'the column header is hidden' do
         render
@@ -84,11 +84,11 @@ describe 'shared/_awards.html.rb' do
           before do
             assign :current_account, issuer
           end
-          context 'coin_type eq erc20' do
+          context '_token_type eq erc20' do
             before do
               recipient1.ethereum_wallet = '0x123'
               project.token.contract_address = '0x' + 'a' * 40
-              project.token.coin_type = 'erc20'
+              project.token._token_type = 'erc20'
             end
             it 'display Metamask icon on Send button' do
               render
@@ -96,10 +96,10 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
-          context 'coin_type eq eth' do
+          context '_token_type eq eth' do
             before do
               recipient1.ethereum_wallet = '0x123'
-              project.token.coin_type = 'eth'
+              project.token._token_type = 'eth'
             end
             it 'display Metamask icon on Send button' do
               render
@@ -107,9 +107,9 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
-          context 'coin_type eq qrc20' do
+          context '_token_type eq qrc20' do
             let!(:project2) do
-              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: 'a' * 40, coin_type: 'qrc20'))
+              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: 'a' * 40, _token_type: 'qrc20'))
             end
             let!(:award_type2) { create(:award_type, project: project2) }
             let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -125,9 +125,9 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
-          context 'coin_type eq qtum' do
+          context '_token_type eq qtum' do
             let!(:project2) do
-              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: 'a' * 40, coin_type: 'qtum'))
+              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: 'a' * 40, _token_type: 'qtum'))
             end
             let!(:award_type2) { create(:award_type, project: project2) }
             let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -143,9 +143,9 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
-          context 'coin_type eq ada' do
+          context '_token_type eq ada' do
             let!(:project2) do
-              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, coin_type: 'ada'))
+              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, _token_type: 'ada'))
             end
             let!(:award_type2) { create(:award_type, project: project2) }
             let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -161,9 +161,9 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
-          context 'coin_type eq eos' do
+          context '_token_type eq eos' do
             let!(:project2) do
-              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, coin_type: 'eos'))
+              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, _token_type: 'eos'))
             end
             let!(:award_type2) { create(:award_type, project: project2) }
             let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -179,9 +179,9 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
-          context 'coin_type eq xtz' do
+          context '_token_type eq xtz' do
             let!(:project2) do
-              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, coin_type: 'xtz'))
+              create(:project, account: issuer, token: create(:token, ethereum_enabled: true, _token_type: 'xtz'))
             end
             let!(:award_type2) { create(:award_type, project: project2) }
             let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }

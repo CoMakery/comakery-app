@@ -84,7 +84,7 @@ class TokenIndex extends React.Component {
                     payment type
                   </div>
                   <div className='token-index--view--info--item--value'>
-                    {this.state.selectedToken.coinType ? this.state.selectedToken.coinType.toUpperCase() : null}
+                    {this.state.selectedToken._tokenType ? this.state.selectedToken._tokenType.toUpperCase() : null}
                   </div>
                 </div>
 
@@ -110,20 +110,20 @@ class TokenIndex extends React.Component {
                   </div>
                 }
 
-                { this.state.selectedToken.blockchainNetwork &&
+                { this.state.selectedToken._blockchain &&
                   <div className='token-index--view--info--item'>
                     <div className='token-index--view--info--item--name'>
                       blockchain network
                     </div>
                     <div className='token-index--view--info--item--value'>
                       { (() => {
-                        switch (this.state.selectedToken.blockchainNetwork) {
+                        switch (this.state.selectedToken._blockchain) {
                           case 'qtum_mainnet':
                             return 'Main QTUM Network'
                           case 'qtum_testnet':
                             return 'Test QTUM Network'
                           default:
-                            return this.state.selectedToken.blockchainNetwork
+                            return this.state.selectedToken._blockchain
                         }
                       })()
                       }

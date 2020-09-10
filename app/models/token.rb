@@ -99,14 +99,17 @@ class Token < ApplicationRecord
   validates :name, uniqueness: true
 
   validate :valid_ethereum_enabled
-  validate :check_contract_address_exist_on_blockchain_network
   validates :contract_address, presence: true
 
   before_validation :populate_token_symbol
   before_validation :set_predefined_values
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
-  after_create :default_reg_group, if: -> { coin_type_comakery? }
+  after_create :default_reg_group, if: -> { _token_type_comakery? }
+
+  def self.blockchain_for(name)
+    "Blockchain::#{name.camelize}".constantize.new
+  end
 
   def blockchain
     "Blockchain::#{_blockchain.camelize}".constantize.new
@@ -116,16 +119,16 @@ class Token < ApplicationRecord
     "TokenType::#{_token_type.camelize}".constantize.new
   end
 
-  def coin_type_token?
-    coin_type_erc20? || coin_type_qrc20? || coin_type_comakery?
+  def _token_type_token?
+    _token_type_erc20? || _token_type_qrc20? || _token_type_comakery?
   end
 
-  def coin_type_on_ethereum?
-    coin_type_erc20? || coin_type_eth? || coin_type_comakery?
+  def _token_type_on_ethereum?
+    _token_type_erc20? || _token_type_eth? || _token_type_comakery?
   end
 
-  def coin_type_on_qtum?
-    coin_type_qrc20? || coin_type_qtum?
+  def _token_type_on_qtum?
+    _token_type_qrc20? || _token_type_qtum?
   end
 
   def transitioned_to_ethereum_enabled?
@@ -137,11 +140,11 @@ class Token < ApplicationRecord
   end
 
   def populate_token?
-    coin_type_on_ethereum? && blockchain_network.present? && contract_address.present? && (symbol.blank? || decimal_places.blank?)
+    _token_type_on_ethereum? && _blockchain.present? && contract_address.present? && (symbol.blank? || decimal_places.blank?)
   end
 
   def abi
-    if coin_type_comakery?
+    if _token_type_comakery?
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
     else
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
@@ -159,16 +162,16 @@ class Token < ApplicationRecord
   private
 
   def set_predefined_values
-    if coin_type && !coin_type_token?
-      self.name = COIN_NAMES[coin_type.to_sym]
-      self.symbol = coin_type.upcase
-      self.decimal_places = COIN_DECIMALS[coin_type.to_sym]
+    if _token_type && !_token_type_token?
+      self.name = token_type.name
+      self.symbol = token_type.symbol
+      self.decimal_places = token_type.decimals
     end
   end
 
   def populate_token_symbol
     if populate_token?
-      web3 = Comakery::Web3.new(blockchain_network)
+      web3 = Comakery::Web3.new(blockchain.explorer_api_host)
       symbol, decimals = web3.fetch_symbol_and_decimals(contract_address)
       self.symbol = symbol if symbol.blank?
       self.decimal_places = decimals if decimal_places.blank?
@@ -189,18 +192,6 @@ class Token < ApplicationRecord
   def valid_ethereum_enabled
     if ethereum_enabled_changed? && ethereum_enabled == false
       errors[:ethereum_enabled] << 'cannot be set to false after it has been set to true'
-    end
-  end
-
-  def contract_address_exist_on_network?(symbol)
-    if (contract_address_changed? || blockchain_network_changed?) && symbol.blank? && contract_address?
-      errors[:contract_address] << 'should exist on the ethereum network'
-    end
-  end
-
-  def check_contract_address_exist_on_blockchain_network
-    if (contract_address_changed? || blockchain_network_changed?) && symbol.blank? && contract_address?
-      errors[:contract_address] << 'should exist on the qtum network'
     end
   end
 end
