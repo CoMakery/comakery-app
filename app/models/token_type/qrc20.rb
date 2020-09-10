@@ -35,7 +35,7 @@ class TokenType::Qrc20 < TokenType
   # Does it have support for smart contracts?
   # @return [Boolean] flag
   def operates_with_smart_contracts?
-    false
+    true
   end
 
   # Does it have custom account data stored on chain?
