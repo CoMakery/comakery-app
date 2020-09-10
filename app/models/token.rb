@@ -13,12 +13,12 @@ class Token < ApplicationRecord
 
   validates :name, :denomination, presence: true
   validates :name, uniqueness: true
-  validates :contract_address, presence: true
+  validates :contract_address, presence: true, if: -> { token_type.operates_with_smart_contracts? }
 
   before_validation :populate_token_symbol
   before_validation :set_predefined_values
   before_save :enable_ethereum
-  after_create :default_reg_group, if: -> { _token_type_comakery_security_token? }
+  after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 
   scope :listed, -> { where unlisted: false }
 
@@ -83,15 +83,15 @@ class Token < ApplicationRecord
   end
 
   def _token_type_token?
-    _token_type_erc20? || _token_type_qrc20? || _token_type_comakery_security_token?
+    token_type.operates_with_smart_contracts?
   end
 
   def _token_type_on_ethereum?
-    _token_type_erc20? || _token_type_eth? || _token_type_comakery_security_token?
+    blockchain.name.match?(/^Ethereum/)
   end
 
   def _token_type_on_qtum?
-    _token_type_qrc20? || _token_type_qtum?
+    blockchain.name.match?(/^Qtum/)
   end
 
   def decimal_places_value
