@@ -64,13 +64,10 @@ class Token < ApplicationRecord
 
   validates :name, :denomination, presence: true
   validates :name, uniqueness: true
-
-  validate :valid_ethereum_enabled
   validates :contract_address, presence: true
 
   before_validation :populate_token_symbol
   before_validation :set_predefined_values
-  before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
   after_create :default_reg_group, if: -> { _token_type_comakery_security_token? }
 
@@ -100,10 +97,6 @@ class Token < ApplicationRecord
 
   def _token_type_on_qtum?
     _token_type_qrc20? || _token_type_qtum?
-  end
-
-  def transitioned_to_ethereum_enabled?
-    @transitioned_to_ethereum_enabled
   end
 
   def decimal_places_value
@@ -151,18 +144,6 @@ class Token < ApplicationRecord
   end
 
   def enable_ethereum
-    self.ethereum_enabled = contract_address.present? unless ethereum_enabled
-  end
-
-  def set_transitioned_to_ethereum_enabled
-    @transitioned_to_ethereum_enabled = ethereum_enabled_changed? &&
-                                        ethereum_enabled && contract_address.blank?
-    true # don't halt filter
-  end
-
-  def valid_ethereum_enabled
-    if ethereum_enabled_changed? && ethereum_enabled == false
-      errors[:ethereum_enabled] << 'cannot be set to false after it has been set to true'
-    end
+    self.ethereum_enabled = contract_address.present? && _token_type_on_ethereum?
   end
 end

@@ -55,21 +55,6 @@ describe 'shared/_awards.html.rb' do
   end
 
   describe 'Blockchain Transaction column' do
-    describe 'when project is not ethereum enabled' do
-      before do
-        project.token.ethereum_enabled = false
-        project.token.contract_address = nil
-        project.token._token_type = nil
-      end
-      it 'the column header is hidden' do
-        render
-        expect(rendered).not_to have_css '.header.blockchain-address'
-      end
-      it 'the column cells are hidden' do
-        render
-        expect(rendered).not_to have_css '.blockchain-address'
-      end
-    end
     describe 'when project is ethereum enabled' do
       describe 'with award ethereum transaction address' do
         before { award1.ethereum_transaction_address = '0x34567890123456789' }

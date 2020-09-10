@@ -111,7 +111,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.token.ethereum_enabled && project.token._token_type_on_ethereum? &&
+    project.token._token_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end

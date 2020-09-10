@@ -88,34 +88,6 @@ describe Token do
       end
     end
 
-    describe 'ethereum_enabled' do
-      let(:token) { create(:token) }
-
-      it { expect(token.ethereum_enabled).to eq(false) }
-
-      it 'can be set to true' do
-        token.ethereum_enabled = true
-        token.save!
-        token.reload
-        expect(token.ethereum_enabled).to eq(true)
-      end
-
-      it 'if set to false can be set to false' do
-        token.ethereum_enabled = false
-        token.save!
-        token.ethereum_enabled = false
-        expect(token).to be_valid
-      end
-
-      it 'once set to true it cannot be set to false' do
-        token.ethereum_enabled = true
-        token.save!
-        token.ethereum_enabled = false
-        expect(token.tap(&:valid?).errors.full_messages.first)
-          .to eq('Ethereum enabled cannot be set to false after it has been set to true')
-      end
-    end
-
     describe '#contract_address' do
       let(:token) { create(:token, _token_type: 'qrc20') }
       let(:address) { 'b' * 40 }
@@ -172,33 +144,6 @@ describe Token do
 
   it 'enum of denominations should contain the platform wide currencies' do
     expect(described_class.denominations.map { |x, _| x }.sort).to eq(Comakery::Currency::DENOMINATIONS.keys.sort)
-  end
-
-  describe '#transitioned_to_ethereum_enabled?' do
-    it 'triggers if new token is saved with ethereum_enabled = true' do
-      token = build(:token, ethereum_enabled: true)
-      token.save!
-      expect(token.transitioned_to_ethereum_enabled?).to eq(true)
-    end
-
-    it 'triggers if existing token is saved with ethereum_enabled = true' do
-      token = create(:token, ethereum_enabled: false)
-      token.update!(ethereum_enabled: true)
-      expect(token.transitioned_to_ethereum_enabled?).to eq(true)
-    end
-
-    it 'does not trigger if new token is saved with ethereum_enabled = false' do
-      token = build(:token, ethereum_enabled: false)
-      token.save!
-      expect(token.transitioned_to_ethereum_enabled?).to eq(false)
-    end
-
-    it 'is false if an existing token with an account is transitioned from ethereum_enabled = false to true' do
-      stub_web3_fetch
-      token = create(:token, ethereum_enabled: false, contract_address: '0x' + '7' * 40)
-      token.update!(ethereum_enabled: true)
-      expect(token.transitioned_to_ethereum_enabled?).to eq(false)
-    end
   end
 
   it 'populate_token_symbol' do

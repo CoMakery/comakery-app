@@ -118,7 +118,6 @@ class TokensController < ApplicationController
   def token_params
     params.require(:token).permit(
       :name,
-      :ethereum_enabled,
       :logo_image,
       :denomination,
       :_token_type,
