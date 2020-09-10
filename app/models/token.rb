@@ -2,19 +2,6 @@ class Token < ApplicationRecord
   include EthereumAddressable
   include QtumContractAddressable
 
-  BLOCKCHAIN_NAMES = {
-    erc20: 'ethereum',
-    eth: 'ethereum',
-    comakery: 'ethereum',
-    qrc20: 'qtum',
-    qtum: 'qtum',
-    ada: 'cardano',
-    btc: 'bitcoin',
-    eos: 'eos',
-    xtz: 'tezos',
-    dag: 'constellation'
-  }.freeze
-
   COIN_DECIMALS = {
     eth: 18,
     qtum: 8,

@@ -139,7 +139,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def blockchain_name
-    Token::BLOCKCHAIN_NAMES[token&._token_type&.to_sym]
+    token&.blockchain&.name
   end
 
   def step_for_amount_input

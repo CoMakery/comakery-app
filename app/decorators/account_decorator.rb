@@ -73,8 +73,7 @@ class AccountDecorator < Draper::Decorator
 
   def can_receive_awards?(project)
     return false unless project.token&._token_type?
-    blockchain_name = Token::BLOCKCHAIN_NAMES[project.token._token_type.to_sym]
-    account&.send("#{blockchain_name}_wallet?")
+    account&.send("#{project.token&.blockchain&.name}_wallet?")
   end
 
   def can_send_awards?(project)
