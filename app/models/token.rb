@@ -116,7 +116,11 @@ class Token < ApplicationRecord
   end
 
   def token_type
-    "TokenType::#{_token_type.camelize}".constantize.new
+    "TokenType::#{_token_type.camelize}".constantize.new(
+      contract_address: contract_address,
+      abi: abi,
+      blockchain: blockchain
+    )
   end
 
   def _token_type_token?
