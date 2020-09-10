@@ -1,8 +1,6 @@
 class Token < ApplicationRecord
-  include EthereumAddressable
-  include QtumContractAddressable
-
   nilify_blanks
+
   attachment :logo_image, type: :image
 
   has_many :projects
@@ -13,8 +11,22 @@ class Token < ApplicationRecord
   has_many :transfer_rules_synced, -> { where synced: true }
   has_many :blockchain_transactions
 
+  validates :name, :denomination, presence: true
+  validates :name, uniqueness: true
+  validates :contract_address, presence: true
+
+  before_validation :populate_token_symbol
+  before_validation :set_predefined_values
+  before_save :enable_ethereum
+  after_create :default_reg_group, if: -> { _token_type_comakery_security_token? }
+
   scope :listed, -> { where unlisted: false }
 
+  enum denomination: {
+    USD: 0,
+    BTC: 1,
+    ETH: 2
+  }
   enum coin_type: {
     erc20: 'ERC20',
     eth: 'ETH',
@@ -27,20 +39,12 @@ class Token < ApplicationRecord
     comakery: 'Comakery Security Token',
     dag: 'DAG'
   }, _prefix: :coin_type
-
-  enum denomination: {
-    USD: 0,
-    BTC: 1,
-    ETH: 2
-  }
-
   enum ethereum_network: {
     main:    'Main Ethereum Network',
     ropsten: 'Ropsten Test Network',
     kovan:   'Kovan Test Network',
     rinkeby: 'Rinkeby Test Network'
   }, _prefix: :deprecated
-
   enum blockchain_network: {
     bitcoin_mainnet: 'Main Bitcoin Network',
     bitcoin_testnet: 'Test Bitcoin Network',
@@ -61,15 +65,6 @@ class Token < ApplicationRecord
 
   enum _blockchain: Blockchain.list, _prefix: :_blockchain
   enum _token_type: TokenType.list, _prefix: :_token_type
-
-  validates :name, :denomination, presence: true
-  validates :name, uniqueness: true
-  validates :contract_address, presence: true
-
-  before_validation :populate_token_symbol
-  before_validation :set_predefined_values
-  before_save :enable_ethereum
-  after_create :default_reg_group, if: -> { _token_type_comakery_security_token? }
 
   def self.blockchain_for(name)
     "Blockchain::#{name.camelize}".constantize.new
