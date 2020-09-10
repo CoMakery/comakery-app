@@ -300,7 +300,7 @@ class Mom
       name: "ComakeryToken-#{SecureRandom.hex(20)}",
       symbol: "XYZ#{SecureRandom.hex(20)}",
       logo_image: dummy_image,
-      _token_type: :comakery,
+      _token_type: :comakery_security_token,
       decimal_places: 18,
       _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
@@ -315,7 +315,7 @@ class Mom
       logo_image: dummy_image,
       _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
-      _token_type: :comakery,
+      _token_type: :comakery_security_token,
       decimal_places: 0
     }
     Token.new(defaults.merge(attrs))
@@ -616,7 +616,7 @@ class Mom
   def erc20_contract(**attrs)
     token = create(
       :token,
-      _token_type: :comakery,
+      _token_type: :comakery_security_token,
       _blockchain: :ethereum_ropsten,
       contract_address: build(:ethereum_contract_address),
       symbol: 'DUM',

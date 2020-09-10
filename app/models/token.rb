@@ -105,7 +105,7 @@ class Token < ApplicationRecord
   before_validation :set_predefined_values
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
-  after_create :default_reg_group, if: -> { _token_type_comakery? }
+  after_create :default_reg_group, if: -> { _token_type_comakery_security_token? }
 
   def self.blockchain_for(name)
     "Blockchain::#{name.camelize}".constantize.new
@@ -124,11 +124,11 @@ class Token < ApplicationRecord
   end
 
   def _token_type_token?
-    _token_type_erc20? || _token_type_qrc20? || _token_type_comakery?
+    _token_type_erc20? || _token_type_qrc20? || _token_type_comakery_security_token?
   end
 
   def _token_type_on_ethereum?
-    _token_type_erc20? || _token_type_eth? || _token_type_comakery?
+    _token_type_erc20? || _token_type_eth? || _token_type_comakery_security_token?
   end
 
   def _token_type_on_qtum?
@@ -148,7 +148,7 @@ class Token < ApplicationRecord
   end
 
   def abi
-    if _token_type_comakery?
+    if _token_type_comakery_security_token?
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
     else
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))

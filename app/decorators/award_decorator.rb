@@ -88,7 +88,7 @@ class AwardDecorator < Draper::Decorator
 
   def stimulus_data(controller_name, action)
     case project.token&._token_type
-    when 'erc20', 'eth', 'comakery'
+    when 'erc20', 'eth', 'comakery_security_token'
       {
         'controller' => controller_name,
         'target' => "#{controller_name}.button",

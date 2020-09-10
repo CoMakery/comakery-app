@@ -1,4 +1,4 @@
-class TokenType::Comakery < TokenType::Erc20
+class TokenType::ComakerySecurityToken < TokenType::Erc20
   # Generated template for implementing a new token type subclass
   # See: rails g token_type -h
 

@@ -213,7 +213,7 @@ class Project < ApplicationRecord
   end
 
   def supports_transfer_rules?
-    token&._token_type_comakery?
+    token&._token_type_comakery_security_token?
   end
 
   def create_default_transfer_types

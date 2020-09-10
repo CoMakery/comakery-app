@@ -8,7 +8,7 @@ class TokenDecorator < Draper::Decorator
 
   def eth_data(controller_name = 'ethereum')
     case _token_type
-    when 'erc20', 'eth', 'comakery'
+    when 'erc20', 'eth', 'comakery_security_token'
       {
         "#{controller_name}-payment-type" => _token_type,
         "#{controller_name}-amount" => 0,

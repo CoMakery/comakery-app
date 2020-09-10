@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::RegGroupsController, type: :controller do
-  let!(:token) { create(:token, _token_type: :comakery) }
+  let!(:token) { create(:token, _token_type: :comakery_security_token) }
   let!(:project) { create(:project, visibility: :public_listed, token: token) }
   let!(:reg_group) { create(:reg_group, token: token) }
 

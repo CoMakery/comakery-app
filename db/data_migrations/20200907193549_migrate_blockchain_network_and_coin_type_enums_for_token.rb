@@ -58,7 +58,7 @@ class MigrateBlockchainNetworkAndCoinTypeEnumsForToken < ActiveRecord::DataMigra
              when 'xtz'
                :xtz
              when 'comakery'
-               :comakery
+               :comakery_security_token
              when 'dag'
                :dag
       end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe TransferRule do
   describe 'associations' do
-    let!(:token) { create(:token, _token_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery_security_token) }
     let!(:sending_group) { create(:reg_group, token: token) }
     let!(:receiving_group) { create(:reg_group, token: token) }
     let!(:transfer_rule) { create(:transfer_rule, token: token, sending_group: sending_group, receiving_group: receiving_group) }

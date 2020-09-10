@@ -512,7 +512,7 @@ describe Project do
 
   describe 'supports_transfer_rules?' do
     let(:project) { create :project }
-    let(:project_w_comakery_token) { create :project, token: create(:token, _token_type: :comakery) }
+    let(:project_w_comakery_token) { create :project, token: create(:token, _token_type: :comakery_security_token) }
 
     it 'returns true for projects with comakery token' do
       expect(project_w_comakery_token.supports_transfer_rules?).to be_truthy

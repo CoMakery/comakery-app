@@ -147,7 +147,7 @@ describe Token do
   end
 
   describe 'associations' do
-    let!(:token) { create(:token, _token_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery_security_token) }
     let!(:project) { create(:project, token: token) }
     let!(:account_token_record) { create(:account_token_record, token: token) }
     let!(:reg_group) { create(:reg_group, token: token) }
@@ -229,7 +229,7 @@ describe Token do
   end
 
   describe 'abi' do
-    let!(:comakery_token) { create(:token, _token_type: :comakery) }
+    let!(:comakery_token) { create(:token, _token_type: :comakery_security_token) }
     let!(:token) { create(:token) }
 
     it 'returns correct abi for Comakery Token' do
@@ -251,7 +251,7 @@ describe Token do
 
   describe 'default_reg_group' do
     it 'returns default reg group for token' do
-      expect(create(:token, _token_type: :comakery).default_reg_group).to be_a(RegGroup)
+      expect(create(:token, _token_type: :comakery_security_token).default_reg_group).to be_a(RegGroup)
     end
   end
 end

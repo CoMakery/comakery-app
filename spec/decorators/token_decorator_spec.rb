@@ -21,7 +21,7 @@ describe TokenDecorator do
   end
 
   describe 'eth_data' do
-    let!(:token) { create(:token, _token_type: :comakery) }
+    let!(:token) { create(:token, _token_type: :comakery_security_token) }
 
     it 'returns data for ethereum_controller.js' do
       data = token.decorate.eth_data
