@@ -213,7 +213,7 @@ describe Token do
       token = create :token, _token_type: coin, name: nil
       expect(token.name).to eq Token::COIN_NAMES[coin.to_sym]
       expect(token.symbol).to eq coin.upcase
-      expect(token.decimal_places).to eq Token::COIN_DECIMALS[coin.to_sym]
+      expect(token.decimal_places).to eq token.token_type.decimals
     end
 
     %w[qrc20 erc20].each do |token|
