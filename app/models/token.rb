@@ -71,11 +71,11 @@ class Token < ApplicationRecord
   end
 
   def blockchain
-    "Blockchain::#{_blockchain.camelize}".constantize.new
+    @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new
   end
 
   def token_type
-    "TokenType::#{_token_type.camelize}".constantize.new(
+    @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(
       contract_address: contract_address,
       abi: abi,
       blockchain: blockchain
