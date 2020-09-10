@@ -2,16 +2,6 @@ class Token < ApplicationRecord
   include EthereumAddressable
   include QtumContractAddressable
 
-  COIN_NAMES = {
-    eth: 'Ether',
-    qtum: 'Qtum',
-    ada: 'Cardano',
-    btc: 'Bitcoin',
-    eos: 'EOSIO',
-    xtz: 'Tezos',
-    dag: 'DAG'
-  }.freeze
-
   nilify_blanks
   attachment :logo_image, type: :image
 

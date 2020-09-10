@@ -211,7 +211,7 @@ describe Token do
   it 'set_predefined_values for coins' do
     %w[eth btc qtum ada eos xtz].each do |coin|
       token = create :token, _token_type: coin, name: nil
-      expect(token.name).to eq Token::COIN_NAMES[coin.to_sym]
+      expect(token.name).to eq token.token_type.name
       expect(token.symbol).to eq coin.upcase
       expect(token.decimal_places).to eq token.token_type.decimals
     end
