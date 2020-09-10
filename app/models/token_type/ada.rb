@@ -20,15 +20,15 @@ class TokenType::Ada < TokenType
     6
   end
 
-  # Contract class if implemented
+  # Contract instance if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20
+    # Comakery::Eth::Contract::Erc20.new
   end
 
-  # Transaction class if implemented
+  # Transaction instance if implemented
   # @return [nil]
   def tx
-    # Comakery::Eth::Tx
+    # Comakery::Eth::Tx.new
   end
 end

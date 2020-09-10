@@ -20,16 +20,16 @@ class TokenType::Erc20 < TokenType
     @decimals ||= contract.decimals.to_i
   end
 
-  # Contract class if implemented
+  # Contract instance if implemented
   # @return [nil]
   def contract
     @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, abi, blockchain.explorer_api_host, nil)
   end
 
-  # Transaction class if implemented
+  # Transaction instance if implemented
   # @return [nil]
   def tx
-    Comakery::Eth::Tx::Erc20
+    # Comakery::Eth::Tx.new::Erc20
   end
 
   def contract_address

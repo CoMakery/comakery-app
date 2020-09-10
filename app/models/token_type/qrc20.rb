@@ -20,15 +20,15 @@ class TokenType::Qrc20 < TokenType
     nil
   end
 
-  # Contract class if implemented
+  # Contract instance if implemented
   # @return [nil]
   def contract
     Comakery::Qtum::Contract::Qrc20
   end
 
-  # Transaction class if implemented
+  # Transaction instance if implemented
   # @return [nil]
   def tx
-    # Comakery::Eth::Tx
+    # Comakery::Eth::Tx.new
   end
 end
