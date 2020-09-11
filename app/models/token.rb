@@ -12,8 +12,7 @@ class Token < ApplicationRecord
   has_many :blockchain_transactions
 
   validates :name, uniqueness: true
-  validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, :logo_image_id, :unlisted, presence: true
-  validates :token_frozen, presence: true, if: -> { token_type.supports_token_freeze? }
+  validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, presence: true
   validate :valid_contract_address, if: -> { token_type.operates_with_smart_contracts? }
 
   before_validation :set_values_from_token_type

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Blockchain::BlockchainTransactionSyncJob, type: :job, vcr: true do
+RSpec.describe BlockchainJob::BlockchainTransactionSyncJob, type: :job, vcr: true do
   let!(:created_blockchain_transaction) { create(:blockchain_transaction) }
   let!(:succeed_blockchain_transaction) do
     create(
@@ -28,12 +28,12 @@ RSpec.describe Blockchain::BlockchainTransactionSyncJob, type: :job, vcr: true d
 
   it 'reschedules itself on failed sync' do
     ActiveJob::Base.queue_adapter = :test
-    expect { described_class.perform_now(unconfirmed_blockchain_transaction) }.to have_enqueued_job(Blockchain::BlockchainTransactionSyncJob)
+    expect { described_class.perform_now(unconfirmed_blockchain_transaction) }.to have_enqueued_job(BlockchainJob::BlockchainTransactionSyncJob)
   end
 
   it 'reschedules itself on a record waiting sync' do
     waiting_blockchain_transaction.update(synced_at: 1.year.from_now)
     ActiveJob::Base.queue_adapter = :test
-    expect { described_class.perform_now(waiting_blockchain_transaction) }.to have_enqueued_job(Blockchain::BlockchainTransactionSyncJob)
+    expect { described_class.perform_now(waiting_blockchain_transaction) }.to have_enqueued_job(BlockchainJob::BlockchainTransactionSyncJob)
   end
 end

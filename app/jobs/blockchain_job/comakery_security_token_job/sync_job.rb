@@ -1,5 +1,5 @@
-module Blockchain
-  module ComakerySecurityToken
+module BlockchainJob
+  module ComakerySecurityTokenJob
     class SyncJob < ApplicationJob
       queue_as :default
 

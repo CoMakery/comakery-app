@@ -1,6 +1,6 @@
-module Blockchain
-  module ComakerySecurityToken
-    class TokenSyncJob < Blockchain::ComakerySecurityToken::SyncJob
+module BlockchainJob
+  module ComakerySecurityTokenJob
+    class TokenSyncJob < BlockchainJob::ComakerySecurityTokenJob::SyncJob
       def sync
         @record.token_frozen = @contract.isPaused
 
@@ -10,7 +10,7 @@ module Blockchain
       def sync_accounts
         @record.accounts.distinct.where.not(ethereum_wallet: nil).each do |account|
           record = @token.account_token_records.find_or_create_by(account: account)
-          Blockchain::ComakerySecurityToken::AccountSyncJob.perform_later(record)
+          BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob.perform_later(record)
         end
       end
     end

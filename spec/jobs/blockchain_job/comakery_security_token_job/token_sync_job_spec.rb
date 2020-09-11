@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Blockchain::ComakerySecurityToken::TokenSyncJob, type: :job do
+RSpec.describe BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob, type: :job do
   let!(:token) { stub_blockchain_sync && create(:token, _token_type: :comakery_security_token, _blockchain: 'ethereum', contract_address: '0x0000000000000000000000000000000000000000') }
   let!(:invalid_token) { stub_blockchain_sync && create(:token) }
   let!(:account) { create(:account, ethereum_wallet: '0x0000000000000000000000000000000000000000') }
@@ -17,6 +17,6 @@ RSpec.describe Blockchain::ComakerySecurityToken::TokenSyncJob, type: :job do
 
   it 'schedules sync jobs for belonging account records' do
     ActiveJob::Base.queue_adapter = :test
-    expect { described_class.perform_now(token) }.to have_enqueued_job(Blockchain::ComakerySecurityToken::AccountSyncJob)
+    expect { described_class.perform_now(token) }.to have_enqueued_job(BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob)
   end
 end

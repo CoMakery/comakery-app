@@ -1,6 +1,6 @@
-module Blockchain
-  module ComakerySecurityToken
-    class AccountSyncJob < Blockchain::ComakerySecurityToken::SyncJob
+module BlockchainJob
+  module ComakerySecurityTokenJob
+    class AccountSyncJob < BlockchainJob::ComakerySecurityTokenJob::SyncJob
       def sync
         @address = @record.account.ethereum_wallet
 

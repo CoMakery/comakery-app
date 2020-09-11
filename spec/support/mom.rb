@@ -290,7 +290,8 @@ class Mom
     defaults = {
       name: "Token-#{SecureRandom.hex(20)}",
       symbol: "TKN#{SecureRandom.hex(20)}",
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
+      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      token_frozen: false
     }
     Token.new(defaults.merge(attrs))
   end
@@ -303,7 +304,8 @@ class Mom
       _token_type: :comakery_security_token,
       decimal_places: 18,
       _blockchain: :ethereum_ropsten,
-      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+      token_frozen: false
     }
     Token.new(defaults.merge(attrs))
   end
@@ -316,7 +318,8 @@ class Mom
       _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
       _token_type: :comakery_security_token,
-      decimal_places: 0
+      decimal_places: 0,
+      token_frozen: false
     }
     Token.new(defaults.merge(attrs))
   end

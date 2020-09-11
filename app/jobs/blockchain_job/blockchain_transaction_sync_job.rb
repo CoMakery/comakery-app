@@ -1,4 +1,4 @@
-module Blockchain
+module BlockchainJob
   class BlockchainTransactionSyncJob < ApplicationJob
     queue_as :default
 
