@@ -4,6 +4,7 @@ shared_examples 'a token type' do
     it { is_expected.to respond_to(:symbol) }
     it { is_expected.to respond_to(:decimals) }
     it { is_expected.to respond_to(:contract) }
+    it { is_expected.to respond_to(:abi) }
     it { is_expected.to respond_to(:tx) }
     it { is_expected.to respond_to(:operates_with_smart_contracts?) }
     it { is_expected.to respond_to(:operates_with_account_records?) }

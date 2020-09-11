@@ -14,7 +14,7 @@ class Token < ApplicationRecord
   validates :name, uniqueness: true
   validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, :logo_image_id, :unlisted, presence: true
   validates :token_frozen, presence: true, if: -> { token_type.supports_token_freeze? }
-  validates :contract_address, presence: true, if: -> { token_type.operates_with_smart_contracts? }
+  validate :valid_contract_address, if: -> { token_type.operates_with_smart_contracts? }
 
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
@@ -110,5 +110,11 @@ class Token < ApplicationRecord
       self.decimal_places ||= token_type.decimals
 
       self.ethereum_enabled ||= (token_type.operates_with_smart_contracts? && _token_type_on_ethereum?) # Deprecated
+    end
+
+    def valid_contract_address
+      blockchain.validate_addr(contract_address)
+    rescue Blockchain::Address::ValidationError => e
+      errors.add(:contract_address, e.message)
     end
 end

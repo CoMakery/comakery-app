@@ -85,6 +85,12 @@ class Blockchain::Eos < Blockchain
   # @raise [Blockchain::Address::ValidationError]
   # @return [void]
   def validate_addr(addr)
-    raise Blockchain::Address::ValidationError if addr.blank?
+    validate_addr_format(addr)
+  end
+
+  def validate_addr_format(addr)
+    if addr !~ /\A[a-z1-5]{12}\z/
+      raise Blockchain::Address::ValidationError("should only include letters 'a-z' and digits '1-5', and have length 12 characters")
+    end
   end
 end
