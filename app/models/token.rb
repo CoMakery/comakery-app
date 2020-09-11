@@ -11,13 +11,12 @@ class Token < ApplicationRecord
   has_many :transfer_rules_synced, -> { where synced: true }
   has_many :blockchain_transactions
 
-  validates :name, :denomination, presence: true
   validates :name, uniqueness: true
+  validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, :logo_image_id, :unlisted, presence: true
+  validates :token_frozen, presence: true, if: -> { token_type.supports_token_freeze? }
   validates :contract_address, presence: true, if: -> { token_type.operates_with_smart_contracts? }
 
-  before_validation :populate_token_symbol
-  before_validation :set_predefined_values
-  before_save :enable_ethereum
+  before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 
   scope :listed, -> { where unlisted: false }
@@ -38,13 +37,13 @@ class Token < ApplicationRecord
     xtz: 'XTZ',
     comakery: 'Comakery Security Token',
     dag: 'DAG'
-  }, _prefix: :coin_type
+  }, _prefix: :coin_type # Deprecated
   enum ethereum_network: {
     main:    'Main Ethereum Network',
     ropsten: 'Ropsten Test Network',
     kovan:   'Kovan Test Network',
     rinkeby: 'Rinkeby Test Network'
-  }, _prefix: :deprecated
+  }, _prefix: :deprecated # Deprecated
   enum blockchain_network: {
     bitcoin_mainnet: 'Main Bitcoin Network',
     bitcoin_testnet: 'Test Bitcoin Network',
@@ -61,10 +60,12 @@ class Token < ApplicationRecord
     ropsten: 'Ropsten Test Network',
     kovan:   'Kovan Test Network',
     rinkeby: 'Rinkeby Test Network'
-  }
+  } # Deprecated
 
   enum _blockchain: Blockchain.list, _prefix: :_blockchain
   enum _token_type: TokenType.list, _prefix: :_token_type
+
+  delegate :contract, :abi, to: :token_type
 
   def self.blockchain_for(name)
     "Blockchain::#{name.camelize}".constantize.new
@@ -76,9 +77,8 @@ class Token < ApplicationRecord
 
   def token_type
     @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(
-      contract_address: contract_address,
-      abi: abi,
-      blockchain: blockchain
+      blockchain: blockchain,
+      contract_address: contract_address
     )
   end
 
@@ -94,22 +94,6 @@ class Token < ApplicationRecord
     blockchain.name.match?(/^Qtum/)
   end
 
-  def decimal_places_value
-    10**decimal_places.to_i
-  end
-
-  def populate_token?
-    _token_type_on_ethereum? && _blockchain.present? && contract_address.present? && (symbol.blank? || decimal_places.blank?)
-  end
-
-  def abi
-    if _token_type_comakery_security_token?
-      JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
-    else
-      JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
-    end
-  end
-
   def to_base_unit(amount)
     BigDecimal(10.pow(decimal_places || 0) * amount)&.to_s&.to_i
   end
@@ -120,25 +104,11 @@ class Token < ApplicationRecord
 
   private
 
-  def set_predefined_values
-    if _token_type && !_token_type_token?
-      self.name = token_type.name
-      self.symbol = token_type.symbol
-      self.decimal_places = token_type.decimals
-    end
-  end
+    def set_values_from_token_type
+      self.name ||= token_type.name
+      self.symbol ||= token_type.symbol
+      self.decimal_places ||= token_type.decimals
 
-  def populate_token_symbol
-    if populate_token?
-      web3 = Comakery::Web3.new(blockchain.explorer_api_host)
-      symbol, decimals = web3.fetch_symbol_and_decimals(contract_address)
-      self.symbol = symbol if symbol.blank?
-      self.decimal_places = decimals if decimal_places.blank?
-      contract_address_exist_on_network?(symbol)
+      self.ethereum_enabled ||= (token_type.operates_with_smart_contracts? && _token_type_on_ethereum?) # Deprecated
     end
-  end
-
-  def enable_ethereum
-    self.ethereum_enabled = contract_address.present? && _token_type_on_ethereum?
-  end
 end

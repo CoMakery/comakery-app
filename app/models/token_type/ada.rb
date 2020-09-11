@@ -26,6 +26,12 @@ class TokenType::Ada < TokenType
     # Comakery::Eth::Contract::Erc20.new
   end
 
+  # ABI structure if present
+  # @return [Hash] abi
+  def abi
+    {}
+  end
+
   # Transaction instance if implemented
   # @return [nil]
   def tx

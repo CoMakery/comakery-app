@@ -26,6 +26,12 @@ class TokenType::Erc20 < TokenType
     @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, abi, blockchain.explorer_api_host, nil)
   end
 
+  # ABI structure if present
+  # @return [Hash] abi
+  def abi
+    @abi ||= JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
+  end
+
   # Transaction instance if implemented
   # @return [nil]
   def tx
@@ -76,10 +82,6 @@ class TokenType::Erc20 < TokenType
 
   def contract_address
     attrs[:contract_address]
-  end
-
-  def abi
-    attrs[:abi]
   end
 
   def blockchain

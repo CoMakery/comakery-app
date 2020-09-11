@@ -8,6 +8,12 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
     'Comakery Security Token'
   end
 
+  # ABI structure if present
+  # @return [Hash] abi
+  def abi
+    @abi ||= JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
+  end
+
   # Does it have custom account data stored on chain?
   # @return [Boolean] flag
   def operates_with_account_records?

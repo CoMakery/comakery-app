@@ -63,8 +63,6 @@ class Project < ApplicationRecord
   delegate :_token_type, to: :token, allow_nil: true
   delegate :_token_type_on_ethereum?, to: :token, allow_nil: true
   delegate :_token_type_on_qtum?, to: :token, allow_nil: true
-  delegate :decimal_places_value, to: :token, allow_nil: true
-  delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
 
   validates :github_url, format: { with: %r{\Ahttps?:\/\/(www\.)?github\.com\/..*\z} }, allow_blank: true

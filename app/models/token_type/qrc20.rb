@@ -26,6 +26,12 @@ class TokenType::Qrc20 < TokenType
     Comakery::Qtum::Contract::Qrc20
   end
 
+  # ABI structure if present
+  # @return [Hash] abi
+  def abi
+    {}
+  end
+
   # Transaction instance if implemented
   # @return [nil]
   def tx
