@@ -118,9 +118,9 @@ class TokenIndex extends React.Component {
                     <div className='token-index--view--info--item--value'>
                       { (() => {
                         switch (this.state.selectedToken._blockchain) {
-                          case 'qtum_mainnet':
+                          case 'qtum':
                             return 'Main QTUM Network'
-                          case 'qtum_testnet':
+                          case 'qtum_test':
                             return 'Test QTUM Network'
                           default:
                             return this.state.selectedToken._blockchain

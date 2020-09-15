@@ -172,14 +172,14 @@ describe('TokenForm', () => {
       'logoUrl'                : '/QRCT.png'
     }
     const blockchains = {
-      'main QTUM Network': 'qtum_mainnet',
-      'test QTUM Network': 'qtum_testnet'
+      'main QTUM Network': 'qtum',
+      'test QTUM Network': 'qtum_test'
     }
     const wrapper = mount(<TokenForm token={token} blockchains={blockchains} />)
 
     expect(wrapper.find(
       'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
-    ).props().value).toBe('qtum_mainnet')
+    ).props().value).toBe('qtum')
     expect(wrapper.find(
       'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
     ).props().selectEntries).toEqual(Object.entries(blockchains))

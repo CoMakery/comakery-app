@@ -13,7 +13,7 @@ class BlockchainTransaction < ApplicationRecord
   validates :contract_address, presence: true, if: -> { token._token_type_token? }
   validates :tx_raw, :tx_hash, presence: true, if: -> { token._token_type_comakery_security_token? && nonce.present? }
 
-  enum network: %i[main ropsten kovan rinkeby constellation_mainnet constellation_testnet]
+  enum network: %i[ethereum ethereum_ropsten ethereum_kovan ethereum_rinkeby constellation constellation_test]
   enum status: %i[created pending cancelled succeed failed]
 
   def self.number_of_confirmations

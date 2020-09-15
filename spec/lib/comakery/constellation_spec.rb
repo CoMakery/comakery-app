@@ -10,7 +10,7 @@ describe Comakery::Constellation do
   end
 
   describe '#tx' do
-    let(:network) { 'constellation_testnet' }
+    let(:network) { 'constellation_test' }
     let(:tx) { 'dummy_tx' }
 
     before do

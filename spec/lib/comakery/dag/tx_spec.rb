@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Comakery::Dag::Tx do
-  let(:network) { 'constellation_testnet' }
+  let(:network) { 'constellation_test' }
   let(:tx) { 'dummy_tx' }
 
   def stub_field(field, value)

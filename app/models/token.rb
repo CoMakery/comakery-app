@@ -74,6 +74,10 @@ class Token < ApplicationRecord
     @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new
   end
 
+  def blockchain_name_for_wallet
+    blockchain.name.match(/^([A-Z][a-z]+)[A-Z]/)[1].downcase
+  end
+
   def token_type
     @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(
       blockchain: blockchain,

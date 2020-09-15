@@ -18,32 +18,32 @@ class AccountDecorator < Draper::Decorator
     end
   end
 
-  def bitcoin_wallet_url(network = 'bitcoin_mainnet')
-    UtilitiesService.get_wallet_url(network, bitcoin_wallet)
+  def bitcoin_wallet_url(network = 'bitcoin')
+    Token.blockchain_for(network.capitalize).url_for_address_human(bitcoin_wallet)
   end
 
-  def cardano_wallet_url(network = 'cardano_mainnet')
-    UtilitiesService.get_wallet_url(network, cardano_wallet)
+  def cardano_wallet_url(network = 'cardano')
+    Token.blockchain_for(network.capitalize).url_for_address_human(cardano_wallet)
   end
 
-  def eos_wallet_url(network = 'eos_mainnet')
-    UtilitiesService.get_wallet_url(network, eos_wallet)
+  def eos_wallet_url(network = 'eos')
+    Token.blockchain_for(network.capitalize).url_for_address_human(eos_wallet)
   end
 
-  def tezos_wallet_url(network = 'tezos_mainnet')
-    UtilitiesService.get_wallet_url(network, tezos_wallet)
+  def tezos_wallet_url(network = 'tezos')
+    Token.blockchain_for(network.capitalize).url_for_address_human(tezos_wallet)
   end
 
-  def ethereum_wallet_url(network = 'main')
-    UtilitiesService.get_wallet_url(network, ethereum_wallet)
+  def ethereum_wallet_url(network = 'ethereum')
+    Token.blockchain_for(network.capitalize).url_for_address_human(ethereum_wallet)
   end
 
-  def etherscan_address(network = 'main')
-    UtilitiesService.get_wallet_url(network, ethereum_wallet)
+  def etherscan_address(network = 'ethereum')
+    Token.blockchain_for(network.capitalize).url_for_address_human(ethereum_wallet)
   end
 
-  def qtum_wallet_url(network = 'qtum_mainnet')
-    UtilitiesService.get_wallet_url(network, qtum_wallet)
+  def qtum_wallet_url(network = 'qtum')
+    Token.blockchain_for(network.capitalize).url_for_address_human(qtum_wallet)
   end
 
   def wallet_address_for(project)
@@ -73,7 +73,7 @@ class AccountDecorator < Draper::Decorator
 
   def can_receive_awards?(project)
     return false unless project.token&._token_type?
-    account&.send("#{project.token&.blockchain&.name}_wallet?")
+    account&.send("#{project.token&.blockchain_name_for_wallet}_wallet?")
   end
 
   def can_send_awards?(project)

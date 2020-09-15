@@ -151,7 +151,7 @@ describe AccountDecorator do
     let!(:project_w_token) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum) }
     let!(:project_wo_token) { create :project, token: nil }
     let!(:project_w_token_on_ropsten) { create :project, token: create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
-    let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_testnet) }
+    let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_test) }
 
     it 'returns link for wallet address if account has address for project token' do
       expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_wallet.ethereum_wallet)

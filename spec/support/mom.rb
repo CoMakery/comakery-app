@@ -328,7 +328,7 @@ class Mom
     defaults = {
       logo_image: dummy_image,
       _token_type: :dag,
-      _blockchain: :constellation_testnet
+      _blockchain: :constellation_test
     }
     Token.new(defaults.merge(attrs))
   end
@@ -650,7 +650,7 @@ class Mom
   end
 
   def dag_tx(**attrs)
-    network = attrs[:network] || :constellation_testnet
+    network = attrs[:network] || :constellation_test
     hash = attrs[:hash] || '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d'
 
     stub_constellation_request(

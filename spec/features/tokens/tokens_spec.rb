@@ -79,7 +79,7 @@ describe 'tokens features', js: true do
     find :css, '.token-index', wait: 10
 
     expect(Token.last._token_type).to eq 'qrc20'
-    expect(Token.last._blockchain).to eq 'qtum_testnet'
+    expect(Token.last._blockchain).to eq 'qtum_test'
     expect(Token.last.name).to eq 'qrc20 test'
     expect(Token.last.contract_address).to eq '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
     expect(Token.last.symbol).to eq 'BIG'
