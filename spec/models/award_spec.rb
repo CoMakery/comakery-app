@@ -446,7 +446,7 @@ describe Award do
     end
 
     describe '#ethereum_transaction_address' do
-      let(:project) { create(:project, token: create(:token, _token_type: 'erc20')) }
+      let(:project) { create(:project, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten)) }
       let(:award_type) { create(:award_type, project: project) }
       let(:award) { create(:award, award_type: award_type) }
       let(:address) { '0x' + 'a' * 64 }
@@ -589,9 +589,9 @@ describe Award do
     end
 
     describe 'with project awards' do
-      let!(:project1) { create :project, token: create(:token, _token_type: 'erc20') }
+      let!(:project1) { create :project, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
       let!(:project1_award_type) { (create :award_type, project: project1) }
-      let(:project2) { create :project, token: create(:token, _token_type: 'erc20') }
+      let(:project2) { create :project, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
       let!(:project2_award_type) { (create :award_type, project: project2) }
       let(:account) { create :account }
 
@@ -621,7 +621,7 @@ describe Award do
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
-    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'erc20') }
+    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { (create :award_type, project: project) }
     let!(:award) { create :award, award_type: award_type, amount: 3, issuer: account, account: account }
     let!(:award1) { create :award, award_type: award_type, amount: 3, issuer: account, account: account1 }
@@ -688,7 +688,7 @@ describe Award do
     let!(:account) { create :account }
     let!(:authentication) { create :authentication, account: account }
     let!(:discord_team) { create :team, provider: 'discord' }
-    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'erc20') }
+    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'channel_id' }
     let!(:account1) { create :account }
@@ -990,7 +990,7 @@ describe Award do
 
   describe '#recipient_address' do
     let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth') }
+    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 
@@ -1047,7 +1047,7 @@ describe Award do
 
   describe 'needs_wallet?' do
     let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth') }
+    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award_w_recepient_address) { create :award, account: recipient, award_type: award_type }
 

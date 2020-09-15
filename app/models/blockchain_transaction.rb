@@ -104,6 +104,7 @@ class BlockchainTransaction < ApplicationRecord
     def populate_data
       self.token ||= blockchain_transactable.token
       self.network ||= token._blockchain
+      self.contract_address ||= token.contract_address
 
       if token._token_type_on_ethereum?
         self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block

@@ -75,7 +75,7 @@ class Token < ApplicationRecord
   end
 
   def blockchain_name_for_wallet
-    blockchain.name.match(/^([A-Z][a-z]+)[A-Z]/)[1].downcase
+    blockchain.name.match(/^([A-Z][a-z]+)[A-Z]*/)[1].downcase
   end
 
   def token_type

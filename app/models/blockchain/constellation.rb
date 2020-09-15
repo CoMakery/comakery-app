@@ -91,7 +91,7 @@ class Blockchain::Constellation < Blockchain
 
   def validate_addr_format(addr)
     if addr !~ /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/
-      raise Blockchain::Address::ValidationError("should start with 'DAG', followed by 37 characters")
+      raise Blockchain::Address::ValidationError.new("should start with 'DAG', followed by 37 characters")
     end
   end
 
@@ -100,7 +100,7 @@ class Blockchain::Constellation < Blockchain
     computed_checksum = addr[4..-1]&.scan(/\d/)&.map(&:to_i)&.reduce(&:+)&.modulo(9)
 
     if included_checksum.to_i != computed_checksum.to_i
-      raise Blockchain::Address::ValidationError('should include valid checksum')
+      raise Blockchain::Address::ValidationError.new('should include valid checksum')
     end
   end
 end

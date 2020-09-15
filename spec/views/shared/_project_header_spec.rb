@@ -10,7 +10,7 @@ describe 'shared/_project_header.html.rb' do
   context "with _token_type eq 'erc20'" do
     let!(:project) do
       stub_token_symbol
-      create(:project, ethereum_enabled: true, token: create(:token, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20'))
+      create(:project, ethereum_enabled: true, token: create(:token, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20', _blockchain: :ethereum_ropsten))
     end
 
     before do

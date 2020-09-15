@@ -293,7 +293,14 @@ class Mom
       logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
       token_frozen: false
     }
-    Token.new(defaults.merge(attrs))
+
+    t = Token.new(defaults.merge(attrs))
+    
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def comakery_token(**attrs)
@@ -307,7 +314,13 @@ class Mom
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
       token_frozen: false
     }
-    Token.new(defaults.merge(attrs))
+    t = Token.new(defaults.merge(attrs))
+    
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def comakery_dummy_token(**attrs)
@@ -321,7 +334,13 @@ class Mom
       decimal_places: 0,
       token_frozen: false
     }
-    Token.new(defaults.merge(attrs))
+    t = Token.new(defaults.merge(attrs))
+    
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def dag_token(**attrs)
@@ -330,7 +349,13 @@ class Mom
       _token_type: :dag,
       _blockchain: :constellation_test
     }
-    Token.new(defaults.merge(attrs))
+    t = Token.new(defaults.merge(attrs))
+    
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def interest(**attrs)

@@ -10,7 +10,7 @@ describe 'shared/_awards.html.rb' do
   let!(:recipient2_auth) { create(:authentication, account: recipient2) }
   let!(:project) do
     stub_token_symbol
-    create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20'))
+    create(:project, account: issuer, token: create(:token, ethereum_enabled: true, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20', _blockchain: :ethereum_ropsten))
   end
   let!(:award_type) { create(:award_type, project: project) }
   let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }

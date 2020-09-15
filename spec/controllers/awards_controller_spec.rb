@@ -10,7 +10,7 @@ RSpec.describe AwardsController, type: :controller do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20')) }
+  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten)) }
   let!(:award_type) { create(:award_type, project: project) }
 
   before do
@@ -704,7 +704,7 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#recipient_address' do
-    let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20')) }
+    let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten)) }
     let(:award_type) { create(:award_type, project: project) }
     let(:award) { create(:award, award_type: award_type) }
 

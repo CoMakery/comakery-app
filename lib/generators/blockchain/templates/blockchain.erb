@@ -85,6 +85,6 @@ class Blockchain::<%= class_name %> < Blockchain
   # @raise [Blockchain::Address::ValidationError]
   # @return [void]
   def validate_addr(addr)
-    raise Blockchain::Address::ValidationError("should be present") if addr.blank?
+    raise Blockchain::Address::ValidationError.new("should be present") if addr.blank?
   end
 end

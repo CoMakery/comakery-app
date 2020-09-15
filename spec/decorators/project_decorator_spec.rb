@@ -180,7 +180,7 @@ describe ProjectDecorator do
     let!(:award_type) { create(:award_type, project: project, state: 'public') }
     let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
     let!(:project_wo_image) { create(:project) }
-    let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token)) }
+    let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
 
     it 'includes required data for project header component' do
       props = project.decorate.header_props
@@ -255,7 +255,7 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_stacked_chart' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
 
     before do
       create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
@@ -276,7 +276,7 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_donut_chart' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
 
     before do
       create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))

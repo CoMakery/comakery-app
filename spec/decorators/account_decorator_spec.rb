@@ -68,7 +68,7 @@ describe AccountDecorator do
   describe '#can_receive_awards?' do
     context 'on ethereum network' do
       let!(:recipient) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true

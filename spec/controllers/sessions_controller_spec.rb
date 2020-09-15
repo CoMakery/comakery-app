@@ -146,7 +146,7 @@ describe SessionsController do
     let!(:account) { create(:account, email: 'user@example.com', password: '12345678') }
     let!(:account1) { create(:account, email: 'user1@example.com', password: '12345678', email_confirm_token: '1234') }
     let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
-    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20')) }
+    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten)) }
 
     it 'allows to login with managed account on according whitelabel instance' do
       active_whitelabel_mission = create(:active_whitelabel_mission)

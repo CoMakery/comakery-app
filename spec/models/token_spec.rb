@@ -58,7 +58,7 @@ describe Token do
       let(:attrs) { { symbol: 'CBB', decimal_places: 8, _blockchain: 'ethereum_ropsten', contract_address: 'a' * 40 } }
 
       it 'eq erc20' do
-        token = create :token, attrs.merge(_token_type: 'erc20')
+        token = create :token, attrs.merge(_token_type: 'erc20', _blockchain: :ethereum_ropsten)
         expect(token).to be_valid
         expect(token.reload._token_type).to eq 'erc20'
         expect(token._blockchain).to eq 'ethereum_ropsten'
@@ -68,7 +68,7 @@ describe Token do
       end
 
       it 'eq eth' do
-        token = create :token, attrs.merge(_token_type: 'eth')
+        token = create :token, attrs.merge(_token_type: 'eth', _blockchain: :ethereum_ropsten)
         expect(token).to be_valid
         expect(token.reload._token_type).to eq 'eth'
         expect(token.contract_address).to be_nil
@@ -119,7 +119,7 @@ describe Token do
   end
 
   describe 'associations' do
-    let!(:token) { create(:token, _token_type: :comakery_security_token) }
+    let!(:token) { create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
     let!(:project) { create(:project, token: token) }
     let!(:account_token_record) { create(:account_token_record, token: token) }
     let!(:reg_group) { create(:reg_group, token: token) }
@@ -174,7 +174,7 @@ describe Token do
   end
 
   describe 'abi' do
-    let!(:comakery_token) { create(:token, _token_type: :comakery_security_token) }
+    let!(:comakery_token) { create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
     let!(:token) { create(:token) }
 
     it 'returns correct abi for Comakery Token' do
@@ -196,7 +196,7 @@ describe Token do
 
   describe 'default_reg_group' do
     it 'returns default reg group for token' do
-      expect(create(:token, _token_type: :comakery_security_token).default_reg_group).to be_a(RegGroup)
+      expect(create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten).default_reg_group).to be_a(RegGroup)
     end
   end
 end

@@ -15,7 +15,7 @@ describe AwardDecorator do
   describe '#issuer_display_name' do
     context 'on ethereum network' do
       let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'erc20') }
+      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
       let!(:award_type) { create :award_type, project: project }
       let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
@@ -54,7 +54,7 @@ describe AwardDecorator do
 
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, token: create(:token, _token_type: 'erc20') }
+    let!(:project) { create :project, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 
@@ -78,7 +78,7 @@ describe AwardDecorator do
   context 'json_for_sending_awards' do
     let!(:recipient) { create :account, id: 529, first_name: 'Account', last_name: 'ABC', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, _token_type: 'erc20') }
+    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
@@ -161,7 +161,7 @@ describe AwardDecorator do
   end
 
   describe 'transfer_button_text' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
     let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
     let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
@@ -174,7 +174,7 @@ describe AwardDecorator do
   end
 
   describe 'pay_data' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
     let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
     let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
