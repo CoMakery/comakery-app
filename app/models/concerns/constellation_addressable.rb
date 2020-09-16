@@ -10,14 +10,14 @@ module ConstellationAddressable
     end
 
     def validate_format(record, attribute, value)
-      if value !~ /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/
+      unless /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/.match?(value)
         message = options[:message] || "should start with 'DAG', " \
           'followed by 37 characters'
         record.errors.add attribute, message
       end
     end
 
-    def validate_checksum(record, attribute, value)
+    def validate_checksum(record, attribute, value) # rubocop:todo Metrics/CyclomaticComplexity
       included_checksum = value[3]
       computed_checksum = value[4..-1]&.scan(/\d/)&.map(&:to_i)&.reduce(&:+)&.modulo(9)
 

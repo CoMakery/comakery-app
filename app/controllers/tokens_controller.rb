@@ -83,13 +83,13 @@ class TokensController < ApplicationController
 
   private
 
-  def redirect_unless_admin
-    redirect_to root_path unless current_account.comakery_admin?
-  end
+    def redirect_unless_admin
+      redirect_to root_path unless current_account.comakery_admin?
+    end
 
-  def set_token
-    @token = Token.find(params[:id]).decorate
-  end
+    def set_token
+      @token = Token.find(params[:id]).decorate
+    end
 
   def set_token_types
     @token_types = Token._token_types.invert

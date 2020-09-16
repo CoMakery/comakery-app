@@ -12,7 +12,7 @@ class AwardType < ApplicationRecord
   after_create :switch_tasks_publicity
   after_save :switch_tasks_publicity, if: -> { saved_change_to_state? }
 
-  enum state: ['draft', 'invite only', 'public'], _suffix: true
+  enum state: { 'draft' => 0, 'invite only' => 1, 'public' => 2 }, _suffix: true
 
   private
 

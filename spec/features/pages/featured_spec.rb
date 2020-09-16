@@ -3,11 +3,21 @@ require 'rails_helper'
 feature 'pages' do
   let!(:account) { create :account, contributor_form: true }
   let!(:token) { create :token }
+  # rubocop:todo Rails/FilePath
   let!(:mission1) { create :mission, name: 'test1', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
+  # rubocop:enable Rails/FilePath
+  # rubocop:todo Rails/FilePath
   let!(:mission2) { create :mission, name: 'test2', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
+  # rubocop:enable Rails/FilePath
+  # rubocop:todo Rails/FilePath
   let!(:mission3) { create :mission, name: 'test3', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
+  # rubocop:enable Rails/FilePath
+  # rubocop:todo Rails/FilePath
   let!(:mission4) { create :mission, name: 'test4', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
+  # rubocop:enable Rails/FilePath
+  # rubocop:todo Rails/FilePath
   let!(:mission5) { create :mission, name: 'test5', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
+  # rubocop:enable Rails/FilePath
   let!(:project) { create :project, title: 'default project 8344', mission_id: mission1.id, visibility: 'public_listed' }
   let!(:project_featured) { create :project, title: 'featured project 9934', mission_id: mission1.id, visibility: 'public_listed', status: 0 }
 

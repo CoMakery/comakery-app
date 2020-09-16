@@ -7,7 +7,7 @@ module QtumAddressable
     end
 
     def validate_format(record, attribute, value)
-      if value !~ /\A[qQ][a-km-zA-HJ-NP-Z0-9]{33}\z/
+      unless /\A[qQ][a-km-zA-HJ-NP-Z0-9]{33}\z/.match?(value)
         message = options[:message] || "should start with 'Q', " \
           'followed by 33 characters'
         record.errors.add attribute, message

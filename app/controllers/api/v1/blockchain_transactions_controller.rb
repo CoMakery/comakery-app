@@ -1,8 +1,9 @@
 class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
-  skip_before_action :verify_signature
-  skip_before_action :verify_public_key
-  skip_before_action :allow_only_whitelabel
-  before_action :verify_public_key_or_policy
+  include Api::V1::Concerns::AuthorizableByMissionKey
+  include Api::V1::Concerns::AuthorizableByProjectKey
+  include Api::V1::Concerns::AuthorizableByProjectPolicy
+  include Api::V1::Concerns::RequiresAnAuthorization
+
   before_action :verify_hash, only: %i[update destroy]
 
   # POST /api/v1/projects/1/blockchain_transactions
@@ -16,11 +17,11 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     if @transaction&.persisted?
-      render 'show.json', status: 201
+      render 'show.json', status: :created
     else
       @errors = { blockchain_transaction: 'No transactables available' }
 
-      render 'api/v1/error.json', status: 204
+      render 'api/v1/error.json', status: :no_content
     end
   end
 
@@ -31,14 +32,14 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       BlockchainJob::BlockchainTransactionSyncJob.perform_later(transaction)
     end
 
-    render 'show.json', status: 200
+    render 'show.json', status: :ok
   end
 
   # DELETE /api/v1/projects/1/blockchain_transactions/1
   def destroy
     transaction.update_status(:cancelled, transaction_update_params[:status_message])
 
-    render 'show.json', status: 200
+    render 'show.json', status: :ok
   end
 
   private
@@ -100,7 +101,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
         transaction.errors[:hash] << 'mismatch'
         @errors = transaction.errors
 
-        render 'api/v1/error.json', status: 400
+        render 'api/v1/error.json', status: :bad_request
       end
     end
 end

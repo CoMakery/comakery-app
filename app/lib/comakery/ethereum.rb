@@ -36,19 +36,19 @@ class Comakery::Ethereum
       private_params = params.merge apiKey: ENV['ETHEREUM_BRIDGE_API_KEY']
 
       response = post url,
-        body: private_params.to_json,
-        headers: headers,
-        timeout: TIMEOUT
+                      body: private_params.to_json,
+                      headers: headers,
+                      timeout: TIMEOUT
 
       begin
         response.parsed_response.fetch(response_key)
-      rescue => error
+      rescue StandardError => e
         raise "Error received: #{response.parsed_response.inspect}
           From request to: #{url}
           With params: #{JSON.pretty_generate params}
           Original error:
-          #{error.message}
-          #{error.backtrace}
+          #{e.message}
+          #{e.backtrace}
         "
       end
     end

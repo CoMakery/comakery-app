@@ -23,8 +23,8 @@ describe Comakery::Ethereum do
           headers: { 'Content-Type': 'application/json' },
           body: { contractAddress: '0x9999999999999999999999999999999999999999' }.to_json
         )
-      contractAddress = described_class.token_contract(maxSupply: 101)
-      expect(contractAddress).to eq '0x9999999999999999999999999999999999999999'
+      contractAddress = described_class.token_contract(maxSupply: 101) # rubocop:todo Naming/VariableName
+      expect(contractAddress).to eq '0x9999999999999999999999999999999999999999' # rubocop:todo Naming/VariableName
     end
 
     describe 'with ETHEREUM_BRIDGE env var unset' do
@@ -65,19 +65,19 @@ describe Comakery::Ethereum do
     it 'calls out to the expected server' do
       stub_request(:post, 'https://eth.example.com/token_issue')
         .with(body: hash_including(contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
-                                   recipient:       '0x2222222222222222222222222222222222222222',
+                                   recipient: '0x2222222222222222222222222222222222222222',
                                    amount: 100,
                                    apiKey: 'abc123apikey'))
         .to_return(
           headers: { 'Content-Type': 'application/json' },
           body: { tx: '0x9999999999999999999999999999999999999999' }.to_json
         )
-      transactionId = described_class.token_issue(
+      transactionId = described_class.token_issue( # rubocop:todo Naming/VariableName
         contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
         recipient: '0x2222222222222222222222222222222222222222',
         amount: 100
       )
-      expect(transactionId).to eq '0x9999999999999999999999999999999999999999'
+      expect(transactionId).to eq '0x9999999999999999999999999999999999999999' # rubocop:todo Naming/VariableName
     end
   end
 end

@@ -7,7 +7,7 @@ module TezosAddressable
     end
 
     def validate_format(record, attribute, value)
-      if value !~ /\A(tz1)[a-zA-Z0-9]{33}\z/
+      unless /\A(tz1)[a-zA-Z0-9]{33}\z/.match?(value)
         message = options[:message] || "should start with 'tz1', " \
           'followed by 33 characters'
         record.errors.add attribute, message

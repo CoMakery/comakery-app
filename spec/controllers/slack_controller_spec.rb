@@ -7,8 +7,8 @@ describe SlackController do
     end
     it 'responds with welcome text' do
       post :command
-      expect(response.body).to match /helps you share revenue/
-      expect(response.body).to match /comakery.museum/
+      expect(response.body).to match(/helps you share revenue/)
+      expect(response.body).to match(/comakery.museum/)
     end
   end
 end

@@ -59,17 +59,17 @@ def make(fixture:, project_model:, owner_name:, team_name:, team_image:, project
   )
   award_type = create :award_type, name: 'Commit', project: project
   fixture_path = get_fixture "#{fixture}.json"
-  contributions = JSON.load IO.read fixture_path
+  contributions = JSON.parse(IO.read(fixture_path))
   contributions.each do |date, data|
     data.each do |name, amount|
       amount.times do
         recipient_auth = auth(name, team_name, team_image)
-        award = create :award, recipient_auth, owner.account,
-          award_type: award_type,
-          amount: 100,
-          description: 'Git commit',
-          created_at: date,
-          updated_at: date
+        award = create :award, recipient_auth, owner.account, # rubocop:todo Lint/UselessAssignment
+                       award_type: award_type,
+                       amount: 100,
+                       description: 'Git commit',
+                       created_at: date,
+                       updated_at: date
       end
     end
   end
@@ -88,7 +88,7 @@ def auth(name, team_name, team_image)
   }
 
   if auth
-    auth.update_attributes! attrs
+    auth.update! attrs
   else
     auth = create :authentication, attrs
   end
@@ -106,7 +106,7 @@ def project_factory(owner, params)
     slack_team_name: params[:slack_team_name]
   )
   if project
-    project.update_attributes! **params
+    project.update!(**params)
     project.award_types.each { |award_type| award_type.awards.destroy_all }
     project.award_types.destroy_all
   else

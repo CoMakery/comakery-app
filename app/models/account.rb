@@ -14,33 +14,43 @@ class Account < ApplicationRecord
   include TezosAddressable
   include ConstellationAddressable
 
-  has_many :projects
+  has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
-  has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy # rubocop:todo Rails/InverseOf
   has_many :authentication_teams, dependent: :destroy
   has_many :teams, through: :authentication_teams
+  # rubocop:todo Rails/InverseOf
   has_many :manager_auth_teams, -> { where("manager=true or provider='slack'") }, class_name: 'AuthenticationTeam'
+  # rubocop:enable Rails/InverseOf
   has_many :manager_teams, through: :manager_auth_teams, source: :team
   has_many :team_projects, through: :teams, source: :projects
   has_many :award_projects, through: :awards, source: :project
   has_many :channel_projects, through: :channels, source: :project
   has_many :team_awards, through: :team_projects, source: :awards
-  has_many :issued_awards, class_name: 'Award', foreign_key: 'issuer_id'
+  # rubocop:todo Rails/InverseOf
+  has_many :issued_awards, class_name: 'Award', foreign_key: 'issuer_id' # rubocop:todo Rails/HasManyOrHasOneDependent
+  # rubocop:enable Rails/InverseOf
   has_many :admin_awards, through: :admin_projects, source: :awards
   has_many :award_types, through: :projects
   has_many :team_award_types, through: :team_projects, source: :award_types
   has_many :admin_award_types, through: :admin_projects, source: :award_types
+  # rubocop:todo Rails/InverseOf
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
+  # rubocop:enable Rails/InverseOf
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
-  has_many :experiences
-  has_many :verifications
+  has_many :experiences # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :verifications # rubocop:todo Rails/HasManyOrHasOneDependent
+  # rubocop:todo Rails/InverseOf
+  # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
+  # rubocop:enable Rails/HasManyOrHasOneDependent
+  # rubocop:enable Rails/InverseOf
   belongs_to :latest_verification, class_name: 'Verification'
-  has_many :account_token_records
-  has_many :account_token_records_synced, -> { where synced: true }
+  has_many :account_token_records # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :account_token_records_synced, -> { where synced: true } # rubocop:todo Rails/InverseOf
 
   belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
@@ -61,15 +71,21 @@ class Account < ApplicationRecord
 
   attr_accessor :password_required, :name_required, :agreement_required
 
+  # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
   validates :date_of_birth, presence: { message: 'should be present in correct format (MM/DD/YYYY)' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 
+  # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
+  # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :ethereum_auth_address, ethereum_address: { type: :account }, uniqueness: true, allow_blank: true
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :qtum_wallet, qtum_address: true # see QtumAddressable
   validates :cardano_wallet, cardano_address: true # see CardanoAddressable
@@ -99,6 +115,7 @@ class Account < ApplicationRecord
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
       return Account.none if award_types.blank?
+
       select("accounts.*, (select sum(total_amount) from awards where awards.status in(3,5) and awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
     end
 
@@ -119,9 +136,7 @@ class Account < ApplicationRecord
       elsif channel
         account = find_or_create_by(email: fetch_email(uid, channel))
         account.nickname = fetch_nickname(uid, channel)
-        errors = if account.save
-          account.create_authentication_and_build_team(uid, channel)
-        end
+        errors = (account.create_authentication_and_build_team(uid, channel) if account.save)
       end
       [account, errors]
     end
@@ -156,9 +171,7 @@ class Account < ApplicationRecord
       # rubocop:disable Rails/SkipsModelValidations
 
       Account.where.not(nonce: nil).find_each do |a|
-        if a.ethereum_wallet.present? && a.email.present? && !a.email.match?(/0x.+@comakery.com/)
-          a.update_column(:ethereum_auth_address, a.ethereum_wallet)
-        end
+        a.update_column(:ethereum_auth_address, a.ethereum_wallet) if a.ethereum_wallet.present? && a.email.present? && !a.email.match?(/0x.+@comakery.com/)
       end
     end
   end
@@ -292,6 +305,7 @@ class Account < ApplicationRecord
 
   def age
     return nil unless date_of_birth
+
     calculate_age
   end
 
@@ -319,39 +333,39 @@ class Account < ApplicationRecord
 
   private
 
-  def validate_age
-    errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18
-  end
-
-  def calculate_age
-    now = Time.zone.now.to_date
-    result = now.year - date_of_birth.year
-    result -= 1 if now.month < date_of_birth.month || now.month == date_of_birth.month && now.day < date_of_birth.day
-    result
-  end
-
-  def check_email_update
-    set_email_confirm_token if saved_change_to_email?
-  end
-
-  def populate_managed_account_id
-    self.managed_account_id ||= SecureRandom.uuid
-  end
-
-  def normalize_ethereum_auth_address
-    if ethereum_auth_address.present?
-      addr = Eth::Address.new(ethereum_auth_address)
-      self.ethereum_auth_address = addr.checksummed if addr.valid?
+    def validate_age
+      errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18
     end
-  end
 
-  def reset_latest_verification
-    self.latest_verification = nil
-  end
-
-  def populate_awards
-    Award.accepted.where(email: email, account_id: nil).find_each do |a|
-      a.update(account: self, email: nil)
+    def calculate_age
+      now = Time.zone.now.to_date
+      result = now.year - date_of_birth.year
+      result -= 1 if now.month < date_of_birth.month || now.month == date_of_birth.month && now.day < date_of_birth.day
+      result
     end
-  end
+
+    def check_email_update
+      set_email_confirm_token if saved_change_to_email?
+    end
+
+    def populate_managed_account_id
+      self.managed_account_id ||= SecureRandom.uuid
+    end
+
+    def normalize_ethereum_auth_address
+      if ethereum_auth_address.present?
+        addr = Eth::Address.new(ethereum_auth_address)
+        self.ethereum_auth_address = addr.checksummed if addr.valid?
+      end
+    end
+
+    def reset_latest_verification
+      self.latest_verification = nil
+    end
+
+    def populate_awards
+      Award.accepted.where(email: email, account_id: nil).find_each do |a|
+        a.update(account: self, email: nil)
+      end
+    end
 end

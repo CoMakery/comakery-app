@@ -9,6 +9,7 @@ class AuthenticationPolicy < ApplicationPolicy
 
     def resolve
       return Authentication.none unless account && team
+
       team.authentications
     end
   end

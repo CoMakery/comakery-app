@@ -63,7 +63,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
                      lockup_until: 1586908800
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -86,7 +86,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
                      lockup_until: 1586908800
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -110,7 +110,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
                      lockup_until: 1586908800
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -134,7 +134,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
                      lockup_until: 1586908800
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -157,7 +157,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
                      lockup_until: 1586908801
                    )
                  )
-        )).to be_falsey
+               )).to be_falsey
       end
     end
 
@@ -180,7 +180,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
                      lockup_until: 1586908800
                    )
                  )
-        )).to be_truthy
+               )).to be_truthy
       end
     end
   end

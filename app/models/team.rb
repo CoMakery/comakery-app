@@ -2,7 +2,7 @@ class Team < ApplicationRecord
   has_many :authentication_teams, dependent: :destroy
   has_many :accounts, through: :authentication_teams
   has_many :authentications, through: :authentication_teams
-  has_many :channels
+  has_many :channels # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :projects, -> { distinct }, through: :channels
 
   def build_authentication_team(authentication, manager = false)
@@ -16,6 +16,7 @@ class Team < ApplicationRecord
 
   def members
     return [] unless discord?
+
     d_client = Comakery::Discord.new
     @members ||= d_client.members(self)
   end

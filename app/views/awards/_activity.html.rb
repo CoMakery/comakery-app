@@ -17,7 +17,7 @@ class Views::Awards::Activity < Views::Base
   end
 
   def make_charts
-    text(<<-JAVASCRIPT.html_safe)
+    text(<<-JAVASCRIPT.html_safe) # rubocop:todo Rails/OutputSafety
       $(function() {
         window.stackedBarChart("#contributions-chart", #{project.awards_for_chart.to_json});
       });

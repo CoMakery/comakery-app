@@ -19,11 +19,12 @@ module ApplicationHelper
     token.blockchain.url_for_tx_human(tx)
   end
 
-  def ransack_filter_present?(query, name, predicate, value)
+  def ransack_filter_present?(query, name, predicate, value) # rubocop:todo Metrics/CyclomaticComplexity
     query.conditions.any? do |c|
       return false unless c.predicate.name == predicate
       return false unless c.attributes.any? { |a| a.name == name }
       return false unless c.values.any? { |v| v.value == value }
+
       true
     end
   end

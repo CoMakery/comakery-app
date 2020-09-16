@@ -101,7 +101,7 @@ class BlockchainTransaction < ApplicationRecord
 
   private
 
-    def populate_data
+    def populate_data # rubocop:todo Metrics/CyclomaticComplexity
       self.token ||= blockchain_transactable.token
       self.network ||= token._blockchain
       self.contract_address ||= token.contract_address

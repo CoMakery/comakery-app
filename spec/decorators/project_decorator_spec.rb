@@ -8,7 +8,7 @@ describe ProjectDecorator do
   describe '#description_html' do
     let(:project) do
       create(:project,
-        description: 'Hi [google](http://www.google.com)')
+             description: 'Hi [google](http://www.google.com)')
         .decorate
     end
 
@@ -20,7 +20,7 @@ describe ProjectDecorator do
   describe '#description_text_truncated' do
     let(:project) do
       create(:project,
-        description: '[Hola](http://google.com) ' + 'a' * 1000)
+             description: '[Hola](http://google.com) ' + 'a' * 1000)
         .decorate
     end
 
@@ -197,7 +197,7 @@ describe ProjectDecorator do
       expect(props[:supports_transfer_rules]).to be_falsey
       expect(props_w_comakery[:supports_transfer_rules]).to be_truthy
       expect(props[:image_url]).to include('image.png')
-      expect(props[:admins_url]).to include(project.id.to_s)
+      expect(props[:access_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
       expect(props[:transfers_url]).to include(project.id.to_s)

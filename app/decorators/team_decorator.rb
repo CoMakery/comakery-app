@@ -7,6 +7,7 @@ class TeamDecorator < Draper::Decorator
   # Calling Discord API to pull list of channels for the team (in Decorator?!)
   def channels
     return [] unless discord?
+
     d_client = Comakery::Discord.new
     @channels ||= d_client.channels(self)
   end
@@ -23,7 +24,8 @@ class TeamDecorator < Draper::Decorator
 
   def channel_name(channel_id)
     return unless channel_id
-    channel = channels.select { |c| c['id'] == channel_id }.first
+
+    channel = channels.find { |c| c['id'] == channel_id }
     channel['name'] if channel
   end
 end

@@ -11,6 +11,7 @@ class Channel < ApplicationRecord
 
   def name_with_provider
     return name unless team
+
     "[#{provider}] #{team.name} ##{name}"
   end
 
@@ -25,11 +26,13 @@ class Channel < ApplicationRecord
 
   def members
     return @members if @members
+
     @members = team.discord? ? team.members_for_select : slack_members
   end
 
   def slack_members
     return @members if @members
+
     slack = auth_team.slack
     @members = slack.get_users[:members].map { |user| [api_formatted_name(user), user[:id]] }
     @members = @members.sort_by { |member| member.first.downcase.sub(/\A@/, '') }
@@ -39,9 +42,7 @@ class Channel < ApplicationRecord
   delegate :authentication, to: :auth_team
 
   def auth_team
-    if project && team
-      @auth_team ||= team.authentication_teams.find_by account_id: project.account_id
-    end
+    @auth_team ||= team.authentication_teams.find_by account_id: project.account_id if project && team
     @auth_team
   end
 
@@ -68,9 +69,7 @@ class Channel < ApplicationRecord
     unless discord_invite_valid?
       code = Comakery::Discord.new.create_invite(channel_id)
 
-      if code
-        update(discord_invite_code: code, discord_invite_created_at: Time.current)
-      end
+      update(discord_invite_code: code, discord_invite_created_at: Time.current) if code
     end
   end
 
@@ -78,12 +77,12 @@ class Channel < ApplicationRecord
 
   private
 
-  def assign_name
-    self.name = team.discord? ? team.decorate.channel_name(channel_id) : channel_id
-  end
+    def assign_name
+      self.name = team.discord? ? team.decorate.channel_name(channel_id) : channel_id
+    end
 
-  def api_formatted_name(user)
-    real_name = [user[:profile][:first_name].presence, user[:profile][:last_name].presence].compact.join(' ')
-    [real_name.presence, "@#{user[:name]}"].compact.join(' - ')
-  end
+    def api_formatted_name(user)
+      real_name = [user[:profile][:first_name].presence, user[:profile][:last_name].presence].compact.join(' ')
+      [real_name.presence, "@#{user[:name]}"].compact.join(' - ')
+    end
 end

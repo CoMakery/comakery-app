@@ -20,7 +20,7 @@ class AccountTokenRecord < ApplicationRecord
   validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
 
-  enum status: %i[created pending synced failed]
+  enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
 
   def lockup_until
     super && Time.zone.at(super)

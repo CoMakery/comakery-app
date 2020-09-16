@@ -16,7 +16,7 @@ describe Specialty do
 
     it 'only creates the values once' do
       starting_count = described_class.count
-      expect(starting_count).to be > 0
+      expect(starting_count).to be_positive
       described_class.initializer_setup
       described_class.initializer_setup
       expect(described_class.count).to eq(starting_count)

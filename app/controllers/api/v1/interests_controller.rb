@@ -1,4 +1,9 @@
 class Api::V1::InterestsController < Api::V1::ApiController
+  include Api::V1::Concerns::AuthorizableByMissionKey
+  include Api::V1::Concerns::RequiresAnAuthorization
+  include Api::V1::Concerns::RequiresSignature
+  include Api::V1::Concerns::RequiresWhitelabelMission
+
   # GET /api/v1/accounts/1/interests
   def index
     fresh_when interests, public: true
@@ -15,11 +20,11 @@ class Api::V1::InterestsController < Api::V1::ApiController
     if interest.save
       interests
 
-      render 'index.json', status: 201
+      render 'index.json', status: :created
     else
       @errors = interest.errors
 
-      render 'api/v1/error.json', status: 400
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 
@@ -28,7 +33,7 @@ class Api::V1::InterestsController < Api::V1::ApiController
     interest.interests.find_by!(account: account).destroy
     interests
 
-    render 'index.json', status: 200
+    render 'index.json', status: :ok
   end
 
   private

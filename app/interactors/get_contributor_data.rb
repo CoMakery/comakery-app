@@ -20,7 +20,7 @@ class GetContributorData
     end.values
   end
 
-  def contributions_summary_pie_chart(awards)
+  def contributions_summary_pie_chart(awards) # rubocop:todo Metrics/CyclomaticComplexity
     contributions = contributions_data(awards)
     total = contributions.sum { |award| award[:net_amount] }
     summary = contributions.reject { |c| c[:net_amount] < total.to_f / 100 }

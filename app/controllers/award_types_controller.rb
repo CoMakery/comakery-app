@@ -2,7 +2,7 @@ class AwardTypesController < ApplicationController
   before_action :assign_project
   before_action :authorize_project_edit, except: %i[index]
   before_action :authorize_project_show, only: %i[index]
-  before_action :set_award_type, only: %i[show edit update destroy]
+  before_action :set_award_type, only: %i[edit update destroy]
   before_action :set_award_types, only: %i[index]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: %i[index]
@@ -82,12 +82,13 @@ class AwardTypesController < ApplicationController
       @award_types = AwardTypePolicy::Scope.new(current_user, @project, @project.award_types).resolve
     end
 
-    def set_index_props
+    # rubocop:todo Metrics/PerceivedComplexity
+    def set_index_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         editable: policy(@project).edit?,
         batches: @award_types&.includes(awards: %i[account project assignments])&.map do |batch|
           batch.serializable_hash.merge(
-            diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
+            diagram_url: Refile.attachment_url(batch || @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,
             total_tasks: batch.awards.sum(&:possible_quantity).to_i,
             currency: batch.project.token&.symbol,
@@ -111,8 +112,9 @@ class AwardTypesController < ApplicationController
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
-    def task_to_index_props(task, batch)
+    def task_to_index_props(task, batch) # rubocop:todo Metrics/CyclomaticComplexity
       task.serializable_hash.merge(
         batch_name: batch.name,
         image_url: helpers.attachment_url(task, :image),
@@ -138,10 +140,10 @@ class AwardTypesController < ApplicationController
       )
     end
 
-    def set_form_props
+    def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
-        batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash&.merge(
-          diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
+        batch: (@award_type || @project.award_types.new).serializable_hash&.merge(
+          diagram_url: Refile.attachment_url(@award_type || @project.award_types.new, :diagram, :fill, 300, 300)
         ),
         project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,

@@ -14,7 +14,7 @@ SimpleCov.start :rails do
 end
 
 require 'spec_helper'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'rack_session_access/capybara'
 require 'sidekiq/testing'
@@ -27,7 +27,7 @@ require 'pundit/rspec'
 # run twice. It is recommended that you do not name files matching this glob to
 # end with _spec.rb. You can configure this pattern with the --pattern
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -47,7 +47,7 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = Rails.root.join('spec', 'fixtures')
+  config.fixture_path = Rails.root.join('spec', 'fixtures') # rubocop:todo Rails/FilePath
 
   config.before do
     Sidekiq::Worker.clear_all
@@ -110,11 +110,11 @@ def logout
   session[:account_id] = nil
 end
 
-def get_award_type_rows
+def get_award_type_rows # rubocop:todo Naming/AccessorMethodName
   page.all('.award-type-row')
 end
 
-def get_channel_rows
+def get_channel_rows # rubocop:todo Naming/AccessorMethodName
   page.all('.channel-row')
 end
 
@@ -127,8 +127,8 @@ def wait_for_turbolinks
   has_no_css?('.turbolinks-progress-bar')
 end
 
-include SlackStubs
-include ConstellationStubs
+include SlackStubs # rubocop:todo Style/MixinUsage
+include ConstellationStubs # rubocop:todo Style/MixinUsage
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

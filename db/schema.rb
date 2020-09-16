@@ -102,6 +102,15 @@ ActiveRecord::Schema.define(version: 2020_09_07_192634) do
     t.index ["project_id", "account_id"], name: "index_accounts_projects_on_project_id_and_account_id"
   end
 
+  create_table "api_keys", force: :cascade do |t|
+    t.string "api_authorizable_type"
+    t.bigint "api_authorizable_id"
+    t.string "key", limit: 32
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_authorizable_type", "api_authorizable_id"], name: "index_api_keys_on_api_authorizable_type_and_api_authorizable_id"
+  end
+
   create_table "authentication_teams", force: :cascade do |t|
     t.integer "authentication_id"
     t.datetime "created_at", null: false

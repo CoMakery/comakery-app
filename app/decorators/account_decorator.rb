@@ -51,7 +51,7 @@ class AccountDecorator < Draper::Decorator
     blockchain_name && send("#{blockchain_name}_wallet")
   end
 
-  def wallet_address_url_for(project)
+  def wallet_address_url_for(project) # rubocop:todo Metrics/CyclomaticComplexity
     address = wallet_address_for(project)
     blockchain = project.token&.blockchain
 
@@ -65,7 +65,7 @@ class AccountDecorator < Draper::Decorator
     url = wallet_address_url_for(project)
 
     if url
-      h.link_to(address, url, target: '_blank')
+      h.link_to(address, url, target: '_blank', rel: 'noopener')
     else
       'needs wallet'
     end

@@ -79,6 +79,13 @@ Rails.application.routes.draw do
     namespace :dashboard do
       resources :transfers, only: [:index, :show, :create]
       resources :accounts, only: [:index, :update]
+      resources :accesses, only: [:index] do
+        collection do
+          post :regenerate_api_key
+          post :add_admin
+          delete :remove_admin
+        end
+      end
       resources :reg_groups, only: [:create, :update, :destroy]
       resources :transfer_types, only: [:index, :create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
@@ -91,9 +98,6 @@ Rails.application.routes.draw do
     
     member do
       get :awards
-      get :admins
-      post :add_admin
-      delete :remove_admin
     end
     
     collection do

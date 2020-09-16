@@ -18,7 +18,7 @@ class Comakery::Qtum
       c['qrc20']['symbol'],
       c['qrc20']['decimals'].to_i
     ]
-  rescue
+  rescue StandardError
     [
       nil,
       nil

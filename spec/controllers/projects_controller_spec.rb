@@ -29,97 +29,6 @@ describe ProjectsController do
     stub_slack_channel_list
   end
 
-  describe '#admins' do
-    let!(:project_admin) { create(:account) }
-
-    before do
-      project.admins << project_admin
-      login(project.account)
-    end
-
-    it 'shows admins for current project' do
-      get :admins, params: { id: project.to_param }
-
-      expect(response.status).to eq(200)
-      expect(assigns[:project]).to eq(project)
-      expect(assigns[:admins]).to match_array([project_admin])
-    end
-  end
-
-  describe '#add_admin' do
-    let!(:project_admin) { create(:account) }
-
-    before do
-      login(project.account)
-    end
-
-    it 'adds an admin by email to current project' do
-      post :add_admin, params: { id: project.to_param, email: project_admin.email }
-      project.reload
-
-      expect(response).to redirect_to(admins_project_path(project))
-      expect(flash[:notice]).not_to be_nil
-      expect(project.admins).to match_array([project_admin])
-      expect(project.interested).to include(project_admin)
-    end
-
-    it 'returns an error if email is not found' do
-      post :add_admin, params: { id: project.to_param, email: 'dummy_email' }
-      project.reload
-
-      expect(response).to redirect_to(admins_project_path(project))
-      expect(flash[:error]).not_to be_nil
-      expect(project.admins).to match_array([])
-    end
-
-    it 'returns an error if account is already an admin' do
-      project.admins << project_admin
-      post :add_admin, params: { id: project.to_param, email: project_admin.email }
-      project.reload
-
-      expect(response).to redirect_to(admins_project_path(project))
-      expect(flash[:error]).not_to be_nil
-      expect(project.admins).to match_array([project_admin])
-    end
-
-    it 'returns an error if admin is project owner' do
-      post :add_admin, params: { id: project.to_param, email: project.account.email }
-      project.reload
-
-      expect(response).to redirect_to(admins_project_path(project))
-      expect(flash[:error]).not_to be_nil
-      expect(project.admins).to match_array([])
-    end
-  end
-
-  describe '#remove_admin' do
-    let!(:project_admin) { create(:account) }
-
-    before do
-      project.admins << project_admin
-      login(project.account)
-    end
-
-    it 'removes admin from current project' do
-      delete :remove_admin, params: { id: project.to_param, account_id: project_admin.id }
-      project.reload
-
-      expect(response).to redirect_to(admins_project_path(project))
-      expect(flash[:notice]).not_to be_nil
-      expect(project.admins).to match_array([])
-    end
-
-    it 'returns an error if account is not project admin' do
-      project.admins.delete(project_admin)
-      delete :remove_admin, params: { id: project.to_param, account_id: project_admin.id }
-      project.reload
-
-      expect(response).to redirect_to(admins_project_path(project))
-      expect(flash[:error]).not_to be_nil
-      expect(project.admins).to match_array([])
-    end
-  end
-
   describe '#awards' do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
     let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
@@ -272,7 +181,7 @@ describe ProjectsController do
         expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats'])
       end
     end
-  describe 'logged out'
+    describe 'logged out'
     it 'redirect to signup page if you are not logged in' do
       logout
       get :landing
@@ -358,8 +267,8 @@ describe ProjectsController do
     end
 
     it 'when invalid, returns 422' do
-      expect do
-        expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
           post :create, params: {
             project: {
               # title: "Project title here",
@@ -419,7 +328,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
       end.to change { Project.count }.by(1)
 
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           project: {
             title: 'Project title here',
@@ -590,7 +499,7 @@ describe ProjectsController do
       context 'with rendered views' do
         render_views
         it 'returns 422 when updating fails' do
-          expect do
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             put :update, params: {
               id: cat_project.to_param,
               project: {

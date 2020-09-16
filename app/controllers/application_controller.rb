@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   respond_to :html
   # layout 'raw'
   include Pundit
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
+  after_action :verify_authorized, except: :index # rubocop:todo Rails/LexicallyScopedActionFilter
+  after_action :verify_policy_scoped, only: :index # rubocop:todo Rails/LexicallyScopedActionFilter
   after_action :set_whitelabel_cors
 
   # Prevent CSRF attacks by raising an exception.
@@ -34,9 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authenticated(msg = nil)
-    if "#{controller_name}##{action_name}" == 'interests#create' && params[:project_id]
-      session[:interested_in_project] = params[:project_id]
-    end
+    session[:interested_in_project] = params[:project_id] if "#{controller_name}##{action_name}" == 'interests#create' && params[:project_id]
 
     respond_to do |format|
       format.html do
@@ -56,7 +54,7 @@ class ApplicationController < ActionController::Base
     head :unauthorized
   end
 
-  def redirect_back_to_session
+  def redirect_back_to_session # rubocop:todo Metrics/CyclomaticComplexity
     if current_account&.valid? && current_account&.confirmed? && session[:return_to]
       redirect_url = session[:return_to]
       session.delete(:return_to)
@@ -64,7 +62,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def create_interest_from_session
+  def create_interest_from_session # rubocop:todo Metrics/CyclomaticComplexity
     if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
       current_account.interests.create(
         project: Project.find(session[:interested_in_project].to_i),
@@ -77,7 +75,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
-  def not_found(e)
+  def not_found(e) # rubocop:todo Naming/MethodParameterName
     if Rails.env.development?
       raise e
     else
@@ -102,10 +100,8 @@ class ApplicationController < ActionController::Base
     not_authenticated if session[:account_id].blank?
   end
 
-  def require_email_confirmation
-    if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-      redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' }
-    end
+  def require_email_confirmation # rubocop:todo Metrics/CyclomaticComplexity
+    redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' } if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
   end
 
   def require_build_profile
@@ -122,9 +118,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_age
-    if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
-      redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website'
-    end
+    redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website' if current_account&.valid_and_underage? && controller_name != 'accounts'
   end
 
   def current_account
@@ -148,7 +142,8 @@ class ApplicationController < ActionController::Base
     return redirect_to '/404.html' unless @project
   end
 
-  def task_to_props(task)
+  # rubocop:todo Metrics/PerceivedComplexity
+  def task_to_props(task) # rubocop:todo Metrics/CyclomaticComplexity
     task&.serializable_hash&.merge({
       description_html: Comakery::Markdown.to_html(task.description),
       requirements_html: Comakery::Markdown.to_html(task.requirements),
@@ -208,14 +203,14 @@ class ApplicationController < ActionController::Base
       status: task.status.humanize.downcase
     })
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # :nocov:
 
   def d(the_proc)
     return if Rails.env.test?
-    unless the_proc.instance_of?(Proc)
-      return STDERR.puts("d expected an instance of Proc, got #{the_proc.try(:inspect)}")
-    end
+    return warn("d expected an instance of Proc, got #{the_proc.try(:inspect)}") unless the_proc.instance_of?(Proc)
+
     source = the_proc.try(:source).try(:match, /\s*proc { (.+) }\s*/).try(:[], 1)
     logger.debug "#{source} ===>>> " if source
     value = the_proc.call
@@ -237,26 +232,30 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def compare_all(*pairs)
-    pairs.map do |a, b|
-      ActiveSupport::SecurityUtils.secure_compare(a, b)
-    end.reduce(:&)
-  end
-
-  def set_whitelabel_mission
-    @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
-  end
-
-  def set_project_scope
-    @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
-  end
-
-  def set_whitelabel_cors
-    if @whitelabel_mission
-      headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
-      headers['Access-Control-Allow-Credentials'] = 'true'
-      headers['Access-Control-Allow-Methods'] = '*'
-      headers['Access-Control-Allow-Headers'] = '*'
+    def compare_all(*pairs)
+      pairs.map do |a, b|
+        ActiveSupport::SecurityUtils.secure_compare(a, b)
+      end.reduce(:&)
     end
-  end
+
+    def set_whitelabel_mission
+      # rubocop:todo Naming/MemoizedInstanceVariableName
+      @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
+      # rubocop:enable Naming/MemoizedInstanceVariableName
+    end
+
+    def set_project_scope
+      # rubocop:todo Naming/MemoizedInstanceVariableName
+      @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
+      # rubocop:enable Naming/MemoizedInstanceVariableName
+    end
+
+    def set_whitelabel_cors
+      if @whitelabel_mission
+        headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
+        headers['Access-Control-Allow-Credentials'] = 'true'
+        headers['Access-Control-Allow-Methods'] = '*'
+        headers['Access-Control-Allow-Headers'] = '*'
+      end
+    end
 end
