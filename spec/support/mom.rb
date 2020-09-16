@@ -295,7 +295,7 @@ class Mom
     }
 
     t = Token.new(defaults.merge(attrs))
-    
+
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
       t.save!
     end
@@ -315,7 +315,7 @@ class Mom
       token_frozen: false
     }
     t = Token.new(defaults.merge(attrs))
-    
+
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
       t.save!
     end
@@ -335,7 +335,7 @@ class Mom
       token_frozen: false
     }
     t = Token.new(defaults.merge(attrs))
-    
+
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
       t.save!
     end
@@ -350,7 +350,7 @@ class Mom
       _blockchain: :constellation_test
     }
     t = Token.new(defaults.merge(attrs))
-    
+
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
       t.save!
     end

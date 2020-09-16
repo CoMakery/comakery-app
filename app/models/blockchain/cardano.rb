@@ -91,8 +91,6 @@ class Blockchain::Cardano < Blockchain
   def validate_addr_format(addr)
     load 'app/schmoozers/cardano_address_validator_schmoozer.rb'
 
-    unless CardanoAddressValidatorSchmoozer.new(__dir__).is_valid_address(addr)
-      raise Blockchain::Address::ValidationError.new("should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters")
-    end
+    raise Blockchain::Address::ValidationError, "should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters" unless CardanoAddressValidatorSchmoozer.new(__dir__).is_valid_address(addr)
   end
 end

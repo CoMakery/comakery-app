@@ -91,41 +91,41 @@ class TokensController < ApplicationController
       @token = Token.find(params[:id]).decorate
     end
 
-  def set_token_types
-    @token_types = Token._token_types.invert
-  end
+    def set_token_types
+      @token_types = Token._token_types.invert
+    end
 
-  def set_blockchains
-    @blockchains = Token._blockchains.invert
-  end
+    def set_blockchains
+      @blockchains = Token._blockchains.invert
+    end
 
-  def set_generic_props
-    @props = {
-      token: @token&.serializable_hash&.merge(
-        {
-          logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
-        }
-      ),
-      token_types: @token_types,
-      blockchains: @blockchains,
-      form_url: tokens_path,
-      form_action: 'POST',
-      url_on_success: tokens_path,
-      csrf_token: form_authenticity_token
-    }
-  end
+    def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity
+      @props = {
+        token: @token&.serializable_hash&.merge(
+          {
+            logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
+          }
+        ),
+        token_types: @token_types,
+        blockchains: @blockchains,
+        form_url: tokens_path,
+        form_action: 'POST',
+        url_on_success: tokens_path,
+        csrf_token: form_authenticity_token
+      }
+    end
 
-  def token_params
-    params.require(:token).permit(
-      :name,
-      :logo_image,
-      :denomination,
-      :_token_type,
-      :_blockchain,
-      :contract_address,
-      :symbol,
-      :decimal_places,
-      :unlisted
-    )
-  end
+    def token_params
+      params.require(:token).permit(
+        :name,
+        :logo_image,
+        :denomination,
+        :_token_type,
+        :_blockchain,
+        :contract_address,
+        :symbol,
+        :decimal_places,
+        :unlisted
+      )
+    end
 end

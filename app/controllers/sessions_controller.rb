@@ -88,9 +88,10 @@ class SessionsController < ApplicationController
       false
     end
 
-    def process_new_award_notice
+    def process_new_award_notice # rubocop:todo Metrics/CyclomaticComplexity
       project = current_account.awards&.completed&.last&.project
       return nil unless project&.token
+
       send("process_new_#{project.token.blockchain_name_for_wallet}_award_notice")
     end
 

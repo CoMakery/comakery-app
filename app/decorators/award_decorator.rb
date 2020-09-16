@@ -56,13 +56,8 @@ class AwardDecorator < Draper::Decorator
     recipient_auth_team&.name || account.decorate.name
   end
 
-<<<<<<< HEAD
-  def issuer_address
-    if object.token&._token_type_on_ethereum?
-=======
   def issuer_address # rubocop:todo Metrics/CyclomaticComplexity
-    if object.token&.coin_type_on_ethereum?
->>>>>>> acceptance
+    if object.token&._token_type_on_ethereum?
       issuer&.ethereum_wallet
     elsif object.token&._token_type_on_qtum?
       issuer&.qtum_wallet
@@ -91,15 +86,9 @@ class AwardDecorator < Draper::Decorator
     BigDecimal(10.pow(project.token&.decimal_places || 0) * total_amount)&.to_s&.to_i
   end
 
-<<<<<<< HEAD
-  def stimulus_data(controller_name, action)
+  def stimulus_data(controller_name, action) # rubocop:todo Metrics/CyclomaticComplexity
     case project.token&._token_type
     when 'erc20', 'eth', 'comakery_security_token'
-=======
-  def stimulus_data(controller_name, action) # rubocop:todo Metrics/CyclomaticComplexity
-    case project.token&.coin_type
-    when 'erc20', 'eth', 'comakery'
->>>>>>> acceptance
       {
         'controller' => controller_name,
         'target' => "#{controller_name}.button",

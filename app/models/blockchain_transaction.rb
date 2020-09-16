@@ -13,8 +13,8 @@ class BlockchainTransaction < ApplicationRecord
   validates :contract_address, presence: true, if: -> { token._token_type_token? }
   validates :tx_raw, :tx_hash, presence: true, if: -> { token._token_type_comakery_security_token? && nonce.present? }
 
-  enum network: %i[ethereum ethereum_ropsten ethereum_kovan ethereum_rinkeby constellation constellation_test]
-  enum status: %i[created pending cancelled succeed failed]
+  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5 }
+  enum status: { created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }
 
   def self.number_of_confirmations
     ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i
@@ -106,9 +106,7 @@ class BlockchainTransaction < ApplicationRecord
       self.network ||= token._blockchain
       self.contract_address ||= token.contract_address
 
-      if token._token_type_on_ethereum?
-        self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block
-      end
+      self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block if token._token_type_on_ethereum?
     end
 
     # @abstract Subclass is expected to implement #tx

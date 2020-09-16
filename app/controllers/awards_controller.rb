@@ -520,6 +520,7 @@ class AwardsController < ApplicationController
 
     def confirm_message(project)
       return nil unless project.token
+
       send("confirm_message_for_#{project.token&.blockchain_name_for_wallet}_award")
     end
 

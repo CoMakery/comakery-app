@@ -91,8 +91,6 @@ class Blockchain::Bitcoin < Blockchain
   def validate_addr_format(addr)
     load 'app/schmoozers/bitcoin_address_validator_schmoozer.rb'
 
-    unless BitcoinAddressValidatorSchmoozer.new(__dir__).is_valid_bitcoin_address(addr)
-      raise Blockchain::Address::ValidationError.new('should start with either 1 or 3 and have length between 26 and 35 characters')
-    end
+    raise Blockchain::Address::ValidationError, 'should start with either 1 or 3 and have length between 26 and 35 characters' unless BitcoinAddressValidatorSchmoozer.new(__dir__).is_valid_bitcoin_address(addr)
   end
 end

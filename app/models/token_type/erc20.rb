@@ -29,7 +29,9 @@ class TokenType::Erc20 < TokenType
   # ABI structure if present
   # @return [Hash] abi
   def abi
+    # rubocop:todo Rails/FilePath
     @abi ||= JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
+    # rubocop:enable Rails/FilePath
   end
 
   # Transaction instance if implemented

@@ -13,9 +13,7 @@ class Views::Shared::Awards < Views::Base
           th(class: 'small-2') { text 'Recipient' } if show_recipient
           th(class: 'small-2') { text 'Contribution' }
           th(class: 'small-2') { text 'Authorized By' }
-          if project.token&._token_type?
-            th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
-          end
+          th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' } if project.token&._token_type?
           th(class: 'small-1', style: 'text-align: center') { text 'status' }
         end
         awards.each do |award|

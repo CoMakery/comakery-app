@@ -17,7 +17,7 @@ describe 'tokens features', js: true do
 
     select('eTH', from: 'token[_token_type]', visible: false)
     select('Ethereum', from: 'token[_blockchain]', visible: false)
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'create & close'
     find :css, '.token-index', wait: 10
@@ -123,15 +123,9 @@ describe 'tokens features', js: true do
     expect(page).to have_content 'Edit Token'
     expect(find_field('token[name]').value).to eq 'ETH'
 
-<<<<<<< HEAD
     select('eTH', from: 'token[_token_type]', visible: false)
     select('Ethereum', from: 'token[_blockchain]', visible: false)
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
-=======
-    select('eTH', from: 'token[coin_type]', visible: false)
-    select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
->>>>>>> acceptance
 
     click_on 'save & close'
     find :css, '.token-index', wait: 10

@@ -227,14 +227,14 @@ class AccountsController < ApplicationController
       UserMailer.with(whitelabel_mission: @whitelabel_mission).underage_alert(@current_account, old_age).deliver_now if @current_account.age >= 18
     end
 
-  def project_decorate(project, award = nil)
-    project.as_json(only: %i[id title token_symbol]).merge(
-      awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
-      award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
-      total_awarded: project.decorate.total_awarded_to_user(current_account),
-      token: project.token ? project.token.serializable_hash : {}
-    )
-  end
+    def project_decorate(project, award = nil)
+      project.as_json(only: %i[id title token_symbol]).merge(
+        awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
+        award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
+        total_awarded: project.decorate.total_awarded_to_user(current_account),
+        token: project.token ? project.token.serializable_hash : {}
+      )
+    end
 
     def account_decorate(account)
       account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet constellation_wallet]).merge(

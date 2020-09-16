@@ -89,8 +89,6 @@ class Blockchain::Tezos < Blockchain
   end
 
   def validate_addr_format(addr)
-    if addr !~ /\A(tz1)[a-zA-Z0-9]{33}\z/
-      raise Blockchain::Address::ValidationError.new("should start with 'tz1', followed by 33 characters")
-    end
+    raise Blockchain::Address::ValidationError, "should start with 'tz1', followed by 33 characters" unless /\A(tz1)[a-zA-Z0-9]{33}\z/.match?(addr)
   end
 end

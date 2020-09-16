@@ -90,17 +90,13 @@ class Blockchain::Constellation < Blockchain
   end
 
   def validate_addr_format(addr)
-    if addr !~ /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/
-      raise Blockchain::Address::ValidationError.new("should start with 'DAG', followed by 37 characters")
-    end
+    raise Blockchain::Address::ValidationError, "should start with 'DAG', followed by 37 characters" unless /^DAG\d[1-9A-HJ-NP-Za-km-z]{36}$/.match?(addr)
   end
 
-  def validate_addr_checksum(addr)
+  def validate_addr_checksum(addr) # rubocop:todo Metrics/CyclomaticComplexity
     included_checksum = addr[3]
     computed_checksum = addr[4..-1]&.scan(/\d/)&.map(&:to_i)&.reduce(&:+)&.modulo(9)
 
-    if included_checksum.to_i != computed_checksum.to_i
-      raise Blockchain::Address::ValidationError.new('should include valid checksum')
-    end
+    raise Blockchain::Address::ValidationError, 'should include valid checksum' if included_checksum.to_i != computed_checksum.to_i
   end
 end

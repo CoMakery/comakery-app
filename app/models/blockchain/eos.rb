@@ -89,8 +89,6 @@ class Blockchain::Eos < Blockchain
   end
 
   def validate_addr_format(addr)
-    if addr !~ /\A[a-z1-5]{12}\z/
-      raise Blockchain::Address::ValidationError.new("should only include letters 'a-z' and digits '1-5', and have length 12 characters")
-    end
+    raise Blockchain::Address::ValidationError, "should only include letters 'a-z' and digits '1-5', and have length 12 characters" unless /\A[a-z1-5]{12}\z/.match?(addr)
   end
 end

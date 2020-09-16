@@ -89,8 +89,6 @@ class Blockchain::Qtum < Blockchain
   end
 
   def validate_addr_format(addr)
-    if (addr !~ /\A[qQ][a-km-zA-HJ-NP-Z0-9]{33}\z/) && (addr !~ /\A[0-9a-fA-F]{40}\z/)
-      raise Blockchain::Address::ValidationError.new("should start with 'Q', followed by 33 characters; or should have 40 hex characters")
-    end
+    raise Blockchain::Address::ValidationError, "should start with 'Q', followed by 33 characters; or should have 40 hex characters" if (addr !~ /\A[qQ][a-km-zA-HJ-NP-Z0-9]{33}\z/) && (addr !~ /\A[0-9a-fA-F]{40}\z/)
   end
 end
