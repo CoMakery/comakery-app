@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://example.org/api/contract/583cbbb8a8443b38abcc0c956bece47340ea1367
+    uri: https://example.org/api/contract/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     body:
       encoding: US-ASCII
       string: ''
@@ -23,11 +23,11 @@ http_interactions:
       Content-Type:
       - text/html; charset=UTF-8
       Date:
-      - Tue, 15 Sep 2020 16:42:49 GMT
+      - Wed, 16 Sep 2020 20:41:59 GMT
       Expires:
-      - Tue, 22 Sep 2020 16:42:49 GMT
+      - Wed, 23 Sep 2020 20:41:59 GMT
       Server:
-      - EOS (vny/044F)
+      - EOS (vny/044E)
       Vary:
       - Accept-Encoding
       Content-Length:
@@ -52,5 +52,5 @@ http_interactions:
         permission.</p>\n    <p><a href=\"https://www.iana.org/domains/example\">More
         information...</a></p>\n</div>\n</body>\n</html>\n"
     http_version: null
-  recorded_at: Tue, 15 Sep 2020 16:42:49 GMT
+  recorded_at: Wed, 16 Sep 2020 20:41:59 GMT
 recorded_with: VCR 5.1.0

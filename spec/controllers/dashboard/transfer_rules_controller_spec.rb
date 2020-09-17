@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::TransferRulesController, type: :controller do
-  let!(:token) { create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
+  let!(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
   let!(:project) { create(:project, visibility: :public_listed, token: token) }
   let!(:transfer_rule) { create(:transfer_rule, token: token) }
 

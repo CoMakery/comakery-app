@@ -31,7 +31,6 @@ describe TokensController do
       it 'returns correct react component' do
         get :new
         expect(response.status).to eq(200)
-        expect(assigns[:token]).to be_a_new_record
       end
     end
   end

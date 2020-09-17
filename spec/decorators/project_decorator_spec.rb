@@ -123,7 +123,7 @@ describe ProjectDecorator do
       create(:award, award_type: award_type, quantity: 1000, amount: 1337, issuer: project.account, account: create(:account))
     end
 
-    specify { expect(project.total_awarded_pretty).to eq('1,337,000') }
+    specify { expect(project.total_awarded_pretty).to eq('1,337,000.00000000') }
   end
 
   describe '#total_awards_outstanding' do
@@ -144,7 +144,7 @@ describe ProjectDecorator do
         .and_return(1_234_567)
 
       expect(project.total_awarded_pretty)
-        .to eq('1,234,567')
+        .to eq('1,234,567.00000000')
     end
   end
 
@@ -153,7 +153,7 @@ describe ProjectDecorator do
       account = create(:account)
       create(:award, award_type: award_type, amount: 1337, account: account)
       expect(project.total_awarded_to_user(account))
-        .to eq('1,337')
+        .to eq('1,337.00000000')
     end
   end
 
@@ -180,7 +180,7 @@ describe ProjectDecorator do
     let!(:award_type) { create(:award_type, project: project, state: 'public') }
     let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
     let!(:project_wo_image) { create(:project) }
-    let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
+    let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
     it 'includes required data for project header component' do
       props = project.decorate.header_props

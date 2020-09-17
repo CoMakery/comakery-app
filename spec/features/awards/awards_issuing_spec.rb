@@ -5,7 +5,7 @@ describe 'awards issuing', js: true do
   let!(:current_auth) { create(:sb_authentication) }
   let!(:awardee_auth) { create(:sb_authentication, account: create(:account, first_name: 'A', ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
   let!(:awardee_auth2) { create(:sb_authentication, account: create(:account, first_name: 'Z', ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1368')) }
-  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, token: create(:token, decimal_places: 8, _token_type: 'erc20', _blockchain: :ethereum_ropsten)) }
+  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, token: create(:token, decimal_places: 8, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
   let!(:channel1) { create(:channel, team: team, project: project1, name: 'channel1') }
   let!(:award_type1) { create(:award_type, project: project1) }
   let!(:award1) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }

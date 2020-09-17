@@ -64,7 +64,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
 
       it 'returns an error' do
-        project.token.update(_token_type: :btc)
+        project.token.update(_token_type: :btc, _blockchain: :bitcoin)
 
         params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id

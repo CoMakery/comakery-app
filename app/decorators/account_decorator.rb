@@ -47,7 +47,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def wallet_address_for(project)
-    blockchain_name = project.decorate.blockchain_name
+    blockchain_name = project.token&.blockchain_name_for_wallet
     blockchain_name && send("#{blockchain_name}_wallet")
   end
 

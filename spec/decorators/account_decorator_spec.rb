@@ -96,7 +96,7 @@ describe AccountDecorator do
 
     context 'on cardano network' do
       let!(:recipient) { create(:account, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'ada') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'ada', _blockchain: 'cardano') }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true
@@ -110,7 +110,7 @@ describe AccountDecorator do
 
     context 'on qtum network' do
       let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'qrc20') }
+      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'qtum', _blockchain: 'qtum') }
 
       it 'returns true' do
         expect(recipient.decorate.can_receive_awards?(project)).to be true
@@ -124,9 +124,10 @@ describe AccountDecorator do
 
     context '_token_type nil' do
       let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: nil) }
+      let!(:project) { build :project, payment_type: 'project_token' }
 
       it 'returns false' do
+        project.token = nil
         expect(recipient.decorate.can_receive_awards?(project)).to be false
       end
     end
@@ -150,7 +151,7 @@ describe AccountDecorator do
     let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
     let!(:project_w_token) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum) }
     let!(:project_wo_token) { create :project, token: nil }
-    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
+    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_test) }
 
     it 'returns link for wallet address if account has address for project token' do

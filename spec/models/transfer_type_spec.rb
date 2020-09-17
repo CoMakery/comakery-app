@@ -50,7 +50,7 @@ RSpec.describe TransferType, type: :model do
     end
 
     context 'when project uses security token' do
-      let!(:project) { create(:project, token: create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
+      let!(:project) { create(:project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
       it 'creates additional default records' do
         expect(project.reload.transfer_types.size).to eq(4)

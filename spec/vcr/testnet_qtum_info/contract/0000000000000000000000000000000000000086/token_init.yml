@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://testnet.qtum.info/api/contract/0000000000000000000000000000000000000086
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 16 Sep 2020 16:35:33 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d44ad4c07239ecceef3795c72aa831f231600274133; expires=Fri, 16-Oct-20
+        16:35:33 GMT; path=/; domain=.qtum.info; HttpOnly; SameSite=Lax
+      Vary:
+      - Origin
+      Rate-Limit-Remaining:
+      - '599'
+      Rate-Limit-Reset:
+      - '1600274733'
+      Rate-Limit-Total:
+      - '600'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Readtime:
+      - '16'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '05395e88d80000edc78b0cc200000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5d3c00548c80edc7-CDG
+    body:
+      encoding: ASCII-8BIT
+      string: '{"address":"0000000000000000000000000000000000000086","addressHex":"0000000000000000000000000000000000000086","vm":"evm","type":"offline-staking","createHeight":625000,"destructHeight":null,"balance":"0","totalReceived":"0","totalSent":"0","unconfirmed":"0","qrc20Balances":[],"qrc721Balances":[],"transactionCount":1078}'
+    http_version: null
+  recorded_at: Wed, 16 Sep 2020 16:35:33 GMT
+recorded_with: VCR 5.1.0

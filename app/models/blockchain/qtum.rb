@@ -11,7 +11,7 @@ class Blockchain::Qtum < Blockchain
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    'example.org'
+    'qtum.info'
   end
 
   # Hostname of block explorer website

@@ -23,7 +23,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 16 Sep 2020 20:05:25 GMT
+      - Wed, 16 Sep 2020 20:23:37 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,13 +36,13 @@ http_interactions:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","id":1,"result":[]}'
     http_version: null
-  recorded_at: Wed, 16 Sep 2020 20:05:25 GMT
+  recorded_at: Wed, 16 Sep 2020 20:23:37 GMT
 - request:
     method: post
     uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0x583cbbb8a8443b38abcc0c956bece47340ea1367","from":null,"data":"0x313ce5670000000000000000000000000000000000000000000000000000000000000000","gas":"0x3d0900","gasPrice":"0x51f4d5c00"},"latest"],"id":1}'
+      string: '{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0x1D1592c28FFF3d3E71b1d29E31147846026A0a37","from":null,"data":"0x313ce5670000000000000000000000000000000000000000000000000000000000000000","gas":"0x3d0900","gasPrice":"0x51f4d5c00"},"latest"],"id":1}'
     headers:
       Content-Type:
       - application/json
@@ -60,7 +60,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 16 Sep 2020 20:05:25 GMT
+      - Wed, 16 Sep 2020 20:23:38 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -71,7 +71,7 @@ http_interactions:
       - Origin
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000012"}'
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000000"}'
     http_version: null
-  recorded_at: Wed, 16 Sep 2020 20:05:25 GMT
+  recorded_at: Wed, 16 Sep 2020 20:23:38 GMT
 recorded_with: VCR 5.1.0

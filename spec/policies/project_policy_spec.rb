@@ -107,7 +107,7 @@ describe ProjectPolicy do
   end
 
   describe 'show_transfer_rules?' do
-    let!(:my_public_project_w_comakery_token) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed', token: create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
+    let!(:my_public_project_w_comakery_token) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed', token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
     it 'returns true for projects with truthy show_contributions supporting transfer rules' do
       authorized(nil, my_public_project_w_comakery_token, :show_transfer_rules?)

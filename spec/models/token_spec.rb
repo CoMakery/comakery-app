@@ -55,7 +55,7 @@ describe Token do
     end
 
     describe '_token_type' do
-      let(:attrs) { { symbol: 'CBB', decimal_places: 8, _blockchain: 'ethereum_ropsten', contract_address: 'a' * 40 } }
+      let(:attrs) { { symbol: 'CBB', decimal_places: 8, _blockchain: 'ethereum_ropsten', contract_address: build(:ethereum_contract_address) } }
 
       it 'eq erc20' do
         token = create :token, attrs.merge(_token_type: 'erc20', _blockchain: :ethereum_ropsten)
@@ -78,11 +78,11 @@ describe Token do
       end
 
       it 'eq qrc20' do
-        token = create :token, attrs.merge(_token_type: 'qrc20', _blockchain: :qtum)
+        token = create :token, attrs.merge(_token_type: 'qrc20', _blockchain: :qtum_test, contract_address: '0000000000000000000000000000000000000086')
         expect(token).to be_valid
         expect(token.reload._token_type).to eq 'qrc20'
-        expect(token._blockchain).to eq 'qtum'
-        expect(token.contract_address).to eq 'a' * 40
+        expect(token._blockchain).to eq 'qtum_test'
+        expect(token.contract_address).to eq '0000000000000000000000000000000000000086'
         expect(token.symbol).to eq 'CBB'
         expect(token.decimal_places).to eq 8
       end
@@ -119,7 +119,7 @@ describe Token do
   end
 
   describe 'associations' do
-    let!(:token) { create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
+    let!(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let!(:project) { create(:project, token: token) }
     let!(:account_token_record) { create(:account_token_record, token: token) }
     let!(:reg_group) { create(:reg_group, token: token) }
@@ -174,7 +174,7 @@ describe Token do
   end
 
   describe 'abi' do
-    let!(:comakery_token) { create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten) }
+    let!(:comakery_token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let!(:token) { create(:token) }
 
     it 'returns correct abi for Comakery Token' do
@@ -196,7 +196,7 @@ describe Token do
 
   describe 'default_reg_group' do
     it 'returns default reg group for token' do
-      expect(create(:token, _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten).default_reg_group).to be_a(RegGroup)
+      expect(create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten).default_reg_group).to be_a(RegGroup)
     end
   end
 end

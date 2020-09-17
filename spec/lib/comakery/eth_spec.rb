@@ -19,7 +19,7 @@ describe Comakery::Eth do
 
   describe 'current_block', vcr: true do
     it 'returns current eth block from blockchain' do
-      expect(build(:eth_client).current_block).to eq(7629060)
+      expect(build(:eth_client).current_block).to eq(8691686)
     end
   end
 end

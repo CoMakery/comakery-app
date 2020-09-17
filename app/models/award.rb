@@ -126,7 +126,7 @@ class Award < ApplicationRecord
 
   def amount_to_send
     if project.token
-      project.token&.to_base_unit(total_amount)
+      project.token&.to_base_unit(total_amount)&.to_i
     else
       total_amount.to_i
     end

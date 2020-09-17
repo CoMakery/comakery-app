@@ -9,7 +9,7 @@ class Comakery::Qtum
   end
 
   def contract(address)
-    JSON.parse((open "https://#{host}/api/contract/#{address}").read)
+    JSON.parse((URI.open "https://#{host}/api/contract/#{address}").read)
   end
 
   def fetch_symbol_and_decimals(address)

@@ -25,7 +25,7 @@ describe 'shared/_project_header.html.rb' do
 
   context "with _token_type eq 'qrc20'" do
     let!(:project) do
-      create(:project, token: create(:token, ethereum_enabled: true, contract_address: '583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'qrc20', _blockchain: 'qtum_test'))
+      create(:project, token: create(:token, ethereum_enabled: true, contract_address: '0000000000000000000000000000000000000086', _token_type: 'qrc20', _blockchain: 'qtum_test'))
     end
 
     before do

@@ -16,7 +16,11 @@ class Comakery::Eth::Contract::Erc20
     function = functions.find { |f| f.name.casecmp?(method_name.to_s) }
 
     if function
-      tx(contract.call_payload(function, args))
+      if args.empty?
+        contract.call.send(method_name)
+      else
+        tx(contract.call_payload(function, args))
+      end
     else
       super
     end

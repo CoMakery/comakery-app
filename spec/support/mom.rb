@@ -653,10 +653,10 @@ class Mom
 
     contract_address = attrs[:contract_address] || token.contract_address
     abi = attrs[:abi] || token.abi
-    host = attrs[:host] || 'ropsten.infura.io'
+    host = attrs[:host] || token.blockchain.explorer_api_host
     nonce = attrs[:nonce] || rand(1_000_000)
 
-    VCR.use_cassette("infura/#{host.split('.').first}/#{contract_address}/contract_init") do
+    VCR.use_cassette("#{host}/contract/#{contract_address}/contract_init") do
       Comakery::Eth::Contract::Erc20.new(
         contract_address,
         abi,

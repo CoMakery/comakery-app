@@ -15,7 +15,7 @@ describe AwardDecorator do
   describe '#issuer_display_name' do
     context 'on ethereum network' do
       let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
+      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
       let!(:award_type) { create :award_type, project: project }
       let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
@@ -34,7 +34,7 @@ describe AwardDecorator do
 
     context 'on qtum network' do
       let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', qtum_wallet: 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM' }
-      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'qrc20', _blockchain: 'qtum_test') }
+      let!(:project) { create :project, account: issuer, token: create(:token, _token_type: 'qtum', _blockchain: 'qtum_test') }
       let!(:award_type) { create :award_type, project: project }
       let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
@@ -54,7 +54,7 @@ describe AwardDecorator do
 
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
+    let!(:project) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 
@@ -78,13 +78,13 @@ describe AwardDecorator do
   context 'json_for_sending_awards' do
     let!(:recipient) { create :account, id: 529, first_name: 'Account', last_name: 'ABC', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten) }
+    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
     it 'valid' do
       award.project.token.contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"50.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":50,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null,"tezos_wallet":null},"project":{"id":512},"award_type":{"id":#{award_type.id}},"token":{"id":#{project.token.id},"_token_type":"erc20","_blockchain":null,"contract_address":null,"contract_address":null}})
+      expected = %({"id":521,"total_amount":"50.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":50,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null,"tezos_wallet":null},"project":{"id":512},"award_type":{"id":#{award_type.id}},"token":{"id":#{project.token.id},"blockchain_network":null,"contract_address":"0x1D1592c28FFF3d3E71b1d29E31147846026A0a37","_blockchain":"ethereum_ropsten","_token_type":"erc20"}})
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
 
@@ -111,15 +111,15 @@ describe AwardDecorator do
 
   it 'display amount_pretty' do
     award = create :award, amount: 2.34
-    expect(award.decorate.amount_pretty).to eq '2'
+    expect(award.decorate.amount_pretty).to eq '2.34000000'
   end
 
   it 'display total_amount_pretty' do
     award = create :award, quantity: 2.5
-    expect(award.decorate.total_amount_pretty).to eq '125'
+    expect(award.decorate.total_amount_pretty).to eq '125.00000000'
 
     award = create :award, quantity: 25
-    expect(award.decorate.total_amount_pretty).to eq '1,250'
+    expect(award.decorate.total_amount_pretty).to eq '1,250.00000000'
 
     award.token.update decimal_places: 2
     expect(award.decorate.total_amount_pretty).to eq '1,250.00'

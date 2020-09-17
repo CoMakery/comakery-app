@@ -146,7 +146,7 @@ describe SessionsController do
     let!(:account) { create(:account, email: 'user@example.com', password: '12345678') }
     let!(:account1) { create(:account, email: 'user1@example.com', password: '12345678', email_confirm_token: '1234') }
     let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
-    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten)) }
+    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
     it 'allows to login with managed account on according whitelabel instance' do
       active_whitelabel_mission = create(:active_whitelabel_mission)
@@ -230,7 +230,7 @@ describe SessionsController do
     end
 
     context 'on Qtum network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'qrc20')) }
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'qtum', _blockchain: 'qtum')) }
 
       it 'notice to update qtm_wallet' do
         account.update new_award_notice: true
@@ -250,7 +250,7 @@ describe SessionsController do
     end
 
     context 'on Cardano network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'ada')) }
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'ada', _blockchain: 'cardano')) }
 
       it 'notice to update cardano_wallet' do
         account.update new_award_notice: true
@@ -290,7 +290,7 @@ describe SessionsController do
     end
 
     context 'on EOS network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eos')) }
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eos', _blockchain: 'eos')) }
 
       it 'notice to update eos_wallet' do
         account.update new_award_notice: true
@@ -310,7 +310,7 @@ describe SessionsController do
     end
 
     context 'on Tezos network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'xtz')) }
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'xtz', _blockchain: 'tezos')) }
 
       it 'notice to update tezos_wallet' do
         account.update new_award_notice: true

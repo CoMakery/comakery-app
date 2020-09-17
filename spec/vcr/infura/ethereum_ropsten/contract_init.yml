@@ -23,7 +23,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 15 Sep 2020 16:08:10 GMT
+      - Wed, 16 Sep 2020 20:40:00 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -34,7 +34,7 @@ http_interactions:
       - Origin
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x849fea"}'
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x84bb61"}'
     http_version: null
-  recorded_at: Tue, 15 Sep 2020 16:08:10 GMT
+  recorded_at: Wed, 16 Sep 2020 20:40:00 GMT
 recorded_with: VCR 5.1.0
