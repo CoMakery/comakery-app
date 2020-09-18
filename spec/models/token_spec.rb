@@ -1,6 +1,24 @@
 require 'rails_helper'
 
-describe Token do
+describe Token, type: :model, vcr: true do
+  it { is_expected.to have_many(:projects) }
+  it { is_expected.to have_many(:accounts) }
+  it { is_expected.to have_many(:account_token_records) }
+  it { is_expected.to have_many(:reg_groups) }
+  it { is_expected.to have_many(:transfer_rules) }
+  it { is_expected.to have_many(:blockchain_transactions) }
+  it { is_expected.to validate_uniqueness_of(:name) }
+  it { is_expected.to validate_presence_of(:_blockchain) }
+  it { is_expected.to validate_presence_of(:_token_type) }
+  it { is_expected.to validate_presence_of(:denomination) }
+  it { is_expected.to define_enum_for(:_blockchain) }
+  it { is_expected.to define_enum_for(:_token_type) }
+
+  describe described_class.new do
+    it { is_expected.to respond_to(:contract) }
+    it { is_expected.to respond_to(:abi) }
+  end
+
   describe 'scopes' do
     describe '.listed' do
       let!(:token) { create(:token) }
@@ -13,169 +31,73 @@ describe Token do
     end
   end
 
-  describe 'validations' do
-    it 'raises error if not found Ethereum address' do
-      stub_const('Comakery::Ethereum::ADDRESS', {})
-      expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
-      stub_web3_fetch
-      expect { described_class.create(contract_address: '111') }.to raise_error(ArgumentError)
+  describe 'denomination' do
+    it 'should contain the platform wide currencies' do
+      expect(described_class.denominations.map { |x, _| x }.sort).to eq(Comakery::Currency::DENOMINATIONS.keys.sort)
+    end
+  end
+
+  describe 'set_values_from_token_type' do
+    it 'loads values from token_type before validation' do
+      token = Token.create!(_token_type: :btc, _blockchain: :bitcoin)
+
+      expect(token.name).to eq(token.token_type.name)
+      expect(token.symbol).to eq(token.token_type.symbol)
+      expect(token.decimal_places).to eq(token.token_type.decimals)
     end
 
-    describe 'denomination enumeration' do
-      let(:token) { build :token }
+    context 'when custom values are provided' do
+      it 'keeps the values' do
+        attrs = {
+          name: 'Dummy Coin',
+          symbol: 'DMC',
+          decimal_places: 2
+        }
 
-      it 'default' do
-        expect(described_class.new.denomination).to eq('USD')
-      end
+        token = Token.create!(_token_type: :btc, _blockchain: :bitcoin, **attrs)
 
-      specify do
-        token.USD!
-        expect(token.denomination).to eq('USD')
-      end
-
-      specify do
-        token.BTC!
-        expect(token.denomination).to eq('BTC')
-      end
-
-      specify do
-        token.ETH!
-        expect(token.denomination).to eq('ETH')
-      end
-    end
-
-    describe 'denomination' do
-      let(:token) { create :token, denomination: 'ETH' }
-
-      it 'can be changed' do
-        token.denomination = 'BTC'
-
-        expect(token).to be_valid
-      end
-    end
-
-    describe '_token_type' do
-      let(:attrs) { { symbol: 'CBB', decimal_places: 8, _blockchain: 'ethereum_ropsten', contract_address: build(:ethereum_contract_address) } }
-
-      it 'eq erc20' do
-        token = create :token, attrs.merge(_token_type: 'erc20', _blockchain: :ethereum_ropsten)
-        expect(token).to be_valid
-        expect(token.reload._token_type).to eq 'erc20'
-        expect(token._blockchain).to eq 'ethereum_ropsten'
-        expect(token.contract_address).to eq 'a' * 40
-        expect(token.symbol).to eq 'CBB'
-        expect(token.decimal_places).to eq 8
-      end
-
-      it 'eq eth' do
-        token = create :token, attrs.merge(_token_type: 'eth', _blockchain: :ethereum_ropsten)
-        expect(token).to be_valid
-        expect(token.reload._token_type).to eq 'eth'
-        expect(token.contract_address).to be_nil
-        expect(token._blockchain).to eq 'ethereum_ropsten'
-        expect(token.symbol).to eq 'ETH'
-        expect(token.decimal_places).to eq 18
-      end
-
-      it 'eq qrc20' do
-        token = create :token, attrs.merge(_token_type: 'qrc20', _blockchain: :qtum_test, contract_address: '0000000000000000000000000000000000000086')
-        expect(token).to be_valid
-        expect(token.reload._token_type).to eq 'qrc20'
-        expect(token._blockchain).to eq 'qtum_test'
-        expect(token.contract_address).to eq '0000000000000000000000000000000000000086'
-        expect(token.symbol).to eq 'CBB'
-        expect(token.decimal_places).to eq 8
-      end
-    end
-
-    describe '#contract_address' do
-      let(:token) { create(:token, _token_type: 'qrc20') }
-      let(:address) { 'b' * 40 }
-
-      it 'valid qtum contract address' do
-        expect(build(:token, _token_type: 'qrc20', contract_address: nil)).to be_valid
-        expect(token.tap { |o| o.contract_address = ('a' * 40).to_s }).to be_valid
-        expect(token.tap { |o| o.contract_address = ('A' * 40).to_s }).to be_valid
-      end
-
-      it 'invalid qtum contract address' do
-        expected_error_message = "Contract address should have 40 characters, should not start with '0x'"
-        expect(token.tap { |o| o.contract_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(token.tap { |o| o.contract_address = '0x' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(token.tap { |o| o.contract_address = "0x#{'a' * 38}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(token.tap { |o| o.contract_address = ('a' * 39).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(token.tap { |o| o.contract_address = ('f' * 41).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-      end
-
-      it { expect(token.contract_address).to eq(nil) }
-
-      it 'can be set' do
-        token.contract_address = address
-        token.save!
-        token.reload
-        expect(token.contract_address).to eq(address)
+        expect(token.name).to eq(attrs[:name])
+        expect(token.symbol).to eq(attrs[:symbol])
+        expect(token.decimal_places).to eq(attrs[:decimal_places])
       end
     end
   end
 
-  describe 'associations' do
-    let!(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
-    let!(:project) { create(:project, token: token) }
-    let!(:account_token_record) { create(:account_token_record, token: token) }
-    let!(:reg_group) { create(:reg_group, token: token) }
-    let!(:transfer_rule) { create(:transfer_rule, token: token) }
-
-    it 'has many projects' do
-      expect(token.projects).to match_array([project])
-    end
-
-    it 'has many account_token_records' do
-      expect(token.account_token_records).to match_array([account_token_record])
-    end
-
-    it 'has many reg_groups' do
-      expect(token.reg_groups).to include(reg_group)
-    end
-
-    it 'has many transfer_rules' do
-      expect(token.transfer_rules).to match_array([transfer_rule])
+  describe 'valid_contract_address' do
+    context 'witn invalid contract_address' do
+      it 'adds an error' do
+        expect(described_class.new(_token_type: :erc20, _blockchain: :ethereum_ropsten, contract_address: '1').valid?).to be_falsey
+      end
     end
   end
 
-  it 'enum of denominations should contain the platform wide currencies' do
-    expect(described_class.denominations.map { |x, _| x }.sort).to eq(Comakery::Currency::DENOMINATIONS.keys.sort)
-  end
-
-  it 'populate_token_symbol' do
-    contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    stub_web3_fetch
-    token = create :token, symbol: nil, contract_address: contract_address
-    expect token.symbol = 'FCBB'
-  end
-
-  it 'set_predefined_values for coins' do
-    %w[eth btc qtum ada eos xtz].each do |coin|
-      token = create :token, _token_type: coin, name: nil
-      expect(token.name).to eq token.token_type.name
-      expect(token.symbol).to eq coin.upcase
-      expect(token.decimal_places).to eq token.token_type.decimals
-    end
-
-    %w[qrc20 erc20].each do |token|
-      expect((create :token, _token_type: token).name).to match(/Token/)
+  describe 'self.blockchain_for' do
+    it 'returns a Blockchain instance for provided name' do
+      expect(described_class.blockchain_for('bitcoin')).to be_a(Blockchain::Bitcoin)
     end
   end
 
-  it 'can manual input symbol' do
-    contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    stub_web3_fetch
-    token = create :token, symbol: 'AAA', contract_address: contract_address
-    expect token.symbol = 'AAA'
+  describe 'blockchain' do
+    it 'returns a Blockchain instance' do
+      expect(described_class.new.blockchain).to be_a(Blockchain::Bitcoin)
+    end
+  end
+
+  describe 'blockchain_name_for_wallet' do
+    it 'returns a Blockchain name suitable for wallet columns on account model' do
+      expect(described_class.new.blockchain_name_for_wallet).to eq('bitcoin')
+    end
+  end
+
+  describe 'token_type' do
+    it 'returns a TokenType instance' do
+      expect(described_class.new.token_type).to be_a(TokenType::Btc)
+    end
   end
 
   describe 'abi' do
     let!(:comakery_token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
-    let!(:token) { create(:token) }
+    let!(:token) { create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten, contract_address: build(:ethereum_contract_address)) }
 
     it 'returns correct abi for Comakery Token' do
       expect(comakery_token.abi.last['name']).to eq('safeApprove')

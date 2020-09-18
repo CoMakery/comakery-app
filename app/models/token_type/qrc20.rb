@@ -11,19 +11,21 @@ class TokenType::Qrc20 < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    @symbol ||= contract.symbol.to_s
+    @symbol ||= contract&.symbol&.to_s
   end
 
   # Number of decimals
   # @return [Integer] number
   def decimals
-    @decimals ||= contract.decimals.to_i
+    @decimals ||= contract&.decimals&.to_i
   end
 
   # Contract instance if implemented
   # @return [nil]
   def contract
-    @contract ||= Comakery::Qtum::Contract::Qrc20.new(contract_address, blockchain.explorer_api_host)
+    @contract ||= blockchain.validate_addr(contract_address) || Comakery::Qtum::Contract::Qrc20.new(contract_address, blockchain.explorer_api_host)
+  rescue Blockchain::Address::ValidationError
+    nil
   end
 
   # ABI structure if present

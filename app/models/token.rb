@@ -8,12 +8,11 @@ class Token < ApplicationRecord
   has_many :account_token_records # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :reg_groups # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :transfer_rules # rubocop:todo Rails/HasManyOrHasOneDependent
-  has_many :transfer_rules_synced, -> { where synced: true } # rubocop:todo Rails/InverseOf
   has_many :blockchain_transactions # rubocop:todo Rails/HasManyOrHasOneDependent
 
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, presence: true
-  validate :valid_contract_address, if: -> { token_type.operates_with_smart_contracts? }
+  validate :valid_contract_address, if: -> { token_type&.operates_with_smart_contracts? }
 
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
@@ -71,7 +70,7 @@ class Token < ApplicationRecord
   end
 
   def blockchain
-    @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new
+    @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new if _blockchain
   end
 
   def blockchain_name_for_wallet
@@ -79,22 +78,24 @@ class Token < ApplicationRecord
   end
 
   def token_type
-    @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(
-      blockchain: blockchain,
-      contract_address: contract_address
-    )
+    if _token_type
+      @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(
+        blockchain: blockchain,
+        contract_address: contract_address
+      )
+    end
   end
 
   def _token_type_token?
-    token_type.operates_with_smart_contracts?
+    token_type&.operates_with_smart_contracts?
   end
 
   def _token_type_on_ethereum?
-    blockchain.name.match?(/^Ethereum/)
+    blockchain&.name&.match?(/^Ethereum/)
   end
 
   def _token_type_on_qtum?
-    blockchain.name.match?(/^Qtum/)
+    blockchain&.name&.match?(/^Qtum/)
   end
 
   def to_base_unit(amount)
@@ -108,11 +109,11 @@ class Token < ApplicationRecord
   private
 
     def set_values_from_token_type # rubocop:todo Metrics/CyclomaticComplexity
-      self.name ||= token_type.name
-      self.symbol ||= token_type.symbol
-      self.decimal_places ||= token_type.decimals
+      self.name ||= token_type&.name
+      self.symbol ||= token_type&.symbol
+      self.decimal_places ||= token_type&.decimals
 
-      self.ethereum_enabled ||= (token_type.operates_with_smart_contracts? && _token_type_on_ethereum?) # Deprecated
+      self.ethereum_enabled ||= (token_type&.operates_with_smart_contracts? && _token_type_on_ethereum?) # Deprecated
     end
 
     def valid_contract_address

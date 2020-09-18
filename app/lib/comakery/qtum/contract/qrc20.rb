@@ -6,10 +6,10 @@ class Comakery::Qtum::Contract::Qrc20
   end
 
   def symbol
-    contract.dig('qrc20', 'symbol')
+    contract&.dig('qrc20', 'symbol')
   end
 
   def decimals
-    contract.dig('qrc20', 'decimals')&.to_i
+    contract&.dig('qrc20', 'decimals')&.to_i
   end
 end

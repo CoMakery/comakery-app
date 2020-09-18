@@ -11,19 +11,21 @@ class TokenType::Erc20 < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    @symbol ||= contract.symbol.to_s
+    @symbol ||= contract&.symbol&.to_s
   end
 
   # Number of decimals
   # @return [Integer] number
   def decimals
-    @decimals ||= contract.decimals.to_i
+    @decimals ||= contract&.decimals&.to_i
   end
 
   # Contract instance if implemented
   # @return [nil]
   def contract
-    @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, abi, blockchain.explorer_api_host, nil)
+    @contract ||= blockchain.validate_addr(contract_address) || Comakery::Eth::Contract::Erc20.new(contract_address, abi, blockchain.explorer_api_host, nil)
+  rescue Blockchain::Address::ValidationError
+    nil
   end
 
   # ABI structure if present

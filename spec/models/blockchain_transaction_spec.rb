@@ -37,7 +37,7 @@ describe BlockchainTransaction, vcr: true do
       end
 
       it 'sets current block' do
-        expect(blockchain_transaction.current_block).to eq(8691686)
+        expect(blockchain_transaction.current_block).to eq(8697793)
       end
     end
 
