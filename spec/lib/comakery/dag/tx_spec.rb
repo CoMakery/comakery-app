@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Comakery::Dag::Tx do
-  let(:network) { 'constellation_test' }
+  let(:host) { 'constellation_test' }
   let(:tx) { 'dummy_tx' }
 
   def stub_field(field, value)
-    stub_constellation_request(network, tx, field => value)
+    stub_constellation_request(host, tx, field => value)
   end
 
   describe '#data' do
@@ -14,7 +14,7 @@ describe Comakery::Dag::Tx do
     end
 
     it 'returns tx data' do
-      expect(described_class.new(network, tx).data).to be_a(Hash)
+      expect(described_class.new(host, tx).data).to be_a(Hash)
     end
   end
 
@@ -25,7 +25,7 @@ describe Comakery::Dag::Tx do
       end
 
       it 'returns true' do
-        expect(described_class.new(network, tx).confirmed?).to be_truthy
+        expect(described_class.new(host, tx).confirmed?).to be_truthy
       end
     end
 
@@ -35,7 +35,7 @@ describe Comakery::Dag::Tx do
       end
 
       it 'returns false' do
-        expect(described_class.new(network, tx).confirmed?).to be_falsey
+        expect(described_class.new(host, tx).confirmed?).to be_falsey
       end
     end
   end
@@ -110,7 +110,7 @@ describe Comakery::Dag::Tx do
       end
 
       it 'returns correct data' do
-        expect(described_class.new(network, tx).send(method)).to eq(0)
+        expect(described_class.new(host, tx).send(method)).to eq(0)
       end
     end
   end

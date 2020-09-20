@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob, type: :job, vcr: true do
-  let!(:token) { stub_blockchain_sync && create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: 'ethereum_ropsten') }
+RSpec.describe BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob, type: :job do
+  let!(:token) { stub_blockchain_sync && create(:token, _token_type: :comakery_security_token, contract_address: '0x0000000000000000000000000000000000000000', _blockchain: 'ethereum') }
   let!(:invalid_token) { stub_blockchain_sync && create(:token) }
   let!(:account) { create(:account, ethereum_wallet: '0x0000000000000000000000000000000000000000') }
   let!(:project) { create(:project, token: token, account: account) }

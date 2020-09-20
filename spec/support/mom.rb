@@ -675,11 +675,11 @@ class Mom
   end
 
   def dag_tx(**attrs)
-    network = attrs[:network] || :constellation_test
+    host = attrs[:host] || :constellation_test
     hash = attrs[:hash] || '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d'
 
     stub_constellation_request(
-      network,
+      host,
       hash,
       'hash' => '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d',
       'amount' => 0,
@@ -688,7 +688,7 @@ class Mom
     )
 
     Comakery::Dag::Tx.new(
-      network,
+      host,
       hash
     )
   end

@@ -2,8 +2,8 @@ class Comakery::Dag::Tx
   attr_reader :constellation
   attr_reader :hash
 
-  def initialize(network, hash)
-    @constellation = Comakery::Constellation.new(network)
+  def initialize(host, hash)
+    @constellation = Comakery::Constellation.new(host)
     @hash = hash
   end
 
