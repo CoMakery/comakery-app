@@ -112,7 +112,7 @@ jobs:
         restore-keys: ${{ matrix.ruby }}-gems-
     
     - name: Install OS dependenices
-      run: sudo apt-get install libpq-dev libssl1.0-dev
+      run: sudo apt-get install libpq-dev libssl-dev
     
     - name: Set up Bundler to use cache
       run: bundle config path 'vendor/bundle'
