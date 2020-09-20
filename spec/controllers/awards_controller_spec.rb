@@ -520,7 +520,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     context 'on Qtum network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'qrc20', _blockchain: 'qtum_test', contract_address: '0000000000000000000000000000000000000086')) }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'qrc20', _blockchain: 'qtum_test', contract_address: '8cfe9e9893e4386645eae8107cd53aaccf96b7fd')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do

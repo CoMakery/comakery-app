@@ -81,10 +81,19 @@ class TokenIndex extends React.Component {
 
                 <div className='token-index--view--info--item'>
                   <div className='token-index--view--info--item--name'>
-                    payment type
+                    token type
                   </div>
                   <div className='token-index--view--info--item--value'>
-                    {this.state.selectedToken._tokenType ? this.state.selectedToken._tokenType.toUpperCase() : null}
+                    {this.state.selectedToken.TokenType.toUpperCase()}
+                  </div>
+                </div>
+
+                <div className='token-index--view--info--item'>
+                  <div className='token-index--view--info--item--name'>
+                    blockchain network
+                  </div>
+                  <div className='token-index--view--info--item--value'>
+                    {this.state.selectedToken.Blockchain}
                   </div>
                 </div>
 

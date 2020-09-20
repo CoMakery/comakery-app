@@ -26,6 +26,8 @@ class TokenForm extends React.Component {
 
     this.lofoInputRef = React.createRef()
 
+    console.log(this.props)
+
     this.state = {
       flashMessages                     : [],
       errors                            : {},
@@ -33,13 +35,13 @@ class TokenForm extends React.Component {
       formAction                        : this.props.formAction,
       formUrl                           : this.props.formUrl,
       closeOnSuccess                    : false,
-      'token[_token_type]'                : this.props.token._tokenType || Object.values(this.props.tokenTypes)[0],
+      'token[_token_type]'              : this.props.token.TokenType || Object.keys(this.props.tokenTypes)[0],
       'token[unlisted]'                 : this.props.token.unlisted ? 'true' : 'false',
       'token[name]'                     : this.props.token.name || '',
       'token[symbol]'                   : this.props.token.symbol || '',
       'token[contract_address]'         : this.props.token.contractAddress || '',
       'token[decimal_places]'           : (!this.props.token.decimalPlaces && this.props.token.decimalPlaces !== 0 ? '' : this.props.token.decimalPlaces.toString()),
-      'token[_blockchain]'       : this.props.token._blockchain || Object.values(this.props.blockchains)[0]
+      'token[_blockchain]'              : this.props.token.Blockchain || Object.keys(this.props.blockchains)[0]
     }
   }
 
@@ -271,7 +273,18 @@ class TokenForm extends React.Component {
 
           <form className='token-form--form' id='token-form--form' onSubmit={this.handleSubmit}>
             <InputFieldDropdownHalfed
-              title='payment type'
+              title='blockchain network'
+              required
+              name='token[_blockchain]'
+              value={this.state['token[_blockchain]']}
+              errorText={this.state.errors['token[_blockchain]']}
+              disabled={this.state.disabled['token[_blockchain]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.blockchains)}
+            />
+
+            <InputFieldDropdownHalfed
+              title='token type'
               required
               name='token[_token_type]'
               value={this.state['token[_token_type]']}
@@ -295,20 +308,17 @@ class TokenForm extends React.Component {
               })}
             />
 
-            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery/) &&
-              <InputFieldHalfed
-                title='token name'
-                required
-                name='token[name]'
-                value={this.state['token[name]']}
-                errorText={this.state.errors['token[name]']}
-                placeholder='Bitcoin'
-                eventHandler={this.handleFieldChange}
-                symbolLimit={0}
-              />
-            }
+            <InputFieldHalfed
+              title='token name'
+              name='token[name]'
+              value={this.state['token[name]']}
+              errorText={this.state.errors['token[name]']}
+              placeholder='Bitcoin'
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
 
-            {this.state['token[_token_type]'].match(/erc20|comakery|qrc20/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token/) &&
               <InputFieldHalfed
                 title='contract address'
                 required
@@ -317,13 +327,13 @@ class TokenForm extends React.Component {
                 errorText={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
-                pattern='[a-fA-F0-9]{40}'
+                pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
             }
 
-            {this.state['token[_token_type]'].match(/qrc20|erc20|comakery/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token/) &&
               <InputFieldHalfed
                 title='token symbol'
                 required
@@ -337,7 +347,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[_token_type]'].match(/qrc20|erc20|comakery/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token/) &&
               <InputFieldHalfed
                 title='decimal places'
                 required
@@ -349,19 +359,6 @@ class TokenForm extends React.Component {
                 readOnly
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
-              />
-            }
-
-            {this.state['token[_token_type]'].match('qrc20|qtum|ada|btc|eos|xtz|dag|eth|erc20|comakery') &&
-              <InputFieldDropdownHalfed
-                title='blockchain network'
-                required
-                name='token[_blockchain]'
-                value={this.state['token[_blockchain]']}
-                errorText={this.state.errors['token[_blockchain]']}
-                disabled={this.state.disabled['token[_blockchain]']}
-                eventHandler={this.handleFieldChange}
-                selectEntries={Object.entries(this.props.blockchains)}
               />
             }
 

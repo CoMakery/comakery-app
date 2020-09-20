@@ -41,7 +41,7 @@ describe Token, type: :model, vcr: true do
     it 'loads values from token_type before validation' do
       token = Token.create!(_token_type: :btc, _blockchain: :bitcoin)
 
-      expect(token.name).to eq(token.token_type.name)
+      expect(token.name).to eq("#{token.token_type&.name&.upcase} (#{token.blockchain&.name})")
       expect(token.symbol).to eq(token.token_type.symbol)
       expect(token.decimal_places).to eq(token.token_type.decimals)
     end
@@ -61,10 +61,8 @@ describe Token, type: :model, vcr: true do
         expect(token.decimal_places).to eq(attrs[:decimal_places])
       end
     end
-  end
 
-  describe 'valid_contract_address' do
-    context 'witn invalid contract_address' do
+    context 'when provided contract address is incorrect' do
       it 'adds an error' do
         expect(described_class.new(_token_type: :erc20, _blockchain: :ethereum_ropsten, contract_address: '1').valid?).to be_falsey
       end

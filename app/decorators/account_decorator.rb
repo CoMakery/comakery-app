@@ -75,8 +75,8 @@ class AccountDecorator < Draper::Decorator
     account&.send("#{project.token&.blockchain_name_for_wallet}_wallet?")
   end
 
-  def can_send_awards?(project) # rubocop:todo Metrics/CyclomaticComplexity
-    (project&.account == self || project.admins.include?(self)) && (project&.token&.contract_address? || project.decorate.send_coins?)
+  def can_send_awards?(project)
+    project&.account == self || project.admins.include?(self)
   end
 
   def image_url(size = 100)

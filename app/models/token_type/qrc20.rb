@@ -23,9 +23,15 @@ class TokenType::Qrc20 < TokenType
   # Contract instance if implemented
   # @return [nil]
   def contract
-    @contract ||= blockchain.validate_addr(contract_address) || Comakery::Qtum::Contract::Qrc20.new(contract_address, blockchain.explorer_api_host)
-  rescue Blockchain::Address::ValidationError
-    nil
+    unless @contract
+      blockchain.validate_addr(contract_address)
+      contract = Comakery::Qtum::Contract::Qrc20.new(contract_address, blockchain.explorer_api_host)
+      contract.symbol
+      @contract = contract
+    end
+    @contract
+  rescue Blockchain::Address::ValidationError, OpenURI::HTTPError
+    raise TokenType::Contract::ValidationError, 'is invalid'
   end
 
   # ABI structure if present

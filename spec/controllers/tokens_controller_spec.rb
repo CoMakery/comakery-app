@@ -79,6 +79,8 @@ describe TokensController do
           post :create, params: {
             token: {
               logo_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              _token_type: :erc20,
+              _blockchain: :ethereum,
               symbol: 'CAT'
             }
           }
@@ -87,7 +89,6 @@ describe TokensController do
         end.not_to(change { Token.count })
 
         token = assigns[:token]
-        expect(token.errors.full_messages.join(', ')).to eq("Name can't be blank")
         expect(token.logo_image).to be_a(Refile::File)
         expect(token.symbol).to eq('CAT')
       end

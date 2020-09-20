@@ -12,7 +12,6 @@ class Token < ApplicationRecord
 
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, presence: true
-  validate :valid_contract_address, if: -> { token_type&.operates_with_smart_contracts? }
 
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
@@ -109,16 +108,12 @@ class Token < ApplicationRecord
   private
 
     def set_values_from_token_type # rubocop:todo Metrics/CyclomaticComplexity
-      self.name ||= token_type&.name
+      self.name ||= "#{token_type&.name&.upcase} (#{blockchain&.name})"
       self.symbol ||= token_type&.symbol
-      self.decimal_places ||= token_type&.decimals
+      self.decimal_places ||= token_type&.decimals || 0
 
       self.ethereum_enabled ||= (token_type&.operates_with_smart_contracts? && _token_type_on_ethereum?) # Deprecated
-    end
-
-    def valid_contract_address
-      blockchain.validate_addr(contract_address)
-    rescue Blockchain::Address::ValidationError => e
+    rescue TokenType::Contract::ValidationError => e
       errors.add(:contract_address, e.message)
     end
 end

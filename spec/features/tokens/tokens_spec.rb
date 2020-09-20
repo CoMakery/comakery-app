@@ -15,8 +15,9 @@ describe 'tokens features', js: true do
     first('.sidebar-item__bold').click
     expect(page).to have_content 'Create A New Token'
 
-    select('eTH', from: 'token[_token_type]', visible: false)
-    select('Ethereum', from: 'token[_blockchain]', visible: false)
+    select('eth', from: 'token[_token_type]', visible: false)
+    select('ethereum', from: 'token[_blockchain]', visible: false)
+    fill_in('token[name]', with: '')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'create & close'
@@ -31,19 +32,15 @@ describe 'tokens features', js: true do
     first('.sidebar-item__bold').click
     expect(page).to have_content 'Create A New Token'
 
-    select('eRC20', from: 'token[_token_type]', visible: false)
-    select('Ethereum', from: 'token[_blockchain]', visible: false)
+    select('erc20', from: 'token[_token_type]', visible: false)
+    select('ethereum', from: 'token[_blockchain]', visible: false)
+    stub_web3_fetch
+    fill_in('token[contract_address]', with: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2')
     fill_in('token[name]', with: 'erc20 test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
-    stub_web3_fetch
-    fill_in('token[contract_address]', with: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2')
-
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
-
-    expect(find_field('token[symbol]').value).to eq 'HOT'
-    expect(find_field('token[decimal_places]').value).to eq '32'
+    find :css, 'input[name="token[symbol]"][value="HOT"]', wait: 10
+    find :css, 'input[name="token[decimal_places]"][value="32"]', wait: 10
 
     click_on 'create & close'
     find :css, '.token-index', wait: 10
@@ -61,19 +58,15 @@ describe 'tokens features', js: true do
     first('.sidebar-item__bold').click
     expect(page).to have_content 'Create A New Token'
 
-    select('qRC20', from: 'token[_token_type]', visible: false)
-    select('Qtum Testnet', from: 'token[_blockchain]', visible: false)
+    select('qrc20', from: 'token[_token_type]', visible: false)
+    select('qtumTest', from: 'token[_blockchain]', visible: false)
+    stub_qtum_fetch
+    fill_in('token[contract_address]', with: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc')
     fill_in('token[name]', with: 'qrc20 test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
-    stub_qtum_fetch
-    fill_in('token[contract_address]', with: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc')
-
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
-
-    expect(find_field('token[symbol]').value).to eq 'BIG'
-    expect(find_field('token[decimal_places]').value).to eq '0'
+    find :css, 'input[name="token[symbol]"][value="BIG"]', wait: 10
+    find :css, 'input[name="token[decimal_places]"][value="0"]', wait: 10
 
     click_on 'create & close'
     find :css, '.token-index', wait: 10
@@ -123,8 +116,8 @@ describe 'tokens features', js: true do
     expect(page).to have_content 'Edit Token'
     expect(find_field('token[name]').value).to eq 'ETH'
 
-    select('eTH', from: 'token[_token_type]', visible: false)
-    select('Ethereum', from: 'token[_blockchain]', visible: false)
+    select('eth', from: 'token[_token_type]', visible: false)
+    select('ethereum', from: 'token[_blockchain]', visible: false)
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'save & close'

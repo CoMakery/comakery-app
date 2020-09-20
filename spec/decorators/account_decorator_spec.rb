@@ -59,8 +59,7 @@ describe AccountDecorator do
       end
 
       it 'cannot send' do
-        project.token._token_type = nil
-        expect(project_owner.decorate.can_send_awards?(project)).to be false
+        expect(recipient.decorate.can_send_awards?(project)).to be false
       end
     end
   end

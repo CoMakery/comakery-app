@@ -23,9 +23,15 @@ class TokenType::Erc20 < TokenType
   # Contract instance if implemented
   # @return [nil]
   def contract
-    @contract ||= blockchain.validate_addr(contract_address) || Comakery::Eth::Contract::Erc20.new(contract_address, abi, blockchain.explorer_api_host, nil)
-  rescue Blockchain::Address::ValidationError
-    nil
+    unless @contract
+      blockchain.validate_addr(contract_address)
+      contract = Comakery::Eth::Contract::Erc20.new(contract_address, abi, blockchain.explorer_api_host, nil)
+      contract.symbol
+      @contract = contract
+    end
+    @contract
+  rescue Blockchain::Address::ValidationError, NoMethodError
+    raise TokenType::Contract::ValidationError, 'is invalid'
   end
 
   # ABI structure if present

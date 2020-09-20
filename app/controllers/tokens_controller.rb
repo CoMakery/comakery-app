@@ -92,11 +92,11 @@ class TokensController < ApplicationController
     end
 
     def set_token_types
-      @token_types = Token._token_types.invert
+      @token_types = Token._token_types.keys.map { |k| [k, k] }.to_h
     end
 
     def set_blockchains
-      @blockchains = Token._blockchains.invert
+      @blockchains = Token._blockchains.keys.map { |k| [k, k] }.to_h
     end
 
     def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity

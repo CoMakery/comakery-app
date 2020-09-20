@@ -12,7 +12,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def ethereum_transaction_explorer_url
-    token.blockchain.url_for_tx_human(ethereum_transaction_address)
+    token.blockchain.url_for_tx_human(ethereum_transaction_address) if ethereum_transaction_address.present?
   end
 
   def json_for_sending_awards

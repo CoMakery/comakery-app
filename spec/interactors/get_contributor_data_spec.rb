@@ -47,9 +47,9 @@ describe GetContributorData do
                                                                      )
                                                                    )
                                                                  ])).to eq([
-                                                                             { name: 'b b', net_amount: 33 },
-                                                                             { name: 'c c', net_amount: 200 },
-                                                                             { name: 'Other', net_amount: 1 }
+                                                                             { name: 'b b', net_amount: 3300000000 },
+                                                                             { name: 'c c', net_amount: 20000000000 },
+                                                                             { name: 'Other', net_amount: 100000000 }
                                                                            ])
     end
 
@@ -83,9 +83,9 @@ describe GetContributorData do
                                                                      )
                                                                    )
                                                                  ])).to eq([
-                                                                             { name: 'a a', net_amount: 10 },
-                                                                             { name: 'b b', net_amount: 33 },
-                                                                             { name: 'c c', net_amount: 20 }
+                                                                             { name: 'a a', net_amount: 1000000000 },
+                                                                             { name: 'b b', net_amount: 3300000000 },
+                                                                             { name: 'c c', net_amount: 2000000000 }
                                                                            ])
     end
 

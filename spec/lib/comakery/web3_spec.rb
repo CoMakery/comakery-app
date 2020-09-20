@@ -12,7 +12,7 @@ describe Comakery::Web3 do
 
   describe 'fetch_symbol_and_decimals' do
     let!(:web3) { described_class.new 'mainnet.infura.io' }
-    let!(:web3_test) { described_class.new 'test' }
+    let!(:web3_test) { described_class.new 'test.infura.io' }
     let!(:address) { '0x6c6ee5e31d828de241282b9606c8e98ea48526e2' }
 
     it 'returns correct symbol and decimals for main network' do
