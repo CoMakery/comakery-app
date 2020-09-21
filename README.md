@@ -278,3 +278,20 @@ You can generate the docs with
 ```
 rails docs:generate
 ```
+
+## Generators
+Generators below will create template files and specs ready to fill in with custom logic.
+
+See `app/models/blockchain/` and `app/models/token_type/` for examples.
+
+### Blockchain
+
+```
+$ rails generate blockchain NAME
+```
+
+### TokenType
+
+```
+$ rails generate token_type NAME
+```
