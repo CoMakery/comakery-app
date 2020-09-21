@@ -118,10 +118,6 @@ class Project < ApplicationRecord
     awards.completed.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
   end
 
-  def total_awards_outstanding
-    total_awarded - total_awards_redeemed
-  end
-
   def community_award_types
     award_types.where(community_awardable: true)
   end

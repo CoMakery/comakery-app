@@ -126,17 +126,6 @@ describe ProjectDecorator do
     specify { expect(project.total_awarded_pretty).to eq('1,337,000.00000000') }
   end
 
-  describe '#total_awards_outstanding' do
-    specify do
-      expect(project)
-        .to receive(:total_awards_outstanding)
-        .and_return(1_234_567)
-
-      expect(project.total_awards_outstanding_pretty)
-        .to eq('1,234,567')
-    end
-  end
-
   describe '#total_awarded' do
     specify do
       expect(project)

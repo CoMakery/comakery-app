@@ -15,4 +15,20 @@ shared_examples 'a blockchain' do
     it { is_expected.to respond_to(:validate_tx_hash).with(1).argument }
     it { is_expected.to respond_to(:validate_addr).with(1).argument }
   end
+
+  describe 'validate_tx_hash' do
+    context 'when supplied tx hash is incorrect' do
+      it 'raises an error' do
+        expect { described_class.new.validate_tx_hash('') }.to raise_error(Blockchain::Tx::ValidationError)
+      end
+    end
+  end
+
+  describe 'validate_addr' do
+    context 'when supplied addr is incorrect' do
+      it 'raises an error' do
+        expect { described_class.new.validate_addr('0') }.to raise_error(Blockchain::Address::ValidationError)
+      end
+    end
+  end
 end

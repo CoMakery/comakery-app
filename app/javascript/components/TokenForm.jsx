@@ -26,8 +26,6 @@ class TokenForm extends React.Component {
 
     this.lofoInputRef = React.createRef()
 
-    console.log(this.props)
-
     this.state = {
       flashMessages                     : [],
       errors                            : {},

@@ -47,11 +47,6 @@ class ProjectDecorator < Draper::Decorator
     project.exclusive_contributions ? 'are exclusive' : 'are not exclusive'
   end
 
-  def total_awards_outstanding_pretty
-    # awards are validated as whole numbers; they are rounded
-    number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
-  end
-
   def total_awarded_pretty
     format_with_decimal_places(total_awarded)
   end

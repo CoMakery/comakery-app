@@ -78,7 +78,7 @@ class Blockchain::Bitcoin < Blockchain
   # @raise [Blockchain::Tx::ValidationError]
   # @return [void]
   def validate_tx_hash(hash)
-    raise Blockchain::Tx::ValidationError('should be present') if hash.blank?
+    raise Blockchain::Tx::ValidationError if hash.blank?
   end
 
   # Validate blockchain address
