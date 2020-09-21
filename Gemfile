@@ -94,6 +94,7 @@ group(:test) do
   gem 'capybara'
   gem 'capybara-screenshot', '~> 1.0'
   gem 'database_cleaner'
+  gem 'generator_spec'
   gem 'guard-rspec', require: false
   gem 'rack_session_access'
   gem 'rails-controller-testing'

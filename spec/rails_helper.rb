@@ -6,7 +6,7 @@ SimpleCov.start :rails do
   SimpleCov.minimum_coverage 98
 
   # add_filter == do not track coverage
-  add_filter %r{^/lib/generators/}
+  # add_filter %r{^/lib/generators/}
 
   add_group 'Decorators', 'app/decorators'
   add_group 'Interactors', 'app/interactors'
