@@ -1,0 +1,19 @@
+attributes:
+  - foreign_key
+  - inheritance
+disconnected: true
+filename: erd
+filetype: pdf
+indirect: false
+inheritance: true
+notation: simple
+orientation: vertical
+polymorphism: true
+sort: true
+warn: true
+exclude: ApplicationRecord
+only: null
+only_recursion_depth: null
+prepend_primary: false
+cluster: false
+splines: spline

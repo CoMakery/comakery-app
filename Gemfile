@@ -81,6 +81,7 @@ end
 
 group(:development) do
   gem 'git-storyid'
+  gem 'rails-erd'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'letter_opener'
   gem 'meta_request'
