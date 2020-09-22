@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_07_192634) do
+ActiveRecord::Schema.define(version: 2020_09_22_160856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,6 +210,17 @@ ActiveRecord::Schema.define(version: 2020_09_07_192634) do
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
     t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
+  end
+
+  create_table "balances", force: :cascade do |t|
+    t.bigint "wallet_id"
+    t.bigint "token_id"
+    t.bigint "base_unit_value", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token_id"], name: "index_balances_on_token_id"
+    t.index ["wallet_id", "token_id"], name: "idx_walled_id_token_id", unique: true
+    t.index ["wallet_id"], name: "index_balances_on_wallet_id"
   end
 
   create_table "blockchain_transaction_updates", force: :cascade do |t|
@@ -507,12 +518,26 @@ ActiveRecord::Schema.define(version: 2020_09_07_192634) do
     t.index ["provider_id"], name: "index_verifications_on_provider_id"
   end
 
+  create_table "wallets", force: :cascade do |t|
+    t.bigint "account_id"
+    t.string "address", null: false
+    t.integer "_blockchain", default: 0, null: false
+    t.integer "state", default: 0, null: false
+    t.integer "source", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["_blockchain", "account_id"], name: "idx_blockchain_account_id", unique: true
+    t.index ["account_id"], name: "index_wallets_on_account_id"
+  end
+
   add_foreign_key "account_token_records", "accounts"
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
+  add_foreign_key "balances", "tokens"
+  add_foreign_key "balances", "wallets"
   add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
   add_foreign_key "blockchain_transactions", "awards"
   add_foreign_key "blockchain_transactions", "tokens"
@@ -524,4 +549,5 @@ ActiveRecord::Schema.define(version: 2020_09_07_192634) do
   add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "transfer_types", "projects"
   add_foreign_key "verifications", "accounts"
+  add_foreign_key "wallets", "accounts"
 end
