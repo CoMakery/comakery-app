@@ -29,7 +29,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   def update
     if transaction.update(transaction_update_params)
       transaction.update_status(:pending)
-      Blockchain::BlockchainTransactionSyncJob.perform_later(transaction)
+      BlockchainJob::BlockchainTransactionSyncJob.perform_later(transaction)
     end
 
     render 'show.json', status: :ok

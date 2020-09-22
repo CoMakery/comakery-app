@@ -19,10 +19,6 @@ class ProjectDecorator < Draper::Decorator
     helpers.strip_tags(description_html).truncate(max_length)
   end
 
-  def ethereum_contract_explorer_url
-    token&.decorate&.ethereum_contract_explorer_url
-  end
-
   def status_description
     if project.license_finalized?
       'These terms are finalized and legally binding.'
@@ -49,11 +45,6 @@ class ProjectDecorator < Draper::Decorator
 
   def exclusive_contributions_text
     project.exclusive_contributions ? 'are exclusive' : 'are not exclusive'
-  end
-
-  def total_awards_outstanding_pretty
-    # awards are validated as whole numbers; they are rounded
-    number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
   def total_awarded_pretty
@@ -95,7 +86,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def send_coins?
-    token&.coin_type? && %w[eth btc ada qtum eos xtz].include?(token&.coin_type)
+    token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
   def header_props
@@ -141,7 +132,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def blockchain_name
-    Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+    token&.blockchain&.name
   end
 
   def step_for_amount_input

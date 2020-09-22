@@ -1,0 +1,66 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://testnet.qtum.info/api/contract/8cfe9e9893e4386645eae8107cd53aaccf96b7fd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 21 Sep 2020 19:25:10 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=dd943c56d40e51a2b3251c037230f738f1600716309; expires=Wed, 21-Oct-20
+        19:25:09 GMT; path=/; domain=.qtum.info; HttpOnly; SameSite=Lax
+      Vary:
+      - Origin
+      Rate-Limit-Remaining:
+      - '599'
+      Rate-Limit-Reset:
+      - '1600716909'
+      Rate-Limit-Total:
+      - '600'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Readtime:
+      - '16'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 0553b99d150000ee8daf3dd200000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5d662ba82d25ee8d-CDG
+    body:
+      encoding: ASCII-8BIT
+      string: '{"address":"8cfe9e9893e4386645eae8107cd53aaccf96b7fd","addressHex":"8cfe9e9893e4386645eae8107cd53aaccf96b7fd","vm":"evm","type":"qrc20","createHeight":141575,"createTransactionId":"143fcdc0923fedd09bab05eaf7d6ff43c7fe8dfd01cf6638fbce79196740fc5d","createOutputIndex":0,"createBy":"qWB73YJbWSw4VzoxjVXQzh2qMnPVpYfSkW","destructHeight":null,"qrc20":{"name":"INK
+        token","symbol":"INK"},"balance":"0","totalReceived":"100000000","totalSent":"100000000","unconfirmed":"0","qrc20Balances":[],"qrc721Balances":[],"transactionCount":1987}'
+    http_version: null
+  recorded_at: Mon, 21 Sep 2020 19:25:10 GMT
+recorded_with: VCR 5.1.0

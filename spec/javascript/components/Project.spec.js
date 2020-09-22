@@ -48,7 +48,7 @@ describe('Project', () => {
       },
       missionData: {id: 1, name: 'First Mission', imageUrl: 'mission1.jpg', missionUrl: '/missions/1'},
       tokenData  : {
-        name       : 'Ether', coinType   : 'eth', symbol     : 'HOT', imageUrl   : 'token.png', contractUrl: 'https://etherscan.io/token/0x9d3d4cc1986d81f9109f2b091b7732e7d9bcf63b'
+        name       : 'Ether', _tokenType   : 'eth', symbol     : 'HOT', imageUrl   : 'token.png', contractUrl: 'https://etherscan.io/token/0x9d3d4cc1986d81f9109f2b091b7732e7d9bcf63b'
       },
       csrfToken       : 'W0fVUAN/GMhmQ7lhD7HNGVAZdHMTIkbdnNDwrIRtxEnGcn0jbtVEn/+gPj9jp5jUMG16zYT7PoUgk8gP/BC9Yg==',
       contributorsPath: '/projects/1/contributors',

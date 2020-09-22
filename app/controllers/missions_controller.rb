@@ -153,8 +153,7 @@ class MissionsController < ApplicationController
             token.serializable_hash.merge(
               count: project_counts[token.id],
               project_name: mission.public_projects.find_by(token_id: token.id).title,
-              logo_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 30, 30) : nil,
-              contract_url: token.decorate.ethereum_contract_explorer_url
+              logo_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 30, 30) : nil
             )
           end,
         token_count: mission.tokens.distinct.size

@@ -80,7 +80,7 @@ export default class extends EthereumController {
   }
 
   get isValid() {
-    if (this.paymentType !== 'comakery') {
+    if (this.paymentType !== 'comakery_security_token') {
       return false
     }
 

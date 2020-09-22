@@ -446,7 +446,7 @@ describe Award do
     end
 
     describe '#ethereum_transaction_address' do
-      let(:project) { create(:project, token: create(:token, coin_type: 'erc20')) }
+      let(:project) { create(:project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
       let(:award_type) { create(:award_type, project: project) }
       let(:award) { create(:award, award_type: award_type) }
       let(:address) { '0x' + 'a' * 64 }
@@ -497,7 +497,7 @@ describe Award do
     end
 
     describe '#ethereum_transaction_address on qtum network' do
-      let(:project) { create(:project, token: create(:token, coin_type: 'qrc20')) }
+      let(:project) { create(:project, token: create(:token, _token_type: 'qtum', _blockchain: 'qtum')) }
       let(:award_type) { create(:award_type, project: project) }
       let(:award) { create(:award, award_type: award_type) }
       let(:address) { 'a' * 64 }
@@ -593,9 +593,9 @@ describe Award do
     end
 
     describe 'with project awards' do
-      let!(:project1) { create :project, token: create(:token, coin_type: 'erc20') }
+      let!(:project1) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
       let!(:project1_award_type) { (create :award_type, project: project1) }
-      let(:project2) { create :project, token: create(:token, coin_type: 'erc20') }
+      let(:project2) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
       let!(:project2_award_type) { (create :award_type, project: project2) }
       let(:account) { create :account }
 
@@ -625,7 +625,7 @@ describe Award do
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
-    let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
+    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { (create :award_type, project: project) }
     let!(:award) { create :award, award_type: award_type, amount: 3, issuer: account, account: account }
     let!(:award1) { create :award, award_type: award_type, amount: 3, issuer: account, account: account1 }
@@ -638,6 +638,7 @@ describe Award do
     end
 
     it 'check for ethereum issue ready' do
+      account.update ethereum_wallet: nil
       expect(award.ethereum_issue_ready?).to be_falsey
 
       project.token.update ethereum_enabled: true
@@ -692,7 +693,7 @@ describe Award do
     let!(:account) { create :account }
     let!(:authentication) { create :authentication, account: account }
     let!(:discord_team) { create :team, provider: 'discord' }
-    let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
+    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'channel_id' }
     let!(:account1) { create :account }
@@ -994,7 +995,7 @@ describe Award do
 
   describe '#recipient_address' do
     let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
+    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 
@@ -1007,7 +1008,7 @@ describe Award do
     context 'on bitcoin network' do
       before do
         award.account.bitcoin_wallet = 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
-        award.token.update coin_type: 'btc'
+        award.token.update _token_type: 'btc', _blockchain: :bitcoin
       end
 
       it 'returns the recipient address' do
@@ -1018,7 +1019,7 @@ describe Award do
     context 'on cardano network' do
       before do
         award.account.cardano_wallet = 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-        award.token.update coin_type: 'ada'
+        award.token.update _token_type: 'ada', _blockchain: :cardano
       end
 
       it 'returns the recipient address' do
@@ -1029,7 +1030,7 @@ describe Award do
     context 'on qtum network' do
       before do
         award.account.qtum_wallet = 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM'
-        award.token.update coin_type: 'qrc20'
+        award.token.update _token_type: 'qrc20', _blockchain: :qtum
       end
 
       it 'returns the recipient address' do
@@ -1040,7 +1041,7 @@ describe Award do
     context 'on eos network' do
       before do
         award.account.eos_wallet = 'aaatestnet11'
-        award.token.update coin_type: 'eos'
+        award.token.update _token_type: 'eos', _blockchain: :eos
       end
 
       it 'returns the recipient address' do
@@ -1051,7 +1052,7 @@ describe Award do
 
   describe 'needs_wallet?' do
     let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
+    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:award_w_recepient_address) { create :award, account: recipient, award_type: award_type }
 
@@ -1151,12 +1152,12 @@ describe Award do
     end
 
     it 'sets tx success and marks award as paid' do
-      expect(award_succeed.ethereum_transaction_success).to be_truthy
+      expect(award_succeed.transaction_success).to be_truthy
       expect(award_succeed.paid?).to be_truthy
     end
 
     it 'sets tx success and marks award as accepted' do
-      expect(award_failed.ethereum_transaction_success).to be_falsey
+      expect(award_failed.transaction_success).to be_falsey
       expect(award_failed.accepted?).to be_truthy
     end
   end
@@ -1170,7 +1171,7 @@ describe Award do
     end
 
     it 'sets tx error and marks award as accepted' do
-      expect(award_failed.ethereum_transaction_error).to eq('test error')
+      expect(award_failed.transaction_error).to eq('test error')
       expect(award_failed.accepted?).to be_truthy
     end
   end

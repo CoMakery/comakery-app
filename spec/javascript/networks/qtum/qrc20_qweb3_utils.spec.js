@@ -20,9 +20,7 @@ describe('qweb3 utils #transferQrc20Tokens', () => {
     },
     'token': {
       'id'                       : 1,
-      'ethereum_contract_address': null,
-      'ethereum_network'         : null,
-      'coin_type'                : 'qrc20',
+      '_token_type'                : 'qrc20',
       'blockchain_network'       : 'qtum_testnet',
       'contract_address'         : 'ed37fad1954961819fa08555cf90f6c5b60d'
     }

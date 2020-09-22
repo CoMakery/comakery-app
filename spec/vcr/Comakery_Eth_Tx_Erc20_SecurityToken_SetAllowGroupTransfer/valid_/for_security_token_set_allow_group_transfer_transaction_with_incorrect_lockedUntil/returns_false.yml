@@ -5,43 +5,6 @@ http_interactions:
     uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582"],"id":1}'
-    headers:
-      Content-Type:
-      - application/json
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-      Host:
-      - ropsten.infura.io
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-      - Wed, 20 May 2020 15:05:41 GMT
-      Content-Type:
-      - application/json
-      Content-Length:
-      - '1650'
-      Connection:
-      - keep-alive
-      Vary:
-      - Origin
-    body:
-      encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0xc511852ba82fdd2883e3413e56d7b47053bacbc437f0ce85dc9ee403e3f4a2ec","blockNumber":"0x75db5b","contractAddress":null,"cumulativeGasUsed":"0xb073","from":"0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b","gasUsed":"0xb073","logs":[{"address":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","blockHash":"0xc511852ba82fdd2883e3413e56d7b47053bacbc437f0ce85dc9ee403e3f4a2ec","blockNumber":"0x75db5b","data":"0x000000000000000000000000000000000000000000000000000000005e964e80","logIndex":"0x0","removed":false,"topics":["0x5845e315015ee03f0d4ab1d198172b4f733609dc3de8b957ae1d86c874030189","0x00000000000000000000000075f538eafdb14a2dc9f3909aa1e0ea19727ff44b","0x0000000000000000000000000000000000000000000000000000000000000000","0x0000000000000000000000000000000000000000000000000000000000000000"],"transactionHash":"0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582","transactionIndex":"0x0"}],"logsBloom":"0x00000000000000000000000000000000000000002000000010000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000020000000000000000000800000000000000000000400000000000080000000000000000000000000000000000000000000000000000000010000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000","status":"0x1","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionHash":"0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582","transactionIndex":"0x0"}}'
-    http_version: null
-  recorded_at: Wed, 20 May 2020 15:05:41 GMT
-- request:
-    method: post
-    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
-    body:
-      encoding: UTF-8
       string: '{"jsonrpc":"2.0","method":"eth_getTransactionByHash","params":["0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582"],"id":1}'
     headers:
       Content-Type:
@@ -60,7 +23,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 20 May 2020 15:05:41 GMT
+      - Tue, 15 Sep 2020 16:05:49 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -73,5 +36,42 @@ http_interactions:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0xc511852ba82fdd2883e3413e56d7b47053bacbc437f0ce85dc9ee403e3f4a2ec","blockNumber":"0x75db5b","from":"0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b","gas":"0x73f79b","gasPrice":"0x3b9aca00","hash":"0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582","input":"0xe98a0c6400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005e964e80","nonce":"0x230","r":"0x682995a9d7be6a6af80dc8fa805d593b91c4e93a1385aa70f3cf5d4f3d0d6a1f","s":"0x1dfeec98937581f553c7b2c2e9069d19118b74a5ec444c78aa47bb431ae4ceab","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionIndex":"0x0","v":"0x2a","value":"0x0"}}'
     http_version: null
-  recorded_at: Wed, 20 May 2020 15:05:41 GMT
+  recorded_at: Tue, 15 Sep 2020 16:05:49 GMT
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582"],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 15 Sep 2020 16:05:49 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1650'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0xc511852ba82fdd2883e3413e56d7b47053bacbc437f0ce85dc9ee403e3f4a2ec","blockNumber":"0x75db5b","contractAddress":null,"cumulativeGasUsed":"0xb073","from":"0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b","gasUsed":"0xb073","logs":[{"address":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","blockHash":"0xc511852ba82fdd2883e3413e56d7b47053bacbc437f0ce85dc9ee403e3f4a2ec","blockNumber":"0x75db5b","data":"0x000000000000000000000000000000000000000000000000000000005e964e80","logIndex":"0x0","removed":false,"topics":["0x5845e315015ee03f0d4ab1d198172b4f733609dc3de8b957ae1d86c874030189","0x00000000000000000000000075f538eafdb14a2dc9f3909aa1e0ea19727ff44b","0x0000000000000000000000000000000000000000000000000000000000000000","0x0000000000000000000000000000000000000000000000000000000000000000"],"transactionHash":"0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582","transactionIndex":"0x0"}],"logsBloom":"0x00000000000000000000000000000000000000002000000010000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000020000000000000000000800000000000000000000400000000000080000000000000000000000000000000000000000000000000000000010000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000","status":"0x1","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionHash":"0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582","transactionIndex":"0x0"}}'
+    http_version: null
+  recorded_at: Tue, 15 Sep 2020 16:05:49 GMT
 recorded_with: VCR 5.1.0

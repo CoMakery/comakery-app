@@ -43,8 +43,8 @@ class Award < ApplicationRecord
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
-  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
-  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
+  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&._token_type_on_ethereum? } # see EthereumAddressable
+  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&._token_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :name, length: { maximum: 100 }
   validates :why, length: { maximum: 500 }
@@ -115,7 +115,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.token.ethereum_enabled && project.token.coin_type_on_ethereum? &&
+    project.token._token_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
@@ -125,8 +125,8 @@ class Award < ApplicationRecord
   end
 
   def amount_to_send
-    if project.decimal_places_value.to_i.positive?
-      (total_amount * project.decimal_places_value.to_i).to_i
+    if project.token
+      project.token&.to_base_unit(total_amount)&.to_i
     else
       total_amount.to_i
     end
@@ -281,7 +281,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    blockchain_name = Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+    blockchain_name = token&.blockchain_name_for_wallet
     blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
   end
 
@@ -318,11 +318,11 @@ class Award < ApplicationRecord
     success = receipt['status']
     status = success ? :paid : :accepted
 
-    update!(ethereum_transaction_success: success, status: status)
+    update!(transaction_success: success, status: status)
   end
 
   def handle_tx_error(error)
-    update!(ethereum_transaction_error: error, status: :accepted)
+    update!(transaction_error: error, status: :accepted)
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

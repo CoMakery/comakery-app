@@ -7,9 +7,9 @@ window.alertMsg = function(modal, msg, closeLabel) {
 }
 
 window.transferAwardOnQtum = function(award) { // award in JSON
-  if (award.token.coin_type === 'qrc20') {
+  if (award.token._token_type === 'qrc20') {
     qrc20Qweb3.transferQrc20Tokens(award)
-  } else if (award.token.coin_type === 'qtum') {
+  } else if (award.token._token_type === 'qtum') {
     qtumLedger.transferQtumCoins(award)
   }
 }
@@ -27,15 +27,15 @@ const transferAwardOnTezos = award => // award in JSON
   tezosTrezor.transferXtzCoins(award)
 
 window.transferAward = function(award) { // award in JSON
-  if ((award.token.coin_type === 'qrc20') || (award.token.coin_type === 'qtum')) {
+  if ((award.token._token_type === 'qrc20') || (award.token._token_type === 'qtum')) {
     transferAwardOnQtum(award)
-  } else if (award.token.coin_type === 'ada') {
+  } else if (award.token._token_type === 'ada') {
     transferAwardOnCardano(award)
-  } else if (award.token.coin_type === 'btc') {
+  } else if (award.token._token_type === 'btc') {
     transferAwardOnBitcoin(award)
-  } else if (award.token.coin_type === 'eos') {
+  } else if (award.token._token_type === 'eos') {
     transferAwardOnEos(award)
-  } else if (award.token.coin_type === 'xtz') {
+  } else if (award.token._token_type === 'xtz') {
     transferAwardOnTezos(award)
   }
 }

@@ -66,12 +66,9 @@ class Project < ApplicationRecord
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(1)' }
 
-  delegate :coin_type, to: :token, allow_nil: true
-  delegate :coin_type_on_ethereum?, to: :token, allow_nil: true
-  delegate :coin_type_on_qtum?, to: :token, allow_nil: true
-  delegate :transitioned_to_ethereum_enabled?, to: :token, allow_nil: true
-  delegate :decimal_places_value, to: :token, allow_nil: true
-  delegate :populate_token?, to: :token, allow_nil: true
+  delegate :_token_type, to: :token, allow_nil: true
+  delegate :_token_type_on_ethereum?, to: :token, allow_nil: true
+  delegate :_token_type_on_qtum?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
 
   validates :github_url, format: { with: %r{\Ahttps?:\/\/(www\.)?github\.com\/..*\z} }, allow_blank: true
@@ -119,10 +116,6 @@ class Project < ApplicationRecord
 
   def total_month_awarded
     awards.completed.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
-  end
-
-  def total_awards_outstanding
-    total_awarded - total_awards_redeemed
   end
 
   def community_award_types
@@ -217,11 +210,11 @@ class Project < ApplicationRecord
   end
 
   def supports_transfer_rules?
-    token&.coin_type_comakery?
+    token&._token_type_comakery_security_token?
   end
 
   def create_default_transfer_types
-    TransferType.create_defaults_for(self)
+    TransferType.create_defaults_for(self) if transfer_types.empty?
   end
 
   private

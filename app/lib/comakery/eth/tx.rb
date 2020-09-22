@@ -2,8 +2,8 @@ class Comakery::Eth::Tx
   attr_reader :eth
   attr_reader :hash
 
-  def initialize(network, hash)
-    @eth = Comakery::Eth.new(network)
+  def initialize(host, hash)
+    @eth = Comakery::Eth.new(host)
     @hash = hash
   end
 

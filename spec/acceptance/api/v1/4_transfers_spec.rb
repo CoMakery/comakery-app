@@ -10,7 +10,7 @@ resource 'IV. Transfers' do
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 8)) }
   let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
-  let!(:transfer_cancelled) { create(:transfer, status: :cancelled, ethereum_transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
+  let!(:transfer_cancelled) { create(:transfer, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
 
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
@@ -52,8 +52,7 @@ resource 'IV. Transfers' do
       response_field :description, 'transfer description', type: :string
       response_field :accountId, 'transfer account id', type: :string
       response_field :transferTypeId, 'transfer type id', type: :string
-      response_field :ethereumTransactionAddress, 'transfer ethereum transaction address', type: :string
-      response_field :ethereumTransactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
+      response_field :transactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
       response_field :status, 'transfer status (accepted paid cancelled)', type: :string
       response_field :createdAt, 'transfer creation timestamp', type: :string
       response_field :updatedAt, 'transfer update timestamp', type: :string

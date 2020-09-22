@@ -11,16 +11,8 @@ class AwardDecorator < Draper::Decorator
     "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
   end
 
-  def ethereum_transaction_explorer_url # rubocop:todo Metrics/CyclomaticComplexity
-    if ethereum_transaction_address
-      if (network = object.token&.blockchain_network).present?
-        UtilitiesService.get_transaction_url(network, ethereum_transaction_address)
-      else
-        site = object.token&.ethereum_network? ? "#{object.token&.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
-        site = 'etherscan.io' if site == 'main.etherscan.io'
-        "https://#{site}/tx/#{ethereum_transaction_address}"
-      end
-    end
+  def ethereum_transaction_explorer_url
+    token.blockchain.url_for_tx_human(ethereum_transaction_address) if ethereum_transaction_address.present?
   end
 
   def json_for_sending_awards
@@ -38,7 +30,7 @@ class AwardDecorator < Draper::Decorator
           only: %i[id]
         },
         token: {
-          only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network]
+          only: %i[id contract_address _blockchain blockchain_network _token_type]
         }
       }
     )
@@ -65,11 +57,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def issuer_address # rubocop:todo Metrics/CyclomaticComplexity
-    if object.token&.coin_type_on_ethereum?
+    if object.token&._token_type_on_ethereum?
       issuer&.ethereum_wallet
-    elsif object.token&.coin_type_on_qtum?
+    elsif object.token&._token_type_on_qtum?
       issuer&.qtum_wallet
-    elsif object.token&.coin_type_ada?
+    elsif object.token&._token_type_ada?
       issuer&.cardano_wallet
     end
   end
@@ -95,18 +87,18 @@ class AwardDecorator < Draper::Decorator
   end
 
   def stimulus_data(controller_name, action) # rubocop:todo Metrics/CyclomaticComplexity
-    case project.token&.coin_type
-    when 'erc20', 'eth', 'comakery'
+    case project.token&._token_type
+    when 'erc20', 'eth', 'comakery_security_token'
       {
         'controller' => controller_name,
         'target' => "#{controller_name}.button",
         'action' => "click->#{controller_name}##{action}",
         "#{controller_name}-id" => id,
-        "#{controller_name}-payment-type" => project.token&.coin_type,
+        "#{controller_name}-payment-type" => project.token&._token_type,
         "#{controller_name}-address" => account.ethereum_wallet,
         "#{controller_name}-amount" => total_amount_wei,
         "#{controller_name}-decimal-places" => project.token&.decimal_places&.to_i,
-        "#{controller_name}-contract-address" => project.token&.ethereum_contract_address,
+        "#{controller_name}-contract-address" => project.token&.contract_address,
         "#{controller_name}-contract-abi" => project.token&.abi&.to_json,
         "#{controller_name}-transactions-path" => api_v1_project_blockchain_transactions_path(project_id: project.id),
         'info' => json_for_sending_awards

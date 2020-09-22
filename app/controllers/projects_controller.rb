@@ -352,9 +352,8 @@ class ProjectsController < ApplicationController
 
     def token_props(token)
       if token.present?
-        token.as_json(only: %i[name symbol coin_type]).merge(
-          image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
-          contract_url: token.ethereum_contract_explorer_url
+        token.as_json(only: %i[name symbol _token_type]).merge(
+          image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil
         )
       end
     end

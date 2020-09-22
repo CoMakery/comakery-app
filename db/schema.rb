@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_24_181512) do
+ActiveRecord::Schema.define(version: 2020_09_07_192634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,8 +202,8 @@ ActiveRecord::Schema.define(version: 2020_08_24_181512) do
     t.integer "assignments_count", default: 0
     t.datetime "transferred_at"
     t.integer "source", default: 0
-    t.boolean "ethereum_transaction_success"
-    t.string "ethereum_transaction_error"
+    t.boolean "transaction_success"
+    t.string "transaction_error"
     t.bigint "transfer_type_id"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
@@ -463,6 +463,8 @@ ActiveRecord::Schema.define(version: 2020_08_24_181512) do
     t.boolean "unlisted", default: false
     t.boolean "token_frozen", default: false
     t.datetime "synced_at"
+    t.integer "_blockchain", default: 0, null: false
+    t.integer "_token_type", default: 0, null: false
   end
 
   create_table "transfer_rules", force: :cascade do |t|

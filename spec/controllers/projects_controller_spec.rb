@@ -17,7 +17,7 @@ describe ProjectsController do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
   let!(:token) { create(:token) }
   let!(:mission) { create(:mission, token_id: token.id) }
@@ -46,7 +46,7 @@ describe ProjectsController do
 
       it 'shows metamask awards' do
         stub_token_symbol
-        project.token.update ethereum_contract_address: '0x' + 'a' * 40
+        project.token.update contract_address: '0x' + 'a' * 40
         get :awards, params: { id: project.to_param }
 
         expect(response.status).to eq(200)

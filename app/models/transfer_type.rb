@@ -11,7 +11,7 @@ class TransferType < ApplicationRecord
 
   def self.create_defaults_for(project)
     defaults = %i[earned bought]
-    defaults.concat(%i[mint burn]) if project.token&.coin_type_comakery?
+    defaults.concat(%i[mint burn]) if project.token&._token_type_comakery_security_token?
 
     defaults.each do |name|
       TransferType.create!(default: true, project: project, name: name)

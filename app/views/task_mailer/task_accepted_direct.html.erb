@@ -19,7 +19,7 @@
     <b>To take ownership of the payment, you will have to register a wallet on your account.</b>
     You need to enter your payment information to receive payment.
     Click <a href="<%= show_account_url(host: @host) %>">here</a>
-    to enter your <%= @award.token.coin_type %> wallet address in your <%= @brand_name %> account.
+    to enter your <%= @award.token._token_type %> wallet address in your <%= @brand_name %> account.
   </p>
 <% end %>
 
@@ -33,7 +33,7 @@
     <p>
       <b>Once registered to take ownership of the payment, you will have to register a wallet on your account.</b>
       Click <a href="<%= show_account_url(host: @host) %>">here</a>
-      to enter your <%= @award.token.coin_type %> wallet address in your <%= @brand_name %> account.
+      to enter your <%= @award.token._token_type %> wallet address in your <%= @brand_name %> account.
     </p>
   <% end %>
 <% end %>

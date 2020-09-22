@@ -23,7 +23,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 13 May 2020 00:01:13 GMT
+      - Tue, 15 Sep 2020 16:08:24 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,5 +36,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","id":1,"result":null}'
     http_version: null
-  recorded_at: Wed, 13 May 2020 00:01:13 GMT
+  recorded_at: Tue, 15 Sep 2020 16:08:24 GMT
 recorded_with: VCR 5.1.0

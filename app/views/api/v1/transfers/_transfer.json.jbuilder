@@ -6,8 +6,7 @@ json.call(
   :quantity,
   :total_amount,
   :description,
-  :ethereum_transaction_address,
-  :ethereum_transaction_error,
+  :transaction_error,
   :status,
   :created_at,
   :updated_at

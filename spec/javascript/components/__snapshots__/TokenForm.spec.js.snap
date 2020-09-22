@@ -2,25 +2,20 @@
 
 exports[`TokenForm renders correctly without props 1`] = `
 <TokenForm
-  blockchainNetworks={
-    Object {
-      "default": "_",
-    }
-  }
-  coinTypes={
+  blockchains={
     Object {
       "default": "_",
     }
   }
   csrfToken="00"
-  ethereumNetworks={
+  formAction="POST"
+  formUrl="/"
+  token={
     Object {
       "default": "_",
     }
   }
-  formAction="POST"
-  formUrl="/"
-  token={
+  tokenTypes={
     Object {
       "default": "_",
     }
@@ -106,7 +101,7 @@ exports[`TokenForm renders correctly without props 1`] = `
             >
               <InputFieldDropdownHalfed
                 eventHandler={[Function]}
-                name="token[coin_type]"
+                name="token[_blockchain]"
                 required={true}
                 selectEntries={
                   Array [
@@ -116,9 +111,8 @@ exports[`TokenForm renders correctly without props 1`] = `
                     ],
                   ]
                 }
-                symbolLimit={0}
-                title="payment type"
-                value="_"
+                title="blockchain network"
+                value="default"
               >
                 <InputField
                   checkboxText=""
@@ -135,7 +129,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   max=""
                   min=""
-                  name="token[coin_type]"
+                  name="token[_blockchain]"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
@@ -151,9 +145,9 @@ exports[`TokenForm renders correctly without props 1`] = `
                   }
                   step=""
                   symbolLimit={0}
-                  title="payment type"
+                  title="blockchain network"
                   type="select"
-                  value="_"
+                  value="default"
                 >
                   <div
                     className="input-field input-field__dropdown--halfed"
@@ -164,7 +158,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--title"
                       >
-                        payment type
+                        blockchain network
                       </span>
                       <span
                         className="input-field--title--required"
@@ -178,10 +172,100 @@ exports[`TokenForm renders correctly without props 1`] = `
                       <select
                         className="input-field--content__select"
                         disabled={false}
-                        name="token[coin_type]"
+                        name="token[_blockchain]"
                         onChange={[Function]}
                         required={true}
-                        value="_"
+                        value="default"
+                      >
+                        <option
+                          key="_"
+                          value="_"
+                        >
+                          default
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdownHalfed>
+              <InputFieldDropdownHalfed
+                eventHandler={[Function]}
+                name="token[_token_type]"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "default",
+                      "_",
+                    ],
+                  ]
+                }
+                symbolLimit={0}
+                title="token type"
+                value="default"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown--halfed"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="token[_token_type]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "default",
+                        "_",
+                      ],
+                    ]
+                  }
+                  step=""
+                  symbolLimit={0}
+                  title="token type"
+                  type="select"
+                  value="default"
+                >
+                  <div
+                    className="input-field input-field__dropdown--halfed"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        token type
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="token[_token_type]"
+                        onChange={[Function]}
+                        required={true}
+                        value="default"
                       >
                         <option
                           key="_"
@@ -297,6 +381,78 @@ exports[`TokenForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldDropdownHalfed>
+              <InputFieldHalfed
+                eventHandler={[Function]}
+                name="token[name]"
+                placeholder="Bitcoin"
+                symbolLimit={0}
+                title="token name"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__halfed"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="token[name]"
+                  pattern=".*"
+                  placeholder="Bitcoin"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={0}
+                  title="token name"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__halfed"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        token name
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="token[name]"
+                        onChange={[Function]}
+                        onClick={null}
+                        pattern=".*"
+                        placeholder="Bitcoin"
+                        readOnly={false}
+                        required={false}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldHalfed>
               <InputFieldUploadFile
                 imgInputRef={
                   Object {

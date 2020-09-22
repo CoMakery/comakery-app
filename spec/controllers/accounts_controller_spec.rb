@@ -316,7 +316,7 @@ describe AccountsController do
   describe '#show' do
     before do
       stub_token_symbol
-      project = create(:project, token: create(:token, ethereum_contract_address: '0x' + 'a' * 40))
+      project = create(:project, token: create(:token, contract_address: '0x' + 'a' * 40))
       award_type = create :award_type, project: project
       create :award, award_type: award_type, account: account
       login account
