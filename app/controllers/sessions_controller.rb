@@ -74,7 +74,7 @@ class SessionsController < ApplicationController
         @path
       else
         process_new_award_notice if current_account.new_award_notice
-        my_tasks_path
+        projects_path
       end
     end
 
