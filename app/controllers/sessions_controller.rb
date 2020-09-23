@@ -64,6 +64,7 @@ class SessionsController < ApplicationController
       end
     end
 
+
     def redirect_path
       token = session[:redeem]
       if token
@@ -72,9 +73,13 @@ class SessionsController < ApplicationController
         my_tasks_path
       elsif @path
         @path
-      else
+      elsif current_account.projects.any?
         process_new_award_notice if current_account.new_award_notice
+        my_project_path
+      elsif @whitelabel_mission
         projects_path
+      else
+        root_path
       end
     end
 
