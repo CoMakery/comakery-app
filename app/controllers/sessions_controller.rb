@@ -64,8 +64,7 @@ class SessionsController < ApplicationController
       end
     end
 
-
-    def redirect_path
+    def redirect_path # rubocop:todo Metrics/CyclomaticComplexity
       token = session[:redeem]
       if token
         session[:redeem] = nil
