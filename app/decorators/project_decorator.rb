@@ -131,10 +131,6 @@ class ProjectDecorator < Draper::Decorator
     interested.size
   end
 
-  def blockchain_name
-    token&.blockchain&.name
-  end
-
   def step_for_amount_input
     token ? (1.0 / 10**token.decimal_places) : 1
   end
