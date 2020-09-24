@@ -33,7 +33,7 @@
     <div class="transfers-table__transfer__address">
       <label>address</label>
 
-      <%= pluralize(@project.blockchain_name.present? ? @accounts_all.map(&:"#{@project.blockchain_name}_wallet").compact.size : 0, 'account', 'accounts') %>
+      <%= pluralize(@project.token.blockchain_name_for_wallet.present? ? @accounts_all.map(&:"#{@project.token.blockchain_name_for_wallet}_wallet").compact.size : 0, 'account', 'accounts') %>
     </div>
   <% end %>
 
