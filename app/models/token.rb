@@ -90,7 +90,7 @@ class Token < ApplicationRecord
   end
 
   def from_base_unit(amount)
-    BigDecimal(amount / 10.pow(decimal_places || 0))
+    BigDecimal(amount).div(BigDecimal(10.pow(decimal_places || 0)), decimal_places || 0)
   end
 
   def default_reg_group

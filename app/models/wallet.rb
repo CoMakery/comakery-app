@@ -8,6 +8,6 @@ class Wallet < ApplicationRecord
   validates :address, blockchain_address: true
   validates :_blockchain, uniqueness: { scope: :account_id }
 
-  enum state: { ok: 0, pending: 1, unclaimed: 2 }
+  enum state: { ok: 0, unclaimed: 1, pending: 2 }
   enum source: { user_provided: 0, ore_id: 1 }
 end
