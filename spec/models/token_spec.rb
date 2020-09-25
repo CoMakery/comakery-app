@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/belongs_to_blockchain_spec'
 
 describe Token, type: :model, vcr: true do
+  it_behaves_like 'belongs_to_blockchain'
+
   it { is_expected.to have_many(:projects) }
   it { is_expected.to have_many(:accounts) }
   it { is_expected.to have_many(:account_token_records) }
@@ -8,10 +11,8 @@ describe Token, type: :model, vcr: true do
   it { is_expected.to have_many(:transfer_rules) }
   it { is_expected.to have_many(:blockchain_transactions) }
   it { is_expected.to validate_uniqueness_of(:name) }
-  it { is_expected.to validate_presence_of(:_blockchain) }
   it { is_expected.to validate_presence_of(:_token_type) }
   it { is_expected.to validate_presence_of(:denomination) }
-  it { is_expected.to define_enum_for(:_blockchain) }
   it { is_expected.to define_enum_for(:_token_type) }
 
   describe described_class.new do
@@ -69,24 +70,6 @@ describe Token, type: :model, vcr: true do
     end
   end
 
-  describe 'self.blockchain_for' do
-    it 'returns a Blockchain instance for provided name' do
-      expect(described_class.blockchain_for('bitcoin')).to be_a(Blockchain::Bitcoin)
-    end
-  end
-
-  describe 'blockchain' do
-    it 'returns a Blockchain instance' do
-      expect(described_class.new.blockchain).to be_a(Blockchain::Bitcoin)
-    end
-  end
-
-  describe 'blockchain_name_for_wallet' do
-    it 'returns a Blockchain name suitable for wallet columns on account model' do
-      expect(described_class.new.blockchain_name_for_wallet).to eq('bitcoin')
-    end
-  end
-
   describe 'token_type' do
     it 'returns a TokenType instance' do
       expect(described_class.new.token_type).to be_a(TokenType::Btc)
@@ -107,10 +90,18 @@ describe Token, type: :model, vcr: true do
   end
 
   describe 'to_base_unit' do
-    it 'converts an amount into base unit based on token decimals' do
+    it 'converts an amount from BigDecimal into a Integer base unit based on token decimals' do
       expect(create(:token, decimal_places: 18).to_base_unit(BigDecimal(1) + 0.1)).to eq(1100000000000000000)
       expect(create(:token, decimal_places: 2).to_base_unit(BigDecimal(1) + 0.1)).to eq(110)
       expect(create(:token, decimal_places: 0).to_base_unit(BigDecimal(1) + 0.1)).to eq(1)
+    end
+  end
+
+  describe 'from_base_unit' do
+    it 'converts an amount from base unit into a BigDecimal based on token decimals' do
+      expect(create(:token, decimal_places: 18).from_base_unit(1100000000000000000)).to eq(BigDecimal(1) + 0.1)
+      expect(create(:token, decimal_places: 2).from_base_unit(110)).to eq(BigDecimal(1) + 0.1)
+      expect(create(:token, decimal_places: 0).from_base_unit(1)).to eq(BigDecimal(1))
     end
   end
 

@@ -3,7 +3,7 @@ module BelongsToBlockchain
 
   class BlockchainAddressValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
-      record.blockchain.validate_addr(value) if value.present?
+      record.blockchain&.validate_addr(value) if value.present?
     rescue Blockchain::Address::ValidationError => e
       record.errors.add(attribute, e.message)
     end
