@@ -42,22 +42,22 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
 
       @q = @transfers_unfiltered.ransack(params[:q])
-      @q.sorts = ['created_at desc'] if @q.sorts.empty?
-      @q
     end
 
     def set_transfers
       @page = (params[:page] || 1).to_i
-      @transfers_all = query.result
-                            .group('awards.id')
+      @transfers_all = query.result(distinct: true)
+                            .reorder('')
                             .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
+
       @transfers_all.size
-      @transfers = @transfers_all.page(@page).per(10)
+      ordered_transfers = order_transfers(@transfers_all)
+      @transfers = ordered_transfers.page(@page).per(10)
 
       if (@page > 1) && @transfers.out_of_range?
         flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
         @page = 1
-        @transfers = @transfers_all.page(@page).per(10)
+        @transfers = ordered_transfers.page(@page).per(10)
       end
     rescue ActiveRecord::StatementInvalid
       head 404
@@ -80,5 +80,18 @@ class Dashboard::TransfersController < ApplicationController
         :requirements,
         :transfer_type_id
       )
+    end
+
+    def order_transfers(transfers)
+      ordered_transfers = transfers.order('awards.created_at')
+      s = params.dig(:q, :s)
+      return ordered_transfers unless s
+
+      order_string = s.is_a?(Array) ? s.join(', ') : s
+      if order_string.include?('issuer_')
+        order_string.gsub!('issuer_', 'accounts.')
+        ordered_transfers = ordered_transfers.joins(:issuer)
+      end
+      ordered_transfers.reorder(order_string)
     end
 end
