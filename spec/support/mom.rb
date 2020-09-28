@@ -20,6 +20,23 @@ class Mom
     Account.new(defaults.merge(attrs))
   end
 
+  def wallet(**attrs)
+    defaults = {
+      _blockchain: :ethereum_ropsten,
+      account: create(:account),
+      address: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'
+    }
+    Wallet.new(defaults.merge(attrs))
+  end
+
+  def balance(**attrs)
+    defaults = {
+      wallet: create(:wallet),
+      token: create(:token)
+    }
+    Balance.new(defaults.merge(attrs))
+  end
+
   def specialty(**attrs)
     defaults = {
       name: "Specialty #{SecureRandom.hex(20)}"

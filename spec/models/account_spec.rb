@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe Account do
+  it { is_expected.to have_many(:wallets) }
+  it { is_expected.to have_many(:balances).through(:wallets) }
+
   subject(:account) { create :account, password: '12345678' }
 
   before do
