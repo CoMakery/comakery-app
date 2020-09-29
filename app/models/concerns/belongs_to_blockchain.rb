@@ -24,5 +24,9 @@ module BelongsToBlockchain
     def blockchain_name_for_wallet
       blockchain.name.match(/^([A-Z][a-z]+)[A-Z]*/)[1].downcase
     end
+
+    def tokens_on_same_blockchain
+      Token.where(_blockchain: _blockchain)
+    end
   end
 end

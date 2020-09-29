@@ -20,6 +20,12 @@ shared_examples 'belongs_to_blockchain' do |attrs|
     end
   end
 
+  describe '#tokens_on_same_blockchain' do
+    it 'returns list of tokens which use the same Blockchain' do
+      expect(described_class.new.tokens_on_same_blockchain).to eq(Token.where(_blockchain: described_class.new._blockchain))
+    end
+  end
+
   attrs && attrs[:blockchain_addressable_columns]&.each do |column|
     it "validates :#{column} according Blockchain" do
       obj = described_class.new(column => '0x')

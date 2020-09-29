@@ -22,9 +22,9 @@ class Mom
 
   def wallet(**attrs)
     defaults = {
-      _blockchain: :ethereum_ropsten,
+      _blockchain: :bitcoin,
       account: create(:account),
-      address: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'
+      address: '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
     }
     Wallet.new(defaults.merge(attrs))
   end

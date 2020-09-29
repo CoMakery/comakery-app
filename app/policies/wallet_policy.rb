@@ -24,15 +24,15 @@ class WalletPolicy < ApplicationPolicy
   end
 
   def new?
-    true
+    account.present?
   end
 
   def show?
     account == wallet.account
   end
 
-  alias create? new?
   alias index? new?
+  alias create? show?
   alias edit? show?
   alias update? show?
   alias destroy? show?

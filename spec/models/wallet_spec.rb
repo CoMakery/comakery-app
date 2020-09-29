@@ -8,7 +8,14 @@ describe Wallet, type: :model do
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:balances).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:address) }
-  it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id).ignoring_case_sensitivity }
+  it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id).with_message('has already wallet added').ignoring_case_sensitivity }
+  it { is_expected.to have_readonly_attribute(:_blockchain) }
   it { is_expected.to define_enum_for(:state).with_values({ ok: 0, unclaimed: 1, pending: 2 }) }
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
+
+  describe '#available_blockchains' do
+    it 'returns list of avaiable blockchains for creating a new wallet with the same account' do
+      expect(subject.available_blockchains).not_to include(subject._blockchain)
+    end
+  end
 end

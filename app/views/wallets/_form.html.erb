@@ -1,0 +1,11 @@
+<%= form_with(model: wallet, local: true) do |form| %>
+  <%= form.label(:_blockchain) %>
+  <%= form.select(:_blockchain, wallet.available_blockchains.map { |k| [Wallet.blockchain_for(k).name, k] }, { required: true }) %>
+
+  <%= form.label(:address) %>
+  <%= form.text_field :address, placeholder: '...', required: true %>
+  
+  <div class="actions">
+    <%= form.submit 'Save Wallet' %>
+  </div>
+<% end %>

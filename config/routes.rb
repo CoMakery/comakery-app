@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/unsubscription' => "unsubscription#new", as: :unsubscription
 
   resource :account, only: [:update]
+  resources :wallets
   resources :accounts, only: [:new, :create, :show] do
     collection do
       get :download_data
