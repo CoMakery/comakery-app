@@ -65,23 +65,18 @@ class SessionsController < ApplicationController
     end
 
     def redirect_path
-      return redirect_to_my_tasks_with_notice if session[:redeem]
       return @path if @path
-      return redirect_to_my_projects if current_account.projects.any?
       return projects_path if @whitelabel_mission
 
-      root_path
-    end
+      process_redeem_notice if session[:redeem]
+      process_new_award_notice if current_account.new_award_notice
 
-    def redirect_to_my_tasks_with_notice
-      session[:redeem] = nil
-      flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
       my_tasks_path
     end
 
-    def redirect_to_my_projects
-      process_new_award_notice if current_account.new_award_notice
-      my_project_path
+    def process_redeem_notice
+      session[:redeem] = nil
+      flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
     end
 
     def redirect_to_the_build_profile_accounts_page(authentication)
