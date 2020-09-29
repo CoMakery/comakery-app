@@ -51,6 +51,8 @@ class Account < ApplicationRecord
   belongs_to :latest_verification, class_name: 'Verification'
   has_many :account_token_records # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :account_token_records_synced, -> { where synced: true } # rubocop:todo Rails/InverseOf
+  has_many :wallets, dependent: :destroy
+  has_many :balances, through: :wallets
 
   belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'

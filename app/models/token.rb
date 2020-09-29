@@ -1,4 +1,6 @@
 class Token < ApplicationRecord
+  include BelongsToBlockchain
+
   nilify_blanks
 
   attachment :logo_image, type: :image
@@ -11,7 +13,7 @@ class Token < ApplicationRecord
   has_many :blockchain_transactions # rubocop:todo Rails/HasManyOrHasOneDependent
 
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
-  validates :name, :symbol, :decimal_places, :_blockchain, :_token_type, :denomination, presence: true
+  validates :name, :symbol, :decimal_places, :_token_type, :denomination, presence: true
 
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
@@ -59,22 +61,8 @@ class Token < ApplicationRecord
     rinkeby: 'Rinkeby Test Network'
   } # Deprecated
 
-  enum _blockchain: Blockchain.list, _prefix: :_blockchain
   enum _token_type: TokenType.list, _prefix: :_token_type
-
   delegate :contract, :abi, to: :token_type
-
-  def self.blockchain_for(name)
-    "Blockchain::#{name.camelize}".constantize.new
-  end
-
-  def blockchain
-    @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new if _blockchain
-  end
-
-  def blockchain_name_for_wallet
-    blockchain.name.match(/^([A-Z][a-z]+)[A-Z]*/)[1].downcase
-  end
 
   def token_type
     if _token_type
@@ -99,6 +87,10 @@ class Token < ApplicationRecord
 
   def to_base_unit(amount)
     BigDecimal(10.pow(decimal_places || 0) * amount)&.to_s&.to_i
+  end
+
+  def from_base_unit(amount)
+    BigDecimal(amount).div(BigDecimal(10.pow(decimal_places || 0)), decimal_places || 0)
   end
 
   def default_reg_group

@@ -10,6 +10,8 @@ require_relative '../spec/support/mom.rb'
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 if Rails.env.development?
+  Specialty.initializer_setup
+
   Account.create(
     email: 'dev@dev.dev',
     password: 'dev',
