@@ -8,16 +8,16 @@ module RansackReorder
 
       order_params = order_params.join(', ') if order_params.is_a?(Array)
       order_column, direction = order_params.split(' ')
-      order_string =
+      order_params =
         if order_column.in?(column_names)
           "#{order_column} #{direction}"
-        elsif order_string == 'issuer_first_name'
+        elsif order_params == 'issuer_first_name'
           scope = scope.joins(:issuer)
           "accounts.issuer_first_name #{direction}, accounts.issuer_last_name #{direction}"
         else
           default
         end
-      scope.reorder(order_string)
+      scope.reorder(order_params)
     end
   end
 end
