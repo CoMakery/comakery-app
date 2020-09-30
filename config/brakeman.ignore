@@ -1,0 +1,26 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "7c12fbe2910eca1cb912652a5b6b034da47f462c3184bda42bc55020b04066d5",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/concerns/ransack_reorder.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "reorder(default).joins(:issuer).reorder((\"#{order_column} #{direction}\" or if (order_params.join(\", \") == \"issuer_first_name\") then\n  scope = reorder(default).joins(:issuer)\n  \"accounts.issuer_first_name #{direction}, accounts.issuer_last_name #{direction}\"\nelse\n  default\nend))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "RansackReorder",
+        "method": "RansackReorder.ransack_reorder"
+      },
+      "user_input": "order_column",
+      "confidence": "Weak",
+      "note": "Ransack ordering is whitelisted"
+    }
+  ],
+  "updated": "2020-09-30 20:54:17 +0300",
+  "brakeman_version": "4.8.1"
+}
