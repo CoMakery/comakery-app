@@ -65,69 +65,25 @@ describe AccountDecorator do
   end
 
   describe '#can_receive_awards?' do
-    context 'on ethereum network' do
-      let!(:recipient) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
+    let!(:wallet) { create(:wallet, _blockchain: :ethereum_ropsten) }
+    let!(:project) { build :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
 
+    context 'when wallet for project token blockchain is present' do
       it 'returns true' do
-        expect(recipient.decorate.can_receive_awards?(project)).to be true
-      end
-
-      it 'returns false' do
-        recipient.ethereum_wallet = nil
-        expect(recipient.decorate.can_receive_awards?(project)).to be false
+        expect(wallet.account.decorate.can_receive_awards?(project)).to be true
       end
     end
 
-    context 'on bitcoin network' do
-      let!(:recipient) { create(:account, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'btc') }
-
-      it 'returns true' do
-        expect(recipient.decorate.can_receive_awards?(project)).to be true
-      end
-
+    context 'when wallet for project token blockchain is not present' do
       it 'returns false' do
-        recipient.bitcoin_wallet = nil
-        expect(recipient.decorate.can_receive_awards?(project)).to be false
+        expect(create(:wallet).account.decorate.can_receive_awards?(project)).to be false
       end
     end
 
-    context 'on cardano network' do
-      let!(:recipient) { create(:account, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'ada', _blockchain: 'cardano') }
-
-      it 'returns true' do
-        expect(recipient.decorate.can_receive_awards?(project)).to be true
-      end
-
-      it 'returns false' do
-        recipient.cardano_wallet = nil
-        expect(recipient.decorate.can_receive_awards?(project)).to be false
-      end
-    end
-
-    context 'on qtum network' do
-      let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
-      let!(:project) { build :project, payment_type: 'project_token', token: create(:token, _token_type: 'qtum', _blockchain: 'qtum') }
-
-      it 'returns true' do
-        expect(recipient.decorate.can_receive_awards?(project)).to be true
-      end
-
-      it 'returns false' do
-        recipient.qtum_wallet = nil
-        expect(recipient.decorate.can_receive_awards?(project)).to be false
-      end
-    end
-
-    context '_token_type nil' do
-      let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
-      let!(:project) { build :project, payment_type: 'project_token' }
-
+    context 'when project token is not present' do
       it 'returns false' do
         project.token = nil
-        expect(recipient.decorate.can_receive_awards?(project)).to be false
+        expect(wallet.account.decorate.can_receive_awards?(project)).to be false
       end
     end
   end
@@ -146,26 +102,25 @@ describe AccountDecorator do
   end
 
   describe 'wallet_address_link_for' do
-    let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e', bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
-    let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
+    let!(:account_w_eth_wallet) { create(:wallet, _blockchain: :ethereum, address: '0x3551cd3a70e07b3484f20d9480e677243870d67e').account }
+    let!(:account_w_btc_wallet) { create(:wallet, _blockchain: :bitcoin_test, address: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps').account }
+    let!(:account_wo_wallet) { create(:account) }
     let!(:project_w_token) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum) }
     let!(:project_wo_token) { create :project, token: nil }
-    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_test) }
 
     it 'returns link for wallet address if account has address for project token' do
-      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_wallet.ethereum_wallet)
+      expect(account_w_eth_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_eth_wallet.address_for_blockchain(:ethereum))
     end
 
     it 'returns placeholder if account doesnt have address for project token' do
-      expect(account_w_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
+      expect(account_w_eth_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
       expect(account_wo_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
       expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('needs wallet')
     end
 
     it 'returns link with correct network' do
-      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token_on_ropsten)).to include('ropsten')
-      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token_on_bitcoin_testnet)).to include('btc-testnet')
+      expect(account_w_btc_wallet.decorate.wallet_address_link_for(project_w_token_on_bitcoin_testnet)).to include('btc-testnet')
     end
   end
 

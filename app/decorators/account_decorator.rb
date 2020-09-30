@@ -47,8 +47,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def wallet_address_for(project)
-    blockchain_name = project.token&.blockchain_name_for_wallet
-    blockchain_name && send("#{blockchain_name}_wallet")
+    address_for_blockchain(project.token._blockchain)
   end
 
   def wallet_address_url_for(project)
@@ -70,9 +69,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_receive_awards?(project)
-    return false unless project.token&._token_type?
-
-    account&.send("#{project.token&.blockchain_name_for_wallet}_wallet?")
+    project.token._blockchain && account.address_for_blockchain(project.token._blockchain).present?
   end
 
   def can_send_awards?(project)

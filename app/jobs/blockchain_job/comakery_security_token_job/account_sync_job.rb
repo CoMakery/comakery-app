@@ -2,7 +2,7 @@ module BlockchainJob
   module ComakerySecurityTokenJob
     class AccountSyncJob < BlockchainJob::ComakerySecurityTokenJob::SyncJob
       def sync
-        @address = @record.account.ethereum_wallet
+        @address = @record.account.address_for_blockchain(@token&._blockchain)
 
         return unless @address&.present?
 

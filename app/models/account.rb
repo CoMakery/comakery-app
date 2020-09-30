@@ -333,6 +333,10 @@ class Account < ApplicationRecord
     update_column :email_confirm_token, SecureRandom.hex
   end
 
+  def address_for_blockchain(blockchain)
+    wallets.find_by(_blockchain: blockchain)&.address
+  end
+
   private
 
     def validate_age
