@@ -51,7 +51,7 @@ class Dashboard::TransfersController < ApplicationController
                             .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
 
       @transfers_all.size
-      ordered_transfers = order_transfers(@transfers_all)
+      ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)
 
       if (@page > 1) && @transfers.out_of_range?
@@ -80,18 +80,5 @@ class Dashboard::TransfersController < ApplicationController
         :requirements,
         :transfer_type_id
       )
-    end
-
-    def order_transfers(transfers)
-      ordered_transfers = transfers.order('awards.created_at')
-      s = params.dig(:q, :s)
-      return ordered_transfers unless s
-
-      order_string = s.is_a?(Array) ? s.join(', ') : s
-      if order_string.include?('issuer_')
-        order_string.gsub!('issuer_', 'accounts.')
-        ordered_transfers = ordered_transfers.joins(:issuer)
-      end
-      ordered_transfers.reorder(order_string)
     end
 end

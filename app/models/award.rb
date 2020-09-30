@@ -6,6 +6,7 @@ class Award < ApplicationRecord
   include EthereumAddressable
   include QtumTransactionAddressable
   include BlockchainTransactable
+  include RansackReorder
 
   EXPERIENCE_LEVELS = {
     'New Contributor' => 0,
