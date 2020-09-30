@@ -153,7 +153,7 @@ describe SessionsController do
       account = create(:account, managed_mission: active_whitelabel_mission, password: '12345678')
 
       post :sign_in, params: { email: account.email, password: '12345678' }
-      expect(response).not_to redirect_to new_session_path
+      expect(response).to redirect_to projects_path
     end
 
     it 'doesnt allow to login with managed account on a different whitelabel instance' do
@@ -219,7 +219,7 @@ describe SessionsController do
       account.update new_award_notice: true, ethereum_wallet: '0x' + 'a' * 40
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
+      expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Your Ethereum address is'
       expect(response).to redirect_to my_tasks_path
     end
 
@@ -244,7 +244,7 @@ describe SessionsController do
         account.update new_award_notice: true, qtum_wallet: 'Q' + 'a' * 33
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to eq true
+        expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Your Qtum address is'
         expect(response).to redirect_to my_tasks_path
       end
     end
@@ -264,7 +264,7 @@ describe SessionsController do
         account.update new_award_notice: true, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Cardano address is')).to eq true
+        expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Your Cardano address is'
         expect(response).to redirect_to my_tasks_path
       end
     end
@@ -284,7 +284,7 @@ describe SessionsController do
         account.update new_award_notice: true, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to eq true
+        expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Your Bitcoin address is'
         expect(response).to redirect_to my_tasks_path
       end
     end
@@ -304,7 +304,7 @@ describe SessionsController do
         account.update new_award_notice: true, eos_wallet: 'aaatestnet11'
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to eq true
+        expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Your EOS account name is'
         expect(response).to redirect_to my_tasks_path
       end
     end
@@ -324,7 +324,7 @@ describe SessionsController do
         account.update new_award_notice: true, tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9'
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Tezos address is')).to eq true
+        expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Your Tezos address is'
         expect(response).to redirect_to my_tasks_path
       end
     end
