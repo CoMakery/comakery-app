@@ -13,7 +13,7 @@ module RansackReorder
           "#{order_column} #{direction}"
         elsif order_string == 'issuer_first_name'
           scope = scope.joins(:issuer)
-          "accounts.issuer_first_name #{direction}, accounts.issuer_last_name"
+          "accounts.issuer_first_name #{direction}, accounts.issuer_last_name #{direction}"
         else
           default
         end
