@@ -13,7 +13,7 @@ class Views::Accounts::Show < Views::Base
         awardsCount: awards_count,
         projects: projects,
         projectsCount: projects_count,
-        countryList: Country.all.sort,
+        countryList: ISO3166::Country.all_translated,
         specialtyList: Specialty.all.map { |s| [s.name, s.id.to_s] },
         clippyIcon: image_url('Octicons-clippy.png')
       },
