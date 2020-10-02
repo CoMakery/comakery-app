@@ -14,12 +14,6 @@ shared_examples 'belongs_to_blockchain' do |attrs|
     end
   end
 
-  describe '#blockchain_name_for_wallet' do
-    it 'returns a Blockchain name suitable for wallet columns on account model' do
-      expect(described_class.new.blockchain_name_for_wallet).to eq('bitcoin')
-    end
-  end
-
   describe '#tokens_on_same_blockchain' do
     it 'returns list of tokens which use the same Blockchain' do
       expect(described_class.new.tokens_on_same_blockchain).to eq(Token.where(_blockchain: described_class.new._blockchain))

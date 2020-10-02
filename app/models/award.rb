@@ -279,8 +279,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    blockchain_name = token&.blockchain_name_for_wallet
-    blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
+    account.address_for_blockchain(token&._blockchain)
   end
 
   def needs_wallet?

@@ -21,10 +21,6 @@ module BelongsToBlockchain
       @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new if _blockchain
     end
 
-    def blockchain_name_for_wallet
-      blockchain.name.match(/^([A-Z][a-z]+)[A-Z]*/)[1].downcase
-    end
-
     def tokens_on_same_blockchain
       Token.where(_blockchain: _blockchain)
     end

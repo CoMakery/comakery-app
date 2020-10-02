@@ -207,16 +207,18 @@ describe SessionsController do
       expect(response).to redirect_to my_tasks_path
     end
 
-    it 'notice to update ethereum_wallet' do
-      account.update new_award_notice: true, ethereum_wallet: nil
+    it 'notice to update wallet' do
+      account.update new_award_notice: true
+      account.wallets.delete_all
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'
+      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address'
       expect(response).to redirect_to my_tasks_path
     end
 
     it 'notice new award' do
-      account.update new_award_notice: true, ethereum_wallet: '0x' + 'a' * 40
+      account.update new_award_notice: true
+      create(:wallet, account: account, address: '0x' + 'a' * 40, _blockchain: project.token._blockchain)
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true

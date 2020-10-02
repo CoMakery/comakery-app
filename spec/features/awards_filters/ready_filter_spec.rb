@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe 'test_ready_filter', js: true do
-  let(:owner) { create :account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423' }
+  let(:owner) { create :account }
   let!(:project) { create :project, token: create(:comakery_dummy_token), account: owner, visibility: 'public_listed' }
+  let!(:wallet) { create :wallet, account: owner, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: project.token._blockchain }
   let!(:project_award_type) { (create :award_type, project: project) }
   let!(:verification) { create(:verification, account: owner) }
 

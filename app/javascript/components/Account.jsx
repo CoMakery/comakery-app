@@ -64,13 +64,6 @@ export default class Account extends React.Component {
     formData.append('account[date_of_birth]', this.dateInput.current.value || '')
     formData.append('account[country]', this.state.country || '')
     formData.append('account[ethereum_auth_address]', this.state.ethereumAuthAddress || '')
-    formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
-    formData.append('account[eos_wallet]', this.state.eosWallet || '')
-    formData.append('account[bitcoin_wallet]', this.state.bitcoinWallet || '')
-    formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
-    formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
-    formData.append('account[tezos_wallet]', this.state.tezosWallet || '')
-    formData.append('account[constellation_wallet]', this.state.constellationWallet || '')
     formData.append('account[specialty_id]', this.state.specialtyId || '')
     formData.append('account[occupation]', this.state.occupation || '')
     formData.append('account[linkedin_url]', this.state.linkedinUrl || '')
@@ -170,7 +163,7 @@ export default class Account extends React.Component {
       <Alert message={this.state.message} messageType={this.state.messageType} isVisible={this.state.showMessage} toggleVisible={() => {
         this.setState({ showMessage: !this.state.showMessage })
       }} />
-      <div className='ethereum_wallet m-t-10'>
+      <div className='m-t-10'>
         <div className={`${this.state.isEdit ? '' : 'hide'} edit-ethereum-wallet`}>
           <h4 style={{ border: 'none' }}>
             Account Details (
@@ -239,20 +232,6 @@ export default class Account extends React.Component {
 
               <FormField fieldLabel='Behance Profile URL' fieldName='behanceUrl' fieldValue={this.state.behanceUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.behanceUrl} />
 
-              <FormField fieldLabel='Qtum Address' fieldName='qtumWallet' fieldValue={this.state.qtumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.qtumWallet} />
-
-              <FormField fieldLabel='Ethereum Address' fieldName='ethereumWallet' fieldValue={this.state.ethereumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereumWallet} />
-
-              <FormField fieldLabel='Cardano Address' fieldName='cardanoWallet' fieldValue={this.state.cardanoWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.cardanoWallet} />
-
-              <FormField fieldLabel='Bitcoin Address' fieldName='bitcoinWallet' fieldValue={this.state.bitcoinWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.bitcoinWallet} />
-
-              <FormField fieldLabel='EOS Account Name' fieldName='eosWallet' fieldValue={this.state.eosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.eosWallet} />
-
-              <FormField fieldLabel='Tezos Address' fieldName='tezosWallet' fieldValue={this.state.tezosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.tezosWallet} />
-
-              <FormField fieldLabel='Constellation Address' fieldName='constellationWallet' fieldValue={this.state.constellationWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.constellationWallet} />
-
               <div className='columns small-3'>
                 <label>Image</label>
               </div>
@@ -280,117 +259,12 @@ export default class Account extends React.Component {
             <DataField fieldName='Ethereum Auth Address' fieldValue={this.state.ethereumAuthAddress} />
             <DataField fieldName='Date of Birth' fieldValue={this.state.accountData.dateOfBirth} />
             <DataField fieldName='Country' fieldValue={this.state.accountData.country} />
-
             <DataField fieldName='My Specialty' fieldValue={specialty ? specialty[0] : ''} />
-
             <DataField fieldName='Occupation' fieldValue={this.state.occupation} />
-
             <DataField fieldName='LinkedIn Profile URL' fieldValue={this.state.linkedinUrl} />
-
             <DataField fieldName='GitHub Profile URL' fieldValue={this.state.githubUrl} />
-
             <DataField fieldName='Dribbble Profile URL' fieldValue={this.state.dribbleUrl} />
-
             <DataField fieldName='Behance Profile URL' fieldValue={this.state.behanceUrl} />
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                Qtum Address
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.qtumWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.qtumWallet} readOnly className='fake-link copy-source fake-link--input' data-href={this.state.accountData.qtumAddress} />
-                  <a className='copiable copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                Ethereum Address
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.ethereumWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.ethereumWallet} readOnly className='fake-link copy-source2 fake-link--input' data-href={this.state.accountData.etherscanAddress} />
-                  <a className='copiable2 copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                Cardano Address
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.cardanoWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.cardanoWallet} readOnly className='fake-link copy-source3 fake-link--input' data-href={this.state.accountData.cardanoAddress} />
-                  <a className='copiable3 copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                Bitcoin Address
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.bitcoinWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.bitcoinWallet} readOnly className='fake-link copy-source4 fake-link--input' data-href={this.state.accountData.bitcoinAddress} />
-                  <a className='copiable4 copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                EOS Account Name
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.eosWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.eosWallet} readOnly className='fake-link copy-source5 fake-link--input' data-href={this.state.accountData.eosAddress} />
-                  <a className='copiable5 copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                Tezos Address
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.tezosWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.tezosWallet} readOnly className='fake-link copy-source6 fake-link--input' data-href={this.state.accountData.tezosWallet} />
-                  <a className='copiable6 copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='columns medium-3' style={{ marginTop: 8 }}>
-                Constellation Address
-              </div>
-              <div className='columns medium-9'>
-                {this.state.accountData.constellationWallet && <React.Fragment>
-                  <input type='text' value={this.state.accountData.constellationWallet} readOnly className='fake-link copy-source6 fake-link--input' data-href={this.state.accountData.constellationWallet} />
-                  <a className='copiable6 copiable--link'>
-                    <img src={this.props.clippyIcon} width={20} height={20} />
-                  </a>
-                </React.Fragment>}
-              </div>
-            </div>
-
           </div>
           <div className='columns show-for-large medium-12 large-3 text-right'>
             {downloadWidget}

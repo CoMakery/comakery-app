@@ -21,7 +21,7 @@ class AwardDecorator < Draper::Decorator
       methods: %i[issuer_address amount_to_send recipient_display_name],
       include: {
         account: {
-          only: %i[id ethereum_wallet qtum_wallet cardano_wallet qtum_wallet bitcoin_wallet eos_wallet tezos_wallet]
+          only: %i[id]
         },
         project: {
           only: %i[id]

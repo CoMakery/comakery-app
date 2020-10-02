@@ -35,31 +35,21 @@ describe AccountDecorator do
   end
 
   describe '#can_send_awards?' do
-    let!(:project_owner) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
+    let!(:project) { create :project }
+    let!(:project2) { create :project }
 
-    context 'on ethereum network' do
-      let!(:project) { create :project, payment_type: 'project_token' }
-      let!(:project2) { build :project, payment_type: 'project_token', account: project_owner, token: build(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005') }
+    context 'when account is project owner or admin' do
+      it 'can send awards' do
+        project.admins << project2.account
 
-      it 'can send' do
-        expect(project_owner.decorate.can_send_awards?(project2)).to be true
-      end
-
-      it 'cannot send' do
-        expect(project_owner.decorate.can_send_awards?(project)).to be false
+        expect(project.account.decorate.can_send_awards?(project)).to be true
+        expect(project2.account.decorate.can_send_awards?(project)).to be true
       end
     end
 
-    context 'on bitcoin network' do
-      let!(:recipient) { create(:account, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
-      let!(:project) { build :project, payment_type: 'project_token', account: project_owner, token: create(:token, _token_type: 'btc') }
-
-      it 'can send' do
-        expect(project_owner.decorate.can_send_awards?(project)).to be true
-      end
-
-      it 'cannot send' do
-        expect(recipient.decorate.can_send_awards?(project)).to be false
+    context 'when account is not project owner or admin' do
+      it 'cannot send awards' do
+        expect(project2.account.decorate.can_send_awards?(project)).to be false
       end
     end
   end

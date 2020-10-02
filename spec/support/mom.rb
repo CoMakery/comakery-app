@@ -13,7 +13,6 @@ class Mom
       nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
       country: 'United States of America',
-      ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B',
       specialty: create(:specialty),
       password: valid_password
     }
@@ -98,9 +97,22 @@ class Mom
 
   def account_token_record(**attrs)
     token = attrs[:token] || build(:comakery_dummy_token)
+    
+    account = attrs[:account] || create(
+      :account
+    )
+
+    create(
+      :wallet,
+      account: account,
+      _blockchain: token._blockchain,
+      address: attrs[:address] || build(:ethereum_address_2)
+    )
+
+    attrs.delete(:address)
 
     defaults = {
-      account: create(:account),
+      account: account,
       token: token,
       reg_group: create(:reg_group, token: token),
       max_balance: 100000,
@@ -108,6 +120,7 @@ class Mom
       account_frozen: false,
       lockup_until: 1.day.ago
     }
+
     AccountTokenRecord.new(defaults.merge(attrs))
   end
 
@@ -174,14 +187,22 @@ class Mom
       token: attrs[:token]
     )
 
+    account = attrs[:account] || create(
+      :account
+    )
+
+    create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: attrs[:destination] || build(:ethereum_address_2)
+    )
+
     attrs[:award] || create(
       :award,
       amount: attrs[:amount] || 1,
       status: :accepted,
-      account: create(
-        :account,
-        ethereum_wallet: attrs[:destination] || build(:ethereum_address_2)
-      ),
+      account: account,
       award_type: create(
         :award_type,
         project: project
@@ -218,14 +239,22 @@ class Mom
       token: attrs[:token]
     )
 
+    account = attrs[:account] || create(
+      :account
+    )
+
+    create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: attrs[:destination] || build(:constellation_address_2)
+    )
+
     attrs[:award] || create(
       :award,
       amount: attrs[:amount] || 1,
       status: :accepted,
-      account: create(
-        :account,
-        constellation_wallet: attrs[:destination] || build(:constellation_address_2)
-      ),
+      account: account,
       award_type: create(
         :award_type,
         project: project

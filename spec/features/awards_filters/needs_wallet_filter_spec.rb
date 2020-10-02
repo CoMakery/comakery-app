@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'test_needs_wallet_filter', js: true do
-  let(:owner) { create :account, ethereum_wallet: nil }
+  let(:owner) { create :account }
   let!(:project) { create :project, token: create(:comakery_dummy_token), account: owner }
   let!(:project_award_type) { (create :award_type, project: project) }
 

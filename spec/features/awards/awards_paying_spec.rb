@@ -57,7 +57,8 @@ describe 'awarding users' do
 
   it 'list awards' do
     project.token.update decimal_places: 2
-    receiver = create :account, email: 'test@test.st', ethereum_wallet: '0x' + 'b' * 40
+    receiver = create :account, email: 'test@test.st'
+    create :wallet, account: receiver, address: '0x' + 'b' * 40, _blockchain: project.token._blockchain
     create :award, account: receiver, award_type: small_award_type, amount: 1000
     login(account)
     visit awards_project_path(project)

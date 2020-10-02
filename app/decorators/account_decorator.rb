@@ -18,34 +18,6 @@ class AccountDecorator < Draper::Decorator
     end
   end
 
-  def bitcoin_wallet_url(network = 'bitcoin')
-    Token.blockchain_for(network.capitalize).url_for_address_human(bitcoin_wallet)
-  end
-
-  def cardano_wallet_url(network = 'cardano')
-    Token.blockchain_for(network.capitalize).url_for_address_human(cardano_wallet)
-  end
-
-  def eos_wallet_url(network = 'eos')
-    Token.blockchain_for(network.capitalize).url_for_address_human(eos_wallet)
-  end
-
-  def tezos_wallet_url(network = 'tezos')
-    Token.blockchain_for(network.capitalize).url_for_address_human(tezos_wallet)
-  end
-
-  def ethereum_wallet_url(network = 'ethereum')
-    Token.blockchain_for(network.capitalize).url_for_address_human(ethereum_wallet)
-  end
-
-  def etherscan_address(network = 'ethereum')
-    Token.blockchain_for(network.capitalize).url_for_address_human(ethereum_wallet)
-  end
-
-  def qtum_wallet_url(network = 'qtum')
-    Token.blockchain_for(network.capitalize).url_for_address_human(qtum_wallet)
-  end
-
   def wallet_address_for(project)
     address_for_blockchain(project.token._blockchain)
   end

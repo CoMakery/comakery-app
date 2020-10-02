@@ -39,55 +39,6 @@ feature 'my account', js: true do
     expect(page).to have_content account_nickname
   end
 
-  scenario 'editing, and adding an ethereum address' do
-    login(auth.account)
-    visit show_account_path
-
-    within('.view-ethereum-wallet') do
-      first(:link).click
-    end
-
-    fill_in 'ethereumWallet', with: 'too short and with spaces'
-    find('input[type=submit]').click
-
-    expect(page).to have_content "should start with '0x', followed by a 40 character ethereum address"
-  end
-
-  scenario 'editing, and adding an qtum address' do
-    login(auth.account)
-    visit show_account_path
-
-    within('.view-ethereum-wallet') do
-      first(:link).click
-    end
-
-    fill_in 'qtumWallet', with: 'too short and with spaces'
-    find('input[type=submit]').click
-
-    expect(page).to have_content "should start with 'Q', followed by 33 characters"
-  end
-
-  scenario 'adding an ethereum address sends ethereum tokens, for awards' do
-    login(auth.account)
-    visit show_account_path
-
-    within('.view-ethereum-wallet') do
-      first(:link).click
-    end
-
-    fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
-    fill_in 'qtumWallet', with: "Q#{'a' * 33}"
-    fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-    fill_in 'bitcoinWallet', with: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
-    fill_in 'eosWallet', with: 'aaatestnet11'
-    find('input[type=submit]').click
-
-    expect(page).to have_content 'Your account details have been updated.'
-    expect(page.find('.fake-link.copy-source').value).to eq "Q#{'a' * 33}"
-    expect(page.find('.fake-link.copy-source2').value).to eq "0x#{'a' * 40}"
-    expect(page.find('.fake-link.copy-source3').value).to eq 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-  end
-
   scenario 'show account image' do
     account.image = Refile::FileDouble.new('dummy', 'avatar.png', content_type: 'image/png')
     account.save
