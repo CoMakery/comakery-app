@@ -279,7 +279,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    account.address_for_blockchain(token&._blockchain)
+    account&.address_for_blockchain(token&._blockchain)
   end
 
   def needs_wallet?

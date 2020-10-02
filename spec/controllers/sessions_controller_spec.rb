@@ -212,7 +212,7 @@ describe SessionsController do
       account.wallets.delete_all
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address'
+      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your'
       expect(response).to redirect_to my_tasks_path
     end
 
@@ -221,7 +221,7 @@ describe SessionsController do
       create(:wallet, account: account, address: '0x' + 'a' * 40, _blockchain: project.token._blockchain)
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
+      expect(flash[:notice].include?('Congratulations, you just claimed your award! Your')).to eq true
       expect(response).to redirect_to my_tasks_path
     end
 

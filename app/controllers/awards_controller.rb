@@ -493,7 +493,7 @@ class AwardsController < ApplicationController
         else
           Account.find_from_uid_channel(params[:uid], Channel.find_by(id: params[:channel_id]))
         end
-      )&.address_for_blockchain(@project.token.&_blockchain)
+      )&.address_for_blockchain(@project.token&._blockchain)
 
       wallet_url = address ? @project.token&.blockchain&.url_for_address_human(address) : nil
 

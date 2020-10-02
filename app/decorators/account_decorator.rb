@@ -19,7 +19,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def wallet_address_for(project)
-    address_for_blockchain(project.token._blockchain)
+    address_for_blockchain(project.token&._blockchain)
   end
 
   def wallet_address_url_for(project)

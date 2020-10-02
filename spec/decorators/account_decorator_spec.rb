@@ -55,7 +55,7 @@ describe AccountDecorator do
   end
 
   describe '#can_receive_awards?' do
-    let!(:wallet) { create(:wallet, _blockchain: :ethereum_ropsten) }
+    let!(:wallet) { create(:wallet, address: '0x' + '0' * 40, _blockchain: :ethereum_ropsten) }
     let!(:project) { build :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
 
     context 'when wallet for project token blockchain is present' do

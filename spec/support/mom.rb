@@ -102,7 +102,7 @@ class Mom
       :account
     )
 
-    create(
+    account.wallets.find_by(_blockchain: token._blockchain) || create(
       :wallet,
       account: account,
       _blockchain: token._blockchain,
@@ -191,7 +191,7 @@ class Mom
       :account
     )
 
-    create(
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
       :wallet,
       account: account,
       _blockchain: project.token._blockchain,
@@ -243,7 +243,7 @@ class Mom
       :account
     )
 
-    create(
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
       :wallet,
       account: account,
       _blockchain: project.token._blockchain,

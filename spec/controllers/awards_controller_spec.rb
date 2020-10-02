@@ -21,7 +21,7 @@ RSpec.describe AwardsController, type: :controller do
     discord_team.build_authentication_team issuer_discord
     discord_team.build_authentication_team receiver_discord
     project.channels.create(team: team, channel_id: '123')
-    create(:wallet, account: receiver, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', _blockchain: project.token._blockchain)
+    create(:wallet, account: receiver.account, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', _blockchain: project.token._blockchain)
   end
 
   describe '#index' do

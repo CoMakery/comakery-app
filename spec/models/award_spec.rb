@@ -996,10 +996,9 @@ describe Award do
   end
 
   describe 'recipient_address' do
-    let!(:award) { create :award }
+    let!(:award) { create :award, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
 
     before do
-      award.project.token = create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)
       create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
     end
 
@@ -1014,10 +1013,9 @@ describe Award do
     end
 
     context 'when recipient_address is present' do
-      let!(:award) { create(:award) }
+      let!(:award) { create :award, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
 
       before do
-        award.project.token = create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)
         create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
       end
 
