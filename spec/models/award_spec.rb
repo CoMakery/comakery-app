@@ -643,7 +643,7 @@ describe Award do
       end
 
       context 'when account wallet is present' do
-        before { create(:wallet, account: account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: project.token._blockchain )}
+        before { create(:wallet, account: account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: project.token._blockchain) }
         specify { expect(award.ethereum_issue_ready?).to be_truthy }
       end
     end
@@ -997,10 +997,10 @@ describe Award do
 
   describe 'recipient_address' do
     let!(:award) { create :award }
-    
+
     before do
       award.project.token = create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)
-      create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain )
+      create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
     end
 
     it "returns recipient address on token's blockchain" do
@@ -1018,7 +1018,7 @@ describe Award do
 
       before do
         award.project.token = create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)
-        create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain )
+        create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
       end
 
       specify { expect(create(:award).needs_wallet?).to be_falsey }

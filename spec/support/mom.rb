@@ -97,7 +97,7 @@ class Mom
 
   def account_token_record(**attrs)
     token = attrs[:token] || build(:comakery_dummy_token)
-    
+
     account = attrs[:account] || create(
       :account
     )

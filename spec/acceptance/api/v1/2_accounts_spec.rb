@@ -76,7 +76,7 @@ resource 'II. Accounts' do
           last_name: 'Smith',
           nickname: "hunter-#{SecureRandom.hex(20)}",
           date_of_birth: '1990/01/01',
-          country: 'United States of America',
+          country: 'United States of America'
         }
       end
 

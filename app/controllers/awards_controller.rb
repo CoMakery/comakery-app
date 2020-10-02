@@ -493,7 +493,7 @@ class AwardsController < ApplicationController
         else
           Account.find_from_uid_channel(params[:uid], Channel.find_by(id: params[:channel_id]))
         end
-      )&.address_for_blockchain(@project.token&_blockchain)
+      )&.address_for_blockchain(@project.token.&_blockchain)
 
       wallet_url = address ? @project.token&.blockchain&.url_for_address_human(address) : nil
 
@@ -523,7 +523,7 @@ class AwardsController < ApplicationController
 
       blockchain_name = project.token.blockchain.name
       addr = current_account.address_for_blockchain(project.token._blockchain)
-      
+
       if addr.present?
         "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallet_path)}. The project owner can now issue the tokens."
       else
