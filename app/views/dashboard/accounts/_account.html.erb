@@ -106,7 +106,7 @@
   	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
 			<% if record.latest_blockchain_transaction&.tx_hash %>
 				<div class="transfer-button <%= record.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">
-					<%= link_to (record.synced? ? "Tx ➔" : "Tx processing"), record.token.url_for_tx_human(record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
+					<%= link_to (record.synced? ? "Tx ➔" : "Tx processing"), record.token.blockchain.url_for_tx_human(record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
 				</div>
       <% end %>
   		
