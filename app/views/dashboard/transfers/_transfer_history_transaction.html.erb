@@ -18,10 +18,8 @@
   </div>
 
   <div class="transfers-table__transfer__link">
-    <% if transaction.tx_hash && transaction.token.coin_type_on_ethereum? %>
-      <%= link_to "#{transaction.tx_hash[0...20]}...", ethereum_explorer_tx_url(transaction.token, transaction.tx_hash), target: '_blank' %>
-    <% elsif transaction.tx_hash %>
-      <%= "#{transaction.tx_hash[0...20]}..." %>
+    <% if transaction.tx_hash %>
+      <%= link_to "#{transaction.tx_hash[0...20]}...", transaction.token.url_for_tx_human(transaction.tx_hash), target: '_blank' %>
     <% else %>
       –
     <% end %>
