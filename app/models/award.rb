@@ -3,8 +3,6 @@ require 'bigdecimal'
 class Award < ApplicationRecord
   paginates_per 50
 
-  include EthereumAddressable
-  include QtumTransactionAddressable
   include BlockchainTransactable
 
   EXPERIENCE_LEVELS = {
@@ -43,8 +41,6 @@ class Award < ApplicationRecord
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
-  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&._token_type_on_ethereum? } # see EthereumAddressable
-  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&._token_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :name, length: { maximum: 100 }
   validates :why, length: { maximum: 500 }
