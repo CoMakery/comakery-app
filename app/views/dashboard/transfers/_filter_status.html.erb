@@ -7,14 +7,14 @@
   }
 ] %>
 
-<% if @project.blockchain_name %>
+<% if @project&.token&.blockchain_name_for_wallet&.present? %>
   <% filters += [
     {
       name: 'ready',
       class_name: 'transfers-filters--filter--options--ready__active',
       query: {
         :status_eq => 3,
-        "account_#{@project.blockchain_name}_wallet_present" => 1,
+        "account_#{@project.token.blockchain_name_for_wallet}_wallet_present" => 1,
         filter: 'ready'
       },
       present: params[:q] && params[:q][:filter] == 'ready'
@@ -22,7 +22,7 @@
     {
       name: 'blocked – needs wallet',
       class_name: 'transfers-filters--filter--options--blocked__active',
-      query: {:status_eq => 3, "account_#{@project.blockchain_name}_wallet_blank" => 1, filter: 'needs_wallet'},
+      query: {:status_eq => 3, "account_#{@project.token.blockchain_name_for_wallet}_wallet_blank" => 1, filter: 'needs_wallet'},
       present: params[:q] && params[:q][:filter] == 'needs_wallet'
     }
   ] %>

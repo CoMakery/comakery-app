@@ -153,7 +153,7 @@ describe SessionsController do
       account = create(:account, managed_mission: active_whitelabel_mission, password: '12345678')
 
       post :sign_in, params: { email: account.email, password: '12345678' }
-      expect(response).not_to redirect_to new_session_path
+      expect(response).to redirect_to projects_path
     end
 
     it 'doesnt allow to login with managed account on a different whitelabel instance' do
