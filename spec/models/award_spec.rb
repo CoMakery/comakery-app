@@ -1019,7 +1019,7 @@ describe Award do
         create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
       end
 
-      specify { expect(create(:award).needs_wallet?).to be_falsey }
+      specify { expect(award.needs_wallet?).to be_falsey }
     end
   end
 

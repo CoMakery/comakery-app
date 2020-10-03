@@ -9,8 +9,7 @@ RSpec.describe AwardsController, type: :controller do
   let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
-
-  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
+  let!(:project) { create(:project, account: issuer.account, visibility: :public_listed, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
   let!(:award_type) { create(:award_type, project: project) }
 
   before do
@@ -89,13 +88,7 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#show' do
-    let(:award) { create(:award) }
-    let(:project) do
-      pj = award.project
-      pj.public_listed!
-      pj
-    end
-
+    let(:award) { create(:award, award_type: award_type) }
     let(:account) { project.account.decorate }
 
     it 'shows member tasks to logged in members' do

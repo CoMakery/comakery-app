@@ -212,7 +212,7 @@ describe SessionsController do
       account.wallets.delete_all
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your'
+      expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Be sure to enter your'
       expect(response).to redirect_to my_tasks_path
     end
 

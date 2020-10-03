@@ -41,7 +41,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_receive_awards?(project)
-    project.token._blockchain && account.address_for_blockchain(project.token._blockchain).present?
+    project.token&._blockchain && account.address_for_blockchain(project.token._blockchain).present?
   end
 
   def can_send_awards?(project)

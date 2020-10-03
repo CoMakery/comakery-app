@@ -97,7 +97,7 @@ class SessionsController < ApplicationController
 
       flash[:notice] = if addr.present?
         current_account.update(new_award_notice: false)
-        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your tokens."
+        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallets_path)}. The project owner can now issue your tokens."
       else
         "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} address on your #{view_context.link_to('wallets page', wallets_path)} to receive your tokens."
       end

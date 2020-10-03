@@ -525,9 +525,9 @@ class AwardsController < ApplicationController
       addr = current_account.address_for_blockchain(project.token._blockchain)
 
       if addr.present?
-        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallet_path)}. The project owner can now issue the tokens."
+        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallets_path)}. The project owner can now issue the tokens."
       else
-        "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} adress on your #{view_context.link_to('wallets page', wallet_path)} to receive your tokens."
+        "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} adress on your #{view_context.link_to('wallets page', wallets_path)} to receive your tokens."
       end
     end
 end

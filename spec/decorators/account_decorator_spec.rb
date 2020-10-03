@@ -66,14 +66,14 @@ describe AccountDecorator do
 
     context 'when wallet for project token blockchain is not present' do
       it 'returns false' do
-        expect(create(:wallet).account.decorate.can_receive_awards?(project)).to be false
+        expect(create(:wallet).account.decorate.can_receive_awards?(project)).to be_falsey
       end
     end
 
     context 'when project token is not present' do
       it 'returns false' do
         project.token = nil
-        expect(wallet.account.decorate.can_receive_awards?(project)).to be false
+        expect(wallet.account.decorate.can_receive_awards?(project)).to be_falsey
       end
     end
   end
