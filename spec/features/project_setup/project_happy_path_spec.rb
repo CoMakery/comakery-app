@@ -29,9 +29,7 @@ describe 'viewing projects, creating and editing', :js do
       click_link project.title
     end
 
-    visit projects_path
-    expect(page).to have_content 'New Project' # wait for new project button to appear before pressing it to avoid random test failure
-    click_link 'New Project'
+    visit new_project_path
     expect(page).to have_content 'New Project'
     fill_in 'project[title]', with: 'This is a project'
     fill_in 'project[description]', with: 'This is a project description which is very informative'
