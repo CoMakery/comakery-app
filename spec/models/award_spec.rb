@@ -53,6 +53,56 @@ describe Award do
     end
   end
 
+  describe 'transfer_ready' do
+    context 'when award is in accepted state' do
+      let!(:award) { create(:award, status: :accepted) }
+
+      context 'and award account has a wallet with matching blockchain' do
+        let!(:wallet) { create(:wallet, account: award.account, _blockchain: award.token._blockchain, address: build(:bitcoin_address_1)) }
+
+        subject { described_class.transfer_ready(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).to include(award) }
+      end
+
+      context 'and award account doesnt have a wallet with matching blockchain' do
+        subject { described_class.transfer_ready(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).not_to include(award) }
+      end
+    end
+
+    context 'when award is not in accepted state' do
+      let(:award) { create(:award, status: :started) }
+
+      subject { described_class.transfer_ready(award.token._blockchain_before_type_cast).group('awards.id') }
+      specify { expect(subject).not_to include(award) }
+    end
+  end
+
+  describe 'transfer_blocked_by_wallet' do
+    context 'when award is in accepted state' do
+      let!(:award) { create(:award, status: :accepted) }
+
+      context 'and award account has a wallet with matching blockchain' do
+        let!(:wallet) { create(:wallet, account: award.account, _blockchain: award.token._blockchain, address: build(:bitcoin_address_1)) }
+
+        subject { described_class.transfer_blocked_by_wallet(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).not_to include(award) }
+      end
+
+      context 'and award account doesnt have a wallet with matching blockchain' do
+        subject { described_class.transfer_blocked_by_wallet(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).to include(award) }
+      end
+    end
+
+    context 'when award is not in accepted state' do
+      let(:award) { create(:award, status: :started) }
+
+      subject { described_class.transfer_blocked_by_wallet(award.token._blockchain_before_type_cast).group('awards.id') }
+      specify { expect(subject).not_to include(award) }
+    end
+  end
+
   describe 'scopes' do
     before do
       described_class.statuses.each_key { |status| (create :award).update(status: status) }

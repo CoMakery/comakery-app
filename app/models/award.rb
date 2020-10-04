@@ -80,6 +80,9 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
+  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }).having('count(wallets) > 0') }
+  scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
+
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
@@ -101,6 +104,10 @@ class Award < ApplicationRecord
 
   enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
   enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }
+
+  def self.ransackable_scopes(_ = nil)
+    %i[transfer_ready transfer_blocked_by_wallet]
+  end
 
   def self.total_awarded
     completed.sum(:total_amount)

@@ -50,7 +50,7 @@ class Dashboard::TransfersController < ApplicationController
       @page = (params[:page] || 1).to_i
       @transfers_all = query.result
                             .group('awards.id')
-                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
+                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets])
       @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
 
@@ -59,8 +59,8 @@ class Dashboard::TransfersController < ApplicationController
         @page = 1
         @transfers = @transfers_all.page(@page).per(10)
       end
-    rescue ActiveRecord::StatementInvalid
-      head 404
+      # rescue ActiveRecord::StatementInvalid
+      # head 404
     end
 
     def set_transfer

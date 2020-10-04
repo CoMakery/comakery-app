@@ -23,7 +23,7 @@ class Mom
     defaults = {
       _blockchain: :bitcoin,
       account: create(:account),
-      address: '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
+      address: bitcoin_address_1
     }
     Wallet.new(defaults.merge(attrs))
   end
@@ -710,6 +710,10 @@ class Mom
         nonce
       )
     end
+  end
+
+  def bitcoin_address_1
+    '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end
 
   def constellation_address_1
