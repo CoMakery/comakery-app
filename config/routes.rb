@@ -136,6 +136,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
         resources :interests, only: [:index, :create, :destroy]
+        resources :wallets, only: [:index, :create, :destroy]
         resources :verifications, only: [:index, :create]
         get :token_balances
       end
