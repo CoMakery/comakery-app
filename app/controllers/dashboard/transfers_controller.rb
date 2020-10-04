@@ -59,8 +59,8 @@ class Dashboard::TransfersController < ApplicationController
         @page = 1
         @transfers = @transfers_all.page(@page).per(10)
       end
-      # rescue ActiveRecord::StatementInvalid
-      # head 404
+    rescue ActiveRecord::StatementInvalid
+      head 404
     end
 
     def set_transfer
