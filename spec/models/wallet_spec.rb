@@ -18,4 +18,16 @@ describe Wallet, type: :model do
       expect(subject.available_blockchains).not_to include(subject._blockchain)
     end
   end
+
+  describe '#pending_for_ore_id' do
+    context 'when created wallet source is ore_id' do
+      subject { create(:wallet, source: :ore_id) }
+      specify { expect(subject.state).to eq('pending') }
+    end
+
+    context 'when created wallet source is not ore_id' do
+      subject { create(:wallet, source: :user_provided) }
+      specify { expect(subject.state).to eq('ok') }
+    end
+  end
 end
