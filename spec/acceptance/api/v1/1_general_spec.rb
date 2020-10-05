@@ -1,5 +1,3 @@
-# Rubocop gives false positives on empty example groups with rspec_api_documentation DSL
-
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 

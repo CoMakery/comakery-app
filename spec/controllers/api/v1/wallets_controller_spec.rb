@@ -12,7 +12,6 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
   before do
     allow(controller).to receive(:authorized).and_return(true)
