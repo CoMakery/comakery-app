@@ -23,11 +23,6 @@ describe 'viewing projects, creating and editing', :js do
 
   it 'does the happy path' do
     login(account)
-    visit projects_path
-    expect(page).to have_content 'Cats with Lazers Project'
-    within "#project-#{project.to_param}" do
-      click_link project.title
-    end
 
     visit new_project_path
     expect(page).to have_content 'New Project'
