@@ -11,7 +11,7 @@ class Blockchain::Algorand < Blockchain
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    'api.algoexplorer.io'
+    'api.algoexplorer.io/idx2'
   end
 
   # Hostname of block explorer website
@@ -59,7 +59,7 @@ class Blockchain::Algorand < Blockchain
   # Transaction url on block explorer API
   # @return [String] url
   def url_for_tx_api(hash)
-    "https://#{explorer_api_host}/v1/transaction/#{hash}"
+    "https://#{explorer_api_host}/v2/transactions?txid=#{hash}"
   end
 
   # Address url on block explorer websitea
