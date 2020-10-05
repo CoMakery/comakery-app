@@ -15,5 +15,5 @@ describe Blockchain::Algorand do
   specify { expect(described_class.new.url_for_tx_human('null')).to eq('https://algoexplorer.io/tx/null') }
   specify { expect(described_class.new.url_for_tx_api('null')).to eq(nil) }
   specify { expect(described_class.new.url_for_address_human('null')).to eq('https://algoexplorer.io/address/null') }
-  specify { expect(described_class.new.url_for_address_api('null')).to eq('https://api.algoexplorer.io/v2/address/null') }
+  specify { expect(described_class.new.url_for_address_api('null')).to eq('https://api.algoexplorer.io/v2/accounts/null') }
 end

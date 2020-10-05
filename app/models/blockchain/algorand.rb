@@ -77,8 +77,8 @@ class Blockchain::Algorand < Blockchain
   # Validate blockchain transaction hash
   # @raise [Blockchain::Tx::ValidationError]
   # @return [void]
-  def validate_tx_hash(_hash)
-    raise Blockchain::Address::ValidationError, 'should consist of 52 alphanumeric characters' unless /\A[0-9A-Za-z]{52}\z/.match?(addr)
+  def validate_tx_hash(hash)
+    raise Blockchain::Tx::ValidationError, 'should consist of 52 alphanumeric characters' unless /\A[0-9A-Za-z]{52}\z/.match?(hash)
   end
 
   # Validate blockchain address
