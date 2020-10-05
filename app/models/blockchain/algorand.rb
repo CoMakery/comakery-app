@@ -58,8 +58,8 @@ class Blockchain::Algorand < Blockchain
 
   # Transaction url on block explorer API
   # @return [String] url
-  def url_for_tx_api(_hash)
-    nil
+  def url_for_tx_api(hash)
+    "https://#{explorer_api_host}/v1/transaction/#{hash}"
   end
 
   # Address url on block explorer websitea
