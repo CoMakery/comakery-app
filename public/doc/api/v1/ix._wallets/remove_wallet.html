@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VII. Blockchain Transactions API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>VII. Blockchain Transactions API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>SUBMIT TRANSACTION – HASH MISMATCH</h2>
-        <h3>PUT /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
+        <h2>REMOVE WALLET</h2>
+        <h3>DELETE /api/v1/accounts/:id/wallets/:wallet_id</h3>
           <p class="explanation">
-            Returns an error if submitted transaction hash differs from generated on backend
+            Returns account wallets (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,26 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
-                </td>
-                <td>
-                  <span class="description">project id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transaction id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">transaction[tx_hash]</span>
+                    <span class="name">wallet_id</span>
                 </td>
                 <td>
-                  <span class="description">transaction hash</span>
+                  <span class="description">wallet id to remove</span>
                 </td>
               </tr>
             </tbody>
@@ -157,28 +149,27 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO
-Api-Transaction-Key: g/WbJuKgLGoqsUczCqMANh7KsSQvDk0h</pre>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/projects/62/blockchain_transactions/11</pre>
+          <pre class="request route highlight">DELETE /api/v1/accounts/033c4280-b4cf-4af6-8bf1-2403983e8744/wallets/22</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"tx_hash":"0x"}},"method":"PUT","nonce":"725c38af23aed1348e7e62d7234e6f7a","timestamp":"1601921676","url":"http://example.org/api/v1/projects/62/blockchain_transactions/11"},"proof":{"signature":"Yp425xbtghrIe5mt+hyIaD4VyXQ36RJd+KxK0oBDzfN6KakUyrQCHU24cepeKmyY+nGpC+7BJbcSccx4fdf0CQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"418ea46b01bf45cf88270a52740e7e65","timestamp":"1601921678","url":"http://example.org/api/v1/accounts/033c4280-b4cf-4af6-8bf1-2403983e8744/wallets/22"},"proof":{"signature":"y6yf3bz2naqZzRKo/KcTTrHMgLsET2SPDIwlY4gBKnIoLq7l/XgeejpWvYGv3unkii/OP4EaLXGCgtbAV2IvAw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 0
+ETag: W/&quot;4f53cda18c2baa0c0354bb5f9a3ecbe5&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;hash&quot;: [
-      &quot;mismatch&quot;
-    ]
-  }
-}</pre>
+              <pre class="response body">[
+
+]</pre>
       </div>
     </div>
   </body>

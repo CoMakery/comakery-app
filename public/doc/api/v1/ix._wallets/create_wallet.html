@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Transfer Rules API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Transfer Rules API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete transfer rules, retrieve transfer rules data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>DELETE</h2>
-        <h3>DELETE /api/v1/projects/:project_id/transfer_rules/:id</h3>
+        <h2>CREATE WALLET</h2>
+        <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Delete the tranfer rule and returns an array of present transfer rules (See GET for response details)
+            Returns account wallets (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,18 +128,34 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">address</span>
                 </td>
                 <td>
-                  <span class="description">transfer rule id</span>
+                  <span class="description">wallet address</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">blockchain</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">source</span>
+                </td>
+                <td>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">provision</span>
+                </td>
+                <td>
+                  <span class="description">wallet provision type</span>
                 </td>
               </tr>
             </tbody>
@@ -152,21 +168,34 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/50/transfer_rules/6</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/7e8fcf07-1fbe-411d-84c0-bf99dc5a67f8/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"927fc3000a07a23b80937bb31cd0982a","timestamp":"1601921673","url":"http://example.org/api/v1/projects/50/transfer_rules/6"},"proof":{"signature":"46ao1cfx21Y/cvBvC3xxXWkZx9lYurMDtxOKN0n99GTTqK4INFc9599GnXMmPJQzkZJrzx9Q3ojpMOELpCcBCw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"wallet":{"address":"3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt","blockchain":"bitcoin"}},"method":"POST","nonce":"d6fcd0d49290e82ce6764d21d9be447a","timestamp":"1601921678","url":"http://example.org/api/v1/accounts/7e8fcf07-1fbe-411d-84c0-bf99dc5a67f8/wallets"},"proof":{"signature":"llgkTxuS+y5M9ws4N04/PCVtuL8KJwHBo2S0BTPNNhrbAM1Hc/GBMqoHIePbvrJf2vyGFSOALmPScgUaSpy/BQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;4f53cda18c2baa0c0354bb5f9a3ecbe5&quot;</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;4731eee8f78b9c12767e23a6797a40fd&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">[
+  {
+    &quot;id&quot;: 20,
+    &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+    &quot;source&quot;: &quot;user_provided&quot;,
+    &quot;state&quot;: &quot;ok&quot;,
+    &quot;createdAt&quot;: &quot;2020-10-05T18:14:38.257Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-10-05T18:14:38.257Z&quot;,
+    &quot;blockchain&quot;: &quot;bitcoin&quot;,
+    &quot;tokens&quot;: [
 
+    ]
+  }
 ]</pre>
       </div>
     </div>

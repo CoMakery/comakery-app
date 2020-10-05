@@ -31,6 +31,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
+      let!(:wallet) { create(:wallet, account: account) }
       let!(:page) { 1 }
 
       example 'INDEX' do

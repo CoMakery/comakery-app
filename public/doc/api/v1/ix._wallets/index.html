@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VIII. Reg Groups API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>VIII. Reg Groups API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete reg groups, retrieve reg group data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>GET</h2>
-        <h3>GET /api/v1/projects/:project_id/reg_groups/:id</h3>
+        <h2>INDEX</h2>
+        <h3>GET /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns data for a single reg group.
+            Returns an array of wallet objects
           </p>
 
           <h3>Parameters</h3>
@@ -128,18 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
-                </td>
-                <td>
-                  <span class="description">project id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">reg group id</span>
+                  <span class="description">account id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
@@ -159,31 +159,47 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">reg group id</span>
+                  <span class="description">wallet id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">name</span>
+                    <span class="name">address</span>
                 </td>
                 <td>
-                  <span class="description">reg group name</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">blockchain_id</span>
-                </td>
-                <td>
-                  <span class="description">reg group id on blockchain</span>
+                  <span class="description">wallet address</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">token_id</span>
+                    <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">reg group token id</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">state</span>
+                </td>
+                <td>
+                  <span class="description">wallet state [&quot;ok&quot;, &quot;unclaimed&quot;, &quot;pending&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain</span>
+                </td>
+                <td>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens</span>
+                </td>
+                <td>
+                  <span class="description">wallet tokens</span>
                 </td>
               </tr>
               <tr>
@@ -211,29 +227,38 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/65/reg_groups/58?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F65%2Freg_groups%2F58&amp;body[method]=GET&amp;body[nonce]=5176f7f68875b353ad1e8a9739ca4c86&amp;body[timestamp]=1601921677&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=NSJ%2B9O0TK6%2FAbLRjBhL1lk1V0BqFrK%2FvnfWFDcR7o3RGBqXzw6Hgaj09qkUN8TwHJ1IBFC8gsgv3nHzyJkgCDw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/04ea01f6-55b8-4c37-a1f3-c35af7ec9891/wallets?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F04ea01f6-55b8-4c37-a1f3-c35af7ec9891%2Fwallets&amp;body[method]=GET&amp;body[nonce]=d3f1fe578c2572e7e1274361f2a92ed6&amp;body[timestamp]=1601921678&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=sqggINOs%2FhHJ4l2Mz2j6gTJQiKfD95UD6DL7WiY6fewu46I50dVJWj0DRAT5vFUCi9SHXojvsZjvkPxWV3dABQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/65/reg_groups/58&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;5176f7f68875b353ad1e8a9739ca4c86&quot;, &quot;timestamp&quot;=&gt;&quot;1601921677&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;NSJ+9O0TK6/AbLRjBhL1lk1V0BqFrK/vnfWFDcR7o3RGBqXzw6Hgaj09qkUN8TwHJ1IBFC8gsgv3nHzyJkgCDw==&quot;}</pre>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/04ea01f6-55b8-4c37-a1f3-c35af7ec9891/wallets&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;d3f1fe578c2572e7e1274361f2a92ed6&quot;, &quot;timestamp&quot;=&gt;&quot;1601921678&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;sqggINOs/hHJ4l2Mz2j6gTJQiKfD95UD6DL7WiY6fewu46I50dVJWj0DRAT5vFUCi9SHXojvsZjvkPxWV3dABQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;c974bea9bae34fd7fc429232e21190eb&quot;
-Last-Modified: Mon, 05 Oct 2020 18:14:37 GMT</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;d9218ed8e4b41aadc14409c3d8eacb22&quot;
+Last-Modified: Mon, 05 Oct 2020 18:14:38 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 58,
-  &quot;name&quot;: &quot;RegGroup a07cfeadb0f774c78c43a8a911401ac91d7db9b7&quot;,
-  &quot;tokenId&quot;: 103,
-  &quot;blockchainId&quot;: 1057,
-  &quot;createdAt&quot;: &quot;2020-10-05T18:14:37.403Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T18:14:37.403Z&quot;
-}</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 19,
+    &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+    &quot;source&quot;: &quot;user_provided&quot;,
+    &quot;state&quot;: &quot;ok&quot;,
+    &quot;createdAt&quot;: &quot;2020-10-05T18:14:38.077Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-10-05T18:14:38.077Z&quot;,
+    &quot;blockchain&quot;: &quot;bitcoin&quot;,
+    &quot;tokens&quot;: [
+
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>
