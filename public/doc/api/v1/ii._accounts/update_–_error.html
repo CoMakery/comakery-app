@@ -198,54 +198,6 @@ table th, table td {
                   <span class="description">date of birth</span>
                 </td>
               </tr>
-              <tr>
-                <td>
-                    <span class="name">account[ethereum_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[qtum_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">qtum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[cardano_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[bitcoin_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[eos_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[tezos_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
-                </td>
-              </tr>
             </tbody>
           </table>
 
@@ -275,11 +227,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/accounts/27d1088c-3008-4443-83ab-1356c4354b65</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/b530ff3d-1499-4834-876f-8096156d1806</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"ethereum_wallet":"0x"}},"method":"PUT","nonce":"f0d840e6d5907c56c536db361af0d9f8","timestamp":"1598448492","url":"http://example.org/api/v1/accounts/27d1088c-3008-4443-83ab-1356c4354b65"},"proof":{"signature":"tSb6yctRc05y0WGV2LLATAusmvKdneTXWX2DqsALFfvfdBZfcDE/rEV0im41bEVqDDf0H3fRhhHEh3gCLm2bAw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"account":{"email":"0x"}},"method":"PUT","nonce":"dc8c9fc746a97a97ae4d175e7f1348ba","timestamp":"1601752574","url":"http://example.org/api/v1/accounts/b530ff3d-1499-4834-876f-8096156d1806"},"proof":{"signature":"t2dhDID6JwK3SxSHP0aaPgh1WMxtnVef6b80yLy8i5FBWc7Um+Mzr9jHJJZHYr8gkoZjD/lLuHJ4uS/nXWtmCQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
@@ -288,8 +240,8 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;ethereumWallet&quot;: [
-      &quot;should start with &#39;0x&#39;, followed by a 40 character ethereum address&quot;
+    &quot;email&quot;: [
+      &quot;is invalid&quot;
     ]
   }
 }</pre>

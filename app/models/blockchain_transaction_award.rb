@@ -1,4 +1,6 @@
 class BlockchainTransactionAward < BlockchainTransaction
+  validates :destination, presence: true
+
   def update_transactable_status
     blockchain_transactable.update!(status: :paid)
   end
@@ -39,13 +41,13 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
 
     def tx
-      @tx ||= case blockchain_transactable.source
-              when 'mint'
-                contract.mint(destination, amount)
-              when 'burn'
-                contract.burn(destination, amount)
-              else
-                contract.transfer(destination, amount)
-      end
+      @tx ||= destination && case blockchain_transactable.source
+                             when 'mint'
+                               contract.mint(destination, amount)
+                             when 'burn'
+                               contract.burn(destination, amount)
+                             else
+                               contract.transfer(destination, amount)
+                             end
     end
 end

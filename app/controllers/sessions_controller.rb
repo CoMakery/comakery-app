@@ -93,60 +93,14 @@ class SessionsController < ApplicationController
       project = current_account.awards&.completed&.last&.project
       return nil unless project&.token
 
-      send("process_new_#{project.token.blockchain_name_for_wallet}_award_notice")
-    end
+      blockchain_name = project.token.blockchain.name
+      addr = current_account.address_for_blockchain(project.token._blockchain)
 
-    def process_new_ethereum_award_notice
-      if current_account.ethereum_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      flash[:notice] = if addr.present?
+        current_account.update(new_award_notice: false)
+        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallets_path)}. The project owner can now issue your tokens."
       else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-        current_account.update new_award_notice: false
-      end
-    end
-
-    def process_new_qtum_award_notice
-      if current_account.qtum_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Qtum tokens."
-        current_account.update new_award_notice: false
-      end
-    end
-
-    def process_new_cardano_award_notice
-      if current_account.cardano_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Cardano Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Cardano address is #{view_context.link_to current_account.cardano_wallet, current_account.decorate.cardano_wallet_url} you can change your Cardano address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Cardano tokens."
-        current_account.update new_award_notice: false
-      end
-    end
-
-    def process_new_bitcoin_award_notice
-      if current_account.bitcoin_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Bitcoin Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Bitcoin address is #{view_context.link_to current_account.bitcoin_wallet, current_account.decorate.bitcoin_wallet_url} you can change your Bitcoin address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Bitcoin tokens."
-        current_account.update new_award_notice: false
-      end
-    end
-
-    def process_new_eos_award_notice
-      if current_account.eos_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your EOS account name on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your EOS account name is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS account name on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
-        current_account.update new_award_notice: false
-      end
-    end
-
-    def process_new_tezos_award_notice
-      if current_account.tezos_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Tezos Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Tezos address is #{view_context.link_to current_account.tezos_wallet, current_account.decorate.tezos_wallet_url} you can change your Tezos address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Tezos tokens."
-        current_account.update new_award_notice: false
+        "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} address on your #{view_context.link_to('wallets page', wallets_path)} to receive your tokens."
       end
     end
 end

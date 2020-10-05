@@ -189,13 +189,6 @@ class AccountsController < ApplicationController
       result = params.require(:account).permit(
         :email,
         :ethereum_auth_address,
-        :ethereum_wallet,
-        :qtum_wallet,
-        :cardano_wallet,
-        :bitcoin_wallet,
-        :eos_wallet,
-        :tezos_wallet,
-        :constellation_wallet,
         :first_name,
         :last_name,
         :nickname,
@@ -237,13 +230,7 @@ class AccountsController < ApplicationController
     end
 
     def account_decorate(account)
-      account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet constellation_wallet]).merge(
-        etherscan_address: account.decorate.etherscan_address,
-        qtum_address: account.decorate.qtum_wallet_url,
-        cardano_address: account.decorate.cardano_wallet_url,
-        bitcoin_address: account.decorate.bitcoin_wallet_url,
-        eos_address: account.decorate.eos_wallet_url,
-        tezos_address: account.decorate.tezos_wallet_url,
+      account.as_json(only: %i[email first_name last_name nickname date_of_birth country ethereum_auth_address]).merge(
         image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
       )
     end

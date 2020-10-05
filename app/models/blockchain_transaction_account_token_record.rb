@@ -11,7 +11,7 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
 
     def tx
       @tx ||= contract.setAddressPermissions(
-        blockchain_transactable.account.ethereum_wallet,
+        blockchain_transactable.account.address_for_blockchain(token._blockchain),
         blockchain_transactable.reg_group.blockchain_id,
         blockchain_transactable.lockup_until.to_i,
         blockchain_transactable.max_balance,

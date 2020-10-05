@@ -67,7 +67,7 @@ RSpec.describe Auth::EthController, type: :controller do
             expect(response).to redirect_to my_tasks_path
           end.to change(Account.all, :count).by(1)
 
-          expect(Account.last.ethereum_wallet).to eq(valid_public_address)
+          expect(Account.last.wallets.last.address).to eq(valid_public_address)
         end
       end
     end

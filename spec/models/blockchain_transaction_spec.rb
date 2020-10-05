@@ -28,7 +28,7 @@ describe BlockchainTransaction, vcr: true do
 
   describe 'callbacks' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:blockchain_transaction_dag) { create(:blockchain_transaction, token: create(:dag_token)) }
+    let!(:blockchain_transaction_dag) { create(:blockchain_transaction_dag) }
 
     context 'with an ethereum coin type' do
       it 'populates contract address and network from token' do
@@ -236,7 +236,7 @@ describe BlockchainTransaction, vcr: true do
 
   describe 'contract' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:blockchain_transaction_dag) { create(:blockchain_transaction, token: create(:dag_token)) }
+    let!(:blockchain_transaction_dag) { create(:blockchain_transaction_dag) }
 
     context 'with an ethereum coin type' do
       it 'returns a contract instance' do

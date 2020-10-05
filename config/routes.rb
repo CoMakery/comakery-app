@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/unsubscription' => "unsubscription#new", as: :unsubscription
 
   resource :account, only: [:update]
+  resources :wallets
   resources :accounts, only: [:new, :create, :show] do
     collection do
       get :download_data
@@ -135,6 +136,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
         resources :interests, only: [:index, :create, :destroy]
+        resources :wallets, only: [:index, :create, :destroy]
         resources :verifications, only: [:index, :create]
         get :token_balances
       end

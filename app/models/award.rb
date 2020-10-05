@@ -3,8 +3,6 @@ require 'bigdecimal'
 class Award < ApplicationRecord
   paginates_per 50
 
-  include EthereumAddressable
-  include QtumTransactionAddressable
   include BlockchainTransactable
 
   EXPERIENCE_LEVELS = {
@@ -43,8 +41,6 @@ class Award < ApplicationRecord
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
-  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&._token_type_on_ethereum? } # see EthereumAddressable
-  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&._token_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :name, length: { maximum: 100 }
   validates :why, length: { maximum: 500 }
@@ -84,6 +80,9 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
+  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }).having('count(wallets) > 0') }
+  scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
+
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
@@ -106,6 +105,10 @@ class Award < ApplicationRecord
   enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
   enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }
 
+  def self.ransackable_scopes(_ = nil)
+    %i[transfer_ready transfer_blocked_by_wallet]
+  end
+
   def self.total_awarded
     completed.sum(:total_amount)
   end
@@ -115,9 +118,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.token._token_type_on_ethereum? &&
-      account&.ethereum_wallet.present? &&
-      ethereum_transaction_address.blank?
+    account.address_for_blockchain(project.token._blockchain)
   end
 
   def self_issued?
@@ -281,8 +282,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    blockchain_name = token&.blockchain_name_for_wallet
-    blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
+    account&.address_for_blockchain(token&._blockchain)
   end
 
   def needs_wallet?

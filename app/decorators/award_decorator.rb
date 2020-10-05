@@ -21,7 +21,7 @@ class AwardDecorator < Draper::Decorator
       methods: %i[issuer_address amount_to_send recipient_display_name],
       include: {
         account: {
-          only: %i[id ethereum_wallet qtum_wallet cardano_wallet qtum_wallet bitcoin_wallet eos_wallet tezos_wallet]
+          only: %i[id]
         },
         project: {
           only: %i[id]
@@ -56,14 +56,8 @@ class AwardDecorator < Draper::Decorator
     recipient_auth_team&.name || account.decorate.name
   end
 
-  def issuer_address # rubocop:todo Metrics/CyclomaticComplexity
-    if object.token&._token_type_on_ethereum?
-      issuer&.ethereum_wallet
-    elsif object.token&._token_type_on_qtum?
-      issuer&.qtum_wallet
-    elsif object.token&._token_type_ada?
-      issuer&.cardano_wallet
-    end
+  def issuer_address
+    issuer.address_for_blockchain(object.token&._blockchain)
   end
 
   def issuer_display_name
@@ -95,7 +89,7 @@ class AwardDecorator < Draper::Decorator
         'action' => "click->#{controller_name}##{action}",
         "#{controller_name}-id" => id,
         "#{controller_name}-payment-type" => project.token&._token_type,
-        "#{controller_name}-address" => account.ethereum_wallet,
+        "#{controller_name}-address" => account.address_for_blockchain(project.token&._blockchain),
         "#{controller_name}-amount" => total_amount_wei,
         "#{controller_name}-decimal-places" => project.token&.decimal_places&.to_i,
         "#{controller_name}-contract-address" => project.token&.contract_address,

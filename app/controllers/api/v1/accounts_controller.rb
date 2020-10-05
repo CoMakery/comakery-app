@@ -57,13 +57,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
         :nickname,
         :image,
         :country,
-        :date_of_birth,
-        :ethereum_wallet,
-        :qtum_wallet,
-        :cardano_wallet,
-        :bitcoin_wallet,
-        :eos_wallet,
-        :tezos_wallet
+        :date_of_birth
       )
     end
 end

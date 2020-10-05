@@ -11,7 +11,7 @@ class BlockchainTransaction < ApplicationRecord
   validates_with TxSupportTokenValidator
   validates :source, :network, :status, presence: true
   validates :contract_address, presence: true, if: -> { token._token_type_token? }
-  validates :tx_raw, :tx_hash, presence: true, if: -> { token._token_type_comakery_security_token? && nonce.present? }
+  validates :tx_raw, :tx_hash, presence: true, if: -> { generate_transaction? }
 
   enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5 }
   enum status: { created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }
@@ -113,8 +113,12 @@ class BlockchainTransaction < ApplicationRecord
     # @!method tx
     #    Return a new contract transaction instance for blockchain_transactable record
 
+    def generate_transaction?
+      token._token_type_comakery_security_token? && nonce.present? && tx.present?
+    end
+
     def generate_transaction
-      if token._token_type_comakery_security_token? && nonce.present?
+      if generate_transaction?
         self.tx_raw ||= tx.hex
         self.tx_hash ||= tx.hash
       end

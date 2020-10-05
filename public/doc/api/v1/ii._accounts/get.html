@@ -212,54 +212,6 @@ table th, table td {
               </tr>
               <tr>
                 <td>
-                    <span class="name">ethereumWallet</span>
-                </td>
-                <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">qtumWallet</span>
-                </td>
-                <td>
-                  <span class="description">qtum Wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">cardanoWallet</span>
-                </td>
-                <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">bitcoinWallet</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">eosWallet</span>
-                </td>
-                <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">tezosWallet</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
                     <span class="name">createdAt</span>
                 </td>
                 <td>
@@ -307,41 +259,35 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/8fa534ac-255c-4a03-bab5-b8e5cbcb56ec?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F8fa534ac-255c-4a03-bab5-b8e5cbcb56ec&amp;body[method]=GET&amp;body[nonce]=aef9f4b2141d20cdeeae5a6be24d638e&amp;body[timestamp]=1598448491&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=Vm7zd2esw0uB1WO6W2K%2BmDtJJj1CQczhPkflPseyddw%2BXsMn7r4oQa2Z8SBJgkJTvv6G1O6BaYeW3XmsIWJNAQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/ec85d6e3-5e8b-4a7d-b9db-191c105cba08?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fec85d6e3-5e8b-4a7d-b9db-191c105cba08&amp;body[method]=GET&amp;body[nonce]=53463fcca2778bdc758b03c4bf3bb4fa&amp;body[timestamp]=1601752567&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=L1Q3lgMq6k1Dpf2eAwD7dJLI0dqffFKzzUG0RxJThs4V5u3RdyEeCESiyFFaPg7j%2FyKHWhaeAuRe5Z7OrqchDQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/8fa534ac-255c-4a03-bab5-b8e5cbcb56ec&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;aef9f4b2141d20cdeeae5a6be24d638e&quot;, &quot;timestamp&quot;=&gt;&quot;1598448491&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;Vm7zd2esw0uB1WO6W2K+mDtJJj1CQczhPkflPseyddw+XsMn7r4oQa2Z8SBJgkJTvv6G1O6BaYeW3XmsIWJNAQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/ec85d6e3-5e8b-4a7d-b9db-191c105cba08&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;53463fcca2778bdc758b03c4bf3bb4fa&quot;, &quot;timestamp&quot;=&gt;&quot;1601752567&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;L1Q3lgMq6k1Dpf2eAwD7dJLI0dqffFKzzUG0RxJThs4V5u3RdyEeCESiyFFaPg7j/yKHWhaeAuRe5Z7OrqchDQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;a799e0c1d678ffe89d523c71c3e1a02f&quot;
-Last-Modified: Wed, 26 Aug 2020 13:28:11 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;66f9cb93b2330bae7ea8a7eb7e26053c&quot;
+Last-Modified: Sat, 03 Oct 2020 19:16:06 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;email&quot;: &quot;me+5c8b3bdbd5830b2ac5f7081af203b4ecb5d985aa@example.com&quot;,
-  &quot;managedAccountId&quot;: &quot;8fa534ac-255c-4a03-bab5-b8e5cbcb56ec&quot;,
+  &quot;email&quot;: &quot;me+7ee4bf9d2cfc118ba51bb65559d6265e01ff0324@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;ec85d6e3-5e8b-4a7d-b9db-191c105cba08&quot;,
   &quot;firstName&quot;: &quot;Eva&quot;,
   &quot;lastName&quot;: &quot;Smith&quot;,
-  &quot;nickname&quot;: &quot;hunter-0416fdd77cb44beb8ceab3070adf21bce0ab3925&quot;,
+  &quot;nickname&quot;: &quot;hunter-3721822f03de9425ff6cda5d5a14d05f5e96b2c2&quot;,
   &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
   &quot;country&quot;: &quot;United States of America&quot;,
   &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
-  &quot;ethereumWallet&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
-  &quot;qtumWallet&quot;: null,
-  &quot;cardanoWallet&quot;: null,
-  &quot;bitcoinWallet&quot;: null,
-  &quot;eosWallet&quot;: null,
-  &quot;tezosWallet&quot;: null,
   &quot;verificationState&quot;: &quot;passed&quot;,
-  &quot;verificationDate&quot;: &quot;2020-08-26T13:28:11.407Z&quot;,
+  &quot;verificationDate&quot;: &quot;2020-10-03T19:16:06.953Z&quot;,
   &quot;verificationMaxInvestmentUsd&quot;: 1000000,
-  &quot;createdAt&quot;: &quot;2020-08-26T13:28:11.364Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-08-26T13:28:11.428Z&quot;
+  &quot;createdAt&quot;: &quot;2020-10-03T19:16:06.911Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-03T19:16:06.962Z&quot;
 }</pre>
       </div>
     </div>

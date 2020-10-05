@@ -7,6 +7,7 @@ describe Balance, type: :model do
   it { is_expected.to validate_presence_of(:base_unit_value) }
   it { is_expected.to validate_numericality_of(:base_unit_value).only_integer.is_greater_than_or_equal_to(0) }
   it { is_expected.to validate_uniqueness_of(:wallet_id).scoped_to(:token_id) }
+  it { is_expected.to validate_inclusion_of(:token_id).in_array(subject.wallet.tokens_on_same_blockchain.pluck(:id)) }
 
   describe '#value' do
     let(:balance) { create(:balance) }

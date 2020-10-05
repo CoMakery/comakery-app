@@ -1,11 +1,11 @@
 <% account = account.decorate %>
 <% record = account.account_token_records.where(token: @project.token).last %>
 <% form_url = record ? project_dashboard_account_path(@project, record) : root_path %>
-<% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.ethereum_wallet, 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => api_v1_project_account_token_records_path(project_id: @project.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
+<% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.address_for_blockchain(@project.token._blockchain), 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => api_v1_project_account_token_records_path(project_id: @project.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 
 <%= form_with model: record, url: form_url, data: form_data, class: 'account-form' do |f| %>
 	
-	<% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
+	<% if policy(@project).edit_accounts? && record && account.address_for_blockchain(@project.token._blockchain) %>
 		<%= image_tag 'pencil.svg', data: {action: 'click->account-form#showForm', target: 'account-form.outputs'}, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
 		<%= image_tag 'iconCloseDark.svg', data: {action: 'click->account-form#hideForm', target: 'account-form.inputs'}, class: 'transfers-table--edit-icon hidden' %>
   <% end %>
@@ -102,7 +102,7 @@
 		<% end %>
 	</div>
 	
-  <% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
+  <% if policy(@project).edit_accounts? && record && account.address_for_blockchain(@project.token._blockchain) %>
   	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
 			<% if record.latest_blockchain_transaction&.tx_hash %>
 				<div class="transfer-button <%= record.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">

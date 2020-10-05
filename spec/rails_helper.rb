@@ -104,7 +104,13 @@ end
 
 def login(account)
   account.authentications.first || create(:authentication, account_id: account.id)
-  session[:account_id] = account.id
+
+  if request
+    request.session[:account_id] = account.id
+  else
+    session[:account_id] = account.id
+  end
+
   account
 end
 

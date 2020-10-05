@@ -903,7 +903,8 @@ form.form-with-submit-button {
 .transfer-rules,
 .owner,
 .admins,
-.project-api-key {
+.project-api-key,
+.wallets {
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -922,7 +923,8 @@ form.form-with-submit-button {
   input[type="text"],
   input[type="number"],
   input[type="password"],
-  input[type="email"] {
+  input[type="email"],
+  select {
     border-radius: 6px;
     border: solid 1px #e6e8ed;
     height: 35px;
@@ -978,6 +980,42 @@ form.form-with-submit-button {
     a {
       height: auto;
       text-transform: uppercase;
+    }
+  }
+
+  .wallets__create {
+    margin: 20px 0 20px 0;
+
+    select,
+    input {
+      margin: 0 0 2em 0;
+      box-shadow: none;
+      max-width: none;
+    }
+
+    input[type="text"] {
+      font-family: monospace;
+    }
+
+    a,
+    input[type="submit"] {
+      margin-bottom: 1.5em;
+      border-radius: 6px;
+      border: 1px solid #e6e8ed;
+      height: 35px;
+      padding: 9px 16px 8px 15px;
+      background-color: #1560fa;
+      color: #fff;
+      font-weight: 600;
+      -webkit-box-shadow: 0 5px 10px 0 rgba(0,0,0,.1);
+      box-shadow: 0 5px 10px 0 rgba(0,0,0,.1);
+      text-transform: uppercase;
+      min-width: 90px;
+      outline: none;
+    }
+
+    .actions {
+      text-align: right;
     }
   }
 
@@ -1404,6 +1442,11 @@ button.reg-groups-create,
       border-bottom-right-radius: 6px;
     }
 
+    &:first-child {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+
     .transfers-table__transfer__name {
       min-width: 130px;
 
@@ -1574,6 +1617,10 @@ button.reg-groups-create,
         overflow: hidden;
         text-overflow: ellipsis;
       }
+    }
+
+    .transfers-table__transfer__blockchain {
+      font-weight: 600;
     }
 
     .transfers-table__transfer__frozen {

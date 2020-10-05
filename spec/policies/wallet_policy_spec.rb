@@ -3,13 +3,21 @@ require 'rails_helper'
 describe WalletPolicy do
   subject { described_class }
 
-  permissions :new?, :create?, :index? do
-    it 'always grants access' do
-      expect(subject).to permit(nil, create(:wallet))
+  permissions :new?, :index? do
+    context 'when account is present' do
+      it 'grants access' do
+        expect(subject).to permit(create(:account), nil)
+      end
+    end
+
+    context 'when account is not present' do
+      it 'denies access' do
+        expect(subject).not_to permit(nil, nil)
+      end
     end
   end
 
-  permissions :show?, :edit?, :update?, :destroy? do
+  permissions :create?, :show?, :edit?, :update?, :destroy? do
     let(:wallet) { create(:wallet) }
 
     context 'when wallet belongs to account' do

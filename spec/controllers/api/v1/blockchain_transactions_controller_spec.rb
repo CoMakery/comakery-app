@@ -31,6 +31,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
   describe 'POST #create', vcr: true do
     context 'with transfers available for transaction' do
       let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
       it 'creates a new BlockchainTransaction' do
         params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
@@ -97,6 +98,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
 
     context 'with supplied valid blockchain_transactable_id' do
       let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
       it 'creates a new BlockchainTransaction for the blockchain_transactable_id' do
         params = build(:api_signed_request, valid_create_attributes.merge(blockchain_transactable_id: award.id), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
@@ -127,7 +129,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
   end
 
-  describe 'PUT #update' do
+  describe 'PUT #update', vcr: true do
     it 'marks transaction as pending' do
       params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
       params[:project_id] = project.id
@@ -147,7 +149,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
   end
 
-  describe 'DELETE #destroy' do
+  describe 'DELETE #destroy', vcr: true do
     it 'marks transaction as cancelled' do
       params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
       params[:project_id] = project.id
