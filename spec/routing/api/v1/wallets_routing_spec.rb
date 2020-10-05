@@ -13,5 +13,9 @@ RSpec.describe Api::V1::WalletsController, type: :routing do
     it 'routes to #destroy' do
       expect(delete: '/api/v1/accounts/1/wallets/1').to route_to('api/v1/wallets#destroy', account_id: '1', id: '1', format: :json)
     end
+
+    it 'routes to #password_reset' do
+      expect(post: '/api/v1/accounts/1/wallets/1/password_reset').to route_to('api/v1/wallets#password_reset', account_id: '1', id: '1', format: :json)
+    end
   end
 end

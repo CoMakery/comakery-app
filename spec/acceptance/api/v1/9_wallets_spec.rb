@@ -102,4 +102,31 @@ resource 'IX. Wallets' do
       end
     end
   end
+
+  post '/api/v1/accounts/:id/wallets/:wallet_id/password_reset' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+      parameter :wallet_id, 'wallet id to remove', required: true, type: :string
+      parameter :redirect_url, 'url to redirect after password change', required: true, type: :string
+    end
+
+    with_options with_example: true do
+      response_field :resetUrl, 'reset password url', type: :string
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:wallet_id) { create(:wallet, source: :ore_id, account: account).id.to_s }
+      let!(:redirect_url) { 'http://localhost' }
+
+      example 'GET RESET PASSWORD URL (ONLY ORE_ID WALLETS)' do
+        explanation 'Returns reset password url for wallet'
+
+        request = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'POST', 'example.org')
+
+        do_request(request)
+        expect(status).to eq(200)
+      end
+    end
+  end
 end

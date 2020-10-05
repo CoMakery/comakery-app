@@ -32,6 +32,14 @@ class Api::V1::WalletsController < Api::V1::ApiController
     render 'index.json', status: :ok
   end
 
+  # POST /api/v1/accounts/1/wallets/1/password_reset
+  def password_reset
+    wallet
+    redirect_url
+
+    render 'password_reset.json', status: :ok
+  end
+
   private
 
     def account
@@ -58,5 +66,9 @@ class Api::V1::WalletsController < Api::V1::ApiController
       r.delete(:blockchain)
       r.delete(:provision)
       r
+    end
+
+    def redirect_url
+      @redirect_url ||= params.fetch(:body, {}).fetch(:data, {}).fetch(:redirect_url, nil)
     end
 end

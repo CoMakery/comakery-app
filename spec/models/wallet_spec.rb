@@ -30,4 +30,16 @@ describe Wallet, type: :model do
       specify { expect(subject.state).to eq('ok') }
     end
   end
+
+  describe '#ore_id_password_reset_url' do
+    context 'when wallet source is ore_id and provided redirect_url is localhost' do
+      subject { create(:wallet, source: :ore_id) }
+      specify { expect(subject.ore_id_password_reset_url('fb.com')).to eq('https://example.org?redirect=localhost') }
+    end
+
+    context 'when wallet source is not ore_id' do
+      subject { create(:wallet, source: :user_provided) }
+      specify { expect(subject.ore_id_password_reset_url('fb.com')).to be_nil }
+    end
+  end
 end
