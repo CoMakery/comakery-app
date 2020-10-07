@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Transfer Rules API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,13 +106,13 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Transfer Rules API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete transfer rules, retrieve transfer rules data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>CREATE – ERROR</h2>
-        <h3>POST /api/v1/projects/:project_id/transfer_rules</h3>
+        <h2>CREATE WALLET – ERROR</h2>
+        <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
             Returns an array of errors
           </p>
@@ -128,58 +128,39 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">address</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">wallet address</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">transfer_rule[sending_group_id]</span>
+                    <span class="name">blockchain</span>
                 </td>
                 <td>
-                  <span class="description">sending reg group id</span>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;]</span>
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">transfer_rule[receiving_group_id]</span>
+                <td>
+                    <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">receiving reg group id</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">transfer_rule[lockup_until]</span>
+                <td>
+                    <span class="name">provision</span>
                 </td>
                 <td>
-                  <span class="description">lockup until</span>
+                  <span class="description">wallet provision type</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -187,11 +168,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/49/transfer_rules</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/e71ee898-cc2c-4512-8d51-e953bc173c8e/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer_rule":{"sending_group_id":"945677752"}},"method":"POST","nonce":"77fc7287d87257530048aed1e77317c2","timestamp":"1601926109","url":"http://example.org/api/v1/projects/49/transfer_rules"},"proof":{"signature":"/OMD98HNBkpEzg8BJRhgeFs/FuXYbJBLyeLLCs+ncvDgAFo1To2OciEYPTNoDa8nvk1UlZ1bx1XOa84Kh79mBg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"wallet":{"address":"3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt","blockchain":"bitcoin"}},"method":"POST","nonce":"4e521ed67c3a697db2991838041da29c","timestamp":"1601926115","url":"http://example.org/api/v1/accounts/e71ee898-cc2c-4512-8d51-e953bc173c8e/wallets"},"proof":{"signature":"z/bfdJN+jx+LOI7BW3eOJu3eSz3BDg2qyK6FcRlxEy+PLIEFjThDDhSzhYburmjEoxgrJMefJ/2loiJMTwUeAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
@@ -200,11 +181,8 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;sendingGroup&quot;: [
-      &quot;should belong to ComakeryDummyToken-dd67545ea6333e379138e228f9253593cca48b7a token&quot;
-    ],
-    &quot;receivingGroup&quot;: [
-      &quot;should belong to ComakeryDummyToken-dd67545ea6333e379138e228f9253593cca48b7a token&quot;
+    &quot;Blockchain&quot;: [
+      &quot;has already wallet added&quot;
     ]
   }
 }</pre>

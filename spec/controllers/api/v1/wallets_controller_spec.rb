@@ -12,7 +12,6 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
   before do
     allow(controller).to receive(:authorized).and_return(true)
@@ -96,6 +95,21 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         params[:id] = wallet.id
 
         delete :destroy, params: params
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe 'POST #password_reset' do
+    context 'with valid params' do
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id) }
+
+      it 'returns url for password reset' do
+        params = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'POST')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+
+        post :password_reset, params: params
         expect(response).to have_http_status(:ok)
       end
     end

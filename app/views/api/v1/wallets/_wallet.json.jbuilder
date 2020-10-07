@@ -1,8 +1,9 @@
 json.call(
   wallet,
   :id,
+  :address,
   :source,
-  :status,
+  :state,
   :created_at,
   :updated_at
 )

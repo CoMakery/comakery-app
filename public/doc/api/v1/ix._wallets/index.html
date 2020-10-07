@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Transfer Rules API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Transfer Rules API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete transfer rules, retrieve transfer rules data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>GET</h2>
-        <h3>GET /api/v1/projects/:project_id/transfer_rules/:id</h3>
+        <h2>INDEX</h2>
+        <h3>GET /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns data for a single transfer rule.
+            Returns an array of wallet objects
           </p>
 
           <h3>Parameters</h3>
@@ -128,18 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
-                </td>
-                <td>
-                  <span class="description">project id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transfer rule id</span>
+                  <span class="description">account id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
@@ -159,47 +159,47 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transfer rule id</span>
+                  <span class="description">wallet id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">token_id</span>
+                    <span class="name">address</span>
                 </td>
                 <td>
-                  <span class="description">transfer rule token id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">sending_group_id</span>
-                </td>
-                <td>
-                  <span class="description">sending reg group token id</span>
+                  <span class="description">wallet address</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">receiving_group_id</span>
+                    <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">reveiving reg group token id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">lockup_until</span>
-                </td>
-                <td>
-                  <span class="description">lockup until</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">status</span>
+                    <span class="name">state</span>
                 </td>
                 <td>
-                  <span class="description">transfer rule status (created synced)</span>
+                  <span class="description">wallet state [&quot;ok&quot;, &quot;unclaimed&quot;, &quot;pending&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain</span>
+                </td>
+                <td>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens</span>
+                </td>
+                <td>
+                  <span class="description">wallet tokens</span>
                 </td>
               </tr>
               <tr>
@@ -227,31 +227,38 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/47/transfer_rules/2?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F47%2Ftransfer_rules%2F2&amp;body[method]=GET&amp;body[nonce]=1d961190fd8f0c222d00e92655fcf5d2&amp;body[timestamp]=1601926109&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=x99JFRQehY47f1vFbCx3tPPkSYtLuV4gOP%2Fd2EPsw5cz5q8TKOI5ezEm%2FaQStfXJg7zpx%2Fcce5jm4NiYh1U4Cg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/92f145dc-c6e6-4c18-b924-c26fb7795c0a/wallets?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F92f145dc-c6e6-4c18-b924-c26fb7795c0a%2Fwallets&amp;body[method]=GET&amp;body[nonce]=5e9dfa65bf17d13aff0acebd0b407561&amp;body[timestamp]=1601926115&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=rn9pCzl5vSaFFwqzuGge776Q3Oxon2XomQNoCl6Ihctgm%2FitYAzQdBIdriMF7XqYoM31akhsCQQfyWslmRwrCQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/47/transfer_rules/2&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;1d961190fd8f0c222d00e92655fcf5d2&quot;, &quot;timestamp&quot;=&gt;&quot;1601926109&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;x99JFRQehY47f1vFbCx3tPPkSYtLuV4gOP/d2EPsw5cz5q8TKOI5ezEm/aQStfXJg7zpx/cce5jm4NiYh1U4Cg==&quot;}</pre>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/92f145dc-c6e6-4c18-b924-c26fb7795c0a/wallets&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;5e9dfa65bf17d13aff0acebd0b407561&quot;, &quot;timestamp&quot;=&gt;&quot;1601926115&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;rn9pCzl5vSaFFwqzuGge776Q3Oxon2XomQNoCl6Ihctgm/itYAzQdBIdriMF7XqYoM31akhsCQQfyWslmRwrCQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;d10bfd6f280533c717c2e90eac603e85&quot;
-Last-Modified: Mon, 05 Oct 2020 19:28:29 GMT</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;ffd7dbd04180597c84badd2f7ba55219&quot;
+Last-Modified: Mon, 05 Oct 2020 19:28:35 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 2,
-  &quot;tokenId&quot;: 67,
-  &quot;sendingGroupId&quot;: 20,
-  &quot;receivingGroupId&quot;: 21,
-  &quot;lockupUntil&quot;: &quot;2020-10-04T19:28:29.000Z&quot;,
-  &quot;status&quot;: &quot;created&quot;,
-  &quot;createdAt&quot;: &quot;2020-10-05T19:28:29.600Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:29.600Z&quot;
-}</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 19,
+    &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+    &quot;source&quot;: &quot;user_provided&quot;,
+    &quot;state&quot;: &quot;ok&quot;,
+    &quot;createdAt&quot;: &quot;2020-10-05T19:28:35.209Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-10-05T19:28:35.209Z&quot;,
+    &quot;blockchain&quot;: &quot;bitcoin&quot;,
+    &quot;tokens&quot;: [
+
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>

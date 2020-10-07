@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Transfer Rules API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Transfer Rules API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete transfer rules, retrieve transfer rules data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>INDEX</h2>
-        <h3>GET /api/v1/projects/:project_id/transfer_rules</h3>
+        <h2>REMOVE WALLET</h2>
+        <h3>DELETE /api/v1/accounts/:id/wallets/:wallet_id</h3>
           <p class="explanation">
-            Returns an array of transfer rules. See GET for response fields description.
+            Returns account wallets (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,18 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">page</span>
+                <td class="required">
+                    <span class="name">wallet_id</span>
                 </td>
                 <td>
-                  <span class="description">page number</span>
+                  <span class="description">wallet id to remove</span>
                 </td>
               </tr>
             </tbody>
@@ -152,35 +152,23 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/46/transfer_rules?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F46%2Ftransfer_rules&amp;body[method]=GET&amp;body[nonce]=7be4b841879384f79d394b6a6fe6586e&amp;body[timestamp]=1601926109&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=0tQ9CCuBb0DskmlRlTAZZaH3cUV%2Fb66FzIXEfsiDP4Fz%2BVW5SeP8M0%2F3WQiQCtLL0Vnq9ilwo8r%2B9r5yXSPZCw%3D%3D</pre>
+          <pre class="request route highlight">DELETE /api/v1/accounts/f8fa7d9c-21f0-4939-8bed-0d60a70ca670/wallets/22</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/46/transfer_rules&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;7be4b841879384f79d394b6a6fe6586e&quot;, &quot;timestamp&quot;=&gt;&quot;1601926109&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;0tQ9CCuBb0DskmlRlTAZZaH3cUV/b66FzIXEfsiDP4Fz+VW5SeP8M0/3WQiQCtLL0Vnq9ilwo8r+9r5yXSPZCw==&quot;}</pre>
 
+            <h4>Body</h4>
+            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"628322f328748aa1234cfddaeed29340","timestamp":"1601926115","url":"http://example.org/api/v1/accounts/f8fa7d9c-21f0-4939-8bed-0d60a70ca670/wallets/22"},"proof":{"signature":"MuwMcwzowLry8Cb26AlyK7G6h+FgptBAsdfngQuVKBXZ0KCNlWZGdK9gHRjiZxxZCkgY/X+88tryBzV1YgRoBg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
-Total: 1
-ETag: W/&quot;7e37940833c81f7366305473c191823c&quot;
-Last-Modified: Mon, 05 Oct 2020 19:28:29 GMT</pre>
+Total: 0
+ETag: W/&quot;4f53cda18c2baa0c0354bb5f9a3ecbe5&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
-  {
-    &quot;id&quot;: 1,
-    &quot;tokenId&quot;: 65,
-    &quot;sendingGroupId&quot;: 17,
-    &quot;receivingGroupId&quot;: 18,
-    &quot;lockupUntil&quot;: &quot;2020-10-04T19:28:29.000Z&quot;,
-    &quot;status&quot;: &quot;created&quot;,
-    &quot;createdAt&quot;: &quot;2020-10-05T19:28:29.430Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-10-05T19:28:29.430Z&quot;
-  }
+
 ]</pre>
       </div>
     </div>
