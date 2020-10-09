@@ -31,7 +31,7 @@ class Comakery::ChartColors
     ]
   end
 
-  def self.lookup(i)
+  def self.lookup(i) # rubocop:todo Naming/MethodParameterName
     i -= array.size until i + 1 <= array.size
 
     array[i]

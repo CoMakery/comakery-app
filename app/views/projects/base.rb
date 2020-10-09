@@ -31,13 +31,13 @@ class Views::Projects::Base < Views::Base
           h5(class: 'project_block--title') do
             a(project.title, href: path)
 
-            if policy(project).edit?
-              a(href: project_award_types_path(project), class: 'project_block--title--edit-link fa fa-cog')
-            end
+            a(href: project_award_types_path(project), class: 'project_block--title--edit-link fa fa-cog') if policy(project).edit?
           end
         end
 
+        # rubocop:todo Rails/Output
         p(class: 'description no-last-award') { text project.description_text_truncated(60) }
+        # rubocop:enable Rails/Output
 
         div(class: 'details') do
           div(class: 'contributors') do

@@ -28,22 +28,22 @@ describe BlockchainTransaction, vcr: true do
 
   describe 'callbacks' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:blockchain_transaction_dag) { create(:blockchain_transaction, token: create(:dag_token)) }
+    let!(:blockchain_transaction_dag) { create(:blockchain_transaction_dag) }
 
     context 'with an ethereum coin type' do
       it 'populates contract address and network from token' do
-        expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
-        expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
+        expect(blockchain_transaction.network).to eq(blockchain_transaction.token._blockchain)
+        expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.contract_address)
       end
 
       it 'sets current block' do
-        expect(blockchain_transaction.current_block).to eq(7890718)
+        expect(blockchain_transaction.current_block).to eq(8697793)
       end
     end
 
     context 'with a dag token' do
       it 'populates network from token' do
-        expect(blockchain_transaction_dag.network).to eq(blockchain_transaction_dag.token.blockchain_network)
+        expect(blockchain_transaction_dag.network).to eq(blockchain_transaction_dag.token._blockchain)
       end
     end
   end
@@ -236,7 +236,7 @@ describe BlockchainTransaction, vcr: true do
 
   describe 'contract' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:blockchain_transaction_dag) { create(:blockchain_transaction, token: create(:dag_token)) }
+    let!(:blockchain_transaction_dag) { create(:blockchain_transaction_dag) }
 
     context 'with an ethereum coin type' do
       it 'returns a contract instance' do

@@ -1,26 +1,21 @@
 require 'rails_helper'
+require 'controllers/api/v1/concerns/requires_an_authorization_spec'
+require 'controllers/api/v1/concerns/requires_signature_spec'
+require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
+require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
 RSpec.describe Api::V1::InterestsController, type: :controller do
+  it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_whitelabel_mission'
+  it_behaves_like 'authorizable_by_mission_key'
+
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
-  let(:valid_session) { {} }
-
-  let(:valid_headers) do
-    {
-      'API-Key' => build(:api_key)
-    }
-  end
-
-  let(:invalid_headers) do
-    {
-      'API-Key' => '12345'
-    }
-  end
-
   before do
-    request.headers.merge! valid_headers
+    allow(controller).to receive(:authorized).and_return(true)
   end
 
   describe 'GET #index' do
@@ -29,7 +24,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
       params[:account_id] = account.managed_account_id
       params[:format] = :json
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
     end
 
@@ -37,7 +32,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
       params = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET')
       params.merge!(account_id: account.managed_account_id, format: :json, page: 9999)
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
       expect(assigns[:interests]).to eq([])
     end
@@ -49,7 +44,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         project.reload
         expect(project.interested).to include(account)
       end
@@ -58,7 +53,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).to have_http_status(:created)
       end
     end
@@ -72,7 +67,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -90,7 +85,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         params[:account_id] = account.managed_account_id
         params[:id] = project.id
 
-        delete :destroy, params: params, session: valid_session
+        delete :destroy, params: params
         project.reload
         expect(project.interested).not_to include(account)
       end
@@ -100,7 +95,7 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         params[:account_id] = account.managed_account_id
         params[:id] = project.id
 
-        delete :destroy, params: params, session: valid_session
+        delete :destroy, params: params
         expect(response).to have_http_status(:ok)
       end
     end

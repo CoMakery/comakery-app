@@ -15,26 +15,12 @@ module ApplicationHelper
     end
   end
 
-  def ethereum_explorer_domain(token)
-    case token&.ethereum_network
-    when nil
-      Rails.application.config.ethereum_explorer_site
-    when 'main'
-      'etherscan.io'
-    else
-      "#{token.ethereum_network}.etherscan.io"
-    end
-  end
-
-  def ethereum_explorer_tx_url(token, tx)
-    "https://#{ethereum_explorer_domain(token)}/tx/#{tx}"
-  end
-
-  def ransack_filter_present?(query, name, predicate, value)
+  def ransack_filter_present?(query, name, predicate, value) # rubocop:todo Metrics/CyclomaticComplexity
     query.conditions.any? do |c|
       return false unless c.predicate.name == predicate
       return false unless c.attributes.any? { |a| a.name == name }
       return false unless c.values.any? { |v| v.value == value }
+
       true
     end
   end

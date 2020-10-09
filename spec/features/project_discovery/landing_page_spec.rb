@@ -28,14 +28,14 @@ describe 'landing page' do
 
     expect(page).to have_content 'mine'
     expect(page).to have_content 'interested'
-    expect(page).to have_content /new project/i
+    expect(page).to have_content(/new project/i)
 
     expect(page.all('.project').size).to eq(16)
 
     click_link 'Browse All'
 
     within('h2') { expect(page.text).to eq('Projects') }
-    expect(page).to have_content /new project/i
+    expect(page).to have_content(/new project/i)
 
     expect(page.all('.project').size).to eq(9)
   end

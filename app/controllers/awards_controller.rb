@@ -98,12 +98,10 @@ class AwardsController < ApplicationController
     render component: 'TaskAssign', props: @props
   end
 
-  def assign
+  def assign # rubocop:todo Metrics/CyclomaticComplexity
     account = Account.find(params[:account_id])
 
-    if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
-      @award = @award.clone_on_assignment
-    end
+    @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
 
     if account && @award.update(account: account, issuer: current_account, status: 'ready')
       TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_assigned.deliver_now
@@ -121,7 +119,7 @@ class AwardsController < ApplicationController
     end
   end
 
-  def submit
+  def submit # rubocop:todo Metrics/CyclomaticComplexity
     if submit_params[:submission_url].blank? &&
        submit_params[:submission_comment].blank? &&
        submit_params[:submission_image].blank?
@@ -168,7 +166,7 @@ class AwardsController < ApplicationController
     render json: @recipient_address_response, status: :ok
   end
 
-  def send_award
+  def send_award # rubocop:todo Metrics/CyclomaticComplexity
     result = SendAward.call(
       award: @award,
       quantity: send_award_params[:quantity],
@@ -283,9 +281,7 @@ class AwardsController < ApplicationController
     end
 
     def clone_award_on_start
-      if @award.should_be_cloned? && @award.can_be_cloned_for?(current_account)
-        @award = @award.clone_on_assignment
-      end
+      @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(current_account)
     end
 
     def set_award_type
@@ -303,9 +299,7 @@ class AwardsController < ApplicationController
     def set_default_project_filter
       default_project_id = ENV['DEFAULT_PROJECT_ID']
 
-      if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
-        @project = Project.find_by(id: default_project_id)
-      end
+      @project = Project.find_by(id: default_project_id) if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
     end
 
     def set_project_filter
@@ -323,9 +317,7 @@ class AwardsController < ApplicationController
     def set_awards
       @awards = current_account.accessable_awards(projects_interested).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
-      if @project
-        @awards = @awards.where(award_type: AwardType.where(project: @project))
-      end
+      @awards = @awards.where(award_type: AwardType.where(project: @project)) if @project
     end
 
     def set_page
@@ -387,37 +379,37 @@ class AwardsController < ApplicationController
       }
     end
 
-  def set_show_props
-    @props = if current_account
-      {
-        task: task_to_props(@award),
-        task_allowed_to_start: policy(@award).start?,
-        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-        tasks_to_unlock: current_account.tasks_to_unlock(@award),
-        license_url: contribution_licenses_path(type: 'CP'),
-        my_tasks_path: my_tasks_path,
-        account_name: current_account.decorate.name,
-        csrf_token: form_authenticity_token
-      }
-    else
-      {
-        task: task_to_props(@award),
-        task_allowed_to_start: false,
-        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-        tasks_to_unlock: nil,
-        license_url: contribution_licenses_path(type: 'CP'),
-        my_tasks_path: my_tasks_path,
-        account_name: nil,
-        csrf_token: form_authenticity_token
-      }
+    def set_show_props
+      @props = if current_account
+        {
+          task: task_to_props(@award),
+          task_allowed_to_start: policy(@award).start?,
+          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+          tasks_to_unlock: current_account.tasks_to_unlock(@award),
+          license_url: contribution_licenses_path(type: 'CP'),
+          my_tasks_path: my_tasks_path,
+          account_name: current_account.decorate.name,
+          csrf_token: form_authenticity_token
+        }
+      else
+        {
+          task: task_to_props(@award),
+          task_allowed_to_start: false,
+          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+          tasks_to_unlock: nil,
+          license_url: contribution_licenses_path(type: 'CP'),
+          my_tasks_path: my_tasks_path,
+          account_name: nil,
+          csrf_token: form_authenticity_token
+        }
+      end
     end
-  end
 
     def account_accessible_channels
       @project.channels.includes(:team).select { |c| c.team.accounts.include?(current_account) }
     end
 
-    def set_award_props
+    def set_award_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         task: @award.serializable_hash,
         batch: @award_type.serializable_hash,
@@ -435,7 +427,7 @@ class AwardsController < ApplicationController
       }
     end
 
-    def set_assignment_props
+    def set_assignment_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         task: @award.serializable_hash(only: %w[id name]),
         batch: @award_type.serializable_hash(only: %w[id name]),
@@ -457,10 +449,10 @@ class AwardsController < ApplicationController
       }
     end
 
-    def set_form_props
+    def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
-        task: (@award ? @award : @award_type.awards.new).serializable_hash&.merge(
-          image_url: Refile.attachment_url(@award ? @award : @award_type.awards.new, :image, :fill, 300, 300)
+        task: (@award || @award_type.awards.new).serializable_hash&.merge(
+          image_url: Refile.attachment_url(@award || @award_type.awards.new, :image, :fill, 300, 300)
         ),
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,
@@ -486,32 +478,24 @@ class AwardsController < ApplicationController
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
-    def error_response(message = nil)
+    def error_response(message = nil) # rubocop:todo Metrics/CyclomaticComplexity
       @error_response = {
         id: @award.id,
-        message: message ? message : @award.errors&.full_messages&.join(', '),
+        message: message || @award.errors&.full_messages&.join(', '),
         errors: @award.errors&.messages&.map { |k, v| ["task[#{k}]", v.to_sentence] }.to_h
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
-    def set_recipient_address_response
+    def set_recipient_address_response # rubocop:todo Metrics/CyclomaticComplexity
       address = (
         if params[:channel_id].blank?
           Account.where('lower(email)=?', params[:email].downcase).first
         else
           Account.find_from_uid_channel(params[:uid], Channel.find_by(id: params[:channel_id]))
         end
-      )&.send("#{Token::BLOCKCHAIN_NAMES[@project.token.coin_type.to_sym]}_wallet")
+      )&.address_for_blockchain(@project.token&._blockchain)
 
-      network = (
-        if @project.token.coin_type_on_ethereum?
-          @project.token.ethereum_network.presence || 'main'
-        else
-          @project.token.blockchain_network
-        end
-      )
-
-      wallet_url = address ? UtilitiesService.get_wallet_url(network, address) : nil
+      wallet_url = address ? @project.token&.blockchain&.url_for_address_human(address) : nil
 
       @recipient_address_response = {
         address: address,
@@ -535,56 +519,15 @@ class AwardsController < ApplicationController
     end
 
     def confirm_message(project)
-      return nil unless project.token&.coin_type?
-      blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
-      send("confirm_message_for_#{blockchain_name}_award")
-    end
+      return nil unless project.token
 
-    def confirm_message_for_ethereum_award
-      if current_account.ethereum_wallet.present?
-        "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
+      blockchain_name = project.token.blockchain.name
+      addr = current_account.address_for_blockchain(project.token._blockchain)
 
-    def confirm_message_for_qtum_award
-      if current_account.qtum_wallet.present?
-        "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Qtum tokens."
+      if addr.present?
+        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallets_path)}. The project owner can now issue the tokens."
       else
-        "Congratulations, you just claimed your award! Be sure to enter your Qtum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_cardano_award
-      if current_account.cardano_wallet.present?
-        "Congratulations, you just claimed your award! Your Cardano address is #{view_context.link_to current_account.cardano_wallet, current_account.decorate.cardano_wallet_url} you can change your Cardano address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Cardano tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Cardano Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_bitcoin_award
-      if current_account.bitcoin_wallet.present?
-        "Congratulations, you just claimed your award! Your Bitcoin address is #{view_context.link_to current_account.bitcoin_wallet, current_account.decorate.bitcoin_wallet_url} you can change your Bitcoin address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Bitcoin tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Bitcoin Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_eos_award
-      if current_account.eos_wallet.present?
-        "Congratulations, you just claimed your award! Your EOS account name is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS account name on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your EOS Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_tezos_award
-      if current_account.tezos_wallet.present?
-        "Congratulations, you just claimed your award! Your Tezos address is #{view_context.link_to current_account.tezos_wallet, current_account.decorate.tezos_wallet_url} you can change your Tezos address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Tezos tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Tezos Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+        "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} adress on your #{view_context.link_to('wallets page', wallets_path)} to receive your tokens."
       end
     end
 end

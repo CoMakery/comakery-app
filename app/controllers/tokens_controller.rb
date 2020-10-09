@@ -1,9 +1,8 @@
 class TokensController < ApplicationController
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
-  before_action :set_coin_types, only: %i[new show edit]
-  before_action :set_ethereum_networks, only: %i[new show edit]
-  before_action :set_blockchain_networks, only: %i[new show edit]
+  before_action :set_token_types, only: %i[new show edit]
+  before_action :set_blockchains, only: %i[new show edit]
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
@@ -68,12 +67,14 @@ class TokensController < ApplicationController
   def fetch_contract_details
     authorize Token.create
 
+    host = Token.blockchain_for(params[:network]).explorer_api_host
+
     case params[:address]
     when /^0x[a-fA-F0-9]{40}$/
-      web3 = Comakery::Web3.new(params[:network])
+      web3 = Comakery::Web3.new(host)
       @symbol, @decimals = web3.fetch_symbol_and_decimals(params[:address])
     when /^[a-fA-F0-9]{40}$/
-      qtum = Comakery::Qtum.new(params[:network])
+      qtum = Comakery::Qtum.new(host)
       @symbol, @decimals = qtum.fetch_symbol_and_decimals(params[:address])
     end
 
@@ -82,57 +83,49 @@ class TokensController < ApplicationController
 
   private
 
-  def redirect_unless_admin
-    redirect_to root_path unless current_account.comakery_admin?
-  end
+    def redirect_unless_admin
+      redirect_to root_path unless current_account.comakery_admin?
+    end
 
-  def set_token
-    @token = Token.find(params[:id]).decorate
-  end
+    def set_token
+      @token = Token.find(params[:id]).decorate
+    end
 
-  def set_coin_types
-    @coin_types = Token.coin_types.invert
-  end
+    def set_token_types
+      @token_types = Token._token_types.keys.map { |k| [k, k] }.to_h
+    end
 
-  def set_ethereum_networks
-    @ethereum_networks = Token.ethereum_networks.invert
-  end
+    def set_blockchains
+      @blockchains = Token._blockchains.keys.map { |k| [k, k] }.to_h
+    end
 
-  def set_blockchain_networks
-    @blockchain_networks = Token.blockchain_networks.invert
-  end
+    def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity
+      @props = {
+        token: @token&.serializable_hash&.merge(
+          {
+            logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
+          }
+        ),
+        token_types: @token_types,
+        blockchains: @blockchains,
+        form_url: tokens_path,
+        form_action: 'POST',
+        url_on_success: tokens_path,
+        csrf_token: form_authenticity_token
+      }
+    end
 
-  def set_generic_props
-    @props = {
-      token: @token&.serializable_hash&.merge(
-        {
-          logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
-        }
-      ),
-      coin_types: @coin_types,
-      ethereum_networks: @ethereum_networks,
-      blockchain_networks: @blockchain_networks,
-      form_url: tokens_path,
-      form_action: 'POST',
-      url_on_success: tokens_path,
-      csrf_token: form_authenticity_token
-    }
-  end
-
-  def token_params
-    params.require(:token).permit(
-      :name,
-      :ethereum_enabled,
-      :logo_image,
-      :coin_type,
-      :denomination,
-      :ethereum_network,
-      :ethereum_contract_address,
-      :blockchain_network,
-      :contract_address,
-      :symbol,
-      :decimal_places,
-      :unlisted
-    )
-  end
+    def token_params
+      params.require(:token).permit(
+        :name,
+        :logo_image,
+        :denomination,
+        :_token_type,
+        :_blockchain,
+        :contract_address,
+        :symbol,
+        :decimal_places,
+        :unlisted
+      )
+    end
 end

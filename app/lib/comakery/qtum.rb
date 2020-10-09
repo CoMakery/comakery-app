@@ -2,22 +2,23 @@ require 'open-uri'
 require 'json'
 
 class Comakery::Qtum
-  def initialize(network)
-    @host = case network
-            when 'qtum_testnet'
-              'testnet.qtum.info'
-            when 'qtum_mainnet'
-              'qtum.info'
-    end
+  attr_reader :host
+
+  def initialize(host)
+    @host = host
+  end
+
+  def contract(address)
+    JSON.parse((URI.open "https://#{host}/api/contract/#{address}").read)
   end
 
   def fetch_symbol_and_decimals(address)
-    contract = JSON.parse((open "https://#{@host}/api/contract/#{address}").read)
+    c = contract(address)
     [
-      contract['qrc20']['symbol'],
-      contract['qrc20']['decimals'].to_i
+      c['qrc20']['symbol'],
+      c['qrc20']['decimals'].to_i
     ]
-  rescue
+  rescue StandardError
     [
       nil,
       nil

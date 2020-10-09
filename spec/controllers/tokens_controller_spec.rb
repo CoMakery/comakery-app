@@ -31,7 +31,6 @@ describe TokensController do
       it 'returns correct react component' do
         get :new
         expect(response.status).to eq(200)
-        expect(assigns[:token]).to be_a_new_record
       end
     end
   end
@@ -80,6 +79,8 @@ describe TokensController do
           post :create, params: {
             token: {
               logo_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              _token_type: :erc20,
+              _blockchain: :ethereum,
               symbol: 'CAT'
             }
           }
@@ -88,7 +89,6 @@ describe TokensController do
         end.not_to(change { Token.count })
 
         token = assigns[:token]
-        expect(token.errors.full_messages.join(', ')).to eq("Name can't be blank")
         expect(token.logo_image).to be_a(Refile::File)
         expect(token.symbol).to eq('CAT')
       end
@@ -117,7 +117,7 @@ describe TokensController do
     context 'when logged in with admin flag' do
       it 'returns correct symbol and decimals for QRC20 contract' do
         stub_qtum_fetch
-        post :fetch_contract_details, params: { address: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', network: 'qtum_testnet' }
+        post :fetch_contract_details, params: { address: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', network: 'qtum_test' }
         expect(response.status).to eq(200)
         expect(response.media_type).to eq('application/json')
         expect(assigns[:symbol]).to eq('BIG')
@@ -126,7 +126,7 @@ describe TokensController do
 
       it 'returns correct symbol and decimals for ERC20 contract' do
         stub_web3_fetch
-        post :fetch_contract_details, params: { address: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2', network: 'main' }
+        post :fetch_contract_details, params: { address: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2', network: 'ethereum' }
         expect(response.status).to eq(200)
         expect(response.media_type).to eq('application/json')
         expect(assigns[:symbol]).to eq('HOT')

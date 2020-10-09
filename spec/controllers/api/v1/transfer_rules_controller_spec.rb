@@ -1,6 +1,15 @@
 require 'rails_helper'
+require 'controllers/api/v1/concerns/requires_an_authorization_spec'
+require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
+require 'controllers/api/v1/concerns/authorizable_by_project_key_spec'
+require 'controllers/api/v1/concerns/authorizable_by_project_policy_spec'
 
 RSpec.describe Api::V1::TransferRulesController, type: :controller do
+  it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'authorizable_by_mission_key'
+  it_behaves_like 'authorizable_by_project_key'
+  it_behaves_like 'authorizable_by_project_policy'
+
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:transfer_rule) { create(:transfer_rule) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: transfer_rule.token) }
@@ -19,22 +28,8 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
     }
   end
 
-  let(:valid_session) { {} }
-
-  let(:valid_headers) do
-    {
-      'API-Key' => build(:api_key)
-    }
-  end
-
-  let(:invalid_headers) do
-    {
-      'API-Key' => '12345'
-    }
-  end
-
   before do
-    request.headers.merge! valid_headers
+    allow(controller).to receive(:authorized).and_return(true)
   end
 
   describe 'GET #index' do
@@ -43,7 +38,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
       params[:project_id] = project.id
       params[:format] = :json
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
     end
 
@@ -51,7 +46,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
       params = build(:api_signed_request, '', api_v1_project_transfer_rules_path(project_id: project.id), 'GET')
       params.merge!(project_id: project.id, format: :json, page: 9999)
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
       expect(assigns[:transfer_rules]).to eq([])
     end
@@ -62,7 +57,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
       params = build(:api_signed_request, '', api_v1_project_transfer_rule_path(id: transfer_rule.id, project_id: project.id), 'GET')
       params.merge!(project_id: project.id, id: transfer_rule.id, format: :json)
 
-      get :show, params: params, session: valid_session
+      get :show, params: params
       expect(response).to be_successful
     end
   end
@@ -74,7 +69,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
           params = build(:api_signed_request, { transfer_rule: valid_attributes }, api_v1_project_transfer_rules_path(project_id: project.id), 'POST')
           params[:project_id] = project.id
 
-          post :create, params: params, session: valid_session
+          post :create, params: params
         end.to change(project.token.transfer_rules, :count).by(1)
       end
 
@@ -82,7 +77,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
         params = build(:api_signed_request, { transfer_rule: valid_attributes }, api_v1_project_transfer_rules_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).to have_http_status(:created)
       end
     end
@@ -92,7 +87,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
         params = build(:api_signed_request, { transfer_rule: invalid_attributes }, api_v1_project_transfer_rules_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -106,7 +101,7 @@ RSpec.describe Api::V1::TransferRulesController, type: :controller do
         params[:project_id] = project.id
         params[:id] = transfer_rule.id
 
-        delete :destroy, params: params, session: valid_session
+        delete :destroy, params: params
       end.to change(project.token.transfer_rules, :count).by(-1)
     end
   end

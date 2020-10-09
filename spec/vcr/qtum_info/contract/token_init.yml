@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://qtum.info/api/contract/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Thu, 17 Sep 2020 16:43:01 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=dcd5dbccdb9df759af32538206876ff5a1600360980; expires=Sat, 17-Oct-20
+        16:43:00 GMT; path=/; domain=.qtum.info; HttpOnly; SameSite=Lax
+      Vary:
+      - Origin
+      Rate-Limit-Remaining:
+      - '599'
+      Rate-Limit-Reset:
+      - '1600361581'
+      Rate-Limit-Total:
+      - '600'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Readtime:
+      - '1'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 053e8bb7a10000cdc3d00ce200000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5d44489f6e7dcdc3-CDG
+    body:
+      encoding: ASCII-8BIT
+      string: "<h1>404 Not Found</h1>"
+    http_version: null
+  recorded_at: Thu, 17 Sep 2020 16:43:01 GMT
+recorded_with: VCR 5.1.0

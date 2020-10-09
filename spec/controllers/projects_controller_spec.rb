@@ -12,12 +12,13 @@ describe ProjectsController do
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
   let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
-  let!(:receiver) { create(:authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
+  let!(:receiver) { create(:authentication, account: create(:account)) }
+  let!(:wallet) { create(:wallet, account: receiver.account, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', _blockchain: :ethereum_ropsten) }
   let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
   let!(:token) { create(:token) }
   let!(:mission) { create(:mission, token_id: token.id) }
@@ -46,7 +47,7 @@ describe ProjectsController do
 
       it 'shows metamask awards' do
         stub_token_symbol
-        project.token.update ethereum_contract_address: '0x' + 'a' * 40
+        project.token.update contract_address: '0x' + 'a' * 40
         get :awards, params: { id: project.to_param }
 
         expect(response.status).to eq(200)
@@ -181,7 +182,7 @@ describe ProjectsController do
         expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats'])
       end
     end
-  describe 'logged out'
+    describe 'logged out'
     it 'redirect to signup page if you are not logged in' do
       logout
       get :landing
@@ -267,8 +268,8 @@ describe ProjectsController do
     end
 
     it 'when invalid, returns 422' do
-      expect do
-        expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
           post :create, params: {
             project: {
               # title: "Project title here",
@@ -328,7 +329,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
       end.to change { Project.count }.by(1)
 
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           project: {
             title: 'Project title here',
@@ -499,7 +500,7 @@ describe ProjectsController do
       context 'with rendered views' do
         render_views
         it 'returns 422 when updating fails' do
-          expect do
+          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
             put :update, params: {
               id: cat_project.to_param,
               project: {

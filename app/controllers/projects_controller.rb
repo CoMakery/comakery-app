@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
-  skip_after_action :verify_authorized, only: %i[teams landing]
+  skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit show update awards]
@@ -136,245 +136,244 @@ class ProjectsController < ApplicationController
 
   private
 
-  def assign_project_by_long_id
-    @project = @project_scope.find_by(long_id: params[:long_id])&.decorate
+    def assign_project_by_long_id
+      @project = @project_scope.find_by(long_id: params[:long_id])&.decorate
 
-    return redirect_to('/404.html') unless @project
-    return redirect_to(project_path(@project)) unless @project.unlisted?
-  end
-
-  def set_projects
-    @page = (params[:page] || 1).to_i
-
-    @q = policy_scope(@project_scope).ransack(params[:q])
-    @q.sorts = 'interests_count DESC' if @q.sorts.empty?
-
-    @projects_all = @q.result.includes(:token, :mission, :account, :admins)
-    @projects = @projects_all.page(@page).per(9)
-
-    redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?
-  end
-
-  def set_tokens
-    @tokens = Token.listed.or(Token.where(id: @project&.token&.id)).pluck(:name, :id).append(['No Token', '']).reverse.to_h
-  end
-
-  def set_missions
-    @missions = Mission.all.pluck(:name, :id).append(['No Mission', '']).reverse.to_h
-  end
-
-  def set_visibilities
-    @visibilities = Project.visibilities.keys
-  end
-
-  def set_teams
-    @teams = current_account&.authentication_teams&.includes(:team, :authentication)&.map do |a_team|
-      {
-        team: "[#{a_team.team.provider}] #{a_team.team.name}",
-        team_id: a_team.team.id.to_s,
-        discord: a_team.team.discord?,
-        channels: a_team.channels&.map do |channel|
-          {
-            channel: a_team.team.discord? ? channel.first.to_s : channel,
-            channel_id: a_team.team.discord? ? channel.second.to_s : channel
-          }
-        end
-      }
+      return redirect_to('/404.html') unless @project
+      return redirect_to(project_path(@project)) unless @project.unlisted?
     end
-  end
 
-  def set_generic_props
-    @props = {
-      project: @project&.serializable_hash&.merge(
+    def set_projects
+      @page = (params[:page] || 1).to_i
+
+      @q = policy_scope(@project_scope).ransack(params[:q])
+      @q.sorts = 'interests_count DESC' if @q.sorts.empty?
+
+      @projects_all = @q.result.includes(:token, :mission, :account, :admins)
+      @projects = @projects_all.page(@page).per(9)
+
+      redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?
+    end
+
+    def set_tokens
+      @tokens = Token.listed.or(Token.where(id: @project&.token&.id)).pluck(:name, :id).append(['No Token', '']).reverse.to_h
+    end
+
+    def set_missions
+      @missions = Mission.all.pluck(:name, :id).append(['No Mission', '']).reverse.to_h
+    end
+
+    def set_visibilities
+      @visibilities = Project.visibilities.keys
+    end
+
+    def set_teams # rubocop:todo Metrics/CyclomaticComplexity
+      @teams = current_account&.authentication_teams&.includes(:team, :authentication)&.map do |a_team|
         {
-          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 1200, 800) : nil,
-          panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
-          mission_id: @project&.mission&.id,
-          token_id: @project&.token&.id,
-          channels: @project&.channels&.includes(:team)&.map do |channel|
+          team: "[#{a_team.team.provider}] #{a_team.team.name}",
+          team_id: a_team.team.id.to_s,
+          discord: a_team.team.discord?,
+          channels: a_team.channels&.map do |channel|
             {
-              channel_id: channel&.channel_id&.to_s,
-              team_id: channel&.team&.id&.to_s,
-              id: channel&.id,
-              name_with_provider: channel&.name_with_provider
+              channel: a_team.team.discord? ? channel.first.to_s : channel,
+              channel_id: a_team.team.discord? ? channel.second.to_s : channel
             }
-          end,
-          github_url: @project.github_url,
-          documentation_url: @project.documentation_url,
-          getting_started_url: @project.getting_started_url,
-          governance_url: @project.governance_url,
-          funding_url: @project.funding_url,
-          video_conference_url: @project.video_conference_url,
-          url: unlisted_project_url(@project.long_id)
-        }
-      ),
-      tokens: @tokens,
-      decimal_places: Token.select(:id, :decimal_places),
-      missions: @missions,
-      visibilities: @visibilities,
-      teams: @teams&.reject { |t| t[:channels].blank? },
-      discord_bot_url: if @teams&.any? { |t| t[:discord] && t[:channels].empty? }
-                         Comakery::Discord.new.add_bot_link
-                       end,
-      license_url: contribution_licenses_path(type: 'CP'),
-      terms_readonly: @project&.terms_readonly?,
-      form_url: projects_path,
-      form_action: 'POST',
-      csrf_token: form_authenticity_token,
-      project_for_header: project_header,
-      mission_for_header: @project&.mission&.decorate&.header_props,
-      is_whitelabel: @whitelabel_mission.present?
-    }
-  end
-
-  def project_header
-    @project ? @project.decorate.header_props : { image_url: helpers.image_url('defaul_project.jpg') }
-  end
-
-  def set_show_props
-    @props = {
-      tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
-        [
-          specialty&.name&.downcase || 'general',
-          awards.map do |task|
-            task_to_props(task).merge(
-              allowed_to_start: policy(task).start?,
-              reached_maximum_assignments: task.reached_maximum_assignments_for?(current_account)
-            )
           end
-        ]
-      end,
-      interested: current_account&.interested?(@project.id),
-      specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
-      project_data: project_props(@project),
-      token_data: token_props(@project&.token&.decorate),
-      csrf_token: form_authenticity_token,
-      my_tasks_path: my_tasks_path(project_id: @project.id),
-      editable: policy(@project).edit?,
-      project_for_header: @project.decorate.header_props,
-      mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
-    }
-  end
-
-  def camelize_props
-    @props.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
-  end
-
-  def project_params
-    result = params.require(:project).permit(
-      :contributor_agreement_url,
-      :description,
-      :square_image,
-      :panoramic_image,
-      :maximum_tokens,
-      :token_id,
-      :mission_id,
-      :long_id,
-      :title,
-      :tracker,
-      :video_url,
-      :github_url,
-      :documentation_url,
-      :getting_started_url,
-      :governance_url,
-      :funding_url,
-      :video_conference_url,
-      :payment_type,
-      :exclusive_contributions,
-      :legal_project_owner,
-      :minimum_payment,
-      :require_confidentiality,
-      :confidentiality,
-      :license_finalized,
-      :visibility,
-      :status,
-      :display_team,
-      channels_attributes: %i[
-        _destroy
-        id
-        team_id
-        channel_id
-      ]
-    )
-    result
-  end
-
-  def assign_current_account
-    @current_account_deco = current_account&.decorate
-  end
-
-  def set_award
-    last_award = @project.awards&.completed&.last
-    @award = Award.new channel: last_award&.channel, award_type: last_award&.award_type
-    awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
-    @awardable_types = awardable_types_result.awardable_types
-    @can_award = awardable_types_result.can_award
-  end
-
-  def project_detail_path
-    @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
-  end
-
-  def contributor_props(account, project)
-    a = account.decorate.serializable_hash(
-      only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
-      include: :specialty,
-      methods: :image_url
-    )
-
-    a['specialty'] ||= {}
-
-    if project.account == account || project.admins.include?(account)
-      a['specialty']['name'] = 'Team Leader'
-    elsif !project.contributors_distinct.include?(account)
-      a['specialty']['name'] = 'Interested'
-    end
-
-    a
-  end
-
-  def project_props(project)
-    project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
-      description_html: Comakery::Markdown.to_html(project.description),
-      show_contributions: policy(project).show_contributions?,
-      square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
-      panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
-      video_id: project.video_id,
-      token_percentage: project.percent_awarded_pretty,
-      maximum_tokens: project.maximum_tokens,
-      awarded_tokens: project.total_awarded_pretty,
-      team_size: project.team_size,
-      team: project.team_top.map { |contributor| contributor_props(contributor, project) },
-      chart_data: GetContributorData.call(project: @project).award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a },
-      stats: project.stats
-    )
-  end
-
-  def token_props(token)
-    if token.present?
-      token.as_json(only: %i[name symbol coin_type]).merge(
-        image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
-        contract_url: token.ethereum_contract_explorer_url
-      )
-    end
-  end
-
-  def mission_props(mission)
-    if mission.present?
-      mission.as_json(only: %i[id name]).merge(
-        logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
-        mission_url: mission_path(mission)
-      )
-    end
-  end
-
-  def redirect_for_whitelabel
-    if @whitelabel_mission
-      if policy(@project).show_contributions?
-        redirect_to project_dashboard_transfers_path(@project)
-      else
-        redirect_to project_award_types_path(@project)
+        }
       end
     end
-  end
+
+    # rubocop:todo Metrics/PerceivedComplexity
+    def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity
+      @props = {
+        project: @project&.serializable_hash&.merge(
+          {
+            square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 1200, 800) : nil,
+            panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
+            mission_id: @project&.mission&.id,
+            token_id: @project&.token&.id,
+            channels: @project&.channels&.includes(:team)&.map do |channel|
+              {
+                channel_id: channel&.channel_id&.to_s,
+                team_id: channel&.team&.id&.to_s,
+                id: channel&.id,
+                name_with_provider: channel&.name_with_provider
+              }
+            end,
+            github_url: @project.github_url,
+            documentation_url: @project.documentation_url,
+            getting_started_url: @project.getting_started_url,
+            governance_url: @project.governance_url,
+            funding_url: @project.funding_url,
+            video_conference_url: @project.video_conference_url,
+            url: unlisted_project_url(@project.long_id)
+          }
+        ),
+        tokens: @tokens,
+        decimal_places: Token.select(:id, :decimal_places),
+        missions: @missions,
+        visibilities: @visibilities,
+        teams: @teams&.reject { |t| t[:channels].blank? },
+        discord_bot_url: (Comakery::Discord.new.add_bot_link if @teams&.any? { |t| t[:discord] && t[:channels].empty? }),
+        license_url: contribution_licenses_path(type: 'CP'),
+        terms_readonly: @project&.terms_readonly?,
+        form_url: projects_path,
+        form_action: 'POST',
+        csrf_token: form_authenticity_token,
+        project_for_header: project_header,
+        mission_for_header: @project&.mission&.decorate&.header_props,
+        is_whitelabel: @whitelabel_mission.present?
+      }
+    end
+    # rubocop:enable Metrics/PerceivedComplexity
+
+    def project_header
+      @project ? @project.decorate.header_props : { image_url: helpers.image_url('defaul_project.jpg') }
+    end
+
+    def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
+      @props = {
+        tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
+          [
+            specialty&.name&.downcase || 'general',
+            awards.map do |task|
+              task_to_props(task).merge(
+                allowed_to_start: policy(task).start?,
+                reached_maximum_assignments: task.reached_maximum_assignments_for?(current_account)
+              )
+            end
+          ]
+        end,
+        interested: current_account&.interested?(@project.id),
+        specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
+        project_data: project_props(@project),
+        token_data: token_props(@project&.token&.decorate),
+        csrf_token: form_authenticity_token,
+        my_tasks_path: my_tasks_path(project_id: @project.id),
+        editable: policy(@project).edit?,
+        project_for_header: @project.decorate.header_props,
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
+      }
+    end
+
+    def camelize_props
+      @props.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
+    end
+
+    def project_params
+      result = params.require(:project).permit(
+        :contributor_agreement_url,
+        :description,
+        :square_image,
+        :panoramic_image,
+        :maximum_tokens,
+        :token_id,
+        :mission_id,
+        :long_id,
+        :title,
+        :tracker,
+        :video_url,
+        :github_url,
+        :documentation_url,
+        :getting_started_url,
+        :governance_url,
+        :funding_url,
+        :video_conference_url,
+        :payment_type,
+        :exclusive_contributions,
+        :legal_project_owner,
+        :minimum_payment,
+        :require_confidentiality,
+        :confidentiality,
+        :license_finalized,
+        :visibility,
+        :status,
+        :display_team,
+        channels_attributes: %i[
+          _destroy
+          id
+          team_id
+          channel_id
+        ]
+      )
+      result
+    end
+
+    def assign_current_account
+      @current_account_deco = current_account&.decorate
+    end
+
+    def set_award
+      last_award = @project.awards&.completed&.last
+      @award = Award.new channel: last_award&.channel, award_type: last_award&.award_type
+      awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
+      @awardable_types = awardable_types_result.awardable_types
+      @can_award = awardable_types_result.can_award
+    end
+
+    def project_detail_path
+      @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
+    end
+
+    def contributor_props(account, project)
+      a = account.decorate.serializable_hash(
+        only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
+        include: :specialty,
+        methods: :image_url
+      )
+
+      a['specialty'] ||= {}
+
+      if project.account == account || project.admins.include?(account)
+        a['specialty']['name'] = 'Team Leader'
+      elsif !project.contributors_distinct.include?(account)
+        a['specialty']['name'] = 'Interested'
+      end
+
+      a
+    end
+
+    def project_props(project) # rubocop:todo Metrics/CyclomaticComplexity
+      project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
+        description_html: Comakery::Markdown.to_html(project.description),
+        show_contributions: policy(project).show_contributions?,
+        square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
+        panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
+        video_id: project.video_id,
+        token_percentage: project.percent_awarded_pretty,
+        maximum_tokens: project.maximum_tokens,
+        awarded_tokens: project.total_awarded_pretty,
+        team_size: project.team_size,
+        team: project.team_top.map { |contributor| contributor_props(contributor, project) },
+        chart_data: GetContributorData.call(project: @project).award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a },
+        stats: project.stats
+      )
+    end
+
+    def token_props(token)
+      if token.present?
+        token.as_json(only: %i[name symbol _token_type]).merge(
+          image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil
+        )
+      end
+    end
+
+    def mission_props(mission)
+      if mission.present?
+        mission.as_json(only: %i[id name]).merge(
+          logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
+          mission_url: mission_path(mission)
+        )
+      end
+    end
+
+    def redirect_for_whitelabel
+      if @whitelabel_mission
+        if policy(@project).show_contributions?
+          redirect_to project_dashboard_transfers_path(@project)
+        else
+          redirect_to project_award_types_path(@project)
+        end
+      end
+    end
 end

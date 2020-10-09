@@ -1,6 +1,6 @@
 require 'refile/file_double'
 require 'webmock/rspec'
-include WebMock::API
+include WebMock::API # rubocop:todo Style/MixinUsage
 
 WebMock.enable!
 
@@ -13,11 +13,27 @@ class Mom
       nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
       country: 'United States of America',
-      ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B',
       specialty: create(:specialty),
       password: valid_password
     }
     Account.new(defaults.merge(attrs))
+  end
+
+  def wallet(**attrs)
+    defaults = {
+      _blockchain: :bitcoin,
+      account: create(:account),
+      address: bitcoin_address_1
+    }
+    Wallet.new(defaults.merge(attrs))
+  end
+
+  def balance(**attrs)
+    defaults = {
+      wallet: create(:wallet),
+      token: create(:token)
+    }
+    Balance.new(defaults.merge(attrs))
   end
 
   def specialty(**attrs)
@@ -82,8 +98,21 @@ class Mom
   def account_token_record(**attrs)
     token = attrs[:token] || build(:comakery_dummy_token)
 
+    account = attrs[:account] || create(
+      :account
+    )
+
+    account.wallets.find_by(_blockchain: token._blockchain) || create(
+      :wallet,
+      account: account,
+      _blockchain: token._blockchain,
+      address: attrs[:address] || build(:ethereum_address_2)
+    )
+
+    attrs.delete(:address)
+
     defaults = {
-      account: create(:account),
+      account: account,
       token: token,
       reg_group: create(:reg_group, token: token),
       max_balance: 100000,
@@ -91,6 +120,7 @@ class Mom
       account_frozen: false,
       lockup_until: 1.day.ago
     }
+
     AccountTokenRecord.new(defaults.merge(attrs))
   end
 
@@ -105,12 +135,12 @@ class Mom
       blockchain_transactable: award,
       amount: 1,
       source: build(:ethereum_address_1),
-      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
       status: :created,
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransaction.create!(defaults.merge(attrs))
     end
   end
@@ -123,12 +153,12 @@ class Mom
       blockchain_transactable: create(:transfer_rule),
       amount: 1,
       source: build(:ethereum_address_1),
-      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
       status: :created,
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionTransferRule.create!(defaults.merge(attrs))
     end
   end
@@ -141,30 +171,38 @@ class Mom
       blockchain_transactable: create(:account_token_record),
       amount: 1,
       source: build(:ethereum_address_1),
-      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
       status: :created,
       status_message: 'dummy'
     }
 
-    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
     end
   end
 
-  def blockchain_transaction__award(**attrs)
+  def blockchain_transaction__award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     project = attrs[:award]&.project || create(
       :project,
       token: attrs[:token]
+    )
+
+    account = attrs[:account] || create(
+      :account
+    )
+
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: attrs[:destination] || build(:ethereum_address_2)
     )
 
     attrs[:award] || create(
       :award,
       amount: attrs[:amount] || 1,
       status: :accepted,
-      account: create(
-        :account,
-        ethereum_wallet: attrs[:destination] || build(:ethereum_address_2)
-      ),
+      account: account,
       award_type: create(
         :award_type,
         project: project
@@ -195,20 +233,28 @@ class Mom
     BlockchainTransaction.create!(defaults.merge(attrs))
   end
 
-  def blockchain_transaction__award_dag(**attrs)
+  def blockchain_transaction__award_dag(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     project = attrs[:award]&.project || create(
       :project,
       token: attrs[:token]
+    )
+
+    account = attrs[:account] || create(
+      :account
+    )
+
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: attrs[:destination] || build(:constellation_address_2)
     )
 
     attrs[:award] || create(
       :award,
       amount: attrs[:amount] || 1,
       status: :accepted,
-      account: create(
-        :account,
-        constellation_wallet: attrs[:destination] || build(:constellation_address_2)
-      ),
+      account: account,
       award_type: create(
         :award_type,
         project: project
@@ -247,8 +293,8 @@ class Mom
   end
 
   def authentication(**attrs)
-    @@authentication_count ||= 0
-    @@authentication_count += 1
+    @@authentication_count ||= 0 # rubocop:todo Style/ClassVars
+    @@authentication_count += 1 # rubocop:todo Style/ClassVars
     defaults = {
       provider: 'slack',
       token: 'slack token',
@@ -290,9 +336,17 @@ class Mom
     defaults = {
       name: "Token-#{SecureRandom.hex(20)}",
       symbol: "TKN#{SecureRandom.hex(20)}",
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
+      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      token_frozen: false
     }
-    Token.new(defaults.merge(attrs))
+
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def comakery_token(**attrs)
@@ -300,12 +354,19 @@ class Mom
       name: "ComakeryToken-#{SecureRandom.hex(20)}",
       symbol: "XYZ#{SecureRandom.hex(20)}",
       logo_image: dummy_image,
-      coin_type: :comakery,
+      _token_type: :comakery_security_token,
       decimal_places: 18,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+      _blockchain: :ethereum_ropsten,
+      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+      token_frozen: false
     }
-    Token.new(defaults.merge(attrs))
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def comakery_dummy_token(**attrs)
@@ -313,21 +374,34 @@ class Mom
       name: "ComakeryDummyToken-#{SecureRandom.hex(20)}",
       symbol: "DUM#{SecureRandom.hex(20)}",
       logo_image: dummy_image,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
-      coin_type: :comakery,
-      decimal_places: 0
+      _blockchain: :ethereum_ropsten,
+      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+      _token_type: :comakery_security_token,
+      decimal_places: 0,
+      token_frozen: false
     }
-    Token.new(defaults.merge(attrs))
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def dag_token(**attrs)
     defaults = {
       logo_image: dummy_image,
-      coin_type: :dag,
-      blockchain_network: :constellation_testnet
+      _token_type: :dag,
+      _blockchain: :constellation_test
     }
-    Token.new(defaults.merge(attrs))
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
   end
 
   def interest(**attrs)
@@ -510,15 +584,15 @@ class Mom
   end
 
   def eth_client(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
 
     Comakery::Eth.new(
-      network
+      host
     )
   end
 
   def eth_tx(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
     # From:
@@ -531,13 +605,13 @@ class Mom
     # 100
 
     Comakery::Eth::Tx.new(
-      network,
+      host,
       hash
     )
   end
 
   def erc20_transfer(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
     # From:
@@ -550,33 +624,33 @@ class Mom
     # 100
 
     Comakery::Eth::Tx::Erc20::Transfer.new(
-      network,
+      host,
       hash
     )
   end
 
   def erc20_mint(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x02286b586b53784715e7eda288744e1c14a5f2d691d43160d4e3c4d5f8825ad0'
 
     Comakery::Eth::Tx::Erc20::Mint.new(
-      network,
+      host,
       hash
     )
   end
 
   def erc20_burn(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x1007e9116efab368169683b81ae576bd48e168bef2be1fea5ef096ccc9e5dcc0'
 
     Comakery::Eth::Tx::Erc20::Burn.new(
-      network,
+      host,
       hash
     )
   end
 
   def security_token_set_allow_group_transfer(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582'
 
     # Inputs:
@@ -588,13 +662,13 @@ class Mom
     # 0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b
 
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(
-      network,
+      host,
       hash
     )
   end
 
   def security_token_set_address_permissions(**attrs)
-    network = attrs[:network] || :ropsten
+    host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d'
 
     # Inputs:
@@ -608,7 +682,7 @@ class Mom
     # 0x8599d17ac1cec71ca30264ddfaaca83c334f8451
 
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(
-      network,
+      host,
       hash
     )
   end
@@ -616,26 +690,30 @@ class Mom
   def erc20_contract(**attrs)
     token = create(
       :token,
-      coin_type: :comakery,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: build(:ethereum_contract_address),
+      _token_type: :comakery_security_token,
+      _blockchain: :ethereum_ropsten,
+      contract_address: build(:ethereum_contract_address),
       symbol: 'DUM',
       decimal_places: 0
     )
 
-    contract_address = attrs[:contract_address] || token.ethereum_contract_address
+    contract_address = attrs[:contract_address] || token.contract_address
     abi = attrs[:abi] || token.abi
-    network = attrs[:network] || token.ethereum_network
+    host = attrs[:host] || token.blockchain.explorer_api_host
     nonce = attrs[:nonce] || rand(1_000_000)
 
-    VCR.use_cassette("infura/#{network}/#{contract_address}/contract_init") do
+    VCR.use_cassette("#{host}/contract/#{contract_address}/contract_init") do
       Comakery::Eth::Contract::Erc20.new(
         contract_address,
         abi,
-        network,
+        host,
         nonce
       )
     end
+  end
+
+  def bitcoin_address_1
+    '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end
 
   def constellation_address_1
@@ -647,11 +725,11 @@ class Mom
   end
 
   def dag_tx(**attrs)
-    network = attrs[:network] || :constellation_testnet
+    host = attrs[:host] || :constellation_test
     hash = attrs[:hash] || '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d'
 
     stub_constellation_request(
-      network,
+      host,
       hash,
       'hash' => '2dd4f39300c5536005170acbb2eb8bfacf15c0b1d78541c7922813319cfc786d',
       'amount' => 0,
@@ -660,7 +738,7 @@ class Mom
     )
 
     Comakery::Dag::Tx.new(
-      network,
+      host,
       hash
     )
   end

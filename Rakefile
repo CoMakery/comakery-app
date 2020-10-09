@@ -9,6 +9,6 @@ Rake::Task['default'].clear
 
 task default: :specs_thorough
 
-task :specs_thorough do
+task specs_thorough: :environment do
   system 'bin/rspect'
 end

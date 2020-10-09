@@ -5,7 +5,7 @@ class ContributorsController < ApplicationController
 
   layout 'legacy'
 
-  def index
+  def index # rubocop:todo Metrics/CyclomaticComplexity
     authorize @project, :show_contributions?
 
     @contributors  = @project.contributors_by_award_amount.page(params[:page])
@@ -33,7 +33,9 @@ class ContributorsController < ApplicationController
       }
     end
 
+    # rubocop:todo Lint/SafeNavigationChain
     @table_data += @project.awards&.completed&.reject(&:account)&.group_by { |award| award.decorate.recipient_display_name }.values.map do |awards|
+      # rubocop:enable Lint/SafeNavigationChain
       {
         image_url: helpers.account_image_url(nil, 27),
         name: awards.first.decorate.recipient_display_name,

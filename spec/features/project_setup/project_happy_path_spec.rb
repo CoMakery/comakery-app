@@ -8,7 +8,7 @@ describe 'viewing projects, creating and editing', :js do
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com') }
   let!(:authentication) { create(:authentication, account: account) }
-  let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1' * 40}") }
+  let!(:same_team_account) { create(:account) }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account) }
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id) } }
 
@@ -23,15 +23,8 @@ describe 'viewing projects, creating and editing', :js do
 
   it 'does the happy path' do
     login(account)
-    visit projects_path
-    expect(page).to have_content 'Cats with Lazers Project'
-    within "#project-#{project.to_param}" do
-      click_link project.title
-    end
 
-    visit projects_path
-    expect(page).to have_content 'New Project' # wait for new project button to appear before pressing it to avoid random test failure
-    click_link 'New Project'
+    visit new_project_path
     expect(page).to have_content 'New Project'
     fill_in 'project[title]', with: 'This is a project'
     fill_in 'project[description]', with: 'This is a project description which is very informative'
@@ -39,8 +32,10 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project[video_url]', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
     select 'Logged In Team Members (Project Slack/Discord channels, Admins, Emailed Award Recipients)', from: 'project[visibility]'
 
-    attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '1200.png')
+    attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '1200.png') # rubocop:todo Rails/FilePath
+    # rubocop:todo Rails/FilePath
     attach_file 'project[panoramic_image]', Rails.root.join('spec', 'fixtures', '1500.png')
+    # rubocop:enable Rails/FilePath
     find_button('create', class: 'button__border').click
     expect(page).to have_content 'Project Created'
 

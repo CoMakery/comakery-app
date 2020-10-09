@@ -58,5 +58,5 @@ Rails.application.configure do
   config.cache_store = nil
   config.action_controller.perform_caching = false
 
-  config.log_level = :error
+  config.log_level = :fatal
 end

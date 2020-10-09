@@ -70,8 +70,8 @@ describe BlockchainTransactionAward, vcr: true do
           :blockchain_transaction,
           token: create(
             :token,
-            coin_type: :eth,
-            ethereum_network: :ropsten
+            _token_type: :eth,
+            _blockchain: :ethereum_ropsten
           )
         )
       end
@@ -104,8 +104,8 @@ describe BlockchainTransactionAward, vcr: true do
           :blockchain_transaction,
           token: create(
             :token,
-            coin_type: :eth,
-            ethereum_network: :ropsten
+            _token_type: :eth,
+            _blockchain: :ethereum_ropsten
           )
         )
 
@@ -145,7 +145,7 @@ describe BlockchainTransactionAward, vcr: true do
 
     context 'with DAG transfer' do
       it 'returns Comakery::Dag::Tx' do
-        blockchain_transaction = build(:blockchain_transaction, token: create(:dag_token))
+        blockchain_transaction = build(:blockchain_transaction_dag)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Dag::Tx)
       end
@@ -175,8 +175,8 @@ describe BlockchainTransactionAward, vcr: true do
       let!(:token) do
         create(
           :token,
-          coin_type: :eth,
-          ethereum_network: :ropsten
+          _token_type: :eth,
+          _blockchain: :ethereum_ropsten
         )
       end
 

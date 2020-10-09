@@ -1,7 +1,5 @@
 class ComakeryTokenValidator < ActiveModel::Validator
   def validate(record)
-    unless record.token.coin_type_comakery?
-      record.errors.add(:token, 'is not a Comakery Security Token')
-    end
+    record.errors.add(:token, 'is not a Comakery Security Token') unless record.token._token_type_comakery_security_token?
   end
 end

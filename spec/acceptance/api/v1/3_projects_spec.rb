@@ -1,5 +1,3 @@
-# Rubocop gives false positives on empty example groups with rspec_api_documentation DSL
-
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
@@ -7,8 +5,8 @@ resource 'III. Projects' do
   include Rails.application.routes.url_helpers
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token), account: create(:account, managed_mission: active_whitelabel_mission)) }
-  let!(:project2) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token), account: create(:account, managed_mission: active_whitelabel_mission)) }
+  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_dummy_token), account: create(:account, managed_mission: active_whitelabel_mission)) }
+  let!(:project2) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_dummy_token), account: create(:account, managed_mission: active_whitelabel_mission)) }
 
   before do
     3.times { project.admins << create(:account, managed_mission: active_whitelabel_mission) }

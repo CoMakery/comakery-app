@@ -9,7 +9,7 @@ class GetAwardData
     }
   end
 
-  def contributions_by_day(awards_scope)
+  def contributions_by_day(awards_scope) # rubocop:todo Metrics/CyclomaticComplexity
     history = 150
     recent_awards = awards_scope
                     .where('awards.updated_at > ?', history.days.ago)
@@ -25,7 +25,7 @@ class GetAwardData
     awards_by_date = recent_awards.group_by { |a| a.created_at.to_date.iso8601 }
 
     start_days_ago = if recent_awards.any?
-      award_age_days = (Time.now - recent_awards.first.created_at) / (60 * 60 * 24)
+      award_age_days = (Time.zone.now - recent_awards.first.created_at) / (60 * 60 * 24)
       [history, award_age_days].min
     else
       history
@@ -49,6 +49,7 @@ class GetAwardData
 
     (awards_on_day || []).each do |award|
       next unless award.account
+
       name = award.account.decorate.name
       row[name] ||= 0
       row[name] += award.total_amount

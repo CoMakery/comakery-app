@@ -3,9 +3,9 @@ require 'rails_helper'
 describe 'awards issuing', js: true do
   let!(:team) { create(:team) }
   let!(:current_auth) { create(:sb_authentication) }
-  let!(:awardee_auth) { create(:sb_authentication, account: create(:account, first_name: 'A', ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
-  let!(:awardee_auth2) { create(:sb_authentication, account: create(:account, first_name: 'Z', ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1368')) }
-  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, token: create(:token, decimal_places: 8, coin_type: 'erc20')) }
+  let!(:awardee_auth) { create(:sb_authentication, account: create(:account, first_name: 'A')) }
+  let!(:awardee_auth2) { create(:sb_authentication, account: create(:account, first_name: 'Z')) }
+  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, token: create(:token, decimal_places: 8, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
   let!(:channel1) { create(:channel, team: team, project: project1, name: 'channel1') }
   let!(:award_type1) { create(:award_type, project: project1) }
   let!(:award1) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }
@@ -23,6 +23,9 @@ describe 'awards issuing', js: true do
     login(current_auth.account)
     stub_slack_user_list(slack_users_from_auths([awardee_auth, awardee_auth2]))
     allow_any_instance_of(Award).to receive(:send_award_notifications)
+
+    create(:wallet, account: awardee_auth.account, _blockchain: :ethereum_ropsten, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')
+    create(:wallet, account: awardee_auth2.account, _blockchain: :ethereum_ropsten, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1368')
   end
 
   it 'allows to create award' do
@@ -88,7 +91,7 @@ describe 'awards issuing', js: true do
     visit project_award_type_award_award_path(project1, award_type1, award3)
     find_button('proceed').click
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
-    expect(page).to have_content '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+    expect(page).to have_content award3.account.address_for_blockchain(project1.token._blockchain)
     find_button('issue award').click
     expect(page).to have_content 'task has been accepted'
   end
@@ -99,7 +102,7 @@ describe 'awards issuing', js: true do
     find('select[name="task[uid]"] > option:nth-child(2)').click
     find_button('proceed').click
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
-    expect(page).to have_content awardee_auth2.account.ethereum_wallet
+    expect(page).to have_content awardee_auth2.account.address_for_blockchain(project1.token._blockchain)
     find_button('issue award').click
     expect(page).to have_content 'task has been accepted'
   end

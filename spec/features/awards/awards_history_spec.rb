@@ -34,7 +34,7 @@ describe 'viewing projects, creating and editing', :js do
 
         it 'show link to ethereum transaction' do
           stub_token_symbol
-          project.token.update ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'
+          project.token.update ethereum_enabled: true, contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', _token_type: 'erc20', _blockchain: :ethereum_ropsten
           award.update ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
           login(owner)
           project.token.reload

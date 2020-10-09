@@ -23,6 +23,7 @@ stats = {}
   date = Date.parse(days_ago.days.ago.utc.iso8601)
   results = run %(cd #{repo_path} && git log --pretty="%an" --since="#{days_ago + 1} days ago" --until "#{days_ago} days ago"), quiet: !$DEBUG
   next if results.blank?
+
   d date
   day = stats[date] = {}
   results.split("\n").each do |names|

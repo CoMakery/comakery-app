@@ -1,7 +1,7 @@
 class Views::Shared::Awards < Views::Base
   needs :project, :awards, :show_recipient, :current_account
 
-  def content
+  def content # rubocop:todo Metrics/PerceivedComplexity
     div(class: 'table-scroll table-box', style: 'margin-right: 0') do
       table(class: 'award-rows') do
         tr(class: 'header-row') do
@@ -13,9 +13,7 @@ class Views::Shared::Awards < Views::Base
           th(class: 'small-2') { text 'Recipient' } if show_recipient
           th(class: 'small-2') { text 'Contribution' }
           th(class: 'small-2') { text 'Authorized By' }
-          if project.token&.coin_type?
-            th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
-          end
+          th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' } if project.token&._token_type&.present?
           th(class: 'small-1', style: 'text-align: center') { text 'status' }
         end
         awards.each do |award|
@@ -36,7 +34,7 @@ class Views::Shared::Awards < Views::Base
               text award.total_amount_pretty
             end
             td(class: 'small-2') do
-              text raw award.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;')
+              text raw award.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;') # rubocop:todo Rails/OutputSafety
             end
             if show_recipient
               td(class: 'small-2 recipient') do
@@ -47,21 +45,21 @@ class Views::Shared::Awards < Views::Base
             td(class: 'small-2 description') do
               strong award.award_type.name.to_s
               span(class: 'help-text') do
+                # rubocop:todo Rails/OutputSafety
                 text raw ": #{markdown_to_html award.description}" if award.description.present?
+                # rubocop:enable Rails/OutputSafety
                 br
                 span award.proof_id
               end
             end
             td(class: 'small-2') do
-              if award.issuer
-                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
-              end
+              img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;') if award.issuer
               text award.issuer_display_name
             end
-            if project.token&.coin_type?
+            if project.token&._token_type?
               td(class: 'small-2 blockchain-address') do
                 if award.ethereum_transaction_explorer_url
-                  link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
+                  link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank', rel: 'noopener'
                 elsif award.recipient_address.blank? && current_account == award.account && show_recipient
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?
@@ -86,17 +84,17 @@ class Views::Shared::Awards < Views::Base
   end
 
   def wallet_logo
-    if project.token.coin_type_on_ethereum?
+    if project.token._token_type_on_ethereum?
       image_tag 'metamask2.png', alt: 'Metamask2'
-    elsif project.token.coin_type_qrc20?
+    elsif project.token._token_type_qrc20?
       image_tag 'qrypto.png', alt: 'Qrypto'
-    elsif project.token.coin_type_qtum?
+    elsif project.token._token_type_qtum?
       image_tag 'ledger.png', alt: 'Ledger'
-    elsif project.token.coin_type_ada? || project.token.coin_type_btc?
+    elsif project.token._token_type_ada? || project.token._token_type_btc?
       image_tag 'trezor.png', alt: 'Trezor'
-    elsif project.token.coin_type_eos?
+    elsif project.token._token_type_eos?
       image_tag 'eos.png', alt: 'Eos'
-    elsif project.token.coin_type_xtz?
+    elsif project.token._token_type_xtz?
       image_tag 'tezos.png', alt: 'Tezos'
     end
   end

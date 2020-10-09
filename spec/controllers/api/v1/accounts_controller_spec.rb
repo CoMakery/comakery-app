@@ -1,6 +1,15 @@
 require 'rails_helper'
+require 'controllers/api/v1/concerns/requires_an_authorization_spec'
+require 'controllers/api/v1/concerns/requires_signature_spec'
+require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
+require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
 RSpec.describe Api::V1::AccountsController, type: :controller do
+  it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_whitelabel_mission'
+  it_behaves_like 'authorizable_by_mission_key'
+
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
@@ -11,33 +20,18 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       last_name: 'Smith',
       nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
-      country: 'United States of America',
-      ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'
+      country: 'United States of America'
     }
   end
 
   let(:invalid_attributes) do
     {
-      ethereum_wallet: '0x'
-    }
-  end
-
-  let(:valid_session) { {} }
-
-  let(:valid_headers) do
-    {
-      'API-Key' => build(:api_key)
-    }
-  end
-
-  let(:invalid_headers) do
-    {
-      'API-Key' => '12345'
+      email: '0x'
     }
   end
 
   before do
-    request.headers.merge! valid_headers
+    allow(controller).to receive(:authorized).and_return(true)
   end
 
   describe 'GET #show' do
@@ -46,7 +40,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       params[:id] = account.managed_account_id
       params[:format] = :json
 
-      get :show, params: params, session: valid_session
+      get :show, params: params
       expect(response).to be_successful
     end
   end
@@ -57,14 +51,14 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         expect do
           params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
 
-          post :create, params: params, session: valid_session
+          post :create, params: params
         end.to change(active_whitelabel_mission.managed_accounts, :count).by(1)
       end
 
       it 'returns created account' do
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).to have_http_status(:created)
       end
     end
@@ -73,7 +67,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       it 'renders an error' do
         params = build(:api_signed_request, { account: invalid_attributes }, api_v1_accounts_path, 'POST')
 
-        post :create, params: params, session: valid_session
+        post :create, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -86,7 +80,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
         params[:id] = account.managed_account_id
 
-        put :update, params: params, session: valid_session
+        put :update, params: params
         account.reload
         expect(account.first_name).to eq(valid_attributes[:first_name])
       end
@@ -95,7 +89,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
         params[:id] = account.managed_account_id
 
-        put :update, params: params, session: valid_session
+        put :update, params: params
         expect(response).to have_http_status(:ok)
       end
     end
@@ -105,7 +99,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         params = build(:api_signed_request, { account: invalid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
         params[:id] = account.managed_account_id
 
-        put :update, params: params, session: valid_session
+        put :update, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -118,7 +112,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       params[:account_id] = account.managed_account_id
       params[:format] = :json
 
-      get :token_balances, params: params, session: valid_session
+      get :token_balances, params: params
       expect(response).to be_successful
     end
   end

@@ -23,7 +23,7 @@ describe('cardano trezor utils #transferAdaCoins', () => {
     },
     'token': {
       'id'                : 1,
-      'coin_type'         : 'ada',
+      '_token_type'         : 'ada',
       'blockchain_network': 'cardano_testnet',
       'contract_address'  : null
     }

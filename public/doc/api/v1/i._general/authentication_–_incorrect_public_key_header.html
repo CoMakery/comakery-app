@@ -125,11 +125,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 12345</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=9347b1dce236f0730cdf2ad48787d3c4&amp;body[timestamp]=1598448490&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=0mLsENml%2Bja3ZAyNiQl4%2BM4YKoyA3QmeFCniesYVm3OAOQm%2BgcEEiWPjhWpO0VV3a8mGSIBJFKKa%2FX%2BPE%2BRlCQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=17c19e988181fcfc5078263927af15d3&amp;body[timestamp]=1601926095&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ETAb6tUnvGA41zM500pU7HDTruznl76z0W4XmWCgAHRT5uhaSPUH14fAiKMY6LNS4fS6%2Fqiw7olSoNSPTlptCQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;9347b1dce236f0730cdf2ad48787d3c4&quot;, &quot;timestamp&quot;=&gt;&quot;1598448490&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;0mLsENml+ja3ZAyNiQl4+M4YKoyA3QmeFCniesYVm3OAOQm+gcEEiWPjhWpO0VV3a8mGSIBJFKKa/X+PE+RlCQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;17c19e988181fcfc5078263927af15d3&quot;, &quot;timestamp&quot;=&gt;&quot;1601926095&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ETAb6tUnvGA41zM500pU7HDTruznl76z0W4XmWCgAHRT5uhaSPUH14fAiKMY6LNS4fS6/qiw7olSoNSPTlptCQ==&quot;}</pre>
 
 
 
@@ -139,7 +139,7 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;authentication&quot;: &quot;Invalid API key&quot;
+    &quot;authentication&quot;: &quot;Missing an authorization&quot;
   }
 }</pre>
       </div>

@@ -8,7 +8,7 @@ describe ProjectDecorator do
   describe '#description_html' do
     let(:project) do
       create(:project,
-        description: 'Hi [google](http://www.google.com)')
+             description: 'Hi [google](http://www.google.com)')
         .decorate
     end
 
@@ -20,7 +20,7 @@ describe ProjectDecorator do
   describe '#description_text_truncated' do
     let(:project) do
       create(:project,
-        description: '[Hola](http://google.com) ' + 'a' * 1000)
+             description: '[Hola](http://google.com) ' + 'a' * 1000)
         .decorate
     end
 
@@ -48,44 +48,6 @@ describe ProjectDecorator do
     it 'can use a length longer than the string length' do
       project = create(:project, description: 'hola').decorate
       expect(project.description_text_truncated(100)).to eq('hola')
-    end
-  end
-
-  describe 'with ethereum contract' do
-    let(:project) do
-      build(
-        :project,
-        token: create(
-          :token,
-          ethereum_contract_address: '0xa234567890b234567890a234567890b234567890',
-          symbol: 'TST',
-          decimal_places: 2
-        )
-      ).decorate
-    end
-
-    specify do
-      expect(project.ethereum_contract_explorer_url)
-        .to include("#{Rails.application.config.ethereum_explorer_site}/token/#{project.token.ethereum_contract_address}")
-    end
-  end
-
-  describe 'with contract_address' do
-    let(:project) do
-      build(
-        :project,
-        token: create(
-          :token,
-          coin_type: 'qrc20',
-          blockchain_network: 'qtum_testnet',
-          contract_address: 'a234567890b234567890a234567890b234567890'
-        )
-      ).decorate
-    end
-
-    specify do
-      expect(project.ethereum_contract_explorer_url)
-        .to include(UtilitiesService.get_contract_url(project.token.blockchain_network, project.token.contract_address))
     end
   end
 
@@ -161,18 +123,7 @@ describe ProjectDecorator do
       create(:award, award_type: award_type, quantity: 1000, amount: 1337, issuer: project.account, account: create(:account))
     end
 
-    specify { expect(project.total_awarded_pretty).to eq('1,337,000') }
-  end
-
-  describe '#total_awards_outstanding' do
-    specify do
-      expect(project)
-        .to receive(:total_awards_outstanding)
-        .and_return(1_234_567)
-
-      expect(project.total_awards_outstanding_pretty)
-        .to eq('1,234,567')
-    end
+    specify { expect(project.total_awarded_pretty).to eq('1,337,000.00000000') }
   end
 
   describe '#total_awarded' do
@@ -182,7 +133,7 @@ describe ProjectDecorator do
         .and_return(1_234_567)
 
       expect(project.total_awarded_pretty)
-        .to eq('1,234,567')
+        .to eq('1,234,567.00000000')
     end
   end
 
@@ -191,7 +142,7 @@ describe ProjectDecorator do
       account = create(:account)
       create(:award, award_type: award_type, amount: 1337, account: account)
       expect(project.total_awarded_to_user(account))
-        .to eq('1,337')
+        .to eq('1,337.00000000')
     end
   end
 
@@ -218,7 +169,7 @@ describe ProjectDecorator do
     let!(:award_type) { create(:award_type, project: project, state: 'public') }
     let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
     let!(:project_wo_image) { create(:project) }
-    let!(:project_comakery_token) { create(:project, token: create(:token, coin_type: :comakery)) }
+    let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
     it 'includes required data for project header component' do
       props = project.decorate.header_props
@@ -293,7 +244,7 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_stacked_chart' do
-    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
 
     before do
       create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))
@@ -314,7 +265,7 @@ describe ProjectDecorator do
   end
 
   describe 'transfers_donut_chart' do
-    let!(:project) { create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :comakery)) }
+    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
 
     before do
       create(:award, amount: 1, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project))

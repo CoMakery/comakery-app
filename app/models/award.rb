@@ -3,8 +3,6 @@ require 'bigdecimal'
 class Award < ApplicationRecord
   paginates_per 50
 
-  include EthereumAddressable
-  include QtumTransactionAddressable
   include BlockchainTransactable
 
   EXPERIENCE_LEVELS = {
@@ -24,12 +22,16 @@ class Award < ApplicationRecord
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
   belongs_to :award_type, touch: true
-  belongs_to :transfer_type, required: true
+  belongs_to :transfer_type, optional: false
   belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty
+  # rubocop:todo Rails/InverseOf
   belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id', counter_cache: :assignments_count, touch: true
-  has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
+  # rubocop:enable Rails/InverseOf
+  # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id' # rubocop:todo Rails/InverseOf
+  # rubocop:enable Rails/HasManyOrHasOneDependent
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
@@ -39,8 +41,6 @@ class Award < ApplicationRecord
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
-  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
-  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :name, length: { maximum: 100 }
   validates :why, length: { maximum: 500 }
@@ -49,9 +49,9 @@ class Award < ApplicationRecord
   validates :requirements, length: { maximum: 1000 }
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
-  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
+  validates :proof_link, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
   validates :submission_url, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
-  validates :submission_url, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { submission_url.present? }
+  validates :submission_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { submission_url.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
   validates :account, presence: true, if: -> { status == 'accepted' && email.blank? }
   validates :expires_in_days, presence: true, numericality: { greater_than: 0 }
@@ -80,6 +80,9 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
+  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }).having('count(wallets) > 0') }
+  scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
+
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
@@ -99,8 +102,12 @@ class Award < ApplicationRecord
     end
   }
 
-  enum status: %i[ready started submitted accepted rejected paid cancelled invite_ready]
-  enum source: %i[earned bought mint burn]
+  enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
+  enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }
+
+  def self.ransackable_scopes(_ = nil)
+    %i[transfer_ready transfer_blocked_by_wallet]
+  end
 
   def self.total_awarded
     completed.sum(:total_amount)
@@ -111,9 +118,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.token.ethereum_enabled && project.token.coin_type_on_ethereum? &&
-      account&.ethereum_wallet.present? &&
-      ethereum_transaction_address.blank?
+    account.address_for_blockchain(project.token._blockchain)
   end
 
   def self_issued?
@@ -121,8 +126,8 @@ class Award < ApplicationRecord
   end
 
   def amount_to_send
-    if project.decimal_places_value.to_i.positive?
-      (total_amount * project.decimal_places_value.to_i).to_i
+    if project.token
+      project.token&.to_base_unit(total_amount)&.to_i
     else
       total_amount.to_i
     end
@@ -154,6 +159,7 @@ class Award < ApplicationRecord
 
   def send_award_notifications
     return unless channel
+
     if team.discord?
       discord_client.send_message self
     else
@@ -174,7 +180,7 @@ class Award < ApplicationRecord
   end
 
   def discord?
-    team && team.discord?
+    team&.discord?
   end
 
   def completed?
@@ -276,8 +282,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    blockchain_name = Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
-    blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
+    account&.address_for_blockchain(token&._blockchain)
   end
 
   def needs_wallet?
@@ -313,11 +318,11 @@ class Award < ApplicationRecord
     success = receipt['status']
     status = success ? :paid : :accepted
 
-    update!(ethereum_transaction_success: success, status: status)
+    update!(transaction_success: success, status: status)
   end
 
   def handle_tx_error(error)
-    update!(ethereum_transaction_error: error, status: :accepted)
+    update!(transaction_error: error, status: :accepted)
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true
@@ -336,12 +341,10 @@ class Award < ApplicationRecord
       self.status = 'invite_ready'
     end
 
-    def total_amount_fits_into_project_budget
+    def total_amount_fits_into_project_budget # rubocop:todo Metrics/CyclomaticComplexity
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
 
-      if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
-        errors[:base] << "Sorry, you can't exceed the project's budget"
-      end
+      errors[:base] << "Sorry, you can't exceed the project's budget" if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
     end
 
     def abort_destroy
@@ -352,15 +355,11 @@ class Award < ApplicationRecord
     end
 
     def contributor_doesnt_have_too_many_started_tasks
-      if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
-        errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks")
-      end
+      errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks") if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
     end
 
     def contributor_doesnt_reach_maximum_assignments
-      if account && reached_maximum_assignments_for?(account)
-        errors.add(:base, 'Sorry, you already did the task maximum times allowed')
-      end
+      errors.add(:base, 'Sorry, you already did the task maximum times allowed') if account && reached_maximum_assignments_for?(account)
     end
 
     def update_account_experience

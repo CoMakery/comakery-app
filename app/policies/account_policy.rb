@@ -9,6 +9,7 @@ class AccountPolicy < ApplicationPolicy
 
     def resolve
       return Account.none unless @scope && @account
+
       @scope.accounts
     end
   end

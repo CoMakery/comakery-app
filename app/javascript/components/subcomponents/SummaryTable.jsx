@@ -15,7 +15,6 @@ export default class SummaryTable extends React.Component {
                   <th className="small-4">Project</th>
                   <th className="small-1">Token</th>
                   <th className="small-2">Total Awarded</th>
-                  <th className="small-5">Token Contract Address</th>
                 </tr>
                 {this.props.projects.map(project =>
                   <tr className="award-row" key={project.id}>
@@ -29,13 +28,6 @@ export default class SummaryTable extends React.Component {
                     </td>
                     <td className="small-2">
                       {project.totalAwarded}
-                    </td>
-                    <td className="small-5">
-                      {project.token.ethereumContractAddress
-                        ? <a href={project.ethereumContractExplorerUrl}>
-                          {project.token.ethereumContractAddress}
-                        </a>
-                        : 'pending'}
                     </td>
                   </tr>
                 )}

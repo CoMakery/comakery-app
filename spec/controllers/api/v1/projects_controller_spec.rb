@@ -1,25 +1,20 @@
 require 'rails_helper'
+require 'controllers/api/v1/concerns/requires_an_authorization_spec'
+require 'controllers/api/v1/concerns/requires_signature_spec'
+require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
+require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
 RSpec.describe Api::V1::ProjectsController, type: :controller do
+  it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_whitelabel_mission'
+  it_behaves_like 'authorizable_by_mission_key'
+
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
-  let(:valid_session) { {} }
-
-  let(:valid_headers) do
-    {
-      'API-Key' => build(:api_key)
-    }
-  end
-
-  let(:invalid_headers) do
-    {
-      'API-Key' => '12345'
-    }
-  end
-
   before do
-    request.headers.merge! valid_headers
+    allow(controller).to receive(:authorized).and_return(true)
   end
 
   describe 'GET #index' do
@@ -27,7 +22,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       params = build(:api_signed_request, '', api_v1_projects_path, 'GET')
       params[:format] = :json
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
     end
 
@@ -36,7 +31,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       params[:format] = :json
       params[:page] = 9999
 
-      get :index, params: params, session: valid_session
+      get :index, params: params
       expect(response).to be_successful
       expect(assigns[:projects]).to eq([])
     end
@@ -48,7 +43,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       params[:id] = project.to_param
       params[:format] = :json
 
-      get :show, params: params, session: valid_session
+      get :show, params: params
       expect(response).to be_successful
     end
   end

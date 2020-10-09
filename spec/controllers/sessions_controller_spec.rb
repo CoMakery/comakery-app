@@ -115,15 +115,15 @@ describe SessionsController do
 
     it 'redirects to new_session_path with error when email is missing from discord oauth' do
       auth_hash['provider'] = 'discord'
-        auth_hash['info']['email'] = nil
+      auth_hash['info']['email'] = nil
 
-        request.env['omniauth.auth'] = auth_hash
-        post :create
+      request.env['omniauth.auth'] = auth_hash
+      post :create
 
-        assert_response :redirect
-        assert_redirected_to new_session_path
-        expect(flash[:error]).to eq('Please use Discord account with a valid email address')
-        expect(session[:account_id]).to be_nil
+      assert_response :redirect
+      assert_redirected_to new_session_path
+      expect(flash[:error]).to eq('Please use Discord account with a valid email address')
+      expect(session[:account_id]).to be_nil
     end
 
     it 'redirects to my_project_path if user already signed in' do
@@ -146,14 +146,14 @@ describe SessionsController do
     let!(:account) { create(:account, email: 'user@example.com', password: '12345678') }
     let!(:account1) { create(:account, email: 'user1@example.com', password: '12345678', email_confirm_token: '1234') }
     let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
-    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
     it 'allows to login with managed account on according whitelabel instance' do
       active_whitelabel_mission = create(:active_whitelabel_mission)
       account = create(:account, managed_mission: active_whitelabel_mission, password: '12345678')
 
       post :sign_in, params: { email: account.email, password: '12345678' }
-      expect(response).not_to redirect_to new_session_path
+      expect(response).to redirect_to projects_path
     end
 
     it 'doesnt allow to login with managed account on a different whitelabel instance' do
@@ -207,19 +207,21 @@ describe SessionsController do
       expect(response).to redirect_to my_tasks_path
     end
 
-    it 'notice to update ethereum_wallet' do
-      account.update new_award_notice: true, ethereum_wallet: nil
+    it 'notice to update wallet' do
+      account.update new_award_notice: true
+      account.wallets.delete_all
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'
+      expect(flash[:notice]).to include 'Congratulations, you just claimed your award! Be sure to enter your'
       expect(response).to redirect_to my_tasks_path
     end
 
     it 'notice new award' do
-      account.update new_award_notice: true, ethereum_wallet: '0x' + 'a' * 40
+      account.update new_award_notice: true
+      create(:wallet, account: account, address: '0x' + 'a' * 40, _blockchain: project.token._blockchain)
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
+      expect(flash[:notice].include?('Congratulations, you just claimed your award! Your')).to eq true
       expect(response).to redirect_to my_tasks_path
     end
 
@@ -227,106 +229,6 @@ describe SessionsController do
       login(account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(response).to redirect_to my_project_path
-    end
-
-    context 'on Qtum network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'qrc20')) }
-
-      it 'notice to update qtm_wallet' do
-        account.update new_award_notice: true
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to my_tasks_path
-      end
-
-      it 'notice new award' do
-        account.update new_award_notice: true, qtum_wallet: 'Q' + 'a' * 33
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to eq true
-        expect(response).to redirect_to my_tasks_path
-      end
-    end
-
-    context 'on Cardano network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'ada')) }
-
-      it 'notice to update cardano_wallet' do
-        account.update new_award_notice: true
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Cardano Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to my_tasks_path
-      end
-
-      it 'notice new award' do
-        account.update new_award_notice: true, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Cardano address is')).to eq true
-        expect(response).to redirect_to my_tasks_path
-      end
-    end
-
-    context 'on Bitcoin network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'btc')) }
-
-      it 'notice to update bitcoin_wallet' do
-        account.update new_award_notice: true
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Bitcoin Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to my_tasks_path
-      end
-
-      it 'notice new award' do
-        account.update new_award_notice: true, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to eq true
-        expect(response).to redirect_to my_tasks_path
-      end
-    end
-
-    context 'on EOS network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'eos')) }
-
-      it 'notice to update eos_wallet' do
-        account.update new_award_notice: true
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your EOS account name on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to my_tasks_path
-      end
-
-      it 'notice new award' do
-        account.update new_award_notice: true, eos_wallet: 'aaatestnet11'
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to eq true
-        expect(response).to redirect_to my_tasks_path
-      end
-    end
-
-    context 'on Tezos network' do
-      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'xtz')) }
-
-      it 'notice to update tezos_wallet' do
-        account.update new_award_notice: true
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Tezos Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to my_tasks_path
-      end
-
-      it 'notice new award' do
-        account.update new_award_notice: true, tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9'
-        create(:award, award_type: create(:award_type, project: project2), account: account)
-        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Tezos address is')).to eq true
-        expect(response).to redirect_to my_tasks_path
-      end
     end
   end
 end

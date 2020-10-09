@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://testnet.qtum.info/api/contract/8cfe9e9893e4386645eae8107cd53aaccf96b7fe
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Mon, 21 Sep 2020 19:41:21 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d64875e4adad399467e507a9107e124641600717280; expires=Wed, 21-Oct-20
+        19:41:20 GMT; path=/; domain=.qtum.info; HttpOnly; SameSite=Lax
+      Vary:
+      - Origin
+      Rate-Limit-Remaining:
+      - '599'
+      Rate-Limit-Reset:
+      - '1600717881'
+      Rate-Limit-Total:
+      - '600'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 0553c86b8b0000ee3b9c3c0200000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5d664358d89fee3b-CDG
+    body:
+      encoding: ASCII-8BIT
+      string: "<h2>404 Not Found</h2>"
+    http_version: null
+  recorded_at: Mon, 21 Sep 2020 19:41:21 GMT
+recorded_with: VCR 5.1.0

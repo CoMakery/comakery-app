@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe Account do
+  it { is_expected.to have_many(:wallets) }
+  it { is_expected.to have_many(:balances).through(:wallets) }
+
   subject(:account) { create :account, password: '12345678' }
 
   before do
@@ -11,10 +14,10 @@ describe Account do
     describe 'urls' do
       let!(:account) do
         create :account,
-          linkedin_url: 'https://www.linkedin.com/',
-          github_url: 'https://github.com/',
-          dribble_url: 'https://dribbble.com/',
-          behance_url: 'https://www.behance.net/'
+               linkedin_url: 'https://www.linkedin.com/',
+               github_url: 'https://github.com/',
+               dribble_url: 'https://dribbble.com/',
+               behance_url: 'https://www.behance.net/'
       end
 
       it 'validates urls' do
@@ -100,93 +103,6 @@ describe Account do
 
     it 'requires many attributes' do
       expect(described_class.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
-    end
-
-    it 'requires #ethereum_wallet to be a valid ethereum address' do
-      account.update(ethereum_wallet: nil)
-      expect(account.ethereum_wallet).to be_blank
-      expect(account).to be_valid
-
-      expect(account.tap { |a| a.update(ethereum_wallet: 'foo') }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap { |a| a.update(ethereum_wallet: '0x') }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 39}") }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 41}") }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'g' * 40}") }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-
-      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 40}") }).to be_valid
-      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'A' * 40}") }).to be_valid
-    end
-
-    it 'requires #qtum_wallet to be a valid qtum address' do
-      expect(account.qtum_wallet).to be_blank
-      expect(account).to be_valid
-
-      expect(account.tap { |a| a.update(qtum_wallet: 'foo') }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
-      expect(account.tap { |a| a.update(qtum_wallet: '0x') }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
-      expect(account.tap { |a| a.update(qtum_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
-      expect(account.tap { |a| a.update(qtum_wallet: "Q#{'a' * 34}") }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
-      expect(account.tap { |a| a.update(qtum_wallet: "0x#{'g' * 32}") }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
-
-      expect(account.tap { |a| a.update(qtum_wallet: "q#{'a' * 33}") }).to be_valid
-      expect(account.tap { |a| a.update(qtum_wallet: "Q#{'m' * 33}") }).to be_valid
-    end
-
-    it 'requires #cardano_wallet to be a valid cardano address' do
-      expect(account.cardano_wallet).to be_blank
-      expect(account).to be_valid
-      error_message = "Cardano wallet should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters"
-
-      expect(account.tap { |a| a.update(cardano_wallet: 'foo') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(cardano_wallet: '0x') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(cardano_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(cardano_wallet: '37btjrVyb4KFNB81QswXHLkY39qp9WKocRpSuHk6BJJFewbS6hJxabQiMJyr7iAhb9wFKZH4U2vEbCfGpEW5TbpYwspeREeyfJSj3JqVF8sQRudC6q') }).to be_valid
-    end
-
-    it 'requires #bitcoin_wallet to be a valid bitcoin address' do
-      expect(account.bitcoin_wallet).to be_blank
-      expect(account).to be_valid
-      error_message = 'Bitcoin wallet should start with either 1 or 3, make sure the length is between 26 and 35 characters'
-
-      expect(account.tap { |a| a.update(bitcoin_wallet: 'foo') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(bitcoin_wallet: '0x') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(bitcoin_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(bitcoin_wallet: '2N3g7srauQ8HYCEXrTMiMkm43Hx9pSopmHU') }).to be_valid
-    end
-
-    it 'requires #eos_wallet to be a valid EOS account name' do
-      expect(account.eos_wallet).to be_blank
-      expect(account).to be_valid
-      error_message = 'Eos wallet a-z,1-5 are allowed only, the length is 12 characters'
-
-      expect(account.tap { |a| a.update(eos_wallet: 'foo') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(eos_wallet: '0x') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(eos_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(eos_wallet: ('a' * 12).to_s) }).to be_valid
-    end
-
-    it 'requires #tezos_wallet to be a valid tezos address' do
-      expect(account.tezos_wallet).to be_blank
-      expect(account).to be_valid
-      error_message = "Tezos wallet should start with 'tz1', followed by 33 characters"
-
-      expect(account.tap { |a| a.update(tezos_wallet: 'foo') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(tezos_wallet: '0x') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(tezos_wallet: "tz1#{'a' * 32}") }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9') }).to be_valid
-    end
-
-    it 'requires #constellation_wallet to be a valid constellation address' do
-      expect(account.constellation_wallet).to be_blank
-      expect(account).to be_valid
-      error_message = "Constellation wallet should start with 'DAG', followed by 37 characters"
-      error_message_checksum = 'Constellation wallet should include valid checksum'
-
-      expect(account.tap { |a| a.update(constellation_wallet: 'foo') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(constellation_wallet: '0x') }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(constellation_wallet: "DAG#{'a' * 36}") }.errors.full_messages).to eq([error_message])
-      expect(account.tap { |a| a.update(constellation_wallet: 'DAG8PU6Np9zrCfNEcq5bnEco5NdYKtcKgTDnZYwp') }.errors.full_messages).to eq([error_message_checksum])
-      expect(account.tap { |a| a.update(constellation_wallet: "DAG0#{'a' * 36}") }).to be_valid
-      expect(account.tap { |a| a.update(constellation_wallet: 'DAG8PU6Np9zrCfNEcq5bnEco6NdYKtcKgTDnZYwp') }).to be_valid
     end
   end
 
@@ -730,7 +646,7 @@ describe Account do
   it 'awards_csv' do
     award = create(:award, account: account)
     award = award.decorate
-    expect(CSV.parse(account.awards_csv, col_sep: "\t", encoding: 'utf-16le')).to eq([["\uFEFFProject", 'Award Type', 'Total Amount', 'Issuer', 'Date'], ['Uber for Cats', 'Contribution', '50', award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]].map { |row| row.map { |cell| cell.encode 'utf-16le' } })
+    expect(CSV.parse(account.awards_csv, col_sep: "\t", encoding: 'utf-16le')).to eq([["\uFEFFProject", 'Award Type', 'Total Amount', 'Issuer', 'Date'], ['Uber for Cats', 'Contribution', '50.00000000', award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]].map { |row| row.map { |cell| cell.encode 'utf-16le' } })
   end
 
   describe 'whitelabel_interested_projects' do
@@ -757,7 +673,7 @@ describe Account do
     end
 
     let!(:non_whitelabel_uninterested_project) do
-      project = create(:project, title: 'Non Whitelabel Uninterested Project')
+      project = create(:project, title: 'Non Whitelabel Uninterested Project') # rubocop:todo Lint/UselessAssignment
     end
 
     it 'shows just the non-whitelabel interested task with no whitelabel' do

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AwardTypesController, type: :controller do
   let(:issuer) { create(:authentication) }
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
   let(:specialty) { create(:specialty) }
 
   let(:valid_attributes) do
@@ -90,15 +90,15 @@ RSpec.describe AwardTypesController, type: :controller do
 
       it 'updates the requested award_type' do
         award_type = AwardType.create! valid_attributes
-          post :update, params: {
-            id: award_type.to_param,
-            project_id: project.to_param,
-            batch: new_attributes
-          }
-          expect(response.status).to eq(200)
-          expect(response.media_type).to eq('application/json')
-          expect(JSON.parse(response.body)['message']).to eq('Batch updated')
-          expect(JSON.parse(response.body)['id']).to eq(project.award_types.last.id)
+        post :update, params: {
+          id: award_type.to_param,
+          project_id: project.to_param,
+          batch: new_attributes
+        }
+        expect(response.status).to eq(200)
+        expect(response.media_type).to eq('application/json')
+        expect(JSON.parse(response.body)['message']).to eq('Batch updated')
+        expect(JSON.parse(response.body)['id']).to eq(project.award_types.last.id)
         award_type.reload
         expect(award_type.name).to eq('new name')
       end

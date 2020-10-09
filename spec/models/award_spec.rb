@@ -53,6 +53,56 @@ describe Award do
     end
   end
 
+  describe 'transfer_ready' do
+    context 'when award is in accepted state' do
+      let!(:award) { create(:award, status: :accepted) }
+
+      context 'and award account has a wallet with matching blockchain' do
+        let!(:wallet) { create(:wallet, account: award.account, _blockchain: award.token._blockchain, address: build(:bitcoin_address_1)) }
+
+        subject { described_class.transfer_ready(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).to include(award) }
+      end
+
+      context 'and award account doesnt have a wallet with matching blockchain' do
+        subject { described_class.transfer_ready(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).not_to include(award) }
+      end
+    end
+
+    context 'when award is not in accepted state' do
+      let(:award) { create(:award, status: :started) }
+
+      subject { described_class.transfer_ready(award.token._blockchain_before_type_cast).group('awards.id') }
+      specify { expect(subject).not_to include(award) }
+    end
+  end
+
+  describe 'transfer_blocked_by_wallet' do
+    context 'when award is in accepted state' do
+      let!(:award) { create(:award, status: :accepted) }
+
+      context 'and award account has a wallet with matching blockchain' do
+        let!(:wallet) { create(:wallet, account: award.account, _blockchain: award.token._blockchain, address: build(:bitcoin_address_1)) }
+
+        subject { described_class.transfer_blocked_by_wallet(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).not_to include(award) }
+      end
+
+      context 'and award account doesnt have a wallet with matching blockchain' do
+        subject { described_class.transfer_blocked_by_wallet(award.token._blockchain_before_type_cast).group('awards.id') }
+        specify { expect(subject).to include(award) }
+      end
+    end
+
+    context 'when award is not in accepted state' do
+      let(:award) { create(:award, status: :started) }
+
+      subject { described_class.transfer_blocked_by_wallet(award.token._blockchain_before_type_cast).group('awards.id') }
+      specify { expect(subject).not_to include(award) }
+    end
+  end
+
   describe 'scopes' do
     before do
       described_class.statuses.each_key { |status| (create :award).update(status: status) }
@@ -389,7 +439,7 @@ describe Award do
       [0, 2, 3, 10, 10000].each do |level|
         a = create(:award)
         a.experience_level = level
-        if Award::EXPERIENCE_LEVELS.values.include?(level)
+        if Award::EXPERIENCE_LEVELS.value?(level)
           expect(a).to be_valid
         else
           expect(a).not_to be_valid
@@ -444,103 +494,6 @@ describe Award do
         expect(award_w_quantity.total_amount).to eq(200)
       end
     end
-
-    describe '#ethereum_transaction_address' do
-      let(:project) { create(:project, token: create(:token, coin_type: 'erc20')) }
-      let(:award_type) { create(:award_type, project: project) }
-      let(:award) { create(:award, award_type: award_type) }
-      let(:address) { '0x' + 'a' * 64 }
-
-      it 'validates with a valid ethereum transaction address' do
-        expect(build(:award, ethereum_transaction_address: nil)).to be_valid
-        expect(build(:award, ethereum_transaction_address: "0x#{'a' * 64}")).to be_valid
-        expect(build(:award, ethereum_transaction_address: "0x#{'A' * 64}")).to be_valid
-      end
-
-      it 'does not validate with an invalid ethereum transaction address' do
-        expected_error_message = "Ethereum transaction address should start with '0x', followed by a 64 character ethereum address"
-        expect(award.tap { |o| o.ethereum_transaction_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = '0x' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'a' * 63}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'a' * 65}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'g' * 64}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-      end
-
-      it { expect(award.ethereum_transaction_address).to eq(nil) }
-
-      it 'can be set' do
-        award.ethereum_transaction_address = address
-        award.save!
-        award.reload
-        expect(award.ethereum_transaction_address).to eq(address)
-      end
-
-      it 'once set cannot be set unset' do
-        award.ethereum_transaction_address = address
-        award.save!
-        award.ethereum_transaction_address = nil
-        expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
-          /Ethereum transaction address cannot be changed after it has been set/
-      end
-
-      it 'once set it cannot be set to another value' do
-        award.ethereum_transaction_address = address
-        award.save!
-        award.ethereum_transaction_address = '0x' + 'b' * 64
-        expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
-          /Ethereum transaction address cannot be changed after it has been set/
-      end
-    end
-
-    describe '#ethereum_transaction_address on qtum network' do
-      let(:project) { create(:project, token: create(:token, coin_type: 'qrc20')) }
-      let(:award_type) { create(:award_type, project: project) }
-      let(:award) { create(:award, award_type: award_type) }
-      let(:address) { 'a' * 64 }
-
-      it 'validates with a valid ethereum transaction address' do
-        expect(build(:award, ethereum_transaction_address: nil)).to be_valid
-        expect(build(:award, ethereum_transaction_address: ('a' * 64).to_s)).to be_valid
-        expect(build(:award, ethereum_transaction_address: ('A' * 64).to_s)).to be_valid
-      end
-
-      it 'does not validate with an invalid ethereum transaction address' do
-        expected_error_message = "Ethereum transaction address should have 64 characters, should not start with '0x'"
-        expect(award.tap { |o| o.ethereum_transaction_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'a' * 62}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = ('a' * 65).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(award.tap { |o| o.ethereum_transaction_address = ('g' * 64).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-      end
-
-      it { expect(award.ethereum_transaction_address).to eq(nil) }
-
-      it 'can be set' do
-        award.ethereum_transaction_address = address
-        award.save!
-        award.reload
-        expect(award.ethereum_transaction_address).to eq(address)
-      end
-
-      it 'once set cannot be set unset' do
-        award.ethereum_transaction_address = address
-        award.save!
-        award.ethereum_transaction_address = nil
-        expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
-          /Ethereum transaction address cannot be changed after it has been set/
-      end
-
-      it 'once set it cannot be set to another value' do
-        award.ethereum_transaction_address = address
-        award.save!
-        award.ethereum_transaction_address = 'b' * 64
-        expect(award).not_to be_valid
-        expect(award.errors.full_messages.to_sentence).to match \
-          /Ethereum transaction address cannot be changed after it has been set/
-      end
-    end
   end
 
   describe '.matching_experience_for?(account)' do
@@ -589,9 +542,9 @@ describe Award do
     end
 
     describe 'with project awards' do
-      let!(:project1) { create :project, token: create(:token, coin_type: 'erc20') }
+      let!(:project1) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
       let!(:project1_award_type) { (create :award_type, project: project1) }
-      let(:project2) { create :project, token: create(:token, coin_type: 'erc20') }
+      let(:project2) { create :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
       let!(:project2_award_type) { (create :award_type, project: project2) }
       let(:account) { create :account }
 
@@ -621,7 +574,7 @@ describe Award do
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
-    let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
+    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { (create :award_type, project: project) }
     let!(:award) { create :award, award_type: award_type, amount: 3, issuer: account, account: account }
     let!(:award1) { create :award, award_type: award_type, amount: 3, issuer: account, account: account1 }
@@ -633,14 +586,17 @@ describe Award do
       project.channels.create(team: team1, channel_id: 'general')
     end
 
-    it 'check for ethereum issue ready' do
-      expect(award.ethereum_issue_ready?).to be_falsey
+    describe 'ethereum issue ready' do
+      context 'when account wallet is not present' do
+        specify { expect(award.ethereum_issue_ready?).to be_falsey }
+      end
 
-      project.token.update ethereum_enabled: true
-      account.update ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423'
-
-      expect(award.reload.ethereum_issue_ready?).to be_truthy
+      context 'when account wallet is present' do
+        before { create(:wallet, account: account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: project.token._blockchain) }
+        specify { expect(award.ethereum_issue_ready?).to be_truthy }
+      end
     end
+
     it 'check self_issued award' do
       expect(award.self_issued?).to be_truthy
       expect(award1.self_issued?).to be_falsey
@@ -683,12 +639,12 @@ describe Award do
     end
   end
 
-  describe '#send_award_notifications' do
+  describe 'send_award_notifications' do
     let!(:team) { create :team }
     let!(:account) { create :account }
     let!(:authentication) { create :authentication, account: account }
     let!(:discord_team) { create :team, provider: 'discord' }
-    let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
+    let!(:project) { create :project, account: account, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'channel_id' }
     let!(:account1) { create :account }
@@ -732,7 +688,7 @@ describe Award do
     end
   end
 
-  describe '.can_be_edited?' do
+  describe 'can_be_edited?' do
     let!(:award) { create(:award) }
     let!(:award_ready) { create(:award_ready) }
     let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
@@ -759,7 +715,7 @@ describe Award do
     end
   end
 
-  describe '.can_be_assigned?' do
+  describe 'can_be_assigned?' do
     it 'returns true if award is ready or invite_ready' do
       described_class.statuses.each_key do |status|
         award = create(:award, status: status)
@@ -773,7 +729,7 @@ describe Award do
     end
   end
 
-  describe '.cloned?' do
+  describe 'cloned?' do
     let!(:award) { create(:award_ready) }
     let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
 
@@ -786,7 +742,7 @@ describe Award do
     end
   end
 
-  describe '.any_clones?' do
+  describe 'any_clones?' do
     let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
     let!(:award) { create(:award_ready) }
 
@@ -803,7 +759,7 @@ describe Award do
     end
   end
 
-  describe '.cloneable?' do
+  describe 'cloneable?' do
     let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
     let!(:award) { create(:award_ready) }
 
@@ -816,7 +772,7 @@ describe Award do
     end
   end
 
-  describe '.should_be_cloned?' do
+  describe 'should_be_cloned?' do
     let!(:award_should_be_cloned) { create(:award_ready, number_of_assignments: 10) }
     let!(:award_has_been_cloned_already) { create(:award_ready, number_of_assignments: 2) }
     let!(:award_shouldnt_be_cloned_at_all) { create(:award_ready) }
@@ -835,7 +791,7 @@ describe Award do
     end
   end
 
-  describe '.can_be_cloned_for?(account)' do
+  describe 'can_be_cloned_for?(account)' do
     let(:award_ready) { create(:award_ready) }
     let(:award_account_started_max) { create(:award_ready) }
     let(:award_account_cloned_max) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
@@ -855,7 +811,7 @@ describe Award do
     end
   end
 
-  describe '.reached_maximum_assignments_for?(account)' do
+  describe 'reached_maximum_assignments_for?(account)' do
     let!(:award) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
     let!(:account) { create(:account) }
     let!(:account_reached_max) { create(:account) }
@@ -873,7 +829,7 @@ describe Award do
     end
   end
 
-  describe '.clone_on_assignment' do
+  describe 'clone_on_assignment' do
     let!(:award) { create(:award_ready) }
 
     it 'returns a new task duped from current one with correct releationships' do
@@ -885,7 +841,7 @@ describe Award do
     end
   end
 
-  describe '.possible_quantity' do
+  describe 'possible_quantity' do
     let!(:award_ready) { create(:award_ready) }
     let!(:award_ready_cloneable_2_times) { create(:award_ready, number_of_assignments: 2) }
     let!(:award_template) { create(:award_ready, number_of_assignments: 10) }
@@ -909,7 +865,7 @@ describe Award do
     end
   end
 
-  describe '.possible_total_amount' do
+  describe 'possible_total_amount' do
     let!(:award_ready) { create(:award_ready, amount: 1) }
     let!(:award_ready_cloneable_2_times) { create(:award_ready, amount: 1, number_of_assignments: 2) }
     let!(:award_template) { create(:award_ready, amount: 1, number_of_assignments: 10) }
@@ -988,75 +944,31 @@ describe Award do
     end
   end
 
-  describe '#recipient_address' do
-    let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, account: recipient, award_type: award_type }
+  describe 'recipient_address' do
+    let!(:award) { create :award, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
 
-    context 'on ethereum network' do
-      it 'returns the recipient address' do
-        expect(award.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
-      end
+    before do
+      create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
     end
 
-    context 'on bitcoin network' do
-      before do
-        award.account.bitcoin_wallet = 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
-        award.token.update coin_type: 'btc'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.recipient_address).to eq('msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps')
-      end
-    end
-
-    context 'on cardano network' do
-      before do
-        award.account.cardano_wallet = 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-        award.token.update coin_type: 'ada'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.recipient_address).to eq('Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp')
-      end
-    end
-
-    context 'on qtum network' do
-      before do
-        award.account.qtum_wallet = 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM'
-        award.token.update coin_type: 'qrc20'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.recipient_address).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
-      end
-    end
-
-    context 'on eos network' do
-      before do
-        award.account.eos_wallet = 'aaatestnet11'
-        award.token.update coin_type: 'eos'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.recipient_address).to eq('aaatestnet11')
-      end
+    it "returns recipient address on token's blockchain" do
+      expect(award.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
     end
   end
 
   describe 'needs_wallet?' do
-    let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award_w_recepient_address) { create :award, account: recipient, award_type: award_type }
-
-    it 'returns true if recipient_address blank' do
-      expect(create(:award).needs_wallet?).to be_truthy
+    context 'when recipient_address is blank' do
+      specify { expect(create(:award).needs_wallet?).to be_truthy }
     end
 
-    it 'returns false if recipient_address present' do
-      expect(award_w_recepient_address.needs_wallet?).to be_falsey
+    context 'when recipient_address is present' do
+      let!(:award) { create :award, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
+
+      before do
+        create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
+      end
+
+      specify { expect(award.needs_wallet?).to be_falsey }
     end
   end
 
@@ -1147,12 +1059,12 @@ describe Award do
     end
 
     it 'sets tx success and marks award as paid' do
-      expect(award_succeed.ethereum_transaction_success).to be_truthy
+      expect(award_succeed.transaction_success).to be_truthy
       expect(award_succeed.paid?).to be_truthy
     end
 
     it 'sets tx success and marks award as accepted' do
-      expect(award_failed.ethereum_transaction_success).to be_falsey
+      expect(award_failed.transaction_success).to be_falsey
       expect(award_failed.accepted?).to be_truthy
     end
   end
@@ -1166,7 +1078,7 @@ describe Award do
     end
 
     it 'sets tx error and marks award as accepted' do
-      expect(award_failed.ethereum_transaction_error).to eq('test error')
+      expect(award_failed.transaction_error).to eq('test error')
       expect(award_failed.accepted?).to be_truthy
     end
   end

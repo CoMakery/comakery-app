@@ -39,9 +39,7 @@ class Dashboard::TransfersController < ApplicationController
     def query
       @transfers_unfiltered = @project.awards.completed_or_cancelled
 
-      unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
-        @transfers_unfiltered = @transfers_unfiltered.not_cancelled
-      end
+      @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
 
       @q = @transfers_unfiltered.ransack(params[:q])
       @q.sorts = ['created_at desc'] if @q.sorts.empty?
@@ -52,7 +50,7 @@ class Dashboard::TransfersController < ApplicationController
       @page = (params[:page] || 1).to_i
       @transfers_all = query.result
                             .group('awards.id')
-                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification])
+                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets])
       @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
 

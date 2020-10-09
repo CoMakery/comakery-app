@@ -179,7 +179,7 @@ describe Project do
       end
 
       it 'can be changed if it was not present and project has completed awards' do
-        token1 = create(:token)
+        token1 = create(:token) # rubocop:todo Lint/UselessAssignment
         token2 = create(:token)
         project = create(:project)
         project.update(token: nil)
@@ -285,7 +285,9 @@ describe Project do
 
       it 'stores the hash of the latest CP license' do
         project.save
+        # rubocop:todo Rails/FilePath
         expect(project.reload.agreed_to_license_hash).to eq(Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) })))
+        # rubocop:enable Rails/FilePath
       end
 
       it 'doesnt update the hash if the terms are finalized' do
@@ -324,7 +326,9 @@ describe Project do
       it 'returns all award types with community_awardable? == true' do
         project = create(:project)
         community_award_type = create(:award_type, project: project, community_awardable: true)
+        # rubocop:todo Lint/UselessAssignment
         normal_award_type = create(:award_type, project: project, community_awardable: false)
+        # rubocop:enable Lint/UselessAssignment
 
         expect(project.community_award_types).to eq([community_award_type])
       end
@@ -515,7 +519,7 @@ describe Project do
 
   describe 'supports_transfer_rules?' do
     let(:project) { create :project }
-    let(:project_w_comakery_token) { create :project, token: create(:token, coin_type: :comakery) }
+    let(:project_w_comakery_token) { create :project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
 
     it 'returns true for projects with comakery token' do
       expect(project_w_comakery_token.supports_transfer_rules?).to be_truthy

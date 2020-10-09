@@ -21,11 +21,9 @@ describe('TokenIndex', () => {
       {
         'id'                     : 0,
         'name'                   : 'ERC-TEST',
-        'coinType'               : 'erc20',
-        'ethereumNetwork'        : 'main',
-        'blockchainNetwork'      : null,
-        'contractAddress'        : null,
-        'ethereumContractAddress': '0x00',
+        'TokenType'               : 'erc20',
+        'Blockchain'      : 'main',
+        'contractAddress': '0x00',
         'symbol'                 : 'ERCT',
         'decimalPlaces'          : 2,
         'logoUrl'                : '/ERCT.png'
@@ -33,11 +31,9 @@ describe('TokenIndex', () => {
       {
         'id'                     : 1,
         'name'                   : 'QRC-TEST',
-        'coinType'               : 'qrc20',
-        'ethereumNetwork'        : null,
-        'blockchainNetwork'      : 'test',
+        'TokenType'               : 'qrc20',
+        'Blockchain'      : 'test',
         'contractAddress'        : '0',
-        'ethereumContractAddress': null,
         'symbol'                 : 'QRCT',
         'decimalPlaces'          : 0,
         'logoUrl'                : '/QRCT.png'
@@ -59,11 +55,9 @@ describe('TokenIndex', () => {
       {
         'id'                     : 0,
         'name'                   : 'ERC-TEST',
-        'coinType'               : 'erc20',
-        'ethereumNetwork'        : 'main',
-        'blockchainNetwork'      : null,
-        'contractAddress'        : null,
-        'ethereumContractAddress': '0x00',
+        'TokenType'               : 'erc20',
+        'Blockchain'      : 'main',
+        'contractAddress': '0x00',
         'symbol'                 : 'ERCT',
         'decimalPlaces'          : 2,
         'logoUrl'                : '/ERCT.png'
@@ -71,11 +65,9 @@ describe('TokenIndex', () => {
       {
         'id'                     : 1,
         'name'                   : 'QRC-TEST',
-        'coinType'               : 'qrc20',
-        'ethereumNetwork'        : null,
-        'blockchainNetwork'      : 'test',
+        'TokenType'               : 'qrc20',
+        'Blockchain'      : 'test',
         'contractAddress'        : 0,
-        'ethereumContractAddress': null,
         'symbol'                 : 'QRCT',
         'decimalPlaces'          : 0,
         'logoUrl'                : '/QRCT.png'

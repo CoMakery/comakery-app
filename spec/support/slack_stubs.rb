@@ -22,7 +22,9 @@ module SlackStubs
     end
   end
 
+  # rubocop:todo Lint/UnusedMethodArgument
   def sb_slack_user(first_name: 'Bob', last_name: 'Johnson', team_id: 'T9999S99P', user_id: 'U9999UVMH')
+    # rubocop:enable Lint/UnusedMethodArgument
     slack_user(team_id: 'swarmbot', first_name: first_name, last_name: last_name, user_id: user_id)
   end
 

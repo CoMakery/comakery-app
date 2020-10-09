@@ -6,15 +6,6 @@ describe AccountsController do
 
   describe '#update' do
     before { login(account) }
-    it 'updates a valid ethereum address successfully' do
-      expect do
-        put :update, params: { account: { ethereum_wallet: "0x#{'a' * 40}" } }
-        expect(response.status).to eq(302)
-      end.to change { account.reload.ethereum_wallet }.to("0x#{'a' * 40}")
-
-      expect(response).to redirect_to account_url
-      expect(flash[:notice]).to eq('Your account details have been updated.')
-    end
 
     it 'set account to unconfirm status if change email' do
       put :update, params: { account: { email: 'another@test.st' } }
@@ -29,36 +20,8 @@ describe AccountsController do
     it 'send email to admin notice about underage' do
       account.update date_of_birth: '2010-01-01'
       put :update, params: { account: { date_of_birth: '01/01/1900' } }
-        expect(response).to redirect_to account_url
+      expect(response).to redirect_to account_url
       expect(flash[:notice]).to eq('Your account details have been updated.')
-    end
-
-    it 'renders errors for an invalid ethereum address' do
-      expect do
-        put :update, params: { account: { ethereum_wallet: 'not a valid ethereum address' } }
-        expect(response.status).to eq(200)
-      end.not_to change { account.reload.ethereum_wallet }
-
-      expect(flash[:error]).to eq("Ethereum wallet should start with '0x', followed by a 40 character ethereum address")
-      expect(assigns[:current_account]).to be
-    end
-
-    it 'renders errors for an invalid bitcoin address' do
-      expect do
-        put :update, params: { account: { bitcoin_wallet: 'not a valid bitcoin address' } }
-      end.not_to change { account.reload.bitcoin_wallet }
-
-      expect(flash[:error]).to eq('Bitcoin wallet should start with either 1 or 3, make sure the length is between 26 and 35 characters')
-      expect(assigns[:current_account]).to be
-    end
-
-    it 'renders errors for an invalid cardano address' do
-      expect do
-        put :update, params: { account: { cardano_wallet: 'not a valid bitcoin address' } }
-      end.not_to change { account.reload.cardano_wallet }
-
-      expect(flash[:error]).to eq("Cardano wallet should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters")
-      expect(assigns[:current_account]).to be
     end
   end
 
@@ -77,7 +40,7 @@ describe AccountsController do
 
   describe '#create' do
     it 'renders errors for invalid password' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           account: {
             email: 'user@test.st',
@@ -91,7 +54,7 @@ describe AccountsController do
     end
 
     it 'renders errors if email is blank' do
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           account: {
             email: '',
@@ -188,7 +151,7 @@ describe AccountsController do
 
     it 'renders errors if email has already been taken' do
       Account.create(email: 'user@test.st', password: '12345678')
-      expect do
+      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {
           account: {
             email: 'user@test.st',
@@ -316,7 +279,7 @@ describe AccountsController do
   describe '#show' do
     before do
       stub_token_symbol
-      project = create(:project, token: create(:token, ethereum_contract_address: '0x' + 'a' * 40))
+      project = create(:project, token: create(:token, contract_address: '0x' + 'a' * 40))
       award_type = create :award_type, project: project
       create :award, award_type: award_type, account: account
       login account

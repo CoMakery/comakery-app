@@ -33,7 +33,7 @@ class Comakery::Slack
     )
   end
 
-  def get_users
+  def get_users # rubocop:todo Naming/AccessorMethodName
     @client.users_list
   end
 

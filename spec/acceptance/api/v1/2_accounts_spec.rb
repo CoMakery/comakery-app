@@ -1,5 +1,3 @@
-# Rubocop gives false positives on empty example groups with rspec_api_documentation DSL
-
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
@@ -31,12 +29,6 @@ resource 'II. Accounts' do
       response_field :imageUrl, 'image url', type: :string
       response_field :country, 'country', type: :string
       response_field :dateOfBirth, 'date of birth', type: :string
-      response_field :ethereumWallet, 'ethereum wallet', type: :string
-      response_field :qtumWallet, 'qtum Wallet', type: :string
-      response_field :cardanoWallet, 'cardano wallet', type: :string
-      response_field :bitcoinWallet, 'bitcoin wallet', type: :string
-      response_field :eosWallet, 'eos wallet', type: :string
-      response_field :tezosWallet, 'tezos wallet', type: :string
       response_field :createdAt, 'account creation timestamp', type: :string
       response_field :updatedAt, 'account update timestamp', type: :string
       response_field :verificationState, 'result of latest AML/KYC verification (passed | failed | unknown)', type: :string, enum: %w[passed failed unknown]
@@ -67,12 +59,6 @@ resource 'II. Accounts' do
       parameter :image, 'image', type: :string
       parameter :country, 'counry', type: :string, required: true
       parameter :date_of_birth, 'date of birth', type: :string, required: true
-      parameter :ethereum_wallet, 'ethereum wallet', type: :string
-      parameter :qtum_wallet, 'qtum wallet', type: :string
-      parameter :cardano_wallet, 'cardano wallet', type: :string
-      parameter :bitcoin_wallet, 'bitcoin wallet', type: :string
-      parameter :eos_wallet, 'eos wallet', type: :string
-      parameter :tezos_wallet, 'tezos wallet', type: :string
     end
 
     with_options with_example: true do
@@ -88,8 +74,7 @@ resource 'II. Accounts' do
           last_name: 'Smith',
           nickname: "hunter-#{SecureRandom.hex(20)}",
           date_of_birth: '1990/01/01',
-          country: 'United States of America',
-          ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'
+          country: 'United States of America'
         }
       end
 
@@ -133,12 +118,6 @@ resource 'II. Accounts' do
       parameter :image, 'image', type: :string
       parameter :country, 'counry', type: :string
       parameter :date_of_birth, 'date of birth', type: :string
-      parameter :ethereum_wallet, 'ethereum wallet', type: :string
-      parameter :qtum_wallet, 'qtum wallet', type: :string
-      parameter :cardano_wallet, 'cardano wallet', type: :string
-      parameter :bitcoin_wallet, 'bitcoin wallet', type: :string
-      parameter :eos_wallet, 'eos wallet', type: :string
-      parameter :tezos_wallet, 'tezos wallet', type: :string
     end
 
     with_options with_example: true do
@@ -166,7 +145,7 @@ resource 'II. Accounts' do
       let!(:id) { account.managed_account_id }
       let!(:account_params) do
         {
-          ethereum_wallet: '0x'
+          email: '0x'
         }
       end
 
@@ -384,8 +363,8 @@ resource 'II. Accounts' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:token) { create(:token, coin_type: :comakery) }
-      let!(:token2) { create(:token, coin_type: :comakery) }
+      let!(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
+      let!(:token2) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
       let!(:account_token_record) { create(:account_token_record, account: account, token: token) }
       let!(:account_token_record2) { create(:account_token_record, account: account, token: token2) }
       let!(:award_type) { create(:award_type, project: create(:project, token: token)) }

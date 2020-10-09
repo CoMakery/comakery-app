@@ -11,6 +11,7 @@ class AuthenticationTeam < ApplicationRecord
 
   def channels
     return @channels if @channels
+
     if slack
       result = GetSlackChannels.call(authentication_team: self)
       @channels = result.channels

@@ -220,15 +220,7 @@ table th, table td {
               </tr>
               <tr>
                 <td>
-                    <span class="name">ethereumTransactionAddress</span>
-                </td>
-                <td>
-                  <span class="description">transfer ethereum transaction address</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">ethereumTransactionError</span>
+                    <span class="name">transactionError</span>
                 </td>
                 <td>
                   <span class="description">latest recieved transaction error (returned from DApp on unsuccessful transaction)</span>
@@ -267,18 +259,18 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/41/transfers/8?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F41%2Ftransfers%2F8&amp;body[method]=GET&amp;body[nonce]=270094d44bdf6569eb67ce914ba55fd4&amp;body[timestamp]=1598448496&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=xerZ%2B0eRZDjikjcm26NPbbyXzxgw8LoGsMDhJpVOgWpbVEsQ4JYVfb%2FKGAKjVmLxARidyj3TbjAYScm1GwnnCg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/41/transfers/8?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F41%2Ftransfers%2F8&amp;body[method]=GET&amp;body[nonce]=40b297e61d573ced0ac950b383ab35f0&amp;body[timestamp]=1601926107&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=gT4VNW5mjquBKwDpIbPMzCtisCnOnXhIdi1jUGDJ0Z21NszlQVwB3frG1dFjYUpyapka5ErV0VKlw4iUmxQyBQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/41/transfers/8&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;270094d44bdf6569eb67ce914ba55fd4&quot;, &quot;timestamp&quot;=&gt;&quot;1598448496&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;xerZ+0eRZDjikjcm26NPbbyXzxgw8LoGsMDhJpVOgWpbVEsQ4JYVfb/KGAKjVmLxARidyj3TbjAYScm1GwnnCg==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/41/transfers/8&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;40b297e61d573ced0ac950b383ab35f0&quot;, &quot;timestamp&quot;=&gt;&quot;1601926107&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;gT4VNW5mjquBKwDpIbPMzCtisCnOnXhIdi1jUGDJ0Z21NszlQVwB3frG1dFjYUpyapka5ErV0VKlw4iUmxQyBQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;d3cb7f191a195fdc8e391993106b5c55&quot;
-Last-Modified: Wed, 26 Aug 2020 13:28:16 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;0190d7e6efef591f39fd0d2d47691020&quot;
+Last-Modified: Mon, 05 Oct 2020 19:28:27 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -289,12 +281,11 @@ Last-Modified: Wed, 26 Aug 2020 13:28:16 GMT</pre>
   &quot;quantity&quot;: &quot;1.0&quot;,
   &quot;totalAmount&quot;: &quot;50.0&quot;,
   &quot;description&quot;: &quot;Investment&quot;,
-  &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
-  &quot;ethereumTransactionError&quot;: null,
+  &quot;transactionError&quot;: null,
   &quot;status&quot;: &quot;paid&quot;,
-  &quot;createdAt&quot;: &quot;2020-08-26T13:28:16.439Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-08-26T13:28:16.429Z&quot;,
-  &quot;accountId&quot;: &quot;77a6636a-0e31-4f79-aac5-6568c75cf9d7&quot;
+  &quot;createdAt&quot;: &quot;2020-10-05T19:28:27.470Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:27.462Z&quot;,
+  &quot;accountId&quot;: &quot;1b337606-5594-409a-9fea-3bdc5ebbbd63&quot;
 }</pre>
       </div>
     </div>

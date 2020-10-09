@@ -1,9 +1,9 @@
 class Comakery::Eth
   attr_reader :client
 
-  def initialize(network)
+  def initialize(host)
     @client = Ethereum::HttpClient.new(
-      "https://#{network.to_s == 'main' ? 'mainnet' : network}.infura.io/v3/#{ENV.fetch('INFURA_PROJECT_ID', '')}"
+      "https://#{host}/v3/#{ENV.fetch('INFURA_PROJECT_ID', '')}"
     )
   end
 

@@ -2,8 +2,8 @@ class Comakery::Eth::Tx
   attr_reader :eth
   attr_reader :hash
 
-  def initialize(network, hash)
-    @eth = Comakery::Eth.new(network)
+  def initialize(host, hash)
+    @eth = Comakery::Eth.new(host)
     @hash = hash
   end
 
@@ -58,11 +58,13 @@ class Comakery::Eth::Tx
     return false if from != source.downcase
     return false if to != destination.downcase
     return false if value != amount
+
     true
   end
 
-  def valid_block?(n)
+  def valid_block?(n) # rubocop:todo Naming/MethodParameterName
     return false if block_number <= n
+
     true
   end
 

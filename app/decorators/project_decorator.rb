@@ -19,10 +19,6 @@ class ProjectDecorator < Draper::Decorator
     helpers.strip_tags(description_html).truncate(max_length)
   end
 
-  def ethereum_contract_explorer_url
-    token&.decorate&.ethereum_contract_explorer_url
-  end
-
   def status_description
     if project.license_finalized?
       'These terms are finalized and legally binding.'
@@ -49,11 +45,6 @@ class ProjectDecorator < Draper::Decorator
 
   def exclusive_contributions_text
     project.exclusive_contributions ? 'are exclusive' : 'are not exclusive'
-  end
-
-  def total_awards_outstanding_pretty
-    # awards are validated as whole numbers; they are rounded
-    number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
   def total_awarded_pretty
@@ -95,7 +86,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def send_coins?
-    token&.coin_type? && %w[eth btc ada qtum eos xtz].include?(token&.coin_type)
+    token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
   def header_props
@@ -131,19 +122,13 @@ class ProjectDecorator < Draper::Decorator
   def team_top
     team = (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
 
-    if team.size < team_top_limit
-      team += interested.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size)
-    end
+    team += interested.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
 
     team
   end
 
   def team_size
     interested.size
-  end
-
-  def blockchain_name
-    Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
   end
 
   def step_for_amount_input
@@ -159,7 +144,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def transfers_chart_types
-    project.transfer_types.pluck(:name).map { |k| [k, 0] }.to_h
+    project.transfer_types.pluck(:name).index_with { |_k| 0 }
   end
 
   def transfers_chart_colors
@@ -170,6 +155,7 @@ class ProjectDecorator < Draper::Decorator
     project.transfer_types.map.with_index { |t, i| [t, Comakery::ChartColors.lookup(i)] }.to_h
   end
 
+  # rubocop:todo Metrics/CyclomaticComplexity
   def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty)
     chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(
@@ -182,6 +168,7 @@ class ProjectDecorator < Draper::Decorator
 
     chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| x[:i] }
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def transfers_stacked_chart_year(transfers)
     transfers_stacked_chart(
@@ -223,7 +210,7 @@ class ProjectDecorator < Draper::Decorator
     )
   end
 
-  def transfers_donut_chart(transfers)
+  def transfers_donut_chart(transfers) # rubocop:todo Metrics/CyclomaticComplexity
     chart = transfers.includes([:transfer_type]).group_by(&:transfer_type).map do |type, set|
       {
         name: type.name,
@@ -257,8 +244,6 @@ class ProjectDecorator < Draper::Decorator
       "≈ #{ratio} %"
     end
   end
-
-  private
 
   def self.pretty_number(*currency_methods)
     currency_methods.each do |method_name|
