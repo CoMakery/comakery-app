@@ -19,6 +19,7 @@ class Award < ApplicationRecord
   attachment :submission_image, type: :image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
+  add_special_orders %w[issuer_first_name]
 
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
@@ -112,6 +113,15 @@ class Award < ApplicationRecord
 
   def self.total_awarded
     completed.sum(:total_amount)
+  end
+
+  # Used in ransack_reored
+  def self.prepare_ordering_by_issuer_first_name(scope)
+    scope.joins(:issuer)
+  end
+
+  def self.issuer_first_name_order_string(direction)
+    "accounts.first_name #{direction}, accounts.last_name #{direction}"
   end
 
   def ensure_proof_id_exists
