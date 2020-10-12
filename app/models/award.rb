@@ -82,7 +82,7 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
-  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }).having('count(wallets) > 0') }
+  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }) }
   scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
 
   scope :filtered_for_view, lambda { |filter, account|
