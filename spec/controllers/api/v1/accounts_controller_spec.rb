@@ -20,14 +20,13 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       last_name: 'Smith',
       nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
-      country: 'United States of America',
-      ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'
+      country: 'United States of America'
     }
   end
 
   let(:invalid_attributes) do
     {
-      ethereum_wallet: '0x'
+      email: '0x'
     }
   end
 

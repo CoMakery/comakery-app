@@ -6,13 +6,7 @@ class Account < ApplicationRecord
   has_secure_password validations: false
   attachment :image, type: :image
 
-  include BitcoinAddressable
   include EthereumAddressable
-  include QtumAddressable
-  include CardanoAddressable
-  include EosAddressable
-  include TezosAddressable
-  include ConstellationAddressable
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
@@ -88,13 +82,6 @@ class Account < ApplicationRecord
   # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :ethereum_auth_address, ethereum_address: { type: :account }, uniqueness: true, allow_blank: true
   # rubocop:enable Rails/UniqueValidationWithoutIndex
-  validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
-  validates :qtum_wallet, qtum_address: true # see QtumAddressable
-  validates :cardano_wallet, cardano_address: true # see CardanoAddressable
-  validates :bitcoin_wallet, bitcoin_address: true # see BitcoinAddressable
-  validates :eos_wallet, eos_address: true # see EosAddressable
-  validates :tezos_wallet, tezos_address: true # see TezosAddressable
-  validates :constellation_wallet, constellation_address: true
   validates :email, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, allow_nil: true
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
   validates :linkedin_url, format: { with: %r{\Ahttps:\/\/www.linkedin.com\/.*\z} }, allow_blank: true
@@ -331,6 +318,10 @@ class Account < ApplicationRecord
 
   def set_email_confirm_token
     update_column :email_confirm_token, SecureRandom.hex
+  end
+
+  def address_for_blockchain(blockchain)
+    wallets.find_by(_blockchain: blockchain)&.address
   end
 
   private

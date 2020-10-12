@@ -7,7 +7,7 @@ json.array! Token.all do |token|
   end
 
   json.blockchain do
-    json.address @account.ethereum_wallet
+    json.address @account.address_for_blockchain(token._blockchain)
     json.balance record.balance
     json.max_balance record.max_balance.to_s
     json.lockup_until record.lockup_until

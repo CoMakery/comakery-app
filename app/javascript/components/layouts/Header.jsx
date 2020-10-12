@@ -95,7 +95,7 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
           </a>
         }
 
-        <a href="/account" className={currentPath.match(/\/account$/) ? 'header--nav--links--current' : null} >
+        <a href="/account" className={currentPath.match(/\/(account$)|(wallets)/) ? 'header--nav--links--current' : null} >
           My Account
         </a>
 

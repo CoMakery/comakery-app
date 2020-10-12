@@ -8,7 +8,7 @@ module BlockchainJob
       end
 
       def sync_accounts
-        @record.accounts.distinct.where.not(ethereum_wallet: nil).each do |account|
+        @record.accounts.distinct.each do |account|
           record = @token.account_token_records.find_or_create_by(account: account)
           BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob.perform_later(record)
         end

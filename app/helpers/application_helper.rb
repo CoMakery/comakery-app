@@ -15,10 +15,6 @@ module ApplicationHelper
     end
   end
 
-  def ethereum_explorer_tx_url(token, tx) # rubocop:todo Naming/MethodParameterName
-    token.blockchain.url_for_tx_human(tx)
-  end
-
   def ransack_filter_present?(query, name, predicate, value) # rubocop:todo Metrics/CyclomaticComplexity
     query.conditions.any? do |c|
       return false unless c.predicate.name == predicate

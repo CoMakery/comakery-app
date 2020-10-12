@@ -4,6 +4,8 @@ ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start :rails do
   SimpleCov.minimum_coverage 98
+  SimpleCov.minimum_coverage_by_file 50
+  SimpleCov.refuse_coverage_drop
 
   # add_filter == do not track coverage
   # add_filter %r{^/lib/generators/}
@@ -102,7 +104,13 @@ end
 
 def login(account)
   account.authentications.first || create(:authentication, account_id: account.id)
-  session[:account_id] = account.id
+
+  if request
+    request.session[:account_id] = account.id
+  else
+    session[:account_id] = account.id
+  end
+
   account
 end
 

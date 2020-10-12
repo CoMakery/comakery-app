@@ -73,7 +73,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 2**256 - 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000000,
                      account_frozen: false,
                      reg_group: reg_group,
@@ -98,7 +98,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000000,
                      account_frozen: false,
                      reg_group: reg_group,
@@ -123,7 +123,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8452'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8452',
                      max_balance: 100000000000000000000000000,
                      account_frozen: false,
                      reg_group: reg_group,
@@ -148,7 +148,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000000,
                      account_frozen: false,
                      reg_group: reg_group,
@@ -173,7 +173,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000000,
                      account_frozen: false,
                      reg_group: reg_group,
@@ -198,7 +198,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000001,
                      account_frozen: false,
                      reg_group: reg_group,
@@ -223,7 +223,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000000,
                      account_frozen: true,
                      reg_group: reg_group,
@@ -248,7 +248,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
                    current_block: 1,
                    blockchain_transactable: create(
                      :account_token_record,
-                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     address: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
                      max_balance: 100000000000000000000000000,
                      account_frozen: false,
                      reg_group: reg_group,

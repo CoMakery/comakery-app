@@ -37,7 +37,7 @@ describe BlockchainTransactionAccountTokenRecord, vcr: true do
 
     it 'generates blockchain transaction data' do
       tx = contract.setAddressPermissions(
-        blockchain_transaction.blockchain_transactable.account.ethereum_wallet,
+        blockchain_transaction.blockchain_transactable.account.address_for_blockchain(blockchain_transaction.token._blockchain),
         blockchain_transaction.blockchain_transactable.reg_group.blockchain_id,
         blockchain_transaction.blockchain_transactable.lockup_until.to_i,
         blockchain_transaction.blockchain_transactable.max_balance,

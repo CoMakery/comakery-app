@@ -493,7 +493,7 @@ class AwardsController < ApplicationController
         else
           Account.find_from_uid_channel(params[:uid], Channel.find_by(id: params[:channel_id]))
         end
-      )&.send("#{@project.token&.blockchain_name_for_wallet}_wallet")
+      )&.address_for_blockchain(@project.token&._blockchain)
 
       wallet_url = address ? @project.token&.blockchain&.url_for_address_human(address) : nil
 
@@ -521,54 +521,13 @@ class AwardsController < ApplicationController
     def confirm_message(project)
       return nil unless project.token
 
-      send("confirm_message_for_#{project.token&.blockchain_name_for_wallet}_award")
-    end
+      blockchain_name = project.token.blockchain.name
+      addr = current_account.address_for_blockchain(project.token._blockchain)
 
-    def confirm_message_for_ethereum_award
-      if current_account.ethereum_wallet.present?
-        "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
+      if addr.present?
+        "Congratulations, you just claimed your award! Your #{blockchain_name} address is #{addr}. You can change the address on your #{view_context.link_to('wallets page', wallets_path)}. The project owner can now issue the tokens."
       else
-        "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_qtum_award
-      if current_account.qtum_wallet.present?
-        "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Qtum tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Qtum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_cardano_award
-      if current_account.cardano_wallet.present?
-        "Congratulations, you just claimed your award! Your Cardano address is #{view_context.link_to current_account.cardano_wallet, current_account.decorate.cardano_wallet_url} you can change your Cardano address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Cardano tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Cardano Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_bitcoin_award
-      if current_account.bitcoin_wallet.present?
-        "Congratulations, you just claimed your award! Your Bitcoin address is #{view_context.link_to current_account.bitcoin_wallet, current_account.decorate.bitcoin_wallet_url} you can change your Bitcoin address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Bitcoin tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Bitcoin Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_eos_award
-      if current_account.eos_wallet.present?
-        "Congratulations, you just claimed your award! Your EOS account name is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS account name on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your EOS Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
-    end
-
-    def confirm_message_for_tezos_award
-      if current_account.tezos_wallet.present?
-        "Congratulations, you just claimed your award! Your Tezos address is #{view_context.link_to current_account.tezos_wallet, current_account.decorate.tezos_wallet_url} you can change your Tezos address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Tezos tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Tezos Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+        "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} adress on your #{view_context.link_to('wallets page', wallets_path)} to receive your tokens."
       end
     end
 end

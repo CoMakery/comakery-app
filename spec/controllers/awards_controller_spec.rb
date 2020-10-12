@@ -5,12 +5,11 @@ RSpec.describe AwardsController, type: :controller do
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
   let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
-  let!(:receiver) { create(:authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
+  let!(:receiver) { create(:authentication, account: create(:account)) }
   let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
-
-  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
+  let!(:project) { create(:project, account: issuer.account, visibility: :public_listed, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
   let!(:award_type) { create(:award_type, project: project) }
 
   before do
@@ -21,6 +20,7 @@ RSpec.describe AwardsController, type: :controller do
     discord_team.build_authentication_team issuer_discord
     discord_team.build_authentication_team receiver_discord
     project.channels.create(team: team, channel_id: '123')
+    create(:wallet, account: receiver.account, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', _blockchain: project.token._blockchain)
   end
 
   describe '#index' do
@@ -88,13 +88,7 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#show' do
-    let(:award) { create(:award) }
-    let(:project) do
-      pj = award.project
-      pj.public_listed!
-      pj
-    end
-
+    let(:award) { create(:award, award_type: award_type) }
     let(:account) { project.account.decorate }
 
     it 'shows member tasks to logged in members' do
@@ -511,141 +505,12 @@ RSpec.describe AwardsController, type: :controller do
 
     it 'add award to account. notice about update wallet address' do
       account = receiver.account
-      account.update ethereum_wallet: nil
+      account.wallets.delete_all
       login receiver.account
       get :confirm, params: { token: 1234 }
       expect(response).to redirect_to(project_path(award.project))
       expect(award.reload.account_id).to eq receiver.account_id
-      expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress')).to be_truthy
-    end
-
-    context 'on Qtum network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'qrc20', _blockchain: 'qtum_test', contract_address: '8cfe9e9893e4386645eae8107cd53aaccf96b7fd')) }
-      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
-
-      it 'add award to account' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, qtum_wallet: 'q' + 'a' * 33
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to be_truthy
-      end
-
-      it 'add award to account. notice about update qtum wallet address' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, qtum_wallet: nil
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Qtum Adress')).to be_truthy
-      end
-    end
-
-    context 'on Cardano network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'ada', _blockchain: 'cardano')) }
-      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
-
-      it 'add award to account' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Cardano address is')).to be_truthy
-      end
-
-      it 'add award to account. notice about update Cardano wallet address' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, cardano_wallet: nil
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Cardano Adress')).to be_truthy
-      end
-    end
-
-    context 'on Bitcoin network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'btc')) }
-      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
-
-      it 'add award to account' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to be_truthy
-      end
-
-      it 'add award to account. notice about update Bitcoin wallet address' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, bitcoin_wallet: nil
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Bitcoin Adress')).to be_truthy
-      end
-    end
-
-    context 'on EOS network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eos', _blockchain: 'eos')) }
-      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
-
-      it 'add award to account' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, eos_wallet: 'aaatestnet11'
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to be_truthy
-      end
-
-      it 'add award to account. notice about update EOS wallet address' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, eos_wallet: nil
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your EOS Adress')).to be_truthy
-      end
-    end
-
-    context 'on Tezos network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'xtz', _blockchain: 'tezos')) }
-      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
-
-      it 'add award to account' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9'
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Tezos address is')).to be_truthy
-      end
-
-      it 'add award to account. notice about update Tezos wallet address' do
-        account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, tezos_wallet: nil
-        login receiver.account
-        get :confirm, params: { token: 61234 }
-        expect(response).to redirect_to(project_path(award2.project))
-        expect(award2.reload.account_id).to eq receiver.account_id
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Tezos Adress')).to be_truthy
-      end
+      expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your')).to be_truthy
     end
   end
 
@@ -709,7 +574,9 @@ RSpec.describe AwardsController, type: :controller do
     let(:award) { create(:award, award_type: award_type) }
 
     it 'with email' do
-      create(:account, email: 'test2@comakery.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47', qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
+      acc = create(:account, email: 'test2@comakery.com')
+      create(:wallet, account: acc, address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47', _blockchain: :ethereum_ropsten)
+      create(:wallet, account: acc, address: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM', _blockchain: :qtum)
 
       login issuer.account
       award.update(status: 'ready')
@@ -750,7 +617,8 @@ RSpec.describe AwardsController, type: :controller do
         }
       }.to_json)
 
-      create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
+      acc = create(:account, email: 'bobjohnson@example.com')
+      create(:wallet, account: acc, address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48', _blockchain: :ethereum_ropsten)
       login issuer.account
       award.update(status: 'ready')
 

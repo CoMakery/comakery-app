@@ -18,7 +18,7 @@ if Rails.env.development?
     first_name: 'Dev',
     last_name: 'Devvy',
     date_of_birth: 18.years.ago,
-    country: 'United States of America',
+    country: 'United States',
     specialty: Specialty.first,
     comakery_admin: true
   )

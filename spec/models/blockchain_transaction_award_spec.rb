@@ -145,7 +145,7 @@ describe BlockchainTransactionAward, vcr: true do
 
     context 'with DAG transfer' do
       it 'returns Comakery::Dag::Tx' do
-        blockchain_transaction = build(:blockchain_transaction, token: create(:dag_token))
+        blockchain_transaction = build(:blockchain_transaction_dag)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Dag::Tx)
       end
