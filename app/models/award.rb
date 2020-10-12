@@ -4,6 +4,7 @@ class Award < ApplicationRecord
   paginates_per 50
 
   include BlockchainTransactable
+  include RansackReorder
 
   EXPERIENCE_LEVELS = {
     'New Contributor' => 0,
@@ -18,6 +19,7 @@ class Award < ApplicationRecord
   attachment :submission_image, type: :image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
+  add_special_orders %w[issuer_first_name]
 
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
@@ -80,7 +82,7 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
-  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }).having('count(wallets) > 0') }
+  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }) }
   scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
 
   scope :filtered_for_view, lambda { |filter, account|
@@ -111,6 +113,15 @@ class Award < ApplicationRecord
 
   def self.total_awarded
     completed.sum(:total_amount)
+  end
+
+  # Used in ransack_reorder
+  def self.prepare_ordering_by_issuer_first_name(scope)
+    scope.joins(:issuer)
+  end
+
+  def self.issuer_first_name_order_string(direction)
+    "accounts.first_name #{direction}, accounts.last_name #{direction}"
   end
 
   def ensure_proof_id_exists

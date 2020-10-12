@@ -10,7 +10,7 @@
   </div>
 
   <div class="transfers-table__transfer__issuer">
-    transferred by
+    <%= sort_link(@q, :issuer_first_name, 'transferred by') %>
   </div>
 
   <div class="transfers-table__transfer__amount">
