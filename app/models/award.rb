@@ -115,7 +115,7 @@ class Award < ApplicationRecord
     completed.sum(:total_amount)
   end
 
-  # Used in ransack_reored
+  # Used in ransack_reorder
   def self.prepare_ordering_by_issuer_first_name(scope)
     scope.joins(:issuer)
   end
