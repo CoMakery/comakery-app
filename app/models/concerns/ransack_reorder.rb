@@ -11,12 +11,13 @@ module RansackReorder
       return scope unless order_param
 
       order_column, direction = order_param.split(' ')
+      direction = direction == 'desc' ? 'desc' : 'asc'
       order_param =
         if order_column.in?(column_names)
           "#{order_column} #{direction}"
-        elsif order_param.in?(@special_orders)
-          scope = send("prepare_ordering_by_#{order_param}", scope)
-          send("#{order_param}_order_string", direction)
+        elsif order_column.in?(@special_orders)
+          scope = send("prepare_ordering_by_#{order_column}", scope)
+          send("#{order_column}_order_string", direction)
         else
           default
         end

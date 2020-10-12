@@ -1175,17 +1175,30 @@ describe Award do
       subject { described_class.ransack_reorder(order_param).pluck(order_param.split(' ').first) }
 
       context 'order by name' do
-        let(:order_param) { 'name ' }
+        let(:order_param) { 'name asc' }
         it { is_expected.to eq described_class.all.order('name').pluck(:name) }
       end
     end
 
     context 'with special params' do
-      subject { described_class.ransack_reorder('issuer_first_name').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
-
       context 'order by issuer_first_name' do
-        let(:order_param) { 'name ' }
+        subject { described_class.ransack_reorder('issuer_first_name desc').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
+
+        it { is_expected.to eq ['Ned Stark', 'John Snow', 'Daenerys Targaryen'] }
+      end
+
+      context 'order by issuer_first_name with wrong direction' do
+        subject { described_class.ransack_reorder('issuer_first_name wrong').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
+
         it { is_expected.to eq ['Daenerys Targaryen', 'John Snow', 'Ned Stark'] }
+      end
+    end
+
+    context 'with unknown param' do
+      subject { described_class.ransack_reorder('unknown').pluck(:created_at) }
+
+      context 'order by default' do
+        it { is_expected.to eq awards.order(:created_at).pluck(:created_at) }
       end
     end
   end
