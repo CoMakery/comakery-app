@@ -1,8 +1,10 @@
 require 'rails_helper'
 require 'models/concerns/blockchain_transactable_spec'
+require 'models/concerns/ransack_reorder_spec'
 
 describe Award do
   it_behaves_like 'blockchain_transactable'
+  it_behaves_like 'ransack_reorder'
 
   describe 'associations' do
     let(:specialty) { create(:specialty) }
@@ -1141,6 +1143,50 @@ describe Award do
       create(:blockchain_transaction, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
 
       expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
+    end
+  end
+
+  describe '.ransack_reorder' do
+    let!(:awards) do
+      issuer1 = create(:account, first_name: 'John', last_name: 'Snow')
+      issuer2 = create(:account, first_name: 'Ned', last_name: 'Stark')
+      issuer3 = create(:account, first_name: 'Daenerys', last_name: 'Targaryen')
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 12:00'), name: 'first', issuer: issuer1)
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 11:00'), name: 'second', issuer: issuer2)
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 13:00'), name: 'third', issuer: issuer3)
+      Award.all
+    end
+
+    context 'default' do
+      subject { described_class.ransack_reorder(nil) }
+
+      it { expect(described_class).to respond_to(:ransack_reorder) }
+
+      it 'apply default order by :created_at' do
+        expect(subject.pluck(:created_at)).to eq awards.order(:created_at).pluck(:created_at)
+      end
+
+      it 'default order with another param' do
+        expect(described_class.ransack_reorder(nil, default: :id).pluck(:id)).to eq awards.order(:id).pluck(:id)
+      end
+    end
+
+    context 'with model\'s params' do
+      subject { described_class.ransack_reorder(order_param).pluck(order_param.split(' ').first) }
+
+      context 'order by name' do
+        let(:order_param) { 'name ' }
+        it { is_expected.to eq described_class.all.order('name').pluck(:name) }
+      end
+    end
+
+    context 'with special params' do
+      subject { described_class.ransack_reorder('issuer_first_name').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
+
+      context 'order by issuer_first_name' do
+        let(:order_param) { 'name ' }
+        it { is_expected.to eq ['Daenerys Targaryen', 'John Snow', 'Ned Stark'] }
+      end
     end
   end
 end
