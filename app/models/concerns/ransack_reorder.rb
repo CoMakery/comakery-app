@@ -2,6 +2,10 @@ module RansackReorder
   extend ActiveSupport::Concern
 
   included do
+    def self.special_orders
+      @special_orders || []
+    end
+
     def self.add_special_orders(orders_list)
       @special_orders = orders_list
     end
@@ -15,7 +19,7 @@ module RansackReorder
       order_param =
         if order_column.in?(column_names)
           "#{order_column} #{direction}"
-        elsif order_column.in?(@special_orders)
+        elsif order_column.in?(special_orders)
           scope = send("prepare_ordering_by_#{order_column}", scope)
           send("#{order_column}_order_string", direction)
         else
