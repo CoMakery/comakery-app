@@ -3,13 +3,13 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "41a687f2292760aab6809ce61b724dcc11112f8435f00dbef699bed981d866b0",
+      "fingerprint": "1d1d31ffbb9f80763f532192ffe0eadcba76dd0cb9dfcd4a0f19fbf88e6d37e1",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/concerns/ransack_reorder.rb",
-      "line": 24,
+      "line": 28,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "(reorder(default) or send(\"prepare_ordering_by_#{order_column}\", reorder(default))).reorder((\"#{order_column} #{(\"desc\" or \"asc\")}\" or if order_column.in?(@special_orders) then\n  scope = send(\"prepare_ordering_by_#{order_column}\", reorder(default))\n  send(\"#{order_column}_order_string\", (\"desc\" or \"asc\"))\nelse\n  default\nend))",
+      "code": "(reorder(default) or send(\"prepare_ordering_by_#{order_column}\", reorder(default))).reorder((\"#{order_column} #{(\"desc\" or \"asc\")}\" or if order_column.in?(special_orders) then\n  scope = send(\"prepare_ordering_by_#{order_column}\", reorder(default))\n  send(\"#{order_column}_order_string\", (\"desc\" or \"asc\"))\nelse\n  default\nend))",
       "render_path": null,
       "location": {
         "type": "method",
@@ -21,6 +21,6 @@
       "note": "Ransack reorder"
     }
   ],
-  "updated": "2020-10-12 14:39:17 +0300",
+  "updated": "2020-10-12 17:05:00 +0300",
   "brakeman_version": "4.8.1"
 }
