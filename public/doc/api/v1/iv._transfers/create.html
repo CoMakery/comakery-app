@@ -223,12 +223,34 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"e2872811-2663-49fe-bd84-4e3a1dc50384","amount":"1000.00000000","description":"investor","quantity":"2.00","total_amount":"2000.00000000","transfer_type_id":"123"}},"method":"POST","nonce":"fb58f0ff4e5c70b20f5b407e283d3a24","timestamp":"1601926107","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"eGCDP2G1aAUgBjef3DWq/Leym1cs2LDmVCiZQnZRXSsUf7U1gksKIwxb9vUhRsK8H+b2tw9EDRdaqQ56bM1YBQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transfer": {
+        "amount": "1000.00000000",
+        "quantity": "2.00",
+        "total_amount": "2000.00000000",
+        "description": "investor",
+        "transfer_type_id": "123",
+        "account_id": "5d2c8374-4eea-421d-a0b5-a1d28deff645"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/42/transfers",
+    "method": "POST",
+    "nonce": "0abd5e068123380c69ec98800c566a59",
+    "timestamp": "1602580470"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "eaucbvS/Zt7feXWPRUjxoeWy3Fma86NP764urJbMwg8RXdADQfDS96yLXYQhGlTtA4tmyW8oBgR5JGgQjdLbDA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;4412a034400b5d48eb5a0a933bf9cc85&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;204c1ef077363900e1f830b5ede3c784&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -241,9 +263,9 @@ table th, table td {
   &quot;description&quot;: &quot;investor&quot;,
   &quot;transactionError&quot;: null,
   &quot;status&quot;: &quot;accepted&quot;,
-  &quot;createdAt&quot;: &quot;2020-10-05T19:28:28.084Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:28.084Z&quot;,
-  &quot;accountId&quot;: &quot;e2872811-2663-49fe-bd84-4e3a1dc50384&quot;
+  &quot;createdAt&quot;: &quot;2020-10-13T09:14:30.593Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-13T09:14:30.593Z&quot;,
+  &quot;accountId&quot;: &quot;5d2c8374-4eea-421d-a0b5-a1d28deff645&quot;
 }</pre>
       </div>
     </div>

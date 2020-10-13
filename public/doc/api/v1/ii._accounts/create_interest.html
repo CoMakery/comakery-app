@@ -171,11 +171,27 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/1ff0a693-2ae4-4e58-bb6e-c66ae683d283/interests</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/957b2634-485c-4084-8e31-e0ca7982184c/interests</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"project_id":"20"},"method":"POST","nonce":"153f0894b7c45a73c09e8569587914bc","timestamp":"1601926103","url":"http://example.org/api/v1/accounts/1ff0a693-2ae4-4e58-bb6e-c66ae683d283/interests"},"project_id":20,"proof":{"signature":"gqgZiMP55krWHB9GYot0lSMgqjZaL3kiQSuBFzAXVB7x904LlgKqb1Mwt93nQ7wZl8Lz91cm8S8+Z6MffG1SAg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "project_id": 20,
+  "body": {
+    "data": {
+      "project_id": "20"
+    },
+    "url": "http://example.org/api/v1/accounts/957b2634-485c-4084-8e31-e0ca7982184c/interests",
+    "method": "POST",
+    "nonce": "a24fbc34ad3a9c03258b9385c35b7188",
+    "timestamp": "1602580467"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "gq9rcsiVJ5Gg0zhsgrYA3mnK8IRhrMa4Jk/PBzv7SuE942oPrwqvOs3ytE1xumaZVtCHBEH23Tk1CpFOzRh7Bw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
