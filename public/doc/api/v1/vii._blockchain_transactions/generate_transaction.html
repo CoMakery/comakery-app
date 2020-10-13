@@ -303,12 +303,30 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"nonce":1,"source":"0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB"}},"method":"POST","nonce":"1363d112f00536effeb24affcbe7a1c8","timestamp":"1601926111","url":"http://example.org/api/v1/projects/56/blockchain_transactions"},"proof":{"signature":"emIrtM9Zhs2m0xn4piPYh4GPmBe6lWeVbwXtNNH9pS1KrBvKu3oFQpWhse/RXmtOeGLMLFt3j7nlQ5qrATwyBA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transaction": {
+        "source": "0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB",
+        "nonce": 1
+      }
+    },
+    "url": "http://example.org/api/v1/projects/56/blockchain_transactions",
+    "method": "POST",
+    "nonce": "262a9e9a49cfb069dd4e05300019d40a",
+    "timestamp": "1602580473"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "/E7HCkzo5w60CpCDMNG3yASN6bPvdeBTkWUCfh0IYZ9OefA+Zr5PMRr2ASeqF6+v62jntYb0117oy8WhTJuKAA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;b60a1da10324b5d534afda77e4e6d329&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;e7fddb0f25086e5f3d6292ca8adaa442&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -325,8 +343,8 @@ table th, table td {
   &quot;txRaw&quot;: &quot;0xf86701822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb00000000000000000000000042d00fc2efdace4859187de4865df9baa320d5db0000000000000000000000000000000000000000000000000000000000000032808080&quot;,
   &quot;status&quot;: &quot;created&quot;,
   &quot;statusMessage&quot;: null,
-  &quot;createdAt&quot;: &quot;2020-10-05T19:28:31.682Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:31.682Z&quot;,
+  &quot;createdAt&quot;: &quot;2020-10-13T09:14:33.803Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-13T09:14:33.803Z&quot;,
   &quot;syncedAt&quot;: null
 }</pre>
       </div>

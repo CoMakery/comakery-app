@@ -168,11 +168,29 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/e71ee898-cc2c-4512-8d51-e953bc173c8e/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/9e1d5bdc-1b67-4341-b609-53b03e8ffd50/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"wallet":{"address":"3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt","blockchain":"bitcoin"}},"method":"POST","nonce":"4e521ed67c3a697db2991838041da29c","timestamp":"1601926115","url":"http://example.org/api/v1/accounts/e71ee898-cc2c-4512-8d51-e953bc173c8e/wallets"},"proof":{"signature":"z/bfdJN+jx+LOI7BW3eOJu3eSz3BDg2qyK6FcRlxEy+PLIEFjThDDhSzhYburmjEoxgrJMefJ/2loiJMTwUeAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "wallet": {
+        "blockchain": "bitcoin",
+        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts/9e1d5bdc-1b67-4341-b609-53b03e8ffd50/wallets",
+    "method": "POST",
+    "nonce": "7bf466e34f61a2c8ee3a075fb6357459",
+    "timestamp": "1602580477"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "xCkKG9skSArinGBnXdfmnFY1rU0JU2Vxtt9wzPYwxjyasPzBVT0lRY3Ow+9WcirAO+NGWDG+NRKaXfC0StcTDA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

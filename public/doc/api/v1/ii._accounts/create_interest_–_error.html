@@ -171,11 +171,27 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/7571aa12-6e36-4b4b-be9d-adcec66ac651/interests</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/ab109d78-c5f5-4832-adb7-f534b149dd9b/interests</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"project_id":"22"},"method":"POST","nonce":"51a511c0186881207cade5eba1f01daa","timestamp":"1601926104","url":"http://example.org/api/v1/accounts/7571aa12-6e36-4b4b-be9d-adcec66ac651/interests"},"project_id":22,"proof":{"signature":"Nzzf1/8Ljp/lJED2WHmTJ+xaaZr9qKhcFuwNpo5pvjLb8/wvCEpely25vwifTwdkKUxHs1B8PiXitNx+rH63Bw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "project_id": 22,
+  "body": {
+    "data": {
+      "project_id": "22"
+    },
+    "url": "http://example.org/api/v1/accounts/ab109d78-c5f5-4832-adb7-f534b149dd9b/interests",
+    "method": "POST",
+    "nonce": "bcc06e16883bf2ce394d0ef3b71fb371",
+    "timestamp": "1602580467"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "46WFvUavnpfw1W4FXD07vJZcLeg60ZPvjocsiqhiypAQbhpJsHSH06IoZanM+jIyi4Cb65pZqOABubltzBJiAw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

@@ -199,12 +199,33 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account_token_record":{"account_frozen":"false","account_id":"166","lockup_until":"1","max_balance":"100","reg_group_id":"39"}},"method":"POST","nonce":"eea3fcdfe164039713f30d600e13d936","timestamp":"1601926110","url":"http://example.org/api/v1/projects/53/account_token_records"},"proof":{"signature":"TyPwqZ3EbwS2S8C5grOzEsnOtVI7WP7i8/g6tUWH8au4ZDPu+lDKNjYkZqrS+RY5SL7kTWBA5hEje+SMobppBw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account_token_record": {
+        "max_balance": "100",
+        "lockup_until": "1",
+        "reg_group_id": "39",
+        "account_id": "166",
+        "account_frozen": "false"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/53/account_token_records",
+    "method": "POST",
+    "nonce": "32a74757b91bb0524fa9b96102dc2ae3",
+    "timestamp": "1602580472"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "Hqqdsad9CvNkx86T7RsTRVBQx+jYPLk1wNyto3Tbu34KnhAXh/pSZ5ZYrSvwgvne60qtFSML/aNzZFYZrTE4AA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;4c7ee58ac6492537c93f242c578e3d79&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;46f20c90382f9de275fb4e6aceafc3bf&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -217,8 +238,8 @@ table th, table td {
   &quot;regGroupId&quot;: 39,
   &quot;accountFrozen&quot;: false,
   &quot;status&quot;: &quot;created&quot;,
-  &quot;createdAt&quot;: &quot;2020-10-05T19:28:30.772Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:30.772Z&quot;
+  &quot;createdAt&quot;: &quot;2020-10-13T09:14:32.982Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-13T09:14:32.982Z&quot;
 }</pre>
       </div>
     </div>

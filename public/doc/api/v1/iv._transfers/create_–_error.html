@@ -223,7 +223,25 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"e28f79b0-91bd-4915-bb3d-9b838d7243c8","amount":"-1.00"}},"method":"POST","nonce":"80433f5cb114636146066e4101a06cab","timestamp":"1601926108","url":"http://example.org/api/v1/projects/43/transfers"},"proof":{"signature":"nRBuJ61rZ496f4Q5jCywV0ypop4+xrBuF9spCAsDbiSsuSPrkJs8YtvxVMbTVD6iYpbA/wDKWP99u+9lP0wRAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transfer": {
+        "amount": "-1.00",
+        "account_id": "d6c2243d-ac60-4f4b-8e4d-978cc2834fc7"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/43/transfers",
+    "method": "POST",
+    "nonce": "c1e3ca4dbede41cdda277e8eb8a84ace",
+    "timestamp": "1602580470"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "ucYjHKWT9SgjJ2YRXiMi3/LSyWMC1Zlj0/luXPfAzWO1BsXjPB0/kPPSCooY/xmUtNkayIAxLrwUWgfVohK/DA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
