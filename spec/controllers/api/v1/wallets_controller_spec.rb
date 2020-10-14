@@ -50,7 +50,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         end.to change(account.wallets, :count).by(1)
       end
 
-      it 'returns list of account wallets' do
+      it 'returns created wallet' do
         params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 

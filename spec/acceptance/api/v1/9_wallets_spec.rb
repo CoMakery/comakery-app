@@ -57,7 +57,7 @@ resource 'IX. Wallets' do
       let!(:create_params) { { wallet: { blockchain: :bitcoin, address: build(:bitcoin_address_1) } } }
 
       example 'CREATE WALLET' do
-        explanation 'Returns account wallets (See INDEX for response details)'
+        explanation 'Returns created wallet (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
