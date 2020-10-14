@@ -20,6 +20,12 @@ class TokenType::Qrc20 < TokenType
     @decimals ||= contract&.decimals&.to_i
   end
 
+  # Wallet logo filename for UI purposes (relative to `app/assets/images`)
+  # @return [String] filename
+  def wallet_logo
+    'qrypto.png'
+  end
+
   # Contract instance if implemented
   # @return [nil]
   def contract

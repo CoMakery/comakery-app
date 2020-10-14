@@ -1,17 +1,5 @@
-<% if project.token._token_type_on_ethereum? %>
-  <% wallet_logo = 'metamask2.png' %>
-<% elsif project.token._token_type_qrc20? %>
-  <% wallet_logo = 'qrypto.png' %>
-<% elsif project.token._token_type_qtum? %>
-  <% wallet_logo = 'ledger.png' %>
-<% elsif project.token._token_type_ada? || project.token._token_type_btc? %>
-  <% wallet_logo = 'trezor.png' %>
-<% elsif project.token._token_type_eos? %>
-  <% wallet_logo = 'eos.png' %>
-<% elsif project.token._token_type_xtz? %>
-  <% wallet_logo = 'tezos.png' %>
+<% if project.token&.token_type&.wallet_logo %>
+  <div class="wallet-logo">
+    <%= image_tag project.token&.token_type&.wallet_logo, size: "#{size}x#{size}" %>
+  </div>
 <% end %>
-
-<div class="wallet-logo">
-  <%= image_tag wallet_logo, size: "#{size}x#{size}" %>
-</div>

@@ -227,7 +227,10 @@ class ApplicationController < ActionController::Base
   end
 
   def unavailable_for_whitelabel
-    return redirect_to new_session_url if @whitelabel_mission
+    return unless @whitelabel_mission
+
+    redirect_url = current_user ? projects_url : new_session_url
+    redirect_to redirect_url
   end
 
   private

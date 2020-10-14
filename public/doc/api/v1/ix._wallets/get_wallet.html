@@ -111,10 +111,10 @@ table th, table td {
         <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>CREATE WALLET</h2>
-        <h3>POST /api/v1/accounts/:id/wallets</h3>
+        <h2>GET WALLET</h2>
+        <h3>GET /api/v1/accounts/:id/wallets/:wallet_id</h3>
           <p class="explanation">
-            Returns created wallet (See INDEX for response details)
+            Returns specified wallet (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,34 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">address</span>
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">wallet address</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">blockchain</span>
+                    <span class="name">wallet_id</span>
                 </td>
                 <td>
-                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;]</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">source</span>
-                </td>
-                <td>
-                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">provision</span>
-                </td>
-                <td>
-                  <span class="description">wallet provision type</span>
+                  <span class="description">wallet id</span>
                 </td>
               </tr>
             </tbody>
@@ -168,44 +152,28 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/66cd27f7-5714-4c3c-8035-690156cad6ef/wallets</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/60aff316-42c2-496e-9ca5-8d104caf9618/wallets/22?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F60aff316-42c2-496e-9ca5-8d104caf9618%2Fwallets%2F22&amp;body[method]=GET&amp;body[nonce]=bd0806495daad87549eb75bb337ab62c&amp;body[timestamp]=1602698164&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=%2FqXfNnBWWAfbVnK5VQt516ayZDESEvf141MpyREcCNcHz0NkzEdez8QBcJosUn17cJXRgkOvD6eAvhYcvMImCw%3D%3D</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/60aff316-42c2-496e-9ca5-8d104caf9618/wallets/22&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;bd0806495daad87549eb75bb337ab62c&quot;, &quot;timestamp&quot;=&gt;&quot;1602698164&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;/qXfNnBWWAfbVnK5VQt516ayZDESEvf141MpyREcCNcHz0NkzEdez8QBcJosUn17cJXRgkOvD6eAvhYcvMImCw==&quot;}</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">{
-  "body": {
-    "data": {
-      "wallet": {
-        "blockchain": "bitcoin",
-        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
-      }
-    },
-    "url": "http://example.org/api/v1/accounts/66cd27f7-5714-4c3c-8035-690156cad6ef/wallets",
-    "method": "POST",
-    "nonce": "97012c3386bfbbd507367a2d98313515",
-    "timestamp": "1602698164"
-  },
-  "proof": {
-    "type": "Ed25519Signature2018",
-    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "fRScL35lv29ubKP43jOnOuBIFzl1YqXtPEvlZxlXvrT3/urx7oouGln/OGYW/A0baiw57mo3RymIYEU2iCioDg=="
-  }
-}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;343756f10faf56960d7caf420f1432df&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;763ef06f7fe494ab6fbae926e472e626&quot;
+Last-Modified: Wed, 14 Oct 2020 17:56:04 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">201 Created</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 20,
+  &quot;id&quot;: 22,
   &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
   &quot;source&quot;: &quot;user_provided&quot;,
   &quot;state&quot;: &quot;ok&quot;,
-  &quot;createdAt&quot;: &quot;2020-10-14T17:56:04.134Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-14T17:56:04.134Z&quot;,
+  &quot;createdAt&quot;: &quot;2020-10-14T17:56:04.471Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-14T17:56:04.471Z&quot;,
   &quot;blockchain&quot;: &quot;bitcoin&quot;,
   &quot;tokens&quot;: [
 

@@ -57,7 +57,7 @@ resource 'IX. Wallets' do
       let!(:create_params) { { wallet: { blockchain: :bitcoin, address: build(:bitcoin_address_1) } } }
 
       example 'CREATE WALLET' do
-        explanation 'Returns account wallets (See INDEX for response details)'
+        explanation 'Returns created wallet (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -79,6 +79,26 @@ resource 'IX. Wallets' do
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(400)
+      end
+    end
+  end
+
+  get '/api/v1/accounts/:id/wallets/:wallet_id' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+      parameter :wallet_id, 'wallet id', required: true, type: :string
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+
+      example 'GET WALLET' do
+        explanation 'Returns specified wallet (See INDEX for response details)'
+
+        request = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'GET', 'example.org')
+        do_request(request)
+        expect(status).to eq(200)
       end
     end
   end
