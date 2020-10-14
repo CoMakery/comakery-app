@@ -24,6 +24,11 @@ class Api::V1::WalletsController < Api::V1::ApiController
     end
   end
 
+  # GET /api/v1/accounts/1/wallets/1
+  def show
+    fresh_when wallet, public: true
+  end
+
   # DELETE /api/v1/accounts/1/wallets/1
   def destroy
     wallet.destroy

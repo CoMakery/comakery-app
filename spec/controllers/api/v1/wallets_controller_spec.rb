@@ -100,6 +100,22 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    context 'with valid params' do
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }
+
+      it 'returns the wallet' do
+        params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'GET')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+        params[:format] = :json
+
+        get :show, params: params
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
   describe 'POST #password_reset' do
     context 'with valid params' do
       let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id) }

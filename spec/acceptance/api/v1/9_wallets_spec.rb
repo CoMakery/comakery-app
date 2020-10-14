@@ -83,6 +83,26 @@ resource 'IX. Wallets' do
     end
   end
 
+  get '/api/v1/accounts/:id/wallets/:wallet_id' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+      parameter :wallet_id, 'wallet id', required: true, type: :string
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+
+      example 'GET WALLET' do
+        explanation 'Returns specified wallet (See INDEX for response details)'
+
+        request = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'GET', 'example.org')
+        do_request(request)
+        expect(status).to eq(200)
+      end
+    end
+  end
+
   delete '/api/v1/accounts/:id/wallets/:wallet_id' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
