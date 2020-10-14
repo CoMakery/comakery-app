@@ -13,6 +13,16 @@ describe Wallet, type: :model do
   it { is_expected.to define_enum_for(:state).with_values({ ok: 0, unclaimed: 1, pending: 2 }) }
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
 
+  it 'allow empty address for pending and ore_id wallet' do
+    wallet = build(:wallet, state: :pending, source: :ore_id)
+    expect(wallet).not_to validate_presence_of(:address)
+  end
+
+  it 'do not allow empty address for ok and ore_id wallet' do
+    wallet = build(:wallet, state: :ok, source: :ore_id)
+    expect(wallet).to validate_presence_of(:address)
+  end
+
   describe '#available_blockchains' do
     it 'returns list of avaiable blockchains for creating a new wallet with the same account' do
       expect(subject.available_blockchains).not_to include(subject._blockchain)
