@@ -14,14 +14,18 @@ class Api::V1::WalletsController < Api::V1::ApiController
     wallet = account.wallets.new(wallet_params)
 
     if wallet.save
-      wallets
-
-      render 'index.json', status: :created
+      @wallet = wallet
+      render 'show.json', status: :created
     else
       @errors = wallet.errors
 
       render 'api/v1/error.json', status: :bad_request
     end
+  end
+
+  # GET /api/v1/accounts/1/wallets/1
+  def show
+    fresh_when wallet, public: true
   end
 
   # DELETE /api/v1/accounts/1/wallets/1
