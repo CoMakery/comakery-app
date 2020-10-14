@@ -9,6 +9,7 @@ describe ApplicationController do
 
     before_action :redirect_back_to_session, only: %i[index]
     before_action :create_interest_from_session, only: %i[index]
+    before_action :unavailable_for_whitelabel, only: %i[index]
 
     def index
       raise ActiveRecord::RecordNotFound
@@ -201,6 +202,24 @@ describe ApplicationController do
 
         expect(response).to redirect_to root_url
       end
+    end
+  end
+
+  describe '#unavailable_for_whitelabel' do
+    let!(:whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'test.host') }
+
+    it 'redirects to new session path for not authorized users' do
+      get :index
+
+      expect(response).to redirect_to new_session_path
+    end
+
+    it 'redirects to projects path for authorized users' do
+      login create(:account)
+
+      get :index
+
+      expect(response).to redirect_to projects_path
     end
   end
 end
