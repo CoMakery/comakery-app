@@ -22,6 +22,7 @@ class SessionsController < ApplicationController
       redirect_to_the_build_profile_accounts_page(authentication) && return
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_authentication(authentication).deliver
       flash[:error] = 'Please check your email for confirmation instruction'
+      @path = my_tasks_path
     else
       flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
       @path = root_path
@@ -68,7 +69,7 @@ class SessionsController < ApplicationController
       return projects_path if @whitelabel_mission
 
       process_redeem_notice if session[:redeem]
-      process_new_award_notice if current_account&.new_award_notice
+      process_new_award_notice if current_account.new_award_notice
 
       my_tasks_path
     end
