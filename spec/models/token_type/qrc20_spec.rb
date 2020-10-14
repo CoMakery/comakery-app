@@ -9,6 +9,7 @@ describe TokenType::Qrc20, vcr: true do
   specify { expect(described_class.new(**attrs).name).to eq('QRC20') }
   specify { expect(described_class.new(**attrs).symbol).to eq('INK') }
   specify { expect(described_class.new(**attrs).decimals).to be_nil }
+  specify { expect(described_class.new(**attrs).wallet_logo).to eq('qrypto.png') }
   specify { expect(described_class.new(**attrs).contract).to be_a(Comakery::Qtum::Contract::Qrc20) }
   specify { expect(described_class.new(**attrs).abi).to eq({}) }
   specify { expect(described_class.new(**attrs).tx).to be_nil }
