@@ -5,7 +5,8 @@ class Wallet < ApplicationRecord
   belongs_to :account
   has_many :balances, dependent: :destroy
 
-  validates :address, :state, :source, presence: true
+  validates :state, :source, presence: true
+  validates :address, presence: true, unless: :ore_id_and_pending?
   validates :address, blockchain_address: true
   validates :_blockchain, uniqueness: { scope: :account_id, message: 'has already wallet added' }
 
@@ -17,4 +18,10 @@ class Wallet < ApplicationRecord
   def available_blockchains
     Wallet._blockchains.keys - account.wallets.pluck(:_blockchain)
   end
+
+  private
+
+    def ore_id_and_pending?
+      pending? && ore_id?
+    end
 end
