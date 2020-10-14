@@ -4,7 +4,7 @@ require 'models/concerns/belongs_to_blockchain_spec'
 describe Wallet, type: :model do
   it_behaves_like 'belongs_to_blockchain', { blockchain_addressable_columns: [:address] }
 
-  subject { create(:wallet) }
+  subject { build(:wallet) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:balances).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:address) }
@@ -24,6 +24,8 @@ describe Wallet, type: :model do
   end
 
   describe '#available_blockchains' do
+    subject { create(:wallet) }
+
     it 'returns list of avaiable blockchains for creating a new wallet with the same account' do
       expect(subject.available_blockchains).not_to include(subject._blockchain)
     end
