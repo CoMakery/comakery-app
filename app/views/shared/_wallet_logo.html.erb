@@ -10,8 +10,10 @@
   <% wallet_logo = 'eos.png' %>
 <% elsif project.token._token_type_xtz? %>
   <% wallet_logo = 'tezos.png' %>
+<% else %>
+  <% wallet_logo = nil %>
 <% end %>
 
 <div class="wallet-logo">
-  <%= image_tag wallet_logo, size: "#{size}x#{size}" %>
+  <%= image_tag wallet_logo, size: "#{size}x#{size}" if wallet_logo %>
 </div>
