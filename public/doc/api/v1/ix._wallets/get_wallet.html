@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VIII. Reg Groups API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>VIII. Reg Groups API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete reg groups, retrieve reg group data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>INDEX</h2>
-        <h3>GET /api/v1/projects/:project_id/reg_groups</h3>
+        <h2>GET WALLET</h2>
+        <h3>GET /api/v1/accounts/:id/wallets/:wallet_id</h3>
           <p class="explanation">
-            Returns an array of reg groups. See GET for response fields description.
+            Returns specified wallet (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,18 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">page</span>
+                <td class="required">
+                    <span class="name">wallet_id</span>
                 </td>
                 <td>
-                  <span class="description">page number</span>
+                  <span class="description">wallet id</span>
                 </td>
               </tr>
             </tbody>
@@ -152,42 +152,33 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/64/reg_groups?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F64%2Freg_groups&amp;body[method]=GET&amp;body[nonce]=15da54268184e36b75123612e7c10006&amp;body[timestamp]=1602692305&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=PPI0qDt%2FnXnzu7%2BCy3wn58M7JzMz0VXTApqH3TuI7MGtXoXD92e%2FX9uszBZxIlVttC5pI%2B%2FToyrmZGK5DkKNAQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/8a5cb460-d1de-4933-98d0-5c156da9bea0/wallets/22?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F8a5cb460-d1de-4933-98d0-5c156da9bea0%2Fwallets%2F22&amp;body[method]=GET&amp;body[nonce]=43513f721855704138faa451bf9c2010&amp;body[timestamp]=1602692306&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=i2C60aCX5PhjcpHArlfrVDtvH85trqJhw9dAXgSrgJ2Gqym72u1RBQ1CnBrfROX%2BXHDXa6KGI%2FsBD0BiS6ceDw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/64/reg_groups&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;15da54268184e36b75123612e7c10006&quot;, &quot;timestamp&quot;=&gt;&quot;1602692305&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;PPI0qDt/nXnzu7+Cy3wn58M7JzMz0VXTApqH3TuI7MGtXoXD92e/X9uszBZxIlVttC5pI+/ToyrmZGK5DkKNAQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/8a5cb460-d1de-4933-98d0-5c156da9bea0/wallets/22&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;43513f721855704138faa451bf9c2010&quot;, &quot;timestamp&quot;=&gt;&quot;1602692306&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;i2C60aCX5PhjcpHArlfrVDtvH85trqJhw9dAXgSrgJ2Gqym72u1RBQ1CnBrfROX+XHDXa6KGI/sBD0BiS6ceDw==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">Per-Page: 25
-Total: 2
-ETag: W/&quot;9462899807646f524093742a3b14b154&quot;
-Last-Modified: Wed, 14 Oct 2020 16:18:25 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;e640c0733e62fc4003e0a7ee4529a958&quot;
+Last-Modified: Wed, 14 Oct 2020 16:18:26 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[
-  {
-    &quot;id&quot;: 55,
-    &quot;name&quot;: &quot;0&quot;,
-    &quot;tokenId&quot;: 101,
-    &quot;blockchainId&quot;: 0,
-    &quot;createdAt&quot;: &quot;2020-10-14T16:18:25.470Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-10-14T16:18:25.470Z&quot;
-  },
-  {
-    &quot;id&quot;: 56,
-    &quot;name&quot;: &quot;RegGroup 9b7599497bafa3a59695fd8aeb762b5e1895ef96&quot;,
-    &quot;tokenId&quot;: 101,
-    &quot;blockchainId&quot;: 1055,
-    &quot;createdAt&quot;: &quot;2020-10-14T16:18:25.478Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-10-14T16:18:25.478Z&quot;
-  }
-]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 22,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;source&quot;: &quot;user_provided&quot;,
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;createdAt&quot;: &quot;2020-10-14T16:18:26.883Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-14T16:18:26.883Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;tokens&quot;: [
+
+  ]
+}</pre>
       </div>
     </div>
   </body>

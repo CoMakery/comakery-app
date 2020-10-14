@@ -114,7 +114,7 @@ table th, table td {
         <h2>CREATE WALLET</h2>
         <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns account wallets (See INDEX for response details)
+            Returns created wallet (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -168,7 +168,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/ba11936c-eac7-4e0a-b413-5ea2ad822f87/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/5b336199-92d3-425a-a2b1-b5ec932f3c27/wallets</pre>
 
 
             <h4>Body</h4>
@@ -180,41 +180,37 @@ table th, table td {
         "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
       }
     },
-    "url": "http://example.org/api/v1/accounts/ba11936c-eac7-4e0a-b413-5ea2ad822f87/wallets",
+    "url": "http://example.org/api/v1/accounts/5b336199-92d3-425a-a2b1-b5ec932f3c27/wallets",
     "method": "POST",
-    "nonce": "4b85b8a9df66c0105800ccf1d58c2ca4",
-    "timestamp": "1602580477"
+    "nonce": "68a3313ae822695040f3bebdc12bef4d",
+    "timestamp": "1602692306"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "sXEz/W7aj1AHwX2MeFzQz37X/haxMc/k/QYkjXXtqH1ZEaDVQ0mwWM3QCR8FKmS5s+HkIiNzzf8aMdOxgGJUAA=="
+    "signature": "aSaXe87WX2PDUmp/E9Cv7lEhWotPbxFoEGXZrxGxc9YJ8B1tYUKOI9gFJMNxMdR+7ZhX7UjZkgJcN/QZPM7GDw=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">Per-Page: 25
-Total: 1
-ETag: W/&quot;2dc2983c89d8737a273a24d000866a75&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;c673a539e4bba4befe7df2311daf16db&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[
-  {
-    &quot;id&quot;: 20,
-    &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
-    &quot;source&quot;: &quot;user_provided&quot;,
-    &quot;state&quot;: &quot;ok&quot;,
-    &quot;createdAt&quot;: &quot;2020-10-13T09:14:37.625Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-10-13T09:14:37.625Z&quot;,
-    &quot;blockchain&quot;: &quot;bitcoin&quot;,
-    &quot;tokens&quot;: [
+              <pre class="response body">{
+  &quot;id&quot;: 20,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;source&quot;: &quot;user_provided&quot;,
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;createdAt&quot;: &quot;2020-10-14T16:18:26.533Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-14T16:18:26.533Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;tokens&quot;: [
 
-    ]
-  }
-]</pre>
+  ]
+}</pre>
       </div>
     </div>
   </body>
