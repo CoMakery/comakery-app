@@ -68,7 +68,7 @@ class SessionsController < ApplicationController
       return projects_path if @whitelabel_mission
 
       process_redeem_notice if session[:redeem]
-      process_new_award_notice if current_account.new_award_notice
+      process_new_award_notice if current_account&.new_award_notice
 
       my_tasks_path
     end
