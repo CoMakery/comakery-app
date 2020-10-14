@@ -7,6 +7,7 @@ describe TokenType::Dag do
   specify { expect(described_class.new.name).to eq('DAG') }
   specify { expect(described_class.new.symbol).to eq('DAG') }
   specify { expect(described_class.new.decimals).to eq(8) }
+  specify { expect(described_class.new.wallet_logo).to be_nil }
   specify { expect(described_class.new.contract).to be_nil }
   specify { expect(described_class.new.abi).to eq({}) }
   specify { expect(described_class.new.tx).to eq(Comakery::Dag::Tx) }
