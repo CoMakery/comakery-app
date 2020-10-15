@@ -1,5 +1,6 @@
 shared_examples 'belongs_to_blockchain' do |attrs|
-  it { is_expected.to validate_presence_of(:_blockchain) }
+  it { is_expected.to validate_presence_of(:_blockchain).with_message('unknown blockchain value') }
+  it { is_expected.to validate_inclusion_of(:_blockchain).in_array(Blockchain.list.keys.map(&:to_s)).with_message('unknown blockchain value') }
   it { is_expected.to define_enum_for(:_blockchain).with_values(Blockchain.list).with_prefix(:_blockchain) }
 
   describe '.blockchain_for' do
