@@ -11,7 +11,7 @@ module BelongsToBlockchain
 
   included do
     enum _blockchain: Blockchain.list, _prefix: :_blockchain
-    validates :_blockchain, presence: true, inclusion: { in: Blockchain.list.keys.map(&:to_s), message: 'unknown blockchain value' }
+    validates :_blockchain, inclusion: { in: Blockchain.list.keys.map(&:to_s), message: 'unknown blockchain value' }
 
     def self.blockchain_for(name)
       "Blockchain::#{name.camelize}".constantize.new
@@ -29,7 +29,8 @@ module BelongsToBlockchain
     def _blockchain=(value)
       super
     rescue ArgumentError
-      # Skip argument error
+      # Skip argument and reset `_blockchain`
+      self._blockchain = nil
     end
   end
 end
