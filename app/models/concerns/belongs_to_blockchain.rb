@@ -10,8 +10,8 @@ module BelongsToBlockchain
   end
 
   included do
-    validates :_blockchain, presence: true
     enum _blockchain: Blockchain.list, _prefix: :_blockchain
+    validates :_blockchain, presence: true, inclusion: { in: Blockchain.list, message: 'Unknown blockchain value' }
 
     def self.blockchain_for(name)
       "Blockchain::#{name.camelize}".constantize.new
@@ -23,6 +23,13 @@ module BelongsToBlockchain
 
     def tokens_on_same_blockchain
       Token.where(_blockchain: _blockchain)
+    end
+
+    # Overwrite the setter to rely on validations instead of [ArgumentError]
+    def _blockchain=(value)
+      super
+    rescue ArgumentError
+      # Skip argument error
     end
   end
 end
