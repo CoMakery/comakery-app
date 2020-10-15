@@ -11,7 +11,7 @@ module BelongsToBlockchain
 
   included do
     enum _blockchain: Blockchain.list, _prefix: :_blockchain
-    validates :_blockchain, presence: true, inclusion: { in: Blockchain.list, message: 'Unknown blockchain value' }
+    validates :_blockchain, presence: true, inclusion: { in: Blockchain.list, message: 'unknown blockchain value' }
 
     def self.blockchain_for(name)
       "Blockchain::#{name.camelize}".constantize.new

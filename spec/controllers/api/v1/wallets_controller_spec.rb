@@ -83,7 +83,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
           post :create, params: params
           expect(response).not_to be_successful
           expect(response).to have_http_status(400)
-          expect(assigns[:errors][:_blockchain]).to eq ['Unknown blockchain value']
+          expect(assigns[:errors][:_blockchain]).to eq ['unknown blockchain value']
         end
       end
     end
