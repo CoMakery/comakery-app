@@ -49,11 +49,21 @@ describe Wallet, type: :model do
       specify { expect(subject.state).to eq('ok') }
     end
 
-    it 'works before validation' do
-      wallet = build(:wallet, source: :ore_id)
-      wallet.valid?
+    context 'before validation' do
+      it 'works on create' do
+        wallet = build(:wallet, source: :ore_id)
+        wallet.valid?
 
-      expect(wallet.state).to eq('pending')
+        expect(wallet.state).to eq('pending')
+      end
+
+      it 'ignore on update' do
+        wallet = create(:wallet, source: :ore_id, address: nil)
+        wallet.update(state: :ok)
+        wallet.valid?
+
+        expect(wallet.state).to eq('ok')
+      end
     end
   end
 
