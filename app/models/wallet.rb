@@ -1,6 +1,6 @@
 class Wallet < ApplicationRecord
   include BelongsToBlockchain
-  include OreIdFeatures
+  include BelongsToOreId
 
   belongs_to :account
   has_many :balances, dependent: :destroy

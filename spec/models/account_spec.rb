@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe Account do
-  it { is_expected.to have_many(:wallets) }
+  it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }
+  it { is_expected.to have_many(:ore_ids).dependent(:destroy) }
 
   subject(:account) { create :account, password: '12345678' }
 
