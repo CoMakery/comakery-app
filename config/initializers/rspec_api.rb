@@ -53,9 +53,11 @@ RspecApiDocumentation.configure do |config|
   config.api_name = "Comakery Whitelabel API"
 
   # Change the description of the API on index pages
-  config.api_explanation = """
+  config.api_explanation = <<~TEXT
     All of the endpoints below are only accessible via a whitelabel domain, with data scoped to the according instance.
-  """
+    <br><br>
+    <strong>Note:</strong> that there is formatting applied to JSON requests for readability. This makes the example cryptographic signatures for the requests invalid in order to make the examples more readable.
+  TEXT
 
   # Redefine what method the DSL thinks is the client
   # This is useful if you need to `let` your own client, most likely a model.
