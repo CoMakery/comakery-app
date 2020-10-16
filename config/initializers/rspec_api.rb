@@ -23,7 +23,7 @@ RspecApiDocumentation.configure do |config|
   config.format = [:html]
 
   # Location of templates
-  # config.template_path = "inside of the gem"
+  config.template_path = 'app/views/'
 
   # Filter by example document type
   config.filter = :all
