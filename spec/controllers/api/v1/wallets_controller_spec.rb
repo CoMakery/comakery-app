@@ -50,7 +50,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         end.to change(account.wallets, :count).by(1)
       end
 
-      it 'returns list of account wallets' do
+      it 'returns created wallet' do
         params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -71,6 +71,20 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         post :create, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
+      end
+
+      context 'with unknown blockchain' do
+        let(:create_params) { { wallet: { blockchain: :unknown, address: build(:bitcoin_address_1) } } }
+
+        it 'renders an error' do
+          params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+          params[:account_id] = account.managed_account_id
+
+          post :create, params: params
+          expect(response).not_to be_successful
+          expect(response).to have_http_status(400)
+          expect(assigns[:errors][:_blockchain]).to eq ['unknown blockchain value']
+        end
       end
     end
   end
@@ -95,6 +109,22 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         params[:id] = wallet.id
 
         delete :destroy, params: params
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe 'GET #show' do
+    context 'with valid params' do
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }
+
+      it 'returns the wallet' do
+        params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'GET')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+        params[:format] = :json
+
+        get :show, params: params
         expect(response).to have_http_status(:ok)
       end
     end

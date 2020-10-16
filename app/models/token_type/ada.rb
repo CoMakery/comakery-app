@@ -20,6 +20,12 @@ class TokenType::Ada < TokenType
     6
   end
 
+  # Wallet logo filename for UI purposes (relative to `app/assets/images`)
+  # @return [String] filename
+  def wallet_logo
+    'trezor.png'
+  end
+
   # Contract instance if implemented
   # @return [nil]
   def contract

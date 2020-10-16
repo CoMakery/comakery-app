@@ -4,7 +4,7 @@
     <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
-      
+
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -168,11 +168,28 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/e71ee898-cc2c-4512-8d51-e953bc173c8e/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/40b019d0-5f4a-4878-ac39-64f86f299750/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"wallet":{"address":"3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt","blockchain":"bitcoin"}},"method":"POST","nonce":"4e521ed67c3a697db2991838041da29c","timestamp":"1601926115","url":"http://example.org/api/v1/accounts/e71ee898-cc2c-4512-8d51-e953bc173c8e/wallets"},"proof":{"signature":"z/bfdJN+jx+LOI7BW3eOJu3eSz3BDg2qyK6FcRlxEy+PLIEFjThDDhSzhYburmjEoxgrJMefJ/2loiJMTwUeAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "wallet": {
+        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts/40b019d0-5f4a-4878-ac39-64f86f299750/wallets",
+    "method": "POST",
+    "nonce": "b9876234ed3affc10fbbd9219a7c03d4",
+    "timestamp": "1602758037"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "5XzUmO5dUq/SJ2KDlA1QXB3VVnz2cpImEtf8KsSgwX9UeJow9EQ8V03/gknSreR87t79C5AVERh1WFMZBl0UBQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -181,8 +198,8 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;Blockchain&quot;: [
-      &quot;has already wallet added&quot;
+    &quot;blockchain&quot;: [
+      &quot;can&#39;t be blank&quot;
     ]
   }
 }</pre>

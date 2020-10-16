@@ -10,7 +10,7 @@ RspecApiDocumentation.configure do |config|
   # Set the application that Rack::Test uses
   config.app = Rails.application
 
-  # Used to provide a configuration for the specification (supported only by 'open_api' format for now) 
+  # Used to provide a configuration for the specification (supported only by 'open_api' format for now)
   # config.configurations_dir = Rails.root.join("doc", "configurations", "api")
 
   # Output folder
@@ -23,7 +23,7 @@ RspecApiDocumentation.configure do |config|
   config.format = [:html]
 
   # Location of templates
-  # config.template_path = "inside of the gem"
+  config.template_path = 'app/views/'
 
   # Filter by example document type
   config.filter = :all
@@ -51,11 +51,13 @@ RspecApiDocumentation.configure do |config|
 
   # Change the name of the API on index pages
   config.api_name = "Comakery Whitelabel API"
-  
+
   # Change the description of the API on index pages
-  config.api_explanation = """
+  config.api_explanation = <<~TEXT
     All of the endpoints below are only accessible via a whitelabel domain, with data scoped to the according instance.
-  """
+    <br><br>
+    <strong>Note:</strong> that there is formatting applied to JSON requests for readability. This makes the example cryptographic signatures for the requests invalid in order to make the examples more readable.
+  TEXT
 
   # Redefine what method the DSL thinks is the client
   # This is useful if you need to `let` your own client, most likely a model.
@@ -77,7 +79,7 @@ RspecApiDocumentation.configure do |config|
 
   # Change how the post body is formatted by default, you can still override by `raw_post`
   # Can be :json, :xml, or a proc that will be passed the params
-  config.request_body_formatter = Proc.new { |params| params.to_json_c14n }
+  config.request_body_formatter = Proc.new { |params| JSON.pretty_generate(params) }
 
   # Change how the response body is formatted by default
   # Is proc that will be called with the response_content_type & response_body

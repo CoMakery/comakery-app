@@ -158,19 +158,36 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO
-Api-Transaction-Key: Vc/XoPm1kqlcdcbcXsGmitvn+uZiM5iP</pre>
+Api-Transaction-Key: 8Xkt2tX2mEJj0DGBXakNF6HxhoCl+cg4</pre>
 
           <h4>Route</h4>
           <pre class="request route highlight">PUT /api/v1/projects/61/blockchain_transactions/10</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"tx_hash":"0x9be2f065472921e3aeb2ce830a24707ab3d3c49453b49ad9a3685f83bbe80aa4"}},"method":"PUT","nonce":"2d37047e4c7852814a9463374604cada","timestamp":"1601926113","url":"http://example.org/api/v1/projects/61/blockchain_transactions/10"},"proof":{"signature":"sjA1RIVPsUvPh73y4/zOVnTkGnVnODYXnLpEHGrPDhP1bzCCBYWuvVZ3vnlqZQndYAXKtjdi/DlAj2U35Fj8CA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transaction": {
+        "tx_hash": "0xa48999d398d1fb873234be9c2ac23a4b882e1c61d02c340740e1b1398f823246"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/61/blockchain_transactions/10",
+    "method": "PUT",
+    "nonce": "793bb9299605fb4ef0728f39396e8a43",
+    "timestamp": "1602698162"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "a0f6GBSlzyRQGlr13QYrINTGqadqszPYncNUMszWdgsGYNR/m6Zmvz9EQDvpxXXxFHtB2TorvE2zkoB+eQZmDg=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;e8a417c847d033e1e1f3e6aa87788071&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;53080db19f28f09d93acb233a12a3107&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -180,15 +197,15 @@ Api-Transaction-Key: Vc/XoPm1kqlcdcbcXsGmitvn+uZiM5iP</pre>
   &quot;destination&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
   &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
   &quot;amount&quot;: 1,
-  &quot;nonce&quot;: 201833,
+  &quot;nonce&quot;: 445640,
   &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
   &quot;network&quot;: &quot;ethereum_ropsten&quot;,
-  &quot;txHash&quot;: &quot;0x9be2f065472921e3aeb2ce830a24707ab3d3c49453b49ad9a3685f83bbe80aa4&quot;,
-  &quot;txRaw&quot;: &quot;0xf86a83031469822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080&quot;,
+  &quot;txHash&quot;: &quot;0xa48999d398d1fb873234be9c2ac23a4b882e1c61d02c340740e1b1398f823246&quot;,
+  &quot;txRaw&quot;: &quot;0xf86a8306ccc8822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080&quot;,
   &quot;status&quot;: &quot;pending&quot;,
   &quot;statusMessage&quot;: null,
-  &quot;createdAt&quot;: &quot;2020-10-05T19:28:33.570Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:33.661Z&quot;,
+  &quot;createdAt&quot;: &quot;2020-10-14T17:56:02.298Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-14T17:56:02.388Z&quot;,
   &quot;syncedAt&quot;: null
 }</pre>
       </div>

@@ -187,7 +187,7 @@ table th, table td {
                     <span class="name">account[date_of_birth]</span>
                 </td>
                 <td>
-                  <span class="description">date of birth</span>
+                  <span class="description">date of birth (YYYY-MM-DD)</span>
                 </td>
               </tr>
             </tbody>
@@ -223,7 +223,24 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"managed_account_id":"b553b2c5-080d-4f82-b75a-11741e36cc77"}},"method":"POST","nonce":"f107affacee9e8a0a2be5a7dc6aa7484","timestamp":"1601926102","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"F2LWozw7E3m+r5yTTlTJQ4G0xCoT6fcKkvPIraaAt6ujWAURLn6SqHufUb1A9Drs1+y1uwQ+hYQcaFRaQ6ngCQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account": {
+        "managed_account_id": "da8ba49e-21a6-49a4-9d25-759be3885d19"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts",
+    "method": "POST",
+    "nonce": "1eee5afe88480573661fee179ab28bb7",
+    "timestamp": "1602698151"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "LEws//VkCBh4M+rxtn8FFWG96QQgBGgMJGFAPhE2G1fINm9mLdTeO2KK6w5GmTFiywx/NZRtEPXrQZW4bCv2DQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -245,7 +262,7 @@ table th, table td {
       &quot;can&#39;t be blank&quot;
     ],
     &quot;dateOfBirth&quot;: [
-      &quot;should be present in correct format (MM/DD/YYYY)&quot;
+      &quot;should be present in correct format&quot;
     ]
   }
 }</pre>

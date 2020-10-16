@@ -58,7 +58,7 @@ resource 'II. Accounts' do
       parameter :nickname, 'nickname', type: :string
       parameter :image, 'image', type: :string
       parameter :country, 'counry', type: :string, required: true
-      parameter :date_of_birth, 'date of birth', type: :string, required: true
+      parameter :date_of_birth, 'date of birth (YYYY-MM-DD)', type: :string, required: true
     end
 
     with_options with_example: true do
@@ -73,7 +73,7 @@ resource 'II. Accounts' do
           first_name: 'Eva',
           last_name: 'Smith',
           nickname: "hunter-#{SecureRandom.hex(20)}",
-          date_of_birth: '1990/01/01',
+          date_of_birth: '1990-01-31',
           country: 'United States of America'
         }
       end
@@ -117,7 +117,7 @@ resource 'II. Accounts' do
       parameter :nickname, 'nickname', type: :string
       parameter :image, 'image', type: :string
       parameter :country, 'counry', type: :string
-      parameter :date_of_birth, 'date of birth', type: :string
+      parameter :date_of_birth, 'date of birth (YYYY-MM-DD)', type: :string
     end
 
     with_options with_example: true do

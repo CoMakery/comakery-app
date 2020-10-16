@@ -187,7 +187,7 @@ table th, table td {
                     <span class="name">account[date_of_birth]</span>
                 </td>
                 <td>
-                  <span class="description">date of birth</span>
+                  <span class="description">date of birth (YYYY-MM-DD)</span>
                 </td>
               </tr>
             </tbody>
@@ -223,29 +223,52 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"country":"United States of America","date_of_birth":"1990/01/01","email":"me+daf640e84a2560d789b82926bae73a701c238150@example.com","first_name":"Eva","last_name":"Smith","managed_account_id":"11245eea-5b8c-47a2-98ae-ba76629cae64","nickname":"hunter-d52458a1da10cfe4f85ca307278bce0859932add"}},"method":"POST","nonce":"9f8553a6100b058ff876df6a8efa8ab9","timestamp":"1601926102","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"yVemKRk80eHLUFqp6r2XjC5DbduADDXv3pu/kQDtzVdasPVhSNpQ2jg9FRCu959Z0xu2+NRiBxZFcwZdSiBUDA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account": {
+        "managed_account_id": "a0d10c93-7790-47fe-83da-0f9b2e6c2136",
+        "email": "me+81cf78f68407ec8ddcf8c7226d231c802f471a29@example.com",
+        "first_name": "Eva",
+        "last_name": "Smith",
+        "nickname": "hunter-8f375fc215be1388a5658a50c12b91ae865df358",
+        "date_of_birth": "1990-01-31",
+        "country": "United States of America"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts",
+    "method": "POST",
+    "nonce": "a3022fa65a1793b0e7c7892e4a78ceb4",
+    "timestamp": "1602698151"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "n9lw7y0vM4Apj78ilP7lb8xEfwdVDZgy7xupXt29nl7LB06SExJmadwdnOQ2hJidbFR0JgwFU+0mQ08Yo3VEBg=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;5d9f262f8fdda9f18852155ed9b72978&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;89f250783f68ed01f0ff5fde974c3da6&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;email&quot;: &quot;me+daf640e84a2560d789b82926bae73a701c238150@example.com&quot;,
-  &quot;managedAccountId&quot;: &quot;11245eea-5b8c-47a2-98ae-ba76629cae64&quot;,
+  &quot;email&quot;: &quot;me+81cf78f68407ec8ddcf8c7226d231c802f471a29@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;a0d10c93-7790-47fe-83da-0f9b2e6c2136&quot;,
   &quot;firstName&quot;: &quot;Eva&quot;,
   &quot;lastName&quot;: &quot;Smith&quot;,
-  &quot;nickname&quot;: &quot;hunter-d52458a1da10cfe4f85ca307278bce0859932add&quot;,
+  &quot;nickname&quot;: &quot;hunter-8f375fc215be1388a5658a50c12b91ae865df358&quot;,
   &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
   &quot;country&quot;: &quot;United States of America&quot;,
-  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
+  &quot;dateOfBirth&quot;: &quot;1990-01-31&quot;,
   &quot;verificationState&quot;: &quot;unknown&quot;,
   &quot;verificationDate&quot;: null,
   &quot;verificationMaxInvestmentUsd&quot;: null,
-  &quot;createdAt&quot;: &quot;2020-10-05T19:28:22.548Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-05T19:28:22.586Z&quot;
+  &quot;createdAt&quot;: &quot;2020-10-14T17:55:51.311Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-14T17:55:51.349Z&quot;
 }</pre>
       </div>
     </div>

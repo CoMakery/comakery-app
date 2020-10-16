@@ -7,6 +7,7 @@ describe TokenType::Eth do
   specify { expect(described_class.new.name).to eq('ETH') }
   specify { expect(described_class.new.symbol).to eq('ETH') }
   specify { expect(described_class.new.decimals).to eq(18) }
+  specify { expect(described_class.new.wallet_logo).to eq('metamask2.png') }
   specify { expect(described_class.new.contract).to be_nil }
   specify { expect(described_class.new.abi).to eq({}) }
   specify { expect(described_class.new.tx).to eq(Comakery::Eth::Tx) }

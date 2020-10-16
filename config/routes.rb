@@ -137,7 +137,7 @@ Rails.application.routes.draw do
       resources :accounts, only: [:show, :update, :create] do
         resources :interests, only: [:index, :create, :destroy]
         resources :verifications, only: [:index, :create]
-        resources :wallets, only: [:index, :create, :destroy] do
+        resources :wallets, only: [:index, :create, :show, :destroy] do
           member do
             post :password_reset
           end
