@@ -17,7 +17,7 @@ module BelongsToOreId
     private
 
       def create_ore_id
-        self.ore_id = account.ore_ids.create if ore_id?
+        self.ore_id = (account.ore_id || account.create_ore_id) if ore_id?
       end
 
       def pending_for_ore_id
