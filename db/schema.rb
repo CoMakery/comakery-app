@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_22_160856) do
+ActiveRecord::Schema.define(version: 2020_10_16_083230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -520,7 +520,7 @@ ActiveRecord::Schema.define(version: 2020_09_22_160856) do
 
   create_table "wallets", force: :cascade do |t|
     t.bigint "account_id"
-    t.string "address", null: false
+    t.string "address"
     t.integer "_blockchain", default: 0, null: false
     t.integer "state", default: 0, null: false
     t.integer "source", default: 0, null: false

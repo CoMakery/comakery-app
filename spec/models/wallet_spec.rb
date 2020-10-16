@@ -14,13 +14,20 @@ describe Wallet, type: :model do
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
 
   it 'allow empty address for pending and ore_id wallet' do
-    wallet = build(:wallet, state: :pending, source: :ore_id)
+    wallet = build(:wallet, state: :pending, source: :ore_id, address: nil)
     expect(wallet).not_to validate_presence_of(:address)
   end
 
-  it 'do not allow empty address for ok and ore_id wallet' do
-    wallet = build(:wallet, state: :ok, source: :ore_id)
-    expect(wallet).to validate_presence_of(:address)
+  example 'do not allow empty address for ok and ore_id wallet' do
+    wallet = build(:wallet, source: :ore_id, address: nil)
+
+    expect(wallet.save).to be true
+    expect(wallet.state).to eq 'pending'
+    expect(wallet.address).to be_nil
+
+    wallet.state = :ok
+    expect(wallet.valid?).to be false
+    expect(wallet.errors.messages).to eq address: ["can't be blank"]
   end
 
   describe '#available_blockchains' do
@@ -40,6 +47,13 @@ describe Wallet, type: :model do
     context 'when created wallet source is not ore_id' do
       subject { create(:wallet, source: :user_provided) }
       specify { expect(subject.state).to eq('ok') }
+    end
+
+    it 'works before validation' do
+      wallet = build(:wallet, source: :ore_id)
+      wallet.valid?
+
+      expect(wallet.state).to eq('pending')
     end
   end
 

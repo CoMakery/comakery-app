@@ -2,7 +2,7 @@ module OreIdFeatures
   extend ActiveSupport::Concern
 
   included do
-    before_create :pending_for_ore_id
+    before_validation :pending_for_ore_id, on: :create
 
     def ore_id_password_reset_url(redirect_url)
       return unless ore_id?
