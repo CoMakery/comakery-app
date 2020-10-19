@@ -9,6 +9,12 @@
     <% end %>
   </div>
 
+  <div class="transfer-rules__refresh_statuses">
+    <% if policy(@project).refresh_transfer_rule_statuses? %>
+      <%= link_to 'refresh transfer rules', refresh_statuses_project_dashboard_transfer_rules_path(@project), class: 'transfer-rule-refresh-statuses', method: :post %>
+    <% end %>
+  </div>
+
   <div class="transfer-rules__table transfers-table">
     <%= render partial: "header" %>
     <%= render partial: "form_transfer_rule" %>
