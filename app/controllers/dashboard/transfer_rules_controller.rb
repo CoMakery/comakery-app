@@ -46,13 +46,12 @@ class Dashboard::TransferRulesController < ApplicationController
     end
   end
 
-  def refresh_statuses
-    authorize @project, :refresh_transfer_rule_statuses?
+  def refresh_from_blockchain
+    authorize @project, :refresh_transfer_rules?
+    authorize @project.token, :refresh_transfer_rules_enabled?
 
-    # TODO: Run no more than once every 10 minutes
-    # BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob.perform_later(@project.token)
-
-    redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Refresh scheduled'
+    BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob.perform_now(@project.token)
+    redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rules were synced from the blockchain'
   end
 
   private

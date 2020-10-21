@@ -1,9 +1,9 @@
 class TokenPolicy < ApplicationPolicy
   attr_reader :account, :token
 
-  def initialize(account, project)
+  def initialize(account, token)
     @account = account
-    @project = project
+    @token = token
   end
 
   class Scope
@@ -33,4 +33,9 @@ class TokenPolicy < ApplicationPolicy
   alias edit? new?
   alias update? new?
   alias fetch_contract_details? new?
+
+  def refresh_transfer_rules_enabled?
+    last_synced_transfer_rule = token.transfer_rules.order(synced_at: :desc).first
+    last_synced_transfer_rule.nil? || last_synced_transfer_rule.synced_at < 10.minutes.ago
+  end
 end

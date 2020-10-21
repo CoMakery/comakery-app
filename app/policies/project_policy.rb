@@ -78,7 +78,7 @@ class ProjectPolicy < ApplicationPolicy
     account.present? && (project.admins.include? account)
   end
 
-  def refresh_transfer_rule_statuses?
+  def refresh_transfer_rules?
     project_owner? || project_admin?
   end
 

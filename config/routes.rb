@@ -93,7 +93,7 @@ Rails.application.routes.draw do
         collection do
           post :pause
           post :unpause
-          post :refresh_statuses
+          post :refresh_from_blockchain
         end
       end
     end

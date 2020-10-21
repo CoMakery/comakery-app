@@ -9,9 +9,9 @@
     <% end %>
   </div>
 
-  <div class="transfer-rules__refresh_statuses">
-    <% if policy(@project).refresh_transfer_rule_statuses? %>
-      <%= link_to 'refresh transfer rules', refresh_statuses_project_dashboard_transfer_rules_path(@project), class: 'transfer-rule-refresh-statuses', method: :post %>
+  <div class="transfer-rules__refresh_from_blockchain">
+    <% if policy(@project).refresh_transfer_rules? %>
+      <%= button_to 'refresh transfer rules', refresh_from_blockchain_project_dashboard_transfer_rules_path(@project), class: 'transfer-rule-refresh-statuses', method: :post, disabled: !policy(@project.token).refresh_transfer_rules_enabled? %>
     <% end %>
   </div>
 
