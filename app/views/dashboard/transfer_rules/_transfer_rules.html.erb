@@ -11,7 +11,7 @@
 
   <div class="transfer-rules__refresh_from_blockchain">
     <% if policy(@project).refresh_transfer_rules? %>
-      <%= button_to 'refresh transfer rules', refresh_from_blockchain_project_dashboard_transfer_rules_path(@project), class: 'transfer-rule-refresh-statuses', method: :post, disabled: !policy(@project.token).refresh_transfer_rules_enabled? %>
+      <%= button_to 'refresh transfer rules', refresh_from_blockchain_project_dashboard_transfer_rules_path(@project), class: 'transfer-rules__refresh_from_blockchain_button', method: :post, disabled: !policy(@project.token).refresh_transfer_rules_enabled? %>
     <% end %>
   </div>
 
