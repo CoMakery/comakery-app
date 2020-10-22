@@ -8,7 +8,7 @@ module BlockchainJob
         raise 'Token is not Comakery Type' unless @token._token_type_comakery_security_token?
 
         @decoder = Ethereum::Decoder.new
-        @transfer_rules = @token.transfer_rules.to_a
+        @transfer_rules = []
         @reg_groups = @token.reg_groups.to_a
 
         @client = Comakery::Eth.new(@token.blockchain.explorer_api_host).client
@@ -49,9 +49,8 @@ module BlockchainJob
           if (index = find_index_of_group_in_built_transfer_rules(sending_group, receiving_group))
             @transfer_rules[index]
           else
-            transfer_rule = TransferRule.find_or_initialize_by(sending_group_id: sending_group.id, receiving_group_id: receiving_group.id, token_id: @token.id)
-            @transfer_rules << transfer_rule
-            transfer_rule
+            @transfer_rules << TransferRule.new(sending_group_id: sending_group.id, receiving_group_id: receiving_group.id, token_id: @token.id)
+            @transfer_rules.last
           end
 
         transfer_rule.lockup_until = lockup_until
@@ -71,19 +70,15 @@ module BlockchainJob
           @reg_groups.find do |reg_group|
             reg_group.blockchain_id == blockchain_group_id && reg_group.token_id == @token.id
           end
-        return cached_group if cached_group
 
-        RegGroup.find_or_create_by(token_id: @token.id, blockchain_id: blockchain_group_id)
+        if cached_group
+          @reg_groups << cached_group
+          cached_group
+        else
+          @reg_groups << RegGroup.find_or_create_by!(token_id: @token.id, blockchain_id: blockchain_group_id)
+          @reg_groups.last
+        end
       end
-      # def sync
-      #   return false unless @address&.present?
-
-      #   @record.reg_group = @token.reg_groups.find_or_create_by(blockchain_id: @contract.getTransferGroup(@address))
-      #   @record.account_frozen = @contract.getFrozenStatus(@address)
-      #   @record.max_balance = @contract.getMaxBalance(@address)
-      #   @record.balance = @contract.balanceOf(@address)
-      #   @record.lockup_until = Time.zone.at(@contract.getLockUntil(@address))
-      # end
     end
   end
 end
