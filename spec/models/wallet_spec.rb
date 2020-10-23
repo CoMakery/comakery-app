@@ -27,19 +27,18 @@ describe Wallet, type: :model do
     it { expect(subject.ore_id_password_reset_url('localhost')).to eq('https://example.org?redirect=localhost') }
 
     context 'and address is missing' do
-      subject { build(:wallet, source: :ore_id) }
-      before { subject.address = nil }
+      subject { Wallet.create(source: :ore_id, address: nil, _blockchain: :bitcoin, account: create(:account)) }
       it { expect(subject.state).to eq('pending') }
     end
 
     context 'and pending?' do
-      subject { build(:wallet, state: :pending, source: :ore_id) }
+      subject { create(:wallet, state: :pending, source: :ore_id) }
       it { is_expected.not_to validate_presence_of(:address) }
     end
 
     context 'and ok?' do
-      subject { build(:wallet, state: :ok, source: :ore_id) }
-      it { is_expected.not_to validate_presence_of(:address) }
+      subject { create(:wallet, state: :ok, source: :ore_id) }
+      it { is_expected.to validate_presence_of(:address) }
     end
   end
 

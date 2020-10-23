@@ -55,9 +55,15 @@ module Comakery
     config.generators do |g|
       g.test_framework :rspec
     end
-    
+
+    class CustomCamelize
+      def self.camelize(string)
+        string.sub(/^_/, '').underscore.camelize(:lower)
+      end
+    end
+
     config.react.camelize_props = true
-    config.middleware.use OliveBranch::Middleware, inflection: 'camel'
+    config.middleware.use OliveBranch::Middleware, inflection: 'camel', camelize: CustomCamelize.method(:camelize)
 
     # Use Redis for Cache Store
     redis_provider = ENV.fetch("REDIS_PROVIDER") { "REDIS_URL" }

@@ -4,7 +4,7 @@ class AwardDecorator < Draper::Decorator
   include Rails.application.routes.url_helpers
 
   def ethereum_transaction_address
-    object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash
+    token && (object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash)
   end
 
   def ethereum_transaction_address_short

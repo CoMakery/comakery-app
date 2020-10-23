@@ -72,6 +72,20 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
+
+      context 'with unknown blockchain' do
+        let(:create_params) { { wallet: { blockchain: :unknown, address: build(:bitcoin_address_1) } } }
+
+        it 'renders an error' do
+          params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+          params[:account_id] = account.managed_account_id
+
+          post :create, params: params
+          expect(response).not_to be_successful
+          expect(response).to have_http_status(400)
+          expect(assigns[:errors][:_blockchain]).to eq ['unknown blockchain value']
+        end
+      end
     end
   end
 

@@ -528,7 +528,7 @@ ActiveRecord::Schema.define(version: 2020_10_16_151114) do
 
   create_table "wallets", force: :cascade do |t|
     t.bigint "account_id"
-    t.string "address", null: false
+    t.string "address"
     t.integer "_blockchain", default: 0, null: false
     t.integer "state", default: 0, null: false
     t.integer "source", default: 0, null: false

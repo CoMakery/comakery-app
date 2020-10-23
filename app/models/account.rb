@@ -73,7 +73,7 @@ class Account < ApplicationRecord
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
-  validates :date_of_birth, presence: { message: 'should be present in correct format (MM/DD/YYYY)' }, if: :name_required
+  validates :date_of_birth, presence: { message: 'should be present in correct format' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 

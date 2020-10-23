@@ -4,7 +4,7 @@
     <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
-      
+
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -168,7 +168,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/85581f30-bcae-49db-98e1-f94cf1ba6667/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/40b019d0-5f4a-4878-ac39-64f86f299750/wallets</pre>
 
 
             <h4>Body</h4>
@@ -176,19 +176,18 @@ table th, table td {
   "body": {
     "data": {
       "wallet": {
-        "blockchain": "bitcoin",
         "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
       }
     },
-    "url": "http://example.org/api/v1/accounts/85581f30-bcae-49db-98e1-f94cf1ba6667/wallets",
+    "url": "http://example.org/api/v1/accounts/40b019d0-5f4a-4878-ac39-64f86f299750/wallets",
     "method": "POST",
-    "nonce": "66f1cc4683bc66deb84a24f3a59c8c64",
-    "timestamp": "1602692306"
+    "nonce": "b9876234ed3affc10fbbd9219a7c03d4",
+    "timestamp": "1602758037"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "8BUh6BMAB2Fvk3AEepHUX+OVONjuYccN4DbayZIiRk+4KvC6IGRFmDBY+LYFKUwBJiQrEkbjqKxjBRsscoX8DQ=="
+    "signature": "5XzUmO5dUq/SJ2KDlA1QXB3VVnz2cpImEtf8KsSgwX9UeJow9EQ8V03/gknSreR87t79C5AVERh1WFMZBl0UBQ=="
   }
 }</pre>
 
@@ -199,8 +198,8 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;Blockchain&quot;: [
-      &quot;has already wallet added&quot;
+    &quot;blockchain&quot;: [
+      &quot;can&#39;t be blank&quot;
     ]
   }
 }</pre>
