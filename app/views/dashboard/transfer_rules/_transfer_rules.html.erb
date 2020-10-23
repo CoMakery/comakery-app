@@ -3,16 +3,18 @@
 
   <h3><%= pluralize(@transfer_rules_all.size, 'Rule', 'Rules') %></h3>
 
-  <div class="transfer-rules__create">
-    <% if policy(@project).edit_transfer_rules? %>
-      <%= button_tag "create transfer rule ＋", type: 'button', class: 'transfer-rule-create', data: { target: 'transfer-rules.button', action: 'transfer-rules#showForm' } %>
-    <% end %>
-  </div>
+  <div class="transfer-rules__buttons">
+    <div class="transfer-rules__create">
+      <% if policy(@project).edit_transfer_rules? %>
+        <%= button_tag "create transfer rule ＋", type: 'button', class: 'transfer-rule-create', data: { target: 'transfer-rules.button', action: 'transfer-rules#showForm' } %>
+      <% end %>
+    </div>
 
-  <div class="transfer-rules__refresh_from_blockchain">
-    <% if policy(@project).refresh_transfer_rules? %>
-      <%= button_to 'refresh transfer rules', refresh_from_blockchain_project_dashboard_transfer_rules_path(@project), class: 'transfer-rules__refresh_from_blockchain_button', method: :post, disabled: !policy(@project.token).refresh_transfer_rules_enabled? %>
-    <% end %>
+    <div class="transfer-rules__refresh_from_blockchain">
+      <% if policy(@project).refresh_transfer_rules? %>
+        <%= button_to 'refresh transfer rules', refresh_from_blockchain_project_dashboard_transfer_rules_path(@project), class: 'transfer-rules__refresh_from_blockchain_button', method: :post, disabled: !policy(@project.token).refresh_transfer_rules_enabled? %>
+      <% end %>
+    </div>
   </div>
 
   <div class="transfer-rules__table transfers-table">

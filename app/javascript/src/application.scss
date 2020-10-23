@@ -1149,6 +1149,10 @@ button.reg-groups-create,
   }
 }
 
+.transfer-rules__buttons {
+  display: flex;
+}
+
 .transfers-manage-types {
   margin-bottom: 1.5em;
   border-radius: 6px;
