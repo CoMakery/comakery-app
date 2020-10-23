@@ -168,6 +168,10 @@ class Account < ApplicationRecord
 
   before_save :downcase_email
 
+  def name
+    "#{first_name} #{last_name}"
+  end
+
   def whitelabel_interested_projects(whitelabel_mission)
     if whitelabel_mission.present?
       projects_interested.where(mission: whitelabel_mission)

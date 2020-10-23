@@ -11,6 +11,8 @@ describe Account do
     stub_discord_channels
   end
 
+  specify { expect(subject.name).to eq("#{subject.first_name} #{subject.last_name}") }
+
   describe 'validations' do
     describe 'urls' do
       let!(:account) do

@@ -91,4 +91,16 @@ class Blockchain::Eos < Blockchain
   def validate_addr_format(addr)
     raise Blockchain::Address::ValidationError, "should only include letters 'a-z' and digits '1-5', and have length 12 characters" unless /\A[a-z1-5]{12}\z/.match?(addr)
   end
+
+  # Is it supported by OreId service
+  # @return [Boolean] flag
+  def supported_by_ore_id?
+    false
+  end
+
+  # Name of the blockchain on OreId service, if supported
+  # @return [String] name
+  def ore_id_name
+    nil
+  end
 end

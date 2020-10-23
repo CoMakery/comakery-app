@@ -1,28 +1,32 @@
 class OreId < ApplicationRecord
   belongs_to :account
   has_many :wallets, dependent: :destroy
-  after_create :schedule_create_remote_ore_id
+  after_create :schedule_sync_wallets
 
-  def create_remote_ore_id
-    # To be called from OreIdJobs::CreateJob
-
-    # Calls Aikon endpoint to create ore_id and sets account_name on success
+  def service
+    @service ||= OreIdService.new(self)
+  ensure
+    update(account_name: @service.account_name) if @service&.account_name && account_name.nil?
   end
 
-  def sync_remote_wallets
-    # To be called from OreIdJobs::SyncWalletsJob
+  def sync_wallets
+    service.permissions.each do |permission|
+      w = Wallet.find_or_initialize_by(
+        account: account,
+        source: :ore_id,
+        _blockchain: permission[:_blockchain]
+      )
 
-    # Raises an error if account_name is not present
-    # Calls Aikon endpoint to pull list of wallets and creates/populates local ones with addresses, marking them unclaimed
-  end
-
-  def reset_password_url
-    # Returns password_reset url
+      w.ore_id = self
+      w.state = :ok
+      w.address = permission[:address]
+      w.save!
+    end
   end
 
   private
 
-    def schedule_create_remote_ore_id
-      OreIdJobs::CreateJob.perform_later(self)
+    def schedule_sync_wallets
+      OreIdSyncJob.perform_later(self)
     end
 end

@@ -36,6 +36,13 @@ class Mom
     Balance.new(defaults.merge(attrs))
   end
 
+  def ore_id(**attrs)
+    defaults = {
+      account: create(:account)
+    }
+    OreId.new(defaults.merge(attrs))
+  end
+
   def specialty(**attrs)
     defaults = {
       name: "Specialty #{SecureRandom.hex(20)}"

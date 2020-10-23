@@ -21,7 +21,7 @@ module BelongsToOreId
       end
 
       def pending_for_ore_id
-        self.state = :pending if ore_id?
+        self.state = :pending if ore_id? && address.nil?
       end
   end
 end

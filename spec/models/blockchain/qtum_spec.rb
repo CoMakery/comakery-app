@@ -16,4 +16,6 @@ describe Blockchain::Qtum do
   specify { expect(described_class.new.url_for_tx_api('null')).to eq('https://qtum.info/tx/null') }
   specify { expect(described_class.new.url_for_address_human('null')).to eq('https://explorer.qtum.org/address/null') }
   specify { expect(described_class.new.url_for_address_api('null')).to eq('https://qtum.info/addr/null') }
+  specify { expect(described_class.new.supported_by_ore_id?).to be_falsey }
+  specify { expect(described_class.new.ore_id_name).to be_nil }
 end

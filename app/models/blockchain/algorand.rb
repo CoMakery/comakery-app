@@ -87,4 +87,16 @@ class Blockchain::Algorand < Blockchain
   def validate_addr(addr)
     raise Blockchain::Address::ValidationError, 'should consist of 58 alphanumeric characters' unless /\A[0-9A-Za-z]{58}\z/.match?(addr)
   end
+
+  # Is it supported by OreId service
+  # @return [Boolean] flag
+  def supported_by_ore_id?
+    true
+  end
+
+  # Name of the blockchain on OreId service, if supported
+  # @return [String] name
+  def ore_id_name
+    'algo_main'
+  end
 end

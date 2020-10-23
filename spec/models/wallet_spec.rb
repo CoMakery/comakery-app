@@ -22,9 +22,15 @@ describe Wallet, type: :model do
     subject { create(:wallet, source: :ore_id) }
 
     it { is_expected.to validate_presence_of(:ore_id_id) }
-    it { expect(subject.state).to eq('pending') }
+    it { expect(subject.state).to eq('ok') }
     it { expect(subject.ore_id).to be_an(OreId) }
     it { expect(subject.ore_id_password_reset_url('localhost')).to eq('https://example.org?redirect=localhost') }
+
+    context 'and address is missing' do
+      subject { build(:wallet, source: :ore_id) }
+      before { subject.address = nil }
+      it { expect(subject.state).to eq('pending') }
+    end
 
     context 'and pending?' do
       subject { build(:wallet, state: :pending, source: :ore_id) }

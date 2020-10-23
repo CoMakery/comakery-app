@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://service.oreid.io/api/custodial/new-user
+    body:
+      encoding: UTF-8
+      string: '{"name":"Eva Smith","user_name":"hunter-e8ecdacb5bcbfffffc0939d91529433b1c942bcb","email":"me+da9f320fbdc7de2a531f13c55cdbfdf1f59f3bb3@example.com","picture":"","user_password":"2bf270dd942be0a8326f432818aaeff9aec81d9ff18de6d1c3bf1627956da95b!","phone":"","account_type":"native"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 23 Oct 2020 19:30:14 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"39-fR6Q0y+pl7Y8wRW6ygroz7FMHjI"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"05681f84cc2e","accountName":"ore1rymlhk45"}'
+    http_version: null
+  recorded_at: Fri, 23 Oct 2020 19:30:14 GMT
+recorded_with: VCR 5.1.0
