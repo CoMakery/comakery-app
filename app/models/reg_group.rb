@@ -19,6 +19,7 @@ class RegGroup < ApplicationRecord
   validates :name, :blockchain_id, uniqueness: { scope: :token_id } # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :blockchain_id, inclusion: { in: BLOCKCHAIN_ID_MIN..BLOCKCHAIN_ID_MAX }
 
+  after_initialize :set_blockchain_id
   before_validation :set_name
 
   def self.default_for(token)
@@ -26,6 +27,16 @@ class RegGroup < ApplicationRecord
   end
 
   private
+
+    def set_blockchain_id
+      return if blockchain_id
+      return unless token_id
+
+      last_blockchain_id = RegGroup.where(token_id: token_id).order(blockchain_id: :desc).first&.blockchain_id
+      new_blockchain_id = last_blockchain_id + 1
+
+      self.blockchain_id = new_blockchain_id || 0
+    end
 
     def set_name
       self.name ||= blockchain_id.to_s
