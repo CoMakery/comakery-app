@@ -12,6 +12,8 @@ class RegGroup < ApplicationRecord
   BLOCKCHAIN_ID_MAX = 2.pow(256) - 1
   BLOCKCHAIN_ID_MIN = 0
 
+  attr_readonly :blockchain_id
+
   validates_with ComakeryTokenValidator
   validates :name, :blockchain_id, presence: true
   validates :name, :blockchain_id, uniqueness: { scope: :token_id } # rubocop:todo Rails/UniqueValidationWithoutIndex
