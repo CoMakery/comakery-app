@@ -1,5 +1,7 @@
 class OreIdService
   class OreIdService::Error < StandardError; end
+  class OreIdService::RemoteUserExistsError < StandardError; end
+  class OreIdService::RemoteInvalidError < StandardError; end
 
   include HTTParty
   base_uri 'https://service.oreid.io/api'
@@ -11,45 +13,42 @@ class OreIdService
     @account = ore_id.account
   end
 
-  def remote
-    @remote ||= (pull_remote || create_remote)
+  def create_remote
+    response = handle_response(
+      self.class.post(
+        '/custodial/new-user',
+        headers: request_headers,
+        body: create_remote_params.to_json
+      )
+    )
+
+    ore_id.update(account_name: response['accountName'])
+    response
   end
 
-  def account_name
-    @account_name ||= remote['accountName']
+  def remote
+    raise OreIdService::RemoteInvalidError unless ore_id.account_name
+
+    @remote ||= handle_response(
+      self.class.get(
+        "/account/user?account=#{ore_id.account_name}",
+        headers: request_headers
+      )
+    )
   end
 
   def permissions
-    @permissions ||= remote['permissions'].select { |p| p['permission'] == 'active' }.uniq { |p| p['chainNetwork'] }.map do |params|
+    @permissions ||= filtered_permissions.map do |params|
       {
         _blockchain: Blockchain.find_with_ore_id_name(params['chainNetwork']).name.underscore,
         address: params['chainAccount']
       }
     end
+  rescue NoMethodError
+    raise OreIdService::RemoteInvalidError
   end
 
   private
-
-    def pull_remote
-      return unless ore_id.account_name
-
-      handle_response(
-        self.class.get(
-          "/account/user?account=#{ore_id.account_name}",
-          headers: request_headers
-        )
-      )
-    end
-
-    def create_remote
-      handle_response(
-        self.class.post(
-          '/custodial/new-user',
-          headers: request_headers,
-          body: create_remote_params.to_json
-        )
-      )
-    end
 
     def create_remote_params
       {
@@ -71,14 +70,25 @@ class OreIdService
       }
     end
 
+    def filtered_permissions
+      remote['permissions'].select { |p| p['permission'] == 'active' }.uniq { |p| p['chainNetwork'] }
+    end
+
     def handle_response(resp)
       body = JSON.parse(resp.body)
 
       case resp.code
       when 200
         body
-      when 404, 400
-        nil
+      else
+        raise_error(body)
+      end
+    end
+
+    def raise_error(body)
+      case body['errorCode']
+      when 'userAlreadyExists'
+        raise OreIdService::RemoteUserExistsError
       else
         raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
       end

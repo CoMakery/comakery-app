@@ -1,7 +1,8 @@
 class OreIdSyncJob < ApplicationJob
   queue_as :default
 
-  def perform(ore_id)
-    ore_id.sync_wallets
+  def perform(id)
+    ore_id = OreId.find(id)
+    ore_id.service.create_remote
   end
 end

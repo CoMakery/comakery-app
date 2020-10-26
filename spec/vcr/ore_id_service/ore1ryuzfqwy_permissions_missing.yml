@@ -1,11 +1,11 @@
 ---
 http_interactions:
 - request:
-    method: post
-    uri: https://service.oreid.io/api/custodial/new-user
+    method: get
+    uri: https://service.oreid.io/api/account/user?account=ore1ryuzfqwy
     body:
-      encoding: UTF-8
-      string: '{"name":"Eva Smith","user_name":"hunter-e8ecdacb5bcbfffffc0939d91529433b1c942bcb","email":"me+da9f320fbdc7de2a531f13c55cdbfdf1f59f3bb3@example.com","picture":"","user_password":"2bf270dd942be0a8326f432818aaeff9aec81d9ff18de6d1c3bf1627956da95b!","phone":"","account_type":"native"}'
+      encoding: US-ASCII
+      string: ''
     headers:
       Api-Key:
       - ENV[ORE_ID_API_KEY]
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 23 Oct 2020 19:30:14 GMT
+      - Mon, 26 Oct 2020 08:01:52 GMT
       Content-Type:
       - application/json; charset=utf-8
       Vary:
@@ -35,14 +35,15 @@ http_interactions:
       Access-Control-Allow-Origin:
       - "*"
       Etag:
-      - W/"39-fR6Q0y+pl7Y8wRW6ygroz7FMHjI"
+      - W/"223-CUrOIvBJqJrIGEoc6gZJquYJErs"
       Via:
       - 1.1 google
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"processId":"05681f84cc2e","accountName":"ore1rymlhk45"}'
+      string: '{"processId":"563751b76f75","accountName":"ore1ryuzfqwy","email":"me+a6396cea1dc3f191e0da5ad89436c47beb689056@example.com","picture":"","name":"Eva
+        Smith","username":"hunter-1436a03f1e078652999eb929a56dc13485dee45c"}'
     http_version: null
-  recorded_at: Fri, 23 Oct 2020 19:30:14 GMT
+  recorded_at: Mon, 26 Oct 2020 08:01:52 GMT
 recorded_with: VCR 5.1.0

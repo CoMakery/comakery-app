@@ -1,12 +1,10 @@
 class OreId < ApplicationRecord
   belongs_to :account
   has_many :wallets, dependent: :destroy
-  after_create :schedule_sync_wallets
+  after_create :schedule_sync
 
   def service
     @service ||= OreIdService.new(self)
-  ensure
-    update(account_name: @service.account_name) if @service&.account_name && account_name.nil?
   end
 
   def sync_wallets
@@ -26,7 +24,8 @@ class OreId < ApplicationRecord
 
   private
 
-    def schedule_sync_wallets
-      OreIdSyncJob.perform_later(self)
+    def schedule_sync
+      OreIdSyncJob.perform_later(id)
+      OreIdWalletsSyncJob.perform_later(id)
     end
 end

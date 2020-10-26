@@ -38,9 +38,15 @@ class Mom
 
   def ore_id(**attrs)
     defaults = {
-      account: create(:account)
+      account: create(:account),
+      account_name: 'ore1ryuzfqwy'
     }
-    OreId.new(defaults.merge(attrs))
+
+    ActiveJob::Base.queue_adapter = :inline
+
+    VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+      OreId.create!(defaults.merge(attrs))
+    end
   end
 
   def specialty(**attrs)
