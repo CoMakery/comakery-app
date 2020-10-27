@@ -1,1 +1,1 @@
-json.reset_url @wallet.ore_id_password_reset_url(@redirect_url)
+json.reset_url @wallet&.ore_id&.service&.password_reset_url(@redirect_url)

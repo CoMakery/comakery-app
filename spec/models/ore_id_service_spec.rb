@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe OreIdService, type: :model, vcr: true do
   subject { described_class.new(create(:ore_id)) }
 
+  specify do
+    expect(subject.password_reset_url('localhost')).to eq('https://example.org?redirect=localhost')
+  end
+
   describe '#create_remote' do
     before do
       subject.ore_id.update(account_name: nil)

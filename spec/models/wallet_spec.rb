@@ -16,7 +16,6 @@ describe Wallet, type: :model do
   it { is_expected.not_to validate_presence_of(:ore_id_id) }
   it { expect(subject.state).to eq('ok') }
   it { expect(subject.ore_id).to be_nil }
-  it { expect(subject.ore_id_password_reset_url('localhost')).to be_nil }
 
   context 'when ore_id?' do
     subject { create(:wallet, source: :ore_id) }
@@ -24,7 +23,6 @@ describe Wallet, type: :model do
     it { is_expected.to validate_presence_of(:ore_id_id) }
     it { expect(subject.state).to eq('ok') }
     it { expect(subject.ore_id).to be_an(OreId) }
-    it { expect(subject.ore_id_password_reset_url('localhost')).to eq('https://example.org?redirect=localhost') }
 
     context 'and address is missing' do
       subject { Wallet.create(source: :ore_id, address: nil, _blockchain: :bitcoin, account: create(:account)) }

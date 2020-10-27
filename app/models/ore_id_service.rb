@@ -48,6 +48,10 @@ class OreIdService
     raise OreIdService::RemoteInvalidError
   end
 
+  def password_reset_url(redirect_url)
+    "https://example.org?redirect=#{redirect_url}"
+  end
+
   private
 
     def create_remote_params

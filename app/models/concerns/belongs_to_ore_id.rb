@@ -8,12 +8,6 @@ module BelongsToOreId
     belongs_to :ore_id, optional: true
     validates :ore_id_id, presence: true, if: :ore_id?
 
-    def ore_id_password_reset_url(redirect_url)
-      return unless ore_id?
-
-      "https://example.org?redirect=#{redirect_url}"
-    end
-
     private
 
       def create_ore_id
