@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VI. Account Token Records API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>VI. Account Token Records API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and delete account token records, retrieve account token record data.</p>
+        <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>CREATE – ERROR</h2>
-        <h3>POST /api/v1/projects/:project_id/account_token_records</h3>
+        <h2>CREATE WALLET – ORE_ID</h2>
+        <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns an array of errors
+            Returns created wallet (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,66 +128,39 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">address</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">wallet address</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">account_token_record[max_balance]</span>
+                    <span class="name">blockchain</span>
                 </td>
                 <td>
-                  <span class="description">max balance</span>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;, &quot;algorand_test&quot;, &quot;algorand_beta&quot;]</span>
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">account_token_record[lockup_until]</span>
+                <td>
+                    <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">lockup until</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">account_token_record[reg_group_id]</span>
+                <td>
+                    <span class="name">provision</span>
                 </td>
                 <td>
-                  <span class="description">reg group id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">account_token_record[account_frozen]</span>
-                </td>
-                <td>
-                  <span class="description">frozen</span>
+                  <span class="description">wallet provision type</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -195,44 +168,48 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/54/account_token_records</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/6e36f2a3-4ece-4dc2-8ef3-108213dc2247/wallets</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
     "data": {
-      "account_token_record": {
-        "max_balance": "-100",
-        "lockup_until": "1",
-        "reg_group_id": "42",
-        "account_id": "170",
-        "account_frozen": "false"
+      "wallet": {
+        "blockchain": "algorand_test",
+        "source": "ore_id"
       }
     },
-    "url": "http://example.org/api/v1/projects/54/account_token_records",
+    "url": "http://example.org/api/v1/accounts/6e36f2a3-4ece-4dc2-8ef3-108213dc2247/wallets",
     "method": "POST",
-    "nonce": "df1ba3804a6edb75317fc4e5d7a15198",
-    "timestamp": "1603787466"
+    "nonce": "6304b227df33daaadc29183c4b9d1c38",
+    "timestamp": "1603787470"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "fFgO6fqRDbo4I2rHP+b7A+6kRliD6scqIobUguX467Mx952GAWnBxWjSqErF53OCxeLJEkG9tFTG5zUE07SYAQ=="
+    "signature": "3cpGbgqCZcnxZteR282ovu4CWsx9izwQPYEuDyzFq7QrfcCSLt+0YObksDccxIuqDFJiVt+qFIVUC2+GbM4/Aw=="
   }
 }</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;2c40117081cacf1677b929243b891ab2&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;maxBalance&quot;: [
-      &quot;is not included in the list&quot;
-    ]
-  }
+  &quot;id&quot;: 21,
+  &quot;address&quot;: null,
+  &quot;source&quot;: &quot;ore_id&quot;,
+  &quot;state&quot;: &quot;pending&quot;,
+  &quot;createdAt&quot;: &quot;2020-10-27T08:31:10.880Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-10-27T08:31:10.880Z&quot;,
+  &quot;blockchain&quot;: &quot;algorand_test&quot;,
+  &quot;tokens&quot;: [
+
+  ]
 }</pre>
       </div>
     </div>
