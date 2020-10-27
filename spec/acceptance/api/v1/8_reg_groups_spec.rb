@@ -73,7 +73,7 @@ resource 'VIII. Reg Groups' do
 
     with_options scope: :reg_group, with_example: true do
       parameter :name, 'reg group name', required: true, type: :string
-      parameter :blockchain_id, 'reg group id on blockchain', type: :string
+      parameter :blockchain_id, 'reg group id on blockchain (will be auto-generated if not provided)', type: :string
     end
 
     context '201' do
