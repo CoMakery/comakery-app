@@ -56,7 +56,7 @@ Rails.application.routes.draw do
   post '/slack/command' => "slack#command"
 
   get '/projects/mine' => "projects#landing", as: :my_project
-  
+
   resources :projects do
     resources :award_types, path: 'batches', except: [:show] do
       resources :awards, path: 'tasks', except: [:index] do
@@ -93,14 +93,15 @@ Rails.application.routes.draw do
         collection do
           post :pause
           post :unpause
+          post :refresh_from_blockchain
         end
       end
     end
-    
+
     member do
       get :awards
     end
-    
+
     collection do
       get :landing
       patch :update_status

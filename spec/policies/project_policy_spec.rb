@@ -227,6 +227,20 @@ describe ProjectPolicy do
     specify { expect(described_class.new(nil, my_public_project).project_admin?).to be_falsey }
   end
 
+  describe '#refresh_transfer_rules?' do
+    specify 'project admin' do
+      expect(described_class.new(project_admin, my_public_project).refresh_transfer_rules?).to be true
+    end
+
+    specify 'project owner' do
+      expect(described_class.new(project_account, my_public_project).refresh_transfer_rules?).to be true
+    end
+
+    specify 'other team member' do
+      expect(described_class.new(other_team_member, my_public_project).refresh_transfer_rules?).to be false
+    end
+  end
+
   def authorized(*args, method)
     expect(ProjectPolicy.new(*args).send(method)).to eq(true)
   end
