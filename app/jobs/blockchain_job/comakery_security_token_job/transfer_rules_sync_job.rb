@@ -16,7 +16,9 @@ module BlockchainJob
         filtered_events.each { |event| process_event(event) }
         filter_unnecessary_rules_updates
 
-        @transfer_rules.each(&:save!)
+        TransferRule.transaction do
+          @transfer_rules.each(&:save!)
+        end
       end
 
       def filtered_events
