@@ -42,11 +42,16 @@ class Mom
       account_name: 'ore1ryuzfqwy'
     }
 
+    o = nil
+    a = ActiveJob::Base.queue_adapter
     ActiveJob::Base.queue_adapter = :inline
 
     VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
-      OreId.create!(defaults.merge(attrs))
+      o = OreId.create!(defaults.merge(attrs))
     end
+
+    ActiveJob::Base.queue_adapter = a
+    o
   end
 
   def specialty(**attrs)
