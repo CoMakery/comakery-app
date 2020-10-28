@@ -63,20 +63,42 @@ describe RegGroup do
       reg_group = build(:reg_group, blockchain_id: described_class::BLOCKCHAIN_ID_MAX + 1)
       expect(reg_group).not_to be_valid
     end
+
+    it 'blockchain_id is readonly' do
+      reg_group = build(:reg_group)
+      expect(reg_group).to have_readonly_attribute :blockchain_id
+    end
   end
 
   describe 'hooks' do
-    let!(:reg_group) { build(:reg_group) }
-    let!(:reg_group_w_name) { create(:reg_group, name: 'test') }
+    context '#set_name' do
+      let(:reg_group) { build(:reg_group) }
+      let!(:reg_group_w_name) { create(:reg_group, name: 'test') }
 
-    before do
-      reg_group.name = nil
-      reg_group.save
+      before do
+        reg_group.name = nil
+        reg_group.save
+      end
+
+      it 'runs as before validation' do
+        expect(reg_group.name).to eq(reg_group.blockchain_id.to_s)
+        expect(reg_group_w_name.name).to eq('test')
+      end
     end
 
-    it 'runs set_name before validation' do
-      expect(reg_group.name).to eq(reg_group.blockchain_id.to_s)
-      expect(reg_group_w_name.name).to eq('test')
+    context '#set_blockchain_id' do
+      it 'runs after initialization' do
+        reg_group = build(:reg_group, blockchain_id: nil)
+        expect(reg_group.blockchain_id).to eq 1
+      end
+
+      it 'set blockchain_id as next after last existed' do
+        token = create(:comakery_dummy_token)
+        create(:reg_group, token: token, blockchain_id: 999)
+        reg_group = build(:reg_group, blockchain_id: nil, token: token)
+
+        expect(reg_group.blockchain_id).to eq 1000
+      end
     end
   end
 

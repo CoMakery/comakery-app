@@ -731,11 +731,11 @@ form.form-with-submit-button {
     fill: none;
     stroke: #e6e8ed;
   }
- 
+
   path.domain {
     stroke: none;
   }
- 
+
   .y .tick line {
     stroke: #e6e8ed;
     opacity: 0.7;
@@ -763,7 +763,7 @@ form.form-with-submit-button {
     max-width: 700px;
     max-height: 350px;
     width: 100%;
-    
+
     text {
       font-size: 12px;
       font-family: Montserrat, sans-serif;
@@ -773,7 +773,7 @@ form.form-with-submit-button {
 
   #donut-chart {
     margin-top: 2em;
-    
+
     text {
       font-size: 12px;
       font-family: Montserrat, sans-serif;
@@ -832,7 +832,7 @@ form.form-with-submit-button {
       font-weight: 600;
     }
   }
-  
+
   .transfers-chart__info {
     display: flex;
     width: 100%;
@@ -876,7 +876,7 @@ form.form-with-submit-button {
   .DateRangePicker_picker {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px 10px;
   }
-  
+
   .DayPicker__withBorder {
     border-radius: 6px;
   }
@@ -1129,7 +1129,8 @@ button.transfer-rule-create,
 button.reg-groups-create,
 .admins__create input[type="submit"],
 .project-api-key__create a,
-.project-api-key__create button {
+.project-api-key__create button,
+.transfer-rules__refresh_from_blockchain input[type="submit"] {
   margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;
@@ -1146,6 +1147,10 @@ button.reg-groups-create,
     background-color: #c7c7c7;
     cursor: not-allowed;
   }
+}
+
+.transfer-rules__buttons {
+  display: flex;
 }
 
 .transfers-manage-types {

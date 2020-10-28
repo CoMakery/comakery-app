@@ -50,9 +50,9 @@ RSpec.describe Dashboard::RegGroupsController, type: :controller do
 
     context 'with valid params' do
       it 'updates group record' do
-        put :update, params: { reg_group: valid_attributes.merge(blockchain_id: 100), id: reg_group.id, project_id: project.to_param }
+        put :update, params: { reg_group: valid_attributes.merge(name: 'updated group'), id: reg_group.id, project_id: project.to_param }
         expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
-        expect(reg_group.reload.blockchain_id).to eq(100)
+        expect(reg_group.reload.name).to eq('updated group')
       end
     end
 
