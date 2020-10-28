@@ -450,7 +450,6 @@ form.form-with-submit-button {
 }
 
 .transfer-button {
-  text-transform: uppercase;
   font-family: Montserrat, sans-serif;
   font-size: 10px;
   font-weight: normal;
@@ -1585,7 +1584,6 @@ button.reg-groups-create,
       overflow: hidden;
       text-overflow: ellipsis;
       align-self: center;
-      text-transform: uppercase;
       margin-right: 1em;
 
       .transfers-table__transfer__address__button {

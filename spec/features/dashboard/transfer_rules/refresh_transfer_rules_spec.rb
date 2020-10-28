@@ -18,7 +18,7 @@ describe 'refresh_transfer_rules' do
     end
 
     expect(page).to have_content '10 Groups'
-    expect(page).to have_content '35 Rules'
+    expect(page).to have_content '16 Rules'
     expect(page).to have_button 'refresh transfer rules', disabled: true
   end
 end
