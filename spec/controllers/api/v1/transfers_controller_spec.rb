@@ -93,8 +93,8 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
         expect(response).to have_http_status(:created)
 
         award = Award.last
-        expect(award.why).to eq '—'
-        expect(award.requirements).to eq '—'
+        expect(award.why).to eq ''
+        expect(award.requirements).to eq ''
         expect(award.description).to eq ''
       end
     end

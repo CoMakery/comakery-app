@@ -26,8 +26,8 @@ class Api::V1::TransfersController < Api::V1::ApiController
     award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer, {}).fetch(:account_id, {}))
     award.status = :accepted
 
-    award.why = '—'
-    award.requirements = '—'
+    award.why = ''
+    award.requirements = ''
     award.description ||= ''
 
     if award.save
