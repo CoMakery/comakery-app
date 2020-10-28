@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe OreId, type: :model do
+RSpec.describe OreIdAccount, type: :model do
   subject { create(:ore_id) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }

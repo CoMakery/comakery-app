@@ -47,7 +47,7 @@ class Mom
     ActiveJob::Base.queue_adapter = :inline
 
     VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
-      o = OreId.create!(defaults.merge(attrs))
+      o = OreIdAccount.create!(defaults.merge(attrs))
     end
 
     ActiveJob::Base.queue_adapter = a

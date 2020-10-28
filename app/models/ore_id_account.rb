@@ -1,4 +1,4 @@
-class OreId < ApplicationRecord
+class OreIdAccount < ApplicationRecord
   belongs_to :account
   has_many :wallets, dependent: :destroy
   after_create :schedule_sync
@@ -15,7 +15,7 @@ class OreId < ApplicationRecord
         _blockchain: permission[:_blockchain]
       )
 
-      w.ore_id = self
+      w.ore_id_account = self
       w.state = :ok
       w.address = permission[:address]
       w.save!
