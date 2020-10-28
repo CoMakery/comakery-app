@@ -84,6 +84,19 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
         post :create, params: params
         expect(response).to have_http_status(:created)
       end
+
+      it 'fills default values for why, requirements and description' do
+        params = build(:api_signed_request, { transfer: valid_attributes.except(:why, :requirements, :description) }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params
+        expect(response).to have_http_status(:created)
+
+        award = Award.last
+        expect(award.why).to eq '—'
+        expect(award.requirements).to eq '—'
+        expect(award.description).to eq ''
+      end
     end
 
     context 'with invalid params' do

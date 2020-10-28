@@ -28,7 +28,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
     award.why = '—'
     award.requirements = '—'
-    award.description ||= '—'
+    award.description ||= ''
 
     if award.save
       @transfer = award
