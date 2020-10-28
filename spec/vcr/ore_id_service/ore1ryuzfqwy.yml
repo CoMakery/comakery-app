@@ -1,0 +1,94 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://service.oreid.io/api/custodial/new-user
+    body:
+      encoding: UTF-8
+      string: '{"name":"Eva Smith","user_name":"hunter-1436a03f1e078652999eb929a56dc13485dee45c","email":"me+a6396cea1dc3f191e0da5ad89436c47beb689056@example.com","picture":"","user_password":"a63f9e02e6de8520785d376bd0089424d9f301119949c8cce0d91a7db7c5c32a!","phone":"","account_type":"native"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 26 Oct 2020 08:01:51 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"39-yBmNIcaxh31fuqQpXJqA52mxSQA"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"c1d36d69f794","accountName":"ore1ryuzfqwy"}'
+    http_version: null
+  recorded_at: Mon, 26 Oct 2020 08:01:51 GMT
+- request:
+    method: get
+    uri: https://service.oreid.io/api/account/user?account=ore1ryuzfqwy
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 26 Oct 2020 08:01:52 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"223-CUrOIvBJqJrIGEoc6gZJquYJErs"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"563751b76f75","accountName":"ore1ryuzfqwy","email":"me+a6396cea1dc3f191e0da5ad89436c47beb689056@example.com","picture":"","name":"Eva
+        Smith","username":"hunter-1436a03f1e078652999eb929a56dc13485dee45c","permissions":[{"chainNetwork":"algo_test","chainAccount":"4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ","permissionName":"active","publicKey":"e673f1f52f2e9863c8ec054744a2a52a17809ce58693b8c0ce10cf81337b29ef","privateKeyStoredExterally":false,"externalWalletType":null,"accountType":"native","permission":"active"}]}'
+    http_version: null
+  recorded_at: Mon, 26 Oct 2020 08:01:52 GMT
+recorded_with: VCR 5.1.0

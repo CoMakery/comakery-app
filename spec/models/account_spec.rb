@@ -1,14 +1,17 @@
 require 'rails_helper'
 
 describe Account do
-  it { is_expected.to have_many(:wallets) }
+  it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }
+  it { is_expected.to have_one(:ore_id_account).dependent(:destroy) }
 
   subject(:account) { create :account, password: '12345678' }
 
   before do
     stub_discord_channels
   end
+
+  specify { expect(subject.name).to eq("#{subject.first_name} #{subject.last_name}") }
 
   describe 'validations' do
     describe 'urls' do

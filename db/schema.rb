@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_16_083230) do
+ActiveRecord::Schema.define(version: 2020_10_28_090538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -332,6 +332,14 @@ ActiveRecord::Schema.define(version: 2020_10_16_083230) do
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
+  create_table "ore_id_accounts", force: :cascade do |t|
+    t.string "account_name"
+    t.bigint "account_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_ore_id_accounts_on_account_id"
+  end
+
   create_table "payments", id: :serial, force: :cascade do |t|
     t.integer "project_id"
     t.integer "issuer_id"
@@ -526,8 +534,10 @@ ActiveRecord::Schema.define(version: 2020_10_16_083230) do
     t.integer "source", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "ore_id_account_id"
     t.index ["_blockchain", "account_id"], name: "idx_blockchain_account_id", unique: true
     t.index ["account_id"], name: "index_wallets_on_account_id"
+    t.index ["ore_id_account_id"], name: "index_wallets_on_ore_id_account_id"
   end
 
   add_foreign_key "account_token_records", "accounts"
@@ -544,10 +554,12 @@ ActiveRecord::Schema.define(version: 2020_10_16_083230) do
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
+  add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "projects", "tokens"
   add_foreign_key "reg_groups", "tokens"
   add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "transfer_types", "projects"
   add_foreign_key "verifications", "accounts"
   add_foreign_key "wallets", "accounts"
+  add_foreign_key "wallets", "ore_id_accounts"
 end

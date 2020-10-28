@@ -1,3 +1,14 @@
+require 'rails_helper'
+
+describe Blockchain, type: :model do
+  subject { described_class }
+
+  specify { expect(subject.list).to be_a(Hash) }
+  specify { expect(subject.append_to_list(nil)).to be_a(Hash) }
+  specify { expect(subject.all).to be_an(Array) }
+  specify { expect(subject.find_with_ore_id_name(nil)).to be_nil }
+end
+
 shared_examples 'a blockchain' do
   describe described_class.new do
     it { is_expected.to respond_to(:name) }
@@ -14,6 +25,8 @@ shared_examples 'a blockchain' do
     it { is_expected.to respond_to(:url_for_address_api).with(1).argument }
     it { is_expected.to respond_to(:validate_tx_hash).with(1).argument }
     it { is_expected.to respond_to(:validate_addr).with(1).argument }
+    it { is_expected.to respond_to(:supported_by_ore_id?) }
+    it { is_expected.to respond_to(:ore_id_name) }
   end
 
   describe 'validate_tx_hash' do

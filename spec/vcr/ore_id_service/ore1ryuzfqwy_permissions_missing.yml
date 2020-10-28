@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://service.oreid.io/api/account/user?account=ore1ryuzfqwy
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 26 Oct 2020 08:01:52 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"223-CUrOIvBJqJrIGEoc6gZJquYJErs"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"563751b76f75","accountName":"ore1ryuzfqwy","email":"me+a6396cea1dc3f191e0da5ad89436c47beb689056@example.com","picture":"","name":"Eva
+        Smith","username":"hunter-1436a03f1e078652999eb929a56dc13485dee45c"}'
+    http_version: null
+  recorded_at: Mon, 26 Oct 2020 08:01:52 GMT
+recorded_with: VCR 5.1.0

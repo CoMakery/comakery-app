@@ -36,6 +36,24 @@ class Mom
     Balance.new(defaults.merge(attrs))
   end
 
+  def ore_id(**attrs)
+    defaults = {
+      account: create(:account),
+      account_name: 'ore1ryuzfqwy'
+    }
+
+    o = nil
+    a = ActiveJob::Base.queue_adapter
+    ActiveJob::Base.queue_adapter = :inline
+
+    VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+      o = OreIdAccount.create!(defaults.merge(attrs))
+    end
+
+    ActiveJob::Base.queue_adapter = a
+    o
+  end
+
   def specialty(**attrs)
     defaults = {
       name: "Specialty #{SecureRandom.hex(20)}"

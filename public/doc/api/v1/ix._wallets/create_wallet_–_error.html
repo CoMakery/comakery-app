@@ -4,7 +4,7 @@
     <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
-
+      
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -139,7 +139,7 @@ table th, table td {
                     <span class="name">blockchain</span>
                 </td>
                 <td>
-                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;]</span>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;, &quot;algorand_test&quot;, &quot;algorand_beta&quot;]</span>
                 </td>
               </tr>
               <tr>
@@ -168,7 +168,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/40b019d0-5f4a-4878-ac39-64f86f299750/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/bec3ebbb-408a-40fc-a5c2-6fd814669fd5/wallets</pre>
 
 
             <h4>Body</h4>
@@ -179,15 +179,15 @@ table th, table td {
         "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
       }
     },
-    "url": "http://example.org/api/v1/accounts/40b019d0-5f4a-4878-ac39-64f86f299750/wallets",
+    "url": "http://example.org/api/v1/accounts/bec3ebbb-408a-40fc-a5c2-6fd814669fd5/wallets",
     "method": "POST",
-    "nonce": "b9876234ed3affc10fbbd9219a7c03d4",
-    "timestamp": "1602758037"
+    "nonce": "c004824318901eaa985fa545a97aa194",
+    "timestamp": "1603787470"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "5XzUmO5dUq/SJ2KDlA1QXB3VVnz2cpImEtf8KsSgwX9UeJow9EQ8V03/gknSreR87t79C5AVERh1WFMZBl0UBQ=="
+    "signature": "UXrLo0fl2ynflKp+6WGsqKlxvUuU4gkOFKBjK7NaOjS2vrOzxEAnTjqrMytHIfiu07WLcN7tWb+WzHn84S0BBA=="
   }
 }</pre>
 
@@ -199,7 +199,7 @@ table th, table td {
               <pre class="response body">{
   &quot;errors&quot;: {
     &quot;blockchain&quot;: [
-      &quot;can&#39;t be blank&quot;
+      &quot;unknown blockchain value&quot;
     ]
   }
 }</pre>
