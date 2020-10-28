@@ -14,7 +14,11 @@ module BlockchainJob
         @client = Comakery::Eth.new(@token.blockchain.explorer_api_host).client
 
         filtered_events.each { |event| process_event(event) }
-        @transfer_rules.each(&:save!)
+        filter_unnecessary_rules_updates
+
+        TransferRule.transaction do
+          @transfer_rules.each(&:save!)
+        end
       end
 
       def filtered_events
@@ -26,6 +30,19 @@ module BlockchainJob
         ).fetch('result')
       end
 
+      def filter_unnecessary_rules_updates
+        synced_rules = TransferRule.where(token: @token, status: 'synced').to_a
+        @transfer_rules.filter! do |transfer_rule|
+          synced_rule = synced_rules.find do |sr|
+            sr.sending_group_id == transfer_rule.sending_group_id &&
+              sr.receiving_group_id == transfer_rule.receiving_group_id &&
+              sr.lockup_until == transfer_rule.lockup_until
+          end
+
+          synced_rule.nil?
+        end
+      end
+
       def process_event(event_data)
         # removed: true when the log was removed, due to a chain reorganization. false if it's a valid log.
         return if event_data['removed']
@@ -33,8 +50,6 @@ module BlockchainJob
         return unless event_data['transactionHash']
 
         lockup_until = @decoder.decode('uint256', event_data['data'])
-        return if lockup_until.zero?
-
         topics = event_data.fetch('topics')
         blockchain_from_group_id = @decoder.decode('uint256', topics[2])
         blockchain_to_group_id = @decoder.decode('uint256', topics[3])
