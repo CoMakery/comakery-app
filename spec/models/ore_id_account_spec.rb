@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/synchronisable_spec'
 
 RSpec.describe OreIdAccount, type: :model do
+  it_behaves_like 'synchronisable'
+
   subject { create(:ore_id) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }

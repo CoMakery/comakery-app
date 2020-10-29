@@ -32,7 +32,7 @@ module Synchronisable
 
     def sync_in_progress?
       if latest_synchronisation.in_progress?
-        if latest_synchronisation.created_at < max_seconds_in_pending.ago
+        if latest_synchronisation.created_at < max_seconds_in_pending.seconds.ago
           latest_synchronisation.failed!
           false
         else
