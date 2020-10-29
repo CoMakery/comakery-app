@@ -1,9 +1,11 @@
 shared_examples 'synchronisable' do
+  before { allow_any_instance_of(described_class).to receive(:sync_allowed?).and_call_original }
+
   it { is_expected.to have_many(:synchronisations).dependent(:destroy) }
 
   subject { described_class.new }
-  specify { expect(subject.min_seconds_between_syncs).to eq(10) }
-  specify { expect(subject.max_seconds_in_pending).to eq(10) }
+  specify { expect(subject.min_seconds_between_syncs).to eq(0) }
+  specify { expect(subject.max_seconds_in_pending).to eq(60) }
 
   describe '#latest_synchronisation' do
     before { allow(subject).to receive(:synchronisations).and_return([Synchronisation.new]) }

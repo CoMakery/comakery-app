@@ -1,25 +1,19 @@
 module Synchronisable
   extend ActiveSupport::Concern
 
-  # Controls state of syncrhonisation
-  # Example usage:
-  #
-  # def synchronise
-  #   return unless sync_allowed?
-  #
-  #   sync = create_synchronisation
-  #   success ? sync.ok! : sync.error!
-  # end
-
   included do
     has_many :synchronisations, as: :synchronisable, dependent: :destroy
 
     def min_seconds_between_syncs
-      10
+      0
     end
 
     def max_seconds_in_pending
-      10
+      60
+    end
+
+    def create_synchronisation
+      Synchronisation.create(synchronisable_type: self.class.name, synchronisable_id: id)
     end
 
     def latest_synchronisation
@@ -50,7 +44,7 @@ module Synchronisable
 
     def next_sync_allowed_after
       return 0 unless latest_synchronisation
-      return 1.year.from_now if sync_in_progress?
+      return max_seconds_in_pending.seconds.from_now if sync_in_progress?
       return latest_synchronisation.updated_at + min_seconds_between_syncs if latest_synchronisation.ok?
       return latest_synchronisation.updated_at + min_seconds_between_syncs**failed_transactions_row if latest_synchronisation.failed?
     end
