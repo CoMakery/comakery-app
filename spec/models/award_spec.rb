@@ -1162,8 +1162,8 @@ describe Award do
 
       it { expect(described_class).to respond_to(:ransack_reorder) }
 
-      it 'apply default order by :created_at' do
-        expect(subject.pluck(:created_at)).to eq awards.order(:created_at).pluck(:created_at)
+      it 'apply default order by created_at desc' do
+        expect(subject.pluck(:created_at)).to eq awards.order(created_at: :desc).pluck(:created_at)
       end
 
       it 'default order with another param' do
@@ -1198,7 +1198,7 @@ describe Award do
       subject { described_class.ransack_reorder('unknown').pluck(:created_at) }
 
       context 'order by default' do
-        it { is_expected.to eq awards.order(:created_at).pluck(:created_at) }
+        it { is_expected.to eq awards.order(created_at: :desc).pluck(:created_at) }
       end
     end
   end
