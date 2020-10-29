@@ -1,9 +1,11 @@
 require 'rails_helper'
+require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 require 'controllers/api/v1/concerns/requires_an_authorization_spec'
 require 'controllers/api/v1/concerns/requires_signature_spec'
 require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
 
 RSpec.describe Api::V1::AccountTransfersController, type: :controller do
+  it_behaves_like 'authorizable_by_mission_key'
   it_behaves_like 'requires_an_authorization'
   it_behaves_like 'requires_signature'
   it_behaves_like 'requires_whitelabel_mission'
