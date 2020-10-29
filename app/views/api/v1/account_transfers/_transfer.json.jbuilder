@@ -2,7 +2,6 @@ json.call(
   transfer.decorate,
   :id,
   :transfer_type_id,
-  :project_id,
   :amount,
   :quantity,
   :total_amount,
@@ -14,3 +13,4 @@ json.call(
 )
 
 json.account_id transfer.account.managed_account_id
+json.project_id transfer.project.id

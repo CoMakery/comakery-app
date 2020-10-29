@@ -25,6 +25,7 @@ RSpec.describe Api::V1::AccountTransfersController, type: :controller do
 
       get :index, params: params
       expect(response).to be_successful
+      expect(assigns[:transfers]).to eq([transfer])
     end
 
     it 'applies pagination' do

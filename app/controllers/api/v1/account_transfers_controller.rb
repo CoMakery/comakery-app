@@ -15,6 +15,7 @@ class Api::V1::AccountTransfersController < Api::V1::ApiController
     end
 
     def transfers
-      @transfers ||= paginate(account.awards.completed_or_cancelled)
+      awards = account.awards.completed_or_cancelled.includes(:project)
+      @transfers ||= paginate(awards)
     end
 end
