@@ -96,7 +96,10 @@ class TokensController < ApplicationController
     end
 
     def set_blockchains
-      @blockchains = Token._blockchains.keys.map { |k| [k, k] }.to_h
+      available_blockchains = Blockchain.all
+      available_blockchains.filter!(&:mainnet?) unless Token.testnets_available?
+
+      @blockchains = available_blockchains.map { |k| [k.key, k.key] }.to_h
     end
 
     def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity

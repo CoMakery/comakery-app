@@ -17,6 +17,14 @@ module BelongsToBlockchain
       "Blockchain::#{name.camelize}".constantize.new
     end
 
+    def self.testnets_available?
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch('TESTNETS_AVAILABLE', 'true'))
+    end
+
+    def testnets_available?
+      self.class.testnets_available?
+    end
+
     def blockchain
       @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new if _blockchain
     end

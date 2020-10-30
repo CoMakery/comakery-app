@@ -19,4 +19,9 @@ class Blockchain
   def self.find_with_ore_id_name(name)
     all.select(&:supported_by_ore_id?).find { |b| b.ore_id_name == name }
   end
+
+  # 'Blockchain::BitcoinTest' => 'bitcoin_test'
+  def key
+    self.class.name.demodulize.underscore
+  end
 end

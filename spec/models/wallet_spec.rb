@@ -46,5 +46,27 @@ describe Wallet, type: :model do
     it 'returns list of avaiable blockchains for creating a new wallet with the same account' do
       expect(subject.available_blockchains).not_to include(subject._blockchain)
     end
+
+    it 'returns testnets if TESTNETS_AVAILABLE set to true' do
+      ENV['TESTNETS_AVAILABLE'] = 'true'
+
+      expect(subject.available_blockchains).to include('bitcoin_test')
+      expect(subject.available_blockchains).to include('ethereum')
+    end
+
+    it 'do not returns testnets if TESTNETS_AVAILABLE set to false' do
+      ENV['TESTNETS_AVAILABLE'] = 'false'
+
+      expect(subject.available_blockchains).not_to include('bitcoin_test')
+      expect(subject.available_blockchains).to include('ethereum')
+    end
+
+    it 'always return testnets for comakery admins' do
+      ENV['TESTNETS_AVAILABLE'] = 'false'
+      subject.account.update(comakery_admin: true)
+
+      expect(subject.available_blockchains).to include('bitcoin_test')
+      expect(subject.available_blockchains).to include('ethereum')
+    end
   end
 end

@@ -16,12 +16,19 @@ class Wallet < ApplicationRecord
   enum source: { user_provided: 0, ore_id: 1 }
 
   def available_blockchains
-    Wallet._blockchains.keys - account.wallets.pluck(:_blockchain)
+    available_blockchains = Blockchain.all
+    available_blockchains.filter!(&:mainnet?) unless testnet_blockchains_available?
+
+    available_blockchains.map(&:key) - account.wallets.pluck(:_blockchain)
   end
 
   private
 
     def ore_id_and_pending?
       pending? && ore_id?
+    end
+
+    def testnet_blockchains_available?
+      testnets_available? || account.comakery_admin?
     end
 end
