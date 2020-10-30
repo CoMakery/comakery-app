@@ -16,6 +16,10 @@ class Blockchain
     list.keys.map { |k| "Blockchain::#{k.to_s.camelize}".constantize.new }
   end
 
+  def self.without_testnets
+    all.filter!(&:mainnet?)
+  end
+
   def self.find_with_ore_id_name(name)
     all.select(&:supported_by_ore_id?).find { |b| b.ore_id_name == name }
   end

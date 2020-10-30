@@ -96,9 +96,12 @@ class TokensController < ApplicationController
     end
 
     def set_blockchains
-      available_blockchains = Blockchain.all
-      available_blockchains.filter!(&:mainnet?) unless Token.testnets_available?
-
+      available_blockchains =
+        if Token.testnets_available?
+          Blockchain.all
+        else
+          Blockchain.without_testnets
+        end
       @blockchains = available_blockchains.map { |k| [k.key, k.key] }.to_h
     end
 
