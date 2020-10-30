@@ -1,4 +1,6 @@
 class OreIdAccount < ApplicationRecord
+  include Synchronisable
+
   belongs_to :account
   has_many :wallets, dependent: :destroy
   after_create :schedule_sync
