@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_28_102447) do
+ActiveRecord::Schema.define(version: 2020_10_30_140403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -455,7 +455,7 @@ ActiveRecord::Schema.define(version: 2020_10_28_102447) do
   create_table "synchronisations", force: :cascade do |t|
     t.string "synchronisable_type"
     t.bigint "synchronisable_id"
-    t.integer "status"
+    t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["synchronisable_type", "synchronisable_id"], name: "idx_syncs_on_sync_type_and_sync_id"
