@@ -5,7 +5,7 @@ module Synchronisable
     has_many :synchronisations, as: :synchronisable, dependent: :destroy
 
     def min_seconds_between_syncs
-      0
+      synchronous_queue_adapter? ? 0 : 10
     end
 
     def max_seconds_in_pending
@@ -48,5 +48,11 @@ module Synchronisable
       return latest_synchronisation.updated_at + min_seconds_between_syncs if latest_synchronisation.ok?
       return latest_synchronisation.updated_at + min_seconds_between_syncs**failed_transactions_row if latest_synchronisation.failed?
     end
+
+    private
+
+      def synchronous_queue_adapter?
+        ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::InlineAdapter)
+      end
   end
 end

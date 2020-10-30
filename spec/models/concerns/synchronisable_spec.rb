@@ -4,7 +4,7 @@ shared_examples 'synchronisable' do
   it { is_expected.to have_many(:synchronisations).dependent(:destroy) }
 
   subject { described_class.new }
-  specify { expect(subject.min_seconds_between_syncs).to eq(0) }
+  specify { expect(subject.min_seconds_between_syncs).to eq(10) }
   specify { expect(subject.max_seconds_in_pending).to eq(60) }
 
   describe '#latest_synchronisation' do
