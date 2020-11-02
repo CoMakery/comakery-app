@@ -7,6 +7,24 @@ describe Blockchain, type: :model do
   specify { expect(subject.append_to_list(nil)).to be_a(Hash) }
   specify { expect(subject.all).to be_an(Array) }
   specify { expect(subject.find_with_ore_id_name(nil)).to be_nil }
+
+  describe '#available' do
+    subject { described_class.available }
+
+    it 'returns testnets if TESTNETS_AVAILABLE set to true' do
+      ENV['TESTNETS_AVAILABLE'] = 'true'
+
+      is_expected.to include Blockchain::BitcoinTest
+      is_expected.to include Blockchain::Bitcoin
+    end
+
+    it 'do not returns testnets if TESTNETS_AVAILABLE set to false' do
+      ENV['TESTNETS_AVAILABLE'] = 'false'
+
+      is_expected.not_to include Blockchain::BitcoinTest
+      is_expected.to include Blockchain::Bitcoin
+    end
+  end
 end
 
 shared_examples 'a blockchain' do
