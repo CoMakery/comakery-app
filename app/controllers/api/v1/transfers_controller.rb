@@ -59,7 +59,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
     end
 
     def transfers
-      @transfers ||= paginate(project.awards.completed_or_cancelled.includes(:account, :latest_blockchain_transaction))
+      @transfers ||= paginate(project.awards.completed_or_cancelled.includes(:account, :latest_blockchain_transaction, :project))
     end
 
     def transfer
