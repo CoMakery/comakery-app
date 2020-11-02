@@ -316,7 +316,7 @@ class TokenForm extends React.Component {
               symbolLimit={0}
             />
 
-            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|asa/) &&
               <InputFieldHalfed
                 title='contract address'
                 required
@@ -325,13 +325,13 @@ class TokenForm extends React.Component {
                 errorText={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
-                pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})'
+                pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})|([A-Z0-9]{58})'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
             }
 
-            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|asa/) &&
               <InputFieldHalfed
                 title='token symbol'
                 required
@@ -345,7 +345,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|asa/) &&
               <InputFieldHalfed
                 title='decimal places'
                 required

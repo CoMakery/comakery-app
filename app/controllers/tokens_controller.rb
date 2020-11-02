@@ -76,6 +76,10 @@ class TokensController < ApplicationController
     when /^[a-fA-F0-9]{40}$/
       qtum = Comakery::Qtum.new(host)
       @symbol, @decimals = qtum.fetch_symbol_and_decimals(params[:address])
+    when /^[a-zA-Z0-9]{58}$/ # AlgorandTest
+      asa_token_type = TokenType::Asa.new
+      @symbol = asa_token_type.symbol
+      @decimals = asa_token_type.decimals
     end
 
     render json: { symbol: @symbol, decimals: @decimals }, status: :ok
