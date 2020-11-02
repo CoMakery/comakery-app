@@ -20,6 +20,18 @@ class Blockchain
     all.filter!(&:mainnet?)
   end
 
+  def self.available
+    testnets_available? ? all : without_testnets
+  end
+
+  def self.testnets_available?
+    ActiveModel::Type::Boolean.new.cast(ENV.fetch('TESTNETS_AVAILABLE', 'true'))
+  end
+
+  def testnets_available?
+    self.class.testnets_available?
+  end
+
   def self.find_with_ore_id_name(name)
     all.select(&:supported_by_ore_id?).find { |b| b.ore_id_name == name }
   end

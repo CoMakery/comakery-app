@@ -60,13 +60,5 @@ describe Wallet, type: :model do
       expect(subject.available_blockchains).not_to include('bitcoin_test')
       expect(subject.available_blockchains).to include('ethereum')
     end
-
-    it 'always return testnets for comakery admins' do
-      ENV['TESTNETS_AVAILABLE'] = 'false'
-      subject.account.update(comakery_admin: true)
-
-      expect(subject.available_blockchains).to include('bitcoin_test')
-      expect(subject.available_blockchains).to include('ethereum')
-    end
   end
 end

@@ -16,13 +16,7 @@ class Wallet < ApplicationRecord
   enum source: { user_provided: 0, ore_id: 1 }
 
   def available_blockchains
-    available_blockchains =
-      if testnet_blockchains_available?
-        Blockchain.all
-      else
-        Blockchain.without_testnets
-      end
-
+    available_blockchains = Blockchain.available
     available_blockchains.map(&:key) - account.wallets.pluck(:_blockchain)
   end
 
