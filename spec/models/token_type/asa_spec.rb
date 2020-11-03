@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'models/token_type_spec'
 
 describe TokenType::Asa do
-  it_behaves_like "a token type"
+  it_behaves_like 'a token type'
 
   specify { expect(described_class.new.name).to eq('ASA') }
   specify { expect(described_class.new.symbol).to eq('ASA') }

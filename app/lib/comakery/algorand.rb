@@ -11,7 +11,7 @@ class Comakery::Algorand
 
     [
       asset_params.fetch('unit-name'),
-      asset_params.fetch('decimals'),
+      asset_params.fetch('decimals')
     ]
   end
 

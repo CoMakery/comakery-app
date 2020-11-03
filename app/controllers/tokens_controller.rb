@@ -67,7 +67,8 @@ class TokensController < ApplicationController
   def fetch_contract_details
     authorize Token.create
 
-    @symbol, @decimals = [nil, nil]
+    @symbol = nil
+    @decimals = nil
     host = Token.blockchain_for(params[:network]).explorer_api_host
 
     client =
