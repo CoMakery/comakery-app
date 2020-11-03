@@ -10,6 +10,7 @@ describe Blockchain, type: :model do
 
   describe '#available' do
     subject { described_class.available }
+    after { ENV['TESTNETS_AVAILABLE'] = 'true' }
 
     it 'returns testnets if TESTNETS_AVAILABLE set to true' do
       ENV['TESTNETS_AVAILABLE'] = 'true'
@@ -22,6 +23,13 @@ describe Blockchain, type: :model do
       ENV['TESTNETS_AVAILABLE'] = 'false'
 
       is_expected.not_to include Blockchain::BitcoinTest
+      is_expected.to include Blockchain::Bitcoin
+    end
+
+    it 'returns testnets if TESTNETS_AVAILABLE not set' do
+      ENV['TESTNETS_AVAILABLE'] = nil
+
+      is_expected.to include Blockchain::BitcoinTest
       is_expected.to include Blockchain::Bitcoin
     end
   end
