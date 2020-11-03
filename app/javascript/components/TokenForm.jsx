@@ -325,7 +325,7 @@ class TokenForm extends React.Component {
                 errorText={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
-                pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40}))'
+                pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
