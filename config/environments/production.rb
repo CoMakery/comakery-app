@@ -112,11 +112,8 @@ Rails.application.configure do
     config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
   end
 
-  config.airbrake = true
-
   config.after_initialize do
     Bullet.enable = true
-    Bullet.airbrake = true
     Bullet.rails_logger = true
     Bullet.unused_eager_loading_enable = false
   end

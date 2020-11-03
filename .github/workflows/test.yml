@@ -28,15 +28,11 @@ jobs:
       BUNDLER_VERSION: 2.0.1
       RACK_ENV: production
       RAILS_ENV: production
-      APP_NAME: production
-      AIRBRAKE_API_KEY: dummy
-      AIRBRAKE_PROJECT_ID: dummy
       SECRET_KEY_BASE: dummy
       AWS_API_KEY: dummy
       AWS_API_SECRET: dummy
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
-      ETHEREUM_EXPLORER_SITE: dummy
       DATABASE_URL: postgres://rails@localhost:5432/rails
       INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
       # Settings -> Secrets

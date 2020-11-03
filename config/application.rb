@@ -46,12 +46,6 @@ module Comakery
 
     config.allow_missing_ethereum_bridge = false
 
-    config.airbrake = false
-
-    config.ethereum_explorer_site = ENV['ETHEREUM_EXPLORER_SITE'] || raise("Please set ETHEREUM_EXPLORER_SITE environment variable")
-
-    config.allow_ethereum = ENV['ALLOW_ETHEREUM']
-
     config.generators do |g|
       g.test_framework :rspec
     end
