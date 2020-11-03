@@ -7,7 +7,7 @@
 # Environment (dotenv)
 /.env
 /.env.*
-!/.env.dev
+!/.env.required
 !/.env.test
 
 # Ignore bundler config.

@@ -44,6 +44,19 @@ x-backend: &backend
     APP_PROTOCOL: http://
     ASSET_HOST: http://localhost:3000
     MAILER_HOST: localhost:3000
+    AWS_API_KEY: dummy
+    AWS_API_SECRET: dummy
+    BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET: none
+    BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET: dummy
+    DISCORD_CLIENT_ID: none
+    DISCORD_CLIENT_SECRET: none
+    INFURA_PROJECT_ID: none
+    ORE_ID_API_KEY: none
+    ORE_ID_SERVICE_KEY: none
+    SLACK_API_KEY: none
+    SLACK_API_SECRET: none
+    REFILE_S3_REGION: dummy
+    REFILE_S3_BUCKET: dummy
   depends_on:
     postgres:
       condition: service_healthy

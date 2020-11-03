@@ -1,8 +1,8 @@
 {
   "name": "Comakery",
-  "description": "CoMakery creates Project Tokens and notifies your team via Slack.",
+  "description": "To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.",
   "website": "http://www.comakery.com/",
-  "repository": "https://github.com/CoMakery/comakery-app/",
+  "repository": "https://github.com/CoMakery/comakery-server/",
   "logo": "https://avatars0.githubusercontent.com/u/17172662",
   "success_url": "/",
   "scripts": {
@@ -29,9 +29,6 @@
   },
   "addons": [
     {
-      "plan": "fixie:tricycle"
-    },
-    {
       "plan": "heroku-postgresql:hobby-dev",
       "as": "DATABASE"
     },
@@ -53,29 +50,83 @@
     }
   ],
   "env": {
-    "APP_HOST": "staging.comakery.com",
-    "APP_NAME": "staging",
-    "AWS_API_KEY": "UPDATE_ME",
-    "AWS_API_SECRET": "UPDATE_ME",
-    "BASIC_AUTH": "",
-    "CLOUDFRONT_HOST": "",
-    "DISCORD_BOT_TOKEN": "UPDATE_ME",
-    "DISCORD_CLIENT_ID": "UPDATE_ME",
-    "DISCORD_CLIENT_SECRET": "UPDATE_ME",
-    "ETHEREUM_EXPLORER_SITE": "ropsten.etherscan.io",
-    "GOOGLE_ANALYTICS": "",
-    "GOOGLE_TAG_MANAGER": "",
-    "INTERCOM_APP_ID": "",
-    "REFILE_S3_BUCKET": "",
-    "REFILE_S3_REGION": "",
+    "APP_HOST": {
+      "description": "Domain name of the app"
+    },
+    "AWS_API_KEY": {
+      "description": "AWS S3 API key"
+    },
+    "AWS_API_SECRET": {
+      "description": "AWS S3 API secret"
+    },
+    "BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET": {
+      "description": "Block explorer url for constellation mainnet"
+    },
+    "BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET": {
+      "description": "Block explorer url for constellation testnet"
+    },
+    "DISCORD_BOT_TOKEN": {
+      "description": "Discord API bot token"
+    },
+    "DISCORD_CLIENT_ID": {
+      "description": "Discord API client id"
+    },
+    "DISCORD_CLIENT_SECRET": {
+      "description": "Discord API client secret"
+    },
+    "INFURA_PROJECT_ID": {
+      "description": "Infura.io project id"
+    },
+    "ORE_ID_API_KEY": {
+      "description": "Aikon ORE ID API key"
+    },
+    "ORE_ID_SERVICE_KEY": {
+      "description": "Aikon ORE ID API service key"
+    },
+    "SLACK_API_KEY": {
+      "description": "Slack API key"
+    },
+    "SLACK_API_SECRET": {
+      "description": "Slack API secret"
+    },
+    "REFILE_S3_REGION": {
+      "description": "AWS S3 region name to store user uploads"
+    },
+    "REFILE_S3_BUCKET": {
+      "description": "AWS S3 bucket name to store user uploads"
+    },
     "SECRET_KEY_BASE": {
-      "description": "SECRET_KEY_BASE",
+      "description": "Rails SECRET_KEY_BASE",
       "generator": "secret"
     },
-    "SIDEKIQ_PASSWORD": "UPDATE_ME",
-    "SIDEKIQ_USERNAME": "UPDATE_ME",
-    "SLACK_API_KEY": "UPDATE_ME",
-    "SLACK_API_SECRET": "UPDATE_ME",
+    "BASIC_AUTH": {
+      "description": "Protect app with basic auth credentials (login:password)",
+      "required": false
+    },
+    "CLOUDFRONT_HOST": {
+      "description": "Cloudfront host to cache assets",
+      "required": false
+    },
+    "GOOGLE_ANALYTICS": {
+      "description": "GA id",
+      "required": false
+    },
+    "GOOGLE_TAG_MANAGER": {
+      "description": "GTM id",
+      "required": false
+    },
+    "INTERCOM_APP_ID": {
+      "description": "Intercom app id",
+      "required": false
+    },
+    "SIDEKIQ_PASSWORD": {
+      "description": "Password for Sidekiq admin panel",
+      "required": false
+    },
+    "SIDEKIQ_USERNAME": {
+      "description": "Username for Sidekiq admin panel",
+      "required": false
+    },
     "NODE_MODULES_CACHE": "false"
   }
 }
