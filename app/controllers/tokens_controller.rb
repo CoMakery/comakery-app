@@ -67,20 +67,19 @@ class TokensController < ApplicationController
   def fetch_contract_details
     authorize Token.create
 
+    @symbol, @decimals = [nil, nil]
     host = Token.blockchain_for(params[:network]).explorer_api_host
 
-    case params[:address]
-    when /^0x[a-fA-F0-9]{40}$/
-      web3 = Comakery::Web3.new(host)
-      @symbol, @decimals = web3.fetch_symbol_and_decimals(params[:address])
-    when /^[a-fA-F0-9]{40}$/
-      qtum = Comakery::Qtum.new(host)
-      @symbol, @decimals = qtum.fetch_symbol_and_decimals(params[:address])
-    when /^[a-zA-Z0-9]{58}$/ # AlgorandTest
-      asa_token_type = TokenType::Asa.new
-      @symbol = asa_token_type.symbol
-      @decimals = asa_token_type.decimals
-    end
+    client =
+      case params[:address]
+      when /^0x[a-fA-F0-9]{40}$/
+        Comakery::Web3.new(host)
+      when /^[a-fA-F0-9]{40}$/
+        Comakery::Qtum.new(host)
+      when /^[0-9]{8,9}$/
+        Comakery::Algorand.new(host)
+      end
+    @symbol, @decimals = client.fetch_symbol_and_decimals(params[:address]) if client
 
     render json: { symbol: @symbol, decimals: @decimals }, status: :ok
   end
