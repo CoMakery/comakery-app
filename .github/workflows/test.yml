@@ -29,12 +29,20 @@ jobs:
       RACK_ENV: production
       RAILS_ENV: production
       SECRET_KEY_BASE: dummy
+      DATABASE_URL: postgres://rails@localhost:5432/rails
       AWS_API_KEY: dummy
       AWS_API_SECRET: dummy
+      BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET: none
+      BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET: dummy
+      DISCORD_CLIENT_ID: none
+      DISCORD_CLIENT_SECRET: none
+      INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
+      ORE_ID_API_KEY: none
+      ORE_ID_SERVICE_KEY: none
+      SLACK_API_KEY: none
+      SLACK_API_SECRET: none
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
-      DATABASE_URL: postgres://rails@localhost:5432/rails
-      INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 
