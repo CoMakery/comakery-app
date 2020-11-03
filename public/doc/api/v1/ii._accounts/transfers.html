@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>II. Accounts API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
 
       <div class="article">
-        <h2>CANCEL – ERROR</h2>
-        <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
+        <h2>TRANSFERS</h2>
+        <h3>GET /api/v1/accounts/:id/transfers</h3>
           <p class="explanation">
-            Returns an array of errors
+            Returns an array of transactions for the account
           </p>
 
           <h3>Parameters</h3>
@@ -131,39 +131,20 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">project_id</span>
+                <td>
+                    <span class="name">page</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -171,37 +152,40 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/48/transfers/22</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/2b3e9ac2-6801-4539-8e71-1b7cb88897bc/transfers?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F2b3e9ac2-6801-4539-8e71-1b7cb88897bc%2Ftransfers&amp;body[method]=GET&amp;body[nonce]=eb679ce7d7fe001f18489e057b8e3604&amp;body[timestamp]=1604412157&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=qjdjuU%2BPrPrOIV24qhlKQA7rjCOs21lFAVa2hkCc%2F6bwqIJJfY%2BXh6reTqepmyt27bk5TfKCvoIF0B5LKW7vAg%3D%3D</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/2b3e9ac2-6801-4539-8e71-1b7cb88897bc/transfers&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;eb679ce7d7fe001f18489e057b8e3604&quot;, &quot;timestamp&quot;=&gt;&quot;1604412157&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;qjdjuU+PrPrOIV24qhlKQA7rjCOs21lFAVa2hkCc/6bwqIJJfY+Xh6reTqepmyt27bk5TfKCvoIF0B5LKW7vAg==&quot;}</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">{
-  "body": {
-    "data": "",
-    "url": "http://example.org/api/v1/projects/48/transfers/22",
-    "method": "DELETE",
-    "nonce": "273f595468e29ac2c3a48a6c95959078",
-    "timestamp": "1604412160"
-  },
-  "proof": {
-    "type": "Ed25519Signature2018",
-    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "RJbHnrK60dQHS+BhMfkGe6YE0m1aZMYQbj1SQCZ7YREn0J8Ica0lHETU1qSjKkxun0yzrNIMOK33CGP5r0WeDw=="
-  }
-}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 50
+Total: 1
+ETag: W/&quot;9c52f817e8e557f5bc69ca2b53b441d3&quot;
+Last-Modified: Tue, 03 Nov 2020 14:02:37 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;base&quot;: [
-      &quot;Paid task/transfer can&#39;t be cancelled&quot;
-    ]
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 4,
+    &quot;transferTypeId&quot;: 98,
+    &quot;amount&quot;: &quot;1.0&quot;,
+    &quot;quantity&quot;: &quot;1.0&quot;,
+    &quot;totalAmount&quot;: &quot;1.0&quot;,
+    &quot;description&quot;: &quot;none&quot;,
+    &quot;transactionError&quot;: null,
+    &quot;status&quot;: &quot;paid&quot;,
+    &quot;createdAt&quot;: &quot;2020-11-03T14:02:37.728Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-11-03T14:02:37.721Z&quot;,
+    &quot;accountId&quot;: &quot;2b3e9ac2-6801-4539-8e71-1b7cb88897bc&quot;,
+    &quot;projectId&quot;: 38
   }
-}</pre>
+]</pre>
       </div>
     </div>
   </body>

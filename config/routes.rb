@@ -143,6 +143,7 @@ Rails.application.routes.draw do
             post :password_reset
           end
         end
+        resources :transfers, only: [:index], controller: :account_transfers
         get :token_balances
       end
 

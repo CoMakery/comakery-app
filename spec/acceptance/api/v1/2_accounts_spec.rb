@@ -385,4 +385,28 @@ resource 'II. Accounts' do
       end
     end
   end
+
+  get '/api/v1/accounts/:id/transfers' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+      parameter :page, 'page number', type: :integer
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:page) { 1 }
+
+      before do
+        create(:award, account: account, status: :paid, amount: 1)
+      end
+
+      example 'TRANSFERS' do
+        explanation 'Returns an array of transactions for the account'
+
+        request = build(:api_signed_request, '', api_v1_account_transfers_path(account_id: account.managed_account_id), 'GET', 'example.org')
+        do_request(request)
+        expect(status).to eq(200)
+      end
+    end
+  end
 end
