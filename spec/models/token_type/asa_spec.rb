@@ -4,18 +4,28 @@ require 'models/token_type_spec'
 describe TokenType::Asa do
   it_behaves_like 'a token type'
 
-  specify { expect(described_class.new.name).to eq('ASA') }
-  specify { expect(described_class.new.symbol).to eq('ASA') }
-  specify { expect(described_class.new.decimals).to eq(6) }
-  specify { expect(described_class.new.wallet_logo).to be_nil }
-  specify { expect(described_class.new.contract).to be_nil }
-  specify { expect(described_class.new.abi).to eq({}) }
-  specify { expect(described_class.new.tx).to be_nil }
-  specify { expect(described_class.new.operates_with_smart_contracts?).to be true }
-  specify { expect(described_class.new.operates_with_account_records?).to be_falsey }
-  specify { expect(described_class.new.operates_with_reg_groups?).to be_falsey }
-  specify { expect(described_class.new.operates_with_transfer_rules?).to be_falsey }
-  specify { expect(described_class.new.supports_token_mint?).to be_falsey }
-  specify { expect(described_class.new.supports_token_burn?).to be_falsey }
-  specify { expect(described_class.new.supports_token_freeze?).to be_falsey }
+  describe 'have filled values' do
+    let(:attrs) { { contract_address: '13076367', blockchain: Blockchain::AlgorandTest.new } }
+    around(:each) do |example|
+      VCR.use_cassette("algorand/AlgorandTest/#{attrs[:contract_address]}/asset_data") do
+        example.run
+      end
+    end
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.name).to eq('ASA') }
+    specify { expect(subject.symbol).to eq('CMKTEST') }
+    specify { expect(subject.decimals).to eq(2) }
+    specify { expect(subject.wallet_logo).to be_nil }
+    specify { expect(subject.contract).to be_a(Comakery::Algorand) }
+    specify { expect(subject.abi).to eq({}) }
+    specify { expect(subject.tx).to be_nil }
+    specify { expect(subject.operates_with_smart_contracts?).to be true }
+    specify { expect(subject.operates_with_account_records?).to be_falsey }
+    specify { expect(subject.operates_with_reg_groups?).to be_falsey }
+    specify { expect(subject.operates_with_transfer_rules?).to be_falsey }
+    specify { expect(subject.supports_token_mint?).to be_falsey }
+    specify { expect(subject.supports_token_burn?).to be_falsey }
+    specify { expect(subject.supports_token_freeze?).to be_falsey }
+  end
 end
