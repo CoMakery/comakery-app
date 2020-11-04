@@ -25,8 +25,4 @@ class Wallet < ApplicationRecord
     def ore_id_and_pending?
       pending? && ore_id?
     end
-
-    def testnet_blockchains_available?
-      testnets_available? || account.comakery_admin?
-    end
 end
