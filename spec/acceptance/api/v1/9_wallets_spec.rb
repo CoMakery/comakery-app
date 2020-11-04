@@ -154,7 +154,10 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, { redirect_url: redirect_url }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'POST', 'example.org')
 
-        do_request(request)
+        VCR.use_cassette('ore_id_service/token', match_requests_on: %i[method uri]) do
+          do_request(request)
+        end
+
         expect(status).to eq(200)
       end
     end

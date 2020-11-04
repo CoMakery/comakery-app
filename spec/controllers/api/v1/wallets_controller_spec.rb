@@ -139,7 +139,10 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         params[:account_id] = account.managed_account_id
         params[:id] = wallet.id
 
-        post :password_reset, params: params
+        VCR.use_cassette('ore_id_service/token', match_requests_on: %i[method uri]) do
+          post :password_reset, params: params
+        end
+
         expect(response).to have_http_status(:ok)
       end
     end
