@@ -48,8 +48,27 @@ class OreIdService
     raise OreIdService::RemoteInvalidError
   end
 
+  def create_token
+    response = handle_response(
+      self.class.post(
+        '/app-token',
+        headers: request_headers
+      )
+    )
+
+    response['appAccessToken']
+  end
+
   def password_reset_url(redirect_url)
-    "https://example.org?redirect=#{redirect_url}"
+    params = {
+      app_access_token: create_token,
+      provider: :email,
+      callback_url: redirect_url,
+      background_color: 'FFFFFF',
+      state: ''
+    }
+
+    "https://service.oreid.io/auth?#{params.to_query}"
   end
 
   private

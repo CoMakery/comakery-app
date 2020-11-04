@@ -3,10 +3,6 @@ require 'rails_helper'
 RSpec.describe OreIdService, type: :model, vcr: true do
   subject { described_class.new(create(:ore_id)) }
 
-  specify do
-    expect(subject.password_reset_url('localhost')).to eq('https://example.org?redirect=localhost')
-  end
-
   describe '#create_remote' do
     before do
       subject.ore_id.update(account_name: nil)
@@ -84,6 +80,24 @@ RSpec.describe OreIdService, type: :model, vcr: true do
           expect { subject.permissions }.to raise_error(OreIdService::RemoteInvalidError)
         end
       end
+    end
+  end
+
+  describe '#create_token' do
+    specify do
+      VCR.use_cassette('ore_id_service/token', match_requests_on: %i[method uri]) do
+        expect(subject.create_token).to be_an(String)
+      end
+    end
+  end
+
+  describe '#password_reset_url' do
+    before do
+      expect(subject).to receive(:create_token).and_return('test')
+    end
+
+    specify do
+      expect(subject.password_reset_url('localhost')).to eq('https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=')
     end
   end
 end
