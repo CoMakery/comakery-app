@@ -23,7 +23,7 @@ class TokenType::Asa < TokenType
   # Wallet logo filename for UI purposes (relative to `app/assets/images`)
   # @return [String] filename
   def wallet_logo
-    nil
+    'OREID_Logo_Symbol.svg'
   end
 
   # Contract instance if implemented
