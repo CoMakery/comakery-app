@@ -88,7 +88,6 @@ RSpec.configure do |config|
     'actionpack',
     'actionview',
     'activesupport',
-    'airbrake',
     'rack',
     'railties',
     'zeus'

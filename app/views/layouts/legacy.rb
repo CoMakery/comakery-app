@@ -2,7 +2,7 @@ class Views::Layouts::Legacy < Views::Base
   use_instance_variables_for_assigns true
   needs :whitelabel_mission
 
-  def content # rubocop:todo Metrics/PerceivedComplexity
+  def content
     doctype!
     html(lang: 'en') do
       head do
@@ -21,13 +21,6 @@ class Views::Layouts::Legacy < Views::Base
         javascript_include_tag Webpacker.manifest.lookup!('application.js')
 
         javascript_include_tag 'jquery.visible' if Rails.env.test?
-
-        if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
-          javascript_include_tag 'airbrake-shim',
-                                 'data-airbrake-project-id' => ENV['AIRBRAKE_PROJECT_ID'],
-                                 'data-airbrake-project-key' => ENV['AIRBRAKE_API_KEY'],
-                                 'data-airbrake-environment-name' => ENV['APP_NAME']
-        end
 
         csrf_meta_tags
       end

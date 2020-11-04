@@ -1,1 +1,1 @@
-json.array! @transfers, partial: 'transfer', as: :transfer
+json.array! @transfers, partial: 'api/v1/transfers/transfer', as: :transfer

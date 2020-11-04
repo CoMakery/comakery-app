@@ -15,7 +15,6 @@ describe 'projects links spec', :js do
   before do
     team.build_authentication_team authentication
     team.build_authentication_team same_team_account_authentication
-    Rails.application.config.allow_ethereum = 'citizencodedomain'
     travel_to Date.new(2016, 1, 10)
     stub_slack_user_list
     stub_slack_channel_list

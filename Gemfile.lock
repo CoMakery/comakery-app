@@ -101,10 +101,6 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    airbrake (9.5.5)
-      airbrake-ruby (~> 4.8)
-    airbrake-ruby (4.14.0)
-      rbtree3 (~> 0.5)
     api-pagination (4.8.2)
     ast (2.4.1)
     awesome_print (1.8.0)
@@ -485,7 +481,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rbtree3 (0.6.0)
     rdoc (6.2.1)
     react-rails (2.6.1)
       babel-transpiler (>= 0.7.0)
@@ -687,7 +682,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (~> 9.4)
   api-pagination (~> 4.8)
   awesome_print
   barnes (~> 0.0.7)
