@@ -72,8 +72,8 @@ class TokensController < ApplicationController
     @decimals = token_type.decimals
 
     render json: { symbol: @symbol, decimals: @decimals }, status: :ok
-  rescue TokenType::Contract::ValidationError => e
-    render json: { error: e }, status: :bad_request
+  rescue TokenType::Contract::ValidationError
+    render json: { error: 'Contract address is invalid' }, status: :bad_request
   end
 
   private

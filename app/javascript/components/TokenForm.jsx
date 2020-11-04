@@ -155,23 +155,21 @@ class TokenForm extends React.Component {
         'Content-Type': 'application/json'
       }
     }).then(response => {
-      if (response.status === 200) {
-        return response.json()
-      } else {
-        this.setState(state => ({
-          flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': response.text()}])
-        }))
-        this.enableContractFields()
-        throw Error(response.text())
-      }
+      return response.json()
     }).then(data => {
       let symbol = data.symbol
       let decimals = data.decimals
+      let error = data.error || null
+
       if (symbol || decimals) {
         this.setState({
           'token[symbol]'        : symbol,
           'token[decimal_places]': decimals.toString()
         })
+      } else if (error !== null) {
+        this.setState(state => ({
+          flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': error}])
+        }))
       }
       this.enableContractFields()
     })
@@ -340,7 +338,7 @@ class TokenForm extends React.Component {
                 errorText={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='10000000'
-                pattern='([0-9]{8,9})'
+                pattern='([0-9]{8,})'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
