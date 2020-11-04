@@ -1,22 +1,20 @@
 class Comakery::Algorand
-  attr_reader :client
-
-  def initialize(host)
-    @api_endpoint = "https://#{host}"
+  def initialize(blockchain, asset_id)
+    @blockchain = blockchain
+    @api_endpoint = "https://#{@blockchain.explorer_api_host}"
+    @asset_id = asset_id
   end
 
-  def fetch_symbol_and_decimals(asset_id)
-    asset_params = asset_details(asset_id).dig('asset', 'params')
-    return [nil, nil] unless asset_params
-
-    [
-      asset_params.fetch('unit-name'),
-      asset_params.fetch('decimals')
-    ]
+  def symbol
+    asset_details.dig('asset', 'params', 'unit-name')
   end
 
-  def asset_details(asset_id)
-    get_request('/v2/assets/', asset_id)
+  def decimals
+    asset_details.dig('asset', 'params', 'decimals')
+  end
+
+  def asset_details
+    @asset_details ||= get_request('/v2/assets/', @asset_id)
   end
 
   def get_request(path, params = {})

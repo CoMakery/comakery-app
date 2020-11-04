@@ -114,11 +114,11 @@ class TokenForm extends React.Component {
 
     switch (event.target.name) {
       case 'token[contract_address]':
-        this.fetchSymbolAndDecimals(event.target.value, this.state['token[_blockchain]'])
+        this.fetchSymbolAndDecimals(event.target.value, this.state['token[_blockchain]'], this.state['token[_token_type]'])
         break
 
       case 'token[_blockchain]':
-        this.fetchSymbolAndDecimals(this.state['token[contract_address]'], event.target.value)
+        this.fetchSymbolAndDecimals(this.state['token[contract_address]'], event.target.value, this.state['token[_token_type]'])
         break
 
       case 'token[_token_type]':
@@ -135,8 +135,8 @@ class TokenForm extends React.Component {
     }
   }
 
-  fetchSymbolAndDecimals(address, network) {
-    if (address === '' || network === '') {
+  fetchSymbolAndDecimals(address, network, tokenType) {
+    if (address === '' || network === '' || tokenType === '') {
       return
     }
 
@@ -148,8 +148,8 @@ class TokenForm extends React.Component {
 
     fetchPolyfill('/tokens/fetch_contract_details', {
       credentials: 'same-origin',
-      method     : 'POST',
-      body       : JSON.stringify({'address': address, 'network': network, 'authenticity_token': this.props.csrfToken}),
+      method: 'POST',
+      body       : JSON.stringify({'address': address, 'network': network, 'token_type': tokenType, 'authenticity_token': this.props.csrfToken}),
       headers    : {
         'Accept'      : 'application/json',
         'Content-Type': 'application/json'

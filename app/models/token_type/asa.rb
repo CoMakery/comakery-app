@@ -11,13 +11,13 @@ class TokenType::Asa < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    'ASA'
+    @symbol ||= contract&.symbol&.to_s
   end
 
   # Number of decimals
   # @return [Integer] number
   def decimals
-    6
+    @decimals ||= contract&.decimals&.to_i
   end
 
   # Wallet logo filename for UI purposes (relative to `app/assets/images`)
@@ -29,7 +29,14 @@ class TokenType::Asa < TokenType
   # Contract instance if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20.new.new
+    @contract ||=
+      begin
+        blockchain.validate_asset(contract_address)
+        contract = Comakery::Algorand.new(blockchain, contract_address)
+        @contract = contract
+      end
+  rescue Blockchain::Address::ValidationError, NoMethodError
+    raise TokenType::Contract::ValidationError, 'is invalid'
   end
 
   # ABI structure if present
@@ -84,5 +91,13 @@ class TokenType::Asa < TokenType
   # @return [Boolean] flag
   def supports_token_freeze?
     false
+  end
+
+  def contract_address
+    attrs[:contract_address]
+  end
+
+  def blockchain
+    attrs[:blockchain]
   end
 end
