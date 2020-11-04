@@ -10,25 +10,24 @@ describe Blockchain, type: :model do
 
   describe '#available' do
     subject { described_class.available }
-    after { ENV['TESTNETS_AVAILABLE'] = 'true' }
 
     it 'returns testnets if TESTNETS_AVAILABLE set to true' do
-      ENV['TESTNETS_AVAILABLE'] = 'true'
+      expect(described_class).to receive(:testnets_available?).and_return(true)
 
       is_expected.to include Blockchain::BitcoinTest
       is_expected.to include Blockchain::Bitcoin
     end
 
     it 'do not returns testnets if TESTNETS_AVAILABLE set to false' do
-      ENV['TESTNETS_AVAILABLE'] = 'false'
+      expect(described_class).to receive(:testnets_available?).and_return(false)
 
       is_expected.not_to include Blockchain::BitcoinTest
       is_expected.to include Blockchain::Bitcoin
     end
 
     it 'returns testnets if TESTNETS_AVAILABLE not set' do
-      ENV['TESTNETS_AVAILABLE'] = nil
-
+      expect(ENV).to receive(:fetch).with('TESTNETS_AVAILABLE', 'true').and_call_original
+      expect(described_class).to receive(:testnets_available?).and_call_original
       is_expected.to include Blockchain::BitcoinTest
       is_expected.to include Blockchain::Bitcoin
     end
