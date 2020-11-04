@@ -42,21 +42,20 @@ describe Wallet, type: :model do
 
   describe '#available_blockchains' do
     subject { create(:wallet) }
-    after { ENV['TESTNETS_AVAILABLE'] = 'true' }
 
     it 'returns list of avaiable blockchains for creating a new wallet with the same account' do
       expect(subject.available_blockchains).not_to include(subject._blockchain)
     end
 
     it 'returns testnets if TESTNETS_AVAILABLE set to true' do
-      ENV['TESTNETS_AVAILABLE'] = 'true'
+      allow(Blockchain).to receive(:testnets_available?).and_return(true)
 
       expect(subject.available_blockchains).to include('bitcoin_test')
       expect(subject.available_blockchains).to include('ethereum')
     end
 
     it 'do not returns testnets if TESTNETS_AVAILABLE set to false' do
-      ENV['TESTNETS_AVAILABLE'] = 'false'
+      allow(Blockchain).to receive(:testnets_available?).and_return(false)
 
       expect(subject.available_blockchains).not_to include('bitcoin_test')
       expect(subject.available_blockchains).to include('ethereum')
