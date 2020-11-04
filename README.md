@@ -125,8 +125,7 @@ Here's a complicated but possibly useful chromedriver reference setup. [Referenc
 Set up .env:
 
 ```sh
-cp .env.dev .env
-heroku config -a <YOUR_HEROKU_APP> -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
+cp .env.required .env
 ```
 
 Basics :
@@ -135,7 +134,7 @@ Basics :
 source .env
 bundle install
 yarn install
-rails db:setup
+bin/setup
 rails data:migrate
 ```
 
