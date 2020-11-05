@@ -14,7 +14,7 @@ class Comakery::Algorand
   end
 
   def asset_details
-    @asset_details ||= get_request('/v2/assets/', @asset_id)
+    @asset_details ||= get_request(@blockchain.asset_api_path(@asset_id))
   end
 
   def get_request(path, params = {})

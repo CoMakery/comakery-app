@@ -20,6 +20,10 @@ class Blockchain::Algorand < Blockchain
     'algoexplorer.io'
   end
 
+  def asset_api_path(asset_id)
+    "/v2/assets/#{asset_id}"
+  end
+
   # Is mainnet?
   # @return [Boolean] mainnet?
   def mainnet?
