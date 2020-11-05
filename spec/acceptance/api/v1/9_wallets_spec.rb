@@ -154,7 +154,9 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, { redirect_url: redirect_url }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'POST', 'example.org')
 
+        allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
         do_request(request)
+
         expect(status).to eq(200)
       end
     end

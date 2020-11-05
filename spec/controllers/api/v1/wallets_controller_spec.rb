@@ -153,7 +153,9 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         params[:account_id] = account.managed_account_id
         params[:id] = wallet.id
 
+        allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
         post :password_reset, params: params
+
         expect(response).to have_http_status(:ok)
       end
     end
