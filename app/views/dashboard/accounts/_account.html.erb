@@ -4,13 +4,13 @@
 <% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.address_for_blockchain(@project.token._blockchain), 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => api_v1_project_account_token_records_path(project_id: @project.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 
 <%= form_with model: record, url: form_url, data: form_data, class: 'account-form' do |f| %>
-	
+
 	<% if policy(@project).edit_accounts? && record && account.address_for_blockchain(@project.token._blockchain) %>
 		<%= image_tag 'pencil.svg', data: {action: 'click->account-form#showForm', target: 'account-form.outputs'}, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
 		<%= image_tag 'iconCloseDark.svg', data: {action: 'click->account-form#hideForm', target: 'account-form.inputs'}, class: 'transfers-table--edit-icon hidden' %>
   <% end %>
-	
-	<div class="transfers-table__transfer">		
+
+	<div class="transfers-table__transfer">
 	  <div class="transfers-table__transfer__account">
 	    <%= render partial: "dashboard/transfers/account", locals: {account: account} %>
 	  </div>
@@ -62,7 +62,7 @@
 		        –
 		      <% end %>
 				</div>
-			
+
 	      <%= f.number_field(:max_balance, required: false, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
 	    </div>
 
@@ -72,7 +72,7 @@
 				<div data-target="account-form.outputs">
 		      <%= record&.decorate&.lockup_until_pretty %>
 				</div>
-			
+
 	      <%= f.date_field(:lockup_until, required: false, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form.inputs"}, class: 'hidden') %>
 	    </div>
 
@@ -82,7 +82,7 @@
 				<div data-target="account-form.outputs">
 	      	<%= record&.reg_group ? "#{record.reg_group.name} (#{record.reg_group.blockchain_id})" : "–" %>
 				</div>
-			
+
 	    	<%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
 			</div>
 
@@ -96,20 +96,42 @@
 		        <span class="transfers-table__transfer__frozen--no">No</span>
 		      <% end %>
 				</div>
-			
+
 	    	<%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressFrozen account-form.inputs"} }) %>
 	    </div>
+
+			<div class="transfers-table__transfer__status">
+      	<label>status</label>
+
+				<div data-target="account-form.outputs">
+					<% if record&.status %>
+						<div>
+							<% if record.status.in?(%w[created pending]) %>
+								Processing...
+							<% else %>
+								<%= record.status %>
+							<% end %>
+						</div>
+					<% end %>
+
+					<% if record&.latest_blockchain_transaction && record.latest_blockchain_transaction&.tx_hash %>
+						<div class="account-table__account-token-record__status">
+							<div class="transfer-button <%= record.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">
+								<%= link_to (record.synced? ? "Tx ➔" : "Tx processing"), record.token.blockchain.url_for_tx_human(record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
+							</div>
+						</div>
+					<% end %>
+				</div>
+
+				<div class="hidden" data-target="account-form.inputs">
+					–
+				</div>
+			</div>
 		<% end %>
 	</div>
-	
+
   <% if policy(@project).edit_accounts? && record && account.address_for_blockchain(@project.token._blockchain) %>
   	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
-			<% if record.latest_blockchain_transaction&.tx_hash %>
-				<div class="transfer-button <%= record.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">
-					<%= link_to (record.synced? ? "Tx ➔" : "Tx processing"), record.token.blockchain.url_for_tx_human(record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
-				</div>
-      <% end %>
-  		
 			<div class='transfer-button'>
         <% if @project.token&.token_frozen? %>
           frozen
