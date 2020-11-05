@@ -16,7 +16,7 @@ describe TokenType::Asa do
     specify { expect(subject.name).to eq('ASA') }
     specify { expect(subject.symbol).to eq('CMKTEST') }
     specify { expect(subject.decimals).to eq(2) }
-    specify { expect(subject.wallet_logo).to be_nil }
+    specify { expect(subject.wallet_logo).to eq 'OREID_Logo_Symbol.svg' }
     specify { expect(subject.contract).to be_a(Comakery::Algorand) }
     specify { expect(subject.abi).to eq({}) }
     specify { expect(subject.tx).to be_nil }
