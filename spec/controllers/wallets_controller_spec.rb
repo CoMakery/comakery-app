@@ -125,5 +125,13 @@ RSpec.describe WalletsController, type: :controller do
       delete :destroy, params: { id: wallet.to_param }
       expect(response).to redirect_to(wallets_url)
     end
+
+    context 'when wallet cannot be destroyed' do
+      it 'redirects to the wallets list' do
+        wallet = create(:wallet, source: :ore_id, account: account)
+        delete :destroy, params: { id: wallet.to_param }
+        expect(response).to redirect_to(wallets_url)
+      end
+    end
   end
 end

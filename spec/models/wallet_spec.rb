@@ -24,6 +24,13 @@ describe Wallet, type: :model do
     it { expect(subject.state).to eq('ok') }
     it { expect(subject.ore_id_account).to be_an(OreIdAccount) }
 
+    it 'aborts destroy with an error' do
+      subject.destroy
+      subject.reload
+      expect(subject).to be_persisted
+      expect(subject.errors).not_to be_empty
+    end
+
     context 'and address is missing' do
       subject { Wallet.create(source: :ore_id, address: nil, _blockchain: :bitcoin, account: create(:account)) }
       it { expect(subject.state).to eq('pending') }

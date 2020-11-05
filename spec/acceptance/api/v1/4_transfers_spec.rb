@@ -6,7 +6,7 @@ resource 'IV. Transfers' do
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 8)) }
-  let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
+  let!(:transfer_accepted) { create(:transfer, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_cancelled) { create(:transfer, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
 
@@ -43,7 +43,6 @@ resource 'IV. Transfers' do
 
     with_options with_example: true do
       response_field :id, 'transfer id', type: :integer
-      response_field :source, 'transfer source (earned bought mint burn)', type: :string
       response_field :amount, 'transfer amount', type: :string
       response_field :quantity, 'transfer quantity', type: :string
       response_field :totalAmount, 'transfer total amount', type: :string
@@ -80,12 +79,11 @@ resource 'IV. Transfers' do
     end
 
     with_options scope: :transfer, with_example: true do
-      parameter :source, 'transfer source ( earned bought mint burn ), defaults to earned', type: :string
       parameter :amount, 'transfer amount (same decimals as token)', required: true, type: :string
       parameter :quantity, 'transfer quantity (2 decimals)', required: true, type: :string
       parameter :total_amount, 'transfer total_amount (amount times quantity, same decimals as token)', required: true, type: :string
       parameter :account_id, 'transfer account id', required: true, type: :string
-      parameter :transfer_type_id, 'transfer type id', required: true, type: :string
+      parameter :transfer_type_id, 'custom transfer type id (default: earned)', required: false, type: :string
       parameter :description, 'transfer description', type: :string
     end
 
