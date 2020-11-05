@@ -67,18 +67,13 @@ class TokensController < ApplicationController
   def fetch_contract_details
     authorize Token.create
 
-    host = Token.blockchain_for(params[:network]).explorer_api_host
-
-    case params[:address]
-    when /^0x[a-fA-F0-9]{40}$/
-      web3 = Comakery::Web3.new(host)
-      @symbol, @decimals = web3.fetch_symbol_and_decimals(params[:address])
-    when /^[a-fA-F0-9]{40}$/
-      qtum = Comakery::Qtum.new(host)
-      @symbol, @decimals = qtum.fetch_symbol_and_decimals(params[:address])
-    end
+    token_type = build_token_type(params.require(:token_type), params.require(:network), params.require(:address))
+    @symbol = token_type.symbol
+    @decimals = token_type.decimals
 
     render json: { symbol: @symbol, decimals: @decimals }, status: :ok
+  rescue TokenType::Contract::ValidationError
+    render json: { error: 'Contract address is invalid' }, status: :bad_request
   end
 
   private
@@ -127,6 +122,13 @@ class TokensController < ApplicationController
         :symbol,
         :decimal_places,
         :unlisted
+      )
+    end
+
+    def build_token_type(token_type, blockchain, contract_address)
+      "TokenType::#{token_type.to_s.camelize}".constantize.new(
+        blockchain: "Blockchain::#{blockchain.to_s.camelize}".constantize.new,
+        contract_address: contract_address
       )
     end
 end

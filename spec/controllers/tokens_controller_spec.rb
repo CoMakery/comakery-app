@@ -117,7 +117,7 @@ describe TokensController do
     context 'when logged in with admin flag' do
       it 'returns correct symbol and decimals for QRC20 contract' do
         stub_qtum_fetch
-        post :fetch_contract_details, params: { address: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', network: 'qtum_test' }
+        post :fetch_contract_details, params: { address: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', network: 'qtum_test', token_type: 'qrc20' }
         expect(response.status).to eq(200)
         expect(response.media_type).to eq('application/json')
         expect(assigns[:symbol]).to eq('BIG')
@@ -126,11 +126,22 @@ describe TokensController do
 
       it 'returns correct symbol and decimals for ERC20 contract' do
         stub_web3_fetch
-        post :fetch_contract_details, params: { address: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2', network: 'ethereum' }
+        post :fetch_contract_details, params: { address: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2', network: 'ethereum', token_type: 'erc20' }
         expect(response.status).to eq(200)
         expect(response.media_type).to eq('application/json')
         expect(assigns[:symbol]).to eq('HOT')
         expect(assigns[:symbol]).not_to eq(nil)
+      end
+
+      it 'returns correct symbol and decimals for ASA contract' do
+        contract_address = '13076367'
+        VCR.use_cassette("algorand/AlgorandTest/#{contract_address}/asset_data") do
+          post :fetch_contract_details, params: { address: contract_address, network: 'algorand_test', token_type: 'asa' }
+        end
+        expect(response.status).to eq(200)
+        expect(response.media_type).to eq('application/json')
+        expect(assigns[:symbol]).to eq('CMKTEST')
+        expect(assigns[:decimals]).to eq(2)
       end
     end
   end
