@@ -1401,6 +1401,11 @@ button.reg-groups-create,
     margin-top: 0.8em;
   }
 
+  .accounts-table_outdated_data {
+    color: #1a1a1a;
+    text-decoration: line-through;
+  }
+
   .transfers-table--edit-save {
     min-height: 60px;
     background-color: #ffffff;
