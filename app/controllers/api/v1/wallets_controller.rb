@@ -31,9 +31,16 @@ class Api::V1::WalletsController < Api::V1::ApiController
   # DELETE /api/v1/accounts/1/wallets/1
   def destroy
     wallet.destroy
-    wallets
 
-    render 'index.json', status: :ok
+    if wallet.persisted?
+      @errors = wallet.errors
+
+      render 'api/v1/error.json', status: :bad_request
+    else
+      wallets
+
+      render 'index.json', status: :ok
+    end
   end
 
   # POST /api/v1/accounts/1/wallets/1/password_reset

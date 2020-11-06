@@ -112,6 +112,20 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         expect(response).to have_http_status(:ok)
       end
     end
+
+    context 'when wallet cannot be destroyed' do
+      subject { create(:wallet, account: account, source: :ore_id) }
+
+      it 'renders an error' do
+        params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: subject.id.to_s), 'DELETE')
+        params[:account_id] = account.managed_account_id
+        params[:id] = subject.id
+
+        delete :destroy, params: params
+        expect(response).not_to be_successful
+        expect(assigns[:errors]).not_to be_nil
+      end
+    end
   end
 
   describe 'GET #show' do

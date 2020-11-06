@@ -48,8 +48,14 @@ class WalletsController < ApplicationController
   # DELETE /wallets/1
   def destroy
     @wallet.destroy
+
     respond_to do |format|
-      format.html { redirect_to wallets_url, notice: 'Wallet removed' }
+      if @wallet.persisted?
+        flash[:error] = @wallet.errors.full_messages.join(', ')
+        format.html { redirect_to wallets_url }
+      else
+        format.html { redirect_to wallets_url, notice: 'Wallet removed' }
+      end
     end
   end
 

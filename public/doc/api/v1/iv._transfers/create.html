@@ -135,14 +135,6 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">transfer[source]</span>
-                </td>
-                <td>
-                  <span class="description">transfer source ( earned bought mint burn ), defaults to earned</span>
-                </td>
-              </tr>
-              <tr>
                 <td class="required">
                     <span class="name">transfer[amount]</span>
                 </td>
@@ -175,11 +167,11 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td class="required">
+                <td>
                     <span class="name">transfer[transfer_type_id]</span>
                 </td>
                 <td>
-                  <span class="description">transfer type id</span>
+                  <span class="description">custom transfer type id (default: earned)</span>
                 </td>
               </tr>
               <tr>
@@ -232,25 +224,25 @@ table th, table td {
         "total_amount": "2000.00000000",
         "description": "investor",
         "transfer_type_id": "130",
-        "account_id": "f4f7cf29-3083-4470-b347-afbdb9339a27"
+        "account_id": "8364476c-cd09-428a-a5aa-36b588c0fcf2"
       }
     },
     "url": "http://example.org/api/v1/projects/45/transfers",
     "method": "POST",
-    "nonce": "4fb23ca041b6a436216814b504fd52ea",
-    "timestamp": "1604500638"
+    "nonce": "b2cfb62c9c63b9e5572d542e22e9392d",
+    "timestamp": "1604580137"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "DF9cO80hJZcRVCl2SktNYNrgdZ+V75ch8uYyy16sb/LdOrDecn8QRMXMQEQrDUe57v7yRD9tyTlBaTqrMskMCQ=="
+    "signature": "ZwkDxPnIV+QsW7rbyKJcyuVv4MLJRhXvGt9Tzcu6hPTvRT0zB7uxBrxEhRcFOXSuQd8IfurWEuy6Lyd/4yb8BA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;60f2615c51371bce8c6ce9ef67e1f718&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;01bf0446915c058fb166ab3ff2c0d89c&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -263,9 +255,9 @@ table th, table td {
   &quot;description&quot;: &quot;investor&quot;,
   &quot;transactionError&quot;: null,
   &quot;status&quot;: &quot;accepted&quot;,
-  &quot;createdAt&quot;: &quot;2020-11-04T14:37:18.974Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-11-04T14:37:18.974Z&quot;,
-  &quot;accountId&quot;: &quot;f4f7cf29-3083-4470-b347-afbdb9339a27&quot;,
+  &quot;createdAt&quot;: &quot;2020-11-05T12:42:17.906Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-11-05T12:42:17.906Z&quot;,
+  &quot;accountId&quot;: &quot;8364476c-cd09-428a-a5aa-36b588c0fcf2&quot;,
   &quot;projectId&quot;: 45
 }</pre>
       </div>
