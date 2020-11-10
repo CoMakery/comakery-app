@@ -61,14 +61,18 @@ class OreIdService
 
   def password_reset_url(redirect_url)
     params = {
-      app_access_token: create_token,
-      provider: :email,
       callback_url: redirect_url,
-      background_color: 'FFFFFF',
-      state: ''
     }
 
-    "https://service.oreid.io/auth?#{params.to_query}"
+    build_auth_url(params)
+  end
+
+  def authorization_url(redirect_url)
+    params = {
+      callback_url: redirect_url,
+    }
+
+    build_auth_url(params)
   end
 
   private
@@ -115,5 +119,16 @@ class OreIdService
       else
         raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
       end
+    end
+
+    def build_auth_url(new_params)
+      default_params = {
+        provider: :email,
+        app_access_token: create_token,
+        background_color: 'FFFFFF',
+        state: ''
+      }
+
+      "https://service.oreid.io/auth?#{default_params.merge(new_params).to_query}"
     end
 end

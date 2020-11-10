@@ -2,7 +2,7 @@
   <% if transfer.project.token&._token_type? %>
     <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
       <%= link_to transfer.ethereum_transaction_address_short, transfer.ethereum_transaction_explorer_url, target: '_blank' %>
-    
+
     <% elsif transfer.paid? %>
       paid
 
@@ -11,30 +11,44 @@
 
     <% elsif transfer.recipient_address.blank? && current_account == transfer.account %>
       <%= link_to 'needs wallet', account_path  %>
-    
+
     <% elsif transfer.recipient_address.blank? %>
       needs wallet
-    
-    <% elsif current_account&.decorate&.can_send_awards?(transfer.project) && transfer.accepted? %>
-      <%= link_to 'javascript:void(0)', class: "transfer-tokens-btn", data: transfer.decorate.pay_data do %>
-        <%= render partial: "shared/wallet_logo", locals: { project: transfer.project, size: 12 } %>
 
-        <% case transfer.latest_blockchain_transaction&.status %>
-        <% when 'created' %>
-          <% if transfer.latest_blockchain_transaction&.waiting_in_created? %>
+    <% elsif current_account&.decorate&.can_send_awards?(transfer.project) && transfer.accepted? %>
+      <% if transfer.token.blockchain.supported_by_ore_id? %>
+        <% if transfer.issuer.ore_id_account.nil? %>
+          <%= link_to transfer.issuer&.ore_id_account&.service&.password_reset_url(@redirect_url), class: "transfer-tokens-btn" do %>
+            <span>Sign in with ORE ID</span>
+          <% end %>
+        <% else %>
+          <%= link_to '#', class: "transfer-tokens-btn" do %>
+            <%= render partial: "shared/wallet_logo", locals: { project: transfer.project, size: 12 } %>
+
+            <span>Pay with ORE ID</span>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= link_to 'javascript:void(0)', class: "transfer-tokens-btn", data: transfer.decorate.pay_data do %>
+          <%= render partial: "shared/wallet_logo", locals: { project: transfer.project, size: 12 } %>
+
+          <% case transfer.latest_blockchain_transaction&.status %>
+          <% when 'created' %>
+            <% if transfer.latest_blockchain_transaction&.waiting_in_created? %>
+              <span>processing</span>
+            <% else %>
+              <span><%= transfer.decorate.transfer_button_text %></span>
+            <% end %>
+          <% when 'pending' %>
             <span>processing</span>
+          <% when 'cancelled', 'failed' %>
+            <span title="Last Failure: <%= transfer.latest_blockchain_transaction&.status_message %>">retry</span>
           <% else %>
             <span><%= transfer.decorate.transfer_button_text %></span>
           <% end %>
-        <% when 'pending' %>
-          <span>processing</span>
-        <% when 'cancelled', 'failed' %>
-          <span title="Last Failure: <%= transfer.latest_blockchain_transaction&.status_message %>">retry</span>
-        <% else %>
-          <span><%= transfer.decorate.transfer_button_text %></span>
-        <% end %>
+        <% end%>
       <% end %>
-    
+
     <% elsif transfer.cancelled? %>
       cancelled
     <% else %>
