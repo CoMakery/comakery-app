@@ -8,14 +8,12 @@ module BelongsToOreId
     belongs_to :ore_id_account, optional: true
     validates :ore_id_account, presence: true, if: :ore_id?
 
+    delegate :state, to: :ore_id_account, allow_nil: true
+
     private
 
       def create_ore_id
         self.ore_id_account = (account.ore_id_account || account.create_ore_id_account) if ore_id?
-      end
-
-      def pending_for_ore_id
-        self.state = :pending if ore_id? && address.nil?
       end
   end
 end

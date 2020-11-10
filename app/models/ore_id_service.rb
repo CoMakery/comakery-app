@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'])
+    ore_id.update(account_name: response['accountName'], state: :unclaimed)
     response
   end
 
@@ -59,13 +59,13 @@ class OreIdService
     response['appAccessToken']
   end
 
-  def password_reset_url(redirect_url)
+  def authorization_url(redirect_url, state = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
       callback_url: redirect_url,
       background_color: 'FFFFFF',
-      state: ''
+      state: state
     }
 
     "https://service.oreid.io/auth?#{params.to_query}"
