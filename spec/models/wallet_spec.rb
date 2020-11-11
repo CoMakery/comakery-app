@@ -24,6 +24,13 @@ describe Wallet, type: :model do
     it { expect(subject.state).to eq('ok') }
     it { expect(subject.ore_id_account).to be_an(OreIdAccount) }
 
+    it 'aborts destroy with an error' do
+      subject.destroy
+      subject.reload
+      expect(subject).to be_persisted
+      expect(subject.errors).not_to be_empty
+    end
+
     context 'and address is missing' do
       subject { Wallet.create(source: :ore_id, address: nil, _blockchain: :bitcoin, account: create(:account)) }
       it { expect(subject.state).to eq('pending') }
@@ -48,14 +55,14 @@ describe Wallet, type: :model do
     end
 
     it 'returns testnets if TESTNETS_AVAILABLE set to true' do
-      ENV['TESTNETS_AVAILABLE'] = 'true'
+      allow(Blockchain).to receive(:testnets_available?).and_return(true)
 
       expect(subject.available_blockchains).to include('bitcoin_test')
       expect(subject.available_blockchains).to include('ethereum')
     end
 
     it 'do not returns testnets if TESTNETS_AVAILABLE set to false' do
-      ENV['TESTNETS_AVAILABLE'] = 'false'
+      allow(Blockchain).to receive(:testnets_available?).and_return(false)
 
       expect(subject.available_blockchains).not_to include('bitcoin_test')
       expect(subject.available_blockchains).to include('ethereum')

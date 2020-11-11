@@ -20,6 +20,10 @@ class Blockchain::Algorand < Blockchain
     'algoexplorer.io'
   end
 
+  def asset_api_path(asset_id)
+    "/v2/assets/#{asset_id}"
+  end
+
   # Is mainnet?
   # @return [Boolean] mainnet?
   def mainnet?
@@ -86,6 +90,15 @@ class Blockchain::Algorand < Blockchain
   # @return [void]
   def validate_addr(addr)
     raise Blockchain::Address::ValidationError, 'should consist of 58 alphanumeric characters' unless /\A[0-9A-Za-z]{58}\z/.match?(addr)
+  end
+
+  # Validate Algorand asset id
+  # @raise [Blockchain::Address::ValidationError]
+  # @return [void]
+  def validate_asset(asset_id)
+    return if asset_id.to_i.positive?
+
+    raise Blockchain::Address::ValidationError, 'should be integer value'
   end
 
   # Is it supported by OreId service

@@ -5,13 +5,19 @@
 
   <div class="transfers-table__transfer__address">
     <div class="transfer-button">
-    <%= link_to wallet.address, wallet.blockchain.url_for_address_human(wallet.address), target: :_blank %>
+      <% if wallet.address.present? %>
+        <%= link_to wallet.address, wallet.blockchain.url_for_address_human(wallet.address), target: :_blank %>
+      <% else %>
+        <%= wallet.state %>
+      <% end %>
     </div>
   </div>
 
-  <div class="transfers-table__transfer__action transfers-table__transfer__action--warn">
-    <div class="transfer-button">
-      <%= link_to 'Remove', wallet_url(wallet), method: :delete %>
+  <% unless wallet.cannot_be_destroyed? %>
+    <div class="transfers-table__transfer__action transfers-table__transfer__action--warn">
+      <div class="transfer-button">
+        <%= link_to 'Remove', wallet_url(wallet), method: :delete %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>
