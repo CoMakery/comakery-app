@@ -9,13 +9,17 @@ class Sign::OreIdController < ApplicationController
 
   # GET /sign/ore_id/receive
   def receive
+    # Show
+    if params[:error_code] || params[:error_message]
+      return render plain: "code: #{params[:error_code]}\nmessage: #{params[:error_message]}\nprocess id: #{params[:process_id]}"
+    end
     head 401 unless current_account.id == received_state['account_id']
 
-    if current_ore_id_account.update(account_name: params.require[:account_name], state: :ok)
-      redirect_to received_state['redirect_back_to'], notice: 'Signed in with ORE ID'
-    else
-      flash[:error] = current_ore_id_account.errors.full_messages.join(', ')
-      redirect_to received_state['redirect_back_to']
-    end
+    # if current_ore_id_account.update(account_name: params.require[:account_name], state: :ok)
+    #   redirect_to received_state['redirect_back_to'], notice: 'Signed in with ORE ID'
+    # else
+    #   flash[:error] = current_ore_id_account.errors.full_messages.join(', ')
+    #   redirect_to received_state['redirect_back_to']
+    # end
   end
 end

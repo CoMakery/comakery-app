@@ -71,17 +71,19 @@ class OreIdService
     "https://service.oreid.io/auth?#{params.to_query}"
   end
 
-  def sign_url(account:, wallet_from: ,callback_url:, ore_id_network:, transaction_data:, broadcast: true, state: nil)
+  # rubocop:todo Metrics/ParameterLists
+  def sign_url(account:, wallet_from:, callback_url:, ore_id_network:, transaction_data:, broadcast: true, state: nil)
     params = {
       app_access_token: create_token,
       account: account,
-      chain_account: wallet_from,
+      chain_account: account,
+      # chain_account: wallet_from,
       callback_url: callback_url,
       broadcast: broadcast,
       chain_network: ore_id_network,
       return_signed_transaction: true,
       state: state,
-      transaction: transaction_data # encode it here
+      transaction: Base64.encode64(transaction_data)
     }
 
     "https://service.oreid.io/sign?#{params.to_query}"

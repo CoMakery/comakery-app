@@ -12,7 +12,15 @@ module OreIdCallbacks
     end
 
     def sign_url
-      @sign_url ||= current_ore_id_account.service.sign_url()
+      @sign_url ||= current_ore_id_account.service.sign_url(
+        account: current_ore_id_account.account_name,
+        wallet_from: nil, # fix me
+        callback_url: sign_ore_id_receive_url,
+        ore_id_network: 'ore_test', # fill me dynamicly
+        transaction_data: {}.to_json, # fill me
+        broadcast: true,
+        state: state
+      )
     end
 
     def crypt
@@ -22,7 +30,7 @@ module OreIdCallbacks
     def state
       @state ||= crypt.encrypt_and_sign({
         account_id: current_account.id,
-        redirect_back_to: params.require(:redirect_back_to)
+        redirect_back_to: params[:redirect_back_to] || request.referer
       }.to_json)
     end
 
