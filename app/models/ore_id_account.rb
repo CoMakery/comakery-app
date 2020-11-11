@@ -4,7 +4,7 @@ class OreIdAccount < ApplicationRecord
   belongs_to :account
   has_many :wallets, dependent: :destroy
 
-  after_create :schedule_sync, unless: :pending_manual
+  after_create :schedule_sync, unless: :pending_manual?
   after_update :schedule_wallet_sync
 
   enum state: { pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }
