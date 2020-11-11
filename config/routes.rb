@@ -131,7 +131,12 @@ Rails.application.routes.draw do
 
   namespace :auth, defaults: { format: :json } do
     resources :eth, only: [:new, :create]
-    
+
+    get 'ore_id/new'
+    get 'ore_id/receive'
+  end
+
+  namespace :sign, defaults: { format: :json } do
     get 'ore_id/new'
     get 'ore_id/receive'
   end

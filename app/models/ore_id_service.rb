@@ -59,16 +59,32 @@ class OreIdService
     response['appAccessToken']
   end
 
-  def authorization_url(redirect_url, state = nil)
+  def authorization_url(callback_url, state = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
-      callback_url: redirect_url,
+      callback_url: callback_url,
       background_color: 'FFFFFF',
       state: state
     }
 
     "https://service.oreid.io/auth?#{params.to_query}"
+  end
+
+  def sign_url(account:, wallet_from: ,callback_url:, ore_id_network:, transaction_data:, broadcast: true, state: nil)
+    params = {
+      app_access_token: create_token,
+      account: account,
+      chain_account: wallet_from,
+      callback_url: callback_url,
+      broadcast: broadcast,
+      chain_network: ore_id_network,
+      return_signed_transaction: true,
+      state: state,
+      transaction: transaction_data # encode it here
+    }
+
+    "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
