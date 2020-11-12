@@ -82,7 +82,7 @@ class OreIdService
       from: issuer_wallet.address,
       to: recipient_wallet.address,
       amount: (transfer.amount * 1000000).to_i, # in microalgos
-      note: 'Payment from CoMakary', # add transfer_id here
+      note: "CoMakary payment for Transfer##{transfer.id}", # add transfer_id here
       type: 'pay'
     }
 
