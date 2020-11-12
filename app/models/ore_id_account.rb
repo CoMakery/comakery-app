@@ -22,9 +22,9 @@ class OreIdAccount < ApplicationRecord
       )
 
       w.ore_id_account = self
-      w.state = :ok
       w.address = permission[:address]
       w.save!
+      ok!
     end
   end
 
