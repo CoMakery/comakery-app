@@ -3,7 +3,6 @@ module BelongsToOreId
 
   included do
     before_validation :create_ore_id, on: :create
-    before_validation :pending_for_ore_id, on: :create
     before_destroy :abort_destroy_for_ore_id
 
     belongs_to :ore_id_account, optional: true
