@@ -135,14 +135,6 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">transfer[source]</span>
-                </td>
-                <td>
-                  <span class="description">transfer source ( earned bought mint burn ), defaults to earned</span>
-                </td>
-              </tr>
-              <tr>
                 <td class="required">
                     <span class="name">transfer[amount]</span>
                 </td>
@@ -175,11 +167,11 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td class="required">
+                <td>
                     <span class="name">transfer[transfer_type_id]</span>
                 </td>
                 <td>
-                  <span class="description">transfer type id</span>
+                  <span class="description">custom transfer type id (default: earned)</span>
                 </td>
               </tr>
               <tr>
@@ -219,7 +211,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/43/transfers</pre>
+          <pre class="request route highlight">POST /api/v1/projects/46/transfers</pre>
 
 
             <h4>Body</h4>
@@ -228,18 +220,18 @@ table th, table td {
     "data": {
       "transfer": {
         "amount": "-1.00",
-        "account_id": "cf09a271-89db-4e6f-b3aa-2f7cce1dbd5f"
+        "account_id": "5994f894-c3cc-4ab4-997a-941922daca10"
       }
     },
-    "url": "http://example.org/api/v1/projects/43/transfers",
+    "url": "http://example.org/api/v1/projects/46/transfers",
     "method": "POST",
-    "nonce": "783ee19f05687bd250668f5c24ad0840",
-    "timestamp": "1602698157"
+    "nonce": "f4abc23a3b6f27d4375bf3ff44c4aa3d",
+    "timestamp": "1604580138"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "0SvU6TJoJUbD9l7+5Jv3eGTcg/vp2BkKgeQUQj7M2pv7AgI6Cg4f+jSHcLEGFUtMHuZJL0IRRk9/RsIKbxSEDQ=="
+    "signature": "5dkt9fQtplq81d8hO6KV6Vk7iyBwmUDEdx6cIZX9a3e3RAu4ISSnoy2pUFnbYOuBPNNSDCugHB9V5SRsdPaNDQ=="
   }
 }</pre>
 

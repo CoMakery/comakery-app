@@ -2,15 +2,25 @@ module EthereumAddressable
   extend ActiveSupport::Concern
 
   class EthereumAddressValidator < ActiveModel::EachValidator
+    ADDRESS = {
+      account: {
+        length: 40
+      },
+      transaction: {
+        length: 64
+      }
+    }.freeze
+
     def validate_each(record, attribute, value)
       validate_format(record, attribute, value) if value.present?
       validate_immutable(record, attribute) if options[:immutable]
     end
 
     def validate_format(record, attribute, value)
-      address = Comakery::Ethereum::ADDRESS[options[:type]]
+      address = ADDRESS[options[:type]]
+
       unless address
-        raise ArgumentError, "type (#{Comakery::Ethereum::ADDRESS.keys.join('|')}) is required, " \
+        raise ArgumentError, "type (#{ADDRESS.keys.join('|')}) is required, " \
                 'for example: ' \
                 '`validates :my_field, ethereum_address: {type: :account}`'
       end

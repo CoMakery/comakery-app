@@ -10,7 +10,7 @@ module RansackReorder
       @special_orders = orders_list
     end
 
-    def self.ransack_reorder(order_param, default: :created_at)
+    def self.ransack_reorder(order_param, default: { created_at: :desc })
       scope = reorder(default)
       return scope unless order_param
 

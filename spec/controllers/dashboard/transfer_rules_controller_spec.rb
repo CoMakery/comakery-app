@@ -50,4 +50,15 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
       end
     end
   end
+
+  describe 'POST #refresh_from_blockchain' do
+    context 'with valid params' do
+      it 'run refresh job' do
+        expect(BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob).to receive(:perform_now).and_return(true)
+        post :refresh_from_blockchain, params: { project_id: project.to_param }
+
+        expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
+      end
+    end
+  end
 end

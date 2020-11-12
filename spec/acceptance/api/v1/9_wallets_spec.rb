@@ -65,6 +65,19 @@ resource 'IX. Wallets' do
       end
     end
 
+    context '201' do
+      let!(:id) { account.managed_account_id }
+      let!(:create_params) { { wallet: { blockchain: :algorand_test, source: :ore_id } } }
+
+      example 'CREATE WALLET – ORE_ID' do
+        explanation 'Returns created wallet (See INDEX for response details)'
+
+        request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        do_request(request)
+        expect(status).to eq(201)
+      end
+    end
+
     context '400' do
       let!(:id) { account.managed_account_id }
       let!(:create_params) { { wallet: { address: build(:bitcoin_address_1) } } }
@@ -141,7 +154,9 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, { redirect_url: redirect_url }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'POST', 'example.org')
 
+        allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
         do_request(request)
+
         expect(status).to eq(200)
       end
     end

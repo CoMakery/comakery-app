@@ -143,11 +143,11 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td class="required">
+                <td>
                     <span class="name">reg_group[blockchain_id]</span>
                 </td>
                 <td>
-                  <span class="description">reg group id on blockchain</span>
+                  <span class="description">reg group id on blockchain (will be auto-generated if not provided)</span>
                 </td>
               </tr>
             </tbody>
@@ -179,7 +179,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/66/reg_groups</pre>
+          <pre class="request route highlight">POST /api/v1/projects/69/reg_groups</pre>
 
 
             <h4>Body</h4>
@@ -187,36 +187,35 @@ table th, table td {
   "body": {
     "data": {
       "reg_group": {
-        "name": "Test",
-        "blockchain_id": "10"
+        "name": "Test"
       }
     },
-    "url": "http://example.org/api/v1/projects/66/reg_groups",
+    "url": "http://example.org/api/v1/projects/69/reg_groups",
     "method": "POST",
-    "nonce": "cdf1fcf3b70c9421666ea06de0c23a4a",
-    "timestamp": "1602698163"
+    "nonce": "072d60cff357b0c86ea5fdec001dfb5c",
+    "timestamp": "1604580143"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "KQvts0FT35Uzkp5ucy1llldbdIAeiPz5YNU2wmCV9a/OiLAJQRxcyEi18BYN3mbcTw5ivNrQbbTXzLalN6V/Dg=="
+    "signature": "Ej/mKtS/Tk2qubV6V0tY0u2kWR01xdYYKhp2YiaKkNC1/j2oIEK6K2nekgXwkA/BoXSilnO8ulAwkCaR8WdGBg=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;6b7ac0e9713e44ef0579ae6d2b0d9f6c&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;6508ea2e1cc8762de4f905c5ad08ff6f&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: 61,
   &quot;name&quot;: &quot;Test&quot;,
-  &quot;tokenId&quot;: 105,
-  &quot;blockchainId&quot;: 10,
-  &quot;createdAt&quot;: &quot;2020-10-14T17:56:03.514Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-14T17:56:03.514Z&quot;
+  &quot;tokenId&quot;: 108,
+  &quot;blockchainId&quot;: 1060,
+  &quot;createdAt&quot;: &quot;2020-11-05T12:42:24.008Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-11-05T12:42:24.008Z&quot;
 }</pre>
       </div>
     </div>

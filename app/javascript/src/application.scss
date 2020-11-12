@@ -450,7 +450,6 @@ form.form-with-submit-button {
 }
 
 .transfer-button {
-  text-transform: uppercase;
   font-family: Montserrat, sans-serif;
   font-size: 10px;
   font-weight: normal;
@@ -731,11 +730,11 @@ form.form-with-submit-button {
     fill: none;
     stroke: #e6e8ed;
   }
- 
+
   path.domain {
     stroke: none;
   }
- 
+
   .y .tick line {
     stroke: #e6e8ed;
     opacity: 0.7;
@@ -763,7 +762,7 @@ form.form-with-submit-button {
     max-width: 700px;
     max-height: 350px;
     width: 100%;
-    
+
     text {
       font-size: 12px;
       font-family: Montserrat, sans-serif;
@@ -773,7 +772,7 @@ form.form-with-submit-button {
 
   #donut-chart {
     margin-top: 2em;
-    
+
     text {
       font-size: 12px;
       font-family: Montserrat, sans-serif;
@@ -832,7 +831,7 @@ form.form-with-submit-button {
       font-weight: 600;
     }
   }
-  
+
   .transfers-chart__info {
     display: flex;
     width: 100%;
@@ -876,7 +875,7 @@ form.form-with-submit-button {
   .DateRangePicker_picker {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px 10px;
   }
-  
+
   .DayPicker__withBorder {
     border-radius: 6px;
   }
@@ -1129,7 +1128,8 @@ button.transfer-rule-create,
 button.reg-groups-create,
 .admins__create input[type="submit"],
 .project-api-key__create a,
-.project-api-key__create button {
+.project-api-key__create button,
+.transfer-rules__refresh_from_blockchain input[type="submit"] {
   margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;
@@ -1146,6 +1146,10 @@ button.reg-groups-create,
     background-color: #c7c7c7;
     cursor: not-allowed;
   }
+}
+
+.transfer-rules__buttons {
+  display: flex;
 }
 
 .transfers-manage-types {
@@ -1393,6 +1397,15 @@ button.reg-groups-create,
     }
   }
 
+  .account-table__account-token-record__status {
+    margin-top: 0.8em;
+  }
+
+  .accounts-table_outdated_data {
+    color: #1a1a1a;
+    text-decoration: line-through;
+  }
+
   .transfers-table--edit-save {
     min-height: 60px;
     background-color: #ffffff;
@@ -1580,7 +1593,6 @@ button.reg-groups-create,
       overflow: hidden;
       text-overflow: ellipsis;
       align-self: center;
-      text-transform: uppercase;
       margin-right: 1em;
 
       .transfers-table__transfer__address__button {

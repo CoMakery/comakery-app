@@ -1,6 +1,6 @@
 class Wallet < ApplicationRecord
   include BelongsToBlockchain
-  include OreIdFeatures
+  include BelongsToOreId
 
   belongs_to :account
   has_many :balances, dependent: :destroy
@@ -16,7 +16,8 @@ class Wallet < ApplicationRecord
   enum source: { user_provided: 0, ore_id: 1 }
 
   def available_blockchains
-    Wallet._blockchains.keys - account.wallets.pluck(:_blockchain)
+    available_blockchains = Blockchain.available
+    available_blockchains.map(&:key) - account.wallets.pluck(:_blockchain)
   end
 
   private

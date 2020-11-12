@@ -13,3 +13,4 @@ json.call(
 )
 
 json.account_id transfer.account.managed_account_id
+json.project_id transfer.project.id

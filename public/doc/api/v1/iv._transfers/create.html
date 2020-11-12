@@ -135,14 +135,6 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">transfer[source]</span>
-                </td>
-                <td>
-                  <span class="description">transfer source ( earned bought mint burn ), defaults to earned</span>
-                </td>
-              </tr>
-              <tr>
                 <td class="required">
                     <span class="name">transfer[amount]</span>
                 </td>
@@ -175,11 +167,11 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td class="required">
+                <td>
                     <span class="name">transfer[transfer_type_id]</span>
                 </td>
                 <td>
-                  <span class="description">transfer type id</span>
+                  <span class="description">custom transfer type id (default: earned)</span>
                 </td>
               </tr>
               <tr>
@@ -219,7 +211,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/42/transfers</pre>
+          <pre class="request route highlight">POST /api/v1/projects/45/transfers</pre>
 
 
             <h4>Body</h4>
@@ -231,41 +223,42 @@ table th, table td {
         "quantity": "2.00",
         "total_amount": "2000.00000000",
         "description": "investor",
-        "transfer_type_id": "123",
-        "account_id": "b708a9c7-9864-4cf2-9545-0187fb43d412"
+        "transfer_type_id": "130",
+        "account_id": "8364476c-cd09-428a-a5aa-36b588c0fcf2"
       }
     },
-    "url": "http://example.org/api/v1/projects/42/transfers",
+    "url": "http://example.org/api/v1/projects/45/transfers",
     "method": "POST",
-    "nonce": "fbf188372228048a1703dc5021740176",
-    "timestamp": "1602698156"
+    "nonce": "b2cfb62c9c63b9e5572d542e22e9392d",
+    "timestamp": "1604580137"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "/MAciSww8EOc82sLFQZWXO0bwya+Dk58Edl8jbD4ZWaipQO1ajjoQmejxAUrfOqkeuvuCC4UFW7IWrnbKPmPBw=="
+    "signature": "ZwkDxPnIV+QsW7rbyKJcyuVv4MLJRhXvGt9Tzcu6hPTvRT0zB7uxBrxEhRcFOXSuQd8IfurWEuy6Lyd/4yb8BA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;41f73c61557eec8b6695e0ca90cc6821&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;01bf0446915c058fb166ab3ff2c0d89c&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 13,
-  &quot;transferTypeId&quot;: 123,
+  &quot;id&quot;: 14,
+  &quot;transferTypeId&quot;: 130,
   &quot;amount&quot;: &quot;1000.0&quot;,
   &quot;quantity&quot;: &quot;2.0&quot;,
   &quot;totalAmount&quot;: &quot;2000.0&quot;,
   &quot;description&quot;: &quot;investor&quot;,
   &quot;transactionError&quot;: null,
   &quot;status&quot;: &quot;accepted&quot;,
-  &quot;createdAt&quot;: &quot;2020-10-14T17:55:56.847Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-10-14T17:55:56.847Z&quot;,
-  &quot;accountId&quot;: &quot;b708a9c7-9864-4cf2-9545-0187fb43d412&quot;
+  &quot;createdAt&quot;: &quot;2020-11-05T12:42:17.906Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-11-05T12:42:17.906Z&quot;,
+  &quot;accountId&quot;: &quot;8364476c-cd09-428a-a5aa-36b588c0fcf2&quot;,
+  &quot;projectId&quot;: 45
 }</pre>
       </div>
     </div>

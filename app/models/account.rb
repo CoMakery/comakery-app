@@ -47,6 +47,7 @@ class Account < ApplicationRecord
   has_many :account_token_records_synced, -> { where synced: true } # rubocop:todo Rails/InverseOf
   has_many :wallets, dependent: :destroy
   has_many :balances, through: :wallets
+  has_one :ore_id_account, dependent: :destroy
 
   belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
@@ -166,6 +167,10 @@ class Account < ApplicationRecord
   end
 
   before_save :downcase_email
+
+  def name
+    "#{first_name} #{last_name}"
+  end
 
   def whitelabel_interested_projects(whitelabel_mission)
     if whitelabel_mission.present?
