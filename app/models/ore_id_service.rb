@@ -71,19 +71,31 @@ class OreIdService
     "https://service.oreid.io/auth?#{params.to_query}"
   end
 
-  # rubocop:todo Metrics/ParameterLists
-  def sign_url(account:, wallet_from:, callback_url:, ore_id_network:, transaction_data:, broadcast: true, state: nil)
+  def sign_url(transfer:, callback_url:, state:)
+    issuer = transfer.issuer
+    recipient = transfer.account
+    issuer_ore_id = issuer.ore_id_account
+    blockchain = transfer.token.blockchain
+    issuer_wallet = issuer.wallets.find_by!(_blockchain: blockchain.key)
+    recipient_wallet = recipient.wallets.find_by!(_blockchain: blockchain.key)
+    transaction_data = {
+      from: issuer_wallet.address,
+      to: recipient_wallet.address,
+      amount: (transfer.amount * 1000000).to_i, # in microalgos
+      note: 'Payment from CoMakary', # add transfer_id here
+      type: 'pay'
+    }
+
     params = {
       app_access_token: create_token,
-      account: account,
-      chain_account: account,
-      # chain_account: wallet_from,
-      callback_url: callback_url,
-      broadcast: broadcast,
-      chain_network: ore_id_network,
+      account: issuer_ore_id.account_name,
+      chain_account: issuer_wallet.address,
+      broadcast: true,
+      chain_network: blockchain.ore_id_name,
       return_signed_transaction: true,
-      state: state,
-      transaction: Base64.encode64(transaction_data)
+      transaction: Base64.encode64(transaction_data.to_json),
+      callback_url: callback_url,
+      state: state
     }
 
     "https://service.oreid.io/sign?#{params.to_query}"

@@ -4,22 +4,24 @@ class Sign::OreIdController < ApplicationController
 
   # GET /sign/ore_id/new
   def new
-    redirect_to sign_url
+    transfer = Award.find(params.require(:transfer_id))
+    head 401 if current_account != transfer.issuer
+
+    redirect_to sign_url(transfer)
   end
 
   # GET /sign/ore_id/receive
   def receive
-    # Show
     if params[:error_code] || params[:error_message]
-      return render plain: "code: #{params[:error_code]}\nmessage: #{params[:error_message]}\nprocess id: #{params[:process_id]}"
+      error_message = "code: #{params[:error_code]}\nmessage: #{params[:error_message]}\nprocess id: #{params[:process_id]}"
+      return render plain: error_message
     end
+    raise OreIdCallbacks::NoStateError unless params[:state]
+
     head 401 unless current_account.id == received_state['account_id']
 
-    # if current_ore_id_account.update(account_name: params.require[:account_name], state: :ok)
-    #   redirect_to received_state['redirect_back_to'], notice: 'Signed in with ORE ID'
-    # else
-    #   flash[:error] = current_ore_id_account.errors.full_messages.join(', ')
-    #   redirect_to received_state['redirect_back_to']
-    # end
+    # Process the transaction hash
+    success_message = "signed transaction: #{Base64.decode64(params[:signed_transaction])}\ntransaction hash: #{params[:transaction_id]}\nstate: #{received_state}\nprocess id: #{params[:process_id]}"
+    render plain: success_message
   end
 end
