@@ -24,8 +24,9 @@ class OreIdAccount < ApplicationRecord
       w.ore_id_account = self
       w.address = permission[:address]
       w.save!
-      ok!
     end
+
+    ok!
   end
 
   private

@@ -1,9 +1,10 @@
 class Sign::OreIdController < ApplicationController
   include OreIdCallbacks
-  skip_after_action :verify_authorized
 
   # GET /sign/ore_id/new
   def new
+    # Should accept transaction instead of transfer
+
     transfer = Award.find(params.require(:transfer_id))
     head 401 if current_account != transfer.issuer
 

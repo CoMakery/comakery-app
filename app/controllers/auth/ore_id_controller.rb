@@ -9,7 +9,8 @@ class Auth::OreIdController < ApplicationController
 
   # GET /auth/ore_id/receive
   def receive
-    head 401 unless current_account.id == received_state['account_id']
+    verify_errorless
+    verify_received_account
 
     if current_ore_id_account.update(account_name: params.require(:account), state: :ok)
       redirect_to received_state['redirect_back_to'], notice: 'Signed in with ORE ID'

@@ -72,6 +72,8 @@ class OreIdService
   end
 
   def sign_url(transfer:, callback_url:, state:)
+    # Should accept transaction instead of transfer
+
     issuer = transfer.issuer
     recipient = transfer.account
     issuer_ore_id = issuer.ore_id_account
@@ -82,7 +84,7 @@ class OreIdService
       from: issuer_wallet.address,
       to: recipient_wallet.address,
       amount: (transfer.amount * 1000000).to_i, # in microalgos
-      note: "CoMakary payment for Transfer##{transfer.id}", # add transfer_id here
+      note: "CoMakery payment for transfer ##{transfer.id}", # add transfer_id here
       type: 'pay'
     }
 

@@ -15,6 +15,8 @@ module OreIdCallbacks
     end
 
     def sign_url(transfer)
+      # Should accept transaction instead of transfer
+
       @sign_url ||= current_ore_id_account.service.sign_url(
         transfer: transfer,
         callback_url: sign_ore_id_receive_url,
@@ -35,5 +37,20 @@ module OreIdCallbacks
 
     def received_state
       @received_state ||= JSON.parse(crypt.decrypt_and_verify(params.require(:state)))
+    end
+
+    def received_error
+      @received_error ||= params[:error_message]
+    end
+
+    def verify_errorless
+      if received_error
+        flash[:error] = received_error
+        redirect_to received_state[:redirect_back_to]
+      end
+    end
+
+    def verify_received_account
+      head 401 unless current_account.id == received_state['account_id']
     end
 end
