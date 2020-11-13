@@ -1,9 +1,6 @@
 module OreIdCallbacks
   extend ActiveSupport::Concern
 
-  class NoStateError < StandardError
-  end
-
   private
 
     def current_ore_id_account

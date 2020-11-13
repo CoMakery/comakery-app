@@ -72,14 +72,6 @@ class OreIdService
   end
 
   def sign_url(transaction:, callback_url:, state:)
-    transaction_data = {
-      from: transaction.source,
-      to: transaction.destination,
-      amount: transaction.amount, # in microalgos
-      note: "CoMakery payment for Transaction##{transaction.id}",
-      type: 'pay'
-    }
-
     params = {
       app_access_token: create_token,
       account: ore_id.account_name,
@@ -87,7 +79,7 @@ class OreIdService
       broadcast: true,
       chain_network: transaction.token.blockchain.ore_id_name,
       return_signed_transaction: true,
-      transaction: Base64.encode64(transaction_data.to_json),
+      transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json),
       callback_url: callback_url,
       state: state
     }
@@ -114,6 +106,16 @@ class OreIdService
         'api-key' => ENV['ORE_ID_API_KEY'],
         'service-key' => ENV['ORE_ID_SERVICE_KEY'],
         'Content-Type' => 'application/json'
+      }
+    end
+
+    def algo_transfer_transaction(transaction)
+      {
+        from: transaction.source,
+        to: transaction.destination,
+        amount: transaction.amount,
+        note: "CoMakery payment for Transaction##{transaction.id}",
+        type: 'pay'
       }
     end
 

@@ -30,7 +30,7 @@ RSpec.describe OreIdAccount, type: :model do
     end
   end
 
-  context 'after_udpdate' do
+  context 'after_udpdate when account_name is updated' do
     subject { described_class.create(account: create(:account), id: 99999) }
 
     it 'schedules a wallet sync' do
@@ -54,7 +54,7 @@ RSpec.describe OreIdAccount, type: :model do
 
     context 'when wallet is initialized locally' do
       before do
-        subject.account.wallets.find_by(source: :ore_id).update(address: nil)
+        create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
       end
 
       it 'sets the wallet address' do
