@@ -17,6 +17,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     specify do
       VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
         expect { subject.create_remote }.to change(subject.ore_id, :account_name)
+        expect { subject.create_remote }.to change(subject.ore_id, :state)
       end
     end
 
@@ -97,7 +98,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     specify do
-      expect(subject.authorization_url('localhost')).to eq('https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=')
+      expect(subject.authorization_url('localhost', 'dummystate')).to eq('https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=dummystate')
     end
   end
 end

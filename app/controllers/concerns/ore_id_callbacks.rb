@@ -46,7 +46,7 @@ module OreIdCallbacks
     def verify_errorless
       if received_error
         flash[:error] = received_error
-        redirect_to received_state[:redirect_back_to]
+        redirect_to wallets_url
       end
     end
 
