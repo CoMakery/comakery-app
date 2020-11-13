@@ -71,29 +71,21 @@ class OreIdService
     "https://service.oreid.io/auth?#{params.to_query}"
   end
 
-  def sign_url(transfer:, callback_url:, state:)
-    # Should accept transaction instead of transfer
-
-    issuer = transfer.issuer
-    recipient = transfer.account
-    issuer_ore_id = issuer.ore_id_account
-    blockchain = transfer.token.blockchain
-    issuer_wallet = issuer.wallets.find_by!(_blockchain: blockchain.key)
-    recipient_wallet = recipient.wallets.find_by!(_blockchain: blockchain.key)
+  def sign_url(transaction:, callback_url:, state:)
     transaction_data = {
-      from: issuer_wallet.address,
-      to: recipient_wallet.address,
-      amount: (transfer.amount * 1000000).to_i, # in microalgos
-      note: "CoMakery payment for transfer ##{transfer.id}", # add transfer_id here
+      from: transaction.source,
+      to: transaction.destination,
+      amount: transaction.amount, # in microalgos
+      note: "CoMakery payment for Transaction##{transaction.id}",
       type: 'pay'
     }
 
     params = {
       app_access_token: create_token,
-      account: issuer_ore_id.account_name,
-      chain_account: issuer_wallet.address,
+      account: ore_id.account_name,
+      chain_account: transaction.source,
       broadcast: true,
-      chain_network: blockchain.ore_id_name,
+      chain_network: transaction.token.blockchain.ore_id_name,
       return_signed_transaction: true,
       transaction: Base64.encode64(transaction_data.to_json),
       callback_url: callback_url,

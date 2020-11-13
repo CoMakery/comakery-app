@@ -1,14 +1,19 @@
 class Sign::OreIdController < ApplicationController
   include OreIdCallbacks
+  skip_after_action :verify_authorized
 
   # GET /sign/ore_id/new
   def new
-    # Should accept transaction instead of transfer
-
     transfer = Award.find(params.require(:transfer_id))
-    head 401 if current_account != transfer.issuer
+    source_wallet = current_account.wallets.find_by!(_blockchain: transfer.token._blockchain).address
 
-    redirect_to sign_url(transfer)
+    transaction = BlockchainTransactionAward.create!(
+      blockchain_transactable: transfer,
+      source: source_wallet,
+      nonce: 1
+    )
+
+    redirect_to sign_url(transaction)
   end
 
   # GET /sign/ore_id/receive

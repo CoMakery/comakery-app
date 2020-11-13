@@ -14,11 +14,9 @@ module OreIdCallbacks
       @auth_url ||= current_ore_id_account.service.authorization_url(auth_ore_id_receive_url, state)
     end
 
-    def sign_url(transfer)
-      # Should accept transaction instead of transfer
-
+    def sign_url(transaction)
       @sign_url ||= current_ore_id_account.service.sign_url(
-        transfer: transfer,
+        transaction: transaction,
         callback_url: sign_ore_id_receive_url,
         state: state
       )
