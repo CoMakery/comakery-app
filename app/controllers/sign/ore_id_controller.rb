@@ -5,7 +5,7 @@ class Sign::OreIdController < ApplicationController
   # GET /sign/ore_id/new
   def new
     transfer = Award.find(params.require(:transfer_id))
-    source_wallet = current_account.wallets.find_by!(_blockchain: transfer.token._blockchain).address
+    source_wallet = current_account.address_for_blockchain(transfer.token._blockchain)
 
     transaction = BlockchainTransactionAward.create!(
       blockchain_transactable: transfer,
