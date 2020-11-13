@@ -18,16 +18,15 @@ class Sign::OreIdController < ApplicationController
 
   # GET /sign/ore_id/receive
   def receive
-    if params[:error_code] || params[:error_message]
-      error_message = "code: #{params[:error_code]}\nmessage: #{params[:error_message]}\nprocess id: #{params[:process_id]}"
-      return render plain: error_message
-    end
-    raise OreIdCallbacks::NoStateError unless params[:state]
+    verify_errorless
+    verify_received_account
 
-    head 401 unless current_account.id == received_state['account_id']
+    transaction = BlockchainTransactionAward.find(received_state['transaction_id'])
+    transaction.tx_hash = params.require(:transaction_id)
+    transaction.tx_raw = Base64.decode64(params.require(:signed_transaction))
+    transaction.status = :pending
+    transaction.save!
 
-    # Process the transaction hash
-    success_message = "signed transaction: #{Base64.decode64(params[:signed_transaction])}\ntransaction hash: #{params[:transaction_id]}\nstate: #{received_state}\nprocess id: #{params[:process_id]}"
-    render plain: success_message
+    redirect_to received_state['redirect_back_to']
   end
 end
