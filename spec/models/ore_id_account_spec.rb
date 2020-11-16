@@ -9,6 +9,7 @@ RSpec.describe OreIdAccount, type: :model do
   subject { create(:ore_id) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
+  it { is_expected.to validate_uniqueness_of(:account_name) }
   it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }) }
   specify { expect(subject.service).to be_an(OreIdService) }
 

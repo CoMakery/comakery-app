@@ -13,10 +13,11 @@ class Auth::OreIdController < ApplicationController
     verify_received_account
 
     if current_ore_id_account.update(account_name: params.require(:account), state: :ok)
-      redirect_to received_state['redirect_back_to'], notice: 'Signed in with ORE ID'
+      flash[:notice] = 'Signed in with ORE ID'
     else
       flash[:error] = current_ore_id_account.errors.full_messages.join(', ')
-      redirect_to received_state['redirect_back_to']
     end
+
+    redirect_to received_state['redirect_back_to']
   end
 end

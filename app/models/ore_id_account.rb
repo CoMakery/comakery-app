@@ -7,6 +7,8 @@ class OreIdAccount < ApplicationRecord
   after_create :schedule_sync, unless: :pending_manual?
   after_update :schedule_wallet_sync, if: :saved_change_to_account_name?
 
+  validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
+
   enum state: { pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }
 
   def service
