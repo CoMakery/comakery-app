@@ -115,7 +115,9 @@ class OreIdService
         to: transaction.destination,
         amount: transaction.amount,
         note: "CoMakery payment for Transaction##{transaction.id}",
-        type: 'pay'
+        # type: 'pay',
+        type: 'axfer',
+        assetIndex: 13076367
       }
     end
 
