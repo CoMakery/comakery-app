@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'])
+    ore_id.update(account_name: response['accountName'], state: :unclaimed)
     response
   end
 
@@ -59,16 +59,32 @@ class OreIdService
     response['appAccessToken']
   end
 
-  def password_reset_url(redirect_url)
+  def authorization_url(callback_url, state = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
-      callback_url: redirect_url,
+      callback_url: callback_url,
       background_color: 'FFFFFF',
-      state: ''
+      state: state
     }
 
     "https://service.oreid.io/auth?#{params.to_query}"
+  end
+
+  def sign_url(transaction:, callback_url:, state:)
+    params = {
+      app_access_token: create_token,
+      account: ore_id.account_name,
+      chain_account: transaction.source,
+      broadcast: true,
+      chain_network: transaction.token.blockchain.ore_id_name,
+      return_signed_transaction: true,
+      transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json),
+      callback_url: callback_url,
+      state: state
+    }
+
+    "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
@@ -90,6 +106,16 @@ class OreIdService
         'api-key' => ENV['ORE_ID_API_KEY'],
         'service-key' => ENV['ORE_ID_SERVICE_KEY'],
         'Content-Type' => 'application/json'
+      }
+    end
+
+    def algo_transfer_transaction(transaction)
+      {
+        from: transaction.source,
+        to: transaction.destination,
+        amount: transaction.amount,
+        note: "CoMakery payment for Transaction##{transaction.id}",
+        type: 'pay'
       }
     end
 

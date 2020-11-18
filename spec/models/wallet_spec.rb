@@ -11,17 +11,14 @@ describe Wallet, type: :model do
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id).with_message('has already wallet added').ignoring_case_sensitivity }
   it { is_expected.to have_readonly_attribute(:_blockchain) }
-  it { is_expected.to define_enum_for(:state).with_values({ ok: 0, unclaimed: 1, pending: 2 }) }
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
   it { is_expected.not_to validate_presence_of(:ore_id_account) }
-  it { expect(subject.state).to eq('ok') }
   it { expect(subject.ore_id_account).to be_nil }
 
   context 'when ore_id?' do
     subject { create(:wallet, source: :ore_id) }
 
     it { is_expected.to validate_presence_of(:ore_id_account) }
-    it { expect(subject.state).to eq('ok') }
     it { expect(subject.ore_id_account).to be_an(OreIdAccount) }
 
     it 'aborts destroy with an error' do
@@ -31,19 +28,10 @@ describe Wallet, type: :model do
       expect(subject.errors).not_to be_empty
     end
 
-    context 'and address is missing' do
-      subject { Wallet.create(source: :ore_id, address: nil, _blockchain: :bitcoin, account: create(:account)) }
-      it { expect(subject.state).to eq('pending') }
-    end
+    context 'and ore_id_account is pending' do
+      before { expect(subject).to receive(:pending?).and_return(true) }
 
-    context 'and pending?' do
-      subject { create(:wallet, state: :pending, source: :ore_id) }
       it { is_expected.not_to validate_presence_of(:address) }
-    end
-
-    context 'and ok?' do
-      subject { create(:wallet, state: :ok, source: :ore_id) }
-      it { is_expected.to validate_presence_of(:address) }
     end
   end
 

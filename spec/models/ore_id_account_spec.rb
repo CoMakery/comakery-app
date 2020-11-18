@@ -9,15 +9,34 @@ RSpec.describe OreIdAccount, type: :model do
   subject { create(:ore_id) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
+  it { is_expected.to validate_uniqueness_of(:account_name) }
+  it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }) }
   specify { expect(subject.service).to be_an(OreIdService) }
 
   context 'after_create' do
     subject { described_class.new(account: create(:account), id: 99999) }
 
-    it 'schedules jobs' do
+    it 'schedules a sync' do
       expect(OreIdSyncJob).to receive(:perform_later).with(subject.id)
-      expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
       subject.save
+    end
+
+    context 'for pending_manual state' do
+      subject { described_class.new(account: create(:account), id: 99999, state: :pending_manual) }
+
+      it 'doesnt schedule a sync' do
+        expect(OreIdSyncJob).not_to receive(:perform_later).with(subject.id)
+        subject.save
+      end
+    end
+  end
+
+  context 'after_udpdate when account_name is updated' do
+    subject { described_class.create(account: create(:account), id: 99999) }
+
+    it 'schedules a wallet sync' do
+      expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
+      subject.update(account_name: 'dummy')
     end
   end
 
@@ -36,7 +55,7 @@ RSpec.describe OreIdAccount, type: :model do
 
     context 'when wallet is initialized locally' do
       before do
-        subject.account.wallets.find_by(source: :ore_id).update(address: nil, state: :pending)
+        create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
       end
 
       it 'sets the wallet address' do

@@ -7,8 +7,22 @@
       <%= link_to 'Add Wallet', new_wallet_url %>
     </div>
 
+    <% if current_account.ore_id_account&.account_name %>
+      <div class="wallets__create">
+        <%= link_to 'Signed In With ORE ID', auth_ore_id_new_url %>
+      </div>
+    <% else %>
+      <div class="wallets__create">
+        <%= link_to 'Sign In With ORE ID', auth_ore_id_new_url %>
+      </div>
+    <% end %>
+
     <div class="transfers-table animated fadeIn faster">      
-      <%= render partial: "wallet", collection: @wallets, as: :wallet, cached: true %>
+      <%= render partial: "wallet", collection: @wallets.user_provided, as: :wallet, cached: true %>
+    </div>
+
+    <div class="transfers-table animated fadeIn faster">      
+      <%= render partial: "wallet", collection: @wallets.ore_id, as: :wallet, cached: true %>
     </div>
   </div>
 <% end %>

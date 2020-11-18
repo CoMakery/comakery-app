@@ -3,7 +3,13 @@ class OreIdAccount < ApplicationRecord
 
   belongs_to :account
   has_many :wallets, dependent: :destroy
-  after_create :schedule_sync
+
+  after_create :schedule_sync, unless: :pending_manual?
+  after_update :schedule_wallet_sync, if: :saved_change_to_account_name?
+
+  validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
+
+  enum state: { pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }
 
   def service
     @service ||= OreIdService.new(self)
@@ -18,16 +24,20 @@ class OreIdAccount < ApplicationRecord
       )
 
       w.ore_id_account = self
-      w.state = :ok
       w.address = permission[:address]
       w.save!
     end
+
+    ok!
   end
 
   private
 
     def schedule_sync
       OreIdSyncJob.perform_later(id)
+    end
+
+    def schedule_wallet_sync
       OreIdWalletsSyncJob.perform_later(id)
     end
 end
