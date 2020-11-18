@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'controllers/concerns/ore_id_callbacks_spec'
 
 RSpec.describe Auth::OreIdController, type: :controller do
+  it_behaves_like 'having ore_id_callbacks'
+
   before do
     login(create(:account))
   end
