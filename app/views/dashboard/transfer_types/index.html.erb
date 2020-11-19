@@ -9,7 +9,7 @@
         <%= button_tag "create transfer type ＋", type: 'button', class: 'reg-groups-create', data: { target: 'reg-group-form.create', action: 'reg-group-form#showForm' } %>
       <% end %>
     </div>
-    
+
     <div class="reg-groups__groups">
       <%= render partial: "transfer_type", collection: @transfer_types, as: :transfer_type, cached: true %>
     </div>

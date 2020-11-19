@@ -69,6 +69,7 @@ group(:development, :test) do
   gem 'brakeman', require: false
   gem 'citizen-scripts', git: 'https://github.com/CoMakery/citizen-scripts.git', ref: 'dev', require: false
   gem 'dotenv-rails'
+  gem 'erb_lint', '~> 0.0.35', require: false
   gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -112,7 +113,7 @@ end
 
 gem 'scout_apm', '~> 2.4'
 
-gem 'mini_racer', '~> 0.2.4'
+gem 'mini_racer', '~> 0.3.1'
 
 gem 'possessive', '~> 1.0'
 

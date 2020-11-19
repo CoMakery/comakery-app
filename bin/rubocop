@@ -2,5 +2,4 @@
 set -e -x
 
 bundle exec rubocop --config config/rubocop/default.yml --display-cop-names --auto-correct --fail-level autocorrect $*
-
 # --auto-gen-config

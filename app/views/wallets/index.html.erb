@@ -2,7 +2,7 @@
   <div class="wallets">
     <h2>My Wallets</h2>
     <h3><%= pluralize(@wallets.size, 'Wallet', 'Wallets') %></h3>
-    
+
     <div class="wallets__create">
       <%= link_to 'Add Wallet', new_wallet_url %>
     </div>
@@ -17,11 +17,11 @@
       </div>
     <% end %>
 
-    <div class="transfers-table animated fadeIn faster">      
+    <div class="transfers-table animated fadeIn faster">
       <%= render partial: "wallet", collection: @wallets.user_provided, as: :wallet, cached: true %>
     </div>
 
-    <div class="transfers-table animated fadeIn faster">      
+    <div class="transfers-table animated fadeIn faster">
       <%= render partial: "wallet", collection: @wallets.ore_id, as: :wallet, cached: true %>
     </div>
   </div>

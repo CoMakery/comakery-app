@@ -8,7 +8,7 @@
       <%= button_tag "create reg group ＋", type: 'button', class: 'reg-groups-create', data: { target: 'reg-group-form.create', action: 'reg-group-form#showForm' } %>
     <% end %>
   </div>
-  
+
   <div class="reg-groups__groups">
     <%= render partial: "reg_group", collection: @reg_groups, as: :reg_group, cached: true %>
   </div>
