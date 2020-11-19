@@ -1,7 +1,7 @@
 <div class="transfers-filters">
   <h2>
     filters
-    
+
     <% if request.params[:q] %>
       <div class="transfers-filters--clear">
         <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
@@ -36,7 +36,7 @@
   <% else %>
     <div class="transfers-filters--filter">
       <h3>Dates</h3>
-      
+
       <div class="calendar">
         <%= react_component('TransfersCalendar') %>
       </div>
@@ -57,7 +57,7 @@
 
     <div class="transfers-filters--filter">
       <h3>Type</h3>
-      
+
       <div class="stacked-chart-legend">
         <% @project.transfers_chart_colors_objects.each do |type, color| %>
           <div class="stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
@@ -72,6 +72,6 @@
         <% end %>
       </div>
     </div>
-    
+
   <% end %>
 </div>

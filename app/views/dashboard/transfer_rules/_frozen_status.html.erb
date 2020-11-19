@@ -2,7 +2,7 @@
   <h2>transfer status</h2>
 
   <h3><%= @project.token&.token_frozen ? 'Frozen' : 'Not Frozen' %></h3>
-    
+
   <% if policy(@project).freeze_token? %>
     <%= render partial: "freeze_token" %>
   <% end %>

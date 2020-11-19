@@ -39,7 +39,6 @@
     </div>
   </div>
 
-
   <% if @project.supports_transfer_rules? %>
     <div class="transfers-filters--filter">
       <h3>frozen</h3>
@@ -69,7 +68,7 @@
 
     <div class="transfers-filters--filter">
       <h3>lockup ends before</h3>
-      
+
       <div class="calendar">
         <%= react_component('AccountsCalendar', project_token_id: @project.token.id) %>
       </div>
