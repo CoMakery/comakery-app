@@ -41,6 +41,11 @@ Layout/IndentationConsistency:
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
+Layout/IndentationStyle:
+  Enabled: true
+  IndentationWidth: 2
+  EnforcedStyle: spaces
+
 Lint/RequireParentheses:
   Enabled: true
 
