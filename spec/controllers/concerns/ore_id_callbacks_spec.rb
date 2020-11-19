@@ -1,18 +1,8 @@
-# WIP
-
-shared_examples 'ore_id_callbacks' do
+shared_examples 'having ore_id_callbacks' do
   describe '#current_ore_id_account' do
-    before do
-      expect_any_instance_of(described_class).to receive(:current_account).and_return(create(:ore_id).account)
-    end
-
-    it 'returns OreIdAccount record of current_account' do
-      expect(controller.current_ore_id_account).to be_a(OreIdAccount)
-    end
-
     context 'when current account doesnt have a OreIdAccount record' do
       before do
-        expect_any_instance_of(described_class).to receive(:current_account).and_return(create(:account))
+        allow_any_instance_of(described_class).to receive(:current_account).and_return(create(:account))
       end
 
       it 'creates a new record in :pending_manual state' do
@@ -24,7 +14,7 @@ shared_examples 'ore_id_callbacks' do
   describe '#auth_url' do
     before do
       expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(create(:ore_id))
-      # service mock
+      expect_any_instance_of(OreIdService).to receive(:authorization_url).and_return('dummy_auth_url')
     end
 
     it 'returns auth url' do
@@ -35,11 +25,11 @@ shared_examples 'ore_id_callbacks' do
   describe '#sign_url' do
     before do
       expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(create(:ore_id))
-      # service mock
+      expect_any_instance_of(OreIdService).to receive(:sign_url).and_return('dummy_auth_url')
     end
 
     it 'returns sign url' do
-      expect(controller.sign_url).to be_a(String)
+      expect(controller.sign_url(create(:blockchain_transaction))).to be_a(String)
     end
   end
 
@@ -52,8 +42,8 @@ shared_examples 'ore_id_callbacks' do
   describe '#state' do
     before do
       expect_any_instance_of(described_class).to receive(:current_account).and_return(create(:account))
-      expect_any_instance_of(described_class).to receive(:params).and_return({ redirect_back_to: 'dummy_url' })
-      expect_any_instance_of(ActiveSupport::MessageEncryptor).to receive(:encrypt_and_sign).and_return('dummy_state')
+      expect_any_instance_of(described_class).to receive(:params).and_return(ActionController::Parameters.new({ redirect_back_to: 'dummy_url' }))
+      expect(controller.crypt).to receive(:encrypt_and_sign).and_return('dummy_state')
     end
 
     it 'returns state to be added to url' do
@@ -63,7 +53,8 @@ shared_examples 'ore_id_callbacks' do
 
   describe '#received_state' do
     before do
-      expect_any_instance_of(ActiveSupport::MessageEncryptor).to receive(:decrypt_and_verify).and_return('{"dummy": "dummy"}')
+      expect_any_instance_of(described_class).to receive(:params).and_return(ActionController::Parameters.new({ state: 'dummy_state' }))
+      expect(controller.crypt).to receive(:decrypt_and_verify).and_return('{"dummy": "dummy"}')
     end
 
     it 'returns parsed received state' do
@@ -84,11 +75,13 @@ shared_examples 'ore_id_callbacks' do
   describe '#verify_errorless' do
     context 'when an error received' do
       before do
-        expect_any_instance_of(described_class).to receive(:received_error).and_return('dummy_error')
+        allow_any_instance_of(described_class).to receive(:received_error).and_return('dummy_error')
       end
 
       it 'adds an error and redirects to wallets_url' do
+        expect(controller).to receive(:redirect_to)
         controller.verify_errorless
+        expect(controller.flash[:error]).to eq('dummy_error')
       end
     end
   end
@@ -101,6 +94,7 @@ shared_examples 'ore_id_callbacks' do
       end
 
       it 'returns 401' do
+        expect(controller).to receive(:head)
         controller.verify_received_account
       end
     end
