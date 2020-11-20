@@ -18,7 +18,7 @@
 
     <% elsif current_account&.decorate&.can_send_awards?(transfer.project) && transfer.accepted? %>
       <% if transfer.token.blockchain.supported_by_ore_id? %>
-        <%= link_to sign_ore_id_new_path(transfer_id: transfer.id), class: 'transfer-tokens-btn', rel: 'nofollow' do %>
+        <%= link_to sign_ore_id_new_path(transfer_id: transfer.id), class: 'transfer-algo-btn', rel: 'nofollow', method: :post do %>
             <%= render partial: "shared/wallet_logo", locals: { project: transfer.project, size: 12 } %>
             <span>Pay with ORE ID</span>
         <% end %>
