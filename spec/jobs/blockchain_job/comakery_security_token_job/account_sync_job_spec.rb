@@ -9,6 +9,7 @@ RSpec.describe BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob, type: :j
   it 'updates account_token_record' do
     described_class.perform_now(record)
     expect(record.reload.synced_at).not_to be_nil
+    expect(record.status).to eq 'synced'
   end
 
   context 'when account doesnt have a wallet' do
@@ -19,6 +20,7 @@ RSpec.describe BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob, type: :j
     it 'does nothing' do
       described_class.perform_now(invalid_record)
       expect(invalid_record.reload.synced_at).to be_nil
+      expect(invalid_record.status).to eq 'created'
     end
   end
 end

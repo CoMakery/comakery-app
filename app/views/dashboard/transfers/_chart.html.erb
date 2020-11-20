@@ -12,10 +12,9 @@
   data-transfers-chart-total="<%= @transfers_unfiltered.sum(&:total_amount) %>"
   data-transfers-chart-total-filtered="<%= @transfers_all.sum(&:total_amount) %>"
   data-transfers-chart-decimals="<%= @project.token&.decimal_places || 0 %>"
-  data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
->
+  data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>">
   <h2>transfer history</h2>
-  
+
   <div class="transfers-chart__info">
     <div class="transfers-filters--filter">
       <div class="transfers-filters--filter--options">
@@ -24,8 +23,7 @@
             data-target="transfers-chart.scales"
             data-action="click->transfers-chart#setStackedChartScaleX"
             data-scale-x="<%= scale_x %>"
-            class=<%= scale_x == 'Year' ? 'transfers-filters--filter--options__active' : nil %>
-          >
+            class=<%= scale_x == 'Year' ? 'transfers-filters--filter--options__active' : nil %>>
             <%= scale_x %>
           </div>
         <% end %>
@@ -39,11 +37,11 @@
       <svg id="donut-chart" width="300" height="300"></svg>
       <div class="donut-amount" data-target='transfers-chart.donutAmountFiltered'>
         <% if @transfers_all.sum(&:total_amount) != @transfers_unfiltered.sum(&:total_amount) %>
-          <%= "#{@transfers_all.sum(&:total_amount)} #{@project.token&.symbol} Filtered Total"  %>
+          <%= "#{@transfers_all.sum(&:total_amount)} #{@project.token&.symbol} Filtered Total" %>
         <% end %>
       </div>
       <div class="donut-amount" data-target='transfers-chart.donutAmount'>
-        <%= "#{@transfers_unfiltered.sum(&:total_amount)} #{@project.token&.symbol} Total"  %>
+        <%= "#{@transfers_unfiltered.sum(&:total_amount)} #{@project.token&.symbol} Total" %>
       </div>
     </div>
     <div id="stacked-chart-tooltip"></div>
