@@ -137,7 +137,7 @@ Rails.application.routes.draw do
   end
 
   namespace :sign, defaults: { format: :json } do
-    get 'ore_id/new'
+    post 'ore_id/new'
     get 'ore_id/receive'
   end
 

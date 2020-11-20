@@ -469,7 +469,8 @@ form.form-with-submit-button {
   height: 14px;
   margin-left: 0.15em;
 
-  .transfer-tokens-btn {
+  .transfer-tokens-btn,
+  .transfer-algo-btn {
     flex-direction: row;
     display: flex;
     text-decoration: none;
