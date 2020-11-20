@@ -104,13 +104,38 @@ RSpec.describe OreIdService, type: :model, vcr: true do
   describe '#sign_url' do
     before do
       expect(subject).to receive(:create_token).and_return('test')
-      expect(subject).to receive(:algo_transfer_transaction).and_return({})
     end
 
-    specify do
-      expect(
-        subject.sign_url(transaction: create(:blockchain_transaction), callback_url: 'localhost', state: 'dummystate')
-      ).to eq('https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&chain_network=&return_signed_transaction=true&state=dummystate&transaction=e30%3D%0A')
+    context 'with Algo token' do
+      let(:transaction) do
+        create(
+          :blockchain_transaction,
+          token: create(:algorand_token),
+          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+        )
+      end
+
+      specify do
+        url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
+        expect(url).to eq('https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6InBheSJ9%0A')
+      end
+    end
+
+    context 'with ASA token' do
+      let(:transaction) do
+        create(
+          :blockchain_transaction,
+          token: create(:asa_token),
+          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
+        )
+      end
+
+      specify do
+        url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
+        expect(url).to eq('https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6ImF4ZmVyIiwiYXNzZXRJbmRleCI6MTMwNzYz%0ANjd9%0A')
+      end
     end
   end
 end
