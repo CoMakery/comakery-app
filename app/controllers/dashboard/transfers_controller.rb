@@ -48,7 +48,7 @@ class Dashboard::TransfersController < ApplicationController
       @page = (params[:page] || 1).to_i
       @transfers_all = query.result(distinct: true)
                             .reorder('')
-                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets])
+                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
 
       @transfers_all.size
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
