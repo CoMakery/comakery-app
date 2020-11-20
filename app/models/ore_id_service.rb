@@ -110,15 +110,23 @@ class OreIdService
     end
 
     def algo_transfer_transaction(transaction)
-      {
+      algo_transaction = {
         from: transaction.source,
         to: transaction.destination,
         amount: transaction.amount,
-        note: "CoMakery payment for Transaction##{transaction.id}",
-        # type: 'pay',
-        type: 'axfer',
-        assetIndex: 13076367
+        type: 'pay'
       }
+
+      if transaction.token._token_type_asa?
+        asa_transaction = {
+          type: 'axfer',
+          assetIndex: transaction.token.contract_address.to_i
+        }
+
+        algo_transaction.merge!(asa_transaction)
+      end
+
+      algo_transaction
     end
 
     def filtered_permissions
