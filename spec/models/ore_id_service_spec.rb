@@ -138,4 +138,47 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
     end
   end
+
+  describe '#algo_transfer_transaction' do
+    context 'with ALGO token' do
+      let(:transaction) do
+        create(
+          :blockchain_transaction,
+          token: create(:algorand_token),
+          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+        )
+      end
+
+      specify do
+        expect(subject.send(:algo_transfer_transaction, transaction)).to eq(
+          amount: 1,
+          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
+          type: 'pay'
+        )
+      end
+    end
+
+    context 'with ASA token' do
+      let(:transaction) do
+        create(
+          :blockchain_transaction,
+          token: create(:asa_token),
+          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
+        )
+      end
+
+      specify do
+        expect(subject.send(:algo_transfer_transaction, transaction)).to eq(
+          amount: 1,
+          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
+          type: 'axfer',
+          assetIndex: 13076367
+        )
+      end
+    end
+  end
 end
