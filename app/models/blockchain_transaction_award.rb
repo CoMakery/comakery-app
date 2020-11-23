@@ -5,11 +5,13 @@ class BlockchainTransactionAward < BlockchainTransaction
     blockchain_transactable.update!(status: :paid)
   end
 
-  def on_chain
+  def on_chain # rubocop:todo Metrics/CyclomaticComplexity
     @on_chain ||= if token._token_type_on_ethereum?
       on_chain_eth
     elsif token._token_type_dag?
       on_chain_dag
+    elsif token._token_type_algo? || token._token_type_asa?
+      on_chain_algo
     end
   end
 
@@ -32,6 +34,10 @@ class BlockchainTransactionAward < BlockchainTransaction
 
     def on_chain_dag
       Comakery::Dag::Tx.new(token.blockchain.explorer_api_host, tx_hash)
+    end
+
+    def on_chain_algo
+      Comakery::Algorand::Tx.new(token.blockchain, tx_hash)
     end
 
     def populate_data

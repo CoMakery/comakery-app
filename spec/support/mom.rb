@@ -632,6 +632,10 @@ class Mom
     '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
   end
 
+  def algorand_address_1
+    'YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4'
+  end
+
   def eth_client(**attrs)
     host = attrs[:host] || 'ropsten.infura.io'
 
