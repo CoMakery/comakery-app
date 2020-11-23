@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/transactions?txid=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 23 Nov 2020 10:43:26 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '45'
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=de3bd302f040ac04e4c74a9711ed30e881606128205; expires=Wed, 23-Dec-20
+        10:43:25 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '06964c9833000000a106148000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=27pv74MCSvq%2Bp1dZkbh%2FBWYlCKoX%2FrnokIvxxXsqZLd1cANIEgsUugoK0laKfprj8My0%2FN%2BtWfc%2FyWpjUY4boO15nfYnMbY4ySgFn3M8hUmid6lbyUxmfw5JDr8%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5f6a4a06b8ce00a1-DME
+    body:
+      encoding: UTF-8
+      string: '{"current-round":10661550,"transactions":[]}
+
+        '
+    http_version:
+  recorded_at: Mon, 23 Nov 2020 10:43:26 GMT
+recorded_with: VCR 5.1.0

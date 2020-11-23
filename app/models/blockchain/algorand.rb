@@ -24,6 +24,10 @@ class Blockchain::Algorand < Blockchain
     "/v2/assets/#{asset_id}"
   end
 
+  def get_transaction_path(tx_hash)
+    "/v2/transactions?txid=#{tx_hash}"
+  end
+
   # Is mainnet?
   # @return [Boolean] mainnet?
   def mainnet?

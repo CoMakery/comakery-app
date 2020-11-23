@@ -761,6 +761,20 @@ class Mom
     end
   end
 
+  def algorand_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A'
+
+    # From:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # To:
+    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
+    # Amount:
+    # 9 algos
+
+    Comakery::Algorand::Tx.new(blockchain, hash)
+  end
+
   def bitcoin_address_1
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end
