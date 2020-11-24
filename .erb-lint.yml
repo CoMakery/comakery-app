@@ -1,5 +1,6 @@
 ---
 EnableDefaultLinters: true
+glob: "app/views/**/*.{html}{+*,}.erb"
 linters:
   ErbSafety:
     enabled: false
