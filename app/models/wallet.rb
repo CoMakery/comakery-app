@@ -16,6 +16,7 @@ class Wallet < ApplicationRecord
 
   def available_blockchains
     available_blockchains = Blockchain.available
+    available_blockchains.reject!(&:supported_by_ore_id?)
     available_blockchains.map(&:key) - account.wallets.pluck(:_blockchain)
   end
 
