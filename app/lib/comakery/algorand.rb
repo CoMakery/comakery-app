@@ -13,7 +13,7 @@ class Comakery::Algorand
   end
 
   def asset_details
-    @asset_details ||= get_request(@blockchain.asset_api_path(@asset_id))
+    @asset_details ||= get_request(@blockchain.url_for_asset_api(@asset_id))
   end
 
   def transaction_details(tx_hash)
