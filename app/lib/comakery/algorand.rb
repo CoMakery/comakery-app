@@ -1,7 +1,6 @@
 class Comakery::Algorand
   def initialize(blockchain, asset_id)
     @blockchain = blockchain
-    @api_endpoint = "https://#{@blockchain.explorer_api_host}"
     @asset_id = asset_id
   end
 
@@ -18,11 +17,10 @@ class Comakery::Algorand
   end
 
   def transaction_details(tx_hash)
-    @transaction_details ||= get_request(@blockchain.get_transaction_path(tx_hash))
+    @transaction_details ||= get_request(@blockchain.url_for_tx_api(tx_hash))
   end
 
-  def get_request(path, params = {})
-    url = "#{@api_endpoint}#{path}#{params.to_param}"
+  def get_request(url)
     HTTParty.get(url)
   end
 end
