@@ -1,7 +1,7 @@
 class Sign::OreIdController < ApplicationController
   include OreIdCallbacks
 
-  # GET /sign/ore_id/new
+  # POST /sign/ore_id/new
   def new
     authorize transfer, :pay?
 
@@ -15,8 +15,8 @@ class Sign::OreIdController < ApplicationController
 
   # GET /sign/ore_id/receive
   def receive
-    verify_errorless
-    verify_received_account
+    verify_errorless or return
+    verify_received_account or return
 
     authorize received_transaction.blockchain_transactable, :pay?
 

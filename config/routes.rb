@@ -132,7 +132,8 @@ Rails.application.routes.draw do
   namespace :auth, defaults: { format: :json } do
     resources :eth, only: [:new, :create]
 
-    get 'ore_id/new'
+    post 'ore_id/new'
+    delete 'ore_id/destroy'
     get 'ore_id/receive'
   end
 
