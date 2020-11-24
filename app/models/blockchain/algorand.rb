@@ -20,10 +20,6 @@ class Blockchain::Algorand < Blockchain
     'algoexplorer.io'
   end
 
-  def asset_api_path(asset_id)
-    "/v2/assets/#{asset_id}"
-  end
-
   # Is mainnet?
   # @return [Boolean] mainnet?
   def mainnet?
@@ -66,7 +62,7 @@ class Blockchain::Algorand < Blockchain
     "https://#{explorer_api_host}/v2/transactions?txid=#{hash}"
   end
 
-  # Address url on block explorer websitea
+  # Address url on block explorer website
   # @return [String] url
   def url_for_address_human(addr)
     "https://#{explorer_human_host}/address/#{addr}"
@@ -76,6 +72,12 @@ class Blockchain::Algorand < Blockchain
   # @return [String] url
   def url_for_address_api(addr)
     "https://#{explorer_api_host}/v2/accounts/#{addr}"
+  end
+
+  # Asset url on block explorer API
+  # @return [String] url
+  def url_for_asset_api(asset_id)
+    "https://#{explorer_api_host}/v2/assets/#{asset_id}"
   end
 
   # Validate blockchain transaction hash
