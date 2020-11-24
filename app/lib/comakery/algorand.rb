@@ -18,6 +18,7 @@ class Comakery::Algorand
 
   def transaction_details(tx_hash)
     return {} if tx_hash.blank?
+
     @transaction_details ||= get_request(@blockchain.url_for_tx_api(tx_hash))
   end
 
