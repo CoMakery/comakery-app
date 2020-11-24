@@ -8,14 +8,28 @@ RSpec.describe Auth::OreIdController, type: :controller do
     login(create(:account))
   end
 
-  describe 'GET /new' do
+  describe 'POST /new' do
     before do
       expect_any_instance_of(described_class).to receive(:auth_url).and_return('/dummy_auth_url')
     end
 
     it 'redirects to an auth_url' do
-      get :new
+      post :new
       expect(response).to redirect_to('/dummy_auth_url')
+    end
+  end
+
+  describe 'DELETE /destroy' do
+    let(:current_ore_id_account) { create(:ore_id) }
+
+    before do
+      expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(current_ore_id_account)
+    end
+
+    it 'destroys current_ore_id_account and redirects to wallets url' do
+      expect(current_ore_id_account).to receive(:destroy!)
+      delete :destroy
+      expect(response).to redirect_to(wallets_url)
     end
   end
 
@@ -23,8 +37,8 @@ RSpec.describe Auth::OreIdController, type: :controller do
     let(:current_ore_id_account) { create(:ore_id) }
 
     before do
-      expect_any_instance_of(described_class).to receive(:verify_errorless)
-      expect_any_instance_of(described_class).to receive(:verify_received_account)
+      expect_any_instance_of(described_class).to receive(:verify_errorless).and_return(true)
+      expect_any_instance_of(described_class).to receive(:verify_received_account).and_return(true)
       expect_any_instance_of(described_class).to receive(:received_state).and_return({ 'redirect_back_to' => '/dummy_redir_url' })
       expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(current_ore_id_account)
     end

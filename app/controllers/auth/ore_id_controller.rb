@@ -2,18 +2,25 @@ class Auth::OreIdController < ApplicationController
   include OreIdCallbacks
   skip_after_action :verify_authorized
 
-  # GET /auth/ore_id/new
+  # POST /auth/ore_id/new
   def new
     redirect_to auth_url
   end
 
+  # DELETE /auth/ore_id/destroy
+  def destroy
+    current_ore_id_account.destroy!
+    flash[:notice] = 'ORE ID Unlinked'
+    redirect_to wallets_url
+  end
+
   # GET /auth/ore_id/receive
   def receive
-    verify_errorless
-    verify_received_account
+    verify_errorless or return
+    verify_received_account or return
 
     if current_ore_id_account.update(account_name: params.require(:account), state: :ok)
-      flash[:notice] = 'Signed in with ORE ID'
+      flash[:notice] = 'ORE ID Linked'
     else
       flash[:error] = current_ore_id_account.errors.full_messages.join(', ')
     end

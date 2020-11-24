@@ -29,8 +29,8 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
     let(:current_ore_id_account) { create(:ore_id) }
 
     before do
-      allow_any_instance_of(described_class).to receive(:verify_errorless)
-      allow_any_instance_of(described_class).to receive(:verify_received_account)
+      expect_any_instance_of(described_class).to receive(:verify_errorless).and_return(true)
+      expect_any_instance_of(described_class).to receive(:verify_received_account).and_return(true)
       allow_any_instance_of(AwardPolicy).to receive(:pay?).and_return(true)
       allow_any_instance_of(BlockchainJob::BlockchainTransactionSyncJob).to receive(:perform_later)
       allow_any_instance_of(described_class).to receive(:received_state).and_return({ 'transaction_id' => transaction.id, 'redirect_back_to' => '/dummy_redir_url' })
