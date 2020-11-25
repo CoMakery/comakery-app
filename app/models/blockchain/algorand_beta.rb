@@ -8,10 +8,8 @@ class Blockchain::AlgorandBeta < Blockchain::Algorand
     'AlgorandBeta'
   end
 
-  # Hostname of block explorer API
-  # @return [String] hostname
-  def explorer_api_host
-    'api.betanet.algoexplorer.io/idx2'
+  def main_api_host
+    'api.betanet.algoexplorer.io'
   end
 
   # Hostname of block explorer website

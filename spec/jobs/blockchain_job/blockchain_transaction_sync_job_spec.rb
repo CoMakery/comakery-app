@@ -43,7 +43,29 @@ RSpec.describe BlockchainJob::BlockchainTransactionSyncJob, type: :job, vcr: tru
         amount: 9000000,
         source: build(:algorand_address_1),
         destination: build(:algorand_address_2),
-        status: :pending
+        status: :pending,
+        current_block: 10661139
+      )
+    end
+
+    it 'update status of the transaction' do
+      described_class.perform_now(blockchain_transaction)
+      expect(blockchain_transaction.reload.status).to eq 'succeed'
+    end
+  end
+
+  describe 'sync succeed algorand asset transaction' do
+    let(:blockchain_transaction) do
+      build(
+        :blockchain_transaction,
+        token: create(:asa_token),
+        tx_hash: 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ',
+        amount: 400,
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: build(:algorand_address_2),
+        contract_address: '13076367',
+        status: :pending,
+        current_block: 10661139
       )
     end
 
