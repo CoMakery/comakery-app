@@ -8,10 +8,8 @@ class Blockchain::AlgorandTest < Blockchain::Algorand
     'AlgorandTest'
   end
 
-  # Hostname of block explorer API
-  # @return [String] hostname
-  def explorer_api_host
-    'api.testnet.algoexplorer.io/idx2'
+  def main_api_host
+    'api.testnet.algoexplorer.io'
   end
 
   # Hostname of block explorer website

@@ -8,16 +8,24 @@ class Blockchain::Algorand < Blockchain
     'Algorand'
   end
 
+  def main_api_host
+    'api.algoexplorer.io'
+  end
+
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    'api.algoexplorer.io/idx2'
+    "#{main_api_host}/idx2"
   end
 
   # Hostname of block explorer website
   # @return [String] hostname
   def explorer_human_host
     'algoexplorer.io'
+  end
+
+  def api_host
+    "#{main_api_host}/v2"
   end
 
   # Is mainnet?
@@ -78,6 +86,10 @@ class Blockchain::Algorand < Blockchain
   # @return [String] url
   def url_for_asset_api(asset_id)
     "https://#{explorer_api_host}/v2/assets/#{asset_id}"
+  end
+
+  def url_for_status_api
+    "https://#{api_host}/status"
   end
 
   # Validate blockchain transaction hash

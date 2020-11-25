@@ -1,5 +1,5 @@
 class Comakery::Algorand
-  def initialize(blockchain, asset_id)
+  def initialize(blockchain, asset_id = nil)
     @blockchain = blockchain
     @asset_id = asset_id
   end
@@ -20,6 +20,14 @@ class Comakery::Algorand
     return {} if tx_hash.blank?
 
     @transaction_details ||= get_request(@blockchain.url_for_tx_api(tx_hash))
+  end
+
+  def status
+    @status ||= get_request(@blockchain.url_for_status_api)
+  end
+
+  def last_round
+    status.fetch('last-round', 0)
   end
 
   def get_request(url)
