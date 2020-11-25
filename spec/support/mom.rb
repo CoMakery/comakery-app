@@ -783,6 +783,21 @@ class Mom
     Comakery::Algorand::Tx.new(blockchain, hash)
   end
 
+  def algorand_asset_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ'
+    asset_id = attrs[:asset_id] || '13076367'
+
+    # From:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # To:
+    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
+    # Amount:
+    # 4 CMTTEST tokens
+
+    Comakery::Algorand::Tx::Asset.new(blockchain, hash, asset_id)
+  end
+
   def bitcoin_address_1
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end

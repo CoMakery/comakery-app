@@ -37,7 +37,11 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
 
     def on_chain_algo
-      Comakery::Algorand::Tx.new(token.blockchain, tx_hash)
+      if token._token_type_algo?
+        Comakery::Algorand::Tx.new(token.blockchain, tx_hash)
+      elsif token._token_type_asa?
+        Comakery::Algorand::Tx::Asset.new(token.blockchain, tx_hash, contract_address)
+      end
     end
 
     def populate_data
