@@ -53,13 +53,15 @@ describe Comakery::Algorand::Tx, vcr: true do
     let(:amount) { 9000000 }
     let(:source) { build(:algorand_address_1) }
     let(:destination) { build(:algorand_address_2) }
+    let(:current_round) { 10661139 }
     let(:blockchain_transaction) do
       build(
         :blockchain_transaction,
         token: create(:algorand_token),
         amount: amount,
         source: source,
-        destination: destination
+        destination: destination,
+        current_block: current_round
       )
     end
     subject { algorand_tx.valid?(blockchain_transaction) }
@@ -78,6 +80,12 @@ describe Comakery::Algorand::Tx, vcr: true do
 
     context 'for incorrect amount' do
       let(:amount) { 8999999 }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for incorrect current round' do
+      let(:current_round) { 10661140 }
 
       it { is_expected.to be false }
     end

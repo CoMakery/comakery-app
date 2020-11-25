@@ -47,6 +47,7 @@ class Comakery::Algorand::Tx
     return false unless confirmed?
     return false unless valid_addresses?(blockchain_transaction)
     return false unless valid_amount?(blockchain_transaction)
+    return false unless valid_round?(blockchain_transaction)
 
     true
   end
@@ -60,5 +61,9 @@ class Comakery::Algorand::Tx
 
     def valid_amount?(blockchain_transaction)
       blockchain_transaction.amount == amount
+    end
+
+    def valid_round?(blockchain_transaction)
+      blockchain_transaction.current_block < confirmed_round
     end
 end
