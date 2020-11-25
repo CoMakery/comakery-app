@@ -54,6 +54,7 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
     let(:amount) { 400 }
     let(:source) { 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA' }
     let(:destination) { build(:algorand_address_2) }
+    let(:current_round) { 10661139 }
     let(:blockchain_transaction) do
       build(
         :blockchain_transaction,
@@ -61,6 +62,7 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
         amount: amount,
         source: source,
         destination: destination,
+        current_block: current_round,
         contract_address: asset_id
       )
     end

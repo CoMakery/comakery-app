@@ -43,7 +43,8 @@ RSpec.describe BlockchainJob::BlockchainTransactionSyncJob, type: :job, vcr: tru
         amount: 9000000,
         source: build(:algorand_address_1),
         destination: build(:algorand_address_2),
-        status: :pending
+        status: :pending,
+        current_block: 10661139
       )
     end
 
@@ -63,7 +64,8 @@ RSpec.describe BlockchainJob::BlockchainTransactionSyncJob, type: :job, vcr: tru
         source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
         destination: build(:algorand_address_2),
         contract_address: '13076367',
-        status: :pending
+        status: :pending,
+        current_block: 10661139
       )
     end
 
