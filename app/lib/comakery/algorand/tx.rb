@@ -40,7 +40,7 @@ class Comakery::Algorand::Tx
   end
 
   def confirmed?(_number_of_confirmations = 1)
-    confirmed_round.present? && current_round > confirmed_round
+    confirmed_round.present? && current_round >= confirmed_round
   end
 
   def valid?(blockchain_transaction)
