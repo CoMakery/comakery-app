@@ -1,4 +1,6 @@
 class TokenOptIn < ApplicationRecord
+  include BlockchainTransactable
+
   belongs_to :wallet
   belongs_to :token
 
