@@ -1,0 +1,17 @@
+<div class="transfers-table__transfer">
+  <div class="transfers-table__transfer__blockchain">
+    <%= token.name %> (<%= token.symbol %>)
+  </div>
+
+  <div class="transfers-table__transfer__status">
+    Opted in FIX ME
+  </div>
+
+  <%# if wallet.cannot_be_destroyed? %>
+    <div class="transfers-table__transfer__action">
+      <div class="transfer-button">
+        <%#= link_to 'Remove', wallet_url(wallet), method: :delete %>
+      </div>
+    </div>
+  <%# end %>
+</div>

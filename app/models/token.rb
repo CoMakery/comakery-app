@@ -11,6 +11,7 @@ class Token < ApplicationRecord
   has_many :reg_groups # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :transfer_rules # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :blockchain_transactions # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :token_opt_ins, dependent: :destroy
 
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_token_type, :denomination, presence: true
