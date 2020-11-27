@@ -59,9 +59,13 @@ class OreIdAccount < ApplicationRecord
   end
 
   def sync_balance
-    # Algorand balance check
+    balance = Comakery::Algorand(wallets.last.blockchain).account_balance(wallets.last.address)
 
-    initial_balance_confirmed!
+    if balance.positive?
+      initial_balance_confirmed!
+    else
+      raise StandardError, 'Account balance is 0'
+    end
   end
 
   def create_opt_in_tx
