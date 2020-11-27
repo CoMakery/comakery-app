@@ -8,6 +8,7 @@ class AlgorandAssetsController < ApplicationController
     @wallets = @current_account.wallets.ore_id
     @tokens = Token._token_type_asa
 
+    redirect_to back_path, flash: { error: 'You don\'t have supported Algorand Wallets' } if @wallets.empty?
     redirect_to back_path, flash: { error: 'No supported Assets found' } if @tokens.empty?
   end
 

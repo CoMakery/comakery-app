@@ -2,10 +2,6 @@
   <div class="algorand_assets">
     <h2>Algorand Standard Assets</h2>
 
-    <% if @wallets.any? %>
-      <%= render partial: "wallet", collection: @wallets, as: :wallet, cached: true %>
-    <% else %>
-      <h2>You don't have supported Algorand Wallets</h2>
-    <% end %>
+    <%= render partial: "wallet", collection: @wallets, as: :wallet, cached: true %>
   </div>
 <% end %>
