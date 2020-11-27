@@ -480,6 +480,7 @@ ActiveRecord::Schema.define(version: 2020_11_26_103120) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["token_id"], name: "index_token_opt_ins_on_token_id"
+    t.index ["wallet_id", "token_id"], name: "index_token_opt_ins_on_wallet_id_and_token_id", unique: true
     t.index ["wallet_id"], name: "index_token_opt_ins_on_wallet_id"
   end
 

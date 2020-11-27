@@ -7,5 +7,7 @@ class CreateTokenOptIns < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+
+    add_index :token_opt_ins, %i[wallet_id token_id], unique: true
   end
 end
