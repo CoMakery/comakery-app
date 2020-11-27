@@ -37,6 +37,23 @@ class OreIdService
     )
   end
 
+  def create_tx(transaction)
+    raise OreIdService::RemoteInvalidError unless ore_id.account_name
+
+    response = handle_response(
+      self.class.post(
+        '/transaction/sign',
+        headers: request_headers,
+        body: create_tx_params(transaction).to_json
+      )
+    )
+
+    if transaction.update(tx_hash: response['transaction_id'], tx_raw: response['signed_transaction'])
+      transaction.update_status(:pending)
+      BlockchainJob::BlockchainTransactionSyncJob.perform_later(transaction)
+    end
+  end
+
   def permissions
     @permissions ||= filtered_permissions.map do |params|
       {
@@ -46,6 +63,10 @@ class OreIdService
     end
   rescue NoMethodError
     raise OreIdService::RemoteInvalidError
+  end
+
+  def password_updated?
+    @password_updated ||= remote['passwordUpdatedAt'].present?
   end
 
   def create_token
@@ -95,9 +116,21 @@ class OreIdService
         'user_name' => account.nickname || '',
         'email' => account.email,
         'picture' => account.image ? Refile.attachment_url(account, :image) : '',
-        'user_password' => SecureRandom.hex(32) + '!',
+        'user_password' => ore_id.temp_password,
         'phone' => '',
         'account_type' => 'native'
+      }
+    end
+
+    def create_tx_params(transaction)
+      {
+        account: ore_id.account_name,
+        user_password: ore_id.temp_password,
+        chain_account: transaction.source,
+        broadcast: true,
+        chain_network: transaction.token.blockchain.ore_id_name,
+        return_signed_transaction: true,
+        transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json)
       }
     end
 
