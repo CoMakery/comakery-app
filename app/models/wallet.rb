@@ -23,4 +23,8 @@ class Wallet < ApplicationRecord
   def pending?
     ore_id? && ore_id_account&.pending?
   end
+
+  def instant_balance
+    blockchain.account_balance(address)
+  end
 end
