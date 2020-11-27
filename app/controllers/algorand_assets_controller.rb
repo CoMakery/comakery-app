@@ -1,4 +1,6 @@
 class AlgorandAssetsController < ApplicationController
+  include OreIdCallbacks
+
   skip_after_action :verify_authorized, :verify_policy_scoped
 
   helper_method :back_path
@@ -13,7 +15,18 @@ class AlgorandAssetsController < ApplicationController
   end
 
   def create
+    @token_opt_in = TokenOptIn.find_or_initialize_by(wallet_id: params.require(:wallet_id), token_id: params.require(:token_id))
+    authorize @token_opt_in, :create?
 
+    @token_opt_in.status = :pending
+    TokenOptIn.transaction do
+      if @token_opt_in.save
+        transaction = BlockchainTransactionOptIn.create!(blockchain_transactable: @token_opt_in)
+        redirect_to sign_url(transaction)
+      else
+        redirect_to algorand_assets, notice: 'Problem with opt-in'
+      end
+    end
   end
 
   private

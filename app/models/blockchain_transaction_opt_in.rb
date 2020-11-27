@@ -7,4 +7,13 @@ class BlockchainTransactionOptIn < BlockchainTransaction
   def on_chain
     @on_chain ||= Comakery::Algorand.new(token.blockchain, contract_address)
   end
+
+  private
+
+  def populate_data
+    super
+    self.amount ||= 0
+    self.destination ||= blockchain_transactable.wallet.address
+    self.source ||= blockchain_transactable.wallet.address
+  end
 end
