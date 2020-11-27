@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/transactions?txid=D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 25 Nov 2020 10:22:07 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d39580759dfae1e30d622c34db5a734b81606299726; expires=Fri, 25-Dec-20
+        10:22:06 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 06a085cc72000000a1e38e2000000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=P6yJmm41QEMcikqLLBBaBMSjUvUOjWY0uc59BuMwJPON69M2bAvu5R3P4u%2Bjk2PD1VafagWSAg1%2BSOIsVI3Z%2Bq0KE4AZrA%2BhY4uTpyMPvfV6n9Syvs485wIuxCI%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 5f7aa58d7c1800a1-DME
+    body:
+      encoding: ASCII-8BIT
+      string: '{"current-round":10701713,"next-token":"J0GjAAAAAAAAAAAA","transactions":[{"asset-transfer-transaction":{"amount":400,"asset-id":13076367,"close-amount":0,"receiver":"E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE"},"close-rewards":0,"closing-amount":0,"confirmed-round":10699047,"fee":1000,"first-valid":10699044,"genesis-hash":"SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=","genesis-id":"testnet-v1.0","id":"D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ","intra-round-offset":0,"last-valid":10700044,"receiver-rewards":0,"round-time":1606288319,"sender":"YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA","sender-rewards":0,"signature":{"sig":"DphAvW1wT6jN1TyO8x6rQHsUfyaLpaUaTP91ZyLiVQFiR2KXKtl7hDifcDP96fReGsciy6DUnJYFIHEjihL1CA=="},"tx-type":"axfer"}]}
+
+        '
+    http_version:
+  recorded_at: Wed, 25 Nov 2020 10:22:07 GMT
+recorded_with: VCR 5.1.0

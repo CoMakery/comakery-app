@@ -632,6 +632,14 @@ class Mom
     '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
   end
 
+  def algorand_address_1
+    'YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4'
+  end
+
+  def algorand_address_2
+    'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+  end
+
   def eth_client(**attrs)
     host = attrs[:host] || 'ropsten.infura.io'
 
@@ -759,6 +767,35 @@ class Mom
         nonce
       )
     end
+  end
+
+  def algorand_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A'
+
+    # From:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # To:
+    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
+    # Amount:
+    # 9 algos
+
+    Comakery::Algorand::Tx.new(blockchain, hash)
+  end
+
+  def algorand_asset_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ'
+    asset_id = attrs[:asset_id] || '13076367'
+
+    # From:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # To:
+    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
+    # Amount:
+    # 4 CMTTEST tokens
+
+    Comakery::Algorand::Tx::Asset.new(blockchain, hash, asset_id)
   end
 
   def bitcoin_address_1
