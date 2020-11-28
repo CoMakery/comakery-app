@@ -59,7 +59,7 @@ class OreIdAccount < ApplicationRecord
   end
 
   def sync_balance
-    if wallets.last.instant_balance.positive?
+    if wallets.last.coin_balance.value.positive?
       initial_balance_confirmed!
     else
       raise StandardError, 'Account balance is 0'
@@ -83,29 +83,33 @@ class OreIdAccount < ApplicationRecord
     ok! if service.password_updated?
   end
 
+  def schedule_sync
+    OreIdSyncJob.perform_later(id)
+  end
+
+  def schedule_wallet_sync
+    OreIdWalletsSyncJob.perform_later(id)
+  end
+
+  def schedule_balance_sync
+    OreIdBalanceSyncJob.perform_later(id)
+  end
+
+  def schedule_opt_in_tx_sync
+    OreIdOptInTxSyncJob.perform_later(id)
+  end
+
+  def schedule_create_opt_in_tx
+    OreIdOptInTxCreateJob.perform_later(id)
+  end
+
+  def schedule_password_update_sync
+    OreIdPasswordUpdateSyncJob.perform_later(id)
+  end
+
   private
 
     def set_temp_password
       self.temp_password ||= SecureRandom.hex(32) + '!'
-    end
-
-    def schedule_sync
-      OreIdSyncJob.perform_later(id)
-    end
-
-    def schedule_wallet_sync
-      OreIdWalletsSyncJob.perform_later(id)
-    end
-
-    def schedule_balance_sync
-      OreIdBalanceSyncJob.perform_later(id)
-    end
-
-    def schedule_opt_in_tx_sync
-      OreIdOptInTxSyncJob.perform_later(id)
-    end
-
-    def schedule_password_update_sync
-      OreIdPasswordUpdateSyncJob.perform_later(id)
     end
 end

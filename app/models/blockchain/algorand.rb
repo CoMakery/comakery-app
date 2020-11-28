@@ -127,9 +127,9 @@ class Blockchain::Algorand < Blockchain
     'algo_main'
   end
 
-  # Return current balance of provided addr
+  # Return coin balance of provided addr
   # @return [Integer] balance
-  def account_balance(addr)
-    Comakery::Algorand(self).account_balance(addr)
+  def account_coin_balance(addr)
+    Comakery::Algorand.new(self).account_balance(addr)
   end
 end

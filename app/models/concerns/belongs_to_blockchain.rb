@@ -21,8 +21,12 @@ module BelongsToBlockchain
       @blockchain ||= "Blockchain::#{_blockchain.camelize}".constantize.new if _blockchain
     end
 
-    def tokens_on_same_blockchain
+    def tokens_of_the_blockchain
       Token.where(_blockchain: _blockchain)
+    end
+
+    def coin_of_the_blockchain
+      tokens_of_the_blockchain.reject { |t| t.token_type.operates_with_smart_contracts? }.first
     end
 
     # Overwrite the setter to rely on validations instead of [ArgumentError]
