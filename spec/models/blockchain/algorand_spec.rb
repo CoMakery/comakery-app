@@ -18,4 +18,11 @@ describe Blockchain::Algorand do
   specify { expect(described_class.new.url_for_address_api('null')).to eq('https://api.algoexplorer.io/idx2/v2/accounts/null') }
   specify { expect(described_class.new.supported_by_ore_id?).to be_truthy }
   specify { expect(described_class.new.ore_id_name).to eq('algo_main') }
+
+  describe '#account_coin_balance' do
+    specify do
+      expect_any_instance_of(Comakery::Algorand).to receive(:account_balance).with('dummy_addr')
+      described_class.new.account_coin_balance('dummy_addr')
+    end
+  end
 end
