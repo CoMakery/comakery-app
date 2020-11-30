@@ -1,7 +1,7 @@
 class AlgorandAssetsController < ApplicationController
   include OreIdCallbacks
 
-  skip_after_action :verify_authorized, :verify_policy_scoped
+  skip_after_action :verify_policy_scoped
 
   helper_method :back_path
 
