@@ -5,7 +5,7 @@ class BlockchainTransactionAward < BlockchainTransaction
     blockchain_transactable.update!(status: :paid)
   end
 
-  def on_chain # rubocop:todo Metrics/CyclomaticComplexity
+  def on_chain
     @on_chain ||= if token._token_type_on_ethereum?
       on_chain_eth
     elsif token._token_type_dag?

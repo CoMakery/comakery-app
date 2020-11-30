@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
     head :unauthorized
   end
 
-  def redirect_back_to_session # rubocop:todo Metrics/CyclomaticComplexity
+  def redirect_back_to_session
     if current_account&.valid? && current_account&.confirmed? && session[:return_to]
       redirect_url = session[:return_to]
       session.delete(:return_to)
@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def create_interest_from_session # rubocop:todo Metrics/CyclomaticComplexity
+  def create_interest_from_session
     if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
       current_account.interests.create(
         project: Project.find(session[:interested_in_project].to_i),
@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
     not_authenticated if session[:account_id].blank?
   end
 
-  def require_email_confirmation # rubocop:todo Metrics/CyclomaticComplexity
+  def require_email_confirmation
     redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' } if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
   end
 
