@@ -69,12 +69,14 @@ class OreIdAccount < ApplicationRecord
   def create_opt_in_tx
     # Create TX
     # service.create_tx(tx)
+    service
 
     opt_in_created!
   end
 
   def sync_opt_in_tx
     # Algorand tx status check
+    service
 
     provisioned!
   end
