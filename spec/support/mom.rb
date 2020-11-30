@@ -181,6 +181,17 @@ class Mom
     end
   end
 
+  def blockchain_transaction_opt_in(**attrs)
+    defaults = {
+      blockchain_transactable: create(:token_opt_in, attrs),
+      status: :created
+    }
+
+    VCR.use_cassette('algorand_test/status') do
+      BlockchainTransactionOptIn.create!(defaults.merge(attrs))
+    end
+  end
+
   def blockchain_transaction_account_token_record(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
     attrs.delete(:token)
