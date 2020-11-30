@@ -59,7 +59,7 @@ class OreIdAccount < ApplicationRecord
   end
 
   def sync_balance
-    if wallets.last.coin_balance.value.positive?
+    if wallets.last&.coin_balance&.value&.positive?
       initial_balance_confirmed!
     else
       raise StandardError, 'Account balance is 0'
@@ -67,7 +67,7 @@ class OreIdAccount < ApplicationRecord
   end
 
   def create_opt_in_tx
-    # Create TX
+    # TODO: Integrate tx creation
     # service.create_tx(tx)
     service
 
@@ -75,6 +75,7 @@ class OreIdAccount < ApplicationRecord
   end
 
   def sync_opt_in_tx
+    # TODO: Integrate tx confirmation
     # Algorand tx status check
     service
 

@@ -11,7 +11,21 @@ RSpec.describe OreIdAccount, type: :model do
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to validate_uniqueness_of(:account_name) }
   it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }) }
+
+  it {
+    is_expected.to define_enum_for(:provisioning_stage).with_values({
+      not_provisioned: 0,
+      initial_balance_confirmed: 1,
+      opt_in_created: 2,
+      provisioned: 3
+    })
+  }
+
   specify { expect(subject.service).to be_an(OreIdService) }
+
+  context 'before_create' do
+    specify { expect(subject.temp_password).not_to be_empty }
+  end
 
   context 'after_create' do
     subject { described_class.new(account: create(:account), id: 99999) }
@@ -64,6 +78,66 @@ RSpec.describe OreIdAccount, type: :model do
         end
 
         expect(subject.account.wallets.last.address).not_to be_nil
+      end
+    end
+  end
+
+  describe '#sync_balance' do
+    context 'when coin balance is positive' do
+      before do
+        allow(subject).to receive(:wallets).and_return([Wallet.new])
+        allow_any_instance_of(Wallet).to receive(:coin_balance).and_return(Balance.new)
+        allow_any_instance_of(Balance).to receive(:value).and_return(1)
+      end
+
+      specify do
+        expect(subject).to receive(:initial_balance_confirmed!)
+        subject.sync_balance
+      end
+    end
+
+    context 'when coin balance is not positive' do
+      before do
+        allow(subject).to receive(:wallets).and_return([])
+      end
+
+      specify do
+        expect { subject.sync_balance }.to raise_error(StandardError)
+      end
+    end
+  end
+
+  describe '#create_opt_in_tx' do
+    context 'when opt_in tx has been created' do
+      # TODO: Integrate tx creation
+
+      specify do
+        expect(subject).to receive(:opt_in_created!)
+        subject.create_opt_in_tx
+      end
+    end
+  end
+
+  describe '#sync_opt_in_tx' do
+    # TODO: Integrate tx confirmation
+
+    context 'when opt_in tx has been confirmed on blockchain' do
+      specify do
+        expect(subject).to receive(:provisioned!)
+        subject.sync_opt_in_tx
+      end
+    end
+  end
+
+  describe '#sync_password_update' do
+    context 'when remote password has been updated' do
+      before do
+        allow_any_instance_of(OreIdService).to receive(:password_updated?).and_return(true)
+      end
+
+      specify do
+        expect(subject).to receive(:ok!)
+        subject.sync_password_update
       end
     end
   end
