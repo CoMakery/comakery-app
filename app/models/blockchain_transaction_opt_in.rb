@@ -15,5 +15,6 @@ class BlockchainTransactionOptIn < BlockchainTransaction
       self.amount ||= 0
       self.destination ||= blockchain_transactable.wallet.address
       self.source ||= blockchain_transactable.wallet.address
+      self.token ||= blockchain_transactable.token
     end
 end
