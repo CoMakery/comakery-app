@@ -3,8 +3,8 @@ require 'controllers/concerns/ore_id_callbacks_spec'
 
 RSpec.describe AlgorandAssetsController, type: :controller do
   let(:account) { create(:account) }
-  let!(:asset_token) { create(:asa_token) }
-  let!(:wallet) do
+  let(:asset_token) { create(:asa_token) }
+  let(:wallet) do
     account.wallets.create!(
       address: build(:algorand_address_1),
       _blockchain: 'algorand_test',
@@ -18,8 +18,22 @@ RSpec.describe AlgorandAssetsController, type: :controller do
 
   describe 'GET /index' do
     it 'renders a successful response' do
+      asset_token
+      wallet
       get :index
       expect(response).to be_successful
+    end
+
+    it 'redirects to wallet page if no tokens' do
+      wallet
+      get :index
+      expect(response).to redirect_to '/wallets'
+    end
+
+    it 'redirects to wallet page if no algorand wallets' do
+      asset_token
+      get :index
+      expect(response).to redirect_to '/wallets'
     end
   end
 
