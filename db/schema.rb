@@ -475,6 +475,17 @@ ActiveRecord::Schema.define(version: 2020_11_27_165843) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "token_opt_ins", force: :cascade do |t|
+    t.bigint "wallet_id", null: false
+    t.bigint "token_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token_id"], name: "index_token_opt_ins_on_token_id"
+    t.index ["wallet_id", "token_id"], name: "index_token_opt_ins_on_wallet_id_and_token_id", unique: true
+    t.index ["wallet_id"], name: "index_token_opt_ins_on_wallet_id"
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "coin_type"
@@ -569,6 +580,8 @@ ActiveRecord::Schema.define(version: 2020_11_27_165843) do
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "projects", "tokens"
   add_foreign_key "reg_groups", "tokens"
+  add_foreign_key "token_opt_ins", "tokens"
+  add_foreign_key "token_opt_ins", "wallets"
   add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "transfer_types", "projects"
   add_foreign_key "verifications", "accounts"

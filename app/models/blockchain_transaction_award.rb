@@ -5,7 +5,7 @@ class BlockchainTransactionAward < BlockchainTransaction
     blockchain_transactable.update!(status: :paid)
   end
 
-  def on_chain # rubocop:todo Metrics/CyclomaticComplexity
+  def on_chain
     @on_chain ||= if token._token_type_on_ethereum?
       on_chain_eth
     elsif token._token_type_dag?
@@ -48,6 +48,7 @@ class BlockchainTransactionAward < BlockchainTransaction
       super
       self.amount ||= token.to_base_unit(blockchain_transactable.total_amount)
       self.destination ||= blockchain_transactable.recipient_address
+      self.current_block ||= Comakery::Algorand.new(token.blockchain).last_round if token._token_type_algo? || token._token_type_asa?
     end
 
     def tx

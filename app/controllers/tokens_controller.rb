@@ -95,7 +95,7 @@ class TokensController < ApplicationController
       @blockchains = available_blockchains.map { |k| [k.key, k.key] }.to_h
     end
 
-    def set_generic_props # rubocop:todo Metrics/CyclomaticComplexity
+    def set_generic_props
       @props = {
         token: @token&.serializable_hash&.merge(
           {

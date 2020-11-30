@@ -181,6 +181,15 @@ class Mom
     end
   end
 
+  def blockchain_transaction_opt_in(**attrs)
+    defaults = {
+      blockchain_transactable: create(:token_opt_in, attrs),
+      status: :created
+    }
+
+    BlockchainTransactionOptIn.create!(defaults.merge(attrs))
+  end
+
   def blockchain_transaction_account_token_record(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
     attrs.delete(:token)
@@ -828,6 +837,15 @@ class Mom
       hash
     )
   end
+end
+
+def token_opt_in(**attrs)
+  default_params = {
+    wallet: create(:wallet, _blockchain: :algorand_test, address: algorand_address_1),
+    token: create(:asa_token)
+  }
+
+  TokenOptIn.create!(default_params.merge(attrs))
 end
 
 def mom

@@ -39,7 +39,7 @@ class AccountsController < ApplicationController
     end
   end
 
-  def create # rubocop:todo Metrics/CyclomaticComplexity
+  def create
     @account = if @whitelabel_mission
       @whitelabel_mission.managed_accounts.new(account_params)
     else

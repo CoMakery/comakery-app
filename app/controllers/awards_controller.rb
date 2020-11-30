@@ -166,7 +166,7 @@ class AwardsController < ApplicationController
     render json: @recipient_address_response, status: :ok
   end
 
-  def send_award # rubocop:todo Metrics/CyclomaticComplexity
+  def send_award
     result = SendAward.call(
       award: @award,
       quantity: send_award_params[:quantity],
