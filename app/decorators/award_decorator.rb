@@ -127,7 +127,7 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
-  def transfer_button_state_class # rubocop:todo Metrics/CyclomaticComplexity
+  def transfer_button_state_class
     case latest_blockchain_transaction&.status
     when 'created'
       'in-progress--metamask' if latest_blockchain_transaction&.waiting_in_created?

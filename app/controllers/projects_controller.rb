@@ -333,7 +333,7 @@ class ProjectsController < ApplicationController
       a
     end
 
-    def project_props(project) # rubocop:todo Metrics/CyclomaticComplexity
+    def project_props(project)
       project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
         description_html: Comakery::Markdown.to_html(project.description),
         show_contributions: policy(project).show_contributions?,
