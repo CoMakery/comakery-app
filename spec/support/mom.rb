@@ -830,6 +830,15 @@ class Mom
   end
 end
 
+def token_opt_in(**attrs)
+  default_params = {
+    wallet: create(:wallet, _blockchain: :algorand_test, address: algorand_address_1),
+    token: create(:asa_token)
+  }
+
+  TokenOptIn.create!(default_params.merge(attrs))
+end
+
 def mom
   @mom ||= Mom.new
 end
