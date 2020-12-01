@@ -7,9 +7,8 @@ class TokenOptInPolicy < ApplicationPolicy
   end
 
   def create?
-    @token_opt_in.new_record? &&
-      @token_opt_in.valid? &&
-      @account.wallets.where(id: @token_opt_in.wallet_id).exists?
+    @token_opt_in.token._token_type_asa? &&
+    @account&.wallets&.where(id: @token_opt_in.wallet_id)&.exists?
   end
 
   def pay?
