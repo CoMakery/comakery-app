@@ -48,7 +48,6 @@ class BlockchainTransactionAward < BlockchainTransaction
       super
       self.amount ||= token.to_base_unit(blockchain_transactable.total_amount)
       self.destination ||= blockchain_transactable.recipient_address
-      self.current_block ||= Comakery::Algorand.new(token.blockchain).last_round if token._token_type_algo? || token._token_type_asa?
     end
 
     def tx

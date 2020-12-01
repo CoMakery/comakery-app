@@ -14,6 +14,7 @@ class AlgorandAssetsController < ApplicationController
     redirect_to back_path, flash: { error: 'No supported Assets found' } if @tokens.empty?
   end
 
+  # POST /algorand_assets
   def create
     @token_opt_in = TokenOptIn.find_or_initialize_by(wallet_id: params.require(:wallet_id), token_id: params.require(:token_id))
     authorize @token_opt_in, :create?
