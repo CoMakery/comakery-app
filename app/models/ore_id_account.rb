@@ -9,7 +9,7 @@ class OreIdAccount < ApplicationRecord
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
-  enum state: { pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }
+  enum state: { pending: 0, pending_manual: 1, unclaimed: 2, ok: 3, unlinking: 4 }
 
   def service
     @service ||= OreIdService.new(self)
@@ -29,6 +29,11 @@ class OreIdAccount < ApplicationRecord
     end
 
     ok!
+  end
+
+  def unlink
+    unlinking!
+    destroy!
   end
 
   private

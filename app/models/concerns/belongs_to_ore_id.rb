@@ -10,8 +10,8 @@ module BelongsToOreId
 
     delegate :state, to: :ore_id_account, allow_nil: true
 
-    def cannot_be_destroyed?
-      ore_id?
+    def can_be_destroyed?
+      !ore_id? || ore_id_account.unlinking?
     end
 
     private
@@ -21,7 +21,7 @@ module BelongsToOreId
       end
 
       def abort_destroy_for_ore_id
-        if cannot_be_destroyed?
+        unless can_be_destroyed?
           errors[:base] << 'An ORE ID wallet currently can not be removed'
           throw :abort
         end

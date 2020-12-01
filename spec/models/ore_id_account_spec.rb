@@ -10,7 +10,7 @@ RSpec.describe OreIdAccount, type: :model do
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to validate_uniqueness_of(:account_name) }
-  it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }) }
+  it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3, unlinking: 4 }) }
   specify { expect(subject.service).to be_an(OreIdService) }
 
   context 'after_create' do
@@ -65,6 +65,14 @@ RSpec.describe OreIdAccount, type: :model do
 
         expect(subject.account.wallets.last.address).not_to be_nil
       end
+    end
+  end
+
+  describe '#unlink' do
+    specify do
+      expect(subject).to receive(:unlinking!)
+      expect(subject).to receive(:destroy!)
+      subject.unlink
     end
   end
 end
