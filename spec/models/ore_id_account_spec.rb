@@ -109,9 +109,13 @@ RSpec.describe OreIdAccount, type: :model do
 
   describe '#create_opt_in_tx' do
     context 'when opt_in tx has been created' do
-      # TODO: Integrate tx creation
+      before do
+        allow(subject).to receive(:provisioning_wallet).and_return(Wallet.new)
+        allow(subject).to receive(:provisioning_tokens).and_return(Token.new)
+      end
 
       specify do
+        expect_any_instance_of(OreIdService).to receive(:create_tx)
         expect(subject).to receive(:opt_in_created!)
         subject.create_opt_in_tx
       end
@@ -119,9 +123,12 @@ RSpec.describe OreIdAccount, type: :model do
   end
 
   describe '#sync_opt_in_tx' do
-    # TODO: Integrate tx confirmation
-
     context 'when opt_in tx has been confirmed on blockchain' do
+      before do
+        allow(subject).to receive(:provisioning_wallet).and_return(Wallet.new)
+        allow_any_instance_of(Wallet).to receive(:token_opt_ins).and_return([TokenOptIn.new(status: :opted_in)])
+      end
+
       specify do
         expect(subject).to receive(:provisioned!)
         subject.sync_opt_in_tx

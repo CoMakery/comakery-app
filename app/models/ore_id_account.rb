@@ -58,8 +58,16 @@ class OreIdAccount < ApplicationRecord
     ok!
   end
 
+  def provisioning_wallet
+    wallets.last
+  end
+
+  def provisioning_tokens
+    Token._token_type_asa
+  end
+
   def sync_balance
-    if wallets.last&.coin_balance&.value&.positive?
+    if provisioning_wallet&.coin_balance&.value&.positive?
       initial_balance_confirmed!
     else
       raise StandardError, 'Account balance is 0'
@@ -67,19 +75,18 @@ class OreIdAccount < ApplicationRecord
   end
 
   def create_opt_in_tx
-    # TODO: Integrate tx creation
-    # service.create_tx(tx)
-    service
+    provisioning_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: provisioning_wallet, token: token)
+      opt_in.pending!
+
+      service.create_tx(BlockchainTransactionOptIn.create!(blockchain_transactable: opt_in))
+    end
 
     opt_in_created!
   end
 
   def sync_opt_in_tx
-    # TODO: Integrate tx confirmation
-    # Algorand tx status check
-    service
-
-    provisioned!
+    provisioned! if provisioning_wallet.token_opt_ins.all?(&:opted_in?)
   end
 
   def sync_password_update

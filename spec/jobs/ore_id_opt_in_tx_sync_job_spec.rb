@@ -12,8 +12,8 @@ RSpec.describe OreIdOptInTxSyncJob, type: :job do
       expect(subject.synchronisations.last).to be_ok
     end
 
-    context 'and service raises an error' do
-      before { subject.class.any_instance.stub(:service) { raise } }
+    context 'and an error is raised' do
+      before { subject.class.any_instance.stub(:provisioning_wallet) { raise } }
 
       it 'reschedules itself and sets synchronisation status to failed' do
         expect_any_instance_of(described_class).to receive(:reschedule)
