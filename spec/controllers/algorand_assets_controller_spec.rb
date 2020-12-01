@@ -38,7 +38,7 @@ RSpec.describe AlgorandAssetsController, type: :controller do
   end
 
   describe 'POST /create' do
-    it 'redirects to algorand sign page' do
+    it 'redirects to algorand sign page', vcr: true do
       allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
 
       post :create, params: { wallet_id: wallet.id, token_id: asset_token.id }
