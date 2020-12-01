@@ -187,7 +187,7 @@ class Mom
       status: :created
     }
 
-    VCR.use_cassette("algorand_test/status") do
+    VCR.use_cassette('algorand_test/status') do
       BlockchainTransactionOptIn.create!(defaults.merge(attrs))
     end
   end
