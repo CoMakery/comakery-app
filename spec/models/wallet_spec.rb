@@ -29,9 +29,16 @@ describe Wallet, type: :model do
     end
 
     context 'and ore_id_account is pending' do
-      before { expect(subject).to receive(:pending?).and_return(true) }
-
       it { is_expected.not_to validate_presence_of(:address) }
+    end
+
+    context 'and ore_id_account is unlinking' do
+      before { allow_any_instance_of(OreIdAccount).to receive(:unlinking?).and_return(true) }
+
+      it 'allows destroy' do
+        subject.destroy!
+        expect(subject).not_to be_persisted
+      end
     end
   end
 

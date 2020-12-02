@@ -10,7 +10,7 @@ RSpec.describe OreIdAccount, type: :model do
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to validate_uniqueness_of(:account_name) }
-  it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3 }) }
+  it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3, unlinking: 4 }) }
 
   it {
     is_expected.to define_enum_for(:provisioning_stage).with_values({
@@ -177,6 +177,14 @@ RSpec.describe OreIdAccount, type: :model do
         expect(subject).to receive(:ok!)
         subject.sync_password_update
       end
+    end
+  end
+
+  describe '#unlink' do
+    specify do
+      expect(subject).to receive(:unlinking!)
+      expect(subject).to receive(:destroy!)
+      subject.unlink
     end
   end
 end

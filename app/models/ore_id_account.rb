@@ -32,7 +32,8 @@ class OreIdAccount < ApplicationRecord
     pending: 0,
     pending_manual: 1,
     unclaimed: 2,
-    ok: 3
+    ok: 3,
+    unlinking: 4
   }
 
   enum provisioning_stage: {
@@ -99,6 +100,11 @@ class OreIdAccount < ApplicationRecord
     else
       raise OreIdAccount::ProvisioningError, 'OptIn tx is not ready'
     end
+  end
+
+  def unlink
+    unlinking!
+    destroy!
   end
 
   def sync_password_update

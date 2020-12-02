@@ -9,7 +9,7 @@ class Auth::OreIdController < ApplicationController
 
   # DELETE /auth/ore_id/destroy
   def destroy
-    current_ore_id_account.destroy!
+    current_ore_id_account.unlink
     flash[:notice] = 'ORE ID Unlinked'
     redirect_to wallets_url
   end
