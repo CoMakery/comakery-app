@@ -45,12 +45,37 @@ RSpec.describe OreIdAccount, type: :model do
     end
   end
 
-  context 'after_udpdate when account_name is updated' do
+  context 'after_update' do
     subject { described_class.create(account: create(:account), id: 99999) }
 
-    it 'schedules a wallet sync' do
-      expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
-      subject.update(account_name: 'dummy')
+    context 'when account_name has been updated' do
+      it 'schedules a wallet sync' do
+        expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
+        subject.update(account_name: 'dummy')
+      end
+
+      context 'and :pending' do
+        it 'schedules a balance sync' do
+          expect(OreIdBalanceSyncJob).to receive(:perform_later).with(subject.id)
+          subject.update(account_name: 'dummy', state: :pending)
+        end
+      end
+    end
+
+    context 'when provisioning_stage has been updated' do
+      context 'to :initial_balance_confirmed' do
+        it 'schedules an opt in tx creation' do
+          expect(OreIdOptInTxCreateJob).to receive(:perform_later).with(subject.id)
+          subject.update(account_name: 'dummy', state: :pending, provisioning_stage: :initial_balance_confirmed)
+        end
+      end
+
+      context 'to :opt_in_created' do
+        it 'schedules an opt in tx sync' do
+          expect(OreIdOptInTxSyncJob).to receive(:perform_later).with(subject.id)
+          subject.update(account_name: 'dummy', state: :pending, provisioning_stage: :opt_in_created)
+        end
+      end
     end
   end
 

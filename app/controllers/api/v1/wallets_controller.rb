@@ -48,6 +48,8 @@ class Api::V1::WalletsController < Api::V1::ApiController
     wallet
     redirect_url
 
+    wallet.ore_id_account.schedule_password_update_sync
+
     render 'password_reset.json', status: :ok
   end
 

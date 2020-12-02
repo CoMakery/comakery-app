@@ -8,6 +8,9 @@ class OreIdAccount < ApplicationRecord
   before_create :set_temp_password
   after_create :schedule_sync, unless: :pending_manual?
   after_update :schedule_wallet_sync, if: :saved_change_to_account_name?
+  after_update :schedule_balance_sync, if: :saved_change_to_account_name? && :pending?
+  after_update :schedule_create_opt_in_tx, if: :saved_change_to_provisioning_stage? && :initial_balance_confirmed?
+  after_update :schedule_opt_in_tx_sync, if: :saved_change_to_provisioning_stage? && :opt_in_created?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
@@ -41,6 +44,10 @@ class OreIdAccount < ApplicationRecord
 
   def service
     @service ||= OreIdService.new(self)
+  end
+
+  def sync_account
+    service.create_remote
   end
 
   def sync_wallets
@@ -114,16 +121,16 @@ class OreIdAccount < ApplicationRecord
     OreIdBalanceSyncJob.perform_later(id)
   end
 
-  def schedule_opt_in_tx_sync
-    OreIdOptInTxSyncJob.perform_later(id)
-  end
-
   def schedule_create_opt_in_tx
     OreIdOptInTxCreateJob.perform_later(id)
   end
 
+  def schedule_opt_in_tx_sync
+    OreIdOptInTxSyncJob.perform_later(id)
+  end
+
   def schedule_password_update_sync
-    OreIdPasswordUpdateSyncJob.perform_later(id)
+    OreIdPasswordUpdateSyncJob.set(wait: 60).perform_later(id)
   end
 
   private
