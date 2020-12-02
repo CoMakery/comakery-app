@@ -39,6 +39,7 @@ class OreIdService
 
   def create_tx(transaction)
     raise OreIdService::RemoteInvalidError unless ore_id.account_name
+    raise OreIdService::RemoteInvalidError unless ore_id.pending?
 
     response = handle_response(
       self.class.post(

@@ -90,6 +90,16 @@ RSpec.describe OreIdService, type: :model, vcr: true do
         expect { subject.create_tx(tx) }.to raise_error(OreIdService::RemoteInvalidError)
       end
     end
+
+    context 'when ore_id is not pending' do
+      before do
+        subject.ore_id.update(state: :pending_manual)
+      end
+
+      specify do
+        expect { subject.create_tx(tx) }.to raise_error(OreIdService::RemoteInvalidError)
+      end
+    end
   end
 
   describe '#permissions' do
