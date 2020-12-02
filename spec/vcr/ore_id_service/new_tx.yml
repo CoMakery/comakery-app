@@ -1,0 +1,46 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://service.oreid.io/api/transaction/sign
+    body:
+      encoding: UTF-8
+      string: '{"account":"ore1ryuzfqwy","user_password":"7b737b93896abe12434b9efc57c43d204d6c51beababb83f7cbfb17ee88a39a5!","chain_account":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","broadcast":true,"chain_network":"algo_test","return_signed_transaction":true,"transaction":"eyJmcm9tIjoiWUZHTTNVT0RPWlZIU0k0SFhLUFhPS0ZJNlQyWUNJSzNIS1dK\nWVhZRlFCT05KRDREM0hEMkRQTVlXNCIsInRvIjoiRTNJVDJURFdFSlM1NVhD\nSTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs\nImFtb3VudCI6MSwidHlwZSI6InBheSJ9\n"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 29 Nov 2020 23:38:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '172'
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"ac-LLSQvrrm3Zim084q5utYgnys6G0"
+      Via:
+      - 1.1 google
+    body:
+      encoding: UTF-8
+      string: '{"processId":"63df138f6a32","transaction_id":"dummyid","signed_transaction":"dummyraw"}'
+    http_version: null
+  recorded_at: Sun, 29 Nov 2020 23:38:16 GMT
+recorded_with: VCR 5.1.0

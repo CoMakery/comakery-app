@@ -347,6 +347,8 @@ ActiveRecord::Schema.define(version: 2020_12_02_070221) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "state", default: 0, null: false
+    t.integer "provisioning_stage", default: 0, null: false
+    t.string "temp_password"
     t.index ["account_id"], name: "index_ore_id_accounts_on_account_id"
     t.index ["account_name"], name: "index_ore_id_accounts_on_account_name", unique: true
   end

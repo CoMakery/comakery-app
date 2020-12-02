@@ -24,4 +24,10 @@ class Wallet < ApplicationRecord
   def pending?
     ore_id? && ore_id_account&.pending?
   end
+
+  def coin_balance
+    balance = balances.find_or_create_by(token: coin_of_the_blockchain)
+    balance.update(base_unit_value: blockchain.account_coin_balance(address))
+    balance
+  end
 end

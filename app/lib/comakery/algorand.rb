@@ -22,6 +22,14 @@ class Comakery::Algorand
     @transaction_details ||= get_request(@blockchain.url_for_tx_api(tx_hash))
   end
 
+  def account_details(addr)
+    @account_details ||= get_request(@blockchain.url_for_address_api(addr))
+  end
+
+  def account_balance(addr)
+    account_details(addr).dig('account', 'amount')
+  end
+
   def status
     @status ||= get_request(@blockchain.url_for_status_api)
   end

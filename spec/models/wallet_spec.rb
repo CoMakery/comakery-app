@@ -67,4 +67,9 @@ describe Wallet, type: :model do
       expect(subject.available_blockchains).not_to include('algorand')
     end
   end
+
+  describe '#coin_balance', vcr: true do
+    subject { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
+    specify { expect(subject.coin_balance).to be_a(Balance) }
+  end
 end

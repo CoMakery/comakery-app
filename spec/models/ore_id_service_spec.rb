@@ -59,6 +59,49 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
   end
 
+  describe '#create_tx' do
+    let(:tx) do
+      create(
+        :blockchain_transaction,
+        amount: 1,
+        source: build(:algorand_address_1),
+        destination: build(:algorand_address_2),
+        token: create(:algorand_token),
+        network: :algorand_test
+      )
+    end
+
+    before do
+      subject
+    end
+
+    specify do
+      VCR.use_cassette('ore_id_service/new_tx', match_requests_on: %i[method uri]) do
+        expect { subject.create_tx(tx) }.to change(tx, :tx_hash).and change(tx, :tx_raw).and change(tx, :status)
+      end
+    end
+
+    context 'when remote account is unknown' do
+      before do
+        subject.ore_id.update(account_name: nil)
+      end
+
+      specify do
+        expect { subject.create_tx(tx) }.to raise_error(OreIdService::RemoteInvalidError)
+      end
+    end
+
+    context 'when ore_id is not pending' do
+      before do
+        subject.ore_id.update(state: :pending_manual)
+      end
+
+      specify do
+        expect { subject.create_tx(tx) }.to raise_error(OreIdService::RemoteInvalidError)
+      end
+    end
+  end
+
   describe '#permissions' do
     before do
       subject
@@ -75,6 +118,36 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     context 'when remote permissions are not present' do
+      specify do
+        VCR.use_cassette('ore_id_service/ore1ryuzfqwy_permissions_missing', match_requests_on: %i[method uri]) do
+          expect { subject.permissions }.to raise_error(OreIdService::RemoteInvalidError)
+        end
+      end
+    end
+  end
+
+  describe '#password_updated?' do
+    before do
+      subject
+    end
+
+    context 'when remote password has been updated' do
+      specify do
+        VCR.use_cassette('ore_id_service/ore1ryuzfqwy_password_updated', match_requests_on: %i[method uri]) do
+          expect(subject.password_updated?).to be_truthy
+        end
+      end
+    end
+
+    context 'when remote password has been updated' do
+      specify do
+        VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+          expect(subject.password_updated?).to be_falsey
+        end
+      end
+    end
+
+    context 'when remote is not present' do
       specify do
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy_permissions_missing', match_requests_on: %i[method uri]) do
           expect { subject.permissions }.to raise_error(OreIdService::RemoteInvalidError)

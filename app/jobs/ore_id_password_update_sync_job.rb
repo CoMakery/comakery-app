@@ -1,4 +1,4 @@
-class OreIdSyncJob < ApplicationJob
+class OreIdPasswordUpdateSyncJob < ApplicationJob
   queue_as :default
 
   def perform(id)
@@ -12,7 +12,7 @@ class OreIdSyncJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.sync_account
+      ore_id.sync_password_update
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)
@@ -23,6 +23,6 @@ class OreIdSyncJob < ApplicationJob
   end
 
   def reschedule(ore_id)
-    self.class.set(wait: ore_id.next_sync_allowed_after - Time.current).perform_later(ore_id.id)
+    self.class.set(wait: ore_id.next_sync_allowed_after(scale: :linear) - Time.current).perform_later(ore_id.id)
   end
 end

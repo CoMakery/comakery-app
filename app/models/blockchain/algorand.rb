@@ -126,4 +126,10 @@ class Blockchain::Algorand < Blockchain
   def ore_id_name
     'algo_main'
   end
+
+  # Return coin balance of provided addr
+  # @return [Integer] balance
+  def account_coin_balance(addr)
+    Comakery::Algorand.new(self).account_balance(addr)
+  end
 end
