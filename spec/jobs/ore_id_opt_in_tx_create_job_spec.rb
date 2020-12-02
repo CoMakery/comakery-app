@@ -13,7 +13,11 @@ RSpec.describe OreIdOptInTxCreateJob, type: :job do
     end
 
     context 'and service raises an error' do
-      before { subject.class.any_instance.stub(:service) { raise } }
+      before do
+        create(:asa_token)
+        subject.class.any_instance.stub(:provisioning_wallet) { create(:wallet) }
+        subject.class.any_instance.stub(:service) { raise }
+      end
 
       it 'reschedules itself and sets synchronisation status to failed' do
         expect_any_instance_of(described_class).to receive(:reschedule)

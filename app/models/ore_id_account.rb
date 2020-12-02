@@ -1,4 +1,5 @@
 class OreIdAccount < ApplicationRecord
+  class OreIdAccount::ProvisioningError < StandardError; end
   include Synchronisable
 
   belongs_to :account
@@ -70,7 +71,7 @@ class OreIdAccount < ApplicationRecord
     if provisioning_wallet&.coin_balance&.value&.positive?
       initial_balance_confirmed!
     else
-      raise StandardError, 'Account balance is 0'
+      raise OreIdAccount::ProvisioningError, 'Balance is not ready'
     end
   end
 
@@ -86,11 +87,19 @@ class OreIdAccount < ApplicationRecord
   end
 
   def sync_opt_in_tx
-    provisioned! if provisioning_wallet.token_opt_ins.all?(&:opted_in?)
+    if provisioning_wallet.token_opt_ins.all?(&:opted_in?)
+      provisioned!
+    else
+      raise OreIdAccount::ProvisioningError, 'OptIn tx is not ready'
+    end
   end
 
   def sync_password_update
-    ok! if service.password_updated?
+    if service.password_updated?
+      ok!
+    else
+      raise OreIdAccount::ProvisioningError, 'Password is not updated'
+    end
   end
 
   def schedule_sync

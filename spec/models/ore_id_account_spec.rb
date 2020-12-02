@@ -107,17 +107,23 @@ RSpec.describe OreIdAccount, type: :model do
     end
   end
 
-  describe '#create_opt_in_tx' do
+  describe '#create_opt_in_tx', vcr: true do
     context 'when opt_in tx has been created' do
-      before do
-        allow(subject).to receive(:provisioning_wallet).and_return(Wallet.new)
-        allow(subject).to receive(:provisioning_tokens).and_return(Token.new)
+      let(:wallet) do
+        create(:wallet)
       end
 
-      specify do
+      before do
+        allow(subject).to receive(:provisioning_wallet).and_return(wallet)
+        allow(subject).to receive(:provisioning_tokens).and_return([create(:algorand_token)])
+      end
+
+      it 'calls service to sign the transaction' do
         expect_any_instance_of(OreIdService).to receive(:create_tx)
         expect(subject).to receive(:opt_in_created!)
         subject.create_opt_in_tx
+        expect(TokenOptIn.last.wallet).to eq(wallet)
+        expect(BlockchainTransactionOptIn.last.blockchain_transactable.wallet).to eq(wallet)
       end
     end
   end
