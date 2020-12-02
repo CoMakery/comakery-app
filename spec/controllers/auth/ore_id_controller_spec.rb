@@ -27,7 +27,7 @@ RSpec.describe Auth::OreIdController, type: :controller do
     end
 
     it 'destroys current_ore_id_account and redirects to wallets url' do
-      expect(current_ore_id_account).to receive(:destroy!)
+      expect(current_ore_id_account).to receive(:unlink)
       delete :destroy
       expect(response).to redirect_to(wallets_url)
     end
