@@ -28,6 +28,10 @@ RSpec.describe Api::V1::AccountTransfersController, type: :controller do
       get :index, params: params
       expect(response).to be_successful
       expect(assigns[:transfers]).to eq([transfer])
+      api_request_log = ApiRequestLog.last
+
+      expect(api_request_log.signature).to eq params.dig('proof', 'signature')
+      expect(api_request_log.ip).to eq IPAddr.new('0.0.0.0')
     end
 
     it 'applies pagination' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_26_103120) do
+ActiveRecord::Schema.define(version: 2020_12_02_070221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,15 @@ ActiveRecord::Schema.define(version: 2020_11_26_103120) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["api_authorizable_type", "api_authorizable_id"], name: "index_api_keys_on_api_authorizable_type_and_api_authorizable_id"
+  end
+
+  create_table "api_request_logs", force: :cascade do |t|
+    t.jsonb "body", null: false
+    t.inet "ip", null: false
+    t.string "signature", null: false
+    t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_api_request_logs_on_created_at"
+    t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
   end
 
   create_table "authentication_teams", force: :cascade do |t|
