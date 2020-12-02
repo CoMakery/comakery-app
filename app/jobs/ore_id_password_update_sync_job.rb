@@ -23,6 +23,6 @@ class OreIdPasswordUpdateSyncJob < ApplicationJob
   end
 
   def reschedule(ore_id)
-    self.class.set(wait: ore_id.next_sync_allowed_after - Time.current).perform_later(ore_id.id)
+    self.class.set(wait: ore_id.next_sync_allowed_after(scale: :linear) - Time.current).perform_later(ore_id.id)
   end
 end
