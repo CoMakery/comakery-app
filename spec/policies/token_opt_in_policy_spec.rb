@@ -26,4 +26,9 @@ describe TokenOptInPolicy do
       is_expected.to be false
     end
   end
+
+  describe '#pay?' do
+    subject { described_class.new(account, token_opt_in).pay? }
+    it { is_expected.to be_truthy }
+  end
 end
