@@ -11,6 +11,7 @@ describe Comakery::Algorand, vcr: true do
   specify { expect(subject.transaction_details('')).to be_an(Hash) }
   specify { expect(subject.account_details('YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4')).to be_an(HTTParty::Response) }
   specify { expect(subject.account_balance('YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4')).to be_an(Integer) }
+  specify { expect(subject.account_assets('YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4')).to be_an(Array) }
   specify { expect(subject.status).to be_an(HTTParty::Response) }
   specify { expect(subject.last_round).to be_an(Integer) }
 end
