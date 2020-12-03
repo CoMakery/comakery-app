@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <% unless wallet.cannot_be_destroyed? %>
+  <% unless wallet.can_be_destroyed? %>
     <div class="transfers-table__transfer__action transfers-table__transfer__action--warn">
       <div class="transfer-button">
         <%= link_to 'Remove', wallet_url(wallet), method: :delete %>
