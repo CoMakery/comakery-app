@@ -44,9 +44,10 @@ class Mom
 
     o = nil
     a = ActiveJob::Base.queue_adapter
-    ActiveJob::Base.queue_adapter = :inline
+    ActiveJob::Base.queue_adapter = :inline unless attrs.key?(:skip_jobs)
+    attrs.delete(:skip_jobs)
 
-    VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+    VCR.use_cassette("ore_id_service/#{attrs.fetch(:account_name, defaults[:account_name])}", match_requests_on: %i[method uri]) do
       o = OreIdAccount.create!(defaults.merge(attrs))
     end
 

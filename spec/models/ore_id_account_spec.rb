@@ -77,6 +77,13 @@ RSpec.describe OreIdAccount, type: :model do
         end
       end
     end
+
+    context 'when state updated to ok' do
+      it 'schedules assets sync' do
+        expect(OreIdAssetsSyncJob).to receive(:perform_later).with(subject.id)
+        subject.update(account_name: 'dummy', state: :ok, provisioning_stage: :not_provisioned)
+      end
+    end
   end
 
   describe '#sync_wallets' do
@@ -177,6 +184,50 @@ RSpec.describe OreIdAccount, type: :model do
         expect(subject).to receive(:ok!)
         subject.sync_password_update
       end
+    end
+  end
+
+  describe '#sync_assets', vcr: true do
+    subject { create(:ore_id, skip_jobs: true) }
+    let(:wallet) do
+      Wallet.create!(
+        account: subject.account,
+        address: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        _blockchain: 'algorand_test',
+        source: 'ore_id',
+        ore_id_account: subject
+      )
+    end
+    let(:token) { create :asa_token }
+
+    specify 'TokenOptIn has been added' do
+      wallet && subject.wallets.reload
+      token
+
+      expect(TokenOptIn.count).to be_zero
+      subject.sync_assets
+
+      expect(TokenOptIn.count).to eq 1
+      created_opt_in = TokenOptIn.last
+      expect(created_opt_in.status).to eq 'opted_in'
+    end
+
+    specify 'when no wallets' do
+      token
+
+      expect(TokenOptIn.count).to be_zero
+      subject.sync_assets
+
+      expect(TokenOptIn.count).to eq 0
+    end
+
+    specify 'when no supported token' do
+      wallet && subject.wallets.reload
+
+      expect(TokenOptIn.count).to be_zero
+      subject.sync_assets
+
+      expect(TokenOptIn.count).to eq 0
     end
   end
 
