@@ -2,8 +2,12 @@ require 'rails_helper'
 
 describe 'wallets page' do
   context 'when logged in' do
+    let(:wallet) do
+      create(:wallet)
+    end
+
     before do
-      login(create(:account))
+      login(wallet.account)
     end
 
     it 'loads' do
