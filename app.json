@@ -20,7 +20,7 @@
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "free"
+      "size": "standard-1x"
     },
     "worker": {
       "quantity": 1,
@@ -29,7 +29,7 @@
   },
   "addons": [
     {
-      "plan": "heroku-postgresql:hobby-dev",
+      "plan": "heroku-postgresql:standard-0",
       "as": "DATABASE"
     },
     {
@@ -38,12 +38,6 @@
     },
     {
       "plan": "scheduler:standard"
-    },
-    {
-      "plan": "scout:chair"
-    },
-    {
-      "plan": "sentry:f1"
     },
     {
       "plan": "sendgrid:starter"
