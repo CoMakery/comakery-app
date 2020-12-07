@@ -1,7 +1,6 @@
 {
   "name": "Comakery",
   "description": "To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.",
-  "website": "http://www.comakery.com/",
   "repository": "https://github.com/CoMakery/comakery-server/",
   "logo": "https://avatars0.githubusercontent.com/u/17172662",
   "success_url": "/",
@@ -24,7 +23,7 @@
     },
     "worker": {
       "quantity": 1,
-      "size": "free"
+      "size": "standard-1X"
     }
   },
   "addons": [
