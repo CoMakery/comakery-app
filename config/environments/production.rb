@@ -102,7 +102,7 @@ Rails.application.configure do
     domain: ENV['SMTP_DOMAIN'] || ENV['SMTP_ADDRESS'] || 'comakery.com',
     address: ENV['SMTP_ADDRESS'] || 'smtp.sendgrid.net',
     port: ENV['SMTP_PORT'] || 587,
-    authentication: ENV['SMTP_PORT'] || :plain,
+    authentication: ENV['SMTP_AUTH'] || :plain,
     enable_starttls_auto: true
   }
 
