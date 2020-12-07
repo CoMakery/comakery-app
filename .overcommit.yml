@@ -39,6 +39,8 @@
 PreCommit:
   BundleCheck:
     enabled: true
+  MergeConflicts:
+    enabled: false
 
   YarnLint:
     enabled: true
