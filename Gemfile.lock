@@ -140,6 +140,8 @@ GEM
     bootsnap (1.4.6)
       msgpack (~> 1.0)
     brakeman (4.8.1)
+    bugsnag (6.18.0)
+      concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.0)
       activesupport (>= 3.0.0)
@@ -704,6 +706,7 @@ DEPENDENCIES
   bcrypt
   bootsnap (~> 1.4)
   brakeman
+  bugsnag (~> 6.18)
   bullet
   capybara
   capybara-screenshot (~> 1.0)
