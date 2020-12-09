@@ -89,21 +89,30 @@ CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and o
 We use environment variables for app "secrets", and values which vary between environments - such as staging and production. Locally these are stored in a `.env` file at the root of the project. **Don't commit your .env file to any GitHub repository.** On heroku environment variables are defined using [Heroku Config Vars](https://devcenter.heroku.com/articles/config-vars).
 
 ## Local development with Docker
+#### Install gems. Run for fresh installation only.
+```
+$ docker-compose run --rm runner bundle install
+```
+
+For existing containers gems will be installed/updated with next command.
+
 #### Setup development environment
 ```
-$ docker-compose run runner bundle exec ./bin/setup
+$ docker-compose run --rm runner bundle exec ./bin/setup
 ```
+
+If you have troubles with this command please try to run previuos one (`bundle install`).
 
 #### Example: Running the app
 ```
-$ docker-compose run --service-ports rails
-$ docker-compose run --service-ports webpacker
-$ docker-compose run --service-ports sidekiq
+$ docker-compose run --rm --service-ports rails
+$ docker-compose run --rm --service-ports webpacker
+$ docker-compose run --rm --service-ports sidekiq
 ```
 
 #### Example: Attaching console and running specs
 ```
-$ docker-compose run runner
+$ docker-compose run --rm runner
 $ RAILS_ENV=test bundle exec rspec
 $ NODE_ENV=test yarn test
 ```

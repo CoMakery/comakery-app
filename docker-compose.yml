@@ -13,7 +13,7 @@ x-app: &app
   environment: &env
     NODE_ENV: development
     RAILS_ENV: ${RAILS_ENV:-development}
-  image: example-dev:1.1.0
+  image: comakery-server-dev:1.0.0
   tmpfs:
     - /tmp
 
