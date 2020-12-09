@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'])
+    ore_id.update(account_name: response['accountName'], state: :unclaimed)
     response
   end
 
@@ -37,6 +37,24 @@ class OreIdService
     )
   end
 
+  def create_tx(transaction)
+    raise OreIdService::RemoteInvalidError unless ore_id.account_name
+    raise OreIdService::RemoteInvalidError unless ore_id.pending?
+
+    response = handle_response(
+      self.class.post(
+        '/transaction/sign',
+        headers: request_headers,
+        body: create_tx_params(transaction).to_json
+      )
+    )
+
+    if transaction.update(tx_hash: response['transaction_id'], tx_raw: response['signed_transaction'])
+      transaction.update_status(:pending)
+      BlockchainJob::BlockchainTransactionSyncJob.perform_later(transaction)
+    end
+  end
+
   def permissions
     @permissions ||= filtered_permissions.map do |params|
       {
@@ -46,6 +64,10 @@ class OreIdService
     end
   rescue NoMethodError
     raise OreIdService::RemoteInvalidError
+  end
+
+  def password_updated?
+    @password_updated ||= remote['passwordUpdatedAt'].present?
   end
 
   def create_token
@@ -59,16 +81,32 @@ class OreIdService
     response['appAccessToken']
   end
 
-  def password_reset_url(redirect_url)
+  def authorization_url(callback_url, state = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
-      callback_url: redirect_url,
+      callback_url: callback_url,
       background_color: 'FFFFFF',
-      state: ''
+      state: state
     }
 
     "https://service.oreid.io/auth?#{params.to_query}"
+  end
+
+  def sign_url(transaction:, callback_url:, state:)
+    params = {
+      app_access_token: create_token,
+      account: ore_id.account_name,
+      chain_account: transaction.source,
+      broadcast: true,
+      chain_network: transaction.token.blockchain.ore_id_name,
+      return_signed_transaction: true,
+      transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json),
+      callback_url: callback_url,
+      state: state
+    }
+
+    "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
@@ -79,9 +117,21 @@ class OreIdService
         'user_name' => account.nickname || '',
         'email' => account.email,
         'picture' => account.image ? Refile.attachment_url(account, :image) : '',
-        'user_password' => SecureRandom.hex(32) + '!',
+        'user_password' => ore_id.temp_password,
         'phone' => '',
         'account_type' => 'native'
+      }
+    end
+
+    def create_tx_params(transaction)
+      {
+        account: ore_id.account_name,
+        user_password: ore_id.temp_password,
+        chain_account: transaction.source,
+        broadcast: true,
+        chain_network: transaction.token.blockchain.ore_id_name,
+        return_signed_transaction: true,
+        transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json)
       }
     end
 
@@ -91,6 +141,26 @@ class OreIdService
         'service-key' => ENV['ORE_ID_SERVICE_KEY'],
         'Content-Type' => 'application/json'
       }
+    end
+
+    def algo_transfer_transaction(transaction)
+      algo_transaction = {
+        from: transaction.source,
+        to: transaction.destination,
+        amount: transaction.amount,
+        type: 'pay'
+      }
+
+      if transaction.token._token_type_asa?
+        asa_transaction = {
+          type: 'axfer',
+          assetIndex: transaction.token.contract_address.to_i
+        }
+
+        algo_transaction.merge!(asa_transaction)
+      end
+
+      algo_transaction
     end
 
     def filtered_permissions

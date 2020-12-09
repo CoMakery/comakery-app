@@ -8,10 +8,14 @@ class Blockchain::Algorand < Blockchain
     'Algorand'
   end
 
+  def main_api_host
+    'api.algoexplorer.io'
+  end
+
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    'api.algoexplorer.io/idx2'
+    "#{main_api_host}/idx2"
   end
 
   # Hostname of block explorer website
@@ -20,8 +24,8 @@ class Blockchain::Algorand < Blockchain
     'algoexplorer.io'
   end
 
-  def asset_api_path(asset_id)
-    "/v2/assets/#{asset_id}"
+  def api_host
+    "#{main_api_host}/v2"
   end
 
   # Is mainnet?
@@ -66,7 +70,7 @@ class Blockchain::Algorand < Blockchain
     "https://#{explorer_api_host}/v2/transactions?txid=#{hash}"
   end
 
-  # Address url on block explorer websitea
+  # Address url on block explorer website
   # @return [String] url
   def url_for_address_human(addr)
     "https://#{explorer_human_host}/address/#{addr}"
@@ -76,6 +80,16 @@ class Blockchain::Algorand < Blockchain
   # @return [String] url
   def url_for_address_api(addr)
     "https://#{explorer_api_host}/v2/accounts/#{addr}"
+  end
+
+  # Asset url on block explorer API
+  # @return [String] url
+  def url_for_asset_api(asset_id)
+    "https://#{explorer_api_host}/v2/assets/#{asset_id}"
+  end
+
+  def url_for_status_api
+    "https://#{api_host}/status"
   end
 
   # Validate blockchain transaction hash
@@ -111,5 +125,11 @@ class Blockchain::Algorand < Blockchain
   # @return [String] name
   def ore_id_name
     'algo_main'
+  end
+
+  # Return coin balance of provided addr
+  # @return [Integer] balance
+  def account_coin_balance(addr)
+    Comakery::Algorand.new(self).account_balance(addr)
   end
 end

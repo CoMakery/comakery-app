@@ -1,0 +1,14 @@
+<h3>
+  Wallet address <%= wallet.address %>
+</h3>
+
+<div class="transfers-table animated fadeIn faster">
+  <div class="transfers-table__transfer transfers-table__transfer--header">
+    <div class="transfers-table__transfer__asset">Asset</div>
+    <div class="transfers-table__transfer__ore_id">ORE ID</div>
+    <div class="transfers-table__transfer__status">Status</div>
+    <div class="transfers-table__transfer__actions">Actions</div>
+  </div>
+
+  <%= render partial: "token", collection: @tokens, as: :token, locals: { wallet: wallet } %>
+</div>

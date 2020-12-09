@@ -10,6 +10,8 @@ class BlockchainTransactionAward < BlockchainTransaction
       on_chain_eth
     elsif token._token_type_dag?
       on_chain_dag
+    elsif token._token_type_algo? || token._token_type_asa?
+      on_chain_algo
     end
   end
 
@@ -32,6 +34,14 @@ class BlockchainTransactionAward < BlockchainTransaction
 
     def on_chain_dag
       Comakery::Dag::Tx.new(token.blockchain.explorer_api_host, tx_hash)
+    end
+
+    def on_chain_algo
+      if token._token_type_algo?
+        Comakery::Algorand::Tx.new(token.blockchain, tx_hash)
+      elsif token._token_type_asa?
+        Comakery::Algorand::Tx::Asset.new(token.blockchain, tx_hash, contract_address)
+      end
     end
 
     def populate_data

@@ -12,39 +12,27 @@ class Comakery::Dag::Tx
   end
 
   def sender
-    data['sender']
-  rescue StandardError
-    nil
+    data.fetch('sender', nil)
   end
 
   def receiver
-    data['receiver']
-  rescue StandardError
-    nil
+    data.fetch('receiver', nil)
   end
 
   def amount
-    data['amount'].to_i
-  rescue StandardError
-    nil
+    data.fetch('amount', nil)&.to_i
   end
 
   def fee
-    data['fee'].to_i
-  rescue StandardError
-    nil
+    data.fetch('fee', nil)&.to_i
   end
 
   def snapshot_hash
-    data['snapshotHash']
-  rescue StandardError
-    nil
+    data.fetch('snapshotHash', nil)
   end
 
   def checkpoint_block
-    data['checkpointBlock']
-  rescue StandardError
-    nil
+    data.fetch('checkpointBlock', nil)
   end
 
   def confirmed?(_ = nil)

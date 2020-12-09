@@ -12,7 +12,7 @@ class OreIdSyncJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.service.create_remote
+      ore_id.sync_account
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)

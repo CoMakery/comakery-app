@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   resource :account, only: [:update]
   resources :wallets
+  resources :algorand_assets, only: %i[index create]
   resources :accounts, only: [:new, :create, :show] do
     collection do
       get :download_data
@@ -131,6 +132,15 @@ Rails.application.routes.draw do
 
   namespace :auth, defaults: { format: :json } do
     resources :eth, only: [:new, :create]
+
+    post 'ore_id/new'
+    delete 'ore_id/destroy'
+    get 'ore_id/receive'
+  end
+
+  namespace :sign, defaults: { format: :json } do
+    post 'ore_id/new'
+    get 'ore_id/receive'
   end
 
   namespace :api, defaults: { format: :json } do

@@ -44,9 +44,10 @@ class Mom
 
     o = nil
     a = ActiveJob::Base.queue_adapter
-    ActiveJob::Base.queue_adapter = :inline
+    ActiveJob::Base.queue_adapter = :inline unless attrs.key?(:skip_jobs)
+    attrs.delete(:skip_jobs)
 
-    VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+    VCR.use_cassette("ore_id_service/#{attrs.fetch(:account_name, defaults[:account_name])}", match_requests_on: %i[method uri]) do
       o = OreIdAccount.create!(defaults.merge(attrs))
     end
 
@@ -178,6 +179,17 @@ class Mom
 
     VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionTransferRule.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_opt_in(**attrs)
+    defaults = {
+      blockchain_transactable: create(:token_opt_in, attrs),
+      status: :created
+    }
+
+    VCR.use_cassette('algorand_test/status') do
+      BlockchainTransactionOptIn.create!(defaults.merge(attrs))
     end
   end
 
@@ -422,6 +434,37 @@ class Mom
     t
   end
 
+  def algorand_token(**attrs)
+    defaults = {
+      name: "Algorand-#{SecureRandom.hex(20)}",
+      symbol: 'ALGO',
+      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      token_frozen: false,
+      _blockchain: 'algorand_test',
+      _token_type: 'algo'
+    }
+
+    Token.create!(defaults.merge(attrs))
+  end
+
+  def asa_token(**attrs)
+    defaults = {
+      name: "Asa-#{SecureRandom.hex(20)}",
+      symbol: "TKN-#{SecureRandom.hex(20)}",
+      contract_address: attrs[:contract_address] || '13076367',
+      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      token_frozen: false,
+      _blockchain: 'algorand_test',
+      _token_type: 'asa'
+    }
+
+    t = Token.new(defaults.merge(attrs))
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+    t
+  end
+
   def interest(**attrs)
     params = {
       protocol: 'Moms protocol',
@@ -601,6 +644,14 @@ class Mom
     '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
   end
 
+  def algorand_address_1
+    'YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4'
+  end
+
+  def algorand_address_2
+    'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+  end
+
   def eth_client(**attrs)
     host = attrs[:host] || 'ropsten.infura.io'
 
@@ -730,6 +781,35 @@ class Mom
     end
   end
 
+  def algorand_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A'
+
+    # From:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # To:
+    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
+    # Amount:
+    # 9 algos
+
+    Comakery::Algorand::Tx.new(blockchain, hash)
+  end
+
+  def algorand_asset_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ'
+    asset_id = attrs[:asset_id] || '13076367'
+
+    # From:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # To:
+    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
+    # Amount:
+    # 4 CMTTEST tokens
+
+    Comakery::Algorand::Tx::Asset.new(blockchain, hash, asset_id)
+  end
+
   def bitcoin_address_1
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end
@@ -760,6 +840,15 @@ class Mom
       hash
     )
   end
+end
+
+def token_opt_in(**attrs)
+  default_params = {
+    wallet: create(:wallet, _blockchain: :algorand_test, address: algorand_address_1),
+    token: create(:asa_token)
+  }
+
+  TokenOptIn.create!(default_params.merge(attrs))
 end
 
 def mom

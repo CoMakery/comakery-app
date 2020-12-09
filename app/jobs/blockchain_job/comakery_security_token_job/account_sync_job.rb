@@ -11,6 +11,7 @@ module BlockchainJob
         @record.max_balance = @contract.getMaxBalance(@address)
         @record.balance = @contract.balanceOf(@address)
         @record.lockup_until = Time.zone.at(@contract.getLockUntil(@address))
+        @record.status = :synced
       end
     end
   end

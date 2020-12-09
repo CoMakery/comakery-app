@@ -22,7 +22,7 @@ resource 'IX. Wallets' do
       response_field :id, 'wallet id', type: :integer
       response_field :address, 'wallet address', type: :string
       response_field :source, "wallet source #{Wallet.sources.keys}", type: :string
-      response_field :state, "wallet state #{Wallet.states.keys}", type: :string
+      response_field :state, "wallet state #{OreIdAccount.states.keys}", type: :string
       response_field :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", type: :string
       response_field :tokens, 'wallet tokens', type: :array
       response_field :createdAt, 'creation timestamp', type: :string

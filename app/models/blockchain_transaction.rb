@@ -13,7 +13,7 @@ class BlockchainTransaction < ApplicationRecord
   validates :contract_address, presence: true, if: -> { token._token_type_token? }
   validates :tx_raw, :tx_hash, presence: true, if: -> { generate_transaction? }
 
-  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5 }
+  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
   enum status: { created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }
 
   def self.number_of_confirmations
@@ -104,9 +104,10 @@ class BlockchainTransaction < ApplicationRecord
     def populate_data # rubocop:todo Metrics/CyclomaticComplexity
       self.token ||= blockchain_transactable.token
       self.contract_address ||= token.contract_address
-      self.network ||= token._blockchain if token._token_type_on_ethereum? || token._token_type_dag?
+      self.network ||= token._blockchain if token._token_type_on_ethereum? || token._token_type_dag? || token._token_type_algo? || token._token_type_asa?
 
       self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block if token._token_type_on_ethereum?
+      self.current_block ||= Comakery::Algorand.new(token.blockchain).last_round if token._token_type_algo? || token._token_type_asa?
     end
 
     # @abstract Subclass is expected to implement #tx

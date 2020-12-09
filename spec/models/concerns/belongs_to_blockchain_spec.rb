@@ -15,9 +15,15 @@ shared_examples 'belongs_to_blockchain' do |attrs|
     end
   end
 
-  describe '#tokens_on_same_blockchain' do
+  describe '#tokens_of_the_blockchain' do
     it 'returns list of tokens which use the same Blockchain' do
-      expect(described_class.new.tokens_on_same_blockchain).to eq(Token.where(_blockchain: described_class.new._blockchain))
+      expect(described_class.new.tokens_of_the_blockchain).to eq(Token.where(_blockchain: described_class.new._blockchain))
+    end
+  end
+
+  describe '#coin_of_the_blockchain' do
+    it 'returns coin token which use the same Blockchain' do
+      expect(described_class.new.coin_of_the_blockchain).to eq(Token.where(_blockchain: described_class.new._blockchain).reject { |t| t.token_type.operates_with_smart_contracts? }.first)
     end
   end
 
