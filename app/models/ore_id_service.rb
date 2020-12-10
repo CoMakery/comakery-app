@@ -101,7 +101,7 @@ class OreIdService
       broadcast: true,
       chain_network: transaction.token.blockchain.ore_id_name,
       return_signed_transaction: true,
-      transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json),
+      transaction: Base64.encode64(algorand_transaction(transaction).to_json),
       callback_url: callback_url,
       state: state
     }
@@ -131,7 +131,7 @@ class OreIdService
         broadcast: true,
         chain_network: transaction.token.blockchain.ore_id_name,
         return_signed_transaction: true,
-        transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json)
+        transaction: Base64.encode64(algorand_transaction(transaction).to_json)
       }
     end
 
@@ -143,24 +143,33 @@ class OreIdService
       }
     end
 
-    def algo_transfer_transaction(transaction)
-      algo_transaction = {
+    def algorand_transaction(transaction)
+      tx = {
         from: transaction.source,
         to: transaction.destination,
         amount: transaction.amount,
         type: 'pay'
       }
 
-      if transaction.token._token_type_asa?
-        asa_transaction = {
-          type: 'axfer',
-          assetIndex: transaction.token.contract_address.to_i
-        }
+      tx.merge!(asa_transaction(transaction)) if transaction.token._token_type_asa?
+      tx.merge!(app_transaction(transaction)) if transaction.token._token_type_algorand_security_token?
+      tx
+    end
 
-        algo_transaction.merge!(asa_transaction)
-      end
+    def asa_transaction(transaction)
+      {
+        type: 'axfer',
+        assetIndex: transaction.token.contract_address.to_i
+      }
+    end
 
-      algo_transaction
+    def app_transaction(transaction)
+      {
+        type: 'appl',
+        appIndex: transaction.token.contract_address.to_i
+
+        # TODO: Add `appArgs:` to pass method name and params
+      }
     end
 
     def filtered_permissions
