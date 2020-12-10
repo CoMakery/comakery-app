@@ -266,7 +266,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
 
       specify do
         expect(subject.send(:algorand_transaction, transaction)).to eq(
-          amount: 1,
+          amount: nil,
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
           to: nil,
           type: 'appl',
