@@ -60,10 +60,12 @@
       "description": "AWS S3 API secret"
     },
     "BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET": {
-      "description": "Block explorer url for constellation mainnet"
+      "description": "Block explorer url for constellation mainnet",
+      "required": false
     },
     "BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET": {
-      "description": "Block explorer url for constellation testnet"
+      "description": "Block explorer url for constellation testnet",
+      "required": false
     },
     "DISCORD_BOT_TOKEN": {
       "description": "Discord API bot token"
