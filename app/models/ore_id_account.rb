@@ -11,6 +11,7 @@ class OreIdAccount < ApplicationRecord
   after_update :schedule_balance_sync, if: :saved_change_to_account_name? && :pending?
   after_update :schedule_create_opt_in_tx, if: :saved_change_to_provisioning_stage? && :initial_balance_confirmed?
   after_update :schedule_opt_in_tx_sync, if: :saved_change_to_provisioning_stage? && :opt_in_created?
+  after_update :schedule_assets_sync, if: :saved_change_to_state? && :ok?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
@@ -83,6 +84,18 @@ class OreIdAccount < ApplicationRecord
     end
   end
 
+  def sync_assets
+    wallets.each do |wallet|
+      assets = Comakery::Algorand.new(wallet.blockchain).account_assets(wallet.address)
+      asset_ids = assets.map { |a| a.fetch('asset-id') }
+      asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
+      asset_tokens.each do |token|
+        opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
+        opt_in.opted_in!
+      end
+    end
+  end
+
   def create_opt_in_tx
     provisioning_tokens.each do |token|
       opt_in = TokenOptIn.find_or_create_by(wallet: provisioning_wallet, token: token)
@@ -137,6 +150,10 @@ class OreIdAccount < ApplicationRecord
 
   def schedule_password_update_sync
     OreIdPasswordUpdateSyncJob.set(wait: 60).perform_later(id)
+  end
+
+  def schedule_assets_sync
+    OreIdAssetsSyncJob.perform_later(id)
   end
 
   private

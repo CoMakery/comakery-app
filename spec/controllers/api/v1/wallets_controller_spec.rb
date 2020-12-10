@@ -146,6 +146,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   describe 'POST #password_reset' do
     context 'with valid params' do
+      render_views
       let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id) }
 
       it 'returns url for password reset and scedules a job for password' do
@@ -160,6 +161,19 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         post :password_reset, params: params
 
         expect(response).to have_http_status(:ok)
+        parsed_response = JSON.parse(response.body)
+        parsed_reset_url = URI.parse(parsed_response['reset_url'])
+        request_signature = params.dig('proof', 'signature')
+
+        expect(parsed_reset_url.host).to eq 'service.oreid.io'
+        expect(parsed_reset_url.path).to eq '/auth'
+        expect(Rack::Utils.parse_nested_query(parsed_reset_url.query)).to eq(
+          'app_access_token' => 'dummy_token',
+          'background_color' => 'FFFFFF',
+          'callback_url' => 'https://localhost',
+          'provider' => 'email',
+          'state' => request_signature
+        )
       end
     end
   end

@@ -45,6 +45,10 @@ class Comakery::Algorand
     account_details(addr).dig('account', 'amount')
   end
 
+  def account_assets(addr)
+    account_details(addr).dig('account', 'assets') || []
+  end
+
   def status
     @status ||= get_request(@blockchain.url_for_status_api)
   end

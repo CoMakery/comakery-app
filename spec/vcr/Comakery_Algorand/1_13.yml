@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.testnet.algoexplorer.io/v2/status
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4
     body:
       encoding: US-ASCII
       string: ''
@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 09 Dec 2020 15:46:29 GMT
+      - Thu, 10 Dec 2020 10:59:48 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Transfer-Encoding:
@@ -27,8 +27,8 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d975698d95b03f2a2dc4810d7374b9f9c1607528788; expires=Fri, 08-Jan-21
-        15:46:28 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      - __cfduid=d75a077dd817dff233e80d1560cb134ef1607597988; expires=Sat, 09-Jan-21
+        10:59:48 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
       Access-Control-Allow-Origin:
       - "*"
       Vary:
@@ -42,22 +42,23 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Cf-Request-Id:
-      - 06e9c7cb2000001f2977ba2000000001
+      - 06ede7b29b0000cda73792a000000001
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=84CbM2bfJ9oxkkUbl9p5TZI%2F%2FAuaGV8td8H6Opwwh2w4GNWrq67U7%2FKtftwYewUIquwh6ez9b6Hp59xb1rTpWC5PI4TJTfc%2FQAzYXcA3RbE4L7aHJvQZ7Wa21Lk%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=4LGJrpeiZ5cFkm88vYIzO6yX0uh2n8V5Y13B8j1SF2EVuQF7BFvBme16UaNQJyOgX0jGn3X9YJhchAaGFKy7IgcfZVDchlUN0yBpxmbBhGZQz9Gm%2BW7LUOR3pqE%3D"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 5fefdbf1c8111f29-FRA
+      - 5ff675642da8cda7-CDG
     body:
       encoding: ASCII-8BIT
-      string: '{"catchpoint":"","catchpoint-acquired-blocks":0,"catchpoint-processed-accounts":0,"catchpoint-total-accounts":0,"catchpoint-total-blocks":0,"catchup-time":0,"last-catchpoint":"10980000#GUTUBY6GMLVL3IHREYIHHIHEX5637S2CW7CM57HILT7YVSR7P5MA","last-round":10989505,"last-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version-round":10989506,"next-version-supported":true,"stopped-at-unsupported-round":false,"time-since-last-round":122126515}
+      string: '{"account":{"address":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","amount":90043000,"amount-without-pending-rewards":90043000,"assets":[{"amount":979999000,"asset-id":13076367,"creator":"","is-frozen":false}],"created-assets":[{"index":13076367,"params":{"clawback":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","creator":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","decimals":2,"default-frozen":false,"freeze":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","manager":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","name":"Comakery
+        test","reserve":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","total":1000000000,"unit-name":"CMKTEST"}}],"pending-rewards":0,"reward-base":25538,"rewards":0,"round":11005713,"sig-type":"sig","status":"Offline"},"current-round":11005713}
 
 '
     http_version: null
-  recorded_at: Wed, 09 Dec 2020 15:46:29 GMT
+  recorded_at: Thu, 10 Dec 2020 10:59:48 GMT
 recorded_with: VCR 5.1.0

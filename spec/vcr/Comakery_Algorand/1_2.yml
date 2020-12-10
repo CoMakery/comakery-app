@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 09 Dec 2020 15:46:26 GMT
+      - Thu, 10 Dec 2020 10:59:46 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Transfer-Encoding:
@@ -27,8 +27,8 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=ddedf2827d88b2aa79b35a927d4d474ed1607528786; expires=Fri, 08-Jan-21
-        15:46:26 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      - __cfduid=d69748ece0f458feaddded1b8bcb34d8a1607597986; expires=Sat, 09-Jan-21
+        10:59:46 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
       Access-Control-Allow-Origin:
       - "*"
       Vary:
@@ -42,23 +42,23 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Cf-Request-Id:
-      - 06e9c7c1cb00001f19611e7000000001
+      - 06ede7aaa400001e4759327000000001
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=bM7OD6Pai6J41RqienC7%2B7%2BAe3iOeaG8uKgROvDTb53zfDT2GUyh4EiVCeQcjY7L7urkNKfoZVebiT3e%2BmGXactIMUI0C0CsRRfLGYJGIQDLC%2B5E3GrvafmqvSQ%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=t3yBrDntM2xH6XWprv25WwmuLq%2BHzISdPXwUEmNTn6Fqmtv6xX4lZOiRzuibcNIAGKqlao6dUZPEwwYnNY7vbvYhopuokQbRz2cbWUkCss%2Bw43JALe4I9xqUm%2BE%3D"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 5fefdbe2dbd51f19-FRA
+      - 5ff675576e481e47-FRA
     body:
       encoding: ASCII-8BIT
       string: '{"asset":{"index":13076367,"params":{"clawback":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","creator":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","decimals":2,"default-frozen":false,"freeze":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","manager":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","name":"Comakery
-        test","reserve":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","total":1000000000,"unit-name":"CMKTEST"}},"current-round":10989503}
+        test","reserve":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","total":1000000000,"unit-name":"CMKTEST"}},"current-round":11005713}
 
 '
     http_version: null
-  recorded_at: Wed, 09 Dec 2020 15:46:26 GMT
+  recorded_at: Thu, 10 Dec 2020 10:59:46 GMT
 recorded_with: VCR 5.1.0
