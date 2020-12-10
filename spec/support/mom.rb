@@ -13,7 +13,7 @@ class Mom
       nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
       country: 'United States of America',
-      specialty: create(:specialty),
+      specialty: Specialty.find_or_create_by(name: 'General'),
       password: valid_password
     }
     Account.new(defaults.merge(attrs))
