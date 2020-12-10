@@ -268,7 +268,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
         expect(subject.send(:algorand_transaction, transaction)).to eq(
           amount: 1,
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
+          to: nil,
           type: 'appl',
           appIndex: 13258116
         )
