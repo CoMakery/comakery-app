@@ -88,6 +88,12 @@ class Blockchain::Algorand < Blockchain
     "https://#{explorer_api_host}/v2/assets/#{asset_id}"
   end
 
+  # App url on block explorer API
+  # @return [String] url
+  def url_for_app_api(app_id)
+    "https://#{explorer_api_host}/v2/applications/#{app_id}"
+  end
+
   def url_for_status_api
     "https://#{api_host}/status"
   end
@@ -111,6 +117,15 @@ class Blockchain::Algorand < Blockchain
   # @return [void]
   def validate_asset(asset_id)
     return if asset_id.to_i.positive?
+
+    raise Blockchain::Address::ValidationError, 'should be integer value'
+  end
+
+  # Validate Algorand app id
+  # @raise [Blockchain::Address::ValidationError]
+  # @return [void]
+  def validate_app(app_id)
+    return if app_id.to_i.positive?
 
     raise Blockchain::Address::ValidationError, 'should be integer value'
   end

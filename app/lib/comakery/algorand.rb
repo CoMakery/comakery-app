@@ -1,7 +1,8 @@
 class Comakery::Algorand
-  def initialize(blockchain, asset_id = nil)
+  def initialize(blockchain, asset_id = nil, app_id = nil)
     @blockchain = blockchain
     @asset_id = asset_id
+    @app_id = app_id
   end
 
   def symbol
@@ -14,6 +15,20 @@ class Comakery::Algorand
 
   def asset_details
     @asset_details ||= get_request(@blockchain.url_for_asset_api(@asset_id))
+  end
+
+  def app_details
+    @app_details ||= get_request(@blockchain.url_for_app_api(@app_id))
+  end
+
+  def app_global_state
+    app_details.dig('application', 'params', 'global-state')
+  end
+
+  def app_global_state_value(key:, type:)
+    value = app_global_state&.find { |entry| entry['key'] == Base64.encode64(key).strip }&.dig('value', type)
+    value = Base64.decode64(value) if value && type == 'bytes'
+    value
   end
 
   def transaction_details(tx_hash)

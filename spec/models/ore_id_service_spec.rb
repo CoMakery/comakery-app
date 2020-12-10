@@ -212,7 +212,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
   end
 
-  describe '#algo_transfer_transaction' do
+  describe '#algorand_transaction' do
     context 'with ALGO token' do
       let(:transaction) do
         create(
@@ -224,7 +224,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
 
       specify do
-        expect(subject.send(:algo_transfer_transaction, transaction)).to eq(
+        expect(subject.send(:algorand_transaction, transaction)).to eq(
           amount: 1,
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
           to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
@@ -244,12 +244,33 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
 
       specify do
-        expect(subject.send(:algo_transfer_transaction, transaction)).to eq(
+        expect(subject.send(:algorand_transaction, transaction)).to eq(
           amount: 1,
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
           to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
           type: 'axfer',
           assetIndex: 13076367
+        )
+      end
+    end
+
+    context 'with Algorand Security token' do
+      let(:transaction) do
+        create(
+          :blockchain_transaction,
+          token: create(:algo_sec_token),
+          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+        )
+      end
+
+      specify do
+        expect(subject.send(:algorand_transaction, transaction)).to eq(
+          amount: nil,
+          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          to: nil,
+          type: 'appl',
+          appIndex: 13258116
         )
       end
     end

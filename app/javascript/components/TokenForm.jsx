@@ -344,7 +344,22 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|asa/) &&
+            {this.state['token[_token_type]'].match(/algorand_security_token/) &&
+              <InputFieldHalfed
+                title='app id'
+                required
+                name='token[contract_address]'
+                value={this.state['token[contract_address]']}
+                errorText={this.state.errors['token[contract_address]']}
+                readOnly={this.state.disabled['token[contract_address]']}
+                placeholder='10000000'
+                pattern='([0-9]{8,})'
+                eventHandler={this.handleFieldChange}
+                symbolLimit={0}
+              />
+            }
+
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|algorand_security_token|asa/) &&
               <InputFieldHalfed
                 title='token symbol'
                 required
@@ -358,7 +373,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|asa/) &&
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|algorand_security_token|asa/) &&
               <InputFieldHalfed
                 title='decimal places'
                 required

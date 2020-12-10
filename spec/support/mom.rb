@@ -465,6 +465,24 @@ class Mom
     t
   end
 
+  def algo_sec_token(**attrs)
+    defaults = {
+      name: "Asa-#{SecureRandom.hex(20)}",
+      symbol: "TKN-#{SecureRandom.hex(20)}",
+      contract_address: attrs[:contract_address] || '13258116',
+      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      token_frozen: false,
+      _blockchain: 'algorand_test',
+      _token_type: 'algorand_security_token'
+    }
+
+    t = Token.new(defaults.merge(attrs))
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+    t
+  end
+
   def interest(**attrs)
     params = {
       protocol: 'Moms protocol',
