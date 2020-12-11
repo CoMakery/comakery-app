@@ -1,5 +1,6 @@
 class Sign::OreIdController < ApplicationController
   include OreIdCallbacks
+  skip_after_action :verify_authorized, only: :receive, unless: :verify_errorless
 
   # POST /sign/ore_id/new
   def new
