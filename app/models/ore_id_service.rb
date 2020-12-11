@@ -167,8 +167,6 @@ class OreIdService
       {
         type: 'appl',
         appIndex: transaction.token.contract_address.to_i,
-        to: nil,
-        amount: nil
 
         # TODO: Add `appArgs:` to pass method name and params
       }

@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   resource :account, only: [:update]
   resources :wallets
-  resources :algorand_assets, only: %i[index create]
+  resources :algorand_opt_ins, only: %i[index create]
   resources :accounts, only: [:new, :create, :show] do
     collection do
       get :download_data

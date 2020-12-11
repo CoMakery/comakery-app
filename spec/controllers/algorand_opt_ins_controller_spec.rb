@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'controllers/concerns/ore_id_callbacks_spec'
 
-RSpec.describe AlgorandAssetsController, type: :controller do
+RSpec.describe AlgorandOptInsController, type: :controller do
   let(:account) { create(:account) }
   let(:asset_token) { create(:asa_token) }
   let(:wallet) do
