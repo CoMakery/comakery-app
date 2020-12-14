@@ -166,9 +166,10 @@ class OreIdService
     def app_transaction(transaction)
       {
         type: 'appl',
-        appIndex: transaction.token.contract_address.to_i
-
-        # TODO: Add `appArgs:` to pass method name and params
+        appIndex: transaction.token.contract_address.to_i,
+        to: nil,
+        amount: nil,
+        appOnComplete: 1 # OptIn type
       }
     end
 
