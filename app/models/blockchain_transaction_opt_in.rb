@@ -1,4 +1,4 @@
-# Algorand Standard Assets Opt-in transactions
+# Algorand Standard Assets and Apps (Algorand Security Token) Opt-in transactions
 class BlockchainTransactionOptIn < BlockchainTransaction
   def update_transactable_status
     blockchain_transactable.update!(status: :opted_in)
