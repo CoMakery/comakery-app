@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4
+    uri: https://api.testnet.algoexplorer.io/v2/status
     body:
       encoding: US-ASCII
       string: ''
@@ -42,21 +42,20 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Cf-Request-Id:
-      - 070725ce4400005aa62731f000000001
+      - 070725cf6a00005aa616b67000000001
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=Qazj61v2HaJ28T4ApOVmccHPdKZEVYOYE9kSkfHNIIHKVZAxjfJ%2F%2FJoE3ZoyurwTQK46wZxS31vHec0gRZVnvVjpuCSovMf4W1C05t83w2b%2BlSwlJ48bqIg%2F88c%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=iLw6hgXbUMCbnQLTqhpAyrQ9kNPim%2FI8ZDoBvINr8hfX93smOYkGRZSa6alvCKRyYRij%2B1AghgCBR7iplU9QmfgZB%2BHU%2FZS33oyn1WmA%2FkykDOb2z47D4uib7cY%3D"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 601ed8c399365aa6-DME
+      - 601ed8c57cf85aa6-DME
     body:
       encoding: ASCII-8BIT
-      string: '{"account":{"address":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","amount":90043000,"amount-without-pending-rewards":90043000,"assets":[{"amount":979999000,"asset-id":13076367,"creator":"","is-frozen":false}],"created-assets":[{"index":13076367,"params":{"clawback":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","creator":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","decimals":2,"default-frozen":false,"freeze":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","manager":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","name":"Comakery
-        test","reserve":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","total":1000000000,"unit-name":"CMKTEST"}}],"pending-rewards":0,"reward-base":25538,"rewards":0,"round":11104758,"sig-type":"sig","status":"Offline"},"current-round":11104758}
+      string: '{"catchpoint":"","catchpoint-acquired-blocks":0,"catchpoint-processed-accounts":0,"catchpoint-total-accounts":0,"catchpoint-total-blocks":0,"catchpoint-verified-accounts":0,"catchup-time":0,"last-catchpoint":"11100000#YOXEQ7LUMRHH2CGRYJ3A3PEEOAYW446SWMJXEW7BMQ2OL4EIYS7A","last-round":11104760,"last-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version-round":11104761,"next-version-supported":true,"stopped-at-unsupported-round":false,"time-since-last-round":424125819}
 
         '
     http_version:
