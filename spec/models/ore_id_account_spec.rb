@@ -198,22 +198,22 @@ RSpec.describe OreIdAccount, type: :model do
         ore_id_account: subject
       )
     end
-    let(:token) { create :asa_token }
+    let(:tokens) { [create(:asa_token), create(:algo_sec_token)] }
 
     specify 'TokenOptIn has been added' do
       wallet && subject.wallets.reload
-      token
+      tokens
 
       expect(TokenOptIn.count).to be_zero
       subject.sync_opt_ins
 
-      expect(TokenOptIn.count).to eq 1
+      expect(TokenOptIn.count).to eq 2
       created_opt_in = TokenOptIn.last
       expect(created_opt_in.status).to eq 'opted_in'
     end
 
     specify 'when no wallets' do
-      token
+      tokens
 
       expect(TokenOptIn.count).to be_zero
       subject.sync_opt_ins
