@@ -80,7 +80,7 @@ RSpec.describe OreIdAccount, type: :model do
 
     context 'when state updated to ok' do
       it 'schedules assets sync' do
-        expect(OreIdAssetsSyncJob).to receive(:perform_later).with(subject.id)
+        expect(OreIdOptInSyncJob).to receive(:perform_later).with(subject.id)
         subject.update(account_name: 'dummy', state: :ok, provisioning_stage: :not_provisioned)
       end
     end
@@ -187,7 +187,7 @@ RSpec.describe OreIdAccount, type: :model do
     end
   end
 
-  describe '#sync_assets', vcr: true do
+  describe '#sync_opt_ins', vcr: true do
     subject { create(:ore_id, skip_jobs: true) }
     let(:wallet) do
       Wallet.create!(
@@ -205,7 +205,7 @@ RSpec.describe OreIdAccount, type: :model do
       token
 
       expect(TokenOptIn.count).to be_zero
-      subject.sync_assets
+      subject.sync_opt_ins
 
       expect(TokenOptIn.count).to eq 1
       created_opt_in = TokenOptIn.last
@@ -216,7 +216,7 @@ RSpec.describe OreIdAccount, type: :model do
       token
 
       expect(TokenOptIn.count).to be_zero
-      subject.sync_assets
+      subject.sync_opt_ins
 
       expect(TokenOptIn.count).to eq 0
     end
@@ -225,7 +225,7 @@ RSpec.describe OreIdAccount, type: :model do
       wallet && subject.wallets.reload
 
       expect(TokenOptIn.count).to be_zero
-      subject.sync_assets
+      subject.sync_opt_ins
 
       expect(TokenOptIn.count).to eq 0
     end
