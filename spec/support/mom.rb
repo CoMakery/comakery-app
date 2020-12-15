@@ -184,7 +184,7 @@ class Mom
 
   def blockchain_transaction_opt_in(**attrs)
     defaults = {
-      blockchain_transactable: create(:token_opt_in, attrs),
+      blockchain_transactable: create(:token_opt_in),
       status: :created
     }
 
@@ -826,6 +826,18 @@ class Mom
     # 4 CMTTEST tokens
 
     Comakery::Algorand::Tx::Asset.new(blockchain, hash, asset_id)
+  end
+
+  def algorand_app_opt_in_tx(**attrs)
+    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
+    hash = attrs[:hash] || 'Y5HSTSGQMAGYJW4SXIWTGSJAVSN4LKKN3GNUFVFAS5QBOFOQ6KYQ'
+    app_id = attrs[:app_id] || '13258116'
+
+    # For:
+    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    # Opt in to Algorand Security Token (ABCTEST)
+
+    Comakery::Algorand::Tx::App.new(blockchain, hash, app_id)
   end
 
   def bitcoin_address_1

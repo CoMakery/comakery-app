@@ -11,7 +11,7 @@ class OreIdAccount < ApplicationRecord
   after_update :schedule_balance_sync, if: :saved_change_to_account_name? && :pending?
   after_update :schedule_create_opt_in_tx, if: :saved_change_to_provisioning_stage? && :initial_balance_confirmed?
   after_update :schedule_opt_in_tx_sync, if: :saved_change_to_provisioning_stage? && :opt_in_created?
-  after_update :schedule_assets_sync, if: :saved_change_to_state? && :ok?
+  after_update :schedule_opt_in_sync, if: :saved_change_to_state? && :ok?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
@@ -84,15 +84,31 @@ class OreIdAccount < ApplicationRecord
     end
   end
 
-  def sync_assets
+  def sync_opt_ins
     wallets.each do |wallet|
-      assets = Comakery::Algorand.new(wallet.blockchain).account_assets(wallet.address)
-      asset_ids = assets.map { |a| a.fetch('asset-id') }
-      asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
-      asset_tokens.each do |token|
-        opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
-        opt_in.opted_in!
-      end
+      client = Comakery::Algorand.new(wallet.blockchain)
+      sync_assets_opt_ins(client, wallet)
+      sync_apps_opt_ins(client, wallet)
+    end
+  end
+
+  def sync_assets_opt_ins(client, wallet)
+    assets = client.account_assets(wallet.address)
+    asset_ids = assets.map { |a| a.fetch('asset-id') }
+    asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
+    asset_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
+      opt_in.opted_in!
+    end
+  end
+
+  def sync_apps_opt_ins(client, wallet)
+    apps = client.account_apps(wallet.address)
+    app_ids = apps.map { |a| a.fetch('id') }
+    app_tokens = Token._token_type_algorand_security_token.where(contract_address: app_ids)
+    app_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
+      opt_in.opted_in!
     end
   end
 
@@ -152,8 +168,8 @@ class OreIdAccount < ApplicationRecord
     OreIdPasswordUpdateSyncJob.set(wait: 60).perform_later(id)
   end
 
-  def schedule_assets_sync
-    OreIdAssetsSyncJob.perform_later(id)
+  def schedule_opt_in_sync
+    OreIdOptInSyncJob.perform_later(id)
   end
 
   private

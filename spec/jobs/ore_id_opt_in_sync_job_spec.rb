@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe OreIdAssetsSyncJob, type: :job do
+RSpec.describe OreIdOptInSyncJob, type: :job do
   subject { create(:ore_id) }
 
   context 'when sync is allowed' do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }
 
     it 'calls sync_balance and sets synchronisation status to ok' do
-      expect_any_instance_of(subject.class).to receive(:sync_assets)
+      expect_any_instance_of(subject.class).to receive(:sync_opt_ins)
       described_class.perform_now(subject.id)
       expect(subject.synchronisations.last).to be_ok
     end

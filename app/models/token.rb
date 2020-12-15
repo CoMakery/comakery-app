@@ -20,6 +20,7 @@ class Token < ApplicationRecord
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 
   scope :listed, -> { where unlisted: false }
+  scope :available_for_algorand_opt_in, -> { where(_token_type: %w[asa algorand_security_token]) }
 
   enum denomination: {
     USD: 0,
