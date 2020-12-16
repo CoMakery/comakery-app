@@ -11,6 +11,20 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     transaction_data.dig('application-transaction', 'application-id')
   end
 
+  def transaction_app_accounts
+    transaction_data.dig('application-transaction', 'accounts')
+  end
+
+  def transaction_app_args
+    transaction_data.dig('application-transaction', 'application-args')&.map do |arg|
+      Base64.decode64(arg)
+    end
+  end
+
+  def transaction_on_completion
+    transaction_data.dig('application-transaction', 'on-completion')
+  end
+
   def receiver_address
     nil
   end
@@ -21,7 +35,19 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     0 # TODO: Fix me
   end
 
+  def valid_app_id?
+    app_id.to_i == transaction_app_id
+  end
+
+  def valid_app_accounts?(_blockchain_transaction)
+    [] == transaction_app_accounts
+  end
+
+  def valid_app_args?(_blockchain_transaction)
+    [] == transaction_app_args
+  end
+
   def valid?(blockchain_transaction)
-    super && app_id.to_i == transaction_app_id
+    super && valid_app_id? && valid_app_accounts?(blockchain_transaction) && valid_app_args?(blockchain_transaction)
   end
 end

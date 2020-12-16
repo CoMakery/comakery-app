@@ -8,9 +8,9 @@ class BlockchainTransactionOptIn < BlockchainTransaction
     @on_chain ||=
       begin
         if token._token_type_asa?
-          Comakery::Algorand::Tx::Asset.new(token.blockchain, tx_hash, contract_address)
+          Comakery::Algorand::Tx::Asset::OptIn.new(token.blockchain, tx_hash, contract_address)
         else
-          Comakery::Algorand::Tx::App.new(token.blockchain, tx_hash, contract_address)
+          Comakery::Algorand::Tx::App::OptIn.new(token.blockchain, tx_hash, contract_address)
         end
       end
   end

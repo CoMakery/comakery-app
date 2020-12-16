@@ -825,7 +825,7 @@ class Mom
     # Amount:
     # 4 CMTTEST tokens
 
-    Comakery::Algorand::Tx::Asset.new(blockchain, hash, asset_id)
+    Comakery::Algorand::Tx::Asset::OptIn.new(blockchain, hash, asset_id)
   end
 
   def algorand_app_opt_in_tx(**attrs)
@@ -837,7 +837,7 @@ class Mom
     # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
     # Opt in to Algorand Security Token (ABCTEST)
 
-    Comakery::Algorand::Tx::App.new(blockchain, hash, app_id)
+    Comakery::Algorand::Tx::App::OptIn.new(blockchain, hash, app_id)
   end
 
   def bitcoin_address_1
