@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 03 Dec 2020 11:26:51 GMT
+      - Tue, 15 Dec 2020 10:10:01 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Transfer-Encoding:
@@ -27,8 +27,8 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d7cc70957c1f28761a5049988520a980d1606994811; expires=Sat, 02-Jan-21
-        11:26:51 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      - __cfduid=d5148ccb4e16af45ff39304f8b1fa29ca1608027001; expires=Thu, 14-Jan-21
+        10:10:01 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
       Access-Control-Allow-Origin:
       - "*"
       Vary:
@@ -42,22 +42,22 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Cf-Request-Id:
-      - 06c9f3f2ff00007b2f09906000000001
+      - '070779eaf200005aa6fe1b7000000001'
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=QZCMQ%2BpdVbU7DoiEjRsu5SDlT1RCfri9yEXHg26A6jm2xb9XR9LeR%2BFZl9E%2B3PVMNwiH4pBTdkrqP0FUu0%2F3MWWQK4Exk9pseXRud%2BwVt01H%2BfAzSnqjFwhsP2Q%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=tkuFX354ZqmrG02Zz1RuQnMMlPF%2BSuTuUxb96Ku%2FxKJNCXogJ9UgIZA8bkBt3XqSCKLK4mr8HKCyic%2FwSDMcdxbeCvp04f3SszerJx%2FfoofPQiYyjZC6khMDlBM%3D"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 5fbcef64cd647b2f-DME
+      - 601f5f57e9c45aa6-DME
     body:
       encoding: ASCII-8BIT
-      string: '{"account":{"address":"YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA","amount":98561995,"amount-without-pending-rewards":98561995,"assets":[{"amount":9994900,"asset-id":13076367,"creator":"","is-frozen":false}],"pending-rewards":0,"reward-base":25538,"rewards":0,"round":10864521,"sig-type":"sig","status":"Offline"},"current-round":10864521}
+      string: '{"account":{"address":"YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA","amount":98559995,"amount-without-pending-rewards":98559995,"apps-local-state":[{"id":13258116,"key-value":[{"key":"YmFsYW5jZQ==","value":{"bytes":"","type":2,"uint":0}},{"key":"dHJhbnNmZXIgZ3JvdXA=","value":{"bytes":"","type":2,"uint":1}}],"schema":{"num-byte-slice":0,"num-uint":4}}],"assets":[{"amount":9994900,"asset-id":13076367,"creator":"","is-frozen":false}],"pending-rewards":0,"reward-base":25538,"rewards":0,"round":11106045,"sig-type":"sig","status":"Offline"},"current-round":11106045}
 
         '
     http_version:
-  recorded_at: Thu, 03 Dec 2020 11:26:51 GMT
+  recorded_at: Tue, 15 Dec 2020 10:10:01 GMT
 recorded_with: VCR 5.1.0

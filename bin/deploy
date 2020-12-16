@@ -24,7 +24,7 @@ begin
   deploy_to_first_successful_remote = git_remotes.map { |remote| "git push --force #{remote} #{git_ref}:master" }.join(' || ')
   system deploy_to_first_successful_remote
 
-  `heroku run --exit-code rake db:migrate --app #{heroku_app}`
+  `heroku run --exit-code rake db:prepare --app #{heroku_app}`
   `heroku run --exit-code rake data:migrate --app #{heroku_app}`
 ensure
   try_to_restart = 7.times.map { "heroku restart --app #{heroku_app}" }.join(' || ')

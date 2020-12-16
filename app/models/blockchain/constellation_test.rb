@@ -11,7 +11,7 @@ class Blockchain::ConstellationTest < Blockchain::Constellation
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    ENV['BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET']
+    ENV['BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET'] || 'pdvmh8pagf.execute-api.us-west-1.amazonaws.com/cl-block-explorer-exchanges'
   end
 
   # Is mainnet?

@@ -12,6 +12,11 @@ describe TokenOptInPolicy do
       is_expected.to be true
     end
 
+    it 'allows for algorand security token' do
+      token_opt_in.update!(token: create(:algo_sec_token))
+      is_expected.to be true
+    end
+
     it 'deny for account without algorand wallet' do
       wallet.destroy!
       is_expected.to be false

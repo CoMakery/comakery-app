@@ -270,7 +270,8 @@ RSpec.describe OreIdService, type: :model, vcr: true do
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
           to: nil,
           type: 'appl',
-          appIndex: 13258116
+          appIndex: 13258116,
+          appOnComplete: 1
         )
       end
     end

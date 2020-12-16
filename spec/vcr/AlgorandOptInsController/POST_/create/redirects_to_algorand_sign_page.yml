@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 01 Dec 2020 08:16:58 GMT
+      - Fri, 11 Dec 2020 10:47:45 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Transfer-Encoding:
@@ -27,8 +27,8 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=dd3697094476428dc6a5ea7b6f88046511606810618; expires=Thu, 31-Dec-20
-        08:16:58 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      - __cfduid=d30ea6ee123f2ff43734aa779fbcdd2b61607683665; expires=Sun, 10-Jan-21
+        10:47:45 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
       Access-Control-Allow-Origin:
       - "*"
       Vary:
@@ -42,22 +42,22 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Cf-Request-Id:
-      - 06bef961f7000000a1ae20e000000001
+      - 06f303050800005aa6c62ef000000001
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=J3iU9GwY1%2FeaOJjO3yK64RWkTjhFe3D%2FvAhSylvC0od6jZqbGi2DvBmhzyfSdZLyCeOtriAjKf8vFr1USZzOfKYL7YwvhEeF2pd23OWCW76ibsuirOUhRvqUDns%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=M9ShpzCKUIa9DH2wM%2BAwCoxNJ5nFOCo%2FRtI%2B7z9fGuWhxXYTsYBolkVUjVMHEgcY6Kh8Z%2BNE0jCkEayr9Mf5Z09wZaay%2F7zEZ9%2FqTMQkoE3JYM%2FOW8%2B8EZMzFXA%3D"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 5fab5e7cbdaf00a1-DME
+      - 5ffea11b3cf05aa6-DME
     body:
       encoding: ASCII-8BIT
-      string: '{"catchpoint":"","catchpoint-acquired-blocks":0,"catchpoint-processed-accounts":0,"catchpoint-total-accounts":0,"catchpoint-total-blocks":0,"catchup-time":0,"last-catchpoint":"10820000#U5UEZZZA5AFP7BD6ZC23HNX6MJSTTVKAAEZ5O5SQ4IO3OSCYDH7A","last-round":10821368,"last-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version-round":10821369,"next-version-supported":true,"stopped-at-unsupported-round":false,"time-since-last-round":3693606232}
+      string: '{"catchpoint":"","catchpoint-acquired-blocks":0,"catchpoint-processed-accounts":0,"catchpoint-total-accounts":0,"catchpoint-total-blocks":0,"catchpoint-verified-accounts":0,"catchup-time":0,"last-catchpoint":"11020000#UCOYHEVZADNCH4TETYEKGPZ7U3ZJTI7MNGJY45EVJIYCP5CRUPZA","last-round":11025757,"last-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version-round":11025758,"next-version-supported":true,"stopped-at-unsupported-round":false,"time-since-last-round":3210281435}
 
         '
     http_version:
-  recorded_at: Tue, 01 Dec 2020 08:16:58 GMT
+  recorded_at: Fri, 11 Dec 2020 10:47:45 GMT
 recorded_with: VCR 5.1.0

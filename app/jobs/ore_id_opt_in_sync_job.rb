@@ -1,4 +1,4 @@
-class OreIdAssetsSyncJob < ApplicationJob
+class OreIdOptInSyncJob < ApplicationJob
   queue_as :default
 
   def perform(id)
@@ -12,7 +12,7 @@ class OreIdAssetsSyncJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.sync_assets
+      ore_id.sync_opt_ins
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)
