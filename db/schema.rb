@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_02_070221) do
+ActiveRecord::Schema.define(version: 2020_12_17_111225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -559,6 +559,16 @@ ActiveRecord::Schema.define(version: 2020_12_02_070221) do
     t.index ["provider_id"], name: "index_verifications_on_provider_id"
   end
 
+  create_table "wallet_provisions", force: :cascade do |t|
+    t.bigint "wallet_id"
+    t.bigint "token_id"
+    t.integer "stage", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token_id"], name: "index_wallet_provisions_on_token_id"
+    t.index ["wallet_id"], name: "index_wallet_provisions_on_wallet_id"
+  end
+
   create_table "wallets", force: :cascade do |t|
     t.bigint "account_id"
     t.string "address"
@@ -594,6 +604,8 @@ ActiveRecord::Schema.define(version: 2020_12_02_070221) do
   add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "transfer_types", "projects"
   add_foreign_key "verifications", "accounts"
+  add_foreign_key "wallet_provisions", "tokens"
+  add_foreign_key "wallet_provisions", "wallets"
   add_foreign_key "wallets", "accounts"
   add_foreign_key "wallets", "ore_id_accounts"
 end

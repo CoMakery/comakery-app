@@ -70,12 +70,12 @@ class Api::V1::WalletsController < Api::V1::ApiController
         :blockchain,
         :address,
         :source,
-        :provision
+        :tokens_to_provision
       )
 
       r[:_blockchain] = r[:blockchain]
       r.delete(:blockchain)
-      r.delete(:provision)
+      r.delete(:tokens_to_provision)
       r
     end
 

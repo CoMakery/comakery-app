@@ -57,6 +57,17 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         post :create, params: params
         expect(response).to have_http_status(:created)
       end
+
+      it 'creates a provisioned wallet' do
+        token = create(:asa_token)
+        # ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [token.id] } }
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id' } }
+        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params
+        expect(response).to have_http_status(:created)
+      end
     end
 
     context 'with invalid params' do

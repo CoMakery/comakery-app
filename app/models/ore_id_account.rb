@@ -18,16 +18,10 @@ class OreIdAccount < ApplicationRecord
   # NOTE: There are two possible flows for ORE ID creation
   #
   # 1) Manual Flow – account created by user on ORE ID service website and passed to CoMakery with a callback.
-  # -- account created via auth:ore_id#new action --> (state: manual_pending)
+  # -- account created via auth:ore_id#new action --> (state: pending_manual)
   # -- account name received via auth:ore_id#receive action --> (state: ok)
   #
-  # 2) Auto Provisioning Flow – account created by CoMakery using ORE ID API.
-  # -- account created via ORE ID API --> (state: pending, provisioning_stage: not_provisioned)
-  # -- account balance confirmed on chain --> (state: pending, provisioning_stage: initial_balance_confirmed)
-  # -- opt in tx created via ORE ID API --> (state: pending, provisioning_stage: opt_in_created)
-  # -- opt in tx confirmed on chain --> (state: pending, provisioning_stage: provisioned)
-  # -- CoMakery password reset api endpoint called --> (state: unclaimed, provisioning_stage: provisioned)
-  # -- passwordUpdatedAt on ORE ID API response has been changed --> (state: ok, provisioning_stage: provisioned)
+  # 2) Auto Provisioning Flow – see description in WalletProvision
 
   enum state: {
     pending: 0,
