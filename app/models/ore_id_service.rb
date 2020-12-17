@@ -90,7 +90,7 @@ class OreIdService
       state: state
     }
 
-    "https://service.oreid.io/auth?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"
   end
 
   def sign_url(transaction:, callback_url:, state:)
@@ -106,7 +106,7 @@ class OreIdService
       state: state
     }
 
-    "https://service.oreid.io/sign?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
@@ -195,5 +195,16 @@ class OreIdService
       else
         raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
       end
+    end
+
+    def append_hmac_to_url(url)
+      data = JSON.generate(data: url)
+      Rails.logger.info "DATA: #{data}"
+      hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], data)
+      hmac = Base64.encode64(hmac)
+      Rails.logger.info "HMAC: #{hmac}"
+      Rails.logger.info "Result url: #{url}&hmac=#{hmac}"
+
+      "#{url}&hmac=#{hmac}"
     end
 end
