@@ -6,6 +6,15 @@ class Comakery::Algorand::Tx
     @hash = hash
   end
 
+  def to_object(blockchain_transaction)
+    {
+      type: 'pay',
+      from: blockchain_transaction.source,
+      to: blockchain_transaction.destination,
+      amount: blockchain_transaction.amount
+    }
+  end
+
   def data
     @data ||= algorand.transaction_details(hash).to_h
   end

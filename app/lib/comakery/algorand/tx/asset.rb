@@ -7,6 +7,16 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
     @asset_id = asset_id
   end
 
+  def to_object(blockchain_transaction)
+    {
+      type: 'axfer',
+      from: blockchain_transaction.source,
+      to: blockchain_transaction.destination,
+      amount: blockchain_transaction.amount,
+      assetId: asset_id
+    }
+  end
+
   def transaction_asset_id
     transaction_data.dig('asset-transfer-transaction', 'asset-id') || 0
   end

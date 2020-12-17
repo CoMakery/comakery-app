@@ -1,10 +1,14 @@
 class Comakery::Algorand::Tx::App::SecurityToken::Burn < Comakery::Algorand::Tx::App
-  def valid_app_accounts?(blockchain_transaction)
-    transaction_app_accounts[0] == blockchain_transaction.destination
+  def app_args(blockchain_transaction)
+    [
+      'burn',
+      blockchain_transaction.amount.to_s
+    ]
   end
 
-  def valid_app_args?(blockchain_transaction)
-    transaction_app_args[0] == 'burn' \
-    && transaction_app_args[1] == blockchain_transaction.amount.to_s
+  def app_accounts(blockchain_transaction)
+    [
+      blockchain_transaction.destination
+    ]
   end
 end

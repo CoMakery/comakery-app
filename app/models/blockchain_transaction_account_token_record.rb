@@ -4,6 +4,8 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
   end
 
   def on_chain
+    # TODO: Add algorand support
+
     @on_chain ||= Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(token.blockchain.explorer_api_host, tx_hash)
   end
 

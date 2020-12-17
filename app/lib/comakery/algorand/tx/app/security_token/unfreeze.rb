@@ -1,10 +1,14 @@
 class Comakery::Algorand::Tx::App::SecurityToken::Unfreeze < Comakery::Algorand::Tx::App
-  def valid_app_accounts?(blockchain_transaction)
-    transaction_app_accounts[0] == blockchain_transaction.destination
+  def app_args(_blockchain_transaction)
+    %w[
+      freeze
+      0
+    ]
   end
 
-  def valid_app_args?(_blockchain_transaction)
-    transaction_app_args[0] == 'freeze' \
-    && transaction_app_args[1] == '0'
+  def app_accounts(blockchain_transaction)
+    [
+      blockchain_transaction.blockchain_transactable.account.address_for_blockchain(blockchain_transaction.token._blockchain)
+    ]
   end
 end

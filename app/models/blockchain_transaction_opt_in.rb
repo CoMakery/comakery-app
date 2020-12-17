@@ -9,7 +9,7 @@ class BlockchainTransactionOptIn < BlockchainTransaction
       begin
         if token._token_type_asa?
           Comakery::Algorand::Tx::Asset::OptIn.new(token.blockchain, tx_hash, contract_address)
-        else
+        elsif token._token_type_algorand_security_token?
           Comakery::Algorand::Tx::App::OptIn.new(token.blockchain, tx_hash, contract_address)
         end
       end
