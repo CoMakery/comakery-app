@@ -201,7 +201,8 @@ class OreIdService
       data = JSON.generate(data: url)
       Rails.logger.info "DATA: #{data}"
       hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], data)
-      hmac = Base64.encode64(hmac)
+      hmac = ERB::Util.url_encode(Base64.encode64(hmac))
+
       Rails.logger.info "HMAC: #{hmac}"
       Rails.logger.info "Result url: #{url}&hmac=#{hmac}"
 
