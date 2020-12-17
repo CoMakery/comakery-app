@@ -29,10 +29,8 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     nil
   end
 
-  # In the minimal App token unit
-  # amount 100 mean 1.00 when App decimal is 2
   def amount
-    0 # TODO: Fix me
+    nil
   end
 
   def valid_app_id?
@@ -40,14 +38,22 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def valid_app_accounts?(_blockchain_transaction)
-    [] == transaction_app_accounts
+    transaction_app_accounts == []
   end
 
   def valid_app_args?(_blockchain_transaction)
-    [] == transaction_app_args
+    transaction_app_args == []
+  end
+
+  def valid_transaction_on_completion?
+    transaction_on_completion == 'noop'
   end
 
   def valid?(blockchain_transaction)
-    super && valid_app_id? && valid_app_accounts?(blockchain_transaction) && valid_app_args?(blockchain_transaction)
+    super \
+    && valid_app_id? \
+    && valid_app_accounts?(blockchain_transaction) \
+    && valid_app_args?(blockchain_transaction) \
+    && valid_transaction_on_completion?
   end
 end
