@@ -75,8 +75,8 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     app_id.to_i == transaction_app_id
   end
 
-  def valid_app_accounts?(_blockchain_transaction)
-    transaction_app_accounts == []
+  def valid_app_accounts?(blockchain_transaction)
+    transaction_app_accounts == app_accounts(blockchain_transaction)
   end
 
   def valid_app_args?(blockchain_transaction)
