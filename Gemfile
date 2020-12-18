@@ -127,7 +127,7 @@ gem 'barnes', '~> 0.0.7'
 
 gem 'bootsnap', '~> 1.4'
 
-# gem 'sentry-raven', '~> 2.12' # disabled because sentry is down and it blocks deploying new instances
+gem 'sentry-raven', '~> 2.12'
 
 gem 'jbuilder', '~> 2.9'
 
@@ -154,5 +154,3 @@ gem 'validate_url', '~> 1.0'
 gem 'overcommit', '~> 0.53.0'
 
 gem 'fuubar', '~> 2.5'
-
-gem 'bugsnag', '~> 6.18'

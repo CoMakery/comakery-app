@@ -140,8 +140,6 @@ GEM
     bootsnap (1.4.6)
       msgpack (~> 1.0)
     brakeman (4.8.1)
-    bugsnag (6.18.0)
-      concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.0)
       activesupport (>= 3.0.0)
@@ -604,6 +602,8 @@ GEM
     semantic_range (2.3.0)
     sendgrid-ruby (6.1.4)
       ruby_http_client (~> 3.4)
+    sentry-raven (2.13.0)
+      faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     shoulda-matchers (4.3.0)
       activesupport (>= 4.2.0)
@@ -706,7 +706,6 @@ DEPENDENCIES
   bcrypt
   bootsnap (~> 1.4)
   brakeman
-  bugsnag (~> 6.18)
   bullet
   capybara
   capybara-screenshot (~> 1.0)
@@ -795,6 +794,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   sendgrid-ruby
+  sentry-raven (~> 2.12)
   shoulda-matchers
   sidekiq
   sidekiq-failures
