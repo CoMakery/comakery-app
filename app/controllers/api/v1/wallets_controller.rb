@@ -13,7 +13,12 @@ class Api::V1::WalletsController < Api::V1::ApiController
   def create
     wallet = account.wallets.new(wallet_params)
 
-    if wallet.save
+    Wallet.transaction do
+      @wallet_created = wallet.save
+      create_wallet_provisions(wallet) if @wallet_created
+    end
+
+    if @wallet_created
       @wallet = wallet
       render 'show.json', status: :created
     else
@@ -69,17 +74,29 @@ class Api::V1::WalletsController < Api::V1::ApiController
       r = params.fetch(:body, {}).fetch(:data, {}).fetch(:wallet, {}).permit(
         :blockchain,
         :address,
-        :source,
-        :tokens_to_provision
+        :source
+        # :tokens_to_provision
       )
 
       r[:_blockchain] = r[:blockchain]
       r.delete(:blockchain)
-      r.delete(:tokens_to_provision)
+      # r.delete(:tokens_to_provision)
       r
     end
 
     def redirect_url
       @redirect_url ||= params.fetch(:body, {}).fetch(:data, {}).fetch(:redirect_url, nil)
+    end
+
+    def tokens_to_provision
+      params.dig(:body, :data, :wallet, :tokens_to_provision) || []
+    end
+
+    def create_wallet_provisions(wallet)
+      return if tokens_to_provision.empty?
+
+      tokens_to_provision.each do |token_to_provision|
+        wallet.wallet_provisions.create!(token_id: token_to_provision)
+      end
     end
 end

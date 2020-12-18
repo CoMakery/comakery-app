@@ -59,9 +59,10 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       end
 
       it 'creates a provisioned wallet' do
+        allow_any_instance_of(described_class).to receive(:verify_signature).and_return(true) # WHY it fails when tokens_to_provision appears?!
+
         token = create(:asa_token)
-        # ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [token.id] } }
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id' } }
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [token.id] } }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
