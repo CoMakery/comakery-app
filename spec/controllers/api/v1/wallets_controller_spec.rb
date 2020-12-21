@@ -76,7 +76,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         provision = WalletProvision.last
         expect(provision.wallet).to eq wallet
         expect(provision.token).to eq token
-        expect(provision.stage).to eq 'pending'
+        expect(provision.state).to eq 'pending'
       end
     end
 

@@ -886,8 +886,10 @@ def wallet_provision(**attrs)
     wallet: attrs[:wallet] || build(:wallet, _blockchain: :algorand_test),
     token: attrs[:token] || build(:asa_token)
   }
+  attrs.delete(:wallet)
+  attrs.delete(:token)
 
-  WalletProvision.create!(params)
+  WalletProvision.create!(params.merge(attrs))
 end
 
 def mom

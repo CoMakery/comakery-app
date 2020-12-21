@@ -130,7 +130,7 @@ RSpec.describe OreIdAccount, type: :model do
     context 'with provision flow' do
       before do
         wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
-        create(:wallet_provision, wallet: wallet, token: build(:asa_token), state: :pending)
+        create(:wallet_provision, wallet: wallet, token: build(:asa_token), stage: :pending)
       end
 
       it 'ore_id_account#state changed to unclaimed' do

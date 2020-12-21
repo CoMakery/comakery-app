@@ -562,7 +562,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
   create_table "wallet_provisions", force: :cascade do |t|
     t.bigint "wallet_id"
     t.bigint "token_id"
-    t.integer "stage", default: 0, null: false
+    t.integer "state", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["token_id"], name: "index_wallet_provisions_on_token_id"
