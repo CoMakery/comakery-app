@@ -145,31 +145,6 @@ RSpec.describe OreIdAccount, type: :model do
     end
   end
 
-  describe '#sync_balance' do
-    context 'when coin balance is positive' do
-      before do
-        allow(subject).to receive(:wallets).and_return([Wallet.new])
-        allow_any_instance_of(Wallet).to receive(:coin_balance).and_return(Balance.new)
-        allow_any_instance_of(Balance).to receive(:value).and_return(1)
-      end
-
-      specify do
-        expect(subject).to receive(:initial_balance_confirmed!)
-        subject.sync_balance
-      end
-    end
-
-    context 'when coin balance is not positive' do
-      before do
-        allow(subject).to receive(:wallets).and_return([])
-      end
-
-      specify do
-        expect { subject.sync_balance }.to raise_error(StandardError)
-      end
-    end
-  end
-
   describe '#create_opt_in_tx', vcr: true do
     context 'when opt_in tx has been created' do
       let(:wallet) do

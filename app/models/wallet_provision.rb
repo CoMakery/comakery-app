@@ -53,14 +53,14 @@ class WalletProvision < ApplicationRecord
   end
 
   def schedule_balance_sync
-    OreIdBalanceSyncJob.perform_later(id)
+    OreIdWalletBalanceSyncJob.perform_later(self)
   end
 
   def schedule_create_opt_in_tx
-    OreIdOptInTxCreateJob.perform_later(id)
+    OreIdOptInTxCreateJob.perform_later(self)
   end
 
   def schedule_opt_in_tx_sync
-    OreIdOptInTxSyncJob.perform_later(id)
+    OreIdOptInTxSyncJob.perform_later(self)
   end
 end
