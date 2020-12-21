@@ -7,6 +7,9 @@
 # -- passwordUpdatedAt on ORE ID API response has been changed --> (OreIdAccount#state: ok, WalletProvision#stage: provisioned)
 
 class WalletProvision < ApplicationRecord
+  belongs_to :wallet
+  belongs_to :token
+
   enum stage: {
     pending: 0,
     initial_balance_confirmed: 1,

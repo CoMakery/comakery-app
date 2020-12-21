@@ -68,6 +68,15 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
         post :create, params: params
         expect(response).to have_http_status(:created)
+
+        wallet = Wallet.last
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
+
+        provision = WalletProvision.last
+        expect(provision.wallet).to eq wallet
+        expect(provision.token).to eq token
+        expect(provision.stage).to eq 'pending'
       end
     end
 
