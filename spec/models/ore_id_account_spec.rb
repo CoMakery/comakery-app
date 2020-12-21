@@ -96,6 +96,13 @@ RSpec.describe OreIdAccount, type: :model do
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.to change(subject.account.wallets, :count).by(1)
         end
+
+        wallet = Wallet.last
+        expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
+
+        expect(subject.state).to eq 'ok'
       end
     end
 
@@ -104,12 +111,36 @@ RSpec.describe OreIdAccount, type: :model do
         create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
       end
 
-      it 'sets the wallet address' do
+      it 'sets correct wallet params' do
+        expect(subject.state).to eq 'pending'
+
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
         end
 
-        expect(subject.account.wallets.last.address).not_to be_nil
+        wallet = Wallet.last
+        expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
+
+        expect(subject.state).to eq 'ok'
+      end
+    end
+
+    context 'with provision flow' do
+      before do
+        wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+        create(:wallet_provision, wallet: wallet, token: build(:asa_token), state: :pending)
+      end
+
+      it 'ore_id_account#state changed to unclaimed' do
+        expect(subject.state).to eq 'pending'
+
+        VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+          expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
+        end
+
+        expect(subject.reload.state).to eq 'unclaimed'
       end
     end
   end

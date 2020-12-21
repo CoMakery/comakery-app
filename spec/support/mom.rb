@@ -881,6 +881,15 @@ def token_opt_in(**attrs)
   TokenOptIn.create!(default_params.merge(attrs))
 end
 
+def wallet_provision(**attrs)
+  params = {
+    wallet: attrs[:wallet] || build(:wallet, _blockchain: :algorand_test),
+    token: attrs[:token] || build(:asa_token)
+  }
+
+  WalletProvision.create!(params)
+end
+
 def mom
   @mom ||= Mom.new
 end
