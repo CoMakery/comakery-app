@@ -5,7 +5,7 @@ RSpec.describe WalletProvision, type: :model do
   it_behaves_like 'synchronisable'
   before { allow_any_instance_of(described_class).to receive(:sync_allowed?).and_return(true) }
 
-  subject { create(:wallet_provision) }
+  subject { create(:wallet_provision, wallet_address: build(:algorand_address_1)) }
 
   it { is_expected.to belong_to(:wallet) }
   it { is_expected.to belong_to(:token) }
@@ -40,6 +40,19 @@ RSpec.describe WalletProvision, type: :model do
 
       specify do
         expect { subject.sync_balance }.to raise_error(WalletProvision::ProvisioningError)
+      end
+    end
+  end
+
+  describe '#create_opt_in_tx', vcr: true do
+    context 'when opt_in tx has been created' do
+      it 'calls service to sign the transaction' do
+        expect_any_instance_of(OreIdService).to receive(:create_tx)
+        expect(subejct).to receive(:opt_in_created!)
+        subject.create_opt_in_tx
+
+        expect(TokenOptIn.last.wallet).to eq(subject.wallet)
+        expect(BlockchainTransactionOptIn.last.blockchain_transactable.wallet).to eq(subject.wallet)
       end
     end
   end

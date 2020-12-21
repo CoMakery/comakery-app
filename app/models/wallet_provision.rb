@@ -34,14 +34,15 @@ class WalletProvision < ApplicationRecord
   end
 
   def create_opt_in_tx
-    provisioning_tokens.each do |token|
-      opt_in = TokenOptIn.find_or_create_by(wallet: provisioning_wallet, token: token)
+    transaction do
+      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
       opt_in.pending!
 
-      service.create_tx(BlockchainTransactionOptIn.create!(blockchain_transactable: opt_in))
-    end
+      blockchain_transaction = BlockchainTransactionOptIn.create!(blockchain_transactable: opt_in)
+      ore_id_account.service.create_tx(blockchain_transaction)
 
-    opt_in_created!
+      opt_in_created!
+    end
   end
 
   def sync_opt_in_tx
