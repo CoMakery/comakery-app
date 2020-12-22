@@ -907,6 +907,14 @@ def wallet_provision(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
   WalletProvision.create!(params.merge(attrs))
 end
 
+def ore_id_hmac(url, url_encode: true)
+  url_wo_hmac = /^(.+?)(&hmac=\S+|)$/.match(url)[1]
+  hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], url_wo_hmac)
+  hmac = Base64.strict_encode64(hmac)
+  hmac = ERB::Util.url_encode(hmac) if url_encode
+  hmac
+end
+
 def mom
   @mom ||= Mom.new
 end
