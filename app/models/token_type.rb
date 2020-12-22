@@ -17,4 +17,8 @@ class TokenType
   def self.append_to_list(token_type)
     list.merge(token_type => (list.values.max + 1))
   end
+
+  def can_be_provisioned?
+    false
+  end
 end

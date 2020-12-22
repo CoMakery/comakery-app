@@ -100,4 +100,8 @@ class TokenType::Asa < TokenType
   def blockchain
     attrs[:blockchain]
   end
+
+  def can_be_provisioned?
+    true
+  end
 end
