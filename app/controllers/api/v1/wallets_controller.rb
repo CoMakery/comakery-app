@@ -98,7 +98,7 @@ class Api::V1::WalletsController < Api::V1::ApiController
       return true if tokens_to_provision.empty?
 
       unless tokens_to_provision.is_a?(Array)
-        wallet.errors.add(:tokens_to_provision, "Wrong format. It must be an Array. For example: [1, 5]")
+        wallet.errors.add(:tokens_to_provision, 'Wrong format. It must be an Array. For example: [1, 5]')
         return false
       end
 
