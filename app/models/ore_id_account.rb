@@ -56,22 +56,6 @@ class OreIdAccount < ApplicationRecord
     wallets.map(&:wallet_provisions).flatten.all?(&:provisioned?)
   end
 
-  # def provisioning_wallet
-  #   wallets.last
-  # end
-
-  # def provisioning_tokens
-  #   Token._token_type_asa
-  # end
-
-  # def sync_balance
-  #   if provisioning_wallet&.coin_balance&.value&.positive?
-  #     initial_balance_confirmed!
-  #   else
-  #     raise OreIdAccount::ProvisioningError, 'Balance is not ready'
-  #   end
-  # end
-
   def sync_opt_ins
     wallets.each do |wallet|
       client = Comakery::Algorand.new(wallet.blockchain)
@@ -99,25 +83,6 @@ class OreIdAccount < ApplicationRecord
       opt_in.opted_in!
     end
   end
-
-  def create_opt_in_tx
-    provisioning_tokens.each do |token|
-      opt_in = TokenOptIn.find_or_create_by(wallet: provisioning_wallet, token: token)
-      opt_in.pending!
-
-      service.create_tx(BlockchainTransactionOptIn.create!(blockchain_transactable: opt_in))
-    end
-
-    opt_in_created!
-  end
-
-  # def sync_opt_in_tx
-  #   if provisioning_wallet.token_opt_ins.all?(&:opted_in?)
-  #     provisioned!
-  #   else
-  #     raise OreIdAccount::ProvisioningError, 'OptIn tx is not ready'
-  #   end
-  # end
 
   def unlink
     unlinking!
