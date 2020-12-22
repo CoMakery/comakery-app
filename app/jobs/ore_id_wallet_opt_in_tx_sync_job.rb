@@ -1,4 +1,4 @@
-class OreIdOptInTxCreateJob < ApplicationJob
+class OreIdWalletOptInTxSyncJob < ApplicationJob
   queue_as :default
 
   def perform(id)
@@ -12,7 +12,7 @@ class OreIdOptInTxCreateJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.create_opt_in_tx
+      ore_id.sync_opt_in_tx
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)

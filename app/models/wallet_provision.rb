@@ -14,7 +14,7 @@ class WalletProvision < ApplicationRecord
   belongs_to :token
   has_one :ore_id_account, through: :wallet
 
-  after_update :schedule_balance_sync, if: :pending?
+  after_create :schedule_balance_sync
   after_update :schedule_create_opt_in_tx, if: :saved_change_to_state? && :initial_balance_confirmed?
   after_update :schedule_opt_in_tx_sync, if: :saved_change_to_state? && :opt_in_created?
 
@@ -46,10 +46,10 @@ class WalletProvision < ApplicationRecord
   end
 
   def sync_opt_in_tx
-    if provisioning_wallet.token_opt_ins.all?(&:opted_in?)
+    if wallet.token_opt_ins.all?(&:opted_in?)
       provisioned!
     else
-      raise OreIdAccount::ProvisioningError, 'OptIn tx is not ready'
+      raise WalletProvision::ProvisioningError, 'OptIn tx is not ready'
     end
   end
 
@@ -58,10 +58,10 @@ class WalletProvision < ApplicationRecord
   end
 
   def schedule_create_opt_in_tx
-    OreIdOptInTxCreateJob.perform_later(self)
+    OreIdWalletOptInTxCreateJob.perform_later(self)
   end
 
   def schedule_opt_in_tx_sync
-    OreIdOptInTxSyncJob.perform_later(self)
+    OreIdWalletOptInTxSyncJob.perform_later(self)
   end
 end

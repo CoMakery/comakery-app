@@ -904,7 +904,7 @@ def wallet_provision(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
   attrs.delete(:ore_id_account_name)
   attrs.delete(:ore_id_account_state)
 
-  WalletProvision.create!(params.merge(attrs))
+  WalletProvision.new(params.merge(attrs))
 end
 
 def ore_id_hmac(url, url_encode: true)

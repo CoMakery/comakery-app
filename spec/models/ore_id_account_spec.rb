@@ -12,15 +12,6 @@ RSpec.describe OreIdAccount, type: :model do
   it { is_expected.to validate_uniqueness_of(:account_name) }
   it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3, unlinking: 4 }) }
 
-  it {
-    is_expected.to define_enum_for(:provisioning_stage).with_values({
-      not_provisioned: 0,
-      initial_balance_confirmed: 1,
-      opt_in_created: 2,
-      provisioned: 3
-    })
-  }
-
   specify { expect(subject.service).to be_an(OreIdService) }
 
   context 'before_create' do
@@ -53,35 +44,12 @@ RSpec.describe OreIdAccount, type: :model do
         expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
         subject.update(account_name: 'dummy')
       end
-
-      context 'and :pending' do
-        it 'schedules a balance sync' do
-          expect(OreIdBalanceSyncJob).to receive(:perform_later).with(subject.id)
-          subject.update(account_name: 'dummy', state: :pending)
-        end
-      end
-    end
-
-    context 'when provisioning_stage has been updated' do
-      context 'to :initial_balance_confirmed' do
-        it 'schedules an opt in tx creation' do
-          expect(OreIdOptInTxCreateJob).to receive(:perform_later).with(subject.id)
-          subject.update(account_name: 'dummy', state: :pending, provisioning_stage: :initial_balance_confirmed)
-        end
-      end
-
-      context 'to :opt_in_created' do
-        it 'schedules an opt in tx sync' do
-          expect(OreIdOptInTxSyncJob).to receive(:perform_later).with(subject.id)
-          subject.update(account_name: 'dummy', state: :pending, provisioning_stage: :opt_in_created)
-        end
-      end
     end
 
     context 'when state updated to ok' do
       it 'schedules assets sync' do
         expect(OreIdOptInSyncJob).to receive(:perform_later).with(subject.id)
-        subject.update(account_name: 'dummy', state: :ok, provisioning_stage: :not_provisioned)
+        subject.update(state: :ok)
       end
     end
   end
@@ -130,7 +98,7 @@ RSpec.describe OreIdAccount, type: :model do
     context 'with provision flow' do
       before do
         wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
-        create(:wallet_provision, wallet: wallet, token: build(:asa_token), stage: :pending)
+        create(:wallet_provision, wallet: wallet, token: build(:asa_token), state: :pending)
       end
 
       it 'ore_id_account#state do not change' do
@@ -141,20 +109,6 @@ RSpec.describe OreIdAccount, type: :model do
         end
 
         expect(subject.reload.state).to eq 'pending'
-      end
-    end
-  end
-
-  describe '#sync_opt_in_tx' do
-    context 'when opt_in tx has been confirmed on blockchain' do
-      before do
-        allow(subject).to receive(:provisioning_wallet).and_return(Wallet.new)
-        allow_any_instance_of(Wallet).to receive(:token_opt_ins).and_return([TokenOptIn.new(status: :opted_in)])
-      end
-
-      specify do
-        expect(subject).to receive(:provisioned!)
-        subject.sync_opt_in_tx
       end
     end
   end

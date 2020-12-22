@@ -140,18 +140,6 @@ class OreIdAccount < ApplicationRecord
     OreIdWalletsSyncJob.perform_later(id)
   end
 
-  # def schedule_balance_sync
-  #   OreIdBalanceSyncJob.perform_later(id)
-  # end
-
-  # def schedule_create_opt_in_tx
-  #   OreIdOptInTxCreateJob.perform_later(id)
-  # end
-
-  # def schedule_opt_in_tx_sync
-  #   OreIdOptInTxSyncJob.perform_later(id)
-  # end
-
   def schedule_password_update_sync
     OreIdPasswordUpdateSyncJob.set(wait: 60).perform_later(id)
   end

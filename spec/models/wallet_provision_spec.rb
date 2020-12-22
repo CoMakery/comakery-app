@@ -18,6 +18,33 @@ RSpec.describe WalletProvision, type: :model do
     })
   }
 
+  describe 'after_create' do
+    subject { build(:wallet_provision, wallet_address: build(:algorand_address_1), state: :pending) }
+
+    it 'schedules a balance sync' do
+      expect(OreIdWalletBalanceSyncJob).to receive(:perform_later).with(subject)
+      subject.save!
+    end
+  end
+
+  describe 'after_update' do
+    context 'when state has been updated' do
+      context 'to :initial_balance_confirmed' do
+        it 'schedules an opt in tx creation' do
+          expect(OreIdWalletOptInTxCreateJob).to receive(:perform_later).with(subject)
+          subject.update!(state: :initial_balance_confirmed)
+        end
+      end
+
+      context 'to :opt_in_created' do
+        it 'schedules an opt in tx sync' do
+          expect(OreIdWalletOptInTxSyncJob).to receive(:perform_later).with(subject)
+          subject.update!(state: :opt_in_created)
+        end
+      end
+    end
+  end
+
   describe '#sync_balance' do
     before do
       allow(subject).to receive(:wallet).and_return(Wallet.new)
@@ -48,11 +75,20 @@ RSpec.describe WalletProvision, type: :model do
     context 'when opt_in tx has been created' do
       it 'calls service to sign the transaction' do
         expect_any_instance_of(OreIdService).to receive(:create_tx)
-        expect(subejct).to receive(:opt_in_created!)
+        expect(subject).to receive(:opt_in_created!)
         subject.create_opt_in_tx
 
         expect(TokenOptIn.last.wallet).to eq(subject.wallet)
         expect(BlockchainTransactionOptIn.last.blockchain_transactable.wallet).to eq(subject.wallet)
+      end
+    end
+  end
+
+  describe '#sync_opt_in_tx' do
+    context 'when opt_in tx has been confirmed on blockchain' do
+      specify do
+        expect(subject).to receive(:provisioned!)
+        subject.sync_opt_in_tx
       end
     end
   end

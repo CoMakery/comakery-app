@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe OreIdOptInTxSyncJob, type: :job do
+RSpec.describe OreIdWalletOptInTxSyncJob, type: :job do
   subject { create(:ore_id) }
 
   context 'when sync is allowed' do
