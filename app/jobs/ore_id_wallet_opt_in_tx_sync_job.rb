@@ -1,28 +1,26 @@
 class OreIdWalletOptInTxSyncJob < ApplicationJob
   queue_as :default
 
-  def perform(id)
-    ore_id = OreIdAccount.find(id)
-
-    unless ore_id.sync_allowed?
-      reschedule(ore_id)
+  def perform(wallet_provision)
+    unless wallet_provision.sync_allowed?
+      reschedule(wallet_provision)
       return
     end
 
-    sync = ore_id.create_synchronisation
+    sync = wallet_provision.create_synchronisation
 
     begin
-      ore_id.sync_opt_in_tx
+      wallet_provision.sync_opt_in_tx
     rescue StandardError => e
       sync.failed!
-      reschedule(ore_id)
+      reschedule(wallet_provision)
       raise e
     else
       sync.ok!
     end
   end
 
-  def reschedule(ore_id)
-    self.class.set(wait: ore_id.next_sync_allowed_after - Time.current).perform_later(ore_id.id)
+  def reschedule(wallet_provision)
+    self.class.set(wait: wallet_provision.next_sync_allowed_after - Time.current).perform_later(wallet_provision)
   end
 end
