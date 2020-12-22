@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'], state: :unclaimed)
+    ore_id.update(account_name: response['accountName'])
     response
   end
 

@@ -133,14 +133,14 @@ RSpec.describe OreIdAccount, type: :model do
         create(:wallet_provision, wallet: wallet, token: build(:asa_token), stage: :pending)
       end
 
-      it 'ore_id_account#state changed to unclaimed' do
+      it 'ore_id_account#state do not change' do
         expect(subject.state).to eq 'pending'
 
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
         end
 
-        expect(subject.reload.state).to eq 'unclaimed'
+        expect(subject.reload.state).to eq 'pending'
       end
     end
   end

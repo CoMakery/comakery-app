@@ -1,8 +1,8 @@
 # Auto Provisioning Flow – account created by CoMakery using ORE ID API.
 # -- OreIdAccount created via ORE ID API --> created WalletProvision (OreIdAccount#state: pending, WalletProvision#state: pending)
-# -- account balance confirmed on chain --> (OreIdAccount#state: unclaimed, WalletProvision#state: initial_balance_confirmed)
-# -- opt in tx created via ORE ID API --> (OreIdAccount#state: unclaimed, WalletProvision#state: opt_in_created)
-# -- opt in tx confirmed on chain --> (OreIdAccount#state: unclaimed, WalletProvision#state: provisioned)
+# -- account balance confirmed on chain --> (OreIdAccount#state: pending, WalletProvision#state: initial_balance_confirmed)
+# -- opt in tx created via ORE ID API --> (OreIdAccount#state: pending, WalletProvision#state: opt_in_created)
+# -- opt in tx confirmed on chain --> (OreIdAccount#state: pending, WalletProvision#state: provisioned)
 # -- CoMakery password reset api endpoint called --> (OreIdAccount#state: unclaimed, WalletProvision#state: provisioned)
 # -- passwordUpdatedAt on ORE ID API response has been changed --> (OreIdAccount#state: ok, WalletProvision#state: provisioned)
 
