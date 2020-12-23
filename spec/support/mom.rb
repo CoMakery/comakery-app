@@ -881,6 +881,32 @@ def token_opt_in(**attrs)
   TokenOptIn.create!(default_params.merge(attrs))
 end
 
+def wallet_provision(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
+  wallet = attrs[:wallet] || build(:wallet, _blockchain: :algorand_test, source: :ore_id, address: attrs[:wallet_address] || nil)
+
+  unless wallet.ore_id_account
+    wallet.create_ore_id_account(
+      account_name: attrs[:ore_id_account_name] || 'ore1raevigpd',
+      account_id: wallet.account_id,
+      state: attrs[:ore_id_account_state] || :pending
+    )
+  end
+  wallet.save!
+
+  params = {
+    wallet: wallet,
+    token: attrs[:token] || create(:asa_token)
+  }
+
+  attrs.delete(:wallet)
+  attrs.delete(:wallet_address)
+  attrs.delete(:token)
+  attrs.delete(:ore_id_account_name)
+  attrs.delete(:ore_id_account_state)
+
+  WalletProvision.new(params.merge(attrs))
+end
+
 def ore_id_hmac(url, url_encode: true)
   url_wo_hmac = /^(.+?)(&hmac=\S+|)$/.match(url)[1]
   hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], url_wo_hmac)

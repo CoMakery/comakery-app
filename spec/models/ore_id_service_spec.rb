@@ -16,7 +16,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
 
     specify do
       VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
-        expect { subject.create_remote }.to change(subject.ore_id, :account_name).and change(subject.ore_id, :state)
+        expect { subject.create_remote }.to change(subject.ore_id, :account_name)
       end
     end
 
