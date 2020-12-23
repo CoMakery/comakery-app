@@ -60,10 +60,8 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       end
 
       it 'creates a provisioned wallet' do
-        allow_any_instance_of(described_class).to receive(:verify_signature).and_return(true) # WHY it fails when tokens_to_provision appears?!
-
         token = create(:asa_token)
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [token.id] } }
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: "[#{token.id}]" } }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -109,9 +107,30 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         end
       end
 
+      it 'with wrong formated and JSON valid tokens_to_provision param' do
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' } }
+        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params
+        expect(response).to have_http_status(:bad_request)
+        expect(response.body).to eq '{"errors":{"tokens_to_provision":["Wrong format. It must be an Array. For example: [1,5]"]}}'
+        expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
+      end
+
+      it 'with wrong formated and JSON invalid tokens_to_provision param' do
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '[1' } }
+        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params
+        expect(response).to have_http_status(:bad_request)
+        expect(response.body).to eq '{"errors":{"tokens_to_provision":["Wrong format. It must be an Array. For example: [1,5]"]}}'
+        expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
+      end
+
       it 'with unknown tokens_to_provision param' do
-        allow_any_instance_of(described_class).to receive(:verify_signature).and_return(true) # WHY it fails when tokens_to_provision appears?!
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [9999] } }
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '[9999]' } }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -122,9 +141,8 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       end
 
       it 'tokens_to_provision with token which can not be provisioned' do
-        allow_any_instance_of(described_class).to receive(:verify_signature).and_return(true) # WHY it fails when tokens_to_provision appears?!
         token = create(:token)
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [token.id] } }
+        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: "[#{token.id}]" } }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 

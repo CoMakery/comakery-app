@@ -83,7 +83,19 @@ class Api::V1::WalletsController < Api::V1::ApiController
     end
 
     def tokens_to_provision
-      @tokens_to_provision ||= params.dig(:body, :data, :wallet, :tokens_to_provision) || []
+      @tokens_to_provision ||=
+        begin
+          token_ids = params.dig(:body, :data, :wallet, :tokens_to_provision)
+          return [] if token_ids.blank?
+
+          parsed_token_ids = JSON.parse(token_ids.to_s)
+          raise JSON::ParserError unless parsed_token_ids.is_a?(Array)
+
+          parsed_token_ids
+        end
+    rescue JSON::ParserError
+      wallet.errors.add(:tokens_to_provision, 'Wrong format. It must be an Array. For example: [1,5]')
+      @tokens_to_provision = []
     end
 
     def build_wallet_provisions
@@ -96,11 +108,6 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
     def valid_tokens_to_provision? # rubocop:todo Metrics/CyclomaticComplexity
       return true if tokens_to_provision.empty?
-
-      unless tokens_to_provision.is_a?(Array)
-        wallet.errors.add(:tokens_to_provision, 'Wrong format. It must be an Array. For example: [1, 5]')
-        return false
-      end
 
       tokens = Token.where(id: tokens_to_provision)
 
