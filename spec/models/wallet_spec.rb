@@ -16,7 +16,7 @@ describe Wallet, type: :model do
   it { expect(subject.ore_id_account).to be_nil }
 
   context 'when ore_id?' do
-    subject { create(:wallet, source: :ore_id) }
+    subject { create(:wallet, source: :ore_id, ore_id_account: create(:ore_id, skip_jobs: true)) }
 
     it { is_expected.to validate_presence_of(:ore_id_account) }
     it { expect(subject.ore_id_account).to be_an(OreIdAccount) }

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe OreIdService, type: :model, vcr: true do
-  subject { described_class.new(create(:ore_id)) }
+  subject { described_class.new(create(:ore_id, skip_jobs: true)) }
 
   describe '#create_remote' do
     before do
