@@ -144,3 +144,9 @@ jobs:
       
     - name: Run Rspec
       run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: SimpleCov Report
+        path: coverage/
