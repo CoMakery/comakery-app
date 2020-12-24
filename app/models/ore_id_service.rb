@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'], state: :unclaimed)
+    ore_id.update(account_name: response['accountName'])
     response
   end
 
@@ -90,7 +90,7 @@ class OreIdService
       state: state
     }
 
-    "https://service.oreid.io/auth?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"
   end
 
   def sign_url(transaction:, callback_url:, state:)
@@ -106,7 +106,7 @@ class OreIdService
       state: state
     }
 
-    "https://service.oreid.io/sign?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
@@ -195,5 +195,12 @@ class OreIdService
       else
         raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
       end
+    end
+
+    def append_hmac_to_url(url)
+      hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], url)
+      hmac = Base64.strict_encode64(hmac)
+      hmac = ERB::Util.url_encode(hmac)
+      "#{url}&hmac=#{hmac}"
     end
 end

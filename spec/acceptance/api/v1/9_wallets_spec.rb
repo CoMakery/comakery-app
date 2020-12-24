@@ -49,7 +49,7 @@ resource 'IX. Wallets' do
       parameter :address, 'wallet address', required: true, type: :string
       parameter :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", required: true, type: :string
       parameter :source, "wallet source #{Wallet.sources.keys}", required: false, type: :string
-      parameter :provision, 'wallet provision type', required: false, type: :string
+      parameter :tokens_to_provision, 'array of tokens to provision', required: false, type: :string
     end
 
     context '201' do

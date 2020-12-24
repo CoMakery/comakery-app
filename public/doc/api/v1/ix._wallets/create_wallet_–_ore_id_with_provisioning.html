@@ -111,7 +111,7 @@ table th, table td {
         <p class="explanation">Create, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>CREATE WALLET</h2>
+        <h2>CREATE WALLET – ORE_ID WITH PROVISIONING</h2>
         <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
             Returns created wallet (See INDEX for response details)
@@ -168,7 +168,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/28781f74-f9c6-4143-b441-8b34e4763b7d/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/e17b7efc-67c3-4bc7-ba6e-b313c931fb04/wallets</pre>
 
 
             <h4>Body</h4>
@@ -176,37 +176,38 @@ table th, table td {
   "body": {
     "data": {
       "wallet": {
-        "blockchain": "bitcoin",
-        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+        "blockchain": "algorand_test",
+        "source": "ore_id",
+        "tokens_to_provision": "[114]"
       }
     },
-    "url": "http://example.org/api/v1/accounts/28781f74-f9c6-4143-b441-8b34e4763b7d/wallets",
+    "url": "http://example.org/api/v1/accounts/e17b7efc-67c3-4bc7-ba6e-b313c931fb04/wallets",
     "method": "POST",
-    "nonce": "eedb729a61b9443655a4add689ea00ab",
-    "timestamp": "1608721144"
+    "nonce": "2510661a92630a6d033c2e72048efbb7",
+    "timestamp": "1608721145"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "xTMmnOQ2pR/F/ZogBSTioxpWOHsPS+zXKry0UoHCfwUeaQVFXYB733evusMHu9vD9RarG0JONOv6Xkk34S4uDw=="
+    "signature": "UCQjCgCtK5i9b6BI3wHdw76h4bh/bi6C9BGv5cfMpeJ5W9skdCgPnDWI3ibOPaOloAifrMDp6caGnTv58sO7Bw=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;3b833d4e612117d0b9d9446b59bc2af3&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;6662e08c0282159b21348e35121f63f5&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 20,
-  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
-  &quot;source&quot;: &quot;user_provided&quot;,
-  &quot;state&quot;: null,
-  &quot;createdAt&quot;: &quot;2020-12-23T10:59:05.063Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-12-23T10:59:05.063Z&quot;,
-  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;id&quot;: 22,
+  &quot;address&quot;: null,
+  &quot;source&quot;: &quot;ore_id&quot;,
+  &quot;state&quot;: &quot;pending&quot;,
+  &quot;createdAt&quot;: &quot;2020-12-23T10:59:05.345Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-12-23T10:59:05.345Z&quot;,
+  &quot;blockchain&quot;: &quot;algorand_test&quot;,
   &quot;tokens&quot;: [
 
   ]

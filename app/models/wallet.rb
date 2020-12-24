@@ -5,6 +5,7 @@ class Wallet < ApplicationRecord
   belongs_to :account
   has_many :balances, dependent: :destroy
   has_many :token_opt_ins, dependent: :destroy
+  has_many :wallet_provisions, dependent: :destroy
 
   validates :source, presence: true
   validates :address, presence: true, unless: :pending?
