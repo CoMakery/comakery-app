@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
-  let(:ore_id_account) { create(:ore_id) }
+  let(:ore_id_account) { create(:ore_id, skip_jobs: true) }
   let(:wallet) { create(:wallet, ore_id_account: ore_id_account, account: ore_id_account.account, _blockchain: :algorand_test, source: :ore_id, address: build(:algorand_address_1)) }
   let(:wallet_provision) { create(:wallet_provision, wallet: wallet, token: build(:asa_token), state: :pending) }
   subject { wallet_provision }

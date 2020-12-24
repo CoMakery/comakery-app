@@ -61,7 +61,7 @@ shared_examples 'synchronisable' do
   describe '#next_sync_allowed_after' do
     context 'when latest_transaction is not present' do
       before { allow(subject).to receive(:latest_transaction).and_return(nil) }
-      specify { expect(subject.next_sync_allowed_after).to eq(0) }
+      specify { expect(subject.next_sync_allowed_after).to be <= Time.current }
     end
 
     context 'when latest_transaction is in progress' do

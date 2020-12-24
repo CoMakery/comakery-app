@@ -20,7 +20,7 @@ RSpec.describe Auth::OreIdController, type: :controller do
   end
 
   describe 'DELETE /destroy' do
-    let(:current_ore_id_account) { create(:ore_id) }
+    let(:current_ore_id_account) { create(:ore_id, skip_jobs: true) }
 
     before do
       expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(current_ore_id_account)
@@ -34,7 +34,7 @@ RSpec.describe Auth::OreIdController, type: :controller do
   end
 
   describe 'GET /receive' do
-    let(:current_ore_id_account) { create(:ore_id) }
+    let(:current_ore_id_account) { create(:ore_id, skip_jobs: true) }
 
     before do
       expect_any_instance_of(described_class).to receive(:verify_errorless).and_return(true)

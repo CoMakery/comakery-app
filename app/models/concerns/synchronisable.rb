@@ -43,7 +43,7 @@ module Synchronisable
     end
 
     def next_sync_allowed_after(scale: :exponential)
-      return 0 unless latest_synchronisation
+      return Time.current unless latest_synchronisation
       return max_seconds_in_pending.seconds.from_now if sync_in_progress?
       return latest_synchronisation.updated_at + timeout if latest_synchronisation.ok?
       return latest_synchronisation.updated_at + timeout(scale) if latest_synchronisation.failed?

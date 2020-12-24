@@ -13,7 +13,7 @@ shared_examples 'having ore_id_callbacks' do
 
   describe '#auth_url' do
     before do
-      expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(create(:ore_id))
+      expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(create(:ore_id, skip_jobs: true))
       expect_any_instance_of(OreIdService).to receive(:authorization_url).and_return('dummy_auth_url')
     end
 
@@ -24,7 +24,7 @@ shared_examples 'having ore_id_callbacks' do
 
   describe '#sign_url' do
     before do
-      expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(create(:ore_id))
+      expect_any_instance_of(described_class).to receive(:current_ore_id_account).and_return(create(:ore_id, skip_jobs: true))
       expect_any_instance_of(OreIdService).to receive(:sign_url).and_return('dummy_auth_url')
     end
 
