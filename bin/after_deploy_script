@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+require_relative '../config/environment'
+
+APP_ROOT = File.expand_path('..', __dir__)
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+if ActiveRecord::Migrator.current_version.nil? # db not created yet
+  puts "\n== setup db =="
+  system! 'bin/rails db:setup'
+elsif ActiveRecord::Migrator.current_version.zero? # db created but not migrated
+  puts "\n== Load db schema =="
+  system! 'bin/rails db:schema:load'
+end
+
+puts "\n== Updating database =="
+system! 'bin/rails db:migrate'
+
+puts "\n== Data migrations =="
+system! 'bin/rails data:migrate'
