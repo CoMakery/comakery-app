@@ -38,6 +38,14 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
       get :index, params: { project_id: project.to_param }
       expect(response).to be_successful
     end
+
+    context 'when page is out of range' do
+      it 'returns a success response with a notice' do
+        get :index, params: { project_id: project.to_param, page: 9999 }
+        expect(response).to be_successful
+        expect(controller).to set_flash[:notice]
+      end
+    end
   end
 
   describe 'GET #show' do
