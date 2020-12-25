@@ -3,8 +3,25 @@ require 'rails_helper'
 RSpec.describe WalletCreator do
   let(:account) { create(:account) }
   let(:wallet_params) { { _blockchain: 'algorand_test', address: nil, source: 'ore_id' } }
+  let(:tokens_to_provision) { nil }
 
   subject { described_class.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision) }
+
+  context 'wallet created' do
+    let(:wallet_address) { build(:bitcoin_address_1) }
+    let(:wallet_params) { { _blockchain: :bitcoin, address: wallet_address } }
+
+    it 'works' do
+      wallet = subject
+      expect(Wallet.count).to eq 1
+      expect(wallet).to be_persisted
+      expect(wallet._blockchain).to eq 'bitcoin'
+      expect(wallet.address).to eq wallet_address
+      expect(wallet.source).to eq 'user_provided'
+
+      expect(WalletProvision.count).to be_zero
+    end
+  end
 
   context 'wallet created with tokens_to_provision' do
     let(:token) { create(:asa_token) }
