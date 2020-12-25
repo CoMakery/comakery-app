@@ -35,19 +35,11 @@ class WalletCreator
       tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?
     end
 
-    def valid_tokens_to_provision? # rubocop:todo Metrics/CyclomaticComplexity
-      return true if tokens_to_provision.empty?
+    def valid_tokens_to_provision?
+      correct_tokens = Token.available_for_provision.where(id: tokens_to_provision)
+      wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.map(&:id)
 
-      tokens = Token.where(id: tokens_to_provision)
-
-      unless tokens.count == tokens_to_provision.count
-        unknown_tokens = tokens_to_provision.map(&:to_i) - tokens.pluck(:id)
-        wallet.errors.add(:tokens_to_provision, "Unknown token ids: #{unknown_tokens}")
-        return false
-      end
-
-      unless tokens.all? { |t| t.token_type.can_be_provisioned? }
-        wrong_tokens = tokens.filter { |t| !t.token_type.can_be_provisioned? }.map(&:id)
+      if wrong_tokens.any?
         wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
         return false
       end

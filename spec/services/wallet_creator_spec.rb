@@ -39,7 +39,7 @@ RSpec.describe WalletCreator do
 
     context 'unexisting token id in tokens_to_provision' do
       let(:tokens_to_provision) { '[9999]' }
-      it { expect(subject.errors.messages).to eq(tokens_to_provision: ['Unknown token ids: [9999]']) }
+      it { expect(subject.errors.messages).to eq(tokens_to_provision: ['Some tokens can\'t be provisioned: [9999]']) }
     end
 
     context 'tokens_to_provision with existing token which can not be provisioned' do

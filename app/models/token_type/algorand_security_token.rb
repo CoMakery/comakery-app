@@ -100,8 +100,4 @@ class TokenType::AlgorandSecurityToken < TokenType
   def blockchain
     attrs[:blockchain]
   end
-
-  def can_be_provisioned?
-    true
-  end
 end
