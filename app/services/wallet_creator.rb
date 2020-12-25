@@ -37,7 +37,7 @@ class WalletCreator
 
     def valid_tokens_to_provision?
       correct_tokens = Token.available_for_provision.where(id: tokens_to_provision)
-      wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.map(&:id)
+      wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.pluck(:id)
 
       if wrong_tokens.any?
         wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
