@@ -43,7 +43,11 @@ RSpec.describe WalletCreator do
   end
 
   context 'with invalid data' do
-    after { expect(Wallet.count).to be_zero }
+    after do
+      expect(Wallet.count).to be_zero
+      expect(WalletProvision.count).to be_zero
+    end
+
     context 'wrong format of tokens_to_provision with valid JSON' do
       let(:tokens_to_provision) { '1' }
       it { expect(subject.errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
