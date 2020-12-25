@@ -38,7 +38,6 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
   end
 
   describe 'POST #create' do
-    render_views
     let(:create_params) { { wallet: { blockchain: :bitcoin, address: build(:bitcoin_address_1) } } }
 
     context 'with valid params' do
@@ -67,15 +66,6 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
         post :create, params: params
         expect(response).to have_http_status(:created)
-
-        wallet = Wallet.last
-        expect(wallet._blockchain).to eq 'algorand_test'
-        expect(wallet.source).to eq 'ore_id'
-
-        provision = WalletProvision.last
-        expect(provision.wallet).to eq wallet
-        expect(provision.token).to eq token
-        expect(provision.state).to eq 'pending'
       end
     end
 
@@ -107,49 +97,19 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         end
       end
 
-      it 'with wrong formated and JSON valid tokens_to_provision param' do
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' } }
-        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
-        params[:account_id] = account.managed_account_id
+      context 'with wrong formated and JSON valid tokens_to_provision param' do
+        render_views
 
-        post :create, params: params
-        expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq '{"errors":{"tokens_to_provision":["Wrong format. It must be an Array. For example: [1,5]"]}}'
-        expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
-      end
+        it do
+          ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' } }
+          params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+          params[:account_id] = account.managed_account_id
 
-      it 'with wrong formated and JSON invalid tokens_to_provision param' do
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '[1' } }
-        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
-        params[:account_id] = account.managed_account_id
-
-        post :create, params: params
-        expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq '{"errors":{"tokens_to_provision":["Wrong format. It must be an Array. For example: [1,5]"]}}'
-        expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
-      end
-
-      it 'with unknown tokens_to_provision param' do
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '[9999]' } }
-        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
-        params[:account_id] = account.managed_account_id
-
-        post :create, params: params
-        expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq '{"errors":{"tokens_to_provision":["Unknown token ids: [9999]"]}}'
-        expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
-      end
-
-      it 'tokens_to_provision with token which can not be provisioned' do
-        token = create(:token)
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: "[#{token.id}]" } }
-        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
-        params[:account_id] = account.managed_account_id
-
-        post :create, params: params
-        expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq "{\"errors\":{\"tokens_to_provision\":[\"Some tokens can't be provisioned: [#{token.id}]\"]}}"
-        expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
+          post :create, params: params
+          expect(response).to have_http_status(:bad_request)
+          expect(response.body).to eq '{"errors":{"tokens_to_provision":["Wrong format. It must be an Array. For example: [1,5]"]}}'
+          expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
+        end
       end
     end
   end
