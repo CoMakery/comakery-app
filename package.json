@@ -1,4 +1,5 @@
 {
+  "license" : "CUSTOM LICENSE SEE LICENSE.md FILE",
   "engines": {
     "npm": "6.x",
     "node": "12",

@@ -1,23 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe OreIdBalanceSyncJob, type: :job do
-  subject { create(:ore_id) }
+RSpec.describe OreIdWalletBalanceSyncJob, type: :job do
+  subject { create(:wallet_provision) }
 
   context 'when sync is allowed' do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }
 
     it 'calls sync_balance and sets synchronisation status to ok' do
       expect_any_instance_of(subject.class).to receive(:sync_balance)
-      described_class.perform_now(subject.id)
+      described_class.perform_now(subject)
       expect(subject.synchronisations.last).to be_ok
     end
 
     context 'and an error is raised' do
-      before { subject.class.any_instance.stub(:wallets) { raise } }
+      before do
+        Wallet.any_instance.stub(:coin_balance) { raise }
+      end
 
       it 'reschedules itself and sets synchronisation status to failed' do
         expect_any_instance_of(described_class).to receive(:reschedule)
-        expect { described_class.perform_now(subject.id) }.to raise_error(RuntimeError)
+        expect { described_class.perform_now(subject) }.to raise_error(RuntimeError)
         expect(subject.synchronisations.last).to be_failed
       end
     end
@@ -28,7 +30,7 @@ RSpec.describe OreIdBalanceSyncJob, type: :job do
 
     it 'reschedules itself' do
       expect_any_instance_of(described_class).to receive(:reschedule)
-      described_class.perform_now(subject.id)
+      described_class.perform_now(subject)
     end
   end
 end

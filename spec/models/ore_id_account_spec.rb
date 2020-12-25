@@ -12,15 +12,6 @@ RSpec.describe OreIdAccount, type: :model do
   it { is_expected.to validate_uniqueness_of(:account_name) }
   it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3, unlinking: 4 }) }
 
-  it {
-    is_expected.to define_enum_for(:provisioning_stage).with_values({
-      not_provisioned: 0,
-      initial_balance_confirmed: 1,
-      opt_in_created: 2,
-      provisioned: 3
-    })
-  }
-
   specify { expect(subject.service).to be_an(OreIdService) }
 
   context 'before_create' do
@@ -53,35 +44,12 @@ RSpec.describe OreIdAccount, type: :model do
         expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
         subject.update(account_name: 'dummy')
       end
-
-      context 'and :pending' do
-        it 'schedules a balance sync' do
-          expect(OreIdBalanceSyncJob).to receive(:perform_later).with(subject.id)
-          subject.update(account_name: 'dummy', state: :pending)
-        end
-      end
-    end
-
-    context 'when provisioning_stage has been updated' do
-      context 'to :initial_balance_confirmed' do
-        it 'schedules an opt in tx creation' do
-          expect(OreIdOptInTxCreateJob).to receive(:perform_later).with(subject.id)
-          subject.update(account_name: 'dummy', state: :pending, provisioning_stage: :initial_balance_confirmed)
-        end
-      end
-
-      context 'to :opt_in_created' do
-        it 'schedules an opt in tx sync' do
-          expect(OreIdOptInTxSyncJob).to receive(:perform_later).with(subject.id)
-          subject.update(account_name: 'dummy', state: :pending, provisioning_stage: :opt_in_created)
-        end
-      end
     end
 
     context 'when state updated to ok' do
       it 'schedules assets sync' do
         expect(OreIdOptInSyncJob).to receive(:perform_later).with(subject.id)
-        subject.update(account_name: 'dummy', state: :ok, provisioning_stage: :not_provisioned)
+        subject.update(state: :ok)
       end
     end
   end
@@ -96,6 +64,13 @@ RSpec.describe OreIdAccount, type: :model do
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.to change(subject.account.wallets, :count).by(1)
         end
+
+        wallet = Wallet.last
+        expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
+
+        expect(subject.state).to eq 'ok'
       end
     end
 
@@ -104,72 +79,36 @@ RSpec.describe OreIdAccount, type: :model do
         create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
       end
 
-      it 'sets the wallet address' do
+      it 'sets correct wallet params' do
+        expect(subject.state).to eq 'pending'
+
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
         end
 
-        expect(subject.account.wallets.last.address).not_to be_nil
-      end
-    end
-  end
+        wallet = Wallet.last
+        expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
 
-  describe '#sync_balance' do
-    context 'when coin balance is positive' do
-      before do
-        allow(subject).to receive(:wallets).and_return([Wallet.new])
-        allow_any_instance_of(Wallet).to receive(:coin_balance).and_return(Balance.new)
-        allow_any_instance_of(Balance).to receive(:value).and_return(1)
-      end
-
-      specify do
-        expect(subject).to receive(:initial_balance_confirmed!)
-        subject.sync_balance
+        expect(subject.state).to eq 'ok'
       end
     end
 
-    context 'when coin balance is not positive' do
+    context 'with provision flow' do
       before do
-        allow(subject).to receive(:wallets).and_return([])
+        wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+        create(:wallet_provision, wallet: wallet, token: build(:asa_token), state: :pending)
       end
 
-      specify do
-        expect { subject.sync_balance }.to raise_error(StandardError)
-      end
-    end
-  end
+      it 'ore_id_account#state do not change' do
+        expect(subject.state).to eq 'pending'
 
-  describe '#create_opt_in_tx', vcr: true do
-    context 'when opt_in tx has been created' do
-      let(:wallet) do
-        create(:wallet)
-      end
+        VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+          expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
+        end
 
-      before do
-        allow(subject).to receive(:provisioning_wallet).and_return(wallet)
-        allow(subject).to receive(:provisioning_tokens).and_return([create(:algorand_token)])
-      end
-
-      it 'calls service to sign the transaction' do
-        expect_any_instance_of(OreIdService).to receive(:create_tx)
-        expect(subject).to receive(:opt_in_created!)
-        subject.create_opt_in_tx
-        expect(TokenOptIn.last.wallet).to eq(wallet)
-        expect(BlockchainTransactionOptIn.last.blockchain_transactable.wallet).to eq(wallet)
-      end
-    end
-  end
-
-  describe '#sync_opt_in_tx' do
-    context 'when opt_in tx has been confirmed on blockchain' do
-      before do
-        allow(subject).to receive(:provisioning_wallet).and_return(Wallet.new)
-        allow_any_instance_of(Wallet).to receive(:token_opt_ins).and_return([TokenOptIn.new(status: :opted_in)])
-      end
-
-      specify do
-        expect(subject).to receive(:provisioned!)
-        subject.sync_opt_in_tx
+        expect(subject.reload.state).to eq 'pending'
       end
     end
   end
@@ -236,6 +175,42 @@ RSpec.describe OreIdAccount, type: :model do
       expect(subject).to receive(:unlinking!)
       expect(subject).to receive(:destroy!)
       subject.unlink
+    end
+  end
+
+  describe '#provisioned?' do
+    specify 'with no wallets' do
+      expect(subject.wallets).to be_empty
+      expect(subject.provisioned?).to be true
+    end
+
+    specify 'with wallet and no wallet_provision' do
+      subject.wallets << create(:wallet)
+      expect(subject.wallets.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions).to be_empty
+      expect(subject.provisioned?).to be true
+    end
+
+    specify 'with pending wallet_provision' do
+      wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+      create(:wallet_provision, wallet: wallet, state: :pending)
+      subject.wallets << wallet
+
+      expect(subject.wallets.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.first.state).to eq 'pending'
+      expect(subject.provisioned?).to be false
+    end
+
+    specify 'with provisioned wallet_provision' do
+      wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+      create(:wallet_provision, wallet: wallet, state: :provisioned)
+      subject.wallets << wallet
+
+      expect(subject.wallets.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.first.state).to eq 'provisioned'
+      expect(subject.provisioned?).to be true
     end
   end
 end
