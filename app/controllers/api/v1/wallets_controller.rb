@@ -13,7 +13,7 @@ class Api::V1::WalletsController < Api::V1::ApiController
   def create
     @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision)
 
-    if @wallet.errors.empty? && @wallet.persisted?
+    if @wallet.persisted?
       render 'show.json', status: :created
     else
       @errors = @wallet.errors
