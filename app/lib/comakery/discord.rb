@@ -1,5 +1,10 @@
 require 'rest-client'
 class Comakery::Discord
+
+  def self.enabled?
+    ENV['DISCORD_BOT_TOKEN'] && ENV['DISCORD_CLIENT_ID']
+  end
+
   def initialize(token = nil)
     @token = token ? "Bearer #{token}" : "Bot #{ENV['DISCORD_BOT_TOKEN']}"
   end

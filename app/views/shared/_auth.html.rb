@@ -14,13 +14,13 @@ class Views::Shared::Auth < Views::Projects::Base
       link_to '/auth/slack', method: :post, class: 'auth-button slack' do
         text 'Slack'
       end
-    end
+    end if Comakery::Slack.enabled?
 
     column('large-12 no-h-pad', style: 'margin-top: 10px') do
       link_to login_discord_path, method: :post, class: 'auth-button discord' do
         text 'Discord'
       end
-    end
+    end if Comakery::Discord.enabled?
 
     column('large-12 no-h-pad', style: 'margin-top: 10px') do
       label do
