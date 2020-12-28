@@ -21,6 +21,7 @@ class Token < ApplicationRecord
 
   scope :listed, -> { where unlisted: false }
   scope :available_for_algorand_opt_in, -> { where(_token_type: %w[asa algorand_security_token]) }
+  scope :available_for_provision, -> { where(_token_type: %w[asa algorand_security_token]) }
 
   enum denomination: {
     USD: 0,

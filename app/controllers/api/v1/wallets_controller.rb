@@ -11,14 +11,12 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/wallets
   def create
-    @wallet = account.wallets.new(wallet_params)
-    build_wallet_provisions if wallet.valid?
+    @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision)
 
-    if @wallet.errors.empty? && @wallet.save
+    if @wallet.persisted?
       render 'show.json', status: :created
     else
       @errors = @wallet.errors
-      @wallet.delete if @wallet.persisted?
 
       render 'api/v1/error.json', status: :bad_request
     end
@@ -83,46 +81,6 @@ class Api::V1::WalletsController < Api::V1::ApiController
     end
 
     def tokens_to_provision
-      @tokens_to_provision ||=
-        begin
-          token_ids = params.dig(:body, :data, :wallet, :tokens_to_provision)
-          return [] if token_ids.blank?
-
-          parsed_token_ids = JSON.parse(token_ids.to_s)
-          raise JSON::ParserError unless parsed_token_ids.is_a?(Array)
-
-          parsed_token_ids
-        end
-    rescue JSON::ParserError
-      wallet.errors.add(:tokens_to_provision, 'Wrong format. It must be an Array. For example: [1,5]')
-      @tokens_to_provision = []
-    end
-
-    def build_wallet_provisions
-      return unless valid_tokens_to_provision?
-
-      tokens_to_provision.each do |token_to_provision|
-        wallet.wallet_provisions.new(token_id: token_to_provision)
-      end
-    end
-
-    def valid_tokens_to_provision? # rubocop:todo Metrics/CyclomaticComplexity
-      return true if tokens_to_provision.empty?
-
-      tokens = Token.where(id: tokens_to_provision)
-
-      unless tokens.count == tokens_to_provision.count
-        unknown_tokens = tokens_to_provision.map(&:to_i) - tokens.pluck(:id)
-        wallet.errors.add(:tokens_to_provision, "Unknown token ids: #{unknown_tokens}")
-        return false
-      end
-
-      unless tokens.all? { |t| t.token_type.can_be_provisioned? }
-        wrong_tokens = tokens.filter { |t| !t.token_type.can_be_provisioned? }.map(&:id)
-        wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
-        return false
-      end
-
-      true
+      params.dig(:body, :data, :wallet, :tokens_to_provision)
     end
 end
