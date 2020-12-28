@@ -25,6 +25,7 @@ resource 'IX. Wallets' do
       response_field :state, "wallet state #{OreIdAccount.states.keys}", type: :string
       response_field :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", type: :string
       response_field :tokens, 'wallet tokens', type: :array
+      response_field :provision_tokens, 'wallet tokens which should be provisioned with state for each token', type: :array
       response_field :createdAt, 'creation timestamp', type: :string
       response_field :updatedAt, 'update timestamp', type: :string
     end
@@ -78,6 +79,20 @@ resource 'IX. Wallets' do
       end
     end
 
+    context '201' do
+      let!(:id) { account.managed_account_id }
+      let(:token) { create(:asa_token) }
+      let(:create_params) { { wallet: { blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]" } } }
+
+      example 'CREATE WALLET – ORE_ID WITH PROVISIONING' do
+        explanation 'Returns created wallet (See INDEX for response details)'
+
+        request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        do_request(request)
+        expect(status).to eq(201)
+      end
+    end
+
     context '400' do
       let!(:id) { account.managed_account_id }
       let!(:create_params) { { wallet: { address: build(:bitcoin_address_1) } } }
@@ -97,6 +112,18 @@ resource 'IX. Wallets' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
       parameter :wallet_id, 'wallet id', required: true, type: :string
+    end
+
+    with_options with_example: true do
+      response_field :id, 'wallet id', type: :integer
+      response_field :address, 'wallet address', type: :string
+      response_field :source, "wallet source #{Wallet.sources.keys}", type: :string
+      response_field :state, "wallet state #{OreIdAccount.states.keys}", type: :string
+      response_field :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", type: :string
+      response_field :tokens, 'wallet tokens', type: :array
+      response_field :provision_tokens, 'wallet tokens which should be provisioned with state for each token', type: :array
+      response_field :createdAt, 'creation timestamp', type: :string
+      response_field :updatedAt, 'update timestamp', type: :string
     end
 
     context '200' do
