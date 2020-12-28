@@ -206,6 +206,25 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         get :show, params: params
         expect(response).to have_http_status(:ok)
       end
+
+      context 'with tokens to provision' do
+        render_views
+        let(:token) { create(:asa_token) }
+        let(:wallet) { account.wallets.create(_blockchain: :algorand_test, address: nil, source: 'ore_id') }
+
+        it 'returns the wallet with provision_tokens filled' do
+          wallet.wallet_provisions << create(:wallet_provision, wallet: wallet, token: token)
+          params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'GET')
+          params[:account_id] = account.managed_account_id
+          params[:id] = wallet.id
+          params[:format] = :json
+
+          get :show, params: params
+
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body).fetch('provision_tokens')).to eq [{ 'token_id' => token.id, 'state' => 'pending' }]
+        end
+      end
     end
   end
 
