@@ -49,6 +49,15 @@ describe Comakery::Algorand::Tx, vcr: true do
     end
   end
 
+  describe '#to_object' do
+    subject { algorand_tx.to_object }
+
+    specify { expect(subject['type']).to eq('pay') }
+    specify { expect(subject['from']).to eq(algorand_tx.blockchain_transaction.source) }
+    specify { expect(subject['to']).to eq(algorand_tx.blockchain_transaction.destination) }
+    specify { expect(subject['amount']).to eq(algorand_tx.blockchain_transaction.amount) }
+  end
+
   describe '#valid?' do
     let(:amount) { 9000000 }
     let(:source) { build(:algorand_address_1) }
@@ -64,7 +73,8 @@ describe Comakery::Algorand::Tx, vcr: true do
         current_block: current_round
       )
     end
-    subject { algorand_tx.valid?(blockchain_transaction) }
+
+    subject { algorand_tx.valid? }
 
     context 'for incorrect source' do
       let(:source) { build(:algorand_address_2) }

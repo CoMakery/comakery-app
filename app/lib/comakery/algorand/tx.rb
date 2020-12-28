@@ -1,12 +1,13 @@
 class Comakery::Algorand::Tx
-  attr_reader :algorand, :hash
+  attr_reader :algorand, :hash, :blockchain_transaction
 
-  def initialize(blockchain, hash)
-    @algorand = Comakery::Algorand.new(blockchain, nil)
-    @hash = hash
+  def initialize(blockchain_transaction)
+    @blockchain_transaction = blockchain_transaction
+    @algorand = Comakery::Algorand.new(blockchain_transaction.token.blockchain, nil)
+    @hash = blockchain_transaction.tx_hash
   end
 
-  def to_object(blockchain_transaction)
+  def to_object
     {
       type: 'pay',
       from: blockchain_transaction.source,
@@ -52,27 +53,27 @@ class Comakery::Algorand::Tx
     confirmed_round.present? && current_round >= confirmed_round
   end
 
-  def valid?(blockchain_transaction)
+  def valid?(_)
     return false unless confirmed?
-    return false unless valid_addresses?(blockchain_transaction)
-    return false unless valid_amount?(blockchain_transaction)
-    return false unless valid_round?(blockchain_transaction)
+    return false unless valid_addresses?
+    return false unless valid_amount?
+    return false unless valid_round?
 
     true
   end
 
   private
 
-    def valid_addresses?(blockchain_transaction)
+    def valid_addresses?
       blockchain_transaction.source == sender_address &&
         blockchain_transaction.destination == receiver_address
     end
 
-    def valid_amount?(blockchain_transaction)
+    def valid_amount?
       blockchain_transaction.amount == amount
     end
 
-    def valid_round?(blockchain_transaction)
+    def valid_round?
       blockchain_transaction.current_block < confirmed_round
     end
 end

@@ -1,30 +1,31 @@
 class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   attr_reader :app_id
 
-  def initialize(blockchain, hash, app_id)
-    @algorand = Comakery::Algorand.new(blockchain, nil, app_id)
-    @hash = hash
-    @app_id = app_id
+  def initialize(blockchain_transaction)
+    @blockchain_transaction = blockchain_transaction
+    @algorand = Comakery::Algorand.new(blockchain_transaction.token.blockchain, nil)
+    @hash = blockchain_transaction.tx_hash
+    @app_id = blockchain_transaction.token.contract_address
   end
 
-  def to_object(blockchain_transaction)
+  def to_object
     {
       type: 'appl',
       from: blockchain_transaction.source,
       to: nil,
       amount: nil,
       appIndex: app_id,
-      appAccounts: app_accounts(blockchain_transaction),
-      appArgs: encode_app_args(app_args(blockchain_transaction)),
+      appAccounts: app_accounts,
+      appArgs: encode_app_args(app_args),
       appOnComplete: encode_app_transaction_on_completion(app_transaction_on_completion)
     }
   end
 
-  def app_accounts(_blockchain_transaction)
+  def app_accounts
     []
   end
 
-  def app_args(_blockchain_transaction)
+  def app_args
     []
   end
 
@@ -63,35 +64,27 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     transaction_data.dig('application-transaction', 'on-completion')
   end
 
-  def receiver_address
-    nil
-  end
-
-  def amount
-    nil
-  end
-
   def valid_app_id?
-    app_id.to_i == transaction_app_id
+    transaction_app_id == app_id.to_i
   end
 
-  def valid_app_accounts?(blockchain_transaction)
-    transaction_app_accounts == app_accounts(blockchain_transaction)
+  def valid_app_accounts?
+    transaction_app_accounts == app_accounts
   end
 
-  def valid_app_args?(blockchain_transaction)
-    transaction_app_args == app_args(blockchain_transaction)
+  def valid_app_args?
+    transaction_app_args == app_args
   end
 
   def valid_transaction_on_completion?
     transaction_on_completion == app_transaction_on_completion
   end
 
-  def valid?(blockchain_transaction)
+  def valid?(_)
     super \
     && valid_app_id? \
-    && valid_app_accounts?(blockchain_transaction) \
-    && valid_app_args?(blockchain_transaction) \
+    && valid_app_accounts? \
+    && valid_app_args? \
     && valid_transaction_on_completion?
   end
 end

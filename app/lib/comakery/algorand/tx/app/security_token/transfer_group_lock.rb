@@ -1,5 +1,5 @@
 class Comakery::Algorand::Tx::App::SecurityToken::TransferGroupLock < Comakery::Algorand::Tx::App
-  def app_args(blockchain_transaction)
+  def app_args
     [
       'transfer group',
       'lock',

@@ -41,11 +41,11 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
 
     def on_chain_algo
-      Comakery::Algorand::Tx.new(token.blockchain, tx_hash)
+      Comakery::Algorand::Tx.new(self)
     end
 
     def on_chain_asa
-      Comakery::Algorand::Tx::Asset.new(token.blockchain, tx_hash, contract_address)
+      Comakery::Algorand::Tx::Asset.new(self)
     end
 
     def on_chain_ast
@@ -60,15 +60,15 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
 
     def on_chain_ast_transfer
-      Comakery::Algorand::Tx::App::SecurityToken::Transfer.new(token.blockchain, tx_hash, contract_address)
+      Comakery::Algorand::Tx::App::SecurityToken::Transfer.new(self)
     end
 
     def on_chain_ast_burn
-      Comakery::Algorand::Tx::App::SecurityToken::Burn.new(token.blockchain, tx_hash, contract_address)
+      Comakery::Algorand::Tx::App::SecurityToken::Burn.new(self)
     end
 
     def on_chain_ast_mint
-      Comakery::Algorand::Tx::App::SecurityToken::Mint.new(token.blockchain, tx_hash, contract_address)
+      Comakery::Algorand::Tx::App::SecurityToken::Mint.new(self)
     end
 
     def populate_data

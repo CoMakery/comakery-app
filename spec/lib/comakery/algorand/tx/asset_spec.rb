@@ -50,6 +50,16 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
     end
   end
 
+  describe '#to_object' do
+    subject { algorand_asset_tx.to_object }
+
+    specify { expect(subject['type']).to eq('axfer') }
+    specify { expect(subject['from']).to eq(algorand_asset_tx.blockchain_transaction.source) }
+    specify { expect(subject['to']).to eq(algorand_asset_tx.blockchain_transaction.destination) }
+    specify { expect(subject['amount']).to eq(algorand_asset_tx.blockchain_transaction.amount) }
+    specify { expect(subject['assetId']).to eq(algorand_asset_tx.asset_id) }
+  end
+
   describe '#valid?' do
     let(:amount) { 400 }
     let(:source) { 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA' }

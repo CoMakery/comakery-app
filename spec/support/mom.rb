@@ -799,10 +799,7 @@ class Mom
     end
   end
 
-  def algorand_tx(**attrs)
-    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
-    hash = attrs[:hash] || 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A'
-
+  def algorand_tx(**_attrs)
     # From:
     # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
     # To:
@@ -810,14 +807,19 @@ class Mom
     # Amount:
     # 9 algos
 
-    Comakery::Algorand::Tx.new(blockchain, hash)
+    Comakery::Algorand::Tx.new(
+      create(
+        :blockchain_transaction,
+        token: create(:algorand_token),
+        amount: 9000000,
+        tx_hash: 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A',
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
   end
 
-  def algorand_asset_tx(**attrs)
-    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
-    hash = attrs[:hash] || 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ'
-    asset_id = attrs[:asset_id] || '13076367'
-
+  def algorand_asset_tx(**_attrs)
     # From:
     # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
     # To:
@@ -825,20 +827,58 @@ class Mom
     # Amount:
     # 4 CMTTEST tokens
 
-    Comakery::Algorand::Tx::Asset::OptIn.new(blockchain, hash, asset_id)
+    Comakery::Algorand::Tx::Asset::OptIn.new(
+      create(
+        :blockchain_transaction,
+        token: create(:asa_token, contract_address: '13076367'),
+        amount: 4000000,
+        tx_hash: 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ',
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
   end
 
-  def algorand_app_opt_in_tx(**attrs)
-    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
-    hash = attrs[:hash] || 'Y5HSTSGQMAGYJW4SXIWTGSJAVSN4LKKN3GNUFVFAS5QBOFOQ6KYQ'
-    app_id = attrs[:app_id] || '13258116'
-
+  def algorand_app_tx(**_attrs)
     # For:
     # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
     # Opt in to Algorand Security Token (ABCTEST)
 
     Comakery::Algorand::Tx::App::OptIn.new(blockchain, hash, app_id)
+
+    Comakery::Algorand::Tx::App::OptIn.new(
+      create(
+        :blockchain_transaction,
+        token: create(:algo_sec_token, contract_address: '13258116'),
+        amount: 4000000,
+        tx_hash: 'Y5HSTSGQMAGYJW4SXIWTGSJAVSN4LKKN3GNUFVFAS5QBOFOQ6KYQ',
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
   end
+
+  def algorand_app_burn_tx(**attrs); end
+
+  def algorand_app_freeze_tx(**attrs); end
+
+  def algorand_app_lock_until_tx(**attrs); end
+
+  def algorand_app_max_balance_tx(**attrs); end
+
+  def algorand_app_mint_tx(**attrs); end
+
+  def algorand_app_pause_tx(**attrs); end
+
+  def algorand_app_transfer_group_lock_tx(**attrs); end
+
+  def algorand_app_transfer_group_set_tx(**attrs); end
+
+  def algorand_app_transfer_tx(**attrs); end
+
+  def algorand_app_unfreeze_tx(**attrs); end
+
+  def algorand_app_unpause_tx(**attrs); end
 
   def bitcoin_address_1
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'

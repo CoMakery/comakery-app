@@ -101,7 +101,7 @@ class OreIdService
       broadcast: true,
       chain_network: transaction.token.blockchain.ore_id_name,
       return_signed_transaction: true,
-      transaction: Base64.encode64(transaction.on_chain.to_object(transaction).to_json),
+      transaction: Base64.encode64(transaction.on_chain.to_object.to_json),
       callback_url: callback_url,
       state: state
     }
@@ -131,7 +131,7 @@ class OreIdService
         broadcast: true,
         chain_network: transaction.token.blockchain.ore_id_name,
         return_signed_transaction: true,
-        transaction: Base64.encode64(transaction.on_chain.to_object(transaction).to_json)
+        transaction: Base64.encode64(transaction.on_chain.to_object.to_json)
       }
     end
 

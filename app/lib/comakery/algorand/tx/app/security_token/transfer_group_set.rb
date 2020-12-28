@@ -1,5 +1,5 @@
 class Comakery::Algorand::Tx::App::SecurityToken::TransferGroupSet < Comakery::Algorand::Tx::App
-  def app_args(blockchain_transaction)
+  def app_args
     [
       'transfer group',
       'set',
@@ -7,7 +7,7 @@ class Comakery::Algorand::Tx::App::SecurityToken::TransferGroupSet < Comakery::A
     ]
   end
 
-  def app_accounts(blockchain_transaction)
+  def app_accounts
     [
       blockchain_transaction.blockchain_transactable.account.address_for_blockchain(blockchain_transaction.token._blockchain)
     ]

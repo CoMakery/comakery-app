@@ -7,7 +7,7 @@ class BlockchainTransactionTransferRule < BlockchainTransaction
     @on_chain ||= if token._token_type_comakery_security_token?
       Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(token.blockchain.explorer_api_host, tx_hash)
     elsif token._token_type_algorand_security_token?
-      Comakery::Algorand::Tx::App::SecurityToken::TransferGroupLock.new(token.blockchain.explorer_api_host, tx_hash)
+      Comakery::Algorand::Tx::App::SecurityToken::TransferGroupLock.new(self)
     end
   end
 
