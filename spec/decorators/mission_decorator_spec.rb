@@ -9,7 +9,7 @@ describe MissionDecorator do
 
       expect(props[:name]).to eq(mission.name)
       expect(props[:url]).to include(mission.id.to_s)
-      expect(props[:image_url]).to include('logo.png')
+      expect(props[:image_url]).to include('dummy_image.png')
     end
   end
 end

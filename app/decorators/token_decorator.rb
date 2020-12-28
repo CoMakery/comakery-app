@@ -24,6 +24,10 @@ class TokenDecorator < Draper::Decorator
   end
 
   def logo_url(size = 100)
-    helpers.attachment_url(self, :logo_image, :fill, size, size, fallback: 'defaul_project.jpg')
+    GetImageVariantPath.call(
+      attachment: logo_image,
+      resize_to_fill: [size, size],
+      fallback: helpers.image_url('default_project.jpg')
+    ).path
   end
 end

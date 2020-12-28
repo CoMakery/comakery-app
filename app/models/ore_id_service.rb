@@ -116,7 +116,7 @@ class OreIdService
         'name' => account.name,
         'user_name' => account.nickname || '',
         'email' => account.email,
-        'picture' => account.image ? Refile.attachment_url(account, :image) : '',
+        'picture' => Attachment::GetPath.call(attachment: account.image).path,
         'user_password' => ore_id.temp_password,
         'phone' => '',
         'account_type' => 'native'

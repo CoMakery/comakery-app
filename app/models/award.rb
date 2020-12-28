@@ -15,8 +15,10 @@ class Award < ApplicationRecord
   STARTED_TASKS_PER_CONTRIBUTOR = 5
   QUANTITY_PRECISION = 2
 
-  attachment :image, type: :image
-  attachment :submission_image, type: :image
+  # attachment :image, type: :image
+  # attachment :submission_image, type: :image
+  has_one_attached :image
+  has_one_attached :submission_image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
   add_special_orders %w[issuer_first_name]
@@ -103,6 +105,8 @@ class Award < ApplicationRecord
       none
     end
   }
+
+  scope :with_all_attached_images, -> { with_attached_image.with_attached_submission_image }
 
   enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
   enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }

@@ -4,7 +4,8 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
-  attachment :image, type: :image
+  # attachment :image, type: :image
+  has_one_attached :image
 
   include EthereumAddressable
 

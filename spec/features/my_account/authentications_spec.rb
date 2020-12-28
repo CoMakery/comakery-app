@@ -40,12 +40,12 @@ feature 'my account', js: true do
   end
 
   scenario 'show account image' do
-    account.image = Refile::FileDouble.new('dummy', 'avatar.png', content_type: 'image/png')
+    account.image = dummy_image
     account.save
     login(account)
     visit show_account_path
 
-    expect(page).to have_css("img[src*='avatar.png']")
+    expect(page).to have_css("img[src*='dummy_image']")
   end
 
   scenario 'show account name' do
