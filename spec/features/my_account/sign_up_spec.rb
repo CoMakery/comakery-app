@@ -65,15 +65,7 @@ describe 'my account', js: true do
     fill_in 'Password', with: '12345678'
     page.check('account_agreed_to_user_agreement')
     click_on 'Create Your Account'
-    expect(page).to have_content('Build Your Profile')
-  end
-
-  scenario 'show email input field if email is empty' do
-    # rubocop:disable Rails/SkipsModelValidations
-    confirmed_account.update_column('email', nil)
-    login(confirmed_account)
-    visit build_profile_accounts_path
-    expect(page).to have_content('E-mail *')
+    expect(page).to have_content('Setup Your Account')
   end
 
   scenario 'Sign up flow with metamask' do
@@ -82,8 +74,8 @@ describe 'my account', js: true do
     login(metamask_account)
     visit build_profile_accounts_path
     expect(page).not_to have_content("can't be blank")
-    click_on 'Save'
-    expect(page).to have_content("Email can't be blank, Email is invalid")
+    click_on 'Get Started'
+    expect(page).to have_content("First name can't be blank")
   end
 
   scenario 'featured page is available after signup' do
