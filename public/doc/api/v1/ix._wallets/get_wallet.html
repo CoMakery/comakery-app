@@ -145,6 +145,89 @@ table th, table td {
             </tbody>
           </table>
 
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">wallet id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">address</span>
+                </td>
+                <td>
+                  <span class="description">wallet address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">source</span>
+                </td>
+                <td>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">state</span>
+                </td>
+                <td>
+                  <span class="description">wallet state [&quot;pending&quot;, &quot;pending_manual&quot;, &quot;unclaimed&quot;, &quot;ok&quot;, &quot;unlinking&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain</span>
+                </td>
+                <td>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;, &quot;algorand_test&quot;, &quot;algorand_beta&quot;]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens</span>
+                </td>
+                <td>
+                  <span class="description">wallet tokens</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">provision_tokens</span>
+                </td>
+                <td>
+                  <span class="description">wallet tokens which should be provisioned with state for each token</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">createdAt</span>
+                </td>
+                <td>
+                  <span class="description">creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">updatedAt</span>
+                </td>
+                <td>
+                  <span class="description">update timestamp</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Request</h3>
 
@@ -152,30 +235,33 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/427a8bc9-615b-46cc-811b-74953165477b/wallets/22?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F427a8bc9-615b-46cc-811b-74953165477b%2Fwallets%2F22&amp;body[method]=GET&amp;body[nonce]=ad49e23ec8672bb704f8b8ee67b2edf6&amp;body[timestamp]=1604580145&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=bhfWpCH0ZURH2XXdA1MGoNrDrxK0QpKLkmBfFiJjnr6Y0jA58o4tlQLOYBqPI66QvQmxBLzS8oK4CON%2FpAt2Dg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/3ace718d-80da-4231-b365-c1ee4e7b9aad/wallets/23?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F3ace718d-80da-4231-b365-c1ee4e7b9aad%2Fwallets%2F23&amp;body[method]=GET&amp;body[nonce]=17f959e1aeaba4ce577be719fb60be2e&amp;body[timestamp]=1609148082&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=bYQjFhLcaCBV2JPyrdlZoLzpr0v%2FELZJ09f5chTBH9qXEiEygmk1Z949yj5qrl7C%2FmwkJTOOSKTjxF7KUmP5Dw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/427a8bc9-615b-46cc-811b-74953165477b/wallets/22&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;ad49e23ec8672bb704f8b8ee67b2edf6&quot;, &quot;timestamp&quot;=&gt;&quot;1604580145&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;bhfWpCH0ZURH2XXdA1MGoNrDrxK0QpKLkmBfFiJjnr6Y0jA58o4tlQLOYBqPI66QvQmxBLzS8oK4CON/pAt2Dg==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/3ace718d-80da-4231-b365-c1ee4e7b9aad/wallets/23&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;17f959e1aeaba4ce577be719fb60be2e&quot;, &quot;timestamp&quot;=&gt;&quot;1609148082&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;bYQjFhLcaCBV2JPyrdlZoLzpr0v/ELZJ09f5chTBH9qXEiEygmk1Z949yj5qrl7C/mwkJTOOSKTjxF7KUmP5Dw==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;fcbdea3a5bff34c1a5b9f42520cf7021&quot;
-Last-Modified: Thu, 05 Nov 2020 12:42:25 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;72012287be4efa124622853c44bc25bc&quot;
+Last-Modified: Mon, 28 Dec 2020 09:34:41 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 22,
+  &quot;id&quot;: 23,
   &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
   &quot;source&quot;: &quot;user_provided&quot;,
-  &quot;state&quot;: &quot;ok&quot;,
-  &quot;createdAt&quot;: &quot;2020-11-05T12:42:25.011Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-11-05T12:42:25.011Z&quot;,
+  &quot;state&quot;: null,
+  &quot;createdAt&quot;: &quot;2020-12-28T09:34:41.999Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-12-28T09:34:41.999Z&quot;,
   &quot;blockchain&quot;: &quot;bitcoin&quot;,
   &quot;tokens&quot;: [
+
+  ],
+  &quot;provisionTokens&quot;: [
 
   ]
 }</pre>
