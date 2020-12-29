@@ -799,14 +799,101 @@ class Mom
     end
   end
 
-  def algorand_tx(**_attrs)
-    # From:
-    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
-    # To:
-    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
-    # Amount:
-    # 9 algos
+  def algo_sec_project_dummy_setup
+    project = create(:project, token: create(:algo_sec_token, contract_address: '13258116'))
+    admin_wallet = create(:wallet, _blockchain: project.token._blockchain, address: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU')
+    contributor_wallet = create(:wallet, _blockchain: project.token._blockchain, address: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA')
 
+    [project, admin_wallet.account, contributor_wallet.account]
+  end
+
+  def algo_sec_dummy_transfer(type: 'earned', amount: 0)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    create(
+      :transfer,
+      issuer: admin,
+      account: contributor,
+      amount: amount,
+      transfer_type: project.transfer_types.find_or_create_by(name: type),
+      award_type: project.default_award_type
+    )
+  end
+
+  def algo_sec_dummy_max_balance(amount: 0)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    AccountTokenRecord.create(
+      account: contributor,
+      token: project.token,
+      reg_group: create(:reg_group, token: project.token),
+      max_balance: amount,
+      balance: 0,
+      account_frozen: false,
+      lockup_until: 1.day.ago
+    )
+  end
+
+  def algo_sec_dummy_lockup_until(lockup_until: 0)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    AccountTokenRecord.create(
+      account: contributor,
+      token: project.token,
+      reg_group: create(:reg_group, token: project.token),
+      max_balance: 0,
+      balance: 0,
+      account_frozen: false,
+      lockup_until: lockup_until
+    )
+  end
+
+  def algo_sec_dummy_frozen(frozen: false)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    AccountTokenRecord.create(
+      account: contributor,
+      token: project.token,
+      reg_group: create(:reg_group, token: project.token),
+      max_balance: 0,
+      balance: 0,
+      account_frozen: frozen,
+      lockup_until: 1.day.ago
+    )
+  end
+
+  def algo_sec_dummy_reg_group(reg_group: 0)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    AccountTokenRecord.create(
+      account: contributor,
+      token: project.token,
+      reg_group: create(:reg_group, token: project.token, blockchain_id: reg_group),
+      max_balance: 0,
+      balance: 0,
+      account_frozen: false,
+      lockup_until: 1.day.ago
+    )
+  end
+
+  def algo_sec_dummy_transfer_rule(from: 0, to: 0, lockup_until: 0)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    TransferRule.new(
+      token: project.token,
+      sending_group: create(:reg_group, token: project.token, blockchain_id: from),
+      receiving_group: create(:reg_group, token: project.token, blockchain_id: to),
+      lockup_until: lockup_until
+    )
+  end
+
+  def algo_sec_dummy_pause(pause: false)
+    project, admin, contributor = algo_sec_project_dummy_setup
+
+    # TODO
+  end
+
+  def algorand_tx
     Comakery::Algorand::Tx.new(
       create(
         :blockchain_transaction,
@@ -819,14 +906,7 @@ class Mom
     )
   end
 
-  def algorand_asset_tx(**_attrs)
-    # From:
-    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
-    # To:
-    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
-    # Amount:
-    # 4 CMTTEST tokens
-
+  def algorand_asset_tx
     Comakery::Algorand::Tx::Asset::OptIn.new(
       create(
         :blockchain_transaction,
@@ -839,13 +919,7 @@ class Mom
     )
   end
 
-  def algorand_app_tx(**_attrs)
-    # For:
-    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
-    # Opt in to Algorand Security Token (ABCTEST)
-
-    Comakery::Algorand::Tx::App::OptIn.new(blockchain, hash, app_id)
-
+  def algorand_app_tx
     Comakery::Algorand::Tx::App::OptIn.new(
       create(
         :blockchain_transaction,
@@ -858,27 +932,117 @@ class Mom
     )
   end
 
-  def algorand_app_burn_tx(**attrs); end
+  def algorand_app_opt_in_tx
+    Comakery::Algorand::Tx::App::OptIn.new(
+      create(
+        :blockchain_transaction,
+        token: create(:algo_sec_token, contract_address: '13258116'),
+        amount: 4000000,
+        tx_hash: 'Y5HSTSGQMAGYJW4SXIWTGSJAVSN4LKKN3GNUFVFAS5QBOFOQ6KYQ',
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
+  end
 
-  def algorand_app_freeze_tx(**attrs); end
+  def algorand_app_burn_tx
+    Comakery::Algorand::Tx::App::Burn.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_transfer(type: 'burn', amount: 1),
+        tx_hash: 'KUSAH7MH26I7LGG25VNPTOUMTLQEMXZN2HZQEDQ7FQYJQZPKFX6Q'
+      )
+    )
+  end
 
-  def algorand_app_lock_until_tx(**attrs); end
+  def algorand_app_freeze_tx
+    Comakery::Algorand::Tx::App::Freeze.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_frozen(frozen: true),
+        tx_hash: 'TODO'
+      )
+    )
+  end
 
-  def algorand_app_max_balance_tx(**attrs); end
+  def algorand_app_lock_until_tx
+    Comakery::Algorand::Tx::App::LockUntil.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_lockup_until(lockup_until: 0),
+        tx_hash: 'TODO'
+      )
+    )
+  end
 
-  def algorand_app_mint_tx(**attrs); end
+  def algorand_app_max_balance_tx
+    Comakery::Algorand::Tx::App::MaxBalance.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_max_balance(amount: 100),
+        tx_hash: 'SZ7UINLCWQU5I4TZEXWQ6GYSFHPKKI63GL73JOSTFDCL7BCYFKEQ',
+        source: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'
+      )
+    )
+  end
 
-  def algorand_app_pause_tx(**attrs); end
+  def algorand_app_mint_tx
+    Comakery::Algorand::Tx::App::Mint.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_transfer(type: 'mint', amount: 15),
+        tx_hash: 'SXBTTQI4PN64RH5H6IYAQ5WSULD5UVQ563NK4B4RF2SXY6GUNRVA'
+      )
+    )
+  end
 
-  def algorand_app_transfer_group_lock_tx(**attrs); end
+  def algorand_app_pause_tx
+    # TODO
+  end
 
-  def algorand_app_transfer_group_set_tx(**attrs); end
+  def algorand_app_transfer_group_lock_tx
+    Comakery::Algorand::Tx::App::TransferGroupSet.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_transfer_rule(from: 0, to: 0, lockup_until: 0),
+        tx_hash: 'TODO'
+      )
+    )
+  end
 
-  def algorand_app_transfer_tx(**attrs); end
+  def algorand_app_transfer_group_set_tx
+    Comakery::Algorand::Tx::App::TransferGroupSet.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_reg_group(reg_group: 0),
+        tx_hash: 'TODO'
+      )
+    )
+  end
 
-  def algorand_app_unfreeze_tx(**attrs); end
+  def algorand_app_transfer_tx
+    Comakery::Algorand::Tx::App::Transfer.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_transfer(amount: 0),
+        tx_hash: 'TODO'
+      )
+    )
+  end
 
-  def algorand_app_unpause_tx(**attrs); end
+  def algorand_app_unfreeze_tx
+    Comakery::Algorand::Tx::App::Unfreeze.new(
+      create(
+        :blockchain_transaction,
+        blockchain_transactable: algo_sec_dummy_frozen(frozen: false),
+        tx_hash: 'TODO'
+      )
+    )
+  end
+
+  def algorand_app_unpause_tx
+    # TODO
+  end
 
   def bitcoin_address_1
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
