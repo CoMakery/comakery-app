@@ -6,7 +6,7 @@ class AwardsController < ApplicationController
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_create, only: %i[create new]
   before_action :authorize_award_show, only: %i[show]
-  before_action :authorize_award_edit, only: %i[edit update]
+  before_action :authorize_award_edit, only: %i[edit update send_award]
   before_action :authorize_award_assign, only: %i[assign]
   before_action :authorize_award_start, only: %i[start]
   before_action :authorize_award_submit, only: %i[submit]
@@ -228,7 +228,7 @@ class AwardsController < ApplicationController
   private
 
     def set_project
-      @project = Project.find(params[:project_id])&.decorate
+      @project = @project_scope.find_by(id: params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
     end
 
@@ -299,11 +299,11 @@ class AwardsController < ApplicationController
     def set_default_project_filter
       default_project_id = ENV['DEFAULT_PROJECT_ID']
 
-      @project = Project.find_by(id: default_project_id) if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
+      @project = @project_scope.find_by(id: default_project_id) if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
     end
 
     def set_project_filter
-      @project = (Project.find_by(id: params[:project_id]) || @project)
+      @project = (@project_scope.find_by(id: params[:project_id]) || @project)
     end
 
     def run_award_expiration

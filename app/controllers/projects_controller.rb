@@ -123,7 +123,7 @@ class ProjectsController < ApplicationController
   end
 
   def update_status
-    @project = Project.find(params[:project_id])
+    @project = @project_scope.find_by(id: params[:project_id])
     authorize @project
 
     begin
