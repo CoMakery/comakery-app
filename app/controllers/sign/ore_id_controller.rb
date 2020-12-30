@@ -16,8 +16,15 @@ class Sign::OreIdController < ApplicationController
 
   # GET /sign/ore_id/receive
   def receive
-    verify_errorless or return
-    verify_received_account or return
+    unless verify_errorless
+      redirect_to wallets_url
+      return
+    end
+
+    unless verify_received_account
+      head 401
+      return
+    end
 
     authorize received_transaction.blockchain_transactable, :pay?
 
