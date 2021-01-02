@@ -1,6 +1,6 @@
 class AddIndexes < ActiveRecord::Migration[4.2]
   def change
-    add_index :account_roles, :account_id
+    # add_index :account_roles, :account_id
 
     add_index :award_types, :project_id
 
