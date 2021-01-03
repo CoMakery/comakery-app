@@ -142,6 +142,30 @@ describe('ProjectForm', () => {
     )).toBe(true)
   })
 
+  it('hides channels section if Discord and Slack disabled', () => {
+    const wrapper = mount(<ProjectForm discordEnabled={false} slackEnabled={false}  />)
+
+    expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(false)
+  })
+
+  it('shows channels section if Discord enabled', () => {
+    const wrapper = mount(<ProjectForm discordEnabled={true} slackEnabled={false}  />)
+
+    expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(true)
+  })
+
+  it('shows channels section if Slack enabled', () => {
+    const wrapper = mount(<ProjectForm discordEnabled={false} slackEnabled={true}  />)
+
+    expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(true)
+  })
+
+  it('shows channels section if Discord and Slack enabled', () => {
+    const wrapper = mount(<ProjectForm discordEnabled={true} slackEnabled={true}  />)
+
+    expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(true)
+  })
+
   it('renders correctly with teams', () => {
     const teams = [
       {

@@ -45,6 +45,6 @@ describe 'project channels', js: true do
     visit new_project_path
     expect(page).not_to have_selector('.project-form--form--channels--add')
     expect(page).not_to have_selector('.project-form--form--channels--channel')
-    expect(page).to have_content 'Start adding channels by signing in with Slack or Discord'
+    expect(page).not_to have_content 'Start adding channels by signing in with Slack or Discord'
   end
 end

@@ -24,4 +24,13 @@ module ApplicationHelper
       true
     end
   end
+
+  def enabled_auth_labels
+    options = []
+    options << 'Slack' if Comakery::Slack.enabled?
+    options << 'Metamask'
+    options << 'Discord' if Comakery::Discord.enabled?
+    last = options.pop
+    [options.join(', '), last].join(' or ')
+  end
 end

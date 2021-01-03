@@ -222,7 +222,9 @@ class ProjectsController < ApplicationController
         csrf_token: form_authenticity_token,
         project_for_header: project_header,
         mission_for_header: @project&.mission&.decorate&.header_props,
-        is_whitelabel: @whitelabel_mission.present?
+        is_whitelabel: @whitelabel_mission.present?,
+        discord_enabled: Comakery::Discord.enabled?,
+        slack_enabled: Comakery::Slack.enabled?
       }
     end
     # rubocop:enable Metrics/PerceivedComplexity
