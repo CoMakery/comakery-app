@@ -68,10 +68,7 @@ class AwardsController < ApplicationController
     if !@award.image && params[:task][:image_from_id]
       source_award = Award.find(params[:task][:image_from_id].to_i)
       if policy(source_award.project).edit?
-        @award.image_id = source_award.image_id
-        @award.image_filename = source_award.image_filename
-        @award.image_content_size = source_award.image_content_size
-        @award.image_content_type = source_award.image_content_type
+        @award.image.attach(source_award.image.blob) if source_award.image.attached?
       end
     end
 
@@ -315,7 +312,16 @@ class AwardsController < ApplicationController
     end
 
     def set_awards
-      @awards = current_account.accessable_awards(projects_interested).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards =
+        current_account
+        .accessable_awards(projects_interested)
+        .includes(
+          :specialty, :issuer, :award_type, :cloned_from,
+          project: [:account, :mission, :token, :admins, channels: [:team]],
+          account: [image_attachment: :blob]
+        ).filtered_for_view(@filter, current_account)
+        .order(expires_at: :asc, updated_at: :desc)
+        .with_all_attached_images
 
       @awards = @awards.where(award_type: AwardType.where(project: @project)) if @project
     end
@@ -450,9 +456,13 @@ class AwardsController < ApplicationController
     end
 
     def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
+      award_image_path = GetImageVariantPath.call(
+        attachment: (@award || @award_type.awards.new).image,
+        resize_to_fill: [300, 300]
+      ).path
       @props = {
         task: (@award || @award_type.awards.new).serializable_hash&.merge(
-          image_url: Refile.attachment_url(@award || @award_type.awards.new, :image, :fill, 300, 300)
+          image_url: award_image_path
         ),
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,

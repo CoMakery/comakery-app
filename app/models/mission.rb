@@ -1,11 +1,16 @@
 class Mission < ApplicationRecord
   default_scope { order(display_order: :asc) }
 
-  attachment :logo
-  attachment :image
-  attachment :whitelabel_logo
-  attachment :whitelabel_logo_dark
-  attachment :whitelabel_favicon
+  # attachment :logo
+  # attachment :image
+  # attachment :whitelabel_logo
+  # attachment :whitelabel_logo_dark
+  # attachment :whitelabel_favicon
+  has_one_attached :logo
+  has_one_attached :image
+  has_one_attached :whitelabel_logo
+  has_one_attached :whitelabel_logo_dark
+  has_one_attached :whitelabel_favicon
 
   has_many :projects, inverse_of: :mission # rubocop:todo Rails/HasManyOrHasOneDependent
   # rubocop:todo Rails/InverseOf
@@ -26,6 +31,14 @@ class Mission < ApplicationRecord
 
   enum status: { active: 0, passive: 1 }
 
+  scope :with_all_attached_images, lambda {
+    with_attached_logo
+      .with_attached_image
+      .with_attached_whitelabel_logo
+      .with_attached_whitelabel_logo_dark
+      .with_attached_whitelabel_favicon
+  }
+
   after_create :assign_display_order
   after_save :set_whitelabel_for_projects
 
@@ -38,11 +51,12 @@ class Mission < ApplicationRecord
   before_save :populate_api_key, if: -> { whitelabel }
 
   def serialize
-    as_json(only: %i[id name token_id subtitle description status display_order]).merge(
-      logo_preview: logo.present? ? Refile.attachment_url(self, :logo, :fill, 150, 100) : nil,
-      image_preview: image.present? ? Refile.attachment_url(self, :image, :fill, 100, 100) : nil,
-      stats: stats
-    )
+    as_json(only: %i[id name token_id subtitle description status display_order])
+      .merge(
+        logo_preview: GetImageVariantPath.call(attachment: logo, resize_to_fill: [150, 100]).path,
+        image_preview: GetImageVariantPath.call(attachment: image, resize_to_fill: [100, 100]).path,
+        stats: stats
+      )
   end
 
   def stats

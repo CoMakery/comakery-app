@@ -1,4 +1,3 @@
-require 'refile/file_double'
 require 'webmock/rspec'
 include WebMock::API # rubocop:todo Style/MixinUsage
 
@@ -356,8 +355,8 @@ class Mom
       maximum_tokens: 1_000_000_000_000_000_000,
       token: create(:token),
       mission: create(:mission),
-      square_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
-      panoramic_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
+      square_image: dummy_image,
+      panoramic_image: dummy_image
     }
     Project.new(defaults.merge(attrs))
   end
@@ -366,7 +365,7 @@ class Mom
     defaults = {
       name: "Token-#{SecureRandom.hex(20)}",
       symbol: "TKN#{SecureRandom.hex(20)}",
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false
     }
 
@@ -438,7 +437,7 @@ class Mom
     defaults = {
       name: "Algorand-#{SecureRandom.hex(20)}",
       symbol: 'ALGO',
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
       _token_type: 'algo'
@@ -452,7 +451,7 @@ class Mom
       name: "Asa-#{SecureRandom.hex(20)}",
       symbol: "TKN-#{SecureRandom.hex(20)}",
       contract_address: attrs[:contract_address] || '13076367',
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
       _token_type: 'asa'
@@ -470,7 +469,7 @@ class Mom
       name: "Asa-#{SecureRandom.hex(20)}",
       symbol: "TKN-#{SecureRandom.hex(20)}",
       contract_address: attrs[:contract_address] || '13258116',
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
       _token_type: 'algorand_security_token'
@@ -620,8 +619,8 @@ class Mom
       name: 'test1',
       subtitle: 'test1',
       description: 'test1',
-      image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
-      logo: Refile::FileDouble.new('dummy_logo', 'logo.png', content_type: 'image/png')
+      image: dummy_image,
+      logo: dummy_image
     }
     Mission.new(defaults.merge(attrs))
   end
@@ -928,5 +927,8 @@ def create(thing, *args)
 end
 
 def dummy_image
-  Refile::FileDouble.new('dummy_image', 'dummy_image.png', content_type: 'image/png')
+  Rack::Test::UploadedFile.new(
+    Rails.root.join('spec/fixtures/dummy_image.png').to_s,
+    'image/png'
+  )
 end

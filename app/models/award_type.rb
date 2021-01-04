@@ -2,7 +2,8 @@ class AwardType < ApplicationRecord
   belongs_to :project, touch: true
   has_many :awards, dependent: :restrict_with_error
 
-  attachment :diagram, type: :image
+  # attachment :diagram, type: :image
+  has_one_attached :diagram
 
   validates :project, presence: true
   validates :name, length: { maximum: 100 }

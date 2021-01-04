@@ -17,7 +17,12 @@ class Api::V1::ProjectsController < Api::V1::ApiController
   private
 
     def projects
-      @projects ||= paginate(project_scope.includes(:token, :admins, :account, :transfer_types))
+      @projects ||=
+        paginate(
+          project_scope
+            .with_all_attached_images
+            .includes(:admins, :account, :transfer_types, token: [logo_image_attachment: :blob])
+        )
     end
 
     def project

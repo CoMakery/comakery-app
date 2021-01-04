@@ -3,7 +3,8 @@ class Token < ApplicationRecord
 
   nilify_blanks
 
-  attachment :logo_image, type: :image
+  # attachment :logo_image, type: :image
+  has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :interested
