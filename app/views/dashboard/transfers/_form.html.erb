@@ -3,9 +3,9 @@
     <label>create transfer</label>
 
     <div class="transfers-table__transfer__name">
-      <label>type</label>
+      <label>Category</label>
 
-      <%= f.select(:transfer_type_id, options_for_select(@project.transfer_types.collect { |t| [t.name.titlecase, t.id] }), { include_blank: 'Type' }, { required: true }) %>
+      <%= f.select(:transfer_type_id, options_for_select(@project.transfer_types.collect { |t| [t.name.titlecase, t.id] }), { include_blank: 'Category' }, { required: true }) %>
     </div>
 
     <div class="transfers-table__transfer__account">
