@@ -1,5 +1,6 @@
 import { Controller } from 'stimulus'
 import { Decimal } from 'decimal.js'
+import * as Turbolinks from 'turbolinks'
 
 export default class extends Controller {
   static targets = [ 'amount', 'quantity', 'total', 'form', 'formChild', 'create' ]
