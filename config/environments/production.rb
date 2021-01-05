@@ -119,4 +119,6 @@ Rails.application.configure do
   end
 
   config.active_job.queue_adapter = :sidekiq
+  
+  config.static_cache_control = 'public, s-maxage=2592000, max-age=86400'
 end
