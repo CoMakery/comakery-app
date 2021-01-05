@@ -61,13 +61,16 @@
       "required": false
     },
     "DISCORD_BOT_TOKEN": {
-      "description": "Discord API bot token"
+      "description": "Discord API bot token",
+      "required": false
     },
     "DISCORD_CLIENT_ID": {
-      "description": "Discord API client id"
+      "description": "Discord API client id",
+      "required": false
     },
     "DISCORD_CLIENT_SECRET": {
-      "description": "Discord API client secret"
+      "description": "Discord API client secret",
+      "required": false
     },
     "INFURA_PROJECT_ID": {
       "description": "Infura.io project id"
@@ -79,10 +82,12 @@
       "description": "Aikon ORE ID API service key"
     },
     "SLACK_API_KEY": {
-      "description": "Slack API key"
+      "description": "Slack API key",
+      "required": false
     },
     "SLACK_API_SECRET": {
-      "description": "Slack API secret"
+      "description": "Slack API secret",
+      "required": false
     },
     "REFILE_S3_REGION": {
       "description": "AWS S3 region name to store user uploads"
