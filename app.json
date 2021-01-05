@@ -40,6 +40,9 @@
     },
     {
       "plan": "sendgrid:starter"
+    },
+    {
+      "plan": "edge:hobby"
     }
   ],
   "env": {
@@ -96,10 +99,6 @@
     },
     "BASIC_AUTH": {
       "description": "Protect app with basic auth credentials (login:password)",
-      "required": false
-    },
-    "CLOUDFRONT_HOST": {
-      "description": "Cloudfront host to cache assets",
       "required": false
     },
     "GOOGLE_ANALYTICS": {

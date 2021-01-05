@@ -38,9 +38,9 @@ module Comakery
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'].presence || 'https://'
 
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
-    cloudfront_host = ENV['CLOUDFRONT_HOST']
-    if cloudfront_host.present?
-      config.action_controller.asset_host = cloudfront_host
+    cdn_host = ENV['EDGE_URL']
+    if cdn_host.present?
+      config.action_controller.asset_host = cdn_host
       config.font_assets.origin = "*"
     end
 
