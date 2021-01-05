@@ -606,6 +606,7 @@ ActiveRecord::Schema.define(version: 2021_01_09_093316) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ore_id_account_id"
+    t.string "name"
     t.boolean "primary_wallet", default: false
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
     t.index ["account_id", "primary_wallet", "_blockchain"], name: "index_wallets_on_account_id_and_primary_wallet_and__blockchain", unique: true, where: "(primary_wallet IS TRUE)"

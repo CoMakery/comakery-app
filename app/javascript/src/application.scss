@@ -75,8 +75,8 @@ label {
   font-family: Montserrat, sans-serif;
 }
 
-input:matches([type="button"], [type="submit"], [type="reset"]),
-button {
+input:not(.btn):matches([type="button"], [type="submit"], [type="reset"]),
+button:not(.btn) {
   height: 30px;
   padding: 6px 12px;
   margin-right: 15px;
@@ -111,21 +111,21 @@ input::-webkit-search-decoration {
   -webkit-appearance: textfield;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="file"],
-input[type="date"],
-input[type="datetime-local"],
-input[type="month"],
-input[type="number"],
-input[type="range"],
-input[type="search"],
-input[type="tel"],
-input[type="time"],
-input[type="url"],
-input[type="week"],
-select {
+input:not(.form-control)[type="text"],
+input:not(.form-control)[type="email"],
+input:not(.form-control)[type="password"],
+input:not(.form-control)[type="file"],
+input:not(.form-control)[type="date"],
+input:not(.form-control)[type="datetime-local"],
+input:not(.form-control)[type="month"],
+input:not(.form-control)[type="number"],
+input:not(.form-control)[type="range"],
+input:not(.form-control)[type="search"],
+input:not(.form-control)[type="tel"],
+input:not(.form-control)[type="time"],
+input:not(.form-control)[type="url"],
+input:not(.form-control)[type="week"],
+select:not(.form-control) {
   font-size: 14px;
   height: 35px;
   padding: 9px 16px 8px 15px;
@@ -1694,7 +1694,6 @@ button.reg-groups-create,
 }
 
 .header--logo {
-  height: 47px;
   padding: 20px;
 }
 
@@ -3901,10 +3900,9 @@ input.button--right-space {
 
 .flash-message-container {
   position: fixed;
-  z-index: 99;
   top: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 10001;
 }
 
 .flash-message {
@@ -5806,3 +5804,5 @@ a:focus {
 .pagination a:hover {
   text-decoration: underline;
 }
+
+@import 'bootstrap_custom';

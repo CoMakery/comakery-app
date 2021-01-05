@@ -95,7 +95,7 @@ resource 'IX. Wallets' do
 
     context '400' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallets: [{ address: build(:bitcoin_address_1) }] } }
+      let!(:create_params) { { wallets: [{ address: build(:bitcoin_address_1), name: 'Wallet' }] } }
 
       example 'CREATE WALLET – ERROR' do
         explanation 'Returns an array of errors'

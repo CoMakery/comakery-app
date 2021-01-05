@@ -23,7 +23,7 @@ class Auth::EthController < ApplicationController
 
       if account.new_record?
         account.save(validate: false)
-        account.wallets.create!(_blockchain: :ethereum, address: Eth::Address.new(auth_params[:public_address]).checksummed)
+        account.wallets.create!(name: 'Ethereum', _blockchain: :ethereum, address: Eth::Address.new(auth_params[:public_address]).checksummed)
       end
 
       session[:account_id] = account.id

@@ -134,7 +134,8 @@ RSpec.describe OreIdAccount, type: :model do
         address: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
         _blockchain: 'algorand_test',
         source: 'ore_id',
-        ore_id_account: subject
+        ore_id_account: subject,
+        name: 'Algorand Test'
       )
     end
     let(:tokens) { [create(:asa_token), create(:algo_sec_token)] }
