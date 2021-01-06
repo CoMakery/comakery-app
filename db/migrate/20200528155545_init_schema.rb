@@ -1,4 +1,4 @@
-class InitSchema < ActiveRecord::Migration[4.2]
+class InitSchema < ActiveRecord::Migration[6.0]
   def up
     # These are extensions that must be enabled in order to support this database
     enable_extension "plpgsql"
