@@ -1,7 +1,7 @@
 # Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
 # rubocop:disable Rails/HasAndBelongsToMany
 
-class Project < ApplicationRecord
+class Project < ActiveRecord::Base
   include ApiAuthorizable
 
   nilify_blanks
