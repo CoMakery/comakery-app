@@ -6,11 +6,15 @@ class PopulateMissionsImages < ActiveRecord::DataMigration
 
         next if attachment_id.blank?
 
-        attachment = Refile.store.get(attachment_id).download
-        mission.public_send(image_field).attach(
-          io: attachment,
-          filename: mission.public_send("#{image_field}_filename")
-        )
+        begin
+          attachment = Refile.store.get(attachment_id).download
+          mission.public_send(image_field).attach(
+            io: attachment,
+            filename: mission.public_send("#{image_field}_filename") || 'mission_image'
+          )
+        rescue StandardError
+          next
+        end
       end
     end
   end

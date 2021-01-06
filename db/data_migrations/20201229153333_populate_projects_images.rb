@@ -6,11 +6,15 @@ class PopulateProjectsImages < ActiveRecord::DataMigration
 
         next if attachment_id.blank?
 
-        attachment = Refile.store.get(attachment_id).download
-        project.public_send(image_field).attach(
-          io: attachment,
-          filename: project.public_send("#{image_field}_filename")
-        )
+        begin
+          attachment = Refile.store.get(attachment_id).download
+          project.public_send(image_field).attach(
+            io: attachment,
+            filename: project.public_send("#{image_field}_filename") || 'project_image'
+          )
+        rescue StandardError
+          next
+        end
       end
     end
   end

@@ -1,17 +1,20 @@
 class PopulateAwardsImages < ActiveRecord::DataMigration
   def up
     Award.find_each do |award|
-      if award.image_id.present?
-        image = Refile.store.get(award.image_id).download
-        award.image.attach(io: image, filename: award.image_filename)
-      end
+      %i[image submission_image].each do |image_field|
+        attachment_id = project.public_send("#{image_field}_id")
 
-      if award.submission_image_id.present?
-        submission_image = Refile.store.get(award.submission_image_id).download
-        award.submission_image.attach(
-          io: submission_image,
-          filename: award.submission_image_filename
-        )
+        next if attachment_id.blank?
+
+        begin
+          attachment = Refile.store.get(attachment_id).download
+          award.public_send(image_field).attach(
+            io: attachment,
+            filename: award.public_send("#{image_field}_filename") || 'award_image'
+          )
+        rescue StandardError
+          next
+        end
       end
     end
   end
