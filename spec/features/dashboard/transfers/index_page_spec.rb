@@ -26,7 +26,7 @@ describe 'transfers_index_page', js: true do
 
         expect(page).to have_select('select_transfers', selected: 'Create New Transfer')
 
-        find('#select_transfers option', :text => transfer, visible: false).click
+        find('#select_transfers option', text: transfer, visible: false).click
 
         expect(page).to have_select('select_transfers', selected: transfer)
 
@@ -43,12 +43,12 @@ describe 'transfers_index_page', js: true do
 
     expect(page).to have_select('select_transfers', selected: 'Create New Transfer')
 
-    find('#select_transfers option', :text => 'Manage Categories', visible: false).click
+    find('#select_transfers option', text: 'Manage Categories', visible: false).click
 
     expect(page).to have_select('select_transfers', selected: 'Manage Categories')
 
     has_css?('.turbolinks-progress-bar', visible: true)
     has_no_css?('.turbolinks-progress-bar')
-    expect(page).to have_content("TRANSFER CATEGORIES")
+    expect(page).to have_content('TRANSFER CATEGORIES')
   end
 end
