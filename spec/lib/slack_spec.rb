@@ -83,4 +83,62 @@ describe Comakery::Slack do
       expect(response['channels'][0]['name']).to eq('fun')
     end
   end
+
+  describe '.enabled?' do
+    subject { described_class.enabled? }
+
+    context 'when SLACK_API_KEY and SLACK_API_SECRET defined' do
+      before do
+        ENV['SLACK_API_KEY'] = 'SLACK_API_KEY'
+        ENV['SLACK_API_SECRET'] = 'SLACK_API_SECRET'
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when only SLACK_API_KEY defined' do
+      before do
+        ENV['SLACK_API_KEY'] = 'SLACK_API_KEY'
+        ENV['SLACK_API_SECRET'] = nil
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when only SLACK_API_KEY defined and SLACK_API_SECRET is blank' do
+      before do
+        ENV['SLACK_API_KEY'] = 'SLACK_API_KEY'
+        ENV['SLACK_API_SECRET'] = ''
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when only SLACK_API_SECRET defined and SLACK_API_KEY is blank' do
+      before do
+        ENV['SLACK_API_KEY'] = ''
+        ENV['SLACK_API_SECRET'] = 'SLACK_API_SECRET'
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when both constants missing' do
+      before do
+        ENV['SLACK_API_KEY'] = nil
+        ENV['SLACK_API_SECRET'] = nil
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when both constants are blank' do
+      before do
+        ENV['SLACK_API_KEY'] = ''
+        ENV['SLACK_API_SECRET'] = ''
+      end
+
+      it { is_expected.to be_falsey }
+    end
+  end
 end

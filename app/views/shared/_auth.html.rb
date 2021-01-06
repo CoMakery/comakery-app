@@ -10,21 +10,25 @@ class Views::Shared::Auth < Views::Projects::Base
       end
     end
 
-    column('large-12 no-h-pad', style: 'margin-top: 10px') do
-      link_to '/auth/slack', method: :post, class: 'auth-button slack' do
-        text 'Slack'
+    if Comakery::Slack.enabled?
+      column('large-12 no-h-pad', style: 'margin-top: 10px') do
+        link_to '/auth/slack', method: :post, class: 'auth-button slack' do
+          text 'Slack'
+        end
       end
     end
 
-    column('large-12 no-h-pad', style: 'margin-top: 10px') do
-      link_to login_discord_path, method: :post, class: 'auth-button discord' do
-        text 'Discord'
+    if Comakery::Discord.enabled?
+      column('large-12 no-h-pad', style: 'margin-top: 10px') do
+        link_to login_discord_path, method: :post, class: 'auth-button discord' do
+          text 'Discord'
+        end
       end
     end
 
     column('large-12 no-h-pad', style: 'margin-top: 10px') do
       label do
-        text 'By clicking a button to Sign Up with Slack, Metamask or Discord, you are agreeing to the '
+        text "By clicking a button to Sign Up with #{enabled_auth_labels}, you are agreeing to the "
         link_to 'CoMakery User Agreement', '/user-agreement'
         text ' and '
         link_to 'Privacy Policy Terms', '/privacy-policy'
