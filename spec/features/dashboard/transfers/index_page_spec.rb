@@ -17,26 +17,38 @@ describe 'transfers_index_page', js: true do
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
   end
 
-  it 'returns transfer form with category selected' do
-    login(owner)
-    visit project_dashboard_transfers_path(project)
-    page.find :css, '#select_transfers', wait: 20
+  %w[earned bought].each do |transfer|
+    context "when user select transfer #{transfer}" do
+      it 'returns transfer form with category selected' do
+        login(owner)
+        visit project_dashboard_transfers_path(project)
+        page.find :css, '#select_transfers', wait: 20
 
-    select('earned', from: 'select_transfers')
+        expect(page).to have_select('select_transfers', selected: 'Create New Transfer')
 
-    expect(find('#select_transfers').find('option[selected]').text).to eq('earned')
-    page.find :css, '.transfers-table__transfer--new', wait: 10
+        find('#select_transfers option', :text => transfer, visible: false).click
 
-    expect(page).to have_content('Earned')
+        expect(page).to have_select('select_transfers', selected: transfer)
+
+        page.find :css, '.transfers-table__transfer--new'
+
+        expect(page).to have_select('select_category', selected: transfer.capitalize)
+      end
+    end
   end
 
   it 'redirect to Transfer Categories page' do
     login(owner)
     visit project_dashboard_transfers_path(project)
-    page.find :css, '#select_transfers', wait: 20
 
-    select('Manage Categories', from: 'select_transfers').click
+    expect(page).to have_select('select_transfers', selected: 'Create New Transfer')
 
-    expect(page).to have_current_path(project_dashboard_transter_categories_path(project))
+    find('#select_transfers option', :text => 'Manage Categories', visible: false).click
+
+    expect(page).to have_select('select_transfers', selected: 'Manage Categories')
+
+    has_css?('.turbolinks-progress-bar', visible: true)
+    has_no_css?('.turbolinks-progress-bar')
+    expect(page).to have_content("TRANSFER CATEGORIES")
   end
 end
