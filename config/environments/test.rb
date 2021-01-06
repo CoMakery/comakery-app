@@ -59,4 +59,6 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
 
   config.log_level = :fatal
+
+  config.serve_static_assets = true
 end

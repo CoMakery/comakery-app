@@ -21,7 +21,7 @@ module Synchronisable
     end
 
     def sync_allowed?
-      Time.current > next_sync_allowed_after
+      next_sync_allowed_after <= Time.current
     end
 
     def sync_in_progress?
@@ -42,11 +42,22 @@ module Synchronisable
       latest_status == 'failed' ? latest_status_row.size : 0
     end
 
-    def next_sync_allowed_after
-      return 0 unless latest_synchronisation
+    def next_sync_allowed_after(scale: :exponential)
+      return Time.current unless latest_synchronisation
       return max_seconds_in_pending.seconds.from_now if sync_in_progress?
-      return latest_synchronisation.updated_at + min_seconds_between_syncs if latest_synchronisation.ok?
-      return latest_synchronisation.updated_at + min_seconds_between_syncs**failed_transactions_row if latest_synchronisation.failed?
+      return latest_synchronisation.updated_at + timeout if latest_synchronisation.ok?
+      return latest_synchronisation.updated_at + timeout(scale) if latest_synchronisation.failed?
+    end
+
+    def timeout(scale = nil)
+      case scale
+      when :exponential
+        min_seconds_between_syncs**failed_transactions_row
+      when :linear
+        min_seconds_between_syncs * failed_transactions_row
+      else
+        min_seconds_between_syncs
+      end
     end
 
     private

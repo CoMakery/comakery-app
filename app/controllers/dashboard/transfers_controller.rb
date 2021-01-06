@@ -37,7 +37,11 @@ class Dashboard::TransfersController < ApplicationController
   private
 
     def query
-      @transfers_unfiltered = @project.awards.completed_or_cancelled
+      @transfers_unfiltered =
+        @project
+        .awards
+        .completed_or_cancelled
+        .includes(issuer: [image_attachment: :blob], account: [image_attachment: :blob])
 
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
 
@@ -48,7 +52,7 @@ class Dashboard::TransfersController < ApplicationController
       @page = (params[:page] || 1).to_i
       @transfers_all = query.result(distinct: true)
                             .reorder('')
-                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets])
+                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
 
       @transfers_all.size
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))

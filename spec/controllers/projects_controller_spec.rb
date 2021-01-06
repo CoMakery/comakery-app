@@ -258,8 +258,8 @@ describe ProjectsController do
       project = Project.last
       expect(project.title).to eq('Project title here')
       expect(project.description).to eq('Project description here')
-      expect(project.square_image).to be_a(Refile::File)
-      expect(project.panoramic_image).to be_a(Refile::File)
+      expect(project.square_image.attached?).to eq(true)
+      expect(project.panoramic_image.attached?).to eq(true)
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
       expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
       expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
@@ -297,8 +297,8 @@ describe ProjectsController do
       project = assigns[:project]
 
       expect(project.description).to eq('Project description here')
-      expect(project.square_image).to be_a(Refile::File)
-      expect(project.panoramic_image).to be_a(Refile::File)
+      expect(project.square_image.attached?).to eq(true)
+      expect(project.panoramic_image.attached?).to eq(true)
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
       expect(project.account_id).to eq(account.id)
     end

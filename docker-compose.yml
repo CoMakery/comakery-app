@@ -13,7 +13,7 @@ x-app: &app
   environment: &env
     NODE_ENV: development
     RAILS_ENV: ${RAILS_ENV:-development}
-  image: example-dev:1.1.0
+  image: comakery-server-dev:1.0.0
   tmpfs:
     - /tmp
 
@@ -46,8 +46,7 @@ x-backend: &backend
     MAILER_HOST: localhost:3000
     AWS_API_KEY: dummy
     AWS_API_SECRET: dummy
-    BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET: none
-    BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET: dummy
+    DISCORD_BOT_TOKEN: none
     DISCORD_CLIENT_ID: none
     DISCORD_CLIENT_SECRET: none
     INFURA_PROJECT_ID: none

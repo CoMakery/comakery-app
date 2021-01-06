@@ -8,15 +8,19 @@
     <%= csrf_meta_tags %>
 
     <% if ENV['GOOGLE_ANALYTICS'].present? %>
-      <%= javascript_tag("
+      <script defer="true">
+//<![CDATA[
+
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-        ga('create', '#{ENV['GOOGLE_ANALYTICS']}', 'auto');
+        ga('create', '<%== ENV['GOOGLE_ANALYTICS'] %>', 'auto');
         ga('send', 'pageview');
-      ", defer: true) %>
+
+//]]>
+</script>
     <% end %>
 
     <%= stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,700,900&amp;subset=cyrillic,cyrillic-ext,latin-ext,vietnamese', defer: true %>
@@ -37,13 +41,13 @@
         is_admin: current_account&.comakery_admin?,
         is_logged_in: (current_account ? true : false),
         is_whitelabel: @whitelabel_mission.present?,
-        whitelabel_logo: attachment_url(@whitelabel_mission, :whitelabel_logo),
+        whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
         current_path: request.fullpath
       },
       {
         prerender: true
       }
-    )%>
+    ) %>
 
     <%= render partial: 'layouts/project_search_form' unless @whitelabel_mission || @skip_search_box %>
 
@@ -58,7 +62,7 @@
         {
           prerender: true
         }
-      )%>
+      ) %>
 
       <%= yield %>
     </div>
@@ -68,12 +72,12 @@
       {
         is_logged_in: (current_account ? true : false),
         is_whitelabel: @whitelabel_mission.present?,
-        whitelabel_logo: attachment_url(@whitelabel_mission, :whitelabel_logo),
-        whitelabel_logo_dark: attachment_url(@whitelabel_mission, :whitelabel_logo_dark)
+        whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
+        whitelabel_logo_dark: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo_dark).path
       },
       {
         prerender: true
       }
-    )%>
+    ) %>
   </body>
 </html>

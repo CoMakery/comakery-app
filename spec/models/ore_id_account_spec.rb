@@ -9,15 +9,48 @@ RSpec.describe OreIdAccount, type: :model do
   subject { create(:ore_id) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
+  it { is_expected.to validate_uniqueness_of(:account_name) }
+  it { is_expected.to define_enum_for(:state).with_values({ pending: 0, pending_manual: 1, unclaimed: 2, ok: 3, unlinking: 4 }) }
+
   specify { expect(subject.service).to be_an(OreIdService) }
+
+  context 'before_create' do
+    specify { expect(subject.temp_password).not_to be_empty }
+  end
 
   context 'after_create' do
     subject { described_class.new(account: create(:account), id: 99999) }
 
-    it 'schedules jobs' do
+    it 'schedules a sync' do
       expect(OreIdSyncJob).to receive(:perform_later).with(subject.id)
-      expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
       subject.save
+    end
+
+    context 'for pending_manual state' do
+      subject { described_class.new(account: create(:account), id: 99999, state: :pending_manual) }
+
+      it 'doesnt schedule a sync' do
+        expect(OreIdSyncJob).not_to receive(:perform_later).with(subject.id)
+        subject.save
+      end
+    end
+  end
+
+  context 'after_update' do
+    subject { described_class.create(account: create(:account), id: 99999) }
+
+    context 'when account_name has been updated' do
+      it 'schedules a wallet sync' do
+        expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
+        subject.update(account_name: 'dummy')
+      end
+    end
+
+    context 'when state updated to ok' do
+      it 'schedules assets sync' do
+        expect(OreIdOptInSyncJob).to receive(:perform_later).with(subject.id)
+        subject.update(state: :ok)
+      end
     end
   end
 
@@ -31,21 +64,153 @@ RSpec.describe OreIdAccount, type: :model do
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.to change(subject.account.wallets, :count).by(1)
         end
+
+        wallet = Wallet.last
+        expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
+
+        expect(subject.state).to eq 'ok'
       end
     end
 
     context 'when wallet is initialized locally' do
       before do
-        subject.account.wallets.find_by(source: :ore_id).update(address: nil, state: :pending)
+        create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
       end
 
-      it 'sets the wallet address' do
+      it 'sets correct wallet params' do
+        expect(subject.state).to eq 'pending'
+
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
         end
 
-        expect(subject.account.wallets.last.address).not_to be_nil
+        wallet = Wallet.last
+        expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
+        expect(wallet._blockchain).to eq 'algorand_test'
+        expect(wallet.source).to eq 'ore_id'
+
+        expect(subject.state).to eq 'ok'
       end
+    end
+
+    context 'with provision flow' do
+      before do
+        wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+        create(:wallet_provision, wallet: wallet, token: build(:asa_token), state: :pending)
+      end
+
+      it 'ore_id_account#state do not change' do
+        expect(subject.state).to eq 'pending'
+
+        VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
+          expect { subject.sync_wallets }.not_to change(subject.account.wallets, :count)
+        end
+
+        expect(subject.reload.state).to eq 'pending'
+      end
+    end
+  end
+
+  describe '#sync_password_update' do
+    context 'when remote password has been updated' do
+      before do
+        allow_any_instance_of(OreIdService).to receive(:password_updated?).and_return(true)
+      end
+
+      specify do
+        expect(subject).to receive(:ok!)
+        subject.sync_password_update
+      end
+    end
+  end
+
+  describe '#sync_opt_ins', vcr: true do
+    subject { create(:ore_id, skip_jobs: true) }
+    let(:wallet) do
+      Wallet.create!(
+        account: subject.account,
+        address: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        _blockchain: 'algorand_test',
+        source: 'ore_id',
+        ore_id_account: subject
+      )
+    end
+    let(:tokens) { [create(:asa_token), create(:algo_sec_token)] }
+
+    specify 'TokenOptIn has been added' do
+      wallet && subject.wallets.reload
+      tokens
+
+      expect(TokenOptIn.count).to be_zero
+      subject.sync_opt_ins
+
+      expect(TokenOptIn.count).to eq 2
+      created_opt_in = TokenOptIn.last
+      expect(created_opt_in.status).to eq 'opted_in'
+    end
+
+    specify 'when no wallets' do
+      tokens
+
+      expect(TokenOptIn.count).to be_zero
+      subject.sync_opt_ins
+
+      expect(TokenOptIn.count).to eq 0
+    end
+
+    specify 'when no supported token' do
+      wallet && subject.wallets.reload
+
+      expect(TokenOptIn.count).to be_zero
+      subject.sync_opt_ins
+
+      expect(TokenOptIn.count).to eq 0
+    end
+  end
+
+  describe '#unlink' do
+    specify do
+      expect(subject).to receive(:unlinking!)
+      expect(subject).to receive(:destroy!)
+      subject.unlink
+    end
+  end
+
+  describe '#provisioned?' do
+    specify 'with no wallets' do
+      expect(subject.wallets).to be_empty
+      expect(subject.provisioned?).to be true
+    end
+
+    specify 'with wallet and no wallet_provision' do
+      subject.wallets << create(:wallet)
+      expect(subject.wallets.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions).to be_empty
+      expect(subject.provisioned?).to be true
+    end
+
+    specify 'with pending wallet_provision' do
+      wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+      create(:wallet_provision, wallet: wallet, state: :pending)
+      subject.wallets << wallet
+
+      expect(subject.wallets.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.first.state).to eq 'pending'
+      expect(subject.provisioned?).to be false
+    end
+
+    specify 'with provisioned wallet_provision' do
+      wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+      create(:wallet_provision, wallet: wallet, state: :provisioned)
+      subject.wallets << wallet
+
+      expect(subject.wallets.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.count).to eq 1
+      expect(subject.wallets.first.wallet_provisions.first.state).to eq 'provisioned'
+      expect(subject.provisioned?).to be true
     end
   end
 end

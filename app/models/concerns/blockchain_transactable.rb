@@ -4,7 +4,7 @@ module BlockchainTransactable
   included do
     has_many :blockchain_transactions, as: :blockchain_transactable, dependent: :destroy
     # rubocop:todo Rails/InverseOf
-    has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', foreign_key: :blockchain_transactable_id
+    has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', as: :blockchain_transactable, foreign_key: :blockchain_transactable_id
     # rubocop:enable Rails/InverseOf
 
     # Return accepted awards matching at least one of the following conditions:

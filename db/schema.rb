@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_140403) do
+ActiveRecord::Schema.define(version: 2020_12_28_115845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,33 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
     t.index ["project_id", "account_id"], name: "index_accounts_projects_on_project_id_and_account_id"
   end
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_postgresql_files", force: :cascade do |t|
+    t.oid "oid"
+    t.string "key"
+    t.index ["key"], name: "index_active_storage_postgresql_files_on_key", unique: true
+  end
+
   create_table "api_keys", force: :cascade do |t|
     t.string "api_authorizable_type"
     t.bigint "api_authorizable_id"
@@ -109,6 +136,15 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["api_authorizable_type", "api_authorizable_id"], name: "index_api_keys_on_api_authorizable_type_and_api_authorizable_id"
+  end
+
+  create_table "api_request_logs", force: :cascade do |t|
+    t.jsonb "body", null: false
+    t.inet "ip", null: false
+    t.string "signature", null: false
+    t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_api_request_logs_on_created_at"
+    t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
   end
 
   create_table "authentication_teams", force: :cascade do |t|
@@ -337,7 +373,11 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
     t.bigint "account_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "state", default: 0, null: false
+    t.integer "provisioning_stage", default: 0, null: false
+    t.string "temp_password"
     t.index ["account_id"], name: "index_ore_id_accounts_on_account_id"
+    t.index ["account_name"], name: "index_ore_id_accounts_on_account_name", unique: true
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
@@ -471,6 +511,17 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "token_opt_ins", force: :cascade do |t|
+    t.bigint "wallet_id", null: false
+    t.bigint "token_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token_id"], name: "index_token_opt_ins_on_token_id"
+    t.index ["wallet_id", "token_id"], name: "index_token_opt_ins_on_wallet_id_and_token_id", unique: true
+    t.index ["wallet_id"], name: "index_token_opt_ins_on_wallet_id"
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "coin_type"
@@ -535,11 +586,20 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
     t.index ["provider_id"], name: "index_verifications_on_provider_id"
   end
 
+  create_table "wallet_provisions", force: :cascade do |t|
+    t.bigint "wallet_id"
+    t.bigint "token_id"
+    t.integer "state", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token_id"], name: "index_wallet_provisions_on_token_id"
+    t.index ["wallet_id"], name: "index_wallet_provisions_on_wallet_id"
+  end
+
   create_table "wallets", force: :cascade do |t|
     t.bigint "account_id"
     t.string "address"
     t.integer "_blockchain", default: 0, null: false
-    t.integer "state", default: 0, null: false
     t.integer "source", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -553,6 +613,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
   add_foreign_key "balances", "tokens"
@@ -566,9 +627,13 @@ ActiveRecord::Schema.define(version: 2020_10_30_140403) do
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "projects", "tokens"
   add_foreign_key "reg_groups", "tokens"
+  add_foreign_key "token_opt_ins", "tokens"
+  add_foreign_key "token_opt_ins", "wallets"
   add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "transfer_types", "projects"
   add_foreign_key "verifications", "accounts"
+  add_foreign_key "wallet_provisions", "tokens"
+  add_foreign_key "wallet_provisions", "wallets"
   add_foreign_key "wallets", "accounts"
   add_foreign_key "wallets", "ore_id_accounts"
 end

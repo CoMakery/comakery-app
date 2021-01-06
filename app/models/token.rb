@@ -3,7 +3,8 @@ class Token < ApplicationRecord
 
   nilify_blanks
 
-  attachment :logo_image, type: :image
+  # attachment :logo_image, type: :image
+  has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :interested
@@ -11,6 +12,7 @@ class Token < ApplicationRecord
   has_many :reg_groups # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :transfer_rules # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :blockchain_transactions # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :token_opt_ins, dependent: :destroy
 
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_token_type, :denomination, presence: true
@@ -19,6 +21,8 @@ class Token < ApplicationRecord
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 
   scope :listed, -> { where unlisted: false }
+  scope :available_for_algorand_opt_in, -> { where(_token_type: %w[asa algorand_security_token]) }
+  scope :available_for_provision, -> { where(_token_type: %w[asa algorand_security_token]) }
 
   enum denomination: {
     USD: 0,

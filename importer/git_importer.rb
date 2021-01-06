@@ -22,7 +22,7 @@ class GitImporter
     send_awards commits
   end
 
-  def parse_opts # rubocop:todo Metrics/CyclomaticComplexity
+  def parse_opts
     @opts = Trollop.options do
       opt :github_repo, 'Github owner/repo, eg `ipfs/go-ipfs`', type: :string
       opt :project_id, 'Comakery project ID', type: :integer
@@ -91,7 +91,7 @@ class GitImporter
     raise RecipientError, errors.join("\n") if errors.present?
   end
 
-  def slack_user_id(author_name) # rubocop:todo Metrics/CyclomaticComplexity
+  def slack_user_id(author_name)
     project = Project.find @opts[:project_id]
     name_to_user_name = {
       'Adam Apollo' => 'adamapollo',
@@ -123,7 +123,7 @@ class GitImporter
     user_id
   end
 
-  def send_awards(commits) # rubocop:todo Metrics/CyclomaticComplexity
+  def send_awards(commits)
     awards = 0
     project = Project.find @opts[:project_id]
     award_type = project.award_types.order(:amount).first # lowest award

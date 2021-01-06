@@ -37,6 +37,24 @@ class OreIdService
     )
   end
 
+  def create_tx(transaction)
+    raise OreIdService::RemoteInvalidError unless ore_id.account_name
+    raise OreIdService::RemoteInvalidError unless ore_id.pending?
+
+    response = handle_response(
+      self.class.post(
+        '/transaction/sign',
+        headers: request_headers,
+        body: create_tx_params(transaction).to_json
+      )
+    )
+
+    if transaction.update(tx_hash: response['transaction_id'], tx_raw: response['signed_transaction'])
+      transaction.update_status(:pending)
+      BlockchainJob::BlockchainTransactionSyncJob.perform_later(transaction)
+    end
+  end
+
   def permissions
     @permissions ||= filtered_permissions.map do |params|
       {
@@ -46,6 +64,10 @@ class OreIdService
     end
   rescue NoMethodError
     raise OreIdService::RemoteInvalidError
+  end
+
+  def password_updated?
+    @password_updated ||= remote['passwordUpdatedAt'].present?
   end
 
   def create_token
@@ -59,16 +81,32 @@ class OreIdService
     response['appAccessToken']
   end
 
-  def password_reset_url(redirect_url)
+  def authorization_url(callback_url, state = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
-      callback_url: redirect_url,
+      callback_url: callback_url,
       background_color: 'FFFFFF',
-      state: ''
+      state: state
     }
 
-    "https://service.oreid.io/auth?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"
+  end
+
+  def sign_url(transaction:, callback_url:, state:)
+    params = {
+      app_access_token: create_token,
+      account: ore_id.account_name,
+      chain_account: transaction.source,
+      broadcast: true,
+      chain_network: transaction.token.blockchain.ore_id_name,
+      return_signed_transaction: true,
+      transaction: Base64.encode64(algorand_transaction(transaction).to_json),
+      callback_url: callback_url,
+      state: state
+    }
+
+    append_hmac_to_url "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
@@ -78,10 +116,22 @@ class OreIdService
         'name' => account.name,
         'user_name' => account.nickname || '',
         'email' => account.email,
-        'picture' => account.image ? Refile.attachment_url(account, :image) : '',
-        'user_password' => SecureRandom.hex(32) + '!',
+        'picture' => Attachment::GetPath.call(attachment: account.image).path,
+        'user_password' => ore_id.temp_password,
         'phone' => '',
         'account_type' => 'native'
+      }
+    end
+
+    def create_tx_params(transaction)
+      {
+        account: ore_id.account_name,
+        user_password: ore_id.temp_password,
+        chain_account: transaction.source,
+        broadcast: true,
+        chain_network: transaction.token.blockchain.ore_id_name,
+        return_signed_transaction: true,
+        transaction: Base64.encode64(algorand_transaction(transaction).to_json)
       }
     end
 
@@ -90,6 +140,36 @@ class OreIdService
         'api-key' => ENV['ORE_ID_API_KEY'],
         'service-key' => ENV['ORE_ID_SERVICE_KEY'],
         'Content-Type' => 'application/json'
+      }
+    end
+
+    def algorand_transaction(transaction)
+      tx = {
+        from: transaction.source,
+        to: transaction.destination,
+        amount: transaction.amount,
+        type: 'pay'
+      }
+
+      tx.merge!(asa_transaction(transaction)) if transaction.token._token_type_asa?
+      tx.merge!(app_transaction(transaction)) if transaction.token._token_type_algorand_security_token?
+      tx
+    end
+
+    def asa_transaction(transaction)
+      {
+        type: 'axfer',
+        assetIndex: transaction.token.contract_address.to_i
+      }
+    end
+
+    def app_transaction(transaction)
+      {
+        type: 'appl',
+        appIndex: transaction.token.contract_address.to_i,
+        to: nil,
+        amount: nil,
+        appOnComplete: 1 # OptIn type
       }
     end
 
@@ -115,5 +195,12 @@ class OreIdService
       else
         raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
       end
+    end
+
+    def append_hmac_to_url(url)
+      hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], url)
+      hmac = Base64.strict_encode64(hmac)
+      hmac = ERB::Util.url_encode(hmac)
+      "#{url}&hmac=#{hmac}"
     end
 end

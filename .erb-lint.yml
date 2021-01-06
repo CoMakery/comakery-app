@@ -1,0 +1,16 @@
+---
+EnableDefaultLinters: true
+glob: "app/views/**/*.{html}{+*,}.erb"
+linters:
+  ErbSafety:
+    enabled: false
+    better_html_config: .better-html.yml
+  Rubocop:
+    enabled: true
+    rubocop_config:
+      Layout/IndentationStyle:
+        Enabled: true
+        EnforcedStyle: spaces
+        IndentationWidth: 2
+    only:
+      - Layout/IndentationStyle

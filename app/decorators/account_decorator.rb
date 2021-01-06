@@ -49,7 +49,11 @@ class AccountDecorator < Draper::Decorator
   end
 
   def image_url(size = 100)
-    helpers.attachment_url(self, :image, :fill, size, size, fallback: 'default_account_image.jpg')
+    GetImageVariantPath.call(
+      attachment: image,
+      resize_to_fill: [size, size],
+      fallback: helpers.image_url('default_account_image.jpg')
+    ).path
   end
 
   def verification_state

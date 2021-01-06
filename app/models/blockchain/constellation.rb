@@ -11,7 +11,7 @@ class Blockchain::Constellation < Blockchain
   # Hostname of block explorer API
   # @return [String] hostname
   def explorer_api_host
-    ENV['BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET']
+    ENV['BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET'] || 'xju69fets2.execute-api.us-west-1.amazonaws.com/cl-block-explorer-mainnet'
   end
 
   # Hostname of block explorer website

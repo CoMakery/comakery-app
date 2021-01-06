@@ -150,6 +150,14 @@ describe BlockchainTransactionAward, vcr: true do
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Dag::Tx)
       end
     end
+
+    context 'with Algorand transfer' do
+      it 'returns Comakery::Algorand::Tx' do
+        blockchain_transaction = build(:blockchain_transaction, token: create(:algorand_token), destination: build(:algorand_address_1))
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx)
+      end
+    end
   end
 
   describe 'confirmed_on_chain?' do

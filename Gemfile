@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.7.1'
 
+gem 'active_storage-postgresql'
 gem 'awesome_print'
 gem 'bcrypt'
 gem 'bullet'
@@ -14,6 +15,7 @@ gem 'fortitude'
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails'
 gem 'httparty'
+gem 'image_processing'
 gem 'interactor'
 gem 'intercom-rails'
 gem 'jquery-rails'
@@ -34,7 +36,7 @@ gem 'puma'
 gem 'pundit'
 gem 'rack', '>= 2.0.6'
 gem 'rails', '~> 6.0.3.2'
-gem 'rails_autoscale_agent'
+gem 'rails_autoscale_agent', '>= 0.9.1'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
 gem 'react-rails'
@@ -69,6 +71,7 @@ group(:development, :test) do
   gem 'brakeman', require: false
   gem 'citizen-scripts', git: 'https://github.com/CoMakery/citizen-scripts.git', ref: 'dev', require: false
   gem 'dotenv-rails'
+  gem 'erb_lint', '~> 0.0.35', require: false
   gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -112,7 +115,7 @@ end
 
 gem 'scout_apm', '~> 2.4'
 
-gem 'mini_racer', '~> 0.2.4'
+gem 'mini_racer', '~> 0.3.1'
 
 gem 'possessive', '~> 1.0'
 

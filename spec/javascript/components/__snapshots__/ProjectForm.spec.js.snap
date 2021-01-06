@@ -5,6 +5,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
   csrfToken="00"
   decimalPlaces={Array []}
   discordBotUrl={null}
+  discordEnabled={true}
   formAction="POST"
   formUrl="/"
   isWhitelabel={false}
@@ -21,6 +22,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
     }
   }
   projectForHeader={null}
+  slackEnabled={true}
   teams={Array []}
   termsReadonly={false}
   tokens={
@@ -1442,7 +1444,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 <div
                   className="project-form--form--channels--empty"
                 >
-                  Start adding channels by signing in with Slack or Discord
+                  Start adding channels by signing in with
+                  Slack or Discord
                 </div>
                 <h2>
                   Permissions & Visibility

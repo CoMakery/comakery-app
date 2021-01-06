@@ -6,7 +6,7 @@ class AwardsController < ApplicationController
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_create, only: %i[create new]
   before_action :authorize_award_show, only: %i[show]
-  before_action :authorize_award_edit, only: %i[edit update]
+  before_action :authorize_award_edit, only: %i[edit update send_award]
   before_action :authorize_award_assign, only: %i[assign]
   before_action :authorize_award_start, only: %i[start]
   before_action :authorize_award_submit, only: %i[submit]
@@ -68,10 +68,7 @@ class AwardsController < ApplicationController
     if !@award.image && params[:task][:image_from_id]
       source_award = Award.find(params[:task][:image_from_id].to_i)
       if policy(source_award.project).edit?
-        @award.image_id = source_award.image_id
-        @award.image_filename = source_award.image_filename
-        @award.image_content_size = source_award.image_content_size
-        @award.image_content_type = source_award.image_content_type
+        @award.image.attach(source_award.image.blob) if source_award.image.attached?
       end
     end
 
@@ -166,7 +163,7 @@ class AwardsController < ApplicationController
     render json: @recipient_address_response, status: :ok
   end
 
-  def send_award # rubocop:todo Metrics/CyclomaticComplexity
+  def send_award
     result = SendAward.call(
       award: @award,
       quantity: send_award_params[:quantity],
@@ -228,7 +225,7 @@ class AwardsController < ApplicationController
   private
 
     def set_project
-      @project = Project.find(params[:project_id])&.decorate
+      @project = @project_scope.find_by(id: params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
     end
 
@@ -299,11 +296,11 @@ class AwardsController < ApplicationController
     def set_default_project_filter
       default_project_id = ENV['DEFAULT_PROJECT_ID']
 
-      @project = Project.find_by(id: default_project_id) if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
+      @project = @project_scope.find_by(id: default_project_id) if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
     end
 
     def set_project_filter
-      @project = (Project.find_by(id: params[:project_id]) || @project)
+      @project = (@project_scope.find_by(id: params[:project_id]) || @project)
     end
 
     def run_award_expiration
@@ -315,7 +312,16 @@ class AwardsController < ApplicationController
     end
 
     def set_awards
-      @awards = current_account.accessable_awards(projects_interested).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards =
+        current_account
+        .accessable_awards(projects_interested)
+        .includes(
+          :specialty, :issuer, :award_type, :cloned_from,
+          project: [:account, :mission, :token, :admins, channels: [:team]],
+          account: [image_attachment: :blob]
+        ).filtered_for_view(@filter, current_account)
+        .order(expires_at: :asc, updated_at: :desc)
+        .with_all_attached_images
 
       @awards = @awards.where(award_type: AwardType.where(project: @project)) if @project
     end
@@ -450,9 +456,13 @@ class AwardsController < ApplicationController
     end
 
     def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
+      award_image_path = GetImageVariantPath.call(
+        attachment: (@award || @award_type.awards.new).image,
+        resize_to_fill: [300, 300]
+      ).path
       @props = {
         task: (@award || @award_type.awards.new).serializable_hash&.merge(
-          image_url: Refile.attachment_url(@award || @award_type.awards.new, :image, :fill, 300, 300)
+          image_url: award_image_path
         ),
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,

@@ -12,7 +12,7 @@ class OreIdSyncJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.service.create_remote
+      ore_id.sync_account
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)
@@ -23,6 +23,14 @@ class OreIdSyncJob < ApplicationJob
   end
 
   def reschedule(ore_id)
-    self.class.set(wait: ore_id.next_sync_allowed_after - Time.current).perform_later(ore_id.id)
+    self.class.set(wait: wait_to_perform(ore_id)).perform_later(ore_id.id)
+  end
+
+  def wait_to_perform(ore_id)
+    if ore_id.next_sync_allowed_after < Time.current
+      0
+    else
+      ore_id.next_sync_allowed_after - Time.current
+    end
   end
 end

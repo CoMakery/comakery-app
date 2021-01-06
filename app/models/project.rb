@@ -5,10 +5,13 @@ class Project < ApplicationRecord
   include ApiAuthorizable
 
   nilify_blanks
-  attachment :image
 
-  attachment :square_image, type: :image
-  attachment :panoramic_image, type: :image
+  # attachment :image
+  # attachment :square_image, type: :image
+  # attachment :panoramic_image, type: :image
+  has_one_attached :image
+  has_one_attached :square_image
+  has_one_attached :panoramic_image
 
   belongs_to :account, touch: true
   has_and_belongs_to_many :admins, class_name: 'Account'
@@ -65,6 +68,7 @@ class Project < ApplicationRecord
   scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(1)' }
+  scope :with_all_attached_images, -> { with_attached_image.with_attached_square_image.with_attached_panoramic_image }
 
   delegate :_token_type, to: :token, allow_nil: true
   delegate :_token_type_on_ethereum?, to: :token, allow_nil: true
@@ -105,13 +109,15 @@ class Project < ApplicationRecord
   end
 
   def top_contributors
-    Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
+    Account
+      .with_attached_image
+      .select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
       left join awards a1 on a1.account_id=accounts.id and a1.status in(3,5)
       left join award_types on a1.award_type_id=award_types.id
       left join projects on award_types.project_id=projects.id")
-           .where('projects.id=?', id)
-           .group('accounts.id')
-           .order('total_awarded desc, last_awarded_at desc').includes(:specialty).first(5)
+      .where('projects.id=?', id)
+      .group('accounts.id')
+      .order('total_awarded desc, last_awarded_at desc').includes(:specialty).first(5)
   end
 
   def total_month_awarded

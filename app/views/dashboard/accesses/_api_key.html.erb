@@ -3,7 +3,7 @@
 
   <div class="project-api-key__create" data-controller="clipboard">
     <%= password_field_tag nil, @project.api_key&.key, placeholder: 'Not generated yet..', readonly: true, data: { target: 'clipboard.field', action: 'focus->clipboard#showPasswordField blur->clipboard#hidePasswordField' } %>
-    
+
     <% if @project.api_key.present? %>
       <%= button_tag 'copy', type: 'button', data: { action: 'click->clipboard#copy' } %>
     <% end %>

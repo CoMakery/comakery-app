@@ -70,7 +70,7 @@ describe TokensController do
 
         token = Token.last
         expect(token.name).to eq('Cat Token')
-        expect(token.logo_image).to be_a(Refile::File)
+        expect(token.logo_image.attached?).to eq(true)
         expect(token.symbol).to eq('CAT')
       end
 
@@ -89,7 +89,7 @@ describe TokensController do
         end.not_to(change { Token.count })
 
         token = assigns[:token]
-        expect(token.logo_image).to be_a(Refile::File)
+        expect(token.logo_image.attached?).to eq(true)
         expect(token.symbol).to eq('CAT')
       end
     end

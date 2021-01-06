@@ -39,11 +39,18 @@
 PreCommit:
   BundleCheck:
     enabled: true
+  MergeConflicts:
+    enabled: false
 
   YarnLint:
     enabled: true
     required_executable: 'yarn'
     command: ['yarn', 'lint']
+
+  ErbLint:
+    enabled: true
+    required_executable: 'bin/erblint_ci'
+    command: ['bin/erblint_ci']
 
 # Hooks that run after HEAD changes or a file is explicitly checked out.
 PostCheckout:

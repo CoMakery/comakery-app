@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/applications/13258116
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 15 Dec 2020 08:38:07 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d830d326e317d279963da572bbd37a6ef1608021487; expires=Thu, 14-Jan-21
+        08:38:07 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 070725c61700005aa6811e3000000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=2Y9BS36dOST9ZDcOSwxpextGaWBXroNEjxYb1qTg9UPmH9vKSAdabEmnCetVccdJmGI5Ikfer3UaVrZIncGlV%2BdxkI9BiMlBxy%2B5T%2FPAENY1YfkUJfntlVNfnEc%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 601ed8b68e945aa6-DME
+    body:
+      encoding: ASCII-8BIT
+      string: '{"application":{"id":13258116,"params":{"approval-program":"AiAGAAUEAgEDJhUFcGF1c2UJc2V0IGFkbWluBmZyZWV6ZQttYXggYmFsYW5jZQpsb2NrIHVudGlsDnRyYW5zZmVyIGdyb3VwBG1pbnQEYnVybgh0cmFuc2Zlcgx0b3RhbCBzdXBwbHkHcmVzZXJ2ZQZwYXVzZWQIZGVjaW1hbHMIdW5pdG5hbWUOY29udHJhY3QgYWRtaW4OdHJhbnNmZXIgYWRtaW4HYmFsYW5jZQZmcm96ZW4Dc2V0BGxvY2sEcnVsZTEYIhJAAGsxGSMSQACpMRkkEkAAsjEZJRJAALMxGSEEEkAAvDYaACgSQADFNhoAKRJAANQ2GgAqEkAA/jYaACsSQAEVNhoAJwQSQAE6NhoAJwUSQAFhNhoAJwYSQAHMNhoAJwcSQAH8NhoAJwgSQAIuADEbIQUSQAABACcJNhoAF2cnCjYaABdnJwsiZycMNhoBF2cnDTYaAmciJwUhBGYiJw4hBGYiJw8hBGYiJxAiZiEEQ0ICdyInDmInCWQnCmQSEENCAmciJw5iQ0ICXycKJwpkIicQYghnIQRDQgJOIicQImYiJwUhBGYhBENCAj0xGyUSQAABACcLNhoBF2ciJw5iQ0ICJiInDmIxGyEFEhA2GgEnDhI2GgEnDxIREDEdIQQSEEAAAQAhBDYaATYaAhdmIQRDQgH0MRslEjEdIQQSEEAAAQAhBCcRNhoBF2YiJw9iQ0IB1TEbJRIxHSEEEhBAAAEANhoBFyISQAALIQQrNhoBF2ZCAAQhBCtoIicPYkNCAacxGyUSMR0hBBIQQAABADYaARciEkAADCEEJwQ2GgEXZkIABSEEJwRoIicPYkNCAXcxGyUNQAABADYaAScSEkAACjYaAScTEkAAHAAxGyEFEjEdIQQSEEAAAQAhBCcFNhoCF2ZCADYxGyMSQAABADYaBBciEkAAFicUNhoCFxZQNhoDFxZQNhoEF2dCAA8nFDYaAhcWUDYaAxcWUGkiJw9iQ0IBAzEbJRIxHSEEEhA2GgEXJwpkDhBAAAEAJwonCmQ2GgEXCWchBCcQIQQnEGI2GgEXCGYiJw5iQ0IAyjEbJRIxHSEEEhA2GgEXIQQnEGIOEEAAAQAnCicKZDYaARcIZyEEJxAhBCcQYjYaARcJZiInDmJDQgCPMRslEjEdIQQSEDYaARciJxBiDhBAAAEAIQQyCCtjNQA1AScLZCInEWIRIicEYjIHDxEnFCInBWIWUCEEJwViFlBkIQQMEScUIicFYhZQIQQnBWIWUGQyBw8RNAA0ASEEJxBiNhoBFwgMEBFBAAIiQyInECInEGI2GgEXCWYhBCcQIQQnEGI2GgEXCGYhBEM=","clear-state-program":"AiACAAEmAgdyZXNlcnZlB2JhbGFuY2UoKGQiKWIIZyND","creator":"6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU","global-state":[{"key":"ZGVjaW1hbHM=","value":{"bytes":"","type":2,"uint":8}},{"key":"cGF1c2Vk","value":{"bytes":"","type":2,"uint":0}},{"key":"cmVzZXJ2ZQ==","value":{"bytes":"","type":2,"uint":80000000000000000}},{"key":"dG90YWwgc3VwcGx5","value":{"bytes":"","type":2,"uint":80000000000000000}},{"key":"dW5pdG5hbWU=","value":{"bytes":"QUJDVEVTVA==","type":1,"uint":0}}],"global-state-schema":{"num-byte-slice":1,"num-uint":60},"local-state-schema":{"num-byte-slice":0,"num-uint":4}}},"current-round":11104758}
+
+        '
+    http_version:
+  recorded_at: Tue, 15 Dec 2020 08:38:07 GMT
+recorded_with: VCR 5.1.0

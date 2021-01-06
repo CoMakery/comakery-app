@@ -39,7 +39,7 @@ class AccountsController < ApplicationController
     end
   end
 
-  def create # rubocop:todo Metrics/CyclomaticComplexity
+  def create
     @account = if @whitelabel_mission
       @whitelabel_mission.managed_accounts.new(account_params)
     else
@@ -231,7 +231,14 @@ class AccountsController < ApplicationController
 
     def account_decorate(account)
       account.as_json(only: %i[email first_name last_name nickname date_of_birth country ethereum_auth_address]).merge(
-        image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
+        image_url: account_image_url(account)
       )
+    end
+
+    def account_image_url(account)
+      GetImageVariantPath.call(
+        attachment: account.image,
+        resize_to_fill: [190, 190]
+      ).path
     end
 end

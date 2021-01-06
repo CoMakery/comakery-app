@@ -96,14 +96,14 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :smtp
-  ActionMailer::Base.smtp_settings = {
-      :user_name => ENV['SENDGRID_USERNAME'],
-      :password => ENV['SENDGRID_PASSWORD'],
-      :domain => 'comakery.com',
-      :address => 'smtp.sendgrid.net',
-      :port => 587,
-      :authentication => :plain,
-      :enable_starttls_auto => true
+  config.action_mailer.smtp_settings = {
+    user_name: ENV['SENDGRID_USERNAME'] || ENV['MAILGUN_SMTP_LOGIN'] || ENV['SMTP_USERNAME'],
+    password: ENV['SENDGRID_PASSWORD'] || ENV['MAILGUN_SMTP_PASSWORD'] || ENV['SMTP_PASSWORD'],
+    domain: ENV['MAILGUN_DOMAIN'] || ENV['SMTP_DOMAIN'] || ENV['SMTP_ADDRESS'] || 'comakery.com',
+    address: ENV['MAILGUN_SMTP_SERVER'] || ENV['SMTP_ADDRESS'] || 'smtp.sendgrid.net',
+    port: ENV['MAILGUN_SMTP_PORT'] || ENV['SMTP_PORT'] || 587,
+    authentication: ENV['SMTP_AUTH'] || :plain,
+    enable_starttls_auto: true
   }
 
   # Should be enabled ONLY on STAGING/DEMO env, since previews expose sensitive data
@@ -119,4 +119,6 @@ Rails.application.configure do
   end
 
   config.active_job.queue_adapter = :sidekiq
+  
+  config.static_cache_control = 'public, s-maxage=2592000, max-age=86400'
 end

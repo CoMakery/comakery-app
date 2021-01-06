@@ -11,13 +11,12 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/wallets
   def create
-    wallet = account.wallets.new(wallet_params)
+    @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision)
 
-    if wallet.save
-      @wallet = wallet
+    if @wallet.persisted?
       render 'show.json', status: :created
     else
-      @errors = wallet.errors
+      @errors = @wallet.errors
 
       render 'api/v1/error.json', status: :bad_request
     end
@@ -45,8 +44,8 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/accounts/1/wallets/1/password_reset
   def password_reset
-    wallet
-    redirect_url
+    @auth_url = wallet.ore_id_account.service.authorization_url(redirect_url, params.dig(:proof, :signature))
+    wallet.ore_id_account.schedule_password_update_sync
 
     render 'password_reset.json', status: :ok
   end
@@ -69,17 +68,19 @@ class Api::V1::WalletsController < Api::V1::ApiController
       r = params.fetch(:body, {}).fetch(:data, {}).fetch(:wallet, {}).permit(
         :blockchain,
         :address,
-        :source,
-        :provision
+        :source
       )
 
       r[:_blockchain] = r[:blockchain]
       r.delete(:blockchain)
-      r.delete(:provision)
       r
     end
 
     def redirect_url
       @redirect_url ||= params.fetch(:body, {}).fetch(:data, {}).fetch(:redirect_url, nil)
+    end
+
+    def tokens_to_provision
+      params.dig(:body, :data, :wallet, :tokens_to_provision)
     end
 end

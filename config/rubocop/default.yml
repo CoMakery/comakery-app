@@ -21,7 +21,7 @@ AllCops:
 # Low cyclomatic complexity is the simplest indication of code quality, readability and maintainability.
 # Bypassing this check should trigger a team discussion
 Metrics/CyclomaticComplexity:
-  Max: 5
+  Max: 6
   Exclude:
     - 'app/views/**/*'
 
@@ -40,6 +40,11 @@ Layout/IndentationConsistency:
 
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
+
+Layout/IndentationStyle:
+  Enabled: true
+  IndentationWidth: 2
+  EnforcedStyle: spaces
 
 Lint/RequireParentheses:
   Enabled: true
