@@ -46,6 +46,7 @@ x-backend: &backend
     MAILER_HOST: localhost:3000
     AWS_API_KEY: dummy
     AWS_API_SECRET: dummy
+    DISCORD_BOT_TOKEN: none
     DISCORD_CLIENT_ID: none
     DISCORD_CLIENT_SECRET: none
     INFURA_PROJECT_ID: none
