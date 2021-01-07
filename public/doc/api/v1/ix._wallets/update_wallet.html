@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Create, update, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>CANCEL</h2>
-        <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
+        <h2>UPDATE WALLET</h2>
+        <h3>PUT /api/v1/accounts/:id/wallets/:wallet_id</h3>
           <p class="explanation">
-            Returns cancelled transfer details (See GET for response details)
+            Returns updated wallet (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -131,39 +131,28 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">wallet_id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">wallet id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">primary_wallet</span>
+                </td>
+                <td>
+                  <span class="description">primary wallet flag</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -171,45 +160,50 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/47/transfers/18</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/11391475-6faf-4496-95c5-d2f9d45e50ae/wallets/23</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
-    "data": "",
-    "url": "http://example.org/api/v1/projects/47/transfers/18",
-    "method": "DELETE",
-    "nonce": "8ba88eea5aee1bd71edb58c7ba710805",
-    "timestamp": "1610052911"
+    "data": {
+      "wallet": {
+        "primary_wallet": true
+      }
+    },
+    "url": "http://example.org/api/v1/accounts/11391475-6faf-4496-95c5-d2f9d45e50ae/wallets/23",
+    "method": "PUT",
+    "nonce": "340a07867918c9189fe3149606304633",
+    "timestamp": "1610052935"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "v18GYk/nQXEfWrP/T539OC7vTZurD09Ds1sRcSeHUHBBkr1I42YOVjG6n3VgvGJrRtE019Fvc2fAv+1c8+wtBg=="
+    "signature": "YgUNM9bZK6kRAuoB2XvwsUs5m4J8b8T5X9oSRnhw7SMmA0thGRQKDzTZ18NazKYJiCy+Ik0ycWmCuv+BEIBDAw=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;c69b41a029edb64a1889c4c626410898&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;714cf3c0d6a02b4548b482d16379a3e4&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 18,
-  &quot;transferTypeId&quot;: 138,
-  &quot;amount&quot;: &quot;1000.0&quot;,
-  &quot;quantity&quot;: &quot;2.0&quot;,
-  &quot;totalAmount&quot;: &quot;2000.0&quot;,
-  &quot;description&quot;: &quot;Award to a team member&quot;,
-  &quot;transactionError&quot;: null,
-  &quot;status&quot;: &quot;cancelled&quot;,
-  &quot;createdAt&quot;: &quot;2021-01-07T20:55:10.707Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-01-07T20:55:11.087Z&quot;,
-  &quot;accountId&quot;: &quot;9ad0fcb2-0203-4143-b920-972125803f7f&quot;,
-  &quot;projectId&quot;: 47
+  &quot;id&quot;: 23,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;source&quot;: &quot;user_provided&quot;,
+  &quot;state&quot;: null,
+  &quot;createdAt&quot;: &quot;2021-01-07T20:55:35.698Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-01-07T20:55:35.698Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;tokens&quot;: [
+
+  ],
+  &quot;provisionTokens&quot;: [
+
+  ]
 }</pre>
       </div>
     </div>

@@ -108,13 +108,13 @@ table th, table td {
     <div class="container">
       <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create, delete and retrieve account wallets.</p>
+        <p class="explanation">Create, update, delete and retrieve account wallets.</p>
 
       <div class="article">
         <h2>CREATE WALLET</h2>
         <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns created wallet (See INDEX for response details)
+            Returns created wallets (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -168,52 +168,56 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/5971eaf6-4248-4b61-8608-677116fc6a07/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/2dc78faa-f824-49be-b707-da1d633f0179/wallets</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
     "data": {
-      "wallet": {
-        "blockchain": "bitcoin",
-        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
-      }
+      "wallets": [
+        {
+          "blockchain": "bitcoin",
+          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+        }
+      ]
     },
-    "url": "http://example.org/api/v1/accounts/5971eaf6-4248-4b61-8608-677116fc6a07/wallets",
+    "url": "http://example.org/api/v1/accounts/2dc78faa-f824-49be-b707-da1d633f0179/wallets",
     "method": "POST",
-    "nonce": "9c92a9927011a6de8e0260db103f898b",
-    "timestamp": "1609148080"
+    "nonce": "e7c16ee21e4d6b8ca3b5652e868e62f6",
+    "timestamp": "1610052934"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "z4TAs0fsr3NJwA+DsZH8E4/vCYw9sn0H8ylHEecdDbO/v8YO/5T+cpFNOPdceNMEd6nwSQLeYdOk28Iacfo1AA=="
+    "signature": "QPd6xbeauQZmMUgp9hO44Dh5Wq/elXjebHmODTKrJiKUetiYDB8b1ShU14fLY2k0gqSTxcHAaMGIS4gjY+wKDA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;654117275ee34d629d1c585fe51ad2c1&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;544899cb53779e20390491b8418e473d&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 20,
-  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
-  &quot;source&quot;: &quot;user_provided&quot;,
-  &quot;state&quot;: null,
-  &quot;createdAt&quot;: &quot;2020-12-28T09:34:41.292Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-12-28T09:34:41.292Z&quot;,
-  &quot;blockchain&quot;: &quot;bitcoin&quot;,
-  &quot;tokens&quot;: [
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 20,
+    &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+    &quot;source&quot;: &quot;user_provided&quot;,
+    &quot;state&quot;: null,
+    &quot;createdAt&quot;: &quot;2021-01-07T20:55:34.374Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-07T20:55:34.374Z&quot;,
+    &quot;blockchain&quot;: &quot;bitcoin&quot;,
+    &quot;tokens&quot;: [
 
-  ],
-  &quot;provisionTokens&quot;: [
+    ],
+    &quot;provisionTokens&quot;: [
 
-  ]
-}</pre>
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>
