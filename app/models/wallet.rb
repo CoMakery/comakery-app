@@ -36,8 +36,8 @@ class Wallet < ApplicationRecord
   end
 
   def set_primary_flag
-    self.primary_wallet = !Wallet.exists?(account_id: account_id, 
-                                          _blockchain: _blockchain, 
+    self.primary_wallet = !Wallet.exists?(account_id: account_id,
+                                          _blockchain: _blockchain,
                                           primary_wallet: true)
   end
 
