@@ -2,7 +2,7 @@ class PopulateAwardsImages < ActiveRecord::DataMigration
   def up
     Award.find_each do |award|
       %i[image submission_image].each do |image_field|
-        attachment_id = project.public_send("#{image_field}_id")
+        attachment_id = award.public_send("#{image_field}_id")
 
         next if attachment_id.blank?
 
