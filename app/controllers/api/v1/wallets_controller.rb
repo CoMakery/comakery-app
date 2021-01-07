@@ -11,7 +11,7 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/wallets
   def create
-    @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision)
+    @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision_params)
 
     if @wallet.persisted?
       render 'show.json', status: :created
@@ -80,7 +80,8 @@ class Api::V1::WalletsController < Api::V1::ApiController
       @redirect_url ||= params.fetch(:body, {}).fetch(:data, {}).fetch(:redirect_url, nil)
     end
 
-    def tokens_to_provision
-      params.dig(:body, :data, :wallet, :tokens_to_provision)
+    def tokens_to_provision_params
+      available_params = %i[token_id max_balance lockup_until reg_group_id account_id account_frozen]
+      params.dig(:body, :data, :wallet).permit(tokens_to_provision: available_params).fetch(:tokens_to_provision, [])
     end
 end
