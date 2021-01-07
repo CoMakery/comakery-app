@@ -553,7 +553,7 @@ class ProjectForm extends React.Component {
 
               {this.props.teams.length === 0 && !this.props.discordBotUrl &&
               <div className='project-form--form--channels--empty'>
-                Start adding channels by signing in with{ [this.props.slackEnabled ? 'Slack' : null, this.props.discordEnabled ? 'Discord' : null].filter((obj) => obj ).join(' or ') }
+                Start adding channels by signing in with{ [this.props.slackEnabled ? 'Slack' : null, this.props.discordEnabled ? 'Discord' : null].filter((obj) => obj).join(' or ') }
               </div>
               }
             </React.Fragment>
@@ -688,7 +688,7 @@ ProjectForm.propTypes = {
   projectForHeader: PropTypes.object,
   isWhitelabel    : PropTypes.bool.isRequired,
   discordEnabled  : PropTypes.bool.isRequired,
-  slackEnabled    : PropTypes.bool.isRequired,
+  slackEnabled    : PropTypes.bool.isRequired
 }
 ProjectForm.defaultProps = {
   project         : {'default': '_'},
@@ -707,6 +707,6 @@ ProjectForm.defaultProps = {
   projectForHeader: null,
   isWhitelabel    : false,
   discordEnabled  : true,
-  slackEnabled    : true,
+  slackEnabled    : true
 }
 export default ProjectForm
