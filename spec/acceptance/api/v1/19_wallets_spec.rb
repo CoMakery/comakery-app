@@ -55,10 +55,10 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallet: { blockchain: :bitcoin, address: build(:bitcoin_address_1) } } }
+      let!(:create_params) { { wallets: [{ blockchain: :bitcoin, address: build(:bitcoin_address_1) }] } }
 
       example 'CREATE WALLET' do
-        explanation 'Returns created wallet (See INDEX for response details)'
+        explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -68,10 +68,10 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallet: { blockchain: :algorand_test, source: :ore_id } } }
+      let!(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id }] } }
 
       example 'CREATE WALLET – ORE_ID' do
-        explanation 'Returns created wallet (See INDEX for response details)'
+        explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -82,10 +82,10 @@ resource 'IX. Wallets' do
     context '201' do
       let!(:id) { account.managed_account_id }
       let(:token) { create(:asa_token) }
-      let(:create_params) { { wallet: { blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]" } } }
+      let(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]" }] } }
 
       example 'CREATE WALLET – ORE_ID WITH PROVISIONING' do
-        explanation 'Returns created wallet (See INDEX for response details)'
+        explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -95,7 +95,7 @@ resource 'IX. Wallets' do
 
     context '400' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallet: { address: build(:bitcoin_address_1) } } }
+      let!(:create_params) { { wallets: [{ address: build(:bitcoin_address_1) }] } }
 
       example 'CREATE WALLET – ERROR' do
         explanation 'Returns an array of errors'
@@ -103,7 +103,7 @@ resource 'IX. Wallets' do
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(400)
-        expect(response_body).to eq '{"errors":{"blockchain":["unknown blockchain value"]}}'
+        expect(response_body).to eq '{"errors":{"0":{"blockchain":["unknown blockchain value"]}}}'
       end
     end
   end

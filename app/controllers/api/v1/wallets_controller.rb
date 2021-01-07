@@ -11,14 +11,24 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/wallets
   def create
-    @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision)
+    ActiveRecord::Base.transaction do
+      @wallets = WalletCreator.new(account: account).call(wallets_params)
 
-    if @wallet.persisted?
-      render 'show.json', status: :created
-    else
-      @errors = @wallet.errors
+      if @wallets.all?(&:persisted?)
+        render 'index.json', status: :created
+      else
+        @errors = {}
 
-      render 'api/v1/error.json', status: :bad_request
+        @wallets.each_with_index.map do |wallet, i|
+          next if wallet.persisted?
+
+          @errors[i] = wallet.errors
+        end
+
+        render 'api/v1/error.json', status: :bad_request
+
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
@@ -64,23 +74,15 @@ class Api::V1::WalletsController < Api::V1::ApiController
       @wallet ||= account.wallets.find(params[:id])
     end
 
-    def wallet_params
-      r = params.fetch(:body, {}).fetch(:data, {}).fetch(:wallet, {}).permit(
-        :blockchain,
-        :address,
-        :source
-      )
+    def wallets_params
+      wallets = params.fetch(:body, {}).fetch(:data, {}).require(:wallets)
 
-      r[:_blockchain] = r[:blockchain]
-      r.delete(:blockchain)
-      r
+      wallets.map do |wallet_params|
+        wallet_params.permit(:blockchain, :address, :source, :tokens_to_provision)
+      end
     end
 
     def redirect_url
       @redirect_url ||= params.fetch(:body, {}).fetch(:data, {}).fetch(:redirect_url, nil)
-    end
-
-    def tokens_to_provision
-      params.dig(:body, :data, :wallet, :tokens_to_provision)
     end
 end
