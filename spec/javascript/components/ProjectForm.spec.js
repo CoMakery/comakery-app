@@ -149,19 +149,19 @@ describe('ProjectForm', () => {
   })
 
   it('shows channels section if Discord enabled', () => {
-    const wrapper = mount(<ProjectForm discordEnabled={true} slackEnabled={false}  />)
+    const wrapper = mount(<ProjectForm discordEnabled slackEnabled={false}  />)
 
     expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(true)
   })
 
   it('shows channels section if Slack enabled', () => {
-    const wrapper = mount(<ProjectForm discordEnabled={false} slackEnabled={true}  />)
+    const wrapper = mount(<ProjectForm discordEnabled={false} slackEnabled  />)
 
     expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(true)
   })
 
   it('shows channels section if Discord and Slack enabled', () => {
-    const wrapper = mount(<ProjectForm discordEnabled={true} slackEnabled={true}  />)
+    const wrapper = mount(<ProjectForm discordEnabled slackEnabled  />)
 
     expect(wrapper.contains(<h2>Communication Channels</h2>)).toEqual(true)
   })
