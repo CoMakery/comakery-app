@@ -118,6 +118,52 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
     end
   end
 
+  describe 'PUT #update' do
+    let(:update_params) { { wallet: { primary_wallet: 'true' } } }
+    let!(:primary_wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_1)) }
+    let!(:wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_2)) }
+
+    context 'with valid params' do
+      it 'updates wallet' do
+        expect(primary_wallet.primary_wallet).to be true
+        expect(wallet.primary_wallet).to be false
+
+        params = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'PUT')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+
+        put :update, params: params
+
+        expect(primary_wallet.reload.primary_wallet).to be false
+        expect(wallet.reload.primary_wallet).to be true
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'with ivalid params' do
+      # At the moment there is no case when invalid params can be sent
+      #   so just stubbed it with false
+      before do
+        allow_any_instance_of(Wallet).to receive(:update).and_return(false)
+      end
+
+      it 'rejects update' do
+        expect(primary_wallet.primary_wallet).to be true
+        expect(wallet.primary_wallet).to be false
+
+        params = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'PUT')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+
+        put :update, params: params
+
+        expect(primary_wallet.reload.primary_wallet).to be true
+        expect(wallet.reload.primary_wallet).to be false
+        expect(response).to have_http_status(400)
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     context 'with valid params' do
       let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }

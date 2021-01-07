@@ -70,8 +70,11 @@ describe Wallet, type: :model do
   end
 
   describe '#set_primary_flag' do
-    subject { wallet.save; wallet.primary_wallet }
-    
+    subject do
+      wallet.save
+      wallet.primary_wallet
+    end
+
     let(:wallet) { build(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
     let(:account) { wallet.account }
 
@@ -97,7 +100,7 @@ describe Wallet, type: :model do
   describe '#mark_another_wallet_as_primary' do
     let!(:wallet) { create(:wallet, primary_wallet: true, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
     let!(:wallet2) { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_2)) }
-    
+
     it 'marks another wallet as primary' do
       wallet.destroy
 

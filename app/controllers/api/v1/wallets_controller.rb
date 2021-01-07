@@ -32,6 +32,24 @@ class Api::V1::WalletsController < Api::V1::ApiController
     end
   end
 
+  # PATCH/PUT /api/v1/accounts/1/wallets/1
+  def update
+    ActiveRecord::Base.transaction do
+      account.wallets.where(_blockchain: wallet._blockchain, primary_wallet: true)
+             .update_all(primary_wallet: false) # rubocop:disable Rails/SkipsModelValidations
+
+      if wallet.update(wallet_params)
+        render 'show.json', status: :ok
+      else
+        @errors = wallet.errors
+
+        render 'api/v1/error.json', status: :bad_request
+
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
+
   # GET /api/v1/accounts/1/wallets/1
   def show
     fresh_when wallet, public: true
@@ -80,6 +98,10 @@ class Api::V1::WalletsController < Api::V1::ApiController
       wallets.map do |wallet_params|
         wallet_params.permit(:blockchain, :address, :source, :tokens_to_provision)
       end
+    end
+
+    def wallet_params
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:wallet, {}).permit(:primary_wallet)
     end
 
     def redirect_url
