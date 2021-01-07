@@ -1,25 +1,31 @@
 class WalletCreator
   class WrongTokensFormat < StandardError; end
 
-  attr_reader :account, :wallet, :tokens_to_provision
+  attr_reader :account
 
   def initialize(account:)
     @account = account
   end
 
-  def call(wallet_params, tokens_to_provision: [])
-    @wallet = account.wallets.new(wallet_params)
-    @tokens_to_provision = sanitize_tokens_to_provision(tokens_to_provision)
+  def call(wallets_params)
+    wallets_params.map do |wallet_params|
+      tokens_to_provision = wallet_params.delete(:tokens_to_provision)
+      wallet_params[:_blockchain] = wallet_params.delete(:blockchain)
 
-    build_wallet_provisions if should_be_provisioned?
+      wallet = account.wallets.new(wallet_params)
+      tokens_to_provision = sanitize_tokens_to_provision(wallet, tokens_to_provision)
 
-    wallet.save if wallet.errors.empty?
-    wallet
+      build_wallet_provisions(wallet, tokens_to_provision) if should_be_provisioned?(wallet, tokens_to_provision)
+
+      wallet.save if wallet.errors.empty?
+
+      wallet
+    end
   end
 
   private
 
-    def sanitize_tokens_to_provision(tokens_to_provision)
+    def sanitize_tokens_to_provision(wallet, tokens_to_provision)
       return [] if tokens_to_provision.blank?
 
       parsed_token_ids = JSON.parse(tokens_to_provision.to_s)
@@ -31,11 +37,11 @@ class WalletCreator
       []
     end
 
-    def should_be_provisioned?
-      tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?
+    def should_be_provisioned?(wallet, tokens_to_provision)
+      tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?(wallet, tokens_to_provision)
     end
 
-    def valid_tokens_to_provision?
+    def valid_tokens_to_provision?(wallet, tokens_to_provision)
       correct_tokens = Token.available_for_provision.where(id: tokens_to_provision)
       wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.pluck(:id)
 
@@ -47,7 +53,7 @@ class WalletCreator
       true
     end
 
-    def build_wallet_provisions
+    def build_wallet_provisions(wallet, tokens_to_provision)
       tokens_to_provision.each do |token_to_provision|
         wallet.wallet_provisions.new(token_id: token_to_provision)
       end

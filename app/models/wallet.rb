@@ -10,7 +10,7 @@ class Wallet < ApplicationRecord
   validates :source, presence: true
   validates :address, presence: true, unless: :pending?
   validates :address, blockchain_address: true
-  validates :_blockchain, uniqueness: { scope: :account_id, message: 'has already wallet added' }
+  validates :_blockchain, uniqueness: { scope: [:account_id, :primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
 
   attr_readonly :_blockchain
 
