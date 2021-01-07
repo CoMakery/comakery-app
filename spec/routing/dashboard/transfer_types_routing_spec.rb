@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Dashboard::TransferTypesController, type: :routing do
   describe 'routing' do
     it 'routes to #index' do
-      expect(get: '/projects/1/dashboard/transfer_types').to route_to('dashboard/transfer_types#index', project_id: '1')
+      expect(get: '/projects/1/dashboard/transfer_categories').to route_to('dashboard/transfer_types#index', project_id: '1')
     end
 
     it 'routes to #create' do

@@ -17,7 +17,7 @@ describe 'test_ready_filter', js: true do
         login(owner)
         visit project_path(project)
         click_link 'transfers'
-        page.find :css, '.transfers-create', wait: 20 # wait for page to load
+        page.find :css, '#select_transfers', wait: 20 # wait for page to load
 
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
@@ -40,7 +40,7 @@ describe 'test_ready_filter', js: true do
     login(owner)
     visit project_path(project)
     click_link 'transfers'
-    page.find :css, '.transfers-create', wait: 20 # wait for page to load
+    page.find :css, '#select_transfers', wait: 20 # wait for page to load
 
     page.find(:css, '.transfers-table__transfer__issuer a.sort_link').click
 

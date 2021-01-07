@@ -1,5 +1,6 @@
 import { Controller } from 'stimulus'
 import { Decimal } from 'decimal.js'
+import * as Turbolinks from 'turbolinks'
 
 export default class extends Controller {
   static targets = [ 'amount', 'quantity', 'total', 'form', 'formChild', 'create' ]
@@ -19,7 +20,20 @@ export default class extends Controller {
 
   showForm() {
     this.formChildTarget.style.display = 'flex'
-    this.createTarget.disabled = true
+
+    let url = this.createTarget[this.createTarget.length - 1].dataset.url
+    let transfer = this.targets.find('create').value
+
+    if (transfer === 'Manage Categories'){
+      Turbolinks.visit(url);
+    }
+    else if(transfer === "") {
+      this.formChildTarget.style.display = 'none'
+    }
+    else {
+      let category = this.formChildTarget.getElementsByClassName('transfers-table__transfer__name')
+      category[0].childNodes[3].value = transfer
+    }
 
     this.transfers.forEach((transfer) => {
       transfer.style.opacity = 0.9
