@@ -9,7 +9,7 @@ describe Wallet, type: :model do
   it { is_expected.to belong_to(:ore_id_account).optional }
   it { is_expected.to have_many(:balances).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:address) }
-  it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id).with_message('has already wallet added').ignoring_case_sensitivity }
+  it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id, :primary_wallet).with_message('has primary wallet already').ignoring_case_sensitivity }
   it { is_expected.to have_readonly_attribute(:_blockchain) }
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
   it { is_expected.not_to validate_presence_of(:ore_id_account) }
@@ -45,10 +45,6 @@ describe Wallet, type: :model do
   describe '#available_blockchains' do
     subject { create(:wallet) }
 
-    it 'returns list of avaiable blockchains for creating a new wallet with the same account' do
-      expect(subject.available_blockchains).not_to include(subject._blockchain)
-    end
-
     it 'returns testnets if TESTNETS_AVAILABLE set to true' do
       allow(Blockchain).to receive(:testnets_available?).and_return(true)
 
@@ -71,5 +67,41 @@ describe Wallet, type: :model do
   describe '#coin_balance', vcr: true do
     subject { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
     specify { expect(subject.coin_balance).to be_a(Balance) }
+  end
+
+  describe '#set_primary_flag' do
+    subject { wallet.save; wallet.primary_wallet }
+    
+    let(:wallet) { build(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
+    let(:account) { wallet.account }
+
+    it { is_expected.to be true }
+
+    context 'when primary for this network already exists' do
+      before do
+        create(:wallet, account: account, primary_wallet: true, _blockchain: :algorand_test, address: build(:algorand_address_2))
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context 'when primary exists for different network' do
+      before do
+        create(:wallet, account: account, primary_wallet: true, _blockchain: :bitcoin, address: build(:bitcoin_address_1))
+      end
+
+      it { is_expected.to be true }
+    end
+  end
+
+  describe '#mark_another_wallet_as_primary' do
+    let!(:wallet) { create(:wallet, primary_wallet: true, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
+    let!(:wallet2) { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_2)) }
+    
+    it 'marks another wallet as primary' do
+      wallet.destroy
+
+      expect(wallet2.reload.primary_wallet).to be true
+    end
   end
 end
