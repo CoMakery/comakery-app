@@ -1,7 +1,7 @@
 # Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
 # rubocop:disable Rails/HasAndBelongsToMany
 
-class Account < ActiveRecord::Base
+class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
   attachment :image, type: :image

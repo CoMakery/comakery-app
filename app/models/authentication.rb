@@ -1,4 +1,4 @@
-class Authentication < ActiveRecord::Base
+class Authentication < ApplicationRecord
   belongs_to :account
   has_many :authentication_teams, dependent: :destroy
   validates :account, :provider, :uid, presence: true
