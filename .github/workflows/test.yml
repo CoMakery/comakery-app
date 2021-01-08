@@ -135,7 +135,16 @@ jobs:
       
     - name: Precompile assets
       run: bundle exec rails assets:precompile
-      
+
+    - name: Drop database
+      run: bundle exec rails db:drop
+
+    - name: Create database
+      run: bundle exec rails db:create
+
+    - name: Run Migrations  
+      run:  bundle exec rails db:migrate
+        
     - name: Setup database
       run: bundle exec rails db:setup
       
