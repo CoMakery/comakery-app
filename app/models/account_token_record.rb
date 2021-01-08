@@ -15,7 +15,7 @@ class AccountTokenRecord < ApplicationRecord
   BALANCE_MIN = 0
 
   attr_readonly :account_id, :token_id, :reg_group_id, :max_balance, :account_frozen, :lockup_until, :balance
-  validates_with ComakeryTokenValidator
+  validates_with SecurityTokenValidator
   validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
   validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
