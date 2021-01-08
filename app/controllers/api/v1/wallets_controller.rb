@@ -81,7 +81,6 @@ class Api::V1::WalletsController < Api::V1::ApiController
     end
 
     def tokens_to_provision_params
-      available_params = %i[token_id max_balance lockup_until reg_group_id account_id account_frozen]
-      params.dig(:body, :data, :wallet).permit(tokens_to_provision: available_params).fetch(:tokens_to_provision, [])
+      params.dig(:body, :data, :wallet, :tokens_to_provision)
     end
 end

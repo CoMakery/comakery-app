@@ -97,11 +97,11 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         end
       end
 
-      context 'with wrong formated and JSON valid tokens_to_provision param' do
+      context 'with param' do
         render_views
 
         it do
-          ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' } }
+          ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: 'string' } }
           params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
           params[:account_id] = account.managed_account_id
 
