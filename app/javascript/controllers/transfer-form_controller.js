@@ -24,13 +24,11 @@ export default class extends Controller {
     let url = this.createTarget[this.createTarget.length - 1].dataset.url
     let transfer = this.targets.find('create').value
 
-    if (transfer === 'Manage Categories'){
-      Turbolinks.visit(url);
-    }
-    else if(transfer === "") {
+    if (transfer === 'Manage Categories') {
+      Turbolinks.visit(url)
+    }    else if (transfer === '') {
       this.formChildTarget.style.display = 'none'
-    }
-    else {
+    }    else {
       let category = this.formChildTarget.getElementsByClassName('transfers-table__transfer__name')
       category[0].childNodes[3].value = transfer
     }
