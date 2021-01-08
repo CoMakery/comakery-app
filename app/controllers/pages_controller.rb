@@ -9,7 +9,7 @@ class PagesController < ApplicationController
 
   def featured # rubocop:todo Metrics/CyclomaticComplexity
     top_missions = Mission.active.with_attached_image.first(4)
-    more_missions = Mission.active.with_attached_image.offset(4)
+    more_missions = Mission.active.with_attached_image.offset(4).limit(10)
 
     flash[:warning] = 'Please confirm your email address to continue' if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
 
