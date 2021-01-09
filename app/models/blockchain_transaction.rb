@@ -104,10 +104,10 @@ class BlockchainTransaction < ApplicationRecord
     def populate_data # rubocop:todo Metrics/CyclomaticComplexity
       self.token ||= blockchain_transactable.token
       self.contract_address ||= token.contract_address
-      self.network ||= token._blockchain if token._token_type_on_ethereum? || token._token_type_dag? || token._token_type_algo? || token._token_type_asa?
+      self.network ||= token._blockchain if token._token_type_on_ethereum? || token._token_type_dag? || token._token_type_algo? || token._token_type_asa? || token._token_type_algorand_security_token?
 
       self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block if token._token_type_on_ethereum?
-      self.current_block ||= Comakery::Algorand.new(token.blockchain).last_round if token._token_type_algo? || token._token_type_asa?
+      self.current_block ||= Comakery::Algorand.new(token.blockchain).last_round if token._token_type_algo? || token._token_type_asa? || token._token_type_algorand_security_token?
     end
 
     # @abstract Subclass is expected to implement #tx

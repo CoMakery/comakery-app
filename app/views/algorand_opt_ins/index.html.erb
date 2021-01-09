@@ -1,0 +1,7 @@
+<%= render layout: 'projects/project_settings_modal' do %>
+  <div class="algorand_opt_ins">
+    <h2>Algorand Standard Assets</h2>
+
+    <%= render partial: "wallet", collection: @wallets, as: :wallet %>
+  </div>
+<% end %>

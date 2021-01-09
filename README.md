@@ -1,6 +1,6 @@
 [![CoMakery](./public/Logo-Header.svg)](https://www.comakery.com)
 
-## CoMakery Helps You Gather a Tribe To Achieve Big Missions. 
+## CoMakery Helps You Gather a Tribe To Achieve Big Missions.
 
 To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
 
@@ -13,7 +13,7 @@ To achieve your big mission you need to bring people together around a common vi
 * [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
 * [The CoMakery REST API](https://www.comakery.com/doc/api/v1/index.html)
 * [CoMakery Security Token (Open Source MIT Licensed ERC-1404)](https://github.com/CoMakery/comakery-security-token)
-* [Setting up the CoMakery platform development environment](#development-setup) 
+* [Setting up the CoMakery platform development environment](#development-setup)
 
 ## Try Out CoMakery
 
@@ -27,7 +27,7 @@ Our [license](LICENSE.md) allows you to use and share this software for noncomme
 
 If you are a company [our license](LICENSE.md) allows you to use this software for free for thirty days.
 
-Get in touch with CoMakery at [support@comakery.com](mailto:support@comakery.com) about: 
+Get in touch with CoMakery at [support@comakery.com](mailto:support@comakery.com) about:
 * A commercial license for self-hosting
 * Customization of the software for your community
 * White label hosting
@@ -47,7 +47,7 @@ Chat with us on the [CoMakery Forum](https://forum.comakery.com) about features 
 
 ## Get Involved
 
-We will be using CoMakery to build CoMakery! 
+We will be using CoMakery to build CoMakery!
 
 Here's where you can connect with the community:
 * Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
@@ -71,7 +71,7 @@ If you want to deploy a new a new CoMakery Server on Heroku just press this butt
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
 - Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
-- Setup DNS and add SSL 
+- Setup DNS and add SSL
 - Update Cloudfront and Airbrake settings
 
 ## Basic Auth
@@ -83,27 +83,36 @@ that environment variable exists.
 # Development Setup
 
 CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and other blockchains.
-  
+
 ## Configuration
 
 We use environment variables for app "secrets", and values which vary between environments - such as staging and production. Locally these are stored in a `.env` file at the root of the project. **Don't commit your .env file to any GitHub repository.** On heroku environment variables are defined using [Heroku Config Vars](https://devcenter.heroku.com/articles/config-vars).
 
 ## Local development with Docker
+#### Install gems. Run for fresh installation only.
+```
+$ docker-compose run --rm runner bundle install
+```
+
+For existing containers gems will be installed/updated with next command.
+
 #### Setup development environment
 ```
-$ docker-compose run runner bundle exec ./bin/setup
+$ docker-compose run --rm runner bundle exec ./bin/setup
 ```
+
+If you have troubles with this command please try to run previuos one (`bundle install`).
 
 #### Example: Running the app
 ```
-$ docker-compose run --service-ports rails
-$ docker-compose run --service-ports webpacker
-$ docker-compose run --service-ports sidekiq
+$ docker-compose run --rm --service-ports rails
+$ docker-compose run --rm --service-ports webpacker
+$ docker-compose run --rm --service-ports sidekiq
 ```
 
 #### Example: Attaching console and running specs
 ```
-$ docker-compose run runner
+$ docker-compose run --rm runner
 $ RAILS_ENV=test bundle exec rspec
 $ NODE_ENV=test yarn test
 ```
@@ -146,7 +155,7 @@ rails server
 
 To render css and js assets faster run:
 ```
-bin/webpack-dev-server 
+bin/webpack-dev-server
 ```
 
 If you need development seed data - DO NOT RUN ON PRODUCTION:
@@ -186,7 +195,7 @@ So after running assets precompile, all react components will be working in prod
 
 ### React_Rails
 
-All react components should be inside `app/javascript/components`. 
+All react components should be inside `app/javascript/components`.
 Use the `react_component` helper to render react component with `<%= react_component "Account" %>`.
 
 https://github.com/reactjs/react-rails
@@ -232,16 +241,16 @@ The `bin/deploy` script does the following:
 1. Turn on the down for maintenance page
 2. Manually backup production
 3. Deploy the git code in the current local branch to the heroku app specified
-4. Run `rake db:migrate`
+4. Run `rake db:prepare`
 5. Run `rake data:migrate` to migrate data
 6. Restart the apps with `heroku restart`
-7. Turn off the down for maintenance page 
+7. Turn off the down for maintenance page
 
 ## Data migrations
 
 We are using the data-migrate gem to load static table data or transform data. data migrate works similarly to schema migrations - they run in sequence, are run only once, track the last database migration that was run in the database, and can be run with rake.
 
-Data migration scripts are located in `db/data_migrations`. 
+Data migration scripts are located in `db/data_migrations`.
 
 If you need to migrate data or add static table data run
 ```

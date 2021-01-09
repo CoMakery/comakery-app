@@ -1,0 +1,24 @@
+.build-profile {
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+  width: 500px;
+  padding: 50px;
+
+  h1 {
+    font-size: 1.7em !important;
+    margin-bottom: 10px !important;
+  }
+
+  form {
+    .horizontal-line {
+      border-top: 1px solid #e2e2e2;
+      width: 124%;
+      margin-left: -36px;
+      margin-bottom: 30px;
+    }
+
+    .button {
+      float: right !important;
+    }
+  }
+}

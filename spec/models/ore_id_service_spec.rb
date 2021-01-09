@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe OreIdService, type: :model, vcr: true do
-  subject { described_class.new(create(:ore_id)) }
+  subject { described_class.new(create(:ore_id, skip_jobs: true)) }
 
   describe '#create_remote' do
     before do
@@ -16,7 +16,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
 
     specify do
       VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
-        expect { subject.create_remote }.to change(subject.ore_id, :account_name).and change(subject.ore_id, :state)
+        expect { subject.create_remote }.to change(subject.ore_id, :account_name)
       end
     end
 
@@ -170,7 +170,9 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     specify do
-      expect(subject.authorization_url('localhost', 'dummystate')).to eq('https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=dummystate')
+      url = 'https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=dummystate'
+      hmac = build(:ore_id_hmac, url)
+      expect(subject.authorization_url('localhost', 'dummystate')).to eq("#{url}&hmac=#{hmac}")
     end
   end
 
@@ -190,8 +192,10 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
 
       specify do
-        url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
-        expect(url).to eq('https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6InBheSJ9%0A')
+        generated_url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
+        expected_url = 'https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6InBheSJ9%0A'
+        hmac = build(:ore_id_hmac, expected_url)
+        expect(generated_url).to eq("#{expected_url}&hmac=#{hmac}")
       end
     end
 
@@ -206,13 +210,15 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
 
       specify do
-        url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
-        expect(url).to eq('https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6ImF4ZmVyIiwiYXNzZXRJbmRleCI6MTMwNzYz%0ANjd9%0A')
+        generated_url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
+        expected_url = 'https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6ImF4ZmVyIiwiYXNzZXRJbmRleCI6MTMwNzYz%0ANjd9%0A'
+        hmac = build(:ore_id_hmac, expected_url)
+        expect(generated_url).to eq("#{expected_url}&hmac=#{hmac}")
       end
     end
   end
 
-  describe '#algo_transfer_transaction' do
+  describe '#algorand_transaction' do
     context 'with ALGO token' do
       let(:transaction) do
         create(
@@ -224,7 +230,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
 
       specify do
-        expect(subject.send(:algo_transfer_transaction, transaction)).to eq(
+        expect(subject.send(:algorand_transaction, transaction)).to eq(
           amount: 1,
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
           to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
@@ -244,12 +250,34 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
 
       specify do
-        expect(subject.send(:algo_transfer_transaction, transaction)).to eq(
+        expect(subject.send(:algorand_transaction, transaction)).to eq(
           amount: 1,
           from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
           to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
           type: 'axfer',
           assetIndex: 13076367
+        )
+      end
+    end
+
+    context 'with Algorand Security token' do
+      let(:transaction) do
+        create(
+          :blockchain_transaction,
+          token: create(:algo_sec_token),
+          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+        )
+      end
+
+      specify do
+        expect(subject.send(:algorand_transaction, transaction)).to eq(
+          amount: nil,
+          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+          to: nil,
+          type: 'appl',
+          appIndex: 13258116,
+          appOnComplete: 1
         )
       end
     end

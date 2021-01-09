@@ -4,7 +4,8 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
-  attachment :image, type: :image
+  # attachment :image, type: :image
+  has_one_attached :image
 
   include EthereumAddressable
 
@@ -72,7 +73,7 @@ class Account < ApplicationRecord
   validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :password, length: { minimum: 8 }, if: :password_required
-  validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
+  validates :first_name, :last_name, :country, presence: true, if: :name_required
   validates :date_of_birth, presence: { message: 'should be present in correct format' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }

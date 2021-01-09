@@ -8,26 +8,17 @@ class OreIdAccount < ApplicationRecord
   before_create :set_temp_password
   after_create :schedule_sync, unless: :pending_manual?
   after_update :schedule_wallet_sync, if: :saved_change_to_account_name?
-  after_update :schedule_balance_sync, if: :saved_change_to_account_name? && :pending?
-  after_update :schedule_create_opt_in_tx, if: :saved_change_to_provisioning_stage? && :initial_balance_confirmed?
-  after_update :schedule_opt_in_tx_sync, if: :saved_change_to_provisioning_stage? && :opt_in_created?
-  after_update :schedule_assets_sync, if: :saved_change_to_state? && :ok?
+  after_update :schedule_opt_in_sync, if: :saved_change_to_state? && :ok?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
   # NOTE: There are two possible flows for ORE ID creation
   #
   # 1) Manual Flow – account created by user on ORE ID service website and passed to CoMakery with a callback.
-  # -- account created via auth:ore_id#new action --> (state: manual_pending)
+  # -- account created via auth:ore_id#new action --> (state: pending_manual)
   # -- account name received via auth:ore_id#receive action --> (state: ok)
   #
-  # 2) Auto Provisioning Flow – account created by CoMakery using ORE ID API.
-  # -- account created via ORE ID API --> (state: pending, provisioning_stage: not_provisioned)
-  # -- account balance confirmed on chain --> (state: pending, provisioning_stage: initial_balance_confirmed)
-  # -- opt in tx created via ORE ID API --> (state: pending, provisioning_stage: opt_in_created)
-  # -- opt in tx confirmed on chain --> (state: pending, provisioning_stage: provisioned)
-  # -- CoMakery password reset api endpoint called --> (state: unclaimed, provisioning_stage: provisioned)
-  # -- passwordUpdatedAt on ORE ID API response has been changed --> (state: ok, provisioning_stage: provisioned)
+  # 2) Auto Provisioning Flow – see description in WalletProvision
 
   enum state: {
     pending: 0,
@@ -35,13 +26,6 @@ class OreIdAccount < ApplicationRecord
     unclaimed: 2,
     ok: 3,
     unlinking: 4
-  }
-
-  enum provisioning_stage: {
-    not_provisioned: 0,
-    initial_balance_confirmed: 1,
-    opt_in_created: 2,
-    provisioned: 3
   }
 
   def service
@@ -65,53 +49,38 @@ class OreIdAccount < ApplicationRecord
       w.save!
     end
 
-    ok!
+    ok! if provisioned?
   end
 
-  def provisioning_wallet
-    wallets.last
+  def provisioned?
+    wallets.map(&:wallet_provisions).flatten.all?(&:provisioned?)
   end
 
-  def provisioning_tokens
-    Token._token_type_asa
-  end
-
-  def sync_balance
-    if provisioning_wallet&.coin_balance&.value&.positive?
-      initial_balance_confirmed!
-    else
-      raise OreIdAccount::ProvisioningError, 'Balance is not ready'
-    end
-  end
-
-  def sync_assets
+  def sync_opt_ins
     wallets.each do |wallet|
-      assets = Comakery::Algorand.new(wallet.blockchain).account_assets(wallet.address)
-      asset_ids = assets.map { |a| a.fetch('asset-id') }
-      asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
-      asset_tokens.each do |token|
-        opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
-        opt_in.opted_in!
-      end
+      client = Comakery::Algorand.new(wallet.blockchain)
+      sync_assets_opt_ins(client, wallet)
+      sync_apps_opt_ins(client, wallet)
     end
   end
 
-  def create_opt_in_tx
-    provisioning_tokens.each do |token|
-      opt_in = TokenOptIn.find_or_create_by(wallet: provisioning_wallet, token: token)
-      opt_in.pending!
-
-      service.create_tx(BlockchainTransactionOptIn.create!(blockchain_transactable: opt_in))
+  def sync_assets_opt_ins(client, wallet)
+    assets = client.account_assets(wallet.address)
+    asset_ids = assets.map { |a| a.fetch('asset-id') }
+    asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
+    asset_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
+      opt_in.opted_in!
     end
-
-    opt_in_created!
   end
 
-  def sync_opt_in_tx
-    if provisioning_wallet.token_opt_ins.all?(&:opted_in?)
-      provisioned!
-    else
-      raise OreIdAccount::ProvisioningError, 'OptIn tx is not ready'
+  def sync_apps_opt_ins(client, wallet)
+    apps = client.account_apps(wallet.address)
+    app_ids = apps.map { |a| a.fetch('id') }
+    app_tokens = Token._token_type_algorand_security_token.where(contract_address: app_ids)
+    app_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
+      opt_in.opted_in!
     end
   end
 
@@ -136,24 +105,12 @@ class OreIdAccount < ApplicationRecord
     OreIdWalletsSyncJob.perform_later(id)
   end
 
-  def schedule_balance_sync
-    OreIdBalanceSyncJob.perform_later(id)
-  end
-
-  def schedule_create_opt_in_tx
-    OreIdOptInTxCreateJob.perform_later(id)
-  end
-
-  def schedule_opt_in_tx_sync
-    OreIdOptInTxSyncJob.perform_later(id)
-  end
-
   def schedule_password_update_sync
     OreIdPasswordUpdateSyncJob.set(wait: 60).perform_later(id)
   end
 
-  def schedule_assets_sync
-    OreIdAssetsSyncJob.perform_later(id)
+  def schedule_opt_in_sync
+    OreIdOptInSyncJob.perform_later(id)
   end
 
   private

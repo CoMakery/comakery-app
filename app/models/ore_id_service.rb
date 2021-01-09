@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'], state: :unclaimed)
+    ore_id.update(account_name: response['accountName'])
     response
   end
 
@@ -90,7 +90,7 @@ class OreIdService
       state: state
     }
 
-    "https://service.oreid.io/auth?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"
   end
 
   def sign_url(transaction:, callback_url:, state:)
@@ -101,12 +101,12 @@ class OreIdService
       broadcast: true,
       chain_network: transaction.token.blockchain.ore_id_name,
       return_signed_transaction: true,
-      transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json),
+      transaction: Base64.encode64(algorand_transaction(transaction).to_json),
       callback_url: callback_url,
       state: state
     }
 
-    "https://service.oreid.io/sign?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/sign?#{params.to_query}"
   end
 
   private
@@ -116,7 +116,7 @@ class OreIdService
         'name' => account.name,
         'user_name' => account.nickname || '',
         'email' => account.email,
-        'picture' => account.image ? Refile.attachment_url(account, :image) : '',
+        'picture' => Attachment::GetPath.call(attachment: account.image).path,
         'user_password' => ore_id.temp_password,
         'phone' => '',
         'account_type' => 'native'
@@ -131,7 +131,7 @@ class OreIdService
         broadcast: true,
         chain_network: transaction.token.blockchain.ore_id_name,
         return_signed_transaction: true,
-        transaction: Base64.encode64(algo_transfer_transaction(transaction).to_json)
+        transaction: Base64.encode64(algorand_transaction(transaction).to_json)
       }
     end
 
@@ -143,24 +143,34 @@ class OreIdService
       }
     end
 
-    def algo_transfer_transaction(transaction)
-      algo_transaction = {
+    def algorand_transaction(transaction)
+      tx = {
         from: transaction.source,
         to: transaction.destination,
         amount: transaction.amount,
         type: 'pay'
       }
 
-      if transaction.token._token_type_asa?
-        asa_transaction = {
-          type: 'axfer',
-          assetIndex: transaction.token.contract_address.to_i
-        }
+      tx.merge!(asa_transaction(transaction)) if transaction.token._token_type_asa?
+      tx.merge!(app_transaction(transaction)) if transaction.token._token_type_algorand_security_token?
+      tx
+    end
 
-        algo_transaction.merge!(asa_transaction)
-      end
+    def asa_transaction(transaction)
+      {
+        type: 'axfer',
+        assetIndex: transaction.token.contract_address.to_i
+      }
+    end
 
-      algo_transaction
+    def app_transaction(transaction)
+      {
+        type: 'appl',
+        appIndex: transaction.token.contract_address.to_i,
+        to: nil,
+        amount: nil,
+        appOnComplete: 1 # OptIn type
+      }
     end
 
     def filtered_permissions
@@ -185,5 +195,12 @@ class OreIdService
       else
         raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
       end
+    end
+
+    def append_hmac_to_url(url)
+      hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], url)
+      hmac = Base64.strict_encode64(hmac)
+      hmac = ERB::Util.url_encode(hmac)
+      "#{url}&hmac=#{hmac}"
     end
 end

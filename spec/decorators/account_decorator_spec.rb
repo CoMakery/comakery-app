@@ -79,7 +79,7 @@ describe AccountDecorator do
   end
 
   describe 'image_url' do
-    let!(:account_w_image) { create(:account, image: Refile::FileDouble.new('dummy', 'dummy_image.png', content_type: 'image/png')) }
+    let!(:account_w_image) { create(:account, image: dummy_image) }
     let!(:account_wo_image) { create :account }
 
     it 'returns image_url if present' do

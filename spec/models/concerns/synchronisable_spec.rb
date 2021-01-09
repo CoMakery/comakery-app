@@ -18,6 +18,15 @@ shared_examples 'synchronisable' do
       specify { expect(subject.sync_allowed?).to be_truthy }
     end
 
+    context 'when next_sync_allowed_after is equal to current time' do
+      before do
+        allow(Time).to receive(:current).and_return(1)
+        allow(subject).to receive(:next_sync_allowed_after).and_return(1)
+      end
+
+      specify { expect(subject.sync_allowed?).to be_truthy }
+    end
+
     context 'when next_sync_allowed_after is later than current time' do
       before { allow(subject).to receive(:next_sync_allowed_after).and_return(1.day.from_now) }
       specify { expect(subject.sync_allowed?).to be_falsey }
@@ -61,7 +70,7 @@ shared_examples 'synchronisable' do
   describe '#next_sync_allowed_after' do
     context 'when latest_transaction is not present' do
       before { allow(subject).to receive(:latest_transaction).and_return(nil) }
-      specify { expect(subject.next_sync_allowed_after).to eq(0) }
+      specify { expect(subject.next_sync_allowed_after).to be <= Time.current }
     end
 
     context 'when latest_transaction is in progress' do

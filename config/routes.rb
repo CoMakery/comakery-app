@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   resource :account, only: [:update]
   resources :wallets
-  resources :algorand_assets, only: %i[index create]
+  resources :algorand_opt_ins, only: %i[index create]
   resources :accounts, only: [:new, :create, :show] do
     collection do
       get :download_data
@@ -89,7 +89,10 @@ Rails.application.routes.draw do
         end
       end
       resources :reg_groups, only: [:create, :update, :destroy]
-      resources :transfer_types, only: [:index, :create, :update, :destroy]
+
+      get 'transfer_categories', to: 'transfer_types#index', as: :transter_categories
+
+      resources :transfer_types, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
         collection do
           post :pause

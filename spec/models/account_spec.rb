@@ -494,7 +494,7 @@ describe Account do
   end
 
   describe '.experience_for(specialty)' do
-    let(:account) { create(:account) }
+    let(:account) { create(:account, specialty: create(:specialty)) }
 
     before do
       3.times { create(:award, specialty: account.specialty, account: account) }

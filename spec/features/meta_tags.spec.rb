@@ -59,7 +59,7 @@ describe 'meta_tags' do
 
     title = 'CoMakery Project'
     description = "#{project.title}: #{Comakery::Markdown.to_text(project.description)}"
-    image = Refile.attachment_url(project, :square_image)
+    image = Attachment::GetPath.call(attachment: project.square_image).path
 
     expect(page).to have_title(title)
 
@@ -84,7 +84,7 @@ describe 'meta_tags' do
 
     title = 'CoMakery Mission'
     description = "#{mission.name}: #{mission.description}"
-    image = Refile.attachment_url(mission, :image)
+    image = Attachment::GetPath.call(attachment: mission.image).path
 
     expect(page).to have_title(title)
 

@@ -116,7 +116,7 @@ jobs:
         restore-keys: ${{ matrix.ruby }}-gems-
     
     - name: Install OS dependenices
-      run: sudo apt-get install libpq-dev libssl-dev graphviz
+      run: sudo apt-get install libpq-dev libssl-dev graphviz imagemagick
     
     - name: Set up Bundler to use cache
       run: bundle config path 'vendor/bundle'
@@ -144,3 +144,10 @@ jobs:
       
     - name: Run Rspec
       run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
+
+    - name: Upload a Build Artifact
+      if: always()
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: SimpleCov Report
+        path: coverage/

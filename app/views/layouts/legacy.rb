@@ -2,6 +2,7 @@ class Views::Layouts::Legacy < Views::Base
   use_instance_variables_for_assigns true
   needs :whitelabel_mission
 
+  # rubocop:todo Metrics/PerceivedComplexity
   def content
     doctype!
     html(lang: 'en') do
@@ -34,7 +35,7 @@ class Views::Layouts::Legacy < Views::Base
             is_admin: current_account&.comakery_admin?,
             is_logged_in: (current_account ? true : false),
             is_whitelabel: @whitelabel_mission.present?,
-            whitelabel_logo: attachment_url(@whitelabel_mission, :whitelabel_logo),
+            whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
             current_path: request.fullpath
           },
           prerender: true
@@ -59,8 +60,8 @@ class Views::Layouts::Legacy < Views::Base
           {
             is_logged_in: (current_account ? true : false),
             is_whitelabel: @whitelabel_mission.present?,
-            whitelabel_logo: attachment_url(@whitelabel_mission, :whitelabel_logo),
-            whitelabel_logo_dark: attachment_url(@whitelabel_mission, :whitelabel_logo_dark)
+            whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
+            whitelabel_logo_dark: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo_dark).path
           },
           prerender: true
         )

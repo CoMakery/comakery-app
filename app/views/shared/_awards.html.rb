@@ -84,19 +84,7 @@ class Views::Shared::Awards < Views::Base
   end
 
   def wallet_logo
-    if project.token._token_type_on_ethereum?
-      image_tag 'metamask2.png', alt: 'Metamask2'
-    elsif project.token._token_type_qrc20?
-      image_tag 'qrypto.png', alt: 'Qrypto'
-    elsif project.token._token_type_qtum?
-      image_tag 'ledger.png', alt: 'Ledger'
-    elsif project.token._token_type_ada? || project.token._token_type_btc?
-      image_tag 'trezor.png', alt: 'Trezor'
-    elsif project.token._token_type_eos?
-      image_tag 'eos.png', alt: 'Eos'
-    elsif project.token._token_type_xtz?
-      image_tag 'tezos.png', alt: 'Tezos'
-    end
+    image_tag 'metamask2.png', alt: 'Metamask2'
   end
 
   def display_status(award)
