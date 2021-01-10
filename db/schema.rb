@@ -60,12 +60,12 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "nickname"
-    t.string "country"
-    t.date "date_of_birth"
     t.string "public_address"
     t.string "nonce"
     t.string "network_id"
     t.boolean "system_email", default: false
+    t.string "country"
+    t.date "date_of_birth"
     t.date "agreed_to_user_agreement"
     t.boolean "new_award_notice", default: false
     t.boolean "contributor_form", default: false
@@ -112,9 +112,9 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
   end
 
   create_table "api_request_logs", force: :cascade do |t|
-    t.jsonb "body", null: false
     t.inet "ip", null: false
     t.string "signature", null: false
+    t.jsonb "body", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_api_request_logs_on_created_at"
     t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
@@ -139,11 +139,14 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.datetime "updated_at"
     t.string "uid", null: false
     t.string "token"
+    t.string "slack_user_name"
+    t.string "slack_first_name"
+    t.string "slack_last_name"
+    t.string "slack_image_32_url"
     t.jsonb "oauth_response"
     t.string "email"
     t.string "confirm_token"
     t.index ["account_id"], name: "index_authentications_on_account_id"
-    t.index ["uid"], name: "index_authentications_on_uid"
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
@@ -155,8 +158,9 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
-    t.integer "specialty_id"
     t.text "goal"
+    t.string "specialty"
+    t.integer "specialty_id"
     t.string "diagram_id"
     t.string "diagram_filename"
     t.string "diagram_content_size"
@@ -172,13 +176,14 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "award_type_id", null: false
-    t.integer "account_id"
+    t.integer "authentication_id"
     t.string "ethereum_transaction_address"
     t.text "proof_id", null: false
     t.string "proof_link"
     t.decimal "quantity", default: "1.0"
     t.decimal "total_amount"
     t.integer "unit_amount"
+    t.integer "account_id"
     t.integer "channel_id"
     t.string "uid"
     t.string "confirm_token"
@@ -214,9 +219,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.boolean "transaction_success"
     t.string "transaction_error"
     t.bigint "transfer_type_id"
-    t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
-    t.index ["issuer_id"], name: "index_awards_on_issuer_id"
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
     t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
   end
@@ -278,9 +281,6 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.datetime "discord_invite_created_at"
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
-  end
-
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
   create_table "experiences", force: :cascade do |t|
@@ -368,8 +368,6 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
-    t.index ["account_id"], name: "index_payments_on_account_id"
-    t.index ["issuer_id"], name: "index_payments_on_issuer_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
@@ -381,6 +379,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.datetime "updated_at", null: false
     t.boolean "public", default: false, null: false
     t.integer "account_id", null: false
+    t.string "slack_team_id"
     t.string "image_id"
     t.string "slack_channel"
     t.decimal "maximum_tokens", default: "0.0"
@@ -401,6 +400,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.string "image_filename"
     t.string "image_content_size"
     t.string "image_content_type"
+    t.boolean "archived", default: false
     t.string "long_id"
     t.integer "visibility", default: 1
     t.string "token_symbol"
@@ -435,6 +435,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
+    t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
     t.index ["token_id"], name: "index_projects_on_token_id"
   end
 
