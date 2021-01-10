@@ -126,6 +126,10 @@
       "description": "Username for Sidekiq admin panel",
       "required": false
     },
+    "WHITELABEL": {
+      "description": "Deploy white lable layout to heroku.",
+      "required": true
+    },
     "NODE_MODULES_CACHE": "false"
   }
 }
