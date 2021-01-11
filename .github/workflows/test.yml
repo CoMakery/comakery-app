@@ -142,10 +142,12 @@ jobs:
     - name: Down the migration
       run: bundle exec rake db:migrate:down VERSION=20200528155545
 
-    - name: Setup database
+    - name: Drop database
       run: bundle exec rake db:drop
+
+    - name: Setup database
       run: bundle exec rake db:prepare
-      
+
     - name: Run data migrations
       run: bundle exec rails data:migrate
       
