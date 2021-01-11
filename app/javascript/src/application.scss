@@ -75,7 +75,7 @@ label {
   font-family: Montserrat, sans-serif;
 }
 
-input:not(.btn):matches([type="button"], [type="submit"], [type="reset"]),
+input:not(.btn):not(.close):matches([type="button"], [type="submit"], [type="reset"]),
 button:not(.btn) {
   height: 30px;
   padding: 6px 12px;
