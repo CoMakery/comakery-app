@@ -19,8 +19,6 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
     account_token_record.account = Account.find(
       params.fetch(:body, {}).fetch(:data, {}).fetch(:account_token_record, {}).fetch(:account_id, nil)
     )
-    # TODO: Add primary filter to `find_by` after PR #1809 will be merged
-    account_token_record.wallet = account_token_record.account.wallets.find_by(_blockchain: account_token_record.token._blockchain)
 
     if account_token_record.save
       project.safe_add_interested(account_token_record.account)

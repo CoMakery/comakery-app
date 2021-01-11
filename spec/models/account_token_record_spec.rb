@@ -28,6 +28,14 @@ describe AccountTokenRecord do
       expect(account_token_record.lockup_until).not_to be_nil
       expect(account_token_record.reg_group).not_to be_nil
     end
+
+    it 'sets a wallet on before_validation' do
+      account_token_record = build(:account_token_record)
+      account_token_record.wallet = nil
+      account_token_record.valid?
+
+      expect(account_token_record.wallet).to eq account_token_record.account.wallets.first
+    end
   end
 
   describe 'validations' do
