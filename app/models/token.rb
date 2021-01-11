@@ -68,7 +68,7 @@ class Token < ApplicationRecord
   enum _token_type: TokenType.list, _prefix: :_token_type
   delegate :contract, :abi, to: :token_type
 
-  ransacker :network, formatter: proc {|v| Blockchain.list[v.to_sym]} do |parent|
+  ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
     parent.table[:_blockchain]
   end
 

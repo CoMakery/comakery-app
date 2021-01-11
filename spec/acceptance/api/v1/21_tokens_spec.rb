@@ -8,8 +8,7 @@ resource 'X. Tokens' do
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
   explanation ['Retrieve data tokens.'   \
-          'Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.'
-              ].join(' ')
+          'Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.'].join(' ')
 
   header 'API-Key', build(:api_key)
   header 'Content-Type', 'application/json'
@@ -47,7 +46,7 @@ resource 'X. Tokens' do
         explanation 'Returns an array of errors'
 
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
-        request[:q] = { _blockchain_cont: 'bitcoin'}
+        request[:q] = { _blockchain_cont: 'bitcoin' }
 
         do_request(request)
         expect(status).to eq(400)
