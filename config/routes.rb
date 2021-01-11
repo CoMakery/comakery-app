@@ -167,6 +167,8 @@ Rails.application.routes.draw do
         resources :transfer_rules, only: [:index, :show, :create, :destroy]
         resources :reg_groups, only: [:index, :show, :create, :destroy]
       end
+      
+      resources :tokens, only: :index
     end
   end
 
