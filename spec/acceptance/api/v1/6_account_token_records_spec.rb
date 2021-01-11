@@ -83,6 +83,7 @@ resource 'VI. Account Token Records' do
       parameter :max_balance, 'max balance', required: true, type: :string
       parameter :lockup_until, 'lockup until', required: true, type: :string
       parameter :reg_group_id, 'reg group id', required: true, type: :string
+      parameter :account_id, 'account id', required: true, type: :string
       parameter :account_frozen, 'frozen', required: true, type: :string
     end
 
