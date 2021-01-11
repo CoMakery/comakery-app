@@ -119,8 +119,7 @@ class Mom
     account = attrs[:account] || create(
       :account
     )
-
-    account.wallets.find_by(_blockchain: token._blockchain) || create(
+    wallet = account.wallets.find_by(_blockchain: token._blockchain) || create(
       :wallet,
       account: account,
       _blockchain: token._blockchain,
@@ -132,6 +131,7 @@ class Mom
     defaults = {
       account: account,
       token: token,
+      wallet: wallet,
       reg_group: create(:reg_group, token: token),
       max_balance: 100000,
       balance: 200,
@@ -194,10 +194,11 @@ class Mom
 
   def blockchain_transaction_account_token_record(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
+    account_token_record = create(:account_token_record)
     attrs.delete(:token)
 
     defaults = {
-      blockchain_transactable: create(:account_token_record),
+      blockchain_transactable: account_token_record,
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,

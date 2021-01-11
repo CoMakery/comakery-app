@@ -4,6 +4,7 @@ class AccountTokenRecord < ApplicationRecord
   belongs_to :account
   belongs_to :token
   belongs_to :reg_group
+  belongs_to :wallet
 
   after_initialize :set_defaults
   before_save :touch_account
