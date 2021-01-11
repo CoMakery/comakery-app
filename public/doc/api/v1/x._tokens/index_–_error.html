@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>X. Tokens API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,84 +106,17 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>X. Tokens API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Retrieve data tokens.Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.</p>
 
       <div class="article">
-        <h2>CREATE – ERROR</h2>
-        <h3>POST /api/v1/projects/:project_id/transfers</h3>
+        <h2>INDEX – ERROR</h2>
+        <h3>GET /api/v1/tokens</h3>
           <p class="explanation">
             Returns an array of errors
           </p>
 
-          <h3>Parameters</h3>
-          <table class="parameters table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="required">
-                    <span class="name">project_id</span>
-                </td>
-                <td>
-                  <span class="description">project id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer[amount]</span>
-                </td>
-                <td>
-                  <span class="description">transfer amount (same decimals as token)</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer[quantity]</span>
-                </td>
-                <td>
-                  <span class="description">transfer quantity (2 decimals)</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer[total_amount]</span>
-                </td>
-                <td>
-                  <span class="description">transfer total_amount (amount times quantity, same decimals as token)</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer[account_id]</span>
-                </td>
-                <td>
-                  <span class="description">transfer account id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">transfer[transfer_type_id]</span>
-                </td>
-                <td>
-                  <span class="description">custom transfer type id (default: earned)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">transfer[description]</span>
-                </td>
-                <td>
-                  <span class="description">transfer description</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Response Fields</h3>
           <table class="response-fields table table-striped table-bordered table-condensed">
@@ -196,10 +129,74 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">errors</span>
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">array of errors</span>
+                  <span class="description">id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">name</span>
+                </td>
+                <td>
+                  <span class="description">name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">symbol</span>
+                </td>
+                <td>
+                  <span class="description">symbol</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">network</span>
+                </td>
+                <td>
+                  <span class="description">network</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">contractAddress</span>
+                </td>
+                <td>
+                  <span class="description">contact address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">decimalPlaces</span>
+                </td>
+                <td>
+                  <span class="description">decimal places</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">imageUrl</span>
+                </td>
+                <td>
+                  <span class="description">image url</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">createdAt</span>
+                </td>
+                <td>
+                  <span class="description">token creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">updatedAt</span>
+                </td>
+                <td>
+                  <span class="description">token update timestamp</span>
                 </td>
               </tr>
             </tbody>
@@ -211,29 +208,13 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/46/transfers</pre>
+          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=7618fa4f3a675dfed3b26a3f8bf296bc&amp;body[timestamp]=1610402970&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=m4ZD3E7vmiGlrJ0BqIlnlCFOrUfxr9tvDVRJ3ySI2vsUI5m6VA42aF5%2BR%2Fe7WYYzvWC5kCsYf85NqQ6InOz4Bw%3D%3D&amp;q[_blockchain_cont]=bitcoin</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;7618fa4f3a675dfed3b26a3f8bf296bc&quot;, &quot;timestamp&quot;=&gt;&quot;1610402970&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;m4ZD3E7vmiGlrJ0BqIlnlCFOrUfxr9tvDVRJ3ySI2vsUI5m6VA42aF5+R/e7WYYzvWC5kCsYf85NqQ6InOz4Bw==&quot;}
+q: {&quot;_blockchain_cont&quot;=&gt;&quot;bitcoin&quot;}</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">{
-  "body": {
-    "data": {
-      "transfer": {
-        "amount": "-1.00",
-        "account_id": "5a0755b0-eb2a-4336-bf59-b4889155a246"
-      }
-    },
-    "url": "http://example.org/api/v1/projects/46/transfers",
-    "method": "POST",
-    "nonce": "c7c335b58b611b8d3ccd8cc8502770d7",
-    "timestamp": "1610402941"
-  },
-  "proof": {
-    "type": "Ed25519Signature2018",
-    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "MAQ//vtLTd8wG/dWZAJkverRPpsswn7bwP1+3LwaepnAF7ErKToYf5e9XL3S35gOtJuQIv8fKqwiXfiXKmDsDQ=="
-  }
-}</pre>
 
 
             <h3>Response</h3>
@@ -242,9 +223,7 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;amount&quot;: [
-      &quot;has incorrect precision (should be 8)&quot;
-    ]
+    &quot;q&quot;: &quot;No operator matches the given name and argument types.&quot;
   }
 }</pre>
       </div>
