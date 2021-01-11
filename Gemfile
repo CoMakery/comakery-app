@@ -154,5 +154,3 @@ gem 'validate_url', '~> 1.0'
 gem 'overcommit', '~> 0.53.0'
 
 gem 'fuubar', '~> 2.5'
-
-gem 'squasher'
