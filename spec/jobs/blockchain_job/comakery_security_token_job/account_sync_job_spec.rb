@@ -15,7 +15,7 @@ RSpec.describe BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob, type: :j
     let!(:record) { create(:account_token_record, token: token) }
 
     before do
-      record.update(wallet: nil)
+      record.update_columns(wallet_id: nil) # rubocop:todo Rails/SkipsModelValidations
       record.account.wallets.delete_all
     end
 
