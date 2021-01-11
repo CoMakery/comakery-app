@@ -32,6 +32,7 @@ class Dashboard::AccountsController < ApplicationController
       head 404
     end
 
+    # TODO: Extract creation of account_token_records to model or service
     def create_token_records
       @project.interested.each { |a| a.account_token_records.find_or_create_by!(token: @project.token) } if @project.token&._token_type_comakery_security_token?
     end
