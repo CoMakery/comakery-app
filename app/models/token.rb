@@ -1,5 +1,6 @@
 class Token < ApplicationRecord
   include BelongsToBlockchain
+  include BlockchainTransactable
 
   nilify_blanks
 
