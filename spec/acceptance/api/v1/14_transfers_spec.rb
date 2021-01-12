@@ -84,6 +84,7 @@ resource 'IV. Transfers' do
       parameter :total_amount, 'transfer total_amount (amount times quantity, same decimals as token)', required: true, type: :string
       parameter :account_id, 'transfer account id', required: true, type: :string
       parameter :transfer_type_id, 'custom transfer type id (default: earned)', required: false, type: :string
+      parameter :recipient_wallet_id, 'custom recipient wallet id', required: false, type: :string
       parameter :description, 'transfer description', type: :string
     end
 

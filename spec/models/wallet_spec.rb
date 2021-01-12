@@ -7,6 +7,7 @@ describe Wallet, type: :model do
   subject { build(:wallet) }
   it { is_expected.to belong_to(:account) }
   it { is_expected.to belong_to(:ore_id_account).optional }
+  it { is_expected.to have_many(:awards).with_foreign_key(:recipient_wallet_id).dependent(:nullify) }
   it { is_expected.to have_many(:balances).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id, :primary_wallet).with_message('has primary wallet already').ignoring_case_sensitivity }

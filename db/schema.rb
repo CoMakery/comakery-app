@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_06_184139) do
+ActiveRecord::Schema.define(version: 2021_01_09_093316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 2021_01_06_184139) do
     t.boolean "transaction_success"
     t.string "transaction_error"
     t.bigint "transfer_type_id"
+    t.bigint "recipient_wallet_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
     t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
@@ -619,6 +620,7 @@ ActiveRecord::Schema.define(version: 2021_01_06_184139) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
+  add_foreign_key "awards", "wallets", column: "recipient_wallet_id"
   add_foreign_key "balances", "tokens"
   add_foreign_key "balances", "wallets"
   add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"

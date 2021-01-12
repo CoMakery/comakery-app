@@ -947,14 +947,29 @@ describe Award do
   end
 
   describe 'recipient_address' do
-    let!(:award) { create :award, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
+    subject { award.recipient_address }
+
+    let(:account) { create(:account) }
+    let(:award) { build :award, account: account, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
 
     before do
-      create(:wallet, account: award.account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
+      create(:wallet, account: account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: award.project.token._blockchain)
     end
 
     it "returns recipient address on token's blockchain" do
-      expect(award.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
+      is_expected.to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
+    end
+
+    context 'when custom wallet provided' do
+      let(:custom_wallet) { create(:wallet, account: account, address: '0xB4252b39f8506A711205B0b1C4170f0034065b46', _blockchain: award.project.token._blockchain) }
+
+      before do
+        award.recipient_wallet_id = custom_wallet.id
+      end
+
+      it 'returns specified wallet' do
+        is_expected.to eq('0xB4252b39f8506A711205B0b1C4170f0034065b46')
+      end
     end
   end
 
@@ -1200,6 +1215,41 @@ describe Award do
       context 'order by default' do
         it { is_expected.to eq awards.order(created_at: :desc).pluck(:created_at) }
       end
+    end
+  end
+
+  describe '#recipient_wallet_belongs_to_account' do
+    subject { award }
+
+    let(:account) { create(:account) }
+    let(:wallet) { create(:wallet, account: account, address: build(:ethereum_address_1), _blockchain: award.project.token._blockchain) }
+    let(:award) { build :award, account: account, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten))) }
+
+    before do
+      award.recipient_wallet_id = wallet.id
+    end
+
+    it { is_expected.to be_valid }
+
+    context 'when wallet belongs to a different account' do
+      let(:wallet) { create(:wallet, address: build(:ethereum_address_1), _blockchain: award.project.token._blockchain) }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
+
+  describe '#recipient_wallet_and_token_in_same_network' do
+    subject { build(:award, account: account, recipient_wallet: wallet, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))) }
+
+    let(:account) { create(:account) }
+    let(:wallet) { create(:wallet, account: account, address: build(:ethereum_address_1), _blockchain: :ethereum_ropsten) }
+
+    it { is_expected.to be_valid }
+
+    context 'when wallet in different netwotk' do
+      let(:wallet) { create(:wallet, account: account, address: build(:bitcoin_address_1), _blockchain: :bitcoin) }
+
+      it { is_expected.not_to be_valid }
     end
   end
 end

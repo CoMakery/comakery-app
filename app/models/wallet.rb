@@ -6,6 +6,7 @@ class Wallet < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :token_opt_ins, dependent: :destroy
   has_many :wallet_provisions, dependent: :destroy
+  has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
 
   validates :source, presence: true
   validates :address, presence: true, unless: :pending?
