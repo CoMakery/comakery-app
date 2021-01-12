@@ -14,16 +14,16 @@ on:
 #   schedule:
 #     - cron: "0 2 * * 1-5"
 
-jobs:    
+jobs:
   test:
     strategy:
       matrix:
         ruby: [2.7.1]
         node: [12.x]
-    
+
     name: Lints, Specs and Security Checks
     runs-on: ubuntu-latest
-    
+
     env:
       BUNDLER_VERSION: 2.0.1
       RACK_ENV: production
@@ -60,7 +60,7 @@ jobs:
           --health-retries 5
         ports:
         - 5432:5432
-      
+
       redis:
         image: redis:5.0.6-alpine
         options: >-
@@ -70,10 +70,10 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-         
+
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Setup Node
       uses: actions/setup-node@v1
       with:
@@ -81,11 +81,11 @@ jobs:
 
     - name: Use a specific Yarn version
       run: yarn policies set-version 1.12.3
-    
+
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
-    
+
     - name: Cache Node dependencies
       uses: actions/cache@v1.1.2
       with:
@@ -93,13 +93,13 @@ jobs:
         key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ matrix.node }}-yarn-
-          
+
     - name: Install Node dependencies
       run: yarn install
-      
+
     - name: Run Eslint
       run: yarn lint
-      
+
     - name: Run Jest
       run: yarn test
 
@@ -107,20 +107,20 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-        
+
     - name: Cache Ruby dependencies
       uses: actions/cache@v1.1.2
       with:
         path: vendor/bundle
         key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock')}}
         restore-keys: ${{ matrix.ruby }}-gems-
-    
+
     - name: Install OS dependenices
       run: sudo apt-get install libpq-dev libssl-dev graphviz imagemagick
-    
+
     - name: Set up Bundler to use cache
       run: bundle config path 'vendor/bundle'
-      
+
     - name: Install Ruby dependencies
       run: bundle install --jobs 4 --retry 3
 
@@ -129,25 +129,22 @@ jobs:
 
     - name: Run Erblint
       run: bin/erblint_ci
-      
+
     - name: Run Brakeman
       run: bundle exec brakeman --exit-on-warn --quiet
-      
+
     - name: Precompile assets
       run: bundle exec rails assets:precompile
 
     - name: Run migrations
-      run: bundle exec rake db:migrate
+      run: bundle exec rails db:migrate
 
     - name: Drop database
-      run: bundle exec rake db:drop
+      run: bundle exec rails db:drop
 
     - name: Setup database
-      run: bundle exec rake db:prepare
+      run: bundle exec rails db:prepare
 
-    - name: Run data migrations
-      run: bundle exec rails data:migrate
-      
     - name: Run Rspec
       run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
 
