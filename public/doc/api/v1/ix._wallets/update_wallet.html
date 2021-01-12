@@ -111,10 +111,10 @@ table th, table td {
         <p class="explanation">Create, update, delete and retrieve account wallets.</p>
 
       <div class="article">
-        <h2>GET RESET PASSWORD URL (ONLY ORE_ID WALLETS)</h2>
-        <h3>POST /api/v1/accounts/:id/wallets/:wallet_id/password_reset</h3>
+        <h2>UPDATE WALLET</h2>
+        <h3>PUT /api/v1/accounts/:id/wallets/:wallet_id</h3>
           <p class="explanation">
-            Returns reset password url for wallet
+            Returns updated wallet (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -143,35 +143,16 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">redirect_url</span>
+                <td>
+                    <span class="name">primary_wallet</span>
                 </td>
                 <td>
-                  <span class="description">url to redirect after password change</span>
+                  <span class="description">primary wallet flag</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">resetUrl</span>
-                </td>
-                <td>
-                  <span class="description">reset password url</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -179,37 +160,50 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/cec4cd2f-899b-464c-9e62-2d3bf1b5662b/wallets/26/password_reset</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/97a97894-b6df-4458-a49f-fc412d6ad0b0/wallets/23</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
-  "redirect_url": "localhost",
   "body": {
     "data": {
-      "redirect_url": "localhost"
+      "wallet": {
+        "primary_wallet": true
+      }
     },
-    "url": "http://example.org/api/v1/accounts/cec4cd2f-899b-464c-9e62-2d3bf1b5662b/wallets/26/password_reset",
-    "method": "POST",
-    "nonce": "d2e5a5acc310ea23b03545d57c074a03",
-    "timestamp": "1610479356"
+    "url": "http://example.org/api/v1/accounts/97a97894-b6df-4458-a49f-fc412d6ad0b0/wallets/23",
+    "method": "PUT",
+    "nonce": "9efced040b7bedcea09ab036cc338b69",
+    "timestamp": "1610479354"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "ekFTcy0N/+ui33aauCXV52cCd8rW+az3R++chqLEdXAWJGEhPq923Oo8VHpy9Fc9wSX6WrK1w/0HF+nEnkgXBw=="
+    "signature": "igMSIDDMDK6fUZ1WHsa0g7+U5MP1Djg86Ovotp2eGbTs09jo7/CYpS2R7bV2xQbsrht5MA3tAVyhbiGtF9fFAw=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;a6bc10fdffe22a29fc564d9b3404122b&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;222e88edf42ae2542e8cbbdf5e4c50a0&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;resetUrl&quot;: &quot;https://service.oreid.io/auth?app_access_token=dummy_token&amp;background_color=FFFFFF&amp;callback_url=localhost&amp;provider=email&amp;state=ekFTcy0N%2F%2Bui33aauCXV52cCd8rW%2Baz3R%2B%2BchqLEdXAWJGEhPq923Oo8VHpy9Fc9wSX6WrK1w%2F0HF%2BnEnkgXBw%3D%3D&amp;hmac=%2F0r8%2FaPIZoYprjrsSHMt%2BHBerOix9f6yUXTlXEmUsN8%3D&quot;
+  &quot;id&quot;: 23,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;source&quot;: &quot;user_provided&quot;,
+  &quot;state&quot;: null,
+  &quot;createdAt&quot;: &quot;2021-01-12T19:22:34.280Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-01-12T19:22:34.280Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;tokens&quot;: [
+
+  ],
+  &quot;provisionTokens&quot;: [
+
+  ]
 }</pre>
       </div>
     </div>
