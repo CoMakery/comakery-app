@@ -26,8 +26,8 @@ jobs:
 
     env:
       BUNDLER_VERSION: 2.0.1
-      RACK_ENV: production
-      RAILS_ENV: production
+      RACK_ENV: test
+      RAILS_ENV: test
       SECRET_KEY_BASE: dummy
       DATABASE_URL: postgres://rails@localhost:5432/rails
       AWS_API_KEY: dummy
@@ -146,7 +146,7 @@ jobs:
       run: bundle exec rails db:prepare
 
     - name: Run Rspec
-      run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
+      run: env bundle exec rspec --format documentation
 
     - name: Upload a Build Artifact
       if: always()
