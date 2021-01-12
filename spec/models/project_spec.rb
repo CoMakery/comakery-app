@@ -256,6 +256,45 @@ describe Project do
         end
       end
     end
+
+    describe 'images validations' do
+      let(:project) { build(:project, image: image, square_image: image, panoramic_image: image) }
+
+      context 'file is not image' do
+        let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/not_img.png').to_s, 'image/png') }
+
+        it 'rejects image' do
+          expect(project.valid?).to eq(false)
+          expect(project.errors.messages[:image].last).to eq('is not a valid image')
+        end
+
+        it 'rejects panoramic_image' do
+          expect(project.valid?).to eq(false)
+          expect(project.errors.messages[:square_image].last).to eq('is not a valid image')
+        end
+
+        it 'rejects square_image' do
+          expect(project.valid?).to eq(false)
+          expect(project.errors.messages[:panoramic_image].last).to eq('is not a valid image')
+        end
+      end
+
+      context 'file is an image' do
+        let(:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/dummy_image.png').to_s, 'image/png') }
+
+        it 'accepts image' do
+          expect(project.valid?).to eq(true)
+        end
+
+        it 'accepts panoramic_image' do
+          expect(project.valid?).to eq(true)
+        end
+
+        it 'accepts square_image' do
+          expect(project.valid?).to eq(true)
+        end
+      end
+    end
   end
 
   describe 'hooks' do
