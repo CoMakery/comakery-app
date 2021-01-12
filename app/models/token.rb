@@ -68,6 +68,10 @@ class Token < ApplicationRecord
   enum _token_type: TokenType.list, _prefix: :_token_type
   delegate :contract, :abi, to: :token_type
 
+  ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
+    parent.table[:_blockchain]
+  end
+
   def token_type
     if _token_type
       @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(
