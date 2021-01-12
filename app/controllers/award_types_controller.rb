@@ -86,26 +86,26 @@ class AwardTypesController < ApplicationController
     def set_index_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         editable: policy(@project).edit?,
-        batches: @award_types&.includes(awards: %i[account project assignments])&.map do |batch|
+        batches: @award_types&.with_attached_diagram&.includes(awards: %i[account project assignments])&.map do |batch|
           batch.serializable_hash.merge(
-            diagram_url: Refile.attachment_url(batch || @project.award_types.new, :diagram, :fill, 300, 300),
+            diagram_url: award_type_diagram_path(batch || @project.award_types.new, 100),
             completed_tasks: batch.awards.completed&.size,
             total_tasks: batch.awards.sum(&:possible_quantity).to_i,
             currency: batch.project.token&.symbol,
             total_amount: batch.awards.sum(&:possible_total_amount),
-            currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
-            team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
-            interested_pics: batch.project.interested.map { |a| helpers.account_image_url(a, 100) },
+            currency_logo: GetImageVariantPath.call(attachment: batch.project.token&.logo_image, resize_to_fill: [100, 100]).path,
+            team_pics: batch.project.contributors_distinct.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
+            interested_pics: batch.project.interested.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
-            tasks: batch.awards&.map { |task| task_to_index_props(task, batch) }
+            tasks: batch.awards.with_all_attached_images&.map { |task| task_to_index_props(task, batch) }
           )
         end,
         new_batch_path: new_project_award_type_path(@project),
         project: @project.serializable_hash.merge(
           currency: @project.token&.symbol,
-          currency_logo: helpers.attachment_url(@project.token, :logo_image, :fill, 100, 100),
+          currency_logo: GetImageVariantPath.call(attachment: @project.token&.logo_image, resize_to_fill: [100, 100]).path,
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
         project_for_header: @project.header_props,
@@ -117,11 +117,11 @@ class AwardTypesController < ApplicationController
     def task_to_index_props(task, batch) # rubocop:todo Metrics/CyclomaticComplexity
       task.serializable_hash.merge(
         batch_name: batch.name,
-        image_url: helpers.attachment_url(task, :image),
+        image_url: Attachment::GetPath.call(attachment: task.image).path,
         description_html: Comakery::Markdown.to_html(task.description),
         requirements_html: Comakery::Markdown.to_html(task.requirements),
         currency: batch.project.token&.symbol,
-        currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
+        currency_logo: GetImageVariantPath.call(attachment: batch.project.token&.logo_image, resize_to_fill: [100, 100]).path,
         assign_path: project_award_type_award_assignment_path(@project, batch, task),
         award_path: project_award_type_award_award_path(@project, batch, task),
         pay_path: project_dashboard_transfers_path(@project, q: { id_eq: task.id }),
@@ -143,7 +143,7 @@ class AwardTypesController < ApplicationController
     def set_form_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         batch: (@award_type || @project.award_types.new).serializable_hash&.merge(
-          diagram_url: Refile.attachment_url(@award_type || @project.award_types.new, :diagram, :fill, 300, 300)
+          diagram_url: award_type_diagram_path(@award_type || @project.award_types.new, 300)
         ),
         project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
@@ -156,6 +156,13 @@ class AwardTypesController < ApplicationController
         project_for_header: @project.header_props,
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
+    end
+
+    def award_type_diagram_path(record, size)
+      GetImageVariantPath.call(
+        attachment: record.diagram,
+        resize_to_fill: [size, size]
+      ).path
     end
 
     def set_ok_response

@@ -19,10 +19,10 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects(@project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects(@project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = @whitelabel_mission ? [] : current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.with_all_attached_images.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
@@ -33,7 +33,10 @@ class ProjectsController < ApplicationController
 
   def awards
     authorize @project, :show_contributions?
-    @awards = @project.awards.completed.includes(:token, :award_type, :account, :issuer, :latest_blockchain_transaction)
+    @awards = @project.awards.completed.includes(
+      :token, :award_type, :issuer, :latest_blockchain_transaction,
+      account: [image_attachment: :blob], issuer: [image_attachment: :blob]
+    )
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
 
@@ -86,7 +89,7 @@ class ProjectsController < ApplicationController
 
     @meta_title = 'CoMakery Project'
     @meta_desc = "#{@project.title}: #{Comakery::Markdown.to_text(@project.description)}"
-    @meta_image = Refile.attachment_url(@project, :square_image)
+    @meta_image = Attachment::GetPath.call(attachment: @project.square_image).path
 
     render component: 'Project', props: @props
   end
@@ -123,7 +126,7 @@ class ProjectsController < ApplicationController
   end
 
   def update_status
-    @project = Project.find(params[:project_id])
+    @project = @project_scope.find_by(id: params[:project_id])
     authorize @project
 
     begin
@@ -137,7 +140,7 @@ class ProjectsController < ApplicationController
   private
 
     def assign_project_by_long_id
-      @project = @project_scope.find_by(long_id: params[:long_id])&.decorate
+      @project = @project_scope.includes(account: [image_attachment: :blob]).find_by(long_id: params[:long_id])&.decorate
 
       return redirect_to('/404.html') unless @project
       return redirect_to(project_path(@project)) unless @project.unlisted?
@@ -149,7 +152,7 @@ class ProjectsController < ApplicationController
       @q = policy_scope(@project_scope).ransack(params[:q])
       @q.sorts = 'interests_count DESC' if @q.sorts.empty?
 
-      @projects_all = @q.result.includes(:token, :mission, :account, :admins)
+      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :admins, account: [image_attachment: :blob])
       @projects = @projects_all.page(@page).per(9)
 
       redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?
@@ -188,8 +191,8 @@ class ProjectsController < ApplicationController
       @props = {
         project: @project&.serializable_hash&.merge(
           {
-            square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 1200, 800) : nil,
-            panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
+            square_image_url: GetImageVariantPath.call(attachment: @project&.square_image, resize_to_fill: [1200, 800]).path,
+            panoramic_image_url: GetImageVariantPath.call(attachment: @project&.panoramic_image, resize_to_fill: [1500, 300]).path,
             mission_id: @project&.mission&.id,
             token_id: @project&.token&.id,
             channels: @project&.channels&.includes(:team)&.map do |channel|
@@ -222,13 +225,15 @@ class ProjectsController < ApplicationController
         csrf_token: form_authenticity_token,
         project_for_header: project_header,
         mission_for_header: @project&.mission&.decorate&.header_props,
-        is_whitelabel: @whitelabel_mission.present?
+        is_whitelabel: @whitelabel_mission.present?,
+        discord_enabled: Comakery::Discord.enabled?,
+        slack_enabled: Comakery::Slack.enabled?
       }
     end
     # rubocop:enable Metrics/PerceivedComplexity
 
     def project_header
-      @project ? @project.decorate.header_props : { image_url: helpers.image_url('defaul_project.jpg') }
+      @project ? @project.decorate.header_props : { image_url: helpers.image_url('default_project.jpg') }
     end
 
     def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
@@ -337,8 +342,8 @@ class ProjectsController < ApplicationController
       project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
         description_html: Comakery::Markdown.to_html(project.description),
         show_contributions: policy(project).show_contributions?,
-        square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
-        panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
+        square_image_url: GetImagePath.call(attachment: project.square_image, fallback: helpers.image_url('default_project.jpg')).path,
+        panoramic_image_url: GetImagePath.call(attachment: project.panoramic_image, fallback: helpers.image_url('default_project.jpg')).path,
         video_id: project.video_id,
         token_percentage: project.percent_awarded_pretty,
         maximum_tokens: project.maximum_tokens,
@@ -353,15 +358,20 @@ class ProjectsController < ApplicationController
     def token_props(token)
       if token.present?
         token.as_json(only: %i[name symbol _token_type]).merge(
-          image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil
+          image_url: GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
         )
       end
     end
 
     def mission_props(mission)
+      mission_logo_path = GetImageVariantPath.call(
+        attachment: mission.logo,
+        resize_to_fill: [100, 100]
+      ).path
+
       if mission.present?
         mission.as_json(only: %i[id name]).merge(
-          logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
+          logo_url: mission_logo_path,
           mission_url: mission_path(mission)
         )
       end

@@ -3,7 +3,8 @@ class Token < ApplicationRecord
 
   nilify_blanks
 
-  attachment :logo_image, type: :image
+  # attachment :logo_image, type: :image
+  has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :interested
@@ -21,6 +22,7 @@ class Token < ApplicationRecord
 
   scope :listed, -> { where unlisted: false }
   scope :available_for_algorand_opt_in, -> { where(_token_type: %w[asa algorand_security_token]) }
+  scope :available_for_provision, -> { where(_token_type: %w[asa algorand_security_token]) }
 
   enum denomination: {
     USD: 0,

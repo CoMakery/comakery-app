@@ -11,7 +11,7 @@
 
     <% elsif transfer.recipient_address.blank? && current_account == transfer.account %>
       <%= link_to 'needs wallet', account_path %>
-    <% elsif transfer.token&.blockchain&.supported_by_ore_id? && (transfer.issuer&.ore_id_account.nil? || transfer.account.ore_id_account.nil?) %>
+    <% elsif transfer.token&.blockchain&.supported_by_ore_id? && (transfer.issuer&.ore_id_account.nil? || transfer.account&.ore_id_account.nil?) %>
       <%= link_to 'needs wallet', account_path %>
     <% elsif transfer.recipient_address.blank? %>
       needs wallet

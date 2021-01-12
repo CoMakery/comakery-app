@@ -6,9 +6,12 @@ class TokensController < ApplicationController
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
-    @tokens = policy_scope(Token).map do |t|
+    @tokens = policy_scope(Token).with_attached_logo_image.map do |t|
       t.serializable_hash.merge(
-        logo_url: Refile.attachment_url(t, :logo_image, :fill, 54, 54)
+        logo_url: GetImageVariantPath.call(
+          attachment: t.logo_image,
+          resize_to_fill: [54, 54]
+        ).path
       )
     end
 
@@ -99,7 +102,7 @@ class TokensController < ApplicationController
       @props = {
         token: @token&.serializable_hash&.merge(
           {
-            logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
+            logo_url: GetImageVariantPath.call(attachment: @token&.logo_image, resize_to_fill: [500, 500]).path
           }
         ),
         token_types: @token_types,

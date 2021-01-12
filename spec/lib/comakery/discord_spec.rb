@@ -66,4 +66,71 @@ describe Comakery::Discord do
       expect(response).to include('invite_code')
     end
   end
+
+  describe '.enabled?' do
+    subject { described_class.enabled? }
+
+    context 'when DISCORD_BOT_TOKEN and DISCORD_CLIENT_ID defined' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = 'DISCORD_BOT_TOKEN'
+        ENV['DISCORD_CLIENT_ID'] = 'DISCORD_CLIENT_ID'
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when only DISCORD_BOT_TOKEN defined' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = 'DISCORD_BOT_TOKEN'
+        ENV['DISCORD_CLIENT_ID'] = nil
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when only DISCORD_CLIENT_ID defined' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = nil
+        ENV['DISCORD_CLIENT_ID'] = 'DISCORD_CLIENT_ID'
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when only DISCORD_BOT_TOKEN defined and DISCORD_CLIENT_ID is blank' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = 'DISCORD_BOT_TOKEN'
+        ENV['DISCORD_CLIENT_ID'] = ''
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when only DISCORD_CLIENT_ID defined and DISCORD_BOT_TOKEN is blank' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = ''
+        ENV['DISCORD_CLIENT_ID'] = 'DISCORD_CLIENT_ID'
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when both constants missing' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = nil
+        ENV['DISCORD_CLIENT_ID'] = nil
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when both constants are blank' do
+      before do
+        ENV['DISCORD_BOT_TOKEN'] = ''
+        ENV['DISCORD_CLIENT_ID'] = ''
+      end
+
+      it { is_expected.to be_falsey }
+    end
+  end
 end

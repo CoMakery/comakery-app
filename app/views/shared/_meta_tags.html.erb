@@ -38,7 +38,8 @@
 
 <% if @whitelabel_mission && @whitelabel_mission&.whitelabel_favicon %>
   <% cache @whitelabel_mission do %>
-    <link rel="shortcut icon" type="image/png" href="<%= Refile.attachment_url(@whitelabel_mission, :whitelabel_favicon, :fill, 64, 64) %>">
+    <link rel="shortcut icon" type="image/png"
+          href="<%= Attachment::GetPath.call(attachment: @whitelabel_mission.whitelabel_favicon, resize_to_fill: [64, 64]).path %>">
   <% end %>
 <% else %>
   <%= favicon_link_tag 'favicon/favicon.ico', defer: true %>

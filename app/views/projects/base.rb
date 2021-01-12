@@ -56,6 +56,9 @@ class Views::Projects::Base < Views::Base
   end
 
   def project_image(project)
-    helpers.attachment_url(project, :image, fallback: 'default_project_image.png')
+    GetImagePath.call(
+      attachment: project.image,
+      fallback: image_url('default_project_image.png')
+    ).path
   end
 end

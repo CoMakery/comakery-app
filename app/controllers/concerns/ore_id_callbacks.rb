@@ -39,17 +39,13 @@ module OreIdCallbacks
   def verify_errorless
     if received_error
       flash[:error] = received_error
-      redirect_to wallets_url and return
+      false
     else
       true
     end
   end
 
   def verify_received_account
-    if current_account.id != received_state['account_id']
-      head 401 and return
-    else
-      true
-    end
+    current_account.id == received_state['account_id']
   end
 end

@@ -4,6 +4,10 @@ class Comakery::Slack
 
   AVATAR = 'https://s3.amazonaws.com/comakery/spacekitty.jpg'.freeze
 
+  def self.enabled?
+    ENV['SLACK_API_KEY'].present? && ENV['SLACK_API_SECRET'].present?
+  end
+
   def self.get(token)
     new(token)
   end

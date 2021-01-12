@@ -37,7 +37,11 @@ class Dashboard::TransfersController < ApplicationController
   private
 
     def query
-      @transfers_unfiltered = @project.awards.completed_or_cancelled
+      @transfers_unfiltered =
+        @project
+        .awards
+        .completed_or_cancelled
+        .includes(issuer: [image_attachment: :blob], account: [image_attachment: :blob])
 
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
 

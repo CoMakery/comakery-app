@@ -78,9 +78,8 @@ shared_examples 'having ore_id_callbacks' do
         allow_any_instance_of(described_class).to receive(:received_error).and_return('dummy_error')
       end
 
-      it 'adds an error and redirects to wallets_url' do
-        expect(controller).to receive(:redirect_to)
-        controller.verify_errorless
+      it 'adds an error and returns false' do
+        expect(controller.verify_errorless).to be_falsey
         expect(controller.flash[:error]).to eq('dummy_error')
       end
     end
@@ -94,8 +93,7 @@ shared_examples 'having ore_id_callbacks' do
       end
 
       it 'returns 401' do
-        expect(controller).to receive(:head)
-        controller.verify_received_account
+        expect(controller.verify_received_account).to be_falsey
       end
     end
   end

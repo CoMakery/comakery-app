@@ -25,7 +25,7 @@ class MissionsController < ApplicationController
 
     @meta_title = 'CoMakery Mission'
     @meta_desc = "#{@mission.name}: #{@mission.description}"
-    @meta_image = Refile.attachment_url(@mission, :image)
+    @meta_image = Attachment::GetPath.call(attachment: @mission.image)
 
     render component: 'Mission', props: @props
   end
@@ -122,11 +122,13 @@ class MissionsController < ApplicationController
 
     def project_props(project)
       project.as_json(only: %i[id title]).merge(
-        # description: Comakery::Markdown.to_html(project.description),
         description: project.description_text_truncated(500),
-        image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
-        square_url: project.square_image.present? ? Refile.attachment_url(project, :square_image, :fill, 800, 800) : nil,
-        default_image_url: helpers.image_url('defaul_project.jpg'),
+        image_url: Attachment::GetPath.call(attachment: project.panoramic_image).path,
+        square_url: GetImageVariantPath.call(
+          attachment: project.square_image,
+          resize_to_fill: [800, 800]
+        ).path,
+        default_image_url: helpers.image_url('default_project.jpg'),
         team_size: project.team_size,
         team: project.team_top.map { |contributor| contributor_props(contributor, project) }
       )
@@ -153,7 +155,7 @@ class MissionsController < ApplicationController
             token.serializable_hash.merge(
               count: project_counts[token.id],
               project_name: mission.public_projects.find_by(token_id: token.id).title,
-              logo_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 30, 30) : nil
+              logo_url: GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [30, 30]).path
             )
           end,
         token_count: mission.tokens.distinct.size
@@ -176,7 +178,7 @@ class MissionsController < ApplicationController
             interested: project.interested.include?(current_account),
             project_data: project_props(project.decorate),
             token_data: project.token&.as_json(only: %i[name])&.merge(
-              logo_url: project.token&.logo_image.present? ? Refile.attachment_url(project.token, :logo_image, :fill, 30, 30) : nil
+              logo_url: GetImageVariantPath.call(attachment: project.token&.logo_image, resize_to_fill: [30, 30]).path
             ),
             stats: project.stats
           }
@@ -194,21 +196,31 @@ class MissionsController < ApplicationController
       }
     end
 
-    def mission_images # rubocop:todo Metrics/CyclomaticComplexity
+    def mission_images
       {
-        logo_url: Refile.attachment_url(@mission, :logo, :fill, 800, 800),
-        image_url: Refile.attachment_url(@mission, :image, :fill, 1200, 800),
-        whitelabel_logo_url: @mission&.whitelabel_logo&.present? ? Refile.attachment_url(@mission, :whitelabel_logo, :fill, 1000, 200) : nil,
-        whitelabel_logo_dark_url: @mission&.whitelabel_logo_dark&.present? ? Refile.attachment_url(@mission, :whitelabel_logo_dark, :fill, 1000, 200) : nil,
-        whitelabel_favicon_url: @mission&.whitelabel_favicon&.present? ? Refile.attachment_url(@mission, :whitelabel_favicon, :fill, 64, 64) : nil
+        logo_url: mission_image_path(@mission.logo, 800, 800),
+        image_url: mission_image_path(@mission.logo, 1200, 800),
+        whitelabel_logo_url: mission_image_path(@mission.logo, 1000, 200),
+        whitelabel_logo_dark_url: mission_image_path(@mission.logo, 1000, 200),
+        whitelabel_favicon_url: mission_image_path(@mission.logo, 64, 64)
       }
     end
 
+    def mission_image_path(image, width, height)
+      GetImageVariantPath.call(
+        attachment: image,
+        resize_to_fill: [width, height]
+      ).path
+    end
+
     def set_missions
-      @missions = policy_scope(Mission).includes(:public_projects, :unarchived_projects).map do |m|
-        m.serialize.merge(
-          projects: m.public_projects.as_json(only: %i[id title status])
-        )
-      end
+      @missions =
+        policy_scope(Mission)
+        .with_all_attached_images
+        .includes(:public_projects, :unarchived_projects).map do |m|
+          m.serialize.merge(
+            projects: m.public_projects.as_json(only: %i[id title status])
+          )
+        end
     end
 end

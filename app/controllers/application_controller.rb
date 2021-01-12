@@ -143,7 +143,12 @@ class ApplicationController < ActionController::Base
   end
 
   # rubocop:todo Metrics/PerceivedComplexity
+  # rubocop:todo Metrics/AbcSize
   def task_to_props(task) # rubocop:todo Metrics/CyclomaticComplexity
+    token_logo = GetImageVariantPath.call(
+      attachment: task.project&.token&.logo_image,
+      resize_to_fill: [100, 100]
+    ).path
     task&.serializable_hash&.merge({
       description_html: Comakery::Markdown.to_html(task.description),
       requirements_html: Comakery::Markdown.to_html(task.requirements),
@@ -154,7 +159,7 @@ class ApplicationController < ActionController::Base
       },
       token: {
         currency: task.project&.token&.symbol&.upcase,
-        logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
+        logo: token_logo
       },
       project: {
         id: task.project&.id,
@@ -189,8 +194,8 @@ class ApplicationController < ActionController::Base
       },
       allowedToStart: true,
       experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
-      image_url: helpers.attachment_url(task, :image),
-      submission_image_url: helpers.attachment_url(task, :submission_image),
+      image_url: Attachment::GetPath.call(attachment: task.image).path,
+      submission_image_url: Attachment::GetPath.call(attachment: task.submission_image).path,
       payment_url: project_dashboard_transfers_path(task.project, q: { id_eq: task.id }),
       details_url: project_award_type_award_path(task.project, task.award_type, task),
       start_url: project_award_type_award_start_path(task.project, task.award_type, task),

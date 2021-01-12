@@ -8,8 +8,8 @@ class PagesController < ApplicationController
   layout 'legacy', except: %i[styleguide featured]
 
   def featured # rubocop:todo Metrics/CyclomaticComplexity
-    top_missions = Mission.active.first(4)
-    more_missions = Mission.active.offset(4)
+    top_missions = Mission.active.with_attached_image.first(4)
+    more_missions = Mission.active.with_attached_image.offset(4).limit(10)
 
     flash[:warning] = 'Please confirm your email address to continue' if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
 
@@ -47,7 +47,7 @@ class PagesController < ApplicationController
     def featured_mission_props(mission)
       mission.as_json(only: %i[id name description]).merge(
         mission_url: mission_url(mission),
-        image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 312, 312) : nil,
+        image_url: mission_image_path(mission, 312),
         projects: mission.projects.public_listed.active.map do |project|
           project.as_json(only: %i[id title]).merge(
             interested: current_account&.interested?(project.id)
@@ -59,8 +59,15 @@ class PagesController < ApplicationController
     def more_mission_props(mission)
       mission.as_json(only: %i[id name]).merge(
         mission_url: mission_url(mission),
-        image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 231, 231) : nil,
+        image_url: mission_image_path(mission, 231),
         projects_count: mission.projects.public_listed.active.count
       )
+    end
+
+    def mission_image_path(mission, size)
+      GetImageVariantPath.call(
+        attachment: mission.image,
+        resize_to_fill: [size, size]
+      ).path
     end
 end

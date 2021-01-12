@@ -1,4 +1,4 @@
-json.array! Token.all do |token|
+json.array! Token.all.with_attached_logo_image do |token|
   record = @account.account_token_records.find_by(token: token)
   next unless record
 

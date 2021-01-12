@@ -21,7 +21,7 @@ module Synchronisable
     end
 
     def sync_allowed?
-      Time.current > next_sync_allowed_after
+      next_sync_allowed_after <= Time.current
     end
 
     def sync_in_progress?
