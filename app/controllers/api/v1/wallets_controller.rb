@@ -11,24 +11,12 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/wallets
   def create
-    ActiveRecord::Base.transaction do
-      @wallets = WalletCreator.new(account: account).call(wallets_params)
+    @wallets, @errors = WalletCreator.new(account: account).call(wallets_params)
 
-      if @wallets.all?(&:persisted?)
-        render 'index.json', status: :created
-      else
-        @errors = {}
-
-        @wallets.each_with_index.map do |wallet, i|
-          next if wallet.persisted?
-
-          @errors[i] = wallet.errors
-        end
-
-        render 'api/v1/error.json', status: :bad_request
-
-        raise ActiveRecord::Rollback
-      end
+    if @errors.empty?
+      render 'index.json', status: :created
+    else
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 

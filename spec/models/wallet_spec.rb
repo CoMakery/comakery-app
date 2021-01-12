@@ -98,7 +98,7 @@ describe Wallet, type: :model do
     end
   end
 
-  describe '#mark_another_wallet_as_primary' do
+  describe '#mark_first_wallet_as_primary' do
     let!(:wallet) { create(:wallet, primary_wallet: true, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
     let!(:wallet2) { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_2)) }
 

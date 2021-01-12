@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe WalletCreator do
-  subject(:wallets) { described_class.new(account: account).call(wallets_params) }
+  subject(:wallets) { described_class.new(account: account).call(wallets_params).first }
 
   let(:account) { create(:account) }
   let(:wallets_params) { [{ blockchain: 'algorand_test', address: nil, source: 'ore_id', tokens_to_provision: tokens_to_provision }] }

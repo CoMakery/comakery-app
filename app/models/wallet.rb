@@ -16,7 +16,7 @@ class Wallet < ApplicationRecord
   attr_readonly :_blockchain
 
   before_create :set_primary_flag
-  after_commit :mark_another_wallet_as_primary, on: [:destroy], if: :primary_wallet?
+  after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
 
   enum source: { user_provided: 0, ore_id: 1 }
 
@@ -42,7 +42,7 @@ class Wallet < ApplicationRecord
                                           primary_wallet: true)
   end
 
-  def mark_another_wallet_as_primary
+  def mark_first_wallet_as_primary
     first_wallet_in_network = Wallet
                               .where(account_id: account_id, _blockchain: _blockchain)
                               .order(id: :asc)

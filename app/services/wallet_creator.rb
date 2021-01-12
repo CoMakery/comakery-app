@@ -8,19 +8,29 @@ class WalletCreator
   end
 
   def call(wallets_params)
-    wallets_params.map do |wallet_params|
-      tokens_to_provision = wallet_params.delete(:tokens_to_provision)
-      wallet_params[:_blockchain] = wallet_params.delete(:blockchain)
+    errors = {}
 
-      wallet = account.wallets.new(wallet_params)
+    wallets = wallets_params.map.with_index do |wallet_attrs, i|
+      tokens_to_provision = wallet_attrs.delete(:tokens_to_provision)
+      wallet_attrs[:_blockchain] = wallet_attrs.delete(:blockchain)
+
+      wallet = account.wallets.new(wallet_attrs)
+
+      # This will init the errors object and allow to add custom errors later on with #errors.add
+      wallet.validate
+
       tokens_to_provision = sanitize_tokens_to_provision(wallet, tokens_to_provision)
 
       build_wallet_provisions(wallet, tokens_to_provision) if should_be_provisioned?(wallet, tokens_to_provision)
 
-      wallet.save if wallet.errors.empty?
+      errors[i] = wallet.errors if wallet.errors.any?
 
       wallet
     end
+
+    account.save if errors.empty?
+
+    [wallets, errors]
   end
 
   private
