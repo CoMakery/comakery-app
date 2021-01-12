@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.7.1'
 
 gem 'active_storage-postgresql'
+gem 'active_storage_validations'
 gem 'awesome_print'
 gem 'bcrypt'
 gem 'bullet'
