@@ -108,13 +108,13 @@ table th, table td {
     <div class="container">
       <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create, delete and retrieve account wallets.</p>
+        <p class="explanation">Create, update, delete and retrieve account wallets.</p>
 
       <div class="article">
         <h2>CREATE WALLET – ORE_ID WITH PROVISIONING</h2>
         <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns created wallet (See INDEX for response details)
+            Returns created wallets (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -168,56 +168,60 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/2613f24b-72b1-46e0-9e67-4d84aebf95a8/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/13e3b60e-d8a1-475d-a050-b2c5ba08c806/wallets</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
     "data": {
-      "wallet": {
-        "blockchain": "algorand_test",
-        "source": "ore_id",
-        "tokens_to_provision": "[114]"
-      }
+      "wallets": [
+        {
+          "blockchain": "algorand_test",
+          "source": "ore_id",
+          "tokens_to_provision": "[114]"
+        }
+      ]
     },
-    "url": "http://example.org/api/v1/accounts/2613f24b-72b1-46e0-9e67-4d84aebf95a8/wallets",
+    "url": "http://example.org/api/v1/accounts/13e3b60e-d8a1-475d-a050-b2c5ba08c806/wallets",
     "method": "POST",
-    "nonce": "7a35585fcd54420056f20893aee5c4fc",
-    "timestamp": "1610402967"
+    "nonce": "db24cc632139310463cad09ddac7bb65",
+    "timestamp": "1610479353"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "QRrYdP/MZ3Ha4097SLqbaiy3M2JJN+SJlbW+CmyNvNYO6kC9DtDpvhcQoSu13pTzsKXwICS5AoyzQf+R/ml/Cg=="
+    "signature": "ZAVqXH5RZbtIyW2lr3I87gLl8smsFT12nTQUx1v9Eebqfg9+0I5hyzQmQGeSQ93X8rD7ppPbUUXp8Nu6/78SCA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;bb5ab643225c10fca4e3600531e37f3f&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;a389a4fdc7c4df12f274a315ec3da3b7&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 22,
-  &quot;address&quot;: null,
-  &quot;source&quot;: &quot;ore_id&quot;,
-  &quot;state&quot;: &quot;pending&quot;,
-  &quot;createdAt&quot;: &quot;2021-01-11T22:09:27.244Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-01-11T22:09:27.244Z&quot;,
-  &quot;blockchain&quot;: &quot;algorand_test&quot;,
-  &quot;tokens&quot;: [
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 22,
+    &quot;address&quot;: null,
+    &quot;source&quot;: &quot;ore_id&quot;,
+    &quot;state&quot;: &quot;pending&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-12T19:22:33.508Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-12T19:22:33.508Z&quot;,
+    &quot;blockchain&quot;: &quot;algorand_test&quot;,
+    &quot;tokens&quot;: [
 
-  ],
-  &quot;provisionTokens&quot;: [
-    {
-      &quot;tokenId&quot;: 114,
-      &quot;state&quot;: &quot;pending&quot;
-    }
-  ]
-}</pre>
+    ],
+    &quot;provisionTokens&quot;: [
+      {
+        &quot;tokenId&quot;: 114,
+        &quot;state&quot;: &quot;pending&quot;
+      }
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>

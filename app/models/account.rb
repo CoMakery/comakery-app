@@ -327,7 +327,7 @@ class Account < ApplicationRecord
   end
 
   def address_for_blockchain(blockchain)
-    wallets.find_by(_blockchain: blockchain)&.address
+    wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
   private

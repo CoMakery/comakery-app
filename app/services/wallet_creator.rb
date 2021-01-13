@@ -1,25 +1,41 @@
 class WalletCreator
   class WrongTokensFormat < StandardError; end
 
-  attr_reader :account, :wallet, :tokens_to_provision
+  attr_reader :account
 
   def initialize(account:)
     @account = account
   end
 
-  def call(wallet_params, tokens_to_provision: [])
-    @wallet = account.wallets.new(wallet_params)
-    @tokens_to_provision = sanitize_tokens_to_provision(tokens_to_provision)
+  def call(wallets_params)
+    errors = {}
 
-    build_wallet_provisions if should_be_provisioned?
+    wallets = wallets_params.map.with_index do |wallet_attrs, i|
+      tokens_to_provision = wallet_attrs.delete(:tokens_to_provision)
+      wallet_attrs[:_blockchain] = wallet_attrs.delete(:blockchain)
 
-    wallet.save if wallet.errors.empty?
-    wallet
+      wallet = account.wallets.new(wallet_attrs)
+
+      # This will init the errors object and allow to add custom errors later on with #errors.add
+      wallet.validate
+
+      tokens_to_provision = sanitize_tokens_to_provision(wallet, tokens_to_provision)
+
+      build_wallet_provisions(wallet, tokens_to_provision) if should_be_provisioned?(wallet, tokens_to_provision)
+
+      errors[i] = wallet.errors if wallet.errors.any?
+
+      wallet
+    end
+
+    account.save if errors.empty?
+
+    [wallets, errors]
   end
 
   private
 
-    def sanitize_tokens_to_provision(tokens_to_provision)
+    def sanitize_tokens_to_provision(wallet, tokens_to_provision)
       return [] if tokens_to_provision.blank?
 
       parsed_token_ids = JSON.parse(tokens_to_provision.to_s)
@@ -31,11 +47,11 @@ class WalletCreator
       []
     end
 
-    def should_be_provisioned?
-      tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?
+    def should_be_provisioned?(wallet, tokens_to_provision)
+      tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?(wallet, tokens_to_provision)
     end
 
-    def valid_tokens_to_provision?
+    def valid_tokens_to_provision?(wallet, tokens_to_provision)
       correct_tokens = Token.available_for_provision.where(id: tokens_to_provision)
       wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.pluck(:id)
 
@@ -47,7 +63,7 @@ class WalletCreator
       true
     end
 
-    def build_wallet_provisions
+    def build_wallet_provisions(wallet, tokens_to_provision)
       tokens_to_provision.each do |token_to_provision|
         wallet.wallet_provisions.new(token_id: token_to_provision)
       end
