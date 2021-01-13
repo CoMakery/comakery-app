@@ -1,21 +1,4 @@
 GIT
-  remote: git://github.com/refile/refile-mini_magick.git
-  revision: 5c7c30d57a94c4104d84eb4eb9e74ca757c1a773
-  specs:
-    refile-mini_magick (0.2.0)
-      image_processing (~> 1.1)
-      mini_magick (~> 4.0)
-      refile (~> 0.6)
-
-GIT
-  remote: git://github.com/refile/refile-s3.git
-  revision: 765b51ded93b96cf7e7cad2353c5bc591507dbe3
-  specs:
-    refile-s3 (0.2.0)
-      aws-sdk-s3 (~> 1.23)
-      refile (~> 0.7.0)
-
-GIT
   remote: https://github.com/CoMakery/citizen-scripts.git
   revision: 566ff1074215082b2e81e69c5d5095abbecd6dff
   ref: dev
@@ -28,6 +11,23 @@ GIT
   specs:
     omniauth-discord (0.1.5)
       omniauth-oauth2 (~> 1.2)
+
+GIT
+  remote: https://github.com/refile/refile-mini_magick.git
+  revision: 5c7c30d57a94c4104d84eb4eb9e74ca757c1a773
+  specs:
+    refile-mini_magick (0.2.0)
+      image_processing (~> 1.1)
+      mini_magick (~> 4.0)
+      refile (~> 0.6)
+
+GIT
+  remote: https://github.com/refile/refile-s3.git
+  revision: 765b51ded93b96cf7e7cad2353c5bc591507dbe3
+  specs:
+    refile-s3 (0.2.0)
+      aws-sdk-s3 (~> 1.23)
+      refile (~> 0.7.0)
 
 GIT
   remote: https://github.com/refile/refile.git
