@@ -8,11 +8,12 @@ export default class extends Controller {
 
   connect() {
     this.createdEvent = new CustomEvent('wallets:created', { bubbles: true });
-    this._checkValidity();
+    this._checkFormValidity();
   }
 
-  inputChanged(_event) {
-    this._checkValidity();
+  inputChanged(event) {
+    this._validateInput(event.target);
+    this._checkFormValidity();
   }
 
   onSubmit(event) {
@@ -30,7 +31,21 @@ export default class extends Controller {
     });
   }
 
-  _checkValidity() {
+  _validateInput(input) {
+    if (input.checkValidity()) {
+      input.classList.remove('is-invalid');
+      const nextSibling = input.nextElementSibling;
+      nextSibling && nextSibling.classList.contains('invalid-feedback') && nextSibling.remove();
+    } else {
+      input.classList.add('is-invalid');
+      input.insertAdjacentHTML(
+        'afterend',
+        '<div class="invalid-feedback">Can not be blank</div>'
+      );
+    }
+  }
+
+  _checkFormValidity() {
     this.submitTarget.disabled = !this.element.checkValidity();
   }
 

@@ -61,11 +61,11 @@
                   <i class="fas fa-ellipsis-h"></i>
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <%= link_to 'Edit', '', class: 'dropdown-item', data: { toggle: :modal, target: '#walletForm', src: edit_wallet_path(wallet) }  %>
                   <% if wallet.ore_id? %>
                     <%= link_to 'Opt In To Algorand', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
                   <% end %>
                   <% if wallet.user_provided? %>
+                    <%= link_to 'Edit', '', class: 'dropdown-item', data: { toggle: :modal, target: '#walletForm', src: edit_wallet_path(wallet) }  %>
                     <%= link_to 'Remove', wallet_url(wallet), method: :delete, class: 'dropdown-item text-danger' %>
                   <% end %>
                 </div>

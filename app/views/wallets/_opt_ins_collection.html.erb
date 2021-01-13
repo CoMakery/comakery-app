@@ -49,13 +49,15 @@
           <td><%= opt_in.status.humanize %></td>
           <td>
             <div class="text-right">
-              <%= link_to(
-                    'OPT-IN',
-                    algorand_opt_ins_url(wallet_id: wallet.id, token_id: token),
-                    method: :post,
-                    type: "button",
-                    class: "btn btn-link font-weight-bold"
-                  ) %>
+              <% if !opt_in.opted_in? %>
+                <%= link_to(
+                      'OPT-IN',
+                      algorand_opt_ins_url(wallet_id: wallet.id, token_id: token),
+                      method: :post,
+                      type: "button",
+                      class: "btn btn-link font-weight-bold"
+                    ) %>
+              <% end %>
             </div>
           </td>
         </tr>
