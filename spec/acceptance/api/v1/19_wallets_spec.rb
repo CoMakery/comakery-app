@@ -55,7 +55,7 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallets: [{ blockchain: :bitcoin, address: build(:bitcoin_address_1) }] } }
+      let!(:create_params) { { wallets: [{ blockchain: :bitcoin, address: build(:bitcoin_address_1), name: 'Wallet' }] } }
 
       example 'CREATE WALLET' do
         explanation 'Returns created wallets (See INDEX for response details)'
@@ -68,7 +68,7 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id }] } }
+      let!(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, name: 'Wallet' }] } }
 
       example 'CREATE WALLET – ORE_ID' do
         explanation 'Returns created wallets (See INDEX for response details)'
@@ -82,7 +82,7 @@ resource 'IX. Wallets' do
     context '201' do
       let!(:id) { account.managed_account_id }
       let(:token) { create(:asa_token) }
-      let(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]" }] } }
+      let(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]", name: 'Wallet' }] } }
 
       example 'CREATE WALLET – ORE_ID WITH PROVISIONING' do
         explanation 'Returns created wallets (See INDEX for response details)'

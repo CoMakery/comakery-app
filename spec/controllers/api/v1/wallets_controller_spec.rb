@@ -86,7 +86,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       render_views
 
       it do
-        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' }] }
+        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1', name: 'Wallet' }] }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -120,8 +120,8 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   describe 'PUT #update' do
     let(:update_params) { { wallet: { primary_wallet: 'true' } } }
-    let!(:primary_wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_1)) }
-    let!(:wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_2)) }
+    let!(:primary_wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_1), name: 'Wallet') }
+    let!(:wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_2), name: 'Wallet') }
 
     context 'with valid params' do
       it 'updates wallet' do
