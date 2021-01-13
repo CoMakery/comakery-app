@@ -1,4 +1,21 @@
 GIT
+  remote: git://github.com/refile/refile-mini_magick.git
+  revision: 5c7c30d57a94c4104d84eb4eb9e74ca757c1a773
+  specs:
+    refile-mini_magick (0.2.0)
+      image_processing (~> 1.1)
+      mini_magick (~> 4.0)
+      refile (~> 0.6)
+
+GIT
+  remote: git://github.com/refile/refile-s3.git
+  revision: 765b51ded93b96cf7e7cad2353c5bc591507dbe3
+  specs:
+    refile-s3 (0.2.0)
+      aws-sdk-s3 (~> 1.23)
+      refile (~> 0.7.0)
+
+GIT
   remote: https://github.com/CoMakery/citizen-scripts.git
   revision: 566ff1074215082b2e81e69c5d5095abbecd6dff
   ref: dev
@@ -13,25 +30,8 @@ GIT
       omniauth-oauth2 (~> 1.2)
 
 GIT
-  remote: https://github.com/refile/refile-mini_magick.git
-  revision: 5c7c30d57a94c4104d84eb4eb9e74ca757c1a773
-  specs:
-    refile-mini_magick (0.2.0)
-      image_processing (~> 1.1)
-      mini_magick (~> 4.0)
-      refile (~> 0.6)
-
-GIT
-  remote: https://github.com/refile/refile-s3.git
-  revision: 765b51ded93b96cf7e7cad2353c5bc591507dbe3
-  specs:
-    refile-s3 (0.2.0)
-      aws-sdk-s3 (~> 1.23)
-      refile (~> 0.7.0)
-
-GIT
   remote: https://github.com/refile/refile.git
-  revision: e690bf5c2d83b3dfd805764d54e8f5daf14993b0
+  revision: c4ac577c6fdad92bc079a62a0e82888319daedc8
   specs:
     refile (0.7.0)
       mime-types
@@ -108,13 +108,13 @@ GEM
     ast (2.4.1)
     awesome_print (1.8.0)
     aws-eventstream (1.1.0)
-    aws-partitions (1.414.0)
-    aws-sdk-core (3.110.0)
+    aws-partitions (1.416.0)
+    aws-sdk-core (3.111.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.40.0)
+    aws-sdk-kms (1.41.0)
       aws-sdk-core (~> 3, >= 3.109.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.87.0)
