@@ -15,6 +15,7 @@ describe Wallet, type: :model do
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
   it { is_expected.not_to validate_presence_of(:ore_id_account) }
   it { expect(subject.ore_id_account).to be_nil }
+  it { is_expected.to validate_presence_of(:name) }
 
   context 'when ore_id?' do
     subject { create(:wallet, source: :ore_id, ore_id_account: create(:ore_id, skip_jobs: true)) }

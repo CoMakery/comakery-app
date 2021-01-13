@@ -38,7 +38,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:create_params) { { wallets: [{ blockchain: :constellation, address: build(:constellation_address_1) }] } }
+    let(:create_params) { { wallets: [{ blockchain: :constellation, address: build(:constellation_address_1), name: 'Wallet' }] } }
 
     context 'with valid params' do
       it 'adds wallet to requested account' do
@@ -60,7 +60,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
       it 'creates a provisioned wallet' do
         token = create(:asa_token)
-        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: "[#{token.id}]" }] }
+        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: "[#{token.id}]", name: 'Wallet' }] }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -70,7 +70,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
     end
 
     context 'with unknown blockchain' do
-      let(:create_params) { { wallets: [{ blockchain: :unknown, address: build(:constellation_address_1) }] } }
+      let(:create_params) { { wallets: [{ blockchain: :unknown, address: build(:constellation_address_1), name: 'Wallet' }] } }
 
       it 'renders an error' do
         params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
@@ -86,7 +86,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       render_views
 
       it do
-        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' }] }
+        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1', name: 'Wallet' }] }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -120,8 +120,8 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   describe 'PUT #update' do
     let(:update_params) { { wallet: { primary_wallet: 'true' } } }
-    let!(:primary_wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_1)) }
-    let!(:wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_2)) }
+    let!(:primary_wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_1), name: 'Wallet') }
+    let!(:wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_2), name: 'Wallet') }
 
     context 'with valid params' do
       it 'updates wallet' do
@@ -166,7 +166,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   describe 'DELETE #destroy' do
     context 'with valid params' do
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), name: 'Wallet') }
 
       it 'removes the wallet from the requested account' do
         expect do
@@ -205,7 +205,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   describe 'GET #show' do
     context 'with valid params' do
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), name: 'Wallet') }
 
       it 'returns the wallet' do
         params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'GET')
@@ -220,7 +220,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       context 'with tokens to provision' do
         render_views
         let(:token) { create(:asa_token) }
-        let(:wallet) { account.wallets.create(_blockchain: :algorand_test, address: nil, source: 'ore_id') }
+        let(:wallet) { account.wallets.create(_blockchain: :algorand_test, address: nil, source: 'ore_id', name: 'Wallet') }
 
         it 'returns the wallet with provision_tokens filled' do
           wallet.wallet_provisions << create(:wallet_provision, wallet: wallet, token: token)
@@ -241,7 +241,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
   describe 'POST #password_reset' do
     context 'with valid params' do
       render_views
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id) }
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id, name: 'Wallet') }
 
       it 'returns url for password reset and scedules a job for password' do
         params = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'POST')

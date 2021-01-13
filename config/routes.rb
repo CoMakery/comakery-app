@@ -14,7 +14,11 @@ Rails.application.routes.draw do
   get '/unsubscription' => "unsubscription#new", as: :unsubscription
 
   resource :account, only: [:update]
-  resources :wallets
+  resources :wallets do
+    member do
+      get :algorand_opt_ins
+    end
+  end
   resources :algorand_opt_ins, only: %i[index create]
   resources :accounts, only: [:new, :create, :show] do
     collection do

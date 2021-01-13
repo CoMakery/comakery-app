@@ -1,0 +1,67 @@
+<div class="card-header bg-white">
+  <div class="d-flex align-items-center flex-wrap">
+    <h5 class="m-0">Wallet address:</h5>
+    <div class="d-flex ml-2" data-controller="utils--clipboard">
+      <%= link_to(
+            wallet.address,
+            wallet.blockchain.url_for_address_human(wallet.address),
+            target: :_blank,
+            class: 'mr-2',
+            data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "400" }
+          ) %>
+      <div class="hidden" data-target="utils--clipboard.source"><%= wallet.address %></div>
+      <span type="button" class="text-primary" data-action="click->utils--clipboard#copy">
+        <i class="far fa-copy" data-target="utils--clipboard.icon"></i>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="card-body p-0 table-responsive">
+  <table class="table table-borderless table-striped cm-table">
+    <thead>
+      <tr>
+        <th scope="col">Asset</th>
+        <th scope="col">Symbol</th>
+        <th scope="col">Type</th>
+        <th scope="col">Asset ID</th>
+        <th scope="col">Status</th>
+        <th scope="col" class="text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% opt_ins.each do |opt_in| %>
+        <% token = opt_in.token %>
+        <tr>
+          <td class="font-weight-bolder">
+            <div data-controller="utils--truncate" data-target="utils--clipboard.source" data-width="100">
+              <%= token.name %>
+            </div>
+          </td>
+          <td>
+            <div data-controller="utils--truncate" data-target="utils--clipboard.source" data-width="100">
+              <%= token.symbol %>
+            </div>
+          </td>
+          <td>
+            <%= token._token_type %>
+          </td>
+          <td><%= token.contract_address %></td>
+          <td><%= opt_in.status.humanize %></td>
+          <td>
+            <div class="text-right">
+              <% if !opt_in.opted_in? %>
+                <%= link_to(
+                      'OPT-IN',
+                      algorand_opt_ins_url(wallet_id: wallet.id, token_id: token),
+                      method: :post,
+                      type: "button",
+                      class: "btn btn-link font-weight-bold"
+                    ) %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

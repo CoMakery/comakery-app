@@ -4,7 +4,9 @@ RSpec.describe WalletCreator do
   subject(:wallets) { described_class.new(account: account).call(wallets_params).first }
 
   let(:account) { create(:account) }
-  let(:wallets_params) { [{ blockchain: 'algorand_test', address: nil, source: 'ore_id', tokens_to_provision: tokens_to_provision }] }
+  let(:wallets_params) do
+    [{ blockchain: 'algorand_test', address: nil, source: 'ore_id', tokens_to_provision: tokens_to_provision, name: 'Wallet' }]
+  end
   let(:tokens_to_provision) { nil }
 
   context 'wallet created' do
@@ -12,8 +14,8 @@ RSpec.describe WalletCreator do
     let(:constellation_address) { build(:constellation_address_1) }
     let(:wallets_params) do
       [
-        { blockchain: :bitcoin, address: bitcoin_address, tokens_to_provision: tokens_to_provision },
-        { blockchain: :constellation, address: constellation_address }
+        { blockchain: :bitcoin, address: bitcoin_address, tokens_to_provision: tokens_to_provision, name: 'Wallet 1' },
+        { blockchain: :constellation, address: constellation_address, name: 'Wallet 2' }
       ]
     end
 

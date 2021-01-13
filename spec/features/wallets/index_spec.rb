@@ -12,7 +12,7 @@ describe 'wallets page' do
 
     it 'loads' do
       visit wallets_url
-      expect(page).to have_css('.wallets')
+      within('h4') { expect(page.text).to eq('Wallets') }
     end
   end
 

@@ -1,11 +1,27 @@
 class WalletsController < ApplicationController
-  before_action :set_wallet, only: %i[show edit update destroy]
-  after_action :authorize_wallet, only: %i[new create show edit update destroy]
+  before_action :set_hide_zero_balances
+  before_action :set_wallet, only: %i[show edit update destroy algorand_opt_ins]
+  after_action :authorize_wallet, only: %i[new create show edit update destroy algorand_opt_ins]
   helper_method :back_path
 
   # GET /wallets
   def index
-    @wallets = policy_scope(Wallet).order(:_blockchain)
+    @wallets = wallets_collection.includes(balances: :token).order(:_blockchain)
+
+    respond_to do |format|
+      format.html {}
+      format.json { render_collection_partial }
+    end
+  end
+
+  def algorand_opt_ins
+    content = render_to_string(
+      partial: 'wallets/opt_ins_collection',
+      formats: :html,
+      layout: false,
+      locals: { wallet: @wallet, opt_ins: @wallet.token_opt_ins }
+    )
+    render json: { content: content }, status: :ok
   end
 
   # GET /wallets/1
@@ -14,34 +30,40 @@ class WalletsController < ApplicationController
   # GET /wallets/new
   def new
     @wallet = policy_scope(Wallet).new
+
+    respond_to do |format|
+      format.html { redirect_to wallets_path }
+      format.json do
+        render_form_partial
+      end
+    end
   end
 
   # GET /wallets/1/edit
-  def edit; end
+  def edit
+    respond_to do |format|
+      format.html { redirect_to wallets_path }
+      format.json { render_form_partial }
+    end
+  end
 
   # POST /wallets
   def create
     @wallet = policy_scope(Wallet).new(wallet_params)
 
-    respond_to do |format|
-      if @wallet.save
-        format.html { redirect_to wallets_url, notice: 'Wallet added' }
-      else
-        flash.now[:error] = @wallet.errors.full_messages.join(', ')
-        format.html { render :new }
-      end
+    if @wallet.save
+      render json: { message: 'Wallet added' }, status: :created
+    else
+      render json: { message: @wallet.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /wallets/1
   def update
-    respond_to do |format|
-      if @wallet.update(wallet_params)
-        format.html { redirect_to wallets_url, notice: 'Wallet updated' }
-      else
-        flash.now[:error] = @wallet.errors.full_messages.join(', ')
-        format.html { render :edit }
-      end
+    if @wallet.update(wallet_params)
+      render json: { message: 'Wallet updated' }, status: :ok
+    else
+      render json: { message: @wallet.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
   end
 
@@ -61,8 +83,44 @@ class WalletsController < ApplicationController
 
   private
 
+    def wallets_collection
+      if session[:wallets__hide_zero_balances]
+        Wallets::WithoutZeroBalances.call(relation: policy_scope(Wallet))
+      else
+        policy_scope(Wallet)
+      end
+    end
+
     def set_wallet
       @wallet = policy_scope(Wallet).find(params[:id])
+    end
+
+    def set_hide_zero_balances
+      if params[:hide_zero_balances].nil?
+        session[:wallets__hide_zero_balances] ||= false
+      else
+        session[:wallets__hide_zero_balances] = params[:hide_zero_balances] == 'true'
+      end
+    end
+
+    def render_collection_partial
+      content = render_to_string(
+        partial: 'wallets/wallets_collection',
+        formats: :html,
+        layout: false,
+        locals: { wallets: @wallets }
+      )
+      render json: { content: content }, status: :ok
+    end
+
+    def render_form_partial
+      content = render_to_string(
+        partial: 'wallets/form',
+        formats: :html,
+        layout: false,
+        locals: { wallet: @wallet }
+      )
+      render json: { content: content }, status: :ok
     end
 
     def authorize_wallet
@@ -71,6 +129,7 @@ class WalletsController < ApplicationController
 
     def wallet_params
       params.require(:wallet).permit(
+        :name,
         :address,
         :_blockchain
       )
