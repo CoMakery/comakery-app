@@ -40,8 +40,7 @@ class AccountTokenRecord < ApplicationRecord
     end
 
     def set_wallet
-      # TODO: Add primary filter to `find_by` after PR #1809 will be merged
-      self.wallet ||= account.wallets.find_by(_blockchain: token._blockchain)
+      self.wallet ||= account.wallets.find_by(_blockchain: token._blockchain, primary_wallet: true)
     end
 
     def touch_account

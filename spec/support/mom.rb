@@ -200,11 +200,10 @@ class Mom
 
   def blockchain_transaction_account_token_record(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
-    account_token_record = create(:account_token_record)
     attrs.delete(:token)
 
     defaults = {
-      blockchain_transactable: account_token_record,
+      blockchain_transactable: create(:account_token_record),
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,
