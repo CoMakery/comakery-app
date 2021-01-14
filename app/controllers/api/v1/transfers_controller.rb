@@ -19,7 +19,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/transfers
   def create
-    award = project.default_award_type.awards.create(transfer_params)
+    award = project.default_award_type.awards.new(transfer_params)
 
     award.name = award.transfer_type.name.titlecase
     award.issuer = project.account
