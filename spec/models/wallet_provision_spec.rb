@@ -126,4 +126,26 @@ RSpec.describe WalletProvision, type: :model do
       end
     end
   end
+
+  describe 'provisioning step-by-step', vcr: true do
+    specify do
+      expect(OreIdWalletBalanceSyncJob).to receive(:perform_later)
+      expect(subject.state).to eq 'pending'
+      allow_any_instance_of(Wallet).to receive(:coin_balance).and_return(Balance.new)
+      allow_any_instance_of(Balance).to receive(:value).and_return(1)
+
+      expect(OreIdWalletOptInTxCreateJob).to receive(:perform_later)
+      subject.sync_balance
+      expect(subject.state).to eq 'initial_balance_confirmed'
+
+      expect(OreIdWalletOptInTxSyncJob).to receive(:perform_later)
+      expect_any_instance_of(OreIdService).to receive(:create_tx).and_return(true)
+      subject.create_opt_in_tx
+      expect(subject.state).to eq 'opt_in_created'
+
+      expect_any_instance_of(Wallet).to receive(:token_opt_ins).and_return([])
+      subject.sync_opt_in_tx
+      expect(subject.state).to eq 'provisioned'
+    end
+  end
 end
