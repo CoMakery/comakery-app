@@ -55,6 +55,9 @@ class Project < ApplicationRecord
   validate :valid_video_url, if: -> { video_url.present? }
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
+  validates :image, dimension: { min: 1..1 }
+  validates :square_image, dimension: { min: 1..1 }
+  validates :panoramic_image, dimension: { min: 1..1 }
 
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }

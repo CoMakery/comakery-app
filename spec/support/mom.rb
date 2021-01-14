@@ -20,6 +20,7 @@ class Mom
 
   def wallet(**attrs)
     defaults = {
+      name: 'Wallet',
       _blockchain: :bitcoin,
       account: create(:account),
       address: bitcoin_address_1

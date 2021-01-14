@@ -1,23 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe WalletCreator do
+  subject(:wallets) { described_class.new(account: account).call(wallets_params).first }
+
   let(:account) { create(:account) }
-  let(:wallet_params) { { _blockchain: 'algorand_test', address: nil, source: 'ore_id' } }
+  let(:wallets_params) do
+    [{ blockchain: 'algorand_test', address: nil, source: 'ore_id', tokens_to_provision: tokens_to_provision, name: 'Wallet' }]
+  end
   let(:tokens_to_provision) { nil }
 
-  subject { described_class.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision) }
-
   context 'wallet created' do
-    let(:wallet_address) { build(:bitcoin_address_1) }
-    let(:wallet_params) { { _blockchain: :bitcoin, address: wallet_address } }
+    let(:bitcoin_address) { build(:bitcoin_address_1) }
+    let(:constellation_address) { build(:constellation_address_1) }
+    let(:wallets_params) do
+      [
+        { blockchain: :bitcoin, address: bitcoin_address, tokens_to_provision: tokens_to_provision, name: 'Wallet 1' },
+        { blockchain: :constellation, address: constellation_address, name: 'Wallet 2' }
+      ]
+    end
 
     it 'works' do
-      wallet = subject
-      expect(Wallet.count).to eq 1
-      expect(wallet).to be_persisted
-      expect(wallet._blockchain).to eq 'bitcoin'
-      expect(wallet.address).to eq wallet_address
-      expect(wallet.source).to eq 'user_provided'
+      wallets
+
+      expect(Wallet.count).to eq 2
+      expect(wallets.all?(&:persisted?)).to be true
+      expect(wallets.map(&:_blockchain)).to eq %w[bitcoin constellation]
+      expect(wallets.map(&:address)).to eq [bitcoin_address, constellation_address]
+      expect(wallets.map(&:source)).to eq %w[user_provided user_provided]
 
       expect(WalletProvision.count).to be_zero
     end
@@ -28,7 +37,7 @@ RSpec.describe WalletCreator do
     let(:tokens_to_provision) { "[#{token.id}]" }
 
     it 'works' do
-      wallet = subject
+      wallet = wallets.first
       expect(Wallet.count).to eq 1
       expect(wallet).to be_persisted
       expect(wallet._blockchain).to eq 'algorand_test'
@@ -50,23 +59,23 @@ RSpec.describe WalletCreator do
 
     context 'wrong format of tokens_to_provision with valid JSON' do
       let(:tokens_to_provision) { '1' }
-      it { expect(subject.errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
     end
 
     context 'wrong format of tokens_to_provision with invalid JSON' do
       let(:tokens_to_provision) { '[1' }
-      it { expect(subject.errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
     end
 
     context 'unexisting token id in tokens_to_provision' do
       let(:tokens_to_provision) { '[9999]' }
-      it { expect(subject.errors.messages).to eq(tokens_to_provision: ['Some tokens can\'t be provisioned: [9999]']) }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Some tokens can\'t be provisioned: [9999]']) }
     end
 
     context 'tokens_to_provision with existing token which can not be provisioned' do
       let(:token) { create(:token) }
       let(:tokens_to_provision) { "[#{token.id}]" }
-      it { expect(subject.errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{token.id}]"]) }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{token.id}]"]) }
     end
   end
 end

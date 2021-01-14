@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe WalletsController, type: :controller do
   let(:valid_attributes) do
     {
+      name: build(:wallet).name,
       address: build(:wallet).address,
       _blockchain: build(:wallet)._blockchain
     }
@@ -37,18 +38,44 @@ RSpec.describe WalletsController, type: :controller do
     end
   end
 
+  describe 'GET /algorand_opt_ins' do
+    it 'renders json with content' do
+      wallet = account.wallets.create! valid_attributes
+      get :algorand_opt_ins, params: { id: wallet.to_param }
+      expect(JSON.parse(response.body)).to have_key('content')
+      expect(response).to have_http_status(200)
+    end
+  end
+
   describe 'GET /new' do
     it 'renders a successful response' do
       get :new
-      expect(response).to be_successful
+      expect(response).to redirect_to wallets_path
+    end
+
+    context 'json type' do
+      it 'renders a successful response' do
+        get :new, format: :json
+        expect(JSON.parse(response.body)).to have_key('content')
+        expect(response).to have_http_status(200)
+      end
     end
   end
 
   describe 'GET /edit' do
+    let(:wallet) { account.wallets.create! valid_attributes }
+
     it 'render a successful response' do
-      wallet = account.wallets.create! valid_attributes
       get :edit, params: { id: wallet.to_param }
-      expect(response).to be_successful
+      expect(response).to redirect_to wallets_path
+    end
+
+    context 'json type' do
+      it 'renders a successful response' do
+        get :edit, format: :json, params: { id: wallet.to_param }
+        expect(JSON.parse(response.body)).to have_key('content')
+        expect(response).to have_http_status(200)
+      end
     end
   end
 
@@ -60,9 +87,10 @@ RSpec.describe WalletsController, type: :controller do
         end.to change(account.wallets, :count).by(1)
       end
 
-      it 'redirects to wallets' do
+      it 'returns json with message and statu 201' do
         post :create, params: { wallet: valid_attributes }
-        expect(response).to redirect_to(wallets_url)
+        expect(JSON.parse(response.body)).to have_key('message')
+        expect(response).to have_http_status(201)
       end
     end
 
@@ -73,9 +101,10 @@ RSpec.describe WalletsController, type: :controller do
         end.to change(account.wallets, :count).by(0)
       end
 
-      it "renders a successful response (i.e. to display the 'new' template)" do
+      it 'returns json with message and status 422' do
         post :create, params: { wallet: invalid_attributes }
-        expect(response).to be_successful
+        expect(JSON.parse(response.body)).to have_key('message')
+        expect(response).to have_http_status(422)
       end
     end
   end
@@ -95,19 +124,21 @@ RSpec.describe WalletsController, type: :controller do
         expect(wallet.address).to eq('3CMercihVFcgrXycK7dgei3P3d8AKxWqB6')
       end
 
-      it 'redirects to wallets' do
+      it 'returns json with message and status 200' do
         wallet = account.wallets.create! valid_attributes
         patch :update, params: { wallet: new_attributes, id: wallet.to_param }
         wallet.reload
-        expect(response).to redirect_to(wallets_url)
+        expect(JSON.parse(response.body)).to have_key('message')
+        expect(response).to have_http_status(200)
       end
     end
 
     context 'with invalid parameters' do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
+      it 'returns json with message and status 422' do
         wallet = account.wallets.create! valid_attributes
         patch :update, params: { wallet: invalid_attributes, id: wallet.to_param }
-        expect(response).to be_successful
+        expect(JSON.parse(response.body)).to have_key('message')
+        expect(response).to have_http_status(422)
       end
     end
   end
