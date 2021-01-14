@@ -233,6 +233,22 @@ class Mom
     end
   end
 
+  def blockchain_transaction_account_token_record_algo(**attrs)
+    token = attrs[:token] || create(:algo_sec_token)
+    attrs.delete(:token)
+
+    defaults = {
+      blockchain_transactable: create(:account_token_record, token: token, address: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
+  end
+
   def blockchain_transaction__award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     project = attrs[:award]&.project || create(
       :project,

@@ -16,10 +16,14 @@ describe BlockchainTransactionAccountTokenRecord, vcr: true do
   end
 
   describe 'on_chain' do
-    it 'returns Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions' do
-      blockchain_transaction = build(:blockchain_transaction_account_token_record)
+    context 'with comakery security token' do
+      subject { build(:blockchain_transaction_account_token_record).on_chain }
+      specify { expect(subject).to be_an(Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions) }
+    end
 
-      expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions)
+    context 'with algorand security token' do
+      subject { build(:blockchain_transaction_account_token_record_algo).on_chain }
+      specify { expect(subject).to be_an(Comakery::Algorand::Tx::App::SecurityToken::TransferRestrictions) }
     end
   end
 
