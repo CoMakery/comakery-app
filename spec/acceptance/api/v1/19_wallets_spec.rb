@@ -7,7 +7,7 @@ resource 'IX. Wallets' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
-  explanation 'Create, delete and retrieve account wallets.'
+  explanation 'Create, update, delete and retrieve account wallets.'
 
   header 'API-Key', build(:api_key)
   header 'Content-Type', 'application/json'
@@ -55,10 +55,10 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallet: { blockchain: :bitcoin, address: build(:bitcoin_address_1) } } }
+      let!(:create_params) { { wallets: [{ blockchain: :bitcoin, address: build(:bitcoin_address_1), name: 'Wallet' }] } }
 
       example 'CREATE WALLET' do
-        explanation 'Returns created wallet (See INDEX for response details)'
+        explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -68,10 +68,10 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallet: { blockchain: :algorand_test, source: :ore_id } } }
+      let!(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, name: 'Wallet' }] } }
 
       example 'CREATE WALLET – ORE_ID' do
-        explanation 'Returns created wallet (See INDEX for response details)'
+        explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -82,10 +82,10 @@ resource 'IX. Wallets' do
     context '201' do
       let!(:id) { account.managed_account_id }
       let(:token) { create(:asa_token) }
-      let(:create_params) { { wallet: { blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]" } } }
+      let(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]", name: 'Wallet' }] } }
 
       example 'CREATE WALLET – ORE_ID WITH PROVISIONING' do
-        explanation 'Returns created wallet (See INDEX for response details)'
+        explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
@@ -95,7 +95,7 @@ resource 'IX. Wallets' do
 
     context '400' do
       let!(:id) { account.managed_account_id }
-      let!(:create_params) { { wallet: { address: build(:bitcoin_address_1) } } }
+      let!(:create_params) { { wallets: [{ address: build(:bitcoin_address_1), name: 'Wallet' }] } }
 
       example 'CREATE WALLET – ERROR' do
         explanation 'Returns an array of errors'
@@ -103,7 +103,32 @@ resource 'IX. Wallets' do
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(400)
-        expect(response_body).to eq '{"errors":{"blockchain":["unknown blockchain value"]}}'
+        expect(response_body).to eq '{"errors":{"0":{"blockchain":["unknown blockchain value"]}}}'
+      end
+    end
+  end
+
+  put '/api/v1/accounts/:id/wallets/:wallet_id' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+      parameter :wallet_id, 'wallet id', required: true, type: :string
+    end
+
+    with_options with_example: true do
+      parameter :primary_wallet, 'primary wallet flag', required: false, type: :boolean
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+      let(:update_params) { { wallet: { primary_wallet: true } } }
+
+      example 'UPDATE WALLET' do
+        explanation 'Returns updated wallet (See INDEX for response details)'
+
+        request = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'PUT', 'example.org')
+        do_request(request)
+        expect(status).to eq(200)
       end
     end
   end

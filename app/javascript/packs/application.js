@@ -12,12 +12,6 @@ require('turbolinks').start()
 
 import '../src/application.js'
 
-import 'slick-carousel/slick/slick.css'
-
-import 'slick-carousel/slick/slick-theme.css'
-
-import 'animate.css'
-
 // Support component names relative to this directory:
 let componentRequireContext = require.context('components', true)
 let ReactRailsUJS = require('react_ujs')

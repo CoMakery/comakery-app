@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 11 Jan 2021 15:53:28 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d575e023a174337e5c2d90c92ad0698461610380408; expires=Wed, 10-Feb-21
+        15:53:28 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '0793c00e4600002d4f8f3a0000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=8rj1Tj7JDY3Drd1qoBZIAH%2Fc1TUSnKJ8hwmQXY%2BMyVb6nw%2BVuXjxkdnoC0U1%2FJh4BEKnbKIcr8inkVuRbbt787g5A89VrMvtcTTCm18%2FfFjmxOTO6qoMsxvb%2FQc%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 60ffcf906bb52d4f-KBP
+    body:
+      encoding: ASCII-8BIT
+      string: '{"account":{"address":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","amount":90043000,"amount-without-pending-rewards":90043000,"assets":[{"amount":979999000,"asset-id":13076367,"creator":"","is-frozen":false}],"created-assets":[{"index":13076367,"params":{"clawback":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","creator":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","decimals":2,"default-frozen":false,"freeze":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","manager":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","name":"Comakery
+        test","reserve":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","total":1000000000,"unit-name":"CMKTEST"}}],"pending-rewards":0,"reward-base":25538,"rewards":0,"round":11656918,"sig-type":"sig","status":"Offline"},"current-round":11656918}
+
+        '
+    http_version:
+  recorded_at: Mon, 11 Jan 2021 15:53:28 GMT
+recorded_with: VCR 5.1.0
