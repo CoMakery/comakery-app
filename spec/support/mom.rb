@@ -114,26 +114,31 @@ class Mom
     TransferRule.new(defaults.merge(attrs))
   end
 
-  def account_token_record(**attrs)
+  def account_token_record(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     token = attrs[:token] || build(:comakery_dummy_token)
+    account = attrs[:account] || create(:account)
+    reg_group = attrs[:reg_group] || create(:reg_group, token: token)
+    wallet =
+      if attrs.key?(:wallet)
+        attrs[:wallet]
+      elsif (account_wallet = account.wallets.find_by(_blockchain: token._blockchain))
+        account_wallet
+      else
+        create(
+          :wallet,
+          account: account,
+          _blockchain: token._blockchain,
+          address: attrs[:address] || build(:ethereum_address_2)
+        )
+      end
 
-    account = attrs[:account] || create(
-      :account
-    )
-
-    account.wallets.find_by(_blockchain: token._blockchain) || create(
-      :wallet,
-      account: account,
-      _blockchain: token._blockchain,
-      address: attrs[:address] || build(:ethereum_address_2)
-    )
-
-    attrs.delete(:address)
+    attrs.except!(:address, :account, :reg_group, :wallet)
 
     defaults = {
       account: account,
       token: token,
-      reg_group: create(:reg_group, token: token),
+      wallet: wallet,
+      reg_group: reg_group,
       max_balance: 100000,
       balance: 200,
       account_frozen: false,

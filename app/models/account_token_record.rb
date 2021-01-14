@@ -4,8 +4,10 @@ class AccountTokenRecord < ApplicationRecord
   belongs_to :account
   belongs_to :token
   belongs_to :reg_group
+  belongs_to :wallet
 
   after_initialize :set_defaults
+  before_validation :set_wallet
   before_save :touch_account
   after_save :replace_existing_record, if: -> { synced? }
 
@@ -35,6 +37,10 @@ class AccountTokenRecord < ApplicationRecord
     def set_defaults
       self.lockup_until ||= Time.current
       self.reg_group ||= RegGroup.default_for(token)
+    end
+
+    def set_wallet
+      self.wallet ||= account.wallets.find_by(_blockchain: token._blockchain, primary_wallet: true)
     end
 
     def touch_account

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_09_093316) do
+ActiveRecord::Schema.define(version: 2021_01_11_085123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,9 +27,11 @@ ActiveRecord::Schema.define(version: 2021_01_09_093316) do
     t.datetime "updated_at", null: false
     t.decimal "balance", precision: 78
     t.integer "status", default: 0
+    t.bigint "wallet_id"
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
+    t.index ["wallet_id"], name: "index_account_token_records_on_wallet_id"
   end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
@@ -616,6 +618,7 @@ ActiveRecord::Schema.define(version: 2021_01_09_093316) do
   add_foreign_key "account_token_records", "accounts"
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
+  add_foreign_key "account_token_records", "wallets"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "awards", "specialties"
