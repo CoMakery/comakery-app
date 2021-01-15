@@ -17,5 +17,6 @@ class PrimariesController < ApplicationController
 
     def set_wallet
       @wallet = policy_scope(Wallet).find(params[:wallet_id])
+      authorize @wallet
     end
 end

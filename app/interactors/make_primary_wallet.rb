@@ -10,7 +10,7 @@ class MakePrimaryWallet
       wallet.update!(primary_wallet: true)
     end
   rescue ActiveRecord::RecordInvalid => _e
-    context.fail(error: wallet.errors.full_messages.join(', '))
+    context.fail!(error: wallet.errors.full_messages.join(', '))
   end
 
   private
