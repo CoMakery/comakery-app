@@ -14,6 +14,8 @@ describe Token, type: :model, vcr: true do
   it { is_expected.to validate_presence_of(:_token_type) }
   it { is_expected.to validate_presence_of(:denomination) }
   it { is_expected.to define_enum_for(:_token_type) }
+  it { is_expected.to validate_content_type_of(:logo_image).allowing('image/png', 'image/jpg', 'image/jpeg') }
+  it { is_expected.to validate_size_of(:logo_image).less_than(10.megabytes) }
 
   describe described_class.new do
     it { is_expected.to respond_to(:contract) }

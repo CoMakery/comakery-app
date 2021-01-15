@@ -4,6 +4,8 @@ describe Account do
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }
   it { is_expected.to have_one(:ore_id_account).dependent(:destroy) }
+  it { is_expected.to validate_content_type_of(:image).allowing('image/png', 'image/jpg', 'image/jpeg') }
+  it { is_expected.to validate_size_of(:image).less_than(10.megabytes) }
 
   subject(:account) { create :account, password: '12345678' }
 
