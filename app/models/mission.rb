@@ -48,20 +48,20 @@ class Mission < ApplicationRecord
   validates :description, length: { maximum: 500 }
   validate :whitelabel_api_public_key_cannot_be_overwritten, if: -> { whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present? }
   validates :image, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                    size: { less_than: 10.megabytes, message: 'is not given between size' },
+                    dimension: { min: 1..1 }
   validates :logo, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                   size: { less_than: 10.megabytes, message: 'is not given between size' },
+                   dimension: { min: 1..1 }
   validates :whitelabel_logo, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                              size: { less_than: 10.megabytes, message: 'is not given between size' },
+                              dimension: { min: 1..1 }
   validates :whitelabel_logo_dark, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                                   size: { less_than: 10.megabytes, message: 'is not given between size' },
+                                   dimension: { min: 1..1 }
   validates :whitelabel_favicon, content_type: %w[image/png image/jpg image/jpeg image/svg+xml],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                                 size: { less_than: 10.megabytes, message: 'is not given between size' },
+                                 dimension: { min: 1..1 }
 
   before_save :populate_api_key, if: -> { whitelabel }
 

@@ -56,14 +56,14 @@ class Project < ApplicationRecord
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
   validates :image, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                    size: { less_than: 10.megabytes, message: 'is not given between size' },
+                    dimension: { min: 1..1 }
   validates :square_image, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
-  validates :panoramic_image,content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                           size: { less_than: 10.megabytes, message: 'is not given between size' },
+                           dimension: { min: 1..1 }
+  validates :panoramic_image, content_type: %w[image/png image/jpg image/jpeg],
+                              size: { less_than: 10.megabytes, message: 'is not given between size' },
+                              dimension: { min: 1..1 }
 
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }

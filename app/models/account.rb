@@ -78,8 +78,8 @@ class Account < ApplicationRecord
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
   validates :image, content_type: %w[image/png image/jpg image/jpeg],
-            size: { less_than: 10.megabytes , message: 'is not given between size' },
-            dimension: { min: 1..1 }
+                    size: { less_than: 10.megabytes, message: 'is not given between size' },
+                    dimension: { min: 1..1 }
   # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   # rubocop:enable Rails/UniqueValidationWithoutIndex
