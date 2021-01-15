@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   resource :account, only: [:update]
   resources :wallets do
+    resource :primaries, only: :create
     member do
       get :algorand_opt_ins
     end
