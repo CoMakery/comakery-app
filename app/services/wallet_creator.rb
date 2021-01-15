@@ -2,14 +2,8 @@ class WalletCreator
   class WrongTokensFormat < StandardError; end
 
   AVAILABLE_PARAMS = %i[token_id max_balance lockup_until reg_group_id account_id account_frozen].freeze
-  # class Validator
-  #   def initialize(token, params)
-  #     @token = token
-  #     @params = params
-  #   end
-  # end
 
-  attr_reader :account
+  attr_reader :account, :errors
 
   def initialize(account:)
     @account = account
@@ -17,85 +11,100 @@ class WalletCreator
 
   def call(wallets_params)
     errors = {}
-
     wallets = wallets_params.map.with_index do |wallet_attrs, i|
       tokens_to_provision = wallet_attrs.delete(:tokens_to_provision)
       wallet_attrs[:_blockchain] = wallet_attrs.delete(:blockchain)
 
       wallet = account.wallets.new(wallet_attrs)
 
-      # This will init the errors object and allow to add custom errors later on with #errors.add
-      wallet.validate
+      provision = Provision.new(wallet, tokens_to_provision)
 
-      tokens_to_provision = sanitize_tokens_to_provision(wallet, tokens_to_provision)
+      if provision.should_be_provisioned?
+        build_wallet_provisions(provision)
+        build_account_token_records(provision)
+      end
 
-      build_wallet_provisions(wallet, tokens_to_provision) if should_be_provisioned?(wallet, tokens_to_provision)
+      errors[i] = provision.wallet.errors if provision.wallet.errors.any?
 
-      errors[i] = wallet.errors if wallet.errors.any?
-
-      wallet
+      provision.wallet
     end
 
     account.save if errors.empty?
-
     [wallets, errors]
   end
 
   private
 
-    def tokens_to_provision_params
-      return unless tokens_to_provision_raw_params.is_a?(Array)
-      return unless tokens_to_provision_raw_params.first.is_a?(ActionController::Parameters)
+    # def tokens_to_provision_params(tokens_to_provision)
+    #   return unless tokens_to_provision
+    #   return unless tokens_to_provision.is_a?(Array)
+    #   return unless tokens_to_provision.first.is_a?(ActionController::Parameters)
 
-      @tokens_to_provision_params ||= tokens_to_provision_raw_params.map { |params| params.permit(AVAILABLE_PARAMS) }
-    end
+    #   tokens_to_provision
+    # end
 
-    def requested_token_ids_to_provision
-      return [] unless tokens_to_provision_params
+    # def valid_tokens_to_provision?(wallet, provision_params)
+    #   correct_tokens = Token.available_for_provision.where(id: provision_params.map{ |p| p[:token_id] }
+    #   wrong_tokens = provision_params.map { |t| t.fetch(:token_id, nil) }.compact.map(&:to_i) - correct_tokens.pluck(:id)
 
-      @requested_token_ids_to_provision ||= tokens_to_provision_params.map { |t| t.fetch(:token_id, nil) }.compact.map(&:to_i)
-    end
+    #   if wrong_tokens.any?
+    #     wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
+    #     return false
+    #   end
 
-    def sanitize_tokens_to_provision(wallet, tokens_to_provision)
-      return [] if tokens_to_provision.blank?
-    end
+    #   true
+    # end
 
-    def available_tokens_to_provision
-      @available_tokens_to_provision ||= Token.available_for_provision.where(id: requested_token_ids_to_provision).to_a
-    end
-
-    def available_token_ids_to_provision
-      @available_token_ids_to_provision ||= available_tokens_to_provision.map(&:id)
-    end
-
-    def should_be_provisioned?(wallet, tokens_to_provision)
-      tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?(wallet, tokens_to_provision)
-    end
-
-    def valid_tokens_to_provision?(wallet, tokens_to_provision)
-      correct_tokens = Token.available_for_provision.where(id: tokens_to_provision)
-      wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.pluck(:id)
-
-      if wrong_tokens.any?
-        wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
-        return false
-      end
-
-      true
-    end
-
-    def build_wallet_provisions(wallet, tokens_to_provision)
-      tokens_to_provision.each do |token_to_provision|
-        wallet.wallet_provisions.new(token_id: token_to_provision)
+    def build_wallet_provisions(provision)
+      provision.params.each do |provision_params|
+        token_id = provision_params.fetch(:token_id)
+        provision.wallet.wallet_provisions.new(token_id: token_id)
       end
     end
 
-    def build_account_token_records
-      tokens_to_provision_params.filter do |params|
-        token = available_tokens_to_provision.find { |t| t.id == params[:token_id] }
+    def build_account_token_records(provision)
+      provision.params.filter do |params|
+        token = Token.available_for_provision.find_by(id: params[:token_id])
         next if token.nil? || !token.token_type.operates_with_account_records?
 
-        wallet.account.account_token_records.new(params)
+        provision.wallet.account.account_token_records.new(params)
       end
+    end
+end
+
+class WalletCreator::Provision
+  attr_reader :wallet, :params
+
+  def initialize(wallet, params)
+    @wallet = wallet
+    @params = sanitize_params(params)
+  end
+
+  def should_be_provisioned?
+    params && wallet.valid? && valid?
+  end
+
+  def valid?
+    unavailable_token_ids = params.map { |t| t.fetch(:token_id) }.map(&:to_i) - available_tokens_to_provision.pluck(:id)
+
+    if unavailable_token_ids.any?
+      wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{unavailable_token_ids}")
+      return false
+    end
+
+    true
+  end
+
+  private
+
+    def available_tokens_to_provision
+      @available_tokens_to_provision ||= Token.available_for_provision.where(id: params.map{ |p| p[:token_id] })
+    end
+
+    def sanitize_params(params)
+      return [] unless params.is_a?(Array)
+      return [] unless params.first.is_a?(ActionController::Parameters)
+
+      params
     end
 end
