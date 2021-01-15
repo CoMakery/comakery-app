@@ -5,11 +5,17 @@ RSpec.describe WalletCreator do
 
   let(:account) { create(:account) }
   let(:wallets_params) do
-    [{ blockchain: 'algorand_test', address: nil, source: 'ore_id', tokens_to_provision: tokens_to_provision, name: 'Wallet' }]
+    [{
+      blockchain: 'algorand_test',
+      address: nil,
+      source: 'ore_id',
+      tokens_to_provision: tokens_to_provision,
+      name: 'Wallet'
+    }]
   end
   let(:tokens_to_provision) { nil }
 
-  context 'wallet created' do
+  context 'wallet created without tokens_to_provision' do
     let(:bitcoin_address) { build(:bitcoin_address_1) }
     let(:constellation_address) { build(:constellation_address_1) }
     let(:wallets_params) do
@@ -34,7 +40,7 @@ RSpec.describe WalletCreator do
 
   context 'wallet created with tokens_to_provision' do
     let(:token) { create(:asa_token) }
-    let(:tokens_to_provision) { "[#{token.id}]" }
+    let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: token.id.to_s).permit(:token_id)] }
 
     it 'works' do
       wallet = wallets.first

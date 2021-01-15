@@ -35,26 +35,6 @@ class WalletCreator
 
   private
 
-    # def tokens_to_provision_params(tokens_to_provision)
-    #   return unless tokens_to_provision
-    #   return unless tokens_to_provision.is_a?(Array)
-    #   return unless tokens_to_provision.first.is_a?(ActionController::Parameters)
-
-    #   tokens_to_provision
-    # end
-
-    # def valid_tokens_to_provision?(wallet, provision_params)
-    #   correct_tokens = Token.available_for_provision.where(id: provision_params.map{ |p| p[:token_id] }
-    #   wrong_tokens = provision_params.map { |t| t.fetch(:token_id, nil) }.compact.map(&:to_i) - correct_tokens.pluck(:id)
-
-    #   if wrong_tokens.any?
-    #     wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
-    #     return false
-    #   end
-
-    #   true
-    # end
-
     def build_wallet_provisions(provision)
       provision.params.each do |provision_params|
         token_id = provision_params.fetch(:token_id)
@@ -67,7 +47,7 @@ class WalletCreator
         token = Token.available_for_provision.find_by(id: params[:token_id])
         next if token.nil? || !token.token_type.operates_with_account_records?
 
-        provision.wallet.account.account_token_records.new(params)
+        provision.wallet.account_token_records.new(params)
       end
     end
 end
@@ -98,7 +78,7 @@ class WalletCreator::Provision
   private
 
     def available_tokens_to_provision
-      @available_tokens_to_provision ||= Token.available_for_provision.where(id: params.map{ |p| p[:token_id] })
+      @available_tokens_to_provision ||= Token.available_for_provision.where(id: params.map { |p| p[:token_id] })
     end
 
     def sanitize_params(params)
