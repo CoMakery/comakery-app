@@ -1,11 +1,51 @@
-<%= form_with(model: wallet, local: true) do |form| %>
-  <%= form.label(:_blockchain) %>
-  <%= form.select(:_blockchain, wallet.available_blockchains.map { |k| [Wallet.blockchain_for(k).name, k] }, { required: true }) %>
+<div class="modal-header">
+  <h5 class="modal-title" id="walletFormLabel">
+    <%= wallet.persisted? ? 'Editing Wallet' : 'Add Wallet' %>
+  </h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<%= form_with(
+      model: wallet, local: true, format: :json,
+      data: {
+        controller: 'wallets--form',
+        action: 'wallets--form#onSubmit wallets:created->wallets--modal#closeModal wallets:created->wallets--page#refreshCollection' }) do |form| %>
 
-  <%= form.label(:address) %>
-  <%= form.text_field :address, placeholder: '...', required: true %>
+  <div class="modal-body">
+    <div class="form-group">
+      <%= form.label(:name) %>
+      <%= form.text_field(
+            :name,
+            value: (wallet.name || "#{wallet.blockchain.name} wallet"),
+            required: true,
+            class: 'form-control',
+            data: { action: 'input->wallets--form#inputChanged' }) %>
+    </div>
 
-  <div class="actions">
-    <%= form.submit 'Save Wallet' %>
+    <div class="form-group">
+      <%= form.label(:_blockchain) %>
+      <%= form.select(
+            :_blockchain, wallet_blockchain_collection(wallet),
+            { required: true },
+            { class: 'form-control', data: { action: 'wallets--form#inputChanged' } }) %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label(:address) %>
+      <%= form.text_field(
+            :address,
+            placeholder: '...',
+            required: true,
+            class: 'form-control',
+            data: { action: 'input->wallets--form#inputChanged' }) %>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-target="wallets--form.submit">
+      <%= wallet.persisted? ? 'Update' : 'Add' %>
+    </button>
   </div>
 <% end %>

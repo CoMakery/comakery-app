@@ -23,7 +23,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
     award.name = award.transfer_type.name.titlecase
     award.issuer = project.account
-    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer, {}).fetch(:account_id, {}))
+    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: account_id)
     award.status = :accepted
 
     award.why = ''
@@ -54,6 +54,10 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
   private
 
+    def account_id
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer, {}).fetch(:account_id, {})
+    end
+
     def project
       @project ||= project_scope.find(params[:project_id])
     end
@@ -72,6 +76,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
         :quantity,
         :total_amount,
         :transfer_type_id,
+        :recipient_wallet_id,
         :description
       )
     end

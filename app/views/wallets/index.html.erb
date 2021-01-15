@@ -1,31 +1,25 @@
-<%= render layout: 'projects/project_settings_modal' do %>
-  <div class="wallets">
-    <h2>My Wallets</h2>
-    <h3><%= pluralize(@wallets.size, 'Wallet', 'Wallets') %></h3>
-
+<div class="layout" data-controller="wallets--page" data-src="<% wallets_path %>">
+  <%= render 'wallets/form_modal' %>
+  <%= render 'wallets/opt_ins_modal' %>
+  <div class="layout--content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="m-0">Wallets</h4>
+      <div class="d-flex">
+        <button class="btn btn-light mr-4 font-weight-bold" data-toggle="modal" data-target="#walletForm" data-src="<%= new_wallet_path %>">
+          Add wallet
+        </button>
+        <%= link_to auth_ore_id_new_url(redirect_back_to: wallets_url), type: :button, class: 'btn btn-primary font-weight-bold', data: { method: 'POST' } do %>
+          <i class="fas fa-plus"></i> <span>Link OREID</span>
+        <% end %>
+      </div>
+    </div>
     <% if current_account.ore_id_account&.account_name && @wallets.ore_id.empty? %>
-      <h3>
+      <h6>
         Synchronising ORE ID Wallets...
-      </h3>
+      </h6>
     <% end %>
-
-    <div class="wallets__create">
-      <%= link_to 'Add Wallet', new_wallet_url %>
-
-      <% if current_account.ore_id_account&.account_name %>
-        <%= link_to 'Unlink ORE ID', auth_ore_id_destroy_url, data: { method: 'DELETE' } %>
-        <%= link_to 'Algorand opt-ins', algorand_opt_ins_path %>
-      <% else %>
-        <%= link_to 'Link ORE ID', auth_ore_id_new_url(redirect_back_to: wallets_url), data: { method: 'POST' } %>
-      <% end %>
-    </div>
-
-    <div class="transfers-table animated fadeIn faster">
-      <%= render partial: "wallet", collection: @wallets.user_provided, as: :wallet, cached: true %>
-    </div>
-
-    <div class="transfers-table animated fadeIn faster">
-      <%= render partial: "wallet", collection: @wallets.ore_id, as: :wallet, cached: true %>
+    <div class="card" data-target="wallets--page.collectionWrapper">
+      <%= render 'wallets/wallets_collection', wallets: @wallets %>
     </div>
   </div>
-<% end %>
+</div>

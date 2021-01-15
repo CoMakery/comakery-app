@@ -13,13 +13,14 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:account_token_record) { create(:account_token_record) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: account_token_record.token) }
+  let(:account) { create(:account) }
 
   let(:valid_attributes) do
     {
       max_balance: '100',
       lockup_until: '1',
       reg_group_id: create(:reg_group, token: account_token_record.token).id.to_s,
-      account_id: create(:account).id.to_s,
+      account_id: account.id.to_s,
       account_frozen: 'false'
     }
   end
@@ -29,7 +30,7 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
       max_balance: '-100',
       lockup_until: '1',
       reg_group_id: create(:reg_group, token: account_token_record.token).id.to_s,
-      account_id: create(:account).id.to_s,
+      account_id: account.id.to_s,
       account_frozen: 'false'
     }
   end
@@ -78,6 +79,10 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
 
           post :create, params: params
         end.to change(project.token.account_token_records, :count).by(1)
+
+        account_token_record = project.token.account_token_records.last
+        expect(account_token_record.account).to eq account
+        expect(account_token_record.wallet).to eq account.wallets.first
       end
 
       it 'returns created record' do

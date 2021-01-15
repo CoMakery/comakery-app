@@ -8,7 +8,8 @@ RSpec.describe AlgorandOptInsController, type: :controller do
     account.wallets.create!(
       address: build(:algorand_address_1),
       _blockchain: 'algorand_test',
-      source: 'ore_id'
+      source: 'ore_id',
+      name: 'Wallet'
     )
   end
 

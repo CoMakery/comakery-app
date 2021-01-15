@@ -11,14 +11,30 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/wallets
   def create
-    @wallet = WalletCreator.new(account: account).call(wallet_params, tokens_to_provision: tokens_to_provision_params)
+    @wallets, @errors = WalletCreator.new(account: account).call(wallets_params)
 
-    if @wallet.persisted?
-      render 'show.json', status: :created
+    if @errors.empty?
+      render 'index.json', status: :created
     else
-      @errors = @wallet.errors
-
       render 'api/v1/error.json', status: :bad_request
+    end
+  end
+
+  # PATCH/PUT /api/v1/accounts/1/wallets/1
+  def update
+    ActiveRecord::Base.transaction do
+      account.wallets.where(_blockchain: wallet._blockchain, primary_wallet: true)
+             .update_all(primary_wallet: false) # rubocop:disable Rails/SkipsModelValidations
+
+      if wallet.update(wallet_params)
+        render 'show.json', status: :ok
+      else
+        @errors = wallet.errors
+
+        render 'api/v1/error.json', status: :bad_request
+
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
@@ -64,23 +80,19 @@ class Api::V1::WalletsController < Api::V1::ApiController
       @wallet ||= account.wallets.find(params[:id])
     end
 
-    def wallet_params
-      r = params.fetch(:body, {}).fetch(:data, {}).fetch(:wallet, {}).permit(
-        :blockchain,
-        :address,
-        :source
-      )
+    def wallets_params
+      wallets = params.fetch(:body, {}).fetch(:data, {}).require(:wallets)
 
-      r[:_blockchain] = r[:blockchain]
-      r.delete(:blockchain)
-      r
+      wallets.map do |wallet_params|
+        wallet_params.permit(:blockchain, :address, :source, :tokens_to_provision, :name)
+      end
+    end
+
+    def wallet_params
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:wallet, {}).permit(:primary_wallet)
     end
 
     def redirect_url
       @redirect_url ||= params.fetch(:body, {}).fetch(:data, {}).fetch(:redirect_url, nil)
-    end
-
-    def tokens_to_provision_params
-      params.dig(:body, :data, :wallet, :tokens_to_provision)
     end
 end

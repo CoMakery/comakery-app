@@ -48,6 +48,8 @@ junk.txt
 yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+/.yarnrc
+/.yarn/
 
 # Ignore encrypted secrets key file.
 config/secrets.yml.key

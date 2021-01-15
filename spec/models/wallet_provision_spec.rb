@@ -4,8 +4,9 @@ require 'models/concerns/synchronisable_spec'
 RSpec.describe WalletProvision, type: :model do
   it_behaves_like 'synchronisable'
   before { allow_any_instance_of(described_class).to receive(:sync_allowed?).and_return(true) }
+  let(:provision_state) { :pending }
 
-  subject { create(:wallet_provision, wallet_address: build(:algorand_address_1)) }
+  subject { create(:wallet_provision, wallet_address: build(:algorand_address_1), state: provision_state) }
 
   it { is_expected.to belong_to(:wallet) }
   it { is_expected.to belong_to(:token) }
@@ -46,6 +47,8 @@ RSpec.describe WalletProvision, type: :model do
   end
 
   describe '#sync_balance' do
+    let(:provision_state) { :pending }
+
     before do
       allow(subject).to receive(:wallet).and_return(Wallet.new)
       allow_any_instance_of(Wallet).to receive(:coin_balance).and_return(Balance.new)
@@ -60,6 +63,15 @@ RSpec.describe WalletProvision, type: :model do
 
         expect(subject.state).to eq 'initial_balance_confirmed'
       end
+
+      context 'with non-pending state' do
+        let(:provision_state) { :initial_balance_confirmed }
+
+        specify 'do nothing' do
+          expect_any_instance_of(Wallet).not_to receive(:coin_balance)
+          expect(subject.sync_balance).to be nil
+        end
+      end
     end
 
     context 'when coin balance is not positive' do
@@ -72,6 +84,8 @@ RSpec.describe WalletProvision, type: :model do
   end
 
   describe '#create_opt_in_tx', vcr: true do
+    let(:provision_state) { :initial_balance_confirmed }
+
     context 'when opt_in tx has been created' do
       it 'calls service to sign the transaction' do
         expect_any_instance_of(OreIdService).to receive(:create_tx)
@@ -82,14 +96,56 @@ RSpec.describe WalletProvision, type: :model do
         expect(BlockchainTransactionOptIn.last.blockchain_transactable.wallet).to eq(subject.wallet)
       end
     end
+
+    context 'when state is not initial_balance_confirmed' do
+      let(:provision_state) { :opt_in_created }
+
+      it 'do nothing' do
+        expect(TokenOptIn).not_to receive(:find_or_create_by)
+        expect(subject.create_opt_in_tx).to be nil
+      end
+    end
   end
 
   describe '#sync_opt_in_tx' do
+    let(:provision_state) { :opt_in_created }
+
     context 'when opt_in tx has been confirmed on blockchain' do
       specify do
         expect(subject).to receive(:provisioned!)
         subject.sync_opt_in_tx
       end
+    end
+
+    context 'when state is not opt_in_created' do
+      let(:provision_state) { :provisioned }
+
+      specify 'do nothing' do
+        expect_any_instance_of(Wallet).not_to receive(:token_opt_ins)
+        expect(subject.sync_opt_in_tx).to be nil
+      end
+    end
+  end
+
+  describe 'provisioning step-by-step', vcr: true do
+    specify do
+      expect(OreIdWalletBalanceSyncJob).to receive(:perform_later)
+      expect(subject.state).to eq 'pending'
+      allow_any_instance_of(Wallet).to receive(:coin_balance).and_return(Balance.new)
+      allow_any_instance_of(Balance).to receive(:value).and_return(1)
+
+      expect(OreIdWalletOptInTxCreateJob).to receive(:perform_later)
+      subject.sync_balance
+      expect(subject.state).to eq 'initial_balance_confirmed'
+
+      expect(OreIdWalletOptInTxSyncJob).to receive(:perform_later)
+      expect_any_instance_of(OreIdService).to receive(:create_tx).and_return(true)
+      subject.create_opt_in_tx
+      expect(subject.state).to eq 'opt_in_created'
+
+      expect_any_instance_of(Wallet).to receive(:token_opt_ins).and_return([])
+      subject.sync_opt_in_tx
+      expect(subject.state).to eq 'provisioned'
     end
   end
 end
