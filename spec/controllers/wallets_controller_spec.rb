@@ -143,6 +143,36 @@ RSpec.describe WalletsController, type: :controller do
     end
   end
 
+  describe 'PATCH #make_primary' do
+    let(:wallet) { create(:wallet, account: account) }
+
+    before do
+      allow(MakePrimaryWallet).to receive(:call).and_return(interactor)
+    end
+
+    subject { patch :make_primary, params: { id: wallet.id } }
+
+    context 'request succeed' do
+      let(:interactor) { OpenStruct.new(success?: true) }
+
+      it 'redirects to wallets page and sets notice message' do
+        subject
+        expect(response).to redirect_to wallets_path
+        expect(flash[:notice]).to eq('The wallet is successfully set as Primary')
+      end
+    end
+
+    context 'request fails' do
+      let(:interactor) { OpenStruct.new(success?: false, error: 'Wallet Update Failed') }
+
+      it 'redirects to wallets page and sets error message' do
+        subject
+        expect(response).to redirect_to wallets_path
+        expect(flash[:error]).to eq('Wallet Update Failed')
+      end
+    end
+  end
+
   describe 'DELETE /destroy' do
     it 'destroys the requested wallet' do
       wallet = account.wallets.create! valid_attributes

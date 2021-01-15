@@ -1,7 +1,7 @@
 class WalletsController < ApplicationController
   before_action :set_hide_zero_balances
-  before_action :set_wallet, only: %i[show edit update destroy algorand_opt_ins]
-  after_action :authorize_wallet, only: %i[new create show edit update destroy algorand_opt_ins]
+  before_action :set_wallet, only: %i[show edit update destroy algorand_opt_ins make_primary]
+  after_action :authorize_wallet, only: %i[new create show edit update destroy algorand_opt_ins make_primary]
   helper_method :back_path
 
   # GET /wallets
@@ -65,6 +65,18 @@ class WalletsController < ApplicationController
     else
       render json: { message: @wallet.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
+  end
+
+  def make_primary
+    result = MakePrimaryWallet.call(account: current_account, wallet: @wallet)
+
+    if result.success?
+      flash[:notice] = 'The wallet is successfully set as Primary'
+    else
+      flash[:error] = result.error
+    end
+
+    redirect_to wallets_path
   end
 
   # DELETE /wallets/1

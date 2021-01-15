@@ -67,7 +67,7 @@
                     <%= link_to 'Opt In To Algorand', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
                   <% end %>
                   <% unless wallet.primary_wallet %>
-                    <%= link_to "Make Primary Wallet for #{wallet.blockchain.name}", wallet_primaries_path(wallet), method: :post, class: 'dropdown-item' %>
+                    <%= link_to "Make Primary Wallet for #{wallet.blockchain.name}", make_primary_wallet_path(wallet), method: :patch, class: 'dropdown-item' %>
                   <% end %>
                   <% if wallet.user_provided? %>
                     <%= link_to 'Edit', '', class: 'dropdown-item', data: { toggle: :modal, target: '#walletForm', src: edit_wallet_path(wallet) }  %>
