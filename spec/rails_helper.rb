@@ -21,6 +21,7 @@ require 'rspec/rails'
 require 'rack_session_access/capybara'
 require 'sidekiq/testing'
 require 'pundit/rspec'
+require 'active_storage_validations/matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
