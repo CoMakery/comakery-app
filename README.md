@@ -66,7 +66,7 @@ You should deploy from the `master` branch. New code is merged into the `accepta
 
 If you want to deploy a new a new CoMakery Server on Heroku just press this button:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/feature/deploy-whitelabel-layout-1790)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
 
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
