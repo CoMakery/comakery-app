@@ -2,11 +2,11 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  if ENV['WHITELABEL'] == "true"
-    root 'projects#index'
-  else
+  # if ENV['WHITELABEL'] == "true"
+  #   root 'projects#index'
+  # else
     root 'pages#featured'
-  end
+  # end
 
   resources :tokens, only: [:index, :new, :create, :show, :edit, :update] do
     collection do
