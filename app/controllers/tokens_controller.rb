@@ -8,11 +8,9 @@ class TokensController < ApplicationController
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
-    set_tokens
-
     props = {
       tokens: serialized_tokens,
-      pagination_html: helpers.paginate(@tokens, window: 3)
+      pagination_html: helpers.paginate(tokens, window: 3)
     }
 
     render component: 'TokenIndex', props: props
@@ -81,8 +79,8 @@ class TokensController < ApplicationController
 
   private
 
-    def set_tokens
-      @tokens =
+    def tokens
+      @tokens ||=
         policy_scope(Token)
         .with_attached_logo_image
         .page(params[:page])
@@ -90,7 +88,7 @@ class TokensController < ApplicationController
     end
 
     def serialized_tokens
-      @tokens.map do |t|
+      tokens.map do |t|
         t.serializable_hash.merge(
           logo_url: GetImageVariantPath.call(
             attachment: t.logo_image,
