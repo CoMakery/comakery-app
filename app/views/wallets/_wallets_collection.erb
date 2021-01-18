@@ -16,6 +16,7 @@
         <th scope="col">Wallet name</th>
         <th scope="col">Balances</th>
         <th scope="col">Blockchain</th>
+        <th scope="col">Primary</th>
         <th scope="col">Address</th>
         <th scope="col" class="text-right">Actions</th>
       </tr>
@@ -39,6 +40,7 @@
             </div>
           </td>
           <td><%= wallet.blockchain.name %></td>
+          <td><%= wallet.primary_wallet.to_s.capitalize %></td>
           <td>
             <div class="d-flex" data-controller="utils--clipboard">
               <%= link_to(
@@ -63,6 +65,9 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <% if wallet.ore_id? %>
                     <%= link_to 'Opt In To Algorand', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
+                  <% end %>
+                  <% unless wallet.primary_wallet %>
+                    <%= link_to "Make Primary Wallet for #{wallet.blockchain.name}", make_primary_wallet_path(wallet), method: :patch, class: 'dropdown-item' %>
                   <% end %>
                   <% if wallet.user_provided? %>
                     <%= link_to 'Edit', '', class: 'dropdown-item', data: { toggle: :modal, target: '#walletForm', src: edit_wallet_path(wallet) }  %>
