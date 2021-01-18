@@ -96,15 +96,14 @@ RSpec.describe WalletCreator do
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array.']) }
     end
 
-    # context 'token_id is not provided' do
-    #   # TODO: Fix me
-    #   # let(:tokens_to_provision) { '1' }
-    #   # it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array.']) }
-    # end
+    context 'token_id is not provided' do
+      let(:tokens_to_provision) { [{ no_token_id: true }] }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['token_id param must be provided']) }
+    end
 
     context 'unexisting token id in tokens_to_provision' do
       let(:tokens_to_provision) { [{ token_id: '9999' }] }
-      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Some tokens can\'t be provisioned: [9999]']) }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [9999]"]) }
     end
 
     context 'tokens_to_provision with existing token which can not be provisioned' do

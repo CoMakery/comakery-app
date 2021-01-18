@@ -58,7 +58,8 @@ class WalletCreator::Provision
   end
 
   def should_be_provisioned?
-    wallet.valid? && validate_params_type && validate_tokens_availability && validate_params_for_account_records
+    wallet.valid? && validate_params_type && validate_token_id_provided &&
+      validate_tokens_availability && validate_params_for_account_records
   end
 
   def params_with_required_tokens_to_fill_account_record
@@ -92,6 +93,11 @@ class WalletCreator::Provision
 
     def validate_params_type
       wallet.errors.add(:tokens_to_provision, params[:error]) if params.is_a?(Hash) && params.key?(:error)
+      wallet.errors.empty?
+    end
+
+    def validate_token_id_provided
+      wallet.errors.add(:tokens_to_provision, 'token_id param must be provided') unless params.all? { |p| p.key?(:token_id) }
       wallet.errors.empty?
     end
 
