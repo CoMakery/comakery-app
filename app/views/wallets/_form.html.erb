@@ -28,7 +28,9 @@
       <%= form.select(
             :_blockchain, wallet_blockchain_collection(wallet),
             { required: true },
-            { class: 'form-control', data: { action: 'wallets--form#inputChanged' } }) %>
+            { class: 'form-control',
+              disabled: wallet.persisted?,
+              data: { action: 'wallets--form#inputChanged' } }) %>
     </div>
 
     <div class="form-group">
@@ -38,6 +40,7 @@
             placeholder: '...',
             required: true,
             class: 'form-control',
+            disabled: wallet.persisted?,
             data: { action: 'input->wallets--form#inputChanged' }) %>
     </div>
   </div>
