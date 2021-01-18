@@ -48,10 +48,11 @@ RSpec.describe WalletCreator do
   context 'wallet created with tokens_to_provision' do
     let(:asa_token) { create(:asa_token) }
     let(:ast_token) { create(:algo_sec_token) }
+    let(:reg_group) { create(:reg_group, token: ast_token)}
     let(:tokens_to_provision) do
       [
         { token_id: asa_token.id.to_s },
-        { token_id: ast_token.id.to_s, max_balance: '100', lockup_until: '1', reg_group_id: '1', account_frozen: 'false' }
+        { token_id: ast_token.id.to_s, max_balance: '100', lockup_until: '1', reg_group_id: reg_group.id.to_s, account_frozen: 'false' }
       ]
     end
 
@@ -80,7 +81,7 @@ RSpec.describe WalletCreator do
       expect(account_token_record_for_ast.status).to eq 'created'
       expect(account_token_record_for_ast.max_balance).to eq 100
       expect(account_token_record_for_ast.lockup_until.to_i).to eq 1
-      expect(account_token_record_for_ast.reg_group_id).to eq 1
+      expect(account_token_record_for_ast.reg_group).to eq reg_group
       expect(account_token_record_for_ast.account_frozen).to eq false
     end
   end
