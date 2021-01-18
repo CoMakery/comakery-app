@@ -40,7 +40,7 @@ RSpec.describe WalletCreator do
 
   context 'wallet created with tokens_to_provision' do
     let(:token) { create(:asa_token) }
-    let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: token.id.to_s).permit(:token_id)] }
+    let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: token.id.to_s).permit!] }
 
     it 'works' do
       wallet = wallets.first
@@ -63,24 +63,19 @@ RSpec.describe WalletCreator do
       expect(WalletProvision.count).to be_zero
     end
 
-    context 'wrong format of tokens_to_provision with valid JSON' do
+    context 'wrong format of tokens_to_provision' do
       let(:tokens_to_provision) { '1' }
-      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
-    end
-
-    context 'wrong format of tokens_to_provision with invalid JSON' do
-      let(:tokens_to_provision) { '[1' }
-      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array. For example: [1,5]']) }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array.']) }
     end
 
     context 'unexisting token id in tokens_to_provision' do
-      let(:tokens_to_provision) { '[9999]' }
+      let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: '9999').permit!] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Some tokens can\'t be provisioned: [9999]']) }
     end
 
     context 'tokens_to_provision with existing token which can not be provisioned' do
       let(:token) { create(:token) }
-      let(:tokens_to_provision) { "[#{token.id}]" }
+      let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: token.id.to_s).permit!] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{token.id}]"]) }
     end
   end

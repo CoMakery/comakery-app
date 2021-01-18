@@ -61,10 +61,15 @@ class WalletCreator::Provision
   end
 
   def should_be_provisioned?
-    params && wallet.valid? && valid?
+    wallet.valid? && valid?
   end
 
   def valid?
+    if params.is_a?(Hash) && params.key?(:error)
+      wallet.errors.add(:tokens_to_provision, params[:error])
+      return false
+    end
+
     unavailable_token_ids = params.map { |t| t.fetch(:token_id) }.map(&:to_i) - available_tokens_to_provision.pluck(:id)
 
     if unavailable_token_ids.any?
@@ -82,8 +87,11 @@ class WalletCreator::Provision
     end
 
     def sanitize_params(params)
-      return [] unless params.is_a?(Array)
-      return [] unless params.first.is_a?(ActionController::Parameters)
+      return [] if params.blank?
+
+      error = { error: 'Wrong format. It must be an Array.' }
+      return error unless params.is_a?(Array)
+      return error unless params.first.is_a?(ActionController::Parameters)
 
       params
     end
