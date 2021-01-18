@@ -44,7 +44,7 @@ class AccountTokenRecord < ApplicationRecord
     end
 
     def touch_account
-      account.touch # rubocop:disable Rails/SkipsModelValidations
+      account&.touch # rubocop:disable Rails/SkipsModelValidations
     end
 
     def replace_existing_record

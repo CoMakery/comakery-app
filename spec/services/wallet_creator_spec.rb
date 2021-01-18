@@ -46,8 +46,14 @@ RSpec.describe WalletCreator do
   end
 
   context 'wallet created with tokens_to_provision' do
-    let(:token) { create(:asa_token) }
-    let(:tokens_to_provision) { [{ token_id: token.id.to_s }] }
+    let(:asa_token) { create(:asa_token) }
+    let(:ast_token) { create(:algo_sec_token) }
+    let(:tokens_to_provision) do
+      [
+        { token_id: asa_token.id.to_s },
+        { token_id: ast_token.id.to_s, max_balance: '100', lockup_until: '1', reg_group_id: '1', account_frozen: 'false' }
+      ]
+    end
 
     it 'works' do
       wallet = wallets.first
@@ -57,10 +63,25 @@ RSpec.describe WalletCreator do
       expect(wallet.address).to be nil
       expect(wallet.source).to eq 'ore_id'
 
-      provision = WalletProvision.last
-      expect(provision.wallet).to eq wallet
-      expect(provision.token).to eq token
-      expect(provision.state).to eq 'pending'
+      provision_token_for_asa = WalletProvision.first
+      expect(provision_token_for_asa.wallet).to eq wallet
+      expect(provision_token_for_asa.token).to eq asa_token
+      expect(provision_token_for_asa.state).to eq 'pending'
+
+      provision_token_for_ast = WalletProvision.last
+      expect(provision_token_for_ast.wallet).to eq wallet
+      expect(provision_token_for_ast.token).to eq ast_token
+      expect(provision_token_for_ast.state).to eq 'pending'
+
+      account_token_record_for_ast = AccountTokenRecord.last
+      expect(account_token_record_for_ast.wallet).to eq wallet
+      expect(account_token_record_for_ast.token).to eq ast_token
+      expect(account_token_record_for_ast.account).to eq account
+      expect(account_token_record_for_ast.status).to eq 'created'
+      expect(account_token_record_for_ast.max_balance).to eq 100
+      expect(account_token_record_for_ast.lockup_until.to_i).to eq 1
+      expect(account_token_record_for_ast.reg_group_id).to eq 1
+      expect(account_token_record_for_ast.account_frozen).to eq false
     end
   end
 
@@ -74,6 +95,12 @@ RSpec.describe WalletCreator do
       let(:tokens_to_provision) { '1' }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array.']) }
     end
+
+    # context 'token_id is not provided' do
+    #   # TODO: Fix me
+    #   # let(:tokens_to_provision) { '1' }
+    #   # it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Wrong format. It must be an Array.']) }
+    # end
 
     context 'unexisting token id in tokens_to_provision' do
       let(:tokens_to_provision) { [{ token_id: '9999' }] }
