@@ -9,11 +9,18 @@ RSpec.describe WalletCreator do
       blockchain: 'algorand_test',
       address: nil,
       source: 'ore_id',
-      tokens_to_provision: tokens_to_provision,
+      tokens_to_provision: tokens_to_provision_params,
       name: 'Wallet'
     }]
   end
   let(:tokens_to_provision) { nil }
+  let(:tokens_to_provision_params) do
+    return tokens_to_provision unless tokens_to_provision.is_a?(Array)
+
+    tokens_to_provision.map do |t|
+      ActionController::Parameters.new(t).permit!
+    end
+  end
 
   context 'wallet created without tokens_to_provision' do
     let(:bitcoin_address) { build(:bitcoin_address_1) }
@@ -40,7 +47,7 @@ RSpec.describe WalletCreator do
 
   context 'wallet created with tokens_to_provision' do
     let(:token) { create(:asa_token) }
-    let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: token.id.to_s).permit!] }
+    let(:tokens_to_provision) { [{ token_id: token.id.to_s }] }
 
     it 'works' do
       wallet = wallets.first
@@ -69,13 +76,13 @@ RSpec.describe WalletCreator do
     end
 
     context 'unexisting token id in tokens_to_provision' do
-      let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: '9999').permit!] }
+      let(:tokens_to_provision) { [{ token_id: '9999' }] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ['Some tokens can\'t be provisioned: [9999]']) }
     end
 
     context 'tokens_to_provision with existing token which can not be provisioned' do
       let(:token) { create(:token) }
-      let(:tokens_to_provision) { [ActionController::Parameters.new(token_id: token.id.to_s).permit!] }
+      let(:tokens_to_provision) { [{ token_id: token.id.to_s }] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{token.id}]"]) }
     end
   end

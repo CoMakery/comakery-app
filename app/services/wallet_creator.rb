@@ -61,23 +61,7 @@ class WalletCreator::Provision
   end
 
   def should_be_provisioned?
-    wallet.valid? && valid?
-  end
-
-  def valid?
-    if params.is_a?(Hash) && params.key?(:error)
-      wallet.errors.add(:tokens_to_provision, params[:error])
-      return false
-    end
-
-    unavailable_token_ids = params.map { |t| t.fetch(:token_id) }.map(&:to_i) - available_tokens_to_provision.pluck(:id)
-
-    if unavailable_token_ids.any?
-      wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{unavailable_token_ids}")
-      return false
-    end
-
-    true
+    wallet.valid? && validate_type && validate_availability
   end
 
   private
@@ -94,5 +78,16 @@ class WalletCreator::Provision
       return error unless params.first.is_a?(ActionController::Parameters)
 
       params
+    end
+
+    def validate_type
+      wallet.errors.add(:tokens_to_provision, params[:error]) if params.is_a?(Hash) && params.key?(:error)
+      wallet.errors.empty?
+    end
+
+    def validate_availability
+      unavailable_token_ids = params.map { |t| t.fetch(:token_id) }.map(&:to_i) - available_tokens_to_provision.pluck(:id)
+      wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{unavailable_token_ids}") if unavailable_token_ids.any?
+      wallet.errors.empty?
     end
 end
