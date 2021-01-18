@@ -48,7 +48,7 @@ RSpec.describe WalletCreator do
   context 'wallet created with tokens_to_provision' do
     let(:asa_token) { create(:asa_token) }
     let(:ast_token) { create(:algo_sec_token) }
-    let(:reg_group) { create(:reg_group, token: ast_token)}
+    let(:reg_group) { create(:reg_group, token: ast_token) }
     let(:tokens_to_provision) do
       [
         { token_id: asa_token.id.to_s },
