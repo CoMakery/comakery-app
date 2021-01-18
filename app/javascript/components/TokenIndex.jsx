@@ -3,6 +3,13 @@ import PropTypes from 'prop-types'
 import Layout from './layouts/Layout'
 import SidebarItem from './styleguide/SidebarItem'
 import SidebarItemBold from './styleguide/SidebarItemBold'
+import styled from "styled-components";
+
+const Pagination = styled.div`
+  text-align: right;
+  width: 100%;
+  padding: 15px 0;
+`
 
 class TokenIndex extends React.Component {
   constructor(props) {
@@ -57,6 +64,8 @@ class TokenIndex extends React.Component {
                     )}
                   </React.Fragment>
                 }
+
+                <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
               </div>
             </React.Fragment>
           }
@@ -157,9 +166,11 @@ class TokenIndex extends React.Component {
 }
 
 TokenIndex.propTypes = {
-  tokens: PropTypes.array.isRequired
+  tokens: PropTypes.array.isRequired,
+  paginationHtml: PropTypes.string.isRequired,
 }
 TokenIndex.defaultProps = {
-  tokens: []
+  tokens: [],
+  paginationHtml: ''
 }
 export default TokenIndex
