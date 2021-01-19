@@ -6,6 +6,6 @@ class AddAddressBlockchainAccountIndexToWallets < ActiveRecord::Migration[6.0]
   end
 
   def down
-    emove_index :wallets, [:account_id, :address, :_blockchain]
+    remove_index :wallets, [:account_id, :address, :_blockchain]
   end
 end
