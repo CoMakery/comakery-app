@@ -60,7 +60,7 @@ class WalletsController < ApplicationController
 
   # PATCH/PUT /wallets/1
   def update
-    if @wallet.update(wallet_params)
+    if @wallet.update(wallet_update_params)
       render json: { message: 'Wallet updated' }, status: :ok
     else
       render json: { message: @wallet.errors.full_messages.join(', ') }, status: :unprocessable_entity
@@ -145,6 +145,10 @@ class WalletsController < ApplicationController
         :address,
         :_blockchain
       )
+    end
+
+    def wallet_update_params
+      params.require(:wallet).permit(:name)
     end
 
     def back_path
