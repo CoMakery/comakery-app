@@ -80,7 +80,6 @@ describe 'my account', js: true do
     expect(page).to have_content("First name can't be blank")
   end
 
-
   scenario 'MetaMask button disabled' do
     visit new_account_path
     expect(page).not_to have_selector 'a', text: 'MetaMask', exact_text: true
