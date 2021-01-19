@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUNDLER_VERSION: 2.0.1
+      BUNDLER_VERSION: 2.2.3
       RACK_ENV: test
       RAILS_ENV: test
       SECRET_KEY_BASE: dummy
