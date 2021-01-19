@@ -18,8 +18,8 @@ class WalletCreator
       provision = Provision.new(wallet, tokens_to_provision)
 
       if provision.should_be_provisioned?
-        build_wallet_provisions(provision)
-        build_account_token_records(provision)
+        provision.build_wallet_provisions
+        provision.build_account_token_records
       end
 
       errors[i] = provision.wallet.errors if provision.wallet.errors.any?
@@ -30,21 +30,6 @@ class WalletCreator
     account.save if errors.empty?
     [wallets, errors]
   end
-
-  private
-
-    def build_wallet_provisions(provision)
-      provision.params.each do |provision_params|
-        token_id = provision_params.fetch(:token_id)
-        provision.wallet.wallet_provisions.new(token_id: token_id)
-      end
-    end
-
-    def build_account_token_records(provision)
-      provision.params_with_required_tokens_to_fill_account_record.each do |token_params|
-        provision.wallet.account_token_records.new(token_params.merge(account: account))
-      end
-    end
 end
 
 class WalletCreator::Provision
@@ -69,6 +54,19 @@ class WalletCreator::Provision
           tokens_to_fill_account_record.any? { |token| token.id == token_params[:token_id].to_i }
         end
       end
+  end
+
+  def build_wallet_provisions
+    params.each do |provision_params|
+      token_id = provision_params.fetch(:token_id)
+      wallet.wallet_provisions.new(token_id: token_id)
+    end
+  end
+
+  def build_account_token_records
+    params_with_required_tokens_to_fill_account_record.each do |token_params|
+      wallet.account_token_records.new(token_params.merge(account: wallet.account))
+    end
   end
 
   private
