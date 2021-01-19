@@ -3,8 +3,10 @@
     <h5 class="m-0">My Wallets</h5>
     <div class="d-flex flex-wrap">
       <%= toggle_zero_balances_link %>
-      <%= link_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold", data: { method: 'DELETE' } do %>
-        <span>Unlink OREID</span>
+      <% unless wallets.ore_id.empty? %>
+        <%= link_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold", data: { method: 'DELETE' } do %>
+          <span>Unlink OREID</span>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -64,7 +66,7 @@
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <% if wallet.ore_id? %>
-                    <%= link_to 'Opt In To Algorand', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
+                    <%= link_to 'Opt In To Algorand Tokens', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
                   <% end %>
                   <% unless wallet.primary_wallet %>
                     <%= link_to "Make Primary Wallet for #{wallet.blockchain.name}", make_primary_wallet_path(wallet), method: :patch, class: 'dropdown-item' %>
