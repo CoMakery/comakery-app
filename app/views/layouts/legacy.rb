@@ -34,14 +34,14 @@ class Views::Layouts::Legacy < Views::Base
           {
             is_admin: current_account&.comakery_admin?,
             is_logged_in: (current_account ? true : false),
-            is_whitelabel: @whitelabel_mission.present?,
+            is_whitelabel: true,
             whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
             current_path: request.fullpath
           },
           prerender: true
         )
 
-        render partial: 'layouts/project_search_form' unless @whitelabel_mission
+        # render partial: 'layouts/project_search_form' unless @whitelabel_mission
 
         div(class: "app-container row#{' home' if current_account && action_name == 'join_us'}") do
           message
