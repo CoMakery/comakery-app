@@ -84,6 +84,11 @@ RSpec.describe WalletCreator do
       expect(account_token_record_for_ast.reg_group).to eq reg_group
       expect(account_token_record_for_ast.account_frozen).to eq false
     end
+
+    context 'tokens_to_provision with asa token and no params' do
+      let(:tokens_to_provision) { [{ token_id: asa_token.id.to_s, max_balance: '100', lockup_until: '1', reg_group_id: reg_group.id.to_s, account_frozen: 'false' }] }
+      it { expect(wallets[0].errors).to be_empty }
+    end
   end
 
   context 'with invalid data' do
@@ -111,6 +116,12 @@ RSpec.describe WalletCreator do
       let(:token) { create(:token) }
       let(:tokens_to_provision) { [{ token_id: token.id.to_s }] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{token.id}]"]) }
+    end
+
+    context 'tokens_to_provision with algorand sec token and no params' do
+      let(:token) { create(:algo_sec_token) }
+      let(:tokens_to_provision) { [{ token_id: token.id.to_s }] }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Token #{token.id} requires to provide additional params: max_balance, lockup_until, reg_group_id, account_frozen"]) }
     end
   end
 end

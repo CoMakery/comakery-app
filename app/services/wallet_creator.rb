@@ -108,7 +108,7 @@ class WalletCreator::Provision
     def validate_params_for_account_records
       params_with_required_tokens_to_fill_account_record.each do |token_params|
         missed_keys = ACCOUNT_RECORD_PARAMS - token_params.keys
-        wallet.errors.add(:tokens_to_provision, "Token #{token_params[:token_id]} requires to provide additional params: #{missed_keys}") if missed_keys.any?
+        wallet.errors.add(:tokens_to_provision, "Token #{token_params[:token_id]} requires to provide additional params: #{missed_keys.join(', ')}") if missed_keys.any?
       end
 
       wallet.errors.empty?
