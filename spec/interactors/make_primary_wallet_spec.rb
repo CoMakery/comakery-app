@@ -2,9 +2,13 @@ require 'rails_helper'
 
 describe MakePrimaryWallet do
   let(:account) { create(:account) }
-  let!(:wallet_1) { create(:wallet, account: account, primary_wallet: true) }
+  let(:address_1) { '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt' }
+  let(:address_2) { '3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5' }
+  let!(:wallet_1) do
+    create(:wallet, account: account, primary_wallet: true, _blockchain: 'bitcoin', address: address_1)
+  end
   let(:wallet_2) do
-    create(:wallet, account: account, _blockchain: wallet_1._blockchain, address: wallet_1.address, primary_wallet: false)
+    create(:wallet, account: account, _blockchain: 'bitcoin', address: address_2, primary_wallet: false)
   end
 
   it 'make given wallet primary' do

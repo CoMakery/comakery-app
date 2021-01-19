@@ -16,6 +16,14 @@ describe Wallet, type: :model do
   it { is_expected.not_to validate_presence_of(:ore_id_account) }
   it { expect(subject.ore_id_account).to be_nil }
   it { is_expected.to validate_presence_of(:name) }
+  it do
+    is_expected.to(
+      validate_uniqueness_of(:address)
+        .scoped_to(:account_id, :_blockchain)
+        .with_message('has already been taken for the blockchain')
+        .ignoring_case_sensitivity
+    )
+  end
 
   context 'when ore_id?' do
     subject { create(:wallet, source: :ore_id, ore_id_account: create(:ore_id, skip_jobs: true)) }
