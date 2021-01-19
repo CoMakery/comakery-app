@@ -111,22 +111,34 @@ RSpec.describe WalletsController, type: :controller do
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) do
-        {
-          address: '3CMercihVFcgrXycK7dgei3P3d8AKxWqB6'
-        }
-      end
+      let(:new_address) { '3BMercihVFcgrXycK7dgei3P3d8AKxWqB6' }
+      let(:new_name) { 'Another Wallet Name' }
+      let(:new_blockchain) { 'algorand' }
+      let(:new_attributes) { { name: new_name, address: new_address, _blockchain: new_blockchain } }
+      let(:wallet) { create(:wallet, account: account) }
+
+      subject { patch :update, params: { wallet: new_attributes, id: wallet.id } }
 
       it 'updates the requested wallet' do
-        wallet = account.wallets.create! valid_attributes
-        patch :update, params: { wallet: new_attributes, id: wallet.to_param }
+        subject
         wallet.reload
-        expect(wallet.address).to eq('3CMercihVFcgrXycK7dgei3P3d8AKxWqB6')
+        expect(wallet.name).to eq(new_name)
+      end
+
+      it 'does not change address' do
+        subject
+        wallet.reload
+        expect(wallet.address).not_to eq(new_address)
+      end
+
+      it 'does not change _blockchain' do
+        subject
+        wallet.reload
+        expect(wallet._blockchain).not_to eq(new_blockchain)
       end
 
       it 'returns json with message and status 200' do
-        wallet = account.wallets.create! valid_attributes
-        patch :update, params: { wallet: new_attributes, id: wallet.to_param }
+        subject
         wallet.reload
         expect(JSON.parse(response.body)).to have_key('message')
         expect(response).to have_http_status(200)
@@ -134,11 +146,44 @@ RSpec.describe WalletsController, type: :controller do
     end
 
     context 'with invalid parameters' do
+      let(:wallet) { create(:wallet, account: account) }
+
+      subject { patch :update, params: { wallet: { name: '' }, id: wallet.id } }
+
       it 'returns json with message and status 422' do
-        wallet = account.wallets.create! valid_attributes
-        patch :update, params: { wallet: invalid_attributes, id: wallet.to_param }
+        expect { subject }.not_to change(wallet, :name)
         expect(JSON.parse(response.body)).to have_key('message')
         expect(response).to have_http_status(422)
+      end
+    end
+  end
+
+  describe 'PATCH #make_primary' do
+    let(:wallet) { create(:wallet, account: account) }
+
+    before do
+      allow(MakePrimaryWallet).to receive(:call).and_return(interactor)
+    end
+
+    subject { patch :make_primary, params: { id: wallet.id } }
+
+    context 'request succeed' do
+      let(:interactor) { OpenStruct.new(success?: true) }
+
+      it 'redirects to wallets page and sets notice message' do
+        subject
+        expect(response).to redirect_to wallets_path
+        expect(flash[:notice]).to eq('The wallet is successfully set as Primary')
+      end
+    end
+
+    context 'request fails' do
+      let(:interactor) { OpenStruct.new(success?: false, error: 'Wallet Update Failed') }
+
+      it 'redirects to wallets page and sets error message' do
+        subject
+        expect(response).to redirect_to wallets_path
+        expect(flash[:error]).to eq('Wallet Update Failed')
       end
     end
   end

@@ -129,7 +129,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       # At the moment there is no case when invalid params can be sent
       #   so just stubbed it with false
       before do
-        allow_any_instance_of(Wallet).to receive(:update).and_return(false)
+        allow_any_instance_of(Wallet).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
       end
 
       it 'rejects update' do

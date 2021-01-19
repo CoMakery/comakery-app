@@ -8,8 +8,10 @@
         <button class="btn btn-light mr-4 font-weight-bold" data-toggle="modal" data-target="#walletForm" data-src="<%= new_wallet_path %>">
           Add wallet
         </button>
-        <%= link_to auth_ore_id_new_url(redirect_back_to: wallets_url), type: :button, class: 'btn btn-primary font-weight-bold', data: { method: 'POST' } do %>
-          <i class="fas fa-plus"></i> <span>Link OREID</span>
+        <% if @wallets.ore_id.empty? %>
+          <%= link_to auth_ore_id_new_url(redirect_back_to: wallets_url), type: :button, class: 'btn btn-primary font-weight-bold', data: { method: 'POST' } do %>
+            <i class="fas fa-plus"></i> <span>Link OREID</span>
+          <% end %>
         <% end %>
       </div>
     </div>

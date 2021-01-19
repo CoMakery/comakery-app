@@ -22,19 +22,13 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # PATCH/PUT /api/v1/accounts/1/wallets/1
   def update
-    ActiveRecord::Base.transaction do
-      account.wallets.where(_blockchain: wallet._blockchain, primary_wallet: true)
-             .update_all(primary_wallet: false) # rubocop:disable Rails/SkipsModelValidations
+    result = MakePrimaryWallet.call(account: account, wallet: wallet)
 
-      if wallet.update(wallet_params)
-        render 'show.json', status: :ok
-      else
-        @errors = wallet.errors
-
-        render 'api/v1/error.json', status: :bad_request
-
-        raise ActiveRecord::Rollback
-      end
+    if result.success?
+      render 'show.json', status: :ok
+    else
+      @errors = result.wallet.errors
+      render 'api/v1/error.json', status: :bad_request
     end
   end
 

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :wallets do
     member do
       get :algorand_opt_ins
+      patch :make_primary
     end
   end
   resources :algorand_opt_ins, only: %i[index create]

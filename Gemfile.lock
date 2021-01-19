@@ -6,7 +6,7 @@ GIT
     citizen-scripts (1.2.0)
 
 GIT
-  remote: https://github.com/CoMakery/omniauth-discord
+  remote: https://github.com/CoMakery/omniauth-discord.git
   revision: a0fffd1a07cdb58ebb56750aa64c93710d1c12a2
   specs:
     omniauth-discord (0.1.5)
@@ -32,6 +32,7 @@ GIT
 GIT
   remote: https://github.com/refile/refile.git
   revision: e690bf5c2d83b3dfd805764d54e8f5daf14993b0
+  ref: e690bf5c2d83b3dfd805764d54e8f5daf14993b0
   specs:
     refile (0.7.0)
       mime-types

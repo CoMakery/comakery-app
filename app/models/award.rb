@@ -368,7 +368,7 @@ class Award < ApplicationRecord
     end
 
     def recipient_wallet_belongs_to_account
-      return if account.wallets.exists?(id: recipient_wallet_id)
+      return if account&.wallets&.exists?(id: recipient_wallet_id)
 
       errors[:recipient_wallet_id] << "wallet doesn't belong to the specified account"
     end

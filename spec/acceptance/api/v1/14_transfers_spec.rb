@@ -5,7 +5,7 @@ resource 'IV. Transfers' do
   include Rails.application.routes.url_helpers
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 8)) }
+  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 8, _blockchain: :ethereum)) }
   let!(:transfer_accepted) { create(:transfer, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_cancelled) { create(:transfer, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
@@ -70,6 +70,9 @@ resource 'IV. Transfers' do
   end
 
   post '/api/v1/projects/:project_id/transfers' do
+    let(:account) { create(:account, managed_mission: active_whitelabel_mission) }
+    let!(:wallet) { create(:wallet, account: account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+
     with_options with_example: true do
       parameter :project_id, 'project id', required: true, type: :integer
     end
@@ -98,7 +101,8 @@ resource 'IV. Transfers' do
           total_amount: '2000.00000000',
           description: 'investor',
           transfer_type_id: create(:transfer_type, project: project).id.to_s,
-          account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
+          account_id: account.managed_account_id.to_s,
+          recipient_wallet_id: wallet.id.to_s
         }
       end
 
