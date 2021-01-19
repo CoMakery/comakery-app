@@ -50,7 +50,12 @@ resource 'IX. Wallets' do
       parameter :address, 'wallet address', required: true, type: :string
       parameter :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", required: true, type: :string
       parameter :source, "wallet source #{Wallet.sources.keys}", required: false, type: :string
-      parameter :tokens_to_provision, 'array of tokens to provision', required: false, type: :string
+      parameter :tokens_to_provision, 'array of params to tokens provision', required: false, type: :array
+      parameter 'tokens_to_provision["token_id"]', 'token_id is required if tokens_to_provision provided', required: true, type: :string
+      parameter 'tokens_to_provision["max_balance"]', 'max_balance is required for security tokens only', required: false, type: :string
+      parameter 'tokens_to_provision["lockup_until"]', 'lockup_until is required for security tokens only', required: false, type: :string
+      parameter 'tokens_to_provision["reg_group_id"]', 'reg_group_id is required for security tokens only', required: false, type: :string
+      parameter 'tokens_to_provision["account_frozen"]', 'account_frozen is required for security tokens only', required: false, type: :string
     end
 
     context '201' do
@@ -81,8 +86,16 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let(:token) { create(:asa_token) }
-      let(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, tokens_to_provision: "[#{token.id}]", name: 'Wallet' }] } }
+      let(:asa_token) { create(:asa_token) }
+      let(:ast_token) { create(:algo_sec_token) }
+      let(:reg_group) { create(:reg_group, token: ast_token) }
+      let(:tokens_to_provision) do
+        [
+          { token_id: asa_token.id.to_s },
+          { token_id: ast_token.id.to_s, max_balance: '100', lockup_until: '1', reg_group_id: reg_group.id.to_s, account_frozen: 'false' }
+        ]
+      end
+      let(:create_params) { { wallets: [{ blockchain: :algorand_test, source: :ore_id, tokens_to_provision: tokens_to_provision, name: 'Wallet name' }] } }
 
       example 'CREATE WALLET – ORE_ID WITH PROVISIONING' do
         explanation 'Returns created wallets (See INDEX for response details)'

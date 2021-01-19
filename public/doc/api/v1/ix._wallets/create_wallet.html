@@ -155,7 +155,47 @@ table th, table td {
                     <span class="name">tokens_to_provision</span>
                 </td>
                 <td>
-                  <span class="description">array of tokens to provision</span>
+                  <span class="description">array of params to tokens provision</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">tokens_to_provision[&quot;token_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">token_id is required if tokens_to_provision provided</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;max_balance&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">max_balance is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;lockup_until&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">lockup_until is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;reg_group_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">reg_group_id is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;account_frozen&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">account_frozen is required for security tokens only</span>
                 </td>
               </tr>
             </tbody>
@@ -168,7 +208,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/ba7d31e9-6daa-4e91-899c-7a79cdb04885/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/56695560-55a0-4833-8678-e0ee1e5bc021/wallets</pre>
 
 
             <h4>Body</h4>
@@ -178,26 +218,27 @@ table th, table td {
       "wallets": [
         {
           "blockchain": "bitcoin",
-          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
+          "name": "Wallet"
         }
       ]
     },
-    "url": "http://example.org/api/v1/accounts/ba7d31e9-6daa-4e91-899c-7a79cdb04885/wallets",
+    "url": "http://example.org/api/v1/accounts/56695560-55a0-4833-8678-e0ee1e5bc021/wallets",
     "method": "POST",
-    "nonce": "8d31de6b80d68318132f5ac204cc03dd",
-    "timestamp": "1610479351"
+    "nonce": "86b5b23afaa553913cc8e2ed061beef4",
+    "timestamp": "1611046120"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "/yziAi0Va+u5+YePxKAAejT3cyxheaYs/aTEFv5ITyY5wxUIDg0johy9BFIAkboM92mEhha5sbfjOh99aXjOAw=="
+    "signature": "uXXbk8eXpwfOF/sW1sxZnW0XKr9EJSUVNq6NgIY/lTGMdLbQO3zpqv3LcJhrbCOikNd5wb3UdH0IyQRPkBhbCQ=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;ffbbf7bf1d0f5758d234b92fb0900379&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;67f38bae0607959bd4c67cbb5a6f3486&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -207,8 +248,8 @@ table th, table td {
     &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
     &quot;source&quot;: &quot;user_provided&quot;,
     &quot;state&quot;: null,
-    &quot;createdAt&quot;: &quot;2021-01-12T19:22:32.346Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-12T19:22:32.346Z&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-19T08:48:41.595Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-19T08:48:41.595Z&quot;,
     &quot;blockchain&quot;: &quot;bitcoin&quot;,
     &quot;tokens&quot;: [
 

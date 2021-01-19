@@ -155,7 +155,47 @@ table th, table td {
                     <span class="name">tokens_to_provision</span>
                 </td>
                 <td>
-                  <span class="description">array of tokens to provision</span>
+                  <span class="description">array of params to tokens provision</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">tokens_to_provision[&quot;token_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">token_id is required if tokens_to_provision provided</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;max_balance&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">max_balance is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;lockup_until&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">lockup_until is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;reg_group_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">reg_group_id is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;account_frozen&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">account_frozen is required for security tokens only</span>
                 </td>
               </tr>
             </tbody>
@@ -168,37 +208,61 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/13e3b60e-d8a1-475d-a050-b2c5ba08c806/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/fc1300b2-5209-402f-97fe-38f5c8614b53/wallets</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
+  "tokens_to_provision": [
+    {
+      "token_id": "114"
+    },
+    {
+      "token_id": "115",
+      "max_balance": "100",
+      "lockup_until": "1",
+      "reg_group_id": "67",
+      "account_frozen": "false"
+    }
+  ],
   "body": {
     "data": {
       "wallets": [
         {
           "blockchain": "algorand_test",
           "source": "ore_id",
-          "tokens_to_provision": "[114]"
+          "tokens_to_provision": [
+            {
+              "token_id": "114"
+            },
+            {
+              "token_id": "115",
+              "max_balance": "100",
+              "lockup_until": "1",
+              "reg_group_id": "67",
+              "account_frozen": "false"
+            }
+          ],
+          "name": "Wallet name"
         }
       ]
     },
-    "url": "http://example.org/api/v1/accounts/13e3b60e-d8a1-475d-a050-b2c5ba08c806/wallets",
+    "url": "http://example.org/api/v1/accounts/fc1300b2-5209-402f-97fe-38f5c8614b53/wallets",
     "method": "POST",
-    "nonce": "db24cc632139310463cad09ddac7bb65",
-    "timestamp": "1610479353"
+    "nonce": "267e82243c23350436a805b5048b9ed1",
+    "timestamp": "1611046122"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "ZAVqXH5RZbtIyW2lr3I87gLl8smsFT12nTQUx1v9Eebqfg9+0I5hyzQmQGeSQ93X8rD7ppPbUUXp8Nu6/78SCA=="
+    "signature": "G+lQQGn9pjbtMiZILaaby7N1S6G66YsdGliihRVClG7H+gxSvjnLKghR/ygbIFmnhtGtzhdYBzdAxCNBVnA8Dg=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;a389a4fdc7c4df12f274a315ec3da3b7&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;9d5563d78e7941830b61aa7381992713&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -208,8 +272,8 @@ table th, table td {
     &quot;address&quot;: null,
     &quot;source&quot;: &quot;ore_id&quot;,
     &quot;state&quot;: &quot;pending&quot;,
-    &quot;createdAt&quot;: &quot;2021-01-12T19:22:33.508Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-12T19:22:33.508Z&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-19T08:48:42.217Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-19T08:48:42.217Z&quot;,
     &quot;blockchain&quot;: &quot;algorand_test&quot;,
     &quot;tokens&quot;: [
 
@@ -217,6 +281,10 @@ table th, table td {
     &quot;provisionTokens&quot;: [
       {
         &quot;tokenId&quot;: 114,
+        &quot;state&quot;: &quot;pending&quot;
+      },
+      {
+        &quot;tokenId&quot;: 115,
         &quot;state&quot;: &quot;pending&quot;
       }
     ]
