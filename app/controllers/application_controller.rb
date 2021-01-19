@@ -254,8 +254,6 @@ class ApplicationController < ActionController::Base
 
     def set_project_scope
       # rubocop:todo Naming/MemoizedInstanceVariableName
-      return @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: true) if ENV['WHITELABEL']
-
       @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
       # rubocop:enable Naming/MemoizedInstanceVariableName
     end
