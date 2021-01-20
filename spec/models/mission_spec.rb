@@ -1,16 +1,8 @@
 require 'rails_helper'
+require 'models/concerns/active_storage_validator_spec'
 
 describe Mission do
-  it { is_expected.to validate_content_type_of(:image).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_content_type_of(:logo).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_content_type_of(:whitelabel_logo).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_content_type_of(:whitelabel_logo_dark).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_content_type_of(:whitelabel_favicon).allowing('image/png', 'image/jpg', 'image/jpeg', 'image/svg+xml') }
-  it { is_expected.to validate_size_of(:image).less_than(10.megabytes) }
-  it { is_expected.to validate_size_of(:logo).less_than(10.megabytes) }
-  it { is_expected.to validate_size_of(:whitelabel_logo).less_than(10.megabytes) }
-  it { is_expected.to validate_size_of(:whitelabel_logo_dark).less_than(10.megabytes) }
-  it { is_expected.to validate_size_of(:whitelabel_favicon).less_than(10.megabytes) }
+  it_behaves_like 'active_storage_validator', %w[image logo whitelabel_logo whitelabel_logo_dark whitelabel_favicon]
 
   describe 'validations' do
     it 'requires many attributes' do

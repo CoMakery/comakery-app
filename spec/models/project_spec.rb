@@ -1,15 +1,10 @@
 require 'rails_helper'
 require 'models/concerns/api_authorizable_spec'
+require 'models/concerns/active_storage_validator_spec'
 
 describe Project do
   it_behaves_like 'api_authorizable'
-
-  it { is_expected.to validate_content_type_of(:image).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_content_type_of(:square_image).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_content_type_of(:panoramic_image).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_size_of(:image).less_than(10.megabytes) }
-  it { is_expected.to validate_size_of(:square_image).less_than(10.megabytes) }
-  it { is_expected.to validate_size_of(:panoramic_image).less_than(10.megabytes) }
+  it_behaves_like 'active_storage_validator', %w[image square_image panoramic_image]
 
   describe 'associations' do
     let!(:project) { create :project }
