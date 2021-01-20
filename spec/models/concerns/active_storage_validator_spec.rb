@@ -1,5 +1,5 @@
 shared_examples 'active_storage_validator' do |attrs|
-  CONTENT_TYPE = %w[image/png image/jpg image/jpeg]
+  CONTENT_TYPE = %w[image/png image/jpg image/jpeg].freeze
 
   attrs.each do |attr|
     it { is_expected.to validate_content_type_of(attr.to_sym).allowing(CONTENT_TYPE) }
