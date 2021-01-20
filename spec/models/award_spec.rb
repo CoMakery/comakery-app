@@ -588,17 +588,6 @@ describe Award do
       project.channels.create(team: team1, channel_id: 'general')
     end
 
-    describe 'ethereum issue ready' do
-      context 'when account wallet is not present' do
-        specify { expect(award.ethereum_issue_ready?).to be_falsey }
-      end
-
-      context 'when account wallet is present' do
-        before { create(:wallet, account: account, address: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423', _blockchain: project.token._blockchain) }
-        specify { expect(award.ethereum_issue_ready?).to be_truthy }
-      end
-    end
-
     it 'check self_issued award' do
       expect(award.self_issued?).to be_truthy
       expect(award1.self_issued?).to be_falsey

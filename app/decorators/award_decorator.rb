@@ -89,7 +89,7 @@ class AwardDecorator < Draper::Decorator
         'action' => "click->#{controller_name}##{action}",
         "#{controller_name}-id" => id,
         "#{controller_name}-payment-type" => project.token&._token_type,
-        "#{controller_name}-address" => account.address_for_blockchain(project.token&._blockchain),
+        "#{controller_name}-address" => recipient_address,
         "#{controller_name}-amount" => total_amount_wei,
         "#{controller_name}-decimal-places" => project.token&.decimal_places&.to_i,
         "#{controller_name}-contract-address" => project.token&.contract_address,
