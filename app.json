@@ -75,6 +75,10 @@
       "description": "Discord API client secret",
       "required": false
     },
+    "METAMASK_LOGIN": {
+      "description": "Login and signup with MetaMask",
+      "required": false
+    },
     "INFURA_PROJECT_ID": {
       "description": "Infura.io project id"
     },
