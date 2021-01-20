@@ -11,13 +11,13 @@ class ValidateAttachments < ActiveRecord::DataMigration
     MODEL_AND_FIELDS.each do |model, fields|
       model.constantize.find_each do |m|
         fields.each do |field|
-          m.send(field).purge if m.send(field).attached? && is_valid?(field)
+          m.send(field).purge if m.send(field).attached? && invalid(field)
         end
       end
     end
   end
 
-  def valid?(field)
+  def invalid(field)
     IMAGE_TYPES.exclude?(m.send(field).blob.content_type) || m.send(field).blob.byte_size > 10.megabytes
   end
 end
