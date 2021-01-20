@@ -9,18 +9,11 @@ RSpec.describe WalletCreator do
       blockchain: 'algorand_test',
       address: nil,
       source: 'ore_id',
-      tokens_to_provision: tokens_to_provision_params,
+      tokens_to_provision: tokens_to_provision,
       name: 'Wallet'
     }]
   end
   let(:tokens_to_provision) { nil }
-  let(:tokens_to_provision_params) do
-    return tokens_to_provision unless tokens_to_provision.is_a?(Array)
-
-    tokens_to_provision.map do |t|
-      ActionController::Parameters.new(t).permit!
-    end
-  end
 
   context 'wallet created without tokens_to_provision' do
     let(:bitcoin_address) { build(:bitcoin_address_1) }
