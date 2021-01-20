@@ -135,10 +135,6 @@ class Award < ApplicationRecord
     self.proof_id ||= SecureRandom.base58(44) # 58^44 > 2^256
   end
 
-  def ethereum_issue_ready?
-    account.address_for_blockchain(project.token._blockchain)
-  end
-
   def self_issued?
     account_id == issuer_id
   end
