@@ -22,11 +22,10 @@ namespace :mission do
       image: dummy_image,
       logo: dummy_image,
       whitelabel: true,
-      whitelabel_domain: ENV['APP_HOST'].present? ? ENV['APP_HOST'] : 'test.test',
+      whitelabel_domain: ENV['APP_HOST'].presence || 'test.test',
       whitelabel_api_public_key: ENV['WHITELABEL_API_PUBLIC_KEY'],
       whitelabel_api_key: ENV['WHITELABEL_API_KEY']
     }
     Mission.new(defaults)
   end
-
 end
