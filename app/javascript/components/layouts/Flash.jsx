@@ -2,12 +2,18 @@ import React from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import Icon from './../styleguide/Icon'
+import { FLASH_ADD_MESSAGE } from '../../src/javascripts/eventTypes'
+import PubSub from 'pubsub-js'
+
 
 export default class Flash extends React.Component {
   constructor(props) {
     super(props)
 
     this.closeMessage = this.closeMessage.bind(this)
+    this.addMessage = this.addMessage.bind(this)
+
+    PubSub.subscribe(FLASH_ADD_MESSAGE, this.addMessage);
 
     this.state = {
       messages: this.props.messages
@@ -17,6 +23,15 @@ export default class Flash extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({
       messages: props.messages
+    })
+  }
+
+  addMessage(_, message) {
+    let messages = this.state.messages;
+    messages.push(message);
+
+    this.setState({
+      messages: messages
     })
   }
 

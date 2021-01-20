@@ -1,4 +1,6 @@
 class TokensController < ApplicationController
+  TOKENS_PER_PAGE = 10
+
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
   before_action :set_token_types, only: %i[new show edit]
@@ -6,16 +8,12 @@ class TokensController < ApplicationController
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
-    @tokens = policy_scope(Token).with_attached_logo_image.map do |t|
-      t.serializable_hash.merge(
-        logo_url: GetImageVariantPath.call(
-          attachment: t.logo_image,
-          resize_to_fill: [54, 54]
-        ).path
-      )
-    end
+    props = {
+      tokens: serialized_tokens,
+      pagination_html: helpers.paginate(tokens, window: 3)
+    }
 
-    render component: 'TokenIndex', props: { tokens: @tokens }
+    render component: 'TokenIndex', props: props
   end
 
   def new
@@ -80,6 +78,25 @@ class TokensController < ApplicationController
   end
 
   private
+
+    def tokens
+      @tokens ||=
+        policy_scope(Token)
+        .with_attached_logo_image
+        .page(params[:page])
+        .per(TOKENS_PER_PAGE)
+    end
+
+    def serialized_tokens
+      tokens.map do |t|
+        t.serializable_hash.merge(
+          logo_url: GetImageVariantPath.call(
+            attachment: t.logo_image,
+            resize_to_fill: [54, 54]
+          ).path
+        )
+      end
+    end
 
     def redirect_unless_admin
       redirect_to root_path unless current_account.comakery_admin?

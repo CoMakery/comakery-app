@@ -14,7 +14,12 @@ Rails.application.routes.draw do
   get '/unsubscription' => "unsubscription#new", as: :unsubscription
 
   resource :account, only: [:update]
-  resources :wallets
+  resources :wallets do
+    member do
+      get :algorand_opt_ins
+      patch :make_primary
+    end
+  end
   resources :algorand_opt_ins, only: %i[index create]
   resources :accounts, only: [:new, :create, :show] do
     collection do
@@ -89,7 +94,10 @@ Rails.application.routes.draw do
         end
       end
       resources :reg_groups, only: [:create, :update, :destroy]
-      resources :transfer_types, only: [:index, :create, :update, :destroy]
+
+      get 'transfer_categories', to: 'transfer_types#index', as: :transter_categories
+
+      resources :transfer_types, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
         collection do
           post :pause
@@ -148,7 +156,7 @@ Rails.application.routes.draw do
       resources :accounts, only: [:show, :update, :create] do
         resources :interests, only: [:index, :create, :destroy]
         resources :verifications, only: [:index, :create]
-        resources :wallets, only: [:index, :create, :show, :destroy] do
+        resources :wallets, only: [:index, :show, :create, :update, :destroy] do
           member do
             post :password_reset
           end
@@ -164,6 +172,8 @@ Rails.application.routes.draw do
         resources :transfer_rules, only: [:index, :show, :create, :destroy]
         resources :reg_groups, only: [:index, :show, :create, :destroy]
       end
+      
+      resources :tokens, only: :index
     end
   end
 

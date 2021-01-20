@@ -1,7 +1,10 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
 ruby '2.7.1'
 
 gem 'active_storage-postgresql'
+gem 'active_storage_validations'
 gem 'awesome_print'
 gem 'bcrypt'
 gem 'bullet'
@@ -28,7 +31,7 @@ gem 'nilify_blanks'
 gem 'nokogiri'
 gem 'olive_branch'
 gem 'omniauth'
-gem 'omniauth-discord', git: 'https://github.com/CoMakery/omniauth-discord'
+gem 'omniauth-discord', github: 'CoMakery/omniauth-discord'
 gem 'omniauth-slack'
 gem 'pg'
 gem 'premailer-rails'
@@ -42,7 +45,7 @@ gem 'rails-html-sanitizer'
 gem 'react-rails'
 gem 'redcarpet'
 gem 'redis', '~> 4.0'
-gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.git' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
+gem 'refile', require: 'refile/rails', github: 'refile/refile', ref: 'e690bf5c2d83b3dfd805764d54e8f5daf14993b0' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
 gem 'refile-mini_magick', github: 'refile/refile-mini_magick'
 gem 'refile-s3', github: 'refile/refile-s3'
 gem 'responders'
@@ -69,7 +72,7 @@ end
 
 group(:development, :test) do
   gem 'brakeman', require: false
-  gem 'citizen-scripts', git: 'https://github.com/CoMakery/citizen-scripts.git', ref: 'dev', require: false
+  gem 'citizen-scripts', github: 'CoMakery/citizen-scripts', ref: 'dev', require: false
   gem 'dotenv-rails'
   gem 'erb_lint', '~> 0.0.35', require: false
   gem 'jaro_winkler'

@@ -1,0 +1,86 @@
+<div class="card-header bg-white">
+  <div class="d-flex justify-content-between align-items-center flex-wrap">
+    <h5 class="m-0">My Wallets</h5>
+    <div class="d-flex flex-wrap">
+      <%= toggle_zero_balances_link %>
+      <% unless wallets.ore_id.empty? %>
+        <%= link_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold", data: { method: 'DELETE' } do %>
+          <span>Unlink OREID</span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="card-body p-0 table-responsive">
+  <table class="table table-borderless table-striped cm-table">
+    <thead>
+      <tr>
+        <th scope="col">Wallet name</th>
+        <th scope="col">Balances</th>
+        <th scope="col">Blockchain</th>
+        <th scope="col">Primary</th>
+        <th scope="col">Address</th>
+        <th scope="col" class="text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% wallets.each do |wallet| %>
+        <tr>
+          <td class="font-weight-bolder">
+            <div class="d-flex align-items-center">
+              <span class="mr-2"><%= wallet.name %></span>
+              <% if wallet.ore_id? %>
+                <%= image_tag 'OREID_Logo_Symbol.svg', size: '30' %>
+              <% end %>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex">
+              <% formatted_wallet_balances(wallet).each do |balance| %>
+                <span><%= balance %></span>
+              <% end %>
+            </div>
+          </td>
+          <td><%= wallet.blockchain.name %></td>
+          <td><%= wallet.primary_wallet.to_s.capitalize %></td>
+          <td>
+            <div class="d-flex" data-controller="utils--clipboard">
+              <%= link_to(
+                    wallet.address,
+                    wallet.blockchain.url_for_address_human(wallet.address),
+                    target: :_blank,
+                    class: 'mr-2',
+                    data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+                  ) %>
+              <div class="hidden" data-target="utils--clipboard.source"><%= wallet.address %></div>
+              <span type="button" class="text-primary" data-action="click->utils--clipboard#copy">
+                <i class="far fa-copy" data-target="utils--clipboard.icon"></i>
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="text-right">
+              <div class="dropdown">
+                <div class="text-primary" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <% if wallet.ore_id? %>
+                    <%= link_to 'Opt In To Algorand Tokens', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
+                  <% end %>
+                  <% unless wallet.primary_wallet %>
+                    <%= link_to "Make Primary Wallet for #{wallet.blockchain.name}", make_primary_wallet_path(wallet), method: :patch, class: 'dropdown-item' %>
+                  <% end %>
+                  <% if wallet.user_provided? %>
+                    <%= link_to 'Edit', '', class: 'dropdown-item', data: { toggle: :modal, target: '#walletForm', src: edit_wallet_path(wallet) }  %>
+                    <%= link_to 'Remove', wallet_url(wallet), method: :delete, class: 'dropdown-item text-danger' %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
