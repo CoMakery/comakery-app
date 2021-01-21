@@ -369,7 +369,8 @@ table th, table td {
   <div class="article">
     <h2>X. Tokens</h2>
 
-      <p class="explanation">Retrieve data tokens.Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.</p>
+      <p class="explanation">Retrieve data tokens. Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
+               By default requests use snake case, responses use camel case.</p>
 
     <ul>
       <li>

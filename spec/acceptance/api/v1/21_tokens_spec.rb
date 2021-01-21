@@ -7,8 +7,9 @@ resource 'X. Tokens' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
-  explanation ['Retrieve data tokens.'   \
-          'Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.'].join(' ')
+  explanation ['Retrieve data tokens. '\
+              'Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
+               By default requests use snake case, responses use camel case.'].join(' ')
 
   header 'API-Key', build(:api_key)
   header 'Content-Type', 'application/json'
@@ -30,7 +31,7 @@ resource 'X. Tokens' do
       let!(:cat_token) { create(:token, name: 'Cats') }
 
       example 'GET' do
-        explanation 'Returns tokens'
+        explanation 'Returns tokens. Filtering tokens ex: OR operator `q[name_or_symbol_cont]=TokenName`, AND operator `q[name_cont]=TokenName&q[network_eq]=Network`.'
 
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
 
@@ -46,7 +47,7 @@ resource 'X. Tokens' do
         explanation 'Returns an array of errors'
 
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
-        request[:q] = { _blockchain_cont: 'bitcoin' }
+        request[:q] = { network_cont: 'bitcoin' }
 
         do_request(request)
         expect(status).to eq(400)
