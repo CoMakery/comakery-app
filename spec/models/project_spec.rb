@@ -1,8 +1,10 @@
 require 'rails_helper'
 require 'models/concerns/api_authorizable_spec'
+require 'models/concerns/active_storage_validator_spec'
 
 describe Project do
   it_behaves_like 'api_authorizable'
+  it_behaves_like 'active_storage_validator', %w[image square_image panoramic_image]
 
   describe 'associations' do
     let!(:project) { create :project }
