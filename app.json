@@ -76,8 +76,9 @@
       "required": false
     },
     "METAMASK_LOGIN": {
-      "description": "Login and signup with MetaMask",
-      "required": false
+      "description": "Enable login and signup with MetaMask",
+      "required": true,
+      "value": false
     },
     "INFURA_PROJECT_ID": {
       "description": "Infura.io project id"
