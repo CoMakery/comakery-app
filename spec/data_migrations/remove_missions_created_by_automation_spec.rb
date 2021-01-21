@@ -5,7 +5,7 @@ describe RemoveMissionsCreatedByAutomation do
   subject { described_class.new.up }
 
   before do
-    allow(Rails.env).to receive(:production?) {true}
+    allow(Rails.env).to receive(:production?) { true }
     names = ['Automation 1', 'Automation 2', '1 Automation', 'automation', 'Mission name']
     names.each do |name|
       create(:mission, name: name)
