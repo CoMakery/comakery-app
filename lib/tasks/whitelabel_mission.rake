@@ -3,8 +3,6 @@ namespace :mission do
   task default_whitelabel_mission: :environment do
     new_whitelabel_mission = mission
     new_whitelabel_mission.save(validate: false)
-    puts new_whitelabel_mission
-    puts Mission.count
   end
 
   def dummy_image

@@ -247,7 +247,6 @@ class ApplicationController < ActionController::Base
     end
 
     def set_whitelabel_mission
-      puts current_domain
       # rubocop:todo Naming/MemoizedInstanceVariableName
       @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
       # rubocop:enable Naming/MemoizedInstanceVariableName

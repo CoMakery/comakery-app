@@ -130,14 +130,6 @@
       "description": "Deploy white lable layout to heroku.",
       "required": true
     },
-    "WHITELABEL_API_PUBLIC_KEY": {
-      "description": "Required for creating default whitelabel mission.",
-      "required": true
-    },
-    "WHITELABEL_API_KEY": {
-      "description": "Required for creating default whitelabel mission.",
-      "required": true
-    },
     "NODE_MODULES_CACHE": "false"
   }
 }
