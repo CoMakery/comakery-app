@@ -1,5 +1,5 @@
 class WalletCreator::Provision
-  ACCOUNT_RECORD_PARAMS = %w[max_balance lockup_until reg_group_id account_frozen].freeze
+  ACCOUNT_RECORD_PARAMS = %w[token_id max_balance lockup_until reg_group_id account_frozen].freeze
 
   attr_reader :wallet, :params
 

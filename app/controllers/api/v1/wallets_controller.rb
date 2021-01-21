@@ -80,7 +80,7 @@ class Api::V1::WalletsController < Api::V1::ApiController
       wallets.map do |wallet_params|
         wallet_params.permit(
           :blockchain, :address, :source, :name,
-          tokens_to_provision: %i[token_id max_balance lockup_until reg_group_id account_id account_frozen]
+          tokens_to_provision: WalletCreator::Provision::ACCOUNT_RECORD_PARAMS
         )
       end
     end
