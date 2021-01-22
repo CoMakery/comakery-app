@@ -33,9 +33,6 @@ FileUtils.chdir APP_ROOT do
   puts "\n== Removing old logs and tempfiles =="
   system! 'bundle exec rails log:clear tmp:clear'
 
-  puts "\n== Preparing default whitelabel enabled mission"
-  system! 'bundle exec rake mission:default_whitelabel_mission'
-
   puts "\n== Enabling caching =="
   system! 'touch tmp/caching-dev.txt'
 end
