@@ -29,11 +29,32 @@ resource 'X. Tokens' do
 
     context '200' do
       let!(:cat_token) { create(:token, name: 'Cats') }
+      let!(:dog_token) { create(:token, name: 'Dogs', _blockchain: 'cardano') }
 
       example 'GET' do
-        explanation 'Returns tokens. Filtering tokens ex: OR operator `q[name_or_symbol_cont]=TokenName`, AND operator `q[name_cont]=TokenName&q[network_eq]=Network`.'
+        explanation 'Returns tokens.'
 
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
+
+        do_request(request)
+        expect(status).to eq(200)
+      end
+
+      example 'GET – FILTERING WITH OR CONDITION' do
+        explanation 'Returns tokens.'
+
+        request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
+        request[:q] = { name_or_symbol_cont: 'Cats' }
+
+        do_request(request)
+        expect(status).to eq(200)
+      end
+
+      example 'GET – FILTERING WITH AND CONDITION' do
+        explanation 'Returns tokens.'
+
+        request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
+        request[:q] = { name_cont: 'Dogs', network_eq: 'cardano' }
 
         do_request(request)
         expect(status).to eq(200)
