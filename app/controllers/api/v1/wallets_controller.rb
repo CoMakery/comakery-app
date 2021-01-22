@@ -78,7 +78,10 @@ class Api::V1::WalletsController < Api::V1::ApiController
       wallets = params.fetch(:body, {}).fetch(:data, {}).require(:wallets)
 
       wallets.map do |wallet_params|
-        wallet_params.permit(:blockchain, :address, :source, :tokens_to_provision, :name)
+        wallet_params.permit(
+          :blockchain, :address, :source, :name,
+          tokens_to_provision: WalletCreator::Provision::ACCOUNT_RECORD_PARAMS
+        )
       end
     end
 

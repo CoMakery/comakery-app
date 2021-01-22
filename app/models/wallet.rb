@@ -7,10 +7,12 @@ class Wallet < ApplicationRecord
   has_many :token_opt_ins, dependent: :destroy
   has_many :wallet_provisions, dependent: :destroy
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
+  has_many :account_token_records, dependent: :destroy
 
   validates :source, presence: true
   validates :address, presence: true, unless: :pending?
   validates :address, blockchain_address: true
+  validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
   validates :name, presence: true
 

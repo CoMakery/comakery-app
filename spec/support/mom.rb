@@ -849,6 +849,10 @@ class Mom
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end
 
+  def bitcoin_address_2
+    '3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5'
+  end
+
   def constellation_address_1
     'DAG8LvRqfJchUjkw5Fpm3DohFqgXhqeqRAVUWKKY'
   end

@@ -1,7 +1,7 @@
 class WalletCreator
   class WrongTokensFormat < StandardError; end
 
-  attr_reader :account
+  attr_reader :account, :errors
 
   def initialize(account:)
     @account = account
@@ -9,63 +9,25 @@ class WalletCreator
 
   def call(wallets_params)
     errors = {}
-
     wallets = wallets_params.map.with_index do |wallet_attrs, i|
       tokens_to_provision = wallet_attrs.delete(:tokens_to_provision)
       wallet_attrs[:_blockchain] = wallet_attrs.delete(:blockchain)
 
       wallet = account.wallets.new(wallet_attrs)
 
-      # This will init the errors object and allow to add custom errors later on with #errors.add
-      wallet.validate
+      provision = Provision.new(wallet, tokens_to_provision)
 
-      tokens_to_provision = sanitize_tokens_to_provision(wallet, tokens_to_provision)
+      if provision.should_be_provisioned?
+        provision.build_wallet_provisions
+        provision.build_account_token_records
+      end
 
-      build_wallet_provisions(wallet, tokens_to_provision) if should_be_provisioned?(wallet, tokens_to_provision)
+      errors[i] = provision.wallet.errors if provision.wallet.errors.any?
 
-      errors[i] = wallet.errors if wallet.errors.any?
-
-      wallet
+      provision.wallet
     end
 
     account.save if errors.empty?
-
     [wallets, errors]
   end
-
-  private
-
-    def sanitize_tokens_to_provision(wallet, tokens_to_provision)
-      return [] if tokens_to_provision.blank?
-
-      parsed_token_ids = JSON.parse(tokens_to_provision.to_s)
-      raise WalletCreator::WrongTokensFormat unless parsed_token_ids.is_a?(Array)
-
-      parsed_token_ids
-    rescue JSON::ParserError, WalletCreator::WrongTokensFormat
-      wallet.errors.add(:tokens_to_provision, 'Wrong format. It must be an Array. For example: [1,5]')
-      []
-    end
-
-    def should_be_provisioned?(wallet, tokens_to_provision)
-      tokens_to_provision.any? && wallet.valid? && valid_tokens_to_provision?(wallet, tokens_to_provision)
-    end
-
-    def valid_tokens_to_provision?(wallet, tokens_to_provision)
-      correct_tokens = Token.available_for_provision.where(id: tokens_to_provision)
-      wrong_tokens = tokens_to_provision.map(&:to_i) - correct_tokens.pluck(:id)
-
-      if wrong_tokens.any?
-        wallet.errors.add(:tokens_to_provision, "Some tokens can't be provisioned: #{wrong_tokens}")
-        return false
-      end
-
-      true
-    end
-
-    def build_wallet_provisions(wallet, tokens_to_provision)
-      tokens_to_provision.each do |token_to_provision|
-        wallet.wallet_provisions.new(token_id: token_to_provision)
-      end
-    end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_085123) do
+ActiveRecord::Schema.define(version: 2021_01_18_172946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -610,6 +610,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_085123) do
     t.string "name"
     t.boolean "primary_wallet", default: false
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
+    t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true
     t.index ["account_id", "primary_wallet", "_blockchain"], name: "index_wallets_on_account_id_and_primary_wallet_and__blockchain", unique: true, where: "(primary_wallet IS TRUE)"
     t.index ["account_id"], name: "index_wallets_on_account_id"
     t.index ["ore_id_account_id"], name: "index_wallets_on_ore_id_account_id"

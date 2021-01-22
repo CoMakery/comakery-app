@@ -4,7 +4,7 @@
     <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
-      
+
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -195,12 +195,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/432fb244-211b-492b-8508-2d9a608d666f/verifications?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F432fb244-211b-492b-8508-2d9a608d666f%2Fverifications&amp;body[method]=GET&amp;body[nonce]=562cb937005201af596f0f27337734a3&amp;body[timestamp]=1610727772&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=Uz3jI3pim1s3x9%2Fuwwv%2B%2Fe%2F6pZ7W0Xsg8oDI659qs88c%2FO5KQ7d4QC2E%2B93wDY4P2ZQyazNC8%2BIzrWvUdNPJCQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/08122fc0-c143-4f70-aa71-a5119340bf08/verifications?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F08122fc0-c143-4f70-aa71-a5119340bf08%2Fverifications&amp;body[method]=GET&amp;body[nonce]=8bdba2c93b35157498afc9b864c91718&amp;body[timestamp]=1611046089&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ogH%2B%2B388U3hThg%2BIwo9ByghteyQs6Ywp6r3e3XfyzNgkYZ7c2t%2B2hY0F9UOLUh92d5LuBr4DiczT1fE%2F11zxAw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/432fb244-211b-492b-8508-2d9a608d666f/verifications&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;562cb937005201af596f0f27337734a3&quot;, &quot;timestamp&quot;=&gt;&quot;1610727772&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;Uz3jI3pim1s3x9/uwwv+/e/6pZ7W0Xsg8oDI659qs88c/O5KQ7d4QC2E+93wDY4P2ZQyazNC8+IzrWvUdNPJCQ==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/08122fc0-c143-4f70-aa71-a5119340bf08/verifications&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;8bdba2c93b35157498afc9b864c91718&quot;, &quot;timestamp&quot;=&gt;&quot;1611046089&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ogH++388U3hThg+Iwo9ByghteyQs6Ywp6r3e3XfyzNgkYZ7c2t+2hY0F9UOLUh92d5LuBr4DiczT1fE/11zxAw==&quot;}</pre>
 
 
 
@@ -208,8 +208,8 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 3
-ETag: W/&quot;ed4a81cb69c8427eea97957079543f6e&quot;
-Last-Modified: Fri, 15 Jan 2021 16:22:52 GMT</pre>
+ETag: W/&quot;d5eb627572662dfe659721a93343d2cc&quot;
+Last-Modified: Tue, 19 Jan 2021 08:48:09 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -218,22 +218,22 @@ Last-Modified: Fri, 15 Jan 2021 16:22:52 GMT</pre>
     &quot;passed&quot;: true,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 1000000,
-    &quot;createdAt&quot;: &quot;2021-01-15T16:22:50.424Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-15T16:22:50.424Z&quot;
+    &quot;createdAt&quot;: &quot;2021-01-19T08:48:08.541Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-19T08:48:08.541Z&quot;
   },
   {
     &quot;passed&quot;: false,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 100000,
-    &quot;createdAt&quot;: &quot;2021-01-15T16:22:52.886Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-15T16:22:52.886Z&quot;
+    &quot;createdAt&quot;: &quot;2021-01-19T08:48:09.242Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-19T08:48:09.242Z&quot;
   },
   {
     &quot;passed&quot;: true,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 10000,
-    &quot;createdAt&quot;: &quot;2021-01-15T16:22:52.913Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-15T16:22:52.913Z&quot;
+    &quot;createdAt&quot;: &quot;2021-01-19T08:48:09.263Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-19T08:48:09.263Z&quot;
   }
 ]</pre>
       </div>

@@ -796,7 +796,7 @@ exports[`MyTask renders component correctly 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-chPdSV",
                               "isStatic": false,
-                              "lastClassName": "hQDLDr",
+                              "lastClassName": "UJWOp",
                               "rules": Array [
                                 "
   font-family: Montserrat;
@@ -813,6 +813,7 @@ exports[`MyTask renders component correctly 1`] = `
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 84px;
 
   &:hover {
     text-decoration: underline;
@@ -847,7 +848,7 @@ exports[`MyTask renders component correctly 1`] = `
                         id="product-tour-my-tasks-step1"
                       >
                         <a
-                          className="sc-chPdSV hQDLDr"
+                          className="sc-chPdSV UJWOp"
                           id="product-tour-my-tasks-step1"
                         >
                           Details 

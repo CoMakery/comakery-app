@@ -8,6 +8,7 @@ class Account < ApplicationRecord
   has_one_attached :image
 
   include EthereumAddressable
+  include ActiveStorageValidator
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
@@ -77,7 +78,6 @@ class Account < ApplicationRecord
   validates :date_of_birth, presence: { message: 'should be present in correct format' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
-
   # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   # rubocop:enable Rails/UniqueValidationWithoutIndex
@@ -95,6 +95,7 @@ class Account < ApplicationRecord
     record.errors.add(attr, 'is unsafe') if ApplicationController.helpers.sanitize(value) != value
   end
 
+  validate_image_attached :image
   validate :validate_age, on: :create
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
   after_validation :normalize_ethereum_auth_address
