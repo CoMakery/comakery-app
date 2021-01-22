@@ -246,6 +246,7 @@ const TaskDetails = styled.a`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 84px;
 
   &:hover {
     text-decoration: underline;

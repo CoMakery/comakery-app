@@ -28,7 +28,7 @@
       <%= form.select(
             :_blockchain, wallet_blockchain_collection(wallet),
             { required: true },
-            { class: 'form-control',
+            { class: 'form-control input-field--content__select',
               disabled: wallet.persisted?,
               data: { action: 'wallets--form#inputChanged' } }) %>
     </div>

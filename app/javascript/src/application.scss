@@ -333,6 +333,17 @@ form.project_search {
 
 .project_settings__content {
   min-height: 50vh;
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #0a0a0a;
+  }
+
+  h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+  }
 }
 
 .project_settings__content--modal {
@@ -993,6 +1004,10 @@ form.form-with-submit-button {
       height: auto;
       text-transform: uppercase;
     }
+
+    a:hover {
+      color: white;
+    }
   }
 
   .wallets__create {
@@ -1112,6 +1127,16 @@ form.form-with-submit-button {
         }
       }
     }
+  }
+}
+
+#walletForm {
+  select {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="27" height="9"><path fill="none" fill-rule="nonzero" stroke="%23201662" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1.5 1L13 8l12.5-7"/></svg>');
+    background-size: 18px 8px;
+    background-position: right 0.5rem center;
+    background-origin: content-box;
+    background-repeat: no-repeat;
   }
 }
 
