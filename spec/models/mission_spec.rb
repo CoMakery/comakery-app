@@ -6,8 +6,6 @@ describe Mission do
       errors = described_class.new.tap(&:valid?).errors.full_messages
       expect(errors.sort).to eq([
                                   "Description can't be blank",
-                                  "Image can't be blank",
-                                  "Logo can't be blank",
                                   "Name can't be blank",
                                   "Subtitle can't be blank"
                                 ])
