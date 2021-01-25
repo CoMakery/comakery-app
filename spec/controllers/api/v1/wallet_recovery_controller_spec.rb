@@ -5,25 +5,25 @@ require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
 require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
 RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
-  # TODO: Fix lines below
-  # it_behaves_like 'requires_an_authorization'
-  # it_behaves_like 'requires_signature'
-  # it_behaves_like 'requires_whitelabel_mission'
+  it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_whitelabel_mission'
   it_behaves_like 'authorizable_by_mission_key'
+
+  let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
+  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
+
+  before do
+    allow(controller).to receive(:authorized).and_return(true)
+  end
 
   describe 'GET /public_wrapping_key' do
     render_views
 
-    let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
-    # let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
-
     subject do
       params = build(:api_signed_request, '', api_v1_wallet_recovery_public_wrapping_key_path, 'GET')
-      get :public_wrapping_key, params: params
-    end
 
-    before do
-      allow(controller).to receive(:authorized).and_return(true)
+      get :public_wrapping_key, params: params
     end
 
     context 'with correct private key' do
