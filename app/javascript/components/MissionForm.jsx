@@ -34,29 +34,30 @@ export default class MissionForm extends React.Component {
     this.whitelabelFaviconInputRef = React.createRef()
 
     this.state = {
-      errors                   : {}, // error hash for account form
-      disabled                 : {}, // disabled hash
-      flashMessages            : [],
-      formAction               : this.props.formAction,
-      formUrl                  : this.props.formUrl,
-      closeOnSuccess           : false,
-      name                     : props.mission.name || '',
-      subtitle                 : props.mission.subtitle || '',
-      description              : props.mission.description || '',
-      whitelabel               : props.mission.whitelabel ? 'true' : 'false',
-      whitelabelDomain         : props.mission.whitelabelDomain || '',
-      whitelabelContactEmail   : props.mission.whitelabelContactEmail || '',
-      whitelabelApiPublicKey   : props.mission.whitelabelApiPublicKey || '',
-      logo                     : null,
-      image                    : null,
-      logoPreview              : props.mission.logoUrl,
-      imagePreview             : props.mission.imageUrl,
-      whitelabelLogo           : null,
-      whitelabelLogoDark       : null,
-      whitelabelFavicon        : null,
-      whitelabelLogoPreview    : props.mission.whitelabelLogoUrl,
-      whitelabelLogoDarkPreview: props.mission.whitelabelLogoDarkUrl,
-      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl
+      errors                     : {}, // error hash for account form
+      disabled                   : {}, // disabled hash
+      flashMessages               : [],
+      formAction                 : this.props.formAction,
+      formUrl                    : this.props.formUrl,
+      closeOnSuccess             : false,
+      name                       : props.mission.name || '',
+      subtitle                   : props.mission.subtitle || '',
+      description                : props.mission.description || '',
+      whitelabel                 : props.mission.whitelabel ? 'true' : 'false',
+      whitelabelDomain           : props.mission.whitelabelDomain || '',
+      whitelabelContactEmail     : props.mission.whitelabelContactEmail || '',
+      whitelabelApiPublicKey     : props.mission.whitelabelApiPublicKey || '',
+      walletRecoveryApiPublicKey : props.mission.walletRecoveryApiPublicKey || '',
+      logo                       : null,
+      image                      : null,
+      logoPreview                : props.mission.logoUrl,
+      imagePreview               : props.mission.imageUrl,
+      whitelabelLogo             : null,
+      whitelabelLogoDark         : null,
+      whitelabelFavicon          : null,
+      whitelabelLogoPreview      : props.mission.whitelabelLogoUrl,
+      whitelabelLogoDarkPreview  : props.mission.whitelabelLogoDarkUrl,
+      whitelabelFaviconPreview   : props.mission.whitelabelFaviconUrl
     }
     this.mounted = false
   }
@@ -106,7 +107,22 @@ export default class MissionForm extends React.Component {
     }
 
     let formData = new FormData()
-    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, whitelabelApiPublicKey, logo, image, whitelabelLogo, whitelabelLogoDark, whitelabelFavicon} = this.state
+    const {
+      name,
+      subtitle,
+      description,
+      whitelabel,
+      whitelabelDomain,
+      whitelabelContactEmail,
+      whitelabelApiPublicKey,
+      walletRecoveryApiPublicKey,
+      logo,
+      image,
+      whitelabelLogo,
+      whitelabelLogoDark,
+      whitelabelFavicon
+    } = this.state
+
     formData.append('mission[name]', name)
     formData.append('mission[subtitle]', subtitle)
     formData.append('mission[description]', description)
@@ -114,6 +130,7 @@ export default class MissionForm extends React.Component {
     formData.append('mission[whitelabel_domain]', whitelabelDomain)
     formData.append('mission[whitelabel_contact_email]', whitelabelContactEmail)
     formData.append('mission[whitelabel_api_public_key]', whitelabelApiPublicKey)
+    formData.append('mission[wallet_recovery_api_public_key]', walletRecoveryApiPublicKey)
     formData.append('authenticity_token', this.props.csrfToken)
     if (logo) {
       formData.append('mission[logo]', logo)
@@ -251,7 +268,22 @@ export default class MissionForm extends React.Component {
   }
 
   render() {
-    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, whitelabelApiPublicKey, logoPreview, imagePreview, whitelabelLogoPreview, whitelabelLogoDarkPreview, whitelabelFaviconPreview, errors} = this.state
+    const {
+      name,
+      subtitle,
+      description,
+      whitelabel,
+      whitelabelDomain,
+      whitelabelContactEmail,
+      whitelabelApiPublicKey,
+      walletRecoveryApiPublicKey,
+      logoPreview,
+      imagePreview,
+      whitelabelLogoPreview,
+      whitelabelLogoDarkPreview,
+      whitelabelFaviconPreview,
+      errors
+    } = this.state
 
     return <React.Fragment>
       <Layout
@@ -363,6 +395,14 @@ export default class MissionForm extends React.Component {
             value={whitelabelApiPublicKey}
             readOnly={this.props.mission.whitelabelApiPublicKey}
             eventHandler={this.handleChangeFormData}
+          />
+
+          <InputFieldWhiteDark
+          name='walletRecoveryApiPublicKey'
+          title='Wallet recovery API Public Key'
+          symbolLimit={68}
+          value={walletRecoveryApiPublicKey}
+          eventHandler={this.handleChangeFormData}
           />
 
           <InputFieldUploadFile
