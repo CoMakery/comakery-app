@@ -171,6 +171,7 @@ Rails.application.routes.draw do
         resources :account_token_records, only: [:index, :show, :create, :destroy]
         resources :transfer_rules, only: [:index, :show, :create, :destroy]
         resources :reg_groups, only: [:index, :show, :create, :destroy]
+        resources :hot_wallet_addresses, only: :create
       end
       
       resources :tokens, only: :index
