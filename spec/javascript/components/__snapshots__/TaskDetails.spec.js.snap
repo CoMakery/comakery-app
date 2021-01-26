@@ -911,7 +911,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                           "componentStyle": ComponentStyle {
                                             "componentId": "sc-chPdSV",
                                             "isStatic": false,
-                                            "lastClassName": "eUxnGC",
+                                            "lastClassName": "gLspXS",
                                             "rules": Array [
                                               "
   font-family: Montserrat;
@@ -928,6 +928,7 @@ exports[`TaskDetails renders component correctly 1`] = `
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 84px;
 
   &:hover {
     text-decoration: underline;
@@ -963,7 +964,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                       id="product-tour-my-tasks-step1"
                                     >
                                       <a
-                                        className="sc-chPdSV eUxnGC"
+                                        className="sc-chPdSV gLspXS"
                                         href={null}
                                         id="product-tour-my-tasks-step1"
                                       >

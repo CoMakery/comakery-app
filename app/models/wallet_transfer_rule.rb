@@ -1,0 +1,2 @@
+class WalletTransferRule < AccountTokenRecord
+end

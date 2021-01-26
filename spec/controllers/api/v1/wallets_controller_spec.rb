@@ -38,7 +38,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:create_params) { { wallet: { blockchain: :bitcoin, address: build(:bitcoin_address_1) } } }
+    let(:create_params) { { wallets: [{ blockchain: :constellation, address: build(:constellation_address_1), name: 'Wallet' }] } }
 
     context 'with valid params' do
       it 'adds wallet to requested account' do
@@ -60,7 +60,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
       it 'creates a provisioned wallet' do
         token = create(:asa_token)
-        ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: "[#{token.id}]" } }
+        ore_id_params = { wallets: [{ blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: [{ token_id: token.id.to_s }], name: 'Algotest wallet' }] }
         params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
@@ -69,54 +69,89 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       end
     end
 
-    context 'with invalid params' do
-      before do
-        account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1))
-      end
+    context 'with unknown blockchain' do
+      let(:create_params) { { wallets: [{ blockchain: :unknown, address: build(:constellation_address_1), name: 'Wallet' }] } }
 
       it 'renders an error' do
         params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
         post :create, params: params
-        expect(response).not_to be_successful
+        expect(response).to have_http_status(400)
+        expect(assigns[:errors][0][:_blockchain]).to eq ['unknown blockchain value']
+      end
+    end
+
+    context 'when one of wallets send is invalid' do
+      let(:create_params) do
+        {
+          wallets: [
+            { blockchain: :constellation, address: build(:constellation_address_1) },
+            { blockchain: :unknown, address: build(:constellation_address_2) }
+          ]
+        }
+      end
+
+      it 'rejects all' do
+        params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        expect { post :create, params: params }.not_to change(account.wallets, :count)
+        expect(response).to have_http_status(400)
         expect(assigns[:errors]).not_to be_nil
       end
+    end
+  end
 
-      context 'with unknown blockchain' do
-        let(:create_params) { { wallet: { blockchain: :unknown, address: build(:bitcoin_address_1) } } }
+  describe 'PUT #update' do
+    let(:update_params) { { wallet: { primary_wallet: 'true' } } }
+    let!(:primary_wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_1), name: 'Wallet') }
+    let!(:wallet) { account.wallets.create(_blockchain: :constellation, address: build(:constellation_address_2), name: 'Wallet') }
 
-        it 'renders an error' do
-          params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
-          params[:account_id] = account.managed_account_id
+    context 'with valid params' do
+      it 'updates wallet' do
+        expect(primary_wallet.primary_wallet).to be true
+        expect(wallet.primary_wallet).to be false
 
-          post :create, params: params
-          expect(response).not_to be_successful
-          expect(response).to have_http_status(400)
-          expect(assigns[:errors][:_blockchain]).to eq ['unknown blockchain value']
-        end
+        params = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'PUT')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+
+        put :update, params: params
+
+        expect(primary_wallet.reload.primary_wallet).to be false
+        expect(wallet.reload.primary_wallet).to be true
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'with ivalid params' do
+      # At the moment there is no case when invalid params can be sent
+      #   so just stubbed it with false
+      before do
+        allow_any_instance_of(Wallet).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
       end
 
-      context 'with wrong formated and JSON valid tokens_to_provision param' do
-        render_views
+      it 'rejects update' do
+        expect(primary_wallet.primary_wallet).to be true
+        expect(wallet.primary_wallet).to be false
 
-        it do
-          ore_id_params = { wallet: { blockchain: :algorand_test, source: 'ore_id', tokens_to_provision: '1' } }
-          params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
-          params[:account_id] = account.managed_account_id
+        params = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'PUT')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
 
-          post :create, params: params
-          expect(response).to have_http_status(:bad_request)
-          expect(response.body).to eq '{"errors":{"tokens_to_provision":["Wrong format. It must be an Array. For example: [1,5]"]}}'
-          expect(Wallet.where(_blockchain: :algorand_test).count).to be_zero
-        end
+        put :update, params: params
+
+        expect(primary_wallet.reload.primary_wallet).to be true
+        expect(wallet.reload.primary_wallet).to be false
+        expect(response).to have_http_status(400)
       end
     end
   end
 
   describe 'DELETE #destroy' do
     context 'with valid params' do
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), name: 'Wallet') }
 
       it 'removes the wallet from the requested account' do
         expect do
@@ -155,7 +190,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
   describe 'GET #show' do
     context 'with valid params' do
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1)) }
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), name: 'Wallet') }
 
       it 'returns the wallet' do
         params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'GET')
@@ -170,7 +205,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       context 'with tokens to provision' do
         render_views
         let(:token) { create(:asa_token) }
-        let(:wallet) { account.wallets.create(_blockchain: :algorand_test, address: nil, source: 'ore_id') }
+        let(:wallet) { account.wallets.create(_blockchain: :algorand_test, address: nil, source: 'ore_id', name: 'Wallet') }
 
         it 'returns the wallet with provision_tokens filled' do
           wallet.wallet_provisions << create(:wallet_provision, wallet: wallet, token: token)
@@ -191,7 +226,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
   describe 'POST #password_reset' do
     context 'with valid params' do
       render_views
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id) }
+      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id, name: 'Wallet') }
 
       it 'returns url for password reset and scedules a job for password' do
         params = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'POST')

@@ -46,21 +46,20 @@
     }
   ],
   "env": {
+    "INFURA_PROJECT_ID": {
+      "description": "Infura.io project id. This is needed to interact with the Ethereum blockchain. If you don't have this yet you can put in a dummy value and add it after deployment but you may seem some failures related to Ethereum transactions until you add it.",
+      "required": true
+    },
     "APP_HOST": {
-      "description": "Domain name of the app"
-    },
-    "AWS_API_KEY": {
-      "description": "AWS S3 API key"
-    },
-    "AWS_API_SECRET": {
-      "description": "AWS S3 API secret"
+      "description": "Domain name of the app. If you don't know it at the time of deployment you can put in a dummy value. But you will want to change it once you have a domain name for your Heroku app.",
+      "required": true
     },
     "BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET": {
-      "description": "Block explorer url for constellation mainnet",
+      "description": "Block explorer url for constellation mainnet. This overrides the default explorer.",
       "required": false
     },
     "BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET": {
-      "description": "Block explorer url for constellation testnet",
+      "description": "Block explorer url for constellation testnet. This overrides the default explorer.",
       "required": false
     },
     "DISCORD_BOT_TOKEN": {
@@ -75,14 +74,13 @@
       "description": "Discord API client secret",
       "required": false
     },
-    "INFURA_PROJECT_ID": {
-      "description": "Infura.io project id"
-    },
     "ORE_ID_API_KEY": {
-      "description": "Aikon ORE ID API key"
+      "description": "Aikon ORE ID API key",
+      "required": false
     },
     "ORE_ID_SERVICE_KEY": {
-      "description": "Aikon ORE ID API service key"
+      "description": "Aikon ORE ID API service key",
+      "required": false
     },
     "SLACK_API_KEY": {
       "description": "Slack API key",
@@ -91,12 +89,6 @@
     "SLACK_API_SECRET": {
       "description": "Slack API secret",
       "required": false
-    },
-    "REFILE_S3_REGION": {
-      "description": "AWS S3 region name to store user uploads"
-    },
-    "REFILE_S3_BUCKET": {
-      "description": "AWS S3 bucket name to store user uploads"
     },
     "SECRET_KEY_BASE": {
       "description": "Rails SECRET_KEY_BASE",

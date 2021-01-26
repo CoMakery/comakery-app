@@ -252,7 +252,6 @@ export default class Account extends React.Component {
                 <i className='fa fa-cog' />
               </a>
             </h4>
-            <h5><a href='/wallets'>Wallets →</a></h5>
             <DataField fieldName='Email' fieldValue={this.state.accountData.email} />
             <DataField fieldName='First Name' fieldValue={this.state.accountData.firstName} />
             <DataField fieldName='Last Name' fieldValue={this.state.accountData.lastName} />

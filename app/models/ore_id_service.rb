@@ -193,7 +193,7 @@ class OreIdService
       when 'userAlreadyExists'
         raise OreIdService::RemoteUserExistsError
       else
-        raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
+        raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})\nFull details: #{body}"
       end
     end
 

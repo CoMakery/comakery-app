@@ -108,6 +108,19 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
+
+      context 'when account_id is missing' do
+        let(:invalid_attributes) { valid_attributes.merge(account_id: nil) }
+
+        it 'renders an error' do
+          params = build(:api_signed_request, { transfer: invalid_attributes }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+          params[:project_id] = project.id
+
+          post :create, params: params
+          expect(response).not_to be_successful
+          expect(assigns[:errors]).not_to be_nil
+        end
+      end
     end
 
     context 'with invalid amount precision' do

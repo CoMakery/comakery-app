@@ -431,7 +431,6 @@ RSpec.describe AwardsController, type: :controller do
 
       it 'records a slack award being created' do
         expect_any_instance_of(Award).to receive(:send_award_notifications)
-        allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
 
         award.update(account: nil, status: 'ready')
 
@@ -458,7 +457,6 @@ RSpec.describe AwardsController, type: :controller do
 
       it 'records a discord award being created' do
         expect_any_instance_of(Award).to receive(:send_award_notifications)
-        allow_any_instance_of(Account).to receive(:ethereum_issue_ready?) { true }
 
         stub_discord_channels
         channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
@@ -495,8 +493,6 @@ RSpec.describe AwardsController, type: :controller do
       end
 
       it 'can not send the award' do
-        allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
-
         award.update(account: nil, status: 'ready')
 
         post :send_award, params: {

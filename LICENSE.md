@@ -1,4 +1,4 @@
-# Noncommercial Nonviolent Public License 1.0
+# Noncommercial Nonviolent Public License 1.1
 
 Contributor: CoMakery, Inc.
 
@@ -34,7 +34,7 @@ Use by any charitable organization, educational institution, public research org
 
 ## Prohibited Purpose
 
-You may not use the software to promote, further, or assist the use of unwelcome physical force against people or property.
+You may not use the software to perpetrate, promote, further, or assist unconsented harm to people or property
 
 ## Defense
 
