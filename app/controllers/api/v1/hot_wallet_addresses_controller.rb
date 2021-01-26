@@ -9,33 +9,33 @@ class Api::V1::HotWalletAddressesController < Api::V1::ApiController
   def create
     create_hot_wallet
 
-    if @hot_wallet&.persisted?
+    if @create_hot_wallet&.persisted?
       render 'api/v1/wallets/index.json', status: :created
     else
-      @errors = @hot_wallet.errors
+      @errors = @create_hot_wallet.errors
       render 'api/v1/error.json', status: :bad_request
     end
   end
 
   private
 
-  def create_hot_wallet
-    @hot_wallet ||= project.create_hot_wallet(wallet_params)
-  end
-
-  def project
-    @project ||= project_scope.find(params[:project_id])
-  end
-
-  def wallet_params
-    params.fetch(:body, {}).fetch(:data, {}).fetch(:hot_wallet, {}).permit(:address, :name, :_blockchain)
-  end
-
-  def verify_hot_wallet
-    if project.hot_wallet.present?
-      @errors = { hot_wallet: 'already exists' }
-
-      render 'api/v1/error.json', status: :unprocessable_entity
+    def create_hot_wallet
+      @create_hot_wallet ||= project.create_hot_wallet(wallet_params)
     end
-  end
+
+    def project
+      @project ||= project_scope.find(params[:project_id])
+    end
+
+    def wallet_params
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:hot_wallet, {}).permit(:address, :name, :_blockchain)
+    end
+
+    def verify_hot_wallet
+      if project.hot_wallet.present?
+        @errors = { hot_wallet: 'already exists' }
+
+        render 'api/v1/error.json', status: :unprocessable_entity
+      end
+    end
 end
