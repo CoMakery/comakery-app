@@ -112,7 +112,7 @@ table th, table td {
                By default requests use snake case, responses use camel case.</p>
 
       <div class="article">
-        <h2>GET</h2>
+        <h2>GET – FILTERING WITH AND CONDITION</h2>
         <h3>GET /api/v1/tokens</h3>
           <p class="explanation">
             Returns tokens.
@@ -209,43 +209,33 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=724a6769911a9ff0b81e38f37d01ab4f&amp;body[timestamp]=1611331788&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=648choxXhKc2WZTJjbrYHbgQuSnUayqu%2B6BNqcry1Guv%2BKJhPXC08K8fBm79VNI1Owplk%2FpS%2FcnLHv%2B284yXAQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=337da828cec397ff2c81b44ab6578d0c&amp;body[timestamp]=1611332882&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=AAekKrIFM37OD6OfVVHD2Cm1LXfDHtJzb7SsK2oe8x49w3zdQf7UenYxRRfEfCIYAadVRt2%2FAkq4tm7wjNkEDQ%3D%3D&amp;q[name_cont]=Dogs&amp;q[network_eq]=cardano</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;724a6769911a9ff0b81e38f37d01ab4f&quot;, &quot;timestamp&quot;=&gt;&quot;1611331788&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;648choxXhKc2WZTJjbrYHbgQuSnUayqu+6BNqcry1Guv+KJhPXC08K8fBm79VNI1Owplk/pS/cnLHv+284yXAQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;337da828cec397ff2c81b44ab6578d0c&quot;, &quot;timestamp&quot;=&gt;&quot;1611332882&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;AAekKrIFM37OD6OfVVHD2Cm1LXfDHtJzb7SsK2oe8x49w3zdQf7UenYxRRfEfCIYAadVRt2/Akq4tm7wjNkEDQ==&quot;}
+q: {&quot;name_cont&quot;=&gt;&quot;Dogs&quot;, &quot;network_eq&quot;=&gt;&quot;cardano&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;ebe71e086c8a353bd4dae58b591fd52b&quot;
-Last-Modified: Fri, 22 Jan 2021 16:09:48 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;91cbab443ed6b6fd6be2c9792766b44c&quot;
+Last-Modified: Fri, 22 Jan 2021 16:28:02 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
   {
-    &quot;id&quot;: 116,
-    &quot;name&quot;: &quot;Cats&quot;,
-    &quot;symbol&quot;: &quot;TKN22bd0656c6db96d5bf6ac7541100903bf134f59f&quot;,
-    &quot;network&quot;: &quot;bitcoin&quot;,
-    &quot;contractAddress&quot;: null,
-    &quot;decimalPlaces&quot;: 8,
-    &quot;logoUrl&quot;: &quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZ3dDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--6ac8ee377828f3a3dd98e0cdefd936fcb1be0108/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;,
-    &quot;createdAt&quot;: &quot;2021-01-22T16:09:47.911Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-22T16:09:47.924Z&quot;
-  },
-  {
-    &quot;id&quot;: 117,
+    &quot;id&quot;: 121,
     &quot;name&quot;: &quot;Dogs&quot;,
-    &quot;symbol&quot;: &quot;TKN5648b2d5e02ccdba5c6388268740617eb23221b1&quot;,
+    &quot;symbol&quot;: &quot;TKN9c306b2a3fd39bf76423fa2e5228bf3032308439&quot;,
     &quot;network&quot;: &quot;cardano&quot;,
     &quot;contractAddress&quot;: null,
     &quot;decimalPlaces&quot;: 8,
-    &quot;logoUrl&quot;: &quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZzBDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e83273b62d27dab1e0346b5408cc0005e33eee39/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;,
-    &quot;createdAt&quot;: &quot;2021-01-22T16:09:48.059Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-22T16:09:48.070Z&quot;
+    &quot;logoUrl&quot;: &quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaFVDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--27d4291f39fbf21d4fc537a9d304381fc6847231/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-22T16:28:02.424Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-22T16:28:02.437Z&quot;
   }
 ]</pre>
       </div>
