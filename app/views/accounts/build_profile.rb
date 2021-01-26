@@ -43,6 +43,22 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               if skip_validation
                 label do
+                  text 'Email'
+                  f.text_field :email
+                end
+              else
+                with_errors(account, :email) do
+                  label do
+                    text 'Email'
+                    f.text_field :email
+                  end
+                end
+              end
+            end
+
+            column('large-12') do
+              if skip_validation
+                label do
                   text 'Date of Birth'
                   f.text_field :date_of_birth, placeholder: 'mm/dd/yyyy', class: 'datepicker'
                 end
