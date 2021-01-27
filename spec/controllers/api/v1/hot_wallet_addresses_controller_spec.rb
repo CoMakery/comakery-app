@@ -1,14 +1,14 @@
 require 'rails_helper'
 require 'controllers/api/v1/concerns/requires_an_authorization_spec'
+require 'controllers/api/v1/concerns/requires_signature_spec'
+require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
 require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
-require 'controllers/api/v1/concerns/authorizable_by_project_key_spec'
-require 'controllers/api/v1/concerns/authorizable_by_project_policy_spec'
 
 RSpec.describe Api::V1::HotWalletAddressesController, type: :controller do
   it_behaves_like 'requires_an_authorization'
+  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_whitelabel_mission'
   it_behaves_like 'authorizable_by_mission_key'
-  it_behaves_like 'authorizable_by_project_key'
-  it_behaves_like 'authorizable_by_project_policy'
 
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
@@ -25,7 +25,7 @@ RSpec.describe Api::V1::HotWalletAddressesController, type: :controller do
     allow(controller).to receive(:authorized).and_return(true)
   end
 
-  describe 'POST #create' do
+  describe 'POST #create', vcr: true do
     let(:create_params) { { hot_wallet: valid_attributes } }
 
     context 'with valid params' do
@@ -36,6 +36,7 @@ RSpec.describe Api::V1::HotWalletAddressesController, type: :controller do
 
         post :create, params: params
         expect(response).to have_http_status(:created)
+        expect(project.reload.hot_wallet.present?).to be true
       end
     end
 

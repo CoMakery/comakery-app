@@ -15,7 +15,7 @@ class Project < ApplicationRecord
   has_one_attached :panoramic_image
 
   belongs_to :account, touch: true
-  belongs_to :hot_wallet, class_name: 'Wallet', optional: true, touch: true
+  belongs_to :hot_wallet, class_name: 'Wallet', touch: true, optional: true
   has_and_belongs_to_many :admins, class_name: 'Account'
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true

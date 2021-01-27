@@ -1,30 +1,33 @@
 class Api::V1::HotWalletAddressesController < Api::V1::ApiController
   include Api::V1::Concerns::AuthorizableByMissionKey
-  include Api::V1::Concerns::AuthorizableByProjectKey
-  include Api::V1::Concerns::AuthorizableByProjectPolicy
   include Api::V1::Concerns::RequiresAnAuthorization
+  include Api::V1::Concerns::RequiresSignature
+  include Api::V1::Concerns::RequiresWhitelabelMission
 
   before_action :verify_hot_wallet, only: :create
 
   def create
-    create_hot_wallet
+    build_hot_wallet
+    @build_hot_wallet.source = Wallet.sources[:hot_wallet]
+    @build_hot_wallet.account = project.account
 
-    if @create_hot_wallet&.persisted?
-      render 'api/v1/wallets/index.json', status: :created
+    if @build_hot_wallet.save
+      project.save
+      render 'show.json', status: :created
     else
-      @errors = @create_hot_wallet.errors
+      @errors = @build_hot_wallet.errors
       render 'api/v1/error.json', status: :bad_request
     end
   end
 
   private
 
-    def create_hot_wallet
-      @create_hot_wallet ||= project.create_hot_wallet(wallet_params)
+    def build_hot_wallet
+      @build_hot_wallet ||= project.create_hot_wallet(wallet_params)
     end
 
     def project
-      @project ||= project_scope.find(params[:project_id])
+      @project ||= Project.find(params[:project_id])
     end
 
     def wallet_params
