@@ -398,11 +398,12 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldWhiteDark
-          name='walletRecoveryApiPublicKey'
-          title='Wallet recovery API Public Key'
-          symbolLimit={68}
-          value={walletRecoveryApiPublicKey}
-          eventHandler={this.handleChangeFormData}
+            name='walletRecoveryApiPublicKey'
+            title='Wallet recovery API Public Key'
+            symbolLimit={68}
+            value={walletRecoveryApiPublicKey}
+            readOnly={this.props.mission.walletRecoveryApiPublicKey}
+            eventHandler={this.handleChangeFormData}
           />
 
           <InputFieldUploadFile
