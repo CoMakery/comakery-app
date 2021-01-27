@@ -28,7 +28,7 @@ class WalletCreator::Provision
   private
 
     def available_tokens_to_provision
-      @available_tokens_to_provision ||= Token.available_for_provision.where(id: params.map { |p| p[:token_id] })
+      @available_tokens_to_provision ||= Token.available_for_provision.where(id: params.map { |p| p[:token_id] }, _blockchain: wallet._blockchain)
     end
 
     def tokens_to_fill_account_record

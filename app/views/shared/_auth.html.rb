@@ -4,9 +4,11 @@ class Views::Shared::Auth < Views::Projects::Base
       h3 'Or With'
     end
 
-    column('large-12 no-h-pad', style: 'margin-top: 5px') do
-      link_to '#', data: { controller: 'auth-eth', action: 'click->auth-eth#auth', target: 'auth-eth.button', 'auth-eth-nonce-path' => new_auth_eth_path, 'auth-eth-auth-path' => auth_eth_index_path, 'auth-eth-csrf-token' => form_authenticity_token }, class: 'auth-button metamask' do
-        text 'MetaMask'
+    if ENV['METAMASK_LOGIN'].present?
+      column('large-12 no-h-pad', style: 'margin-top: 5px') do
+        link_to '#', data: { controller: 'auth-eth', action: 'click->auth-eth#auth', target: 'auth-eth.button', 'auth-eth-nonce-path' => new_auth_eth_path, 'auth-eth-auth-path' => auth_eth_index_path, 'auth-eth-csrf-token' => form_authenticity_token }, class: 'auth-button metamask' do
+          text 'MetaMask'
+        end
       end
     end
 

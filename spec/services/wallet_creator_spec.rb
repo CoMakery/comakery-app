@@ -116,5 +116,12 @@ RSpec.describe WalletCreator do
       let(:tokens_to_provision) { [{ token_id: token.id.to_s }] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Token #{token.id} requires to provide additional params: max_balance, lockup_until, reg_group_id, account_frozen"]) }
     end
+
+    context 'wallet blockchain is not match with tokens_to_provision' do
+      let(:asa_token) { create(:asa_token) }
+      let(:wallets_params) { [{ blockchain: :bitcoin, address: build(:bitcoin_address_1), tokens_to_provision: tokens_to_provision, name: 'Wallet 1' }] }
+      let(:tokens_to_provision) { [{ token_id: asa_token.id.to_s }] }
+      it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{asa_token.id}]"]) }
+    end
   end
 end
