@@ -30,6 +30,7 @@ class Award < ApplicationRecord
   belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty
+  belongs_to :recipient_wallet, class_name: 'Wallet', optional: true
   # rubocop:todo Rails/InverseOf
   belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id', counter_cache: :assignments_count, touch: true
   # rubocop:enable Rails/InverseOf
@@ -64,6 +65,8 @@ class Award < ApplicationRecord
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
   validate :contributor_doesnt_reach_maximum_assignments, if: -> { status == 'started' }
   validate :cancellation, if: -> { status_changed? && status_was.in?(%w[rejected paid cancelled]) && status == 'cancelled' }
+  validate :recipient_wallet_belongs_to_account, if: -> { recipient_wallet_id.present? }
+  validate :recipient_wallet_and_token_in_same_network, if: -> { recipient_wallet_id.present? }
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
@@ -84,7 +87,7 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
-  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain }) }
+  scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain, primary_wallet: true }) }
   scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
 
   scope :filtered_for_view, lambda { |filter, account|
@@ -130,10 +133,6 @@ class Award < ApplicationRecord
 
   def ensure_proof_id_exists
     self.proof_id ||= SecureRandom.base58(44) # 58^44 > 2^256
-  end
-
-  def ethereum_issue_ready?
-    account.address_for_blockchain(project.token._blockchain)
   end
 
   def self_issued?
@@ -297,6 +296,8 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
+    return recipient_wallet.address if recipient_wallet_id.present?
+
     account&.address_for_blockchain(token&._blockchain)
   end
 
@@ -360,6 +361,18 @@ class Award < ApplicationRecord
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
 
       errors[:base] << "Sorry, you can't exceed the project's budget" if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
+    end
+
+    def recipient_wallet_belongs_to_account
+      return if account&.wallets&.exists?(id: recipient_wallet_id)
+
+      errors[:recipient_wallet_id] << "wallet doesn't belong to the specified account"
+    end
+
+    def recipient_wallet_and_token_in_same_network
+      return if recipient_wallet._blockchain == token&._blockchain
+
+      errors[:recipient_wallet_id] << 'wallet and token are not in the same network'
     end
 
     def abort_destroy

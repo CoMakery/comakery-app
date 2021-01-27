@@ -2,6 +2,7 @@
 
 exports[`TokenIndex renders correctly without props 1`] = `
 <TokenIndex
+  paginationHtml=""
   tokens={Array []}
 >
   <Layout
@@ -24,6 +25,13 @@ exports[`TokenIndex renders correctly without props 1`] = `
               text="Create a Token"
             />
           </a>
+          <ForwardRef(styled.div)
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "",
+              }
+            }
+          />
         </div>
       </React.Fragment>
     }
@@ -123,6 +131,57 @@ exports[`TokenIndex renders correctly without props 1`] = `
                   </SidebarItem>
                 </SidebarItemBold>
               </a>
+              <styled.div
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "",
+                  }
+                }
+              >
+                <StyledComponent
+                  dangerouslySetInnerHTML={
+                    Object {
+                      "__html": "",
+                    }
+                  }
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-bdVaJa",
+                        "isStatic": true,
+                        "lastClassName": "eDrlXv",
+                        "rules": Array [
+                          "
+  text-align: right;
+  width: 100%;
+  padding: 15px 0;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-bdVaJa",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-bdVaJa eDrlXv"
+                    dangerouslySetInnerHTML={
+                      Object {
+                        "__html": "",
+                      }
+                    }
+                  />
+                </StyledComponent>
+              </styled.div>
             </div>
           </div>
           <div

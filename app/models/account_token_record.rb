@@ -4,8 +4,10 @@ class AccountTokenRecord < ApplicationRecord
   belongs_to :account
   belongs_to :token
   belongs_to :reg_group
+  belongs_to :wallet
 
   after_initialize :set_defaults
+  before_validation :set_wallet
   before_save :touch_account
   after_save :replace_existing_record, if: -> { synced? }
 
@@ -15,7 +17,7 @@ class AccountTokenRecord < ApplicationRecord
   BALANCE_MIN = 0
 
   attr_readonly :account_id, :token_id, :reg_group_id, :max_balance, :account_frozen, :lockup_until, :balance
-  validates_with ComakeryTokenValidator
+  validates_with SecurityTokenValidator
   validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
   validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
@@ -37,8 +39,12 @@ class AccountTokenRecord < ApplicationRecord
       self.reg_group ||= RegGroup.default_for(token)
     end
 
+    def set_wallet
+      self.wallet ||= account.wallets.find_by(_blockchain: token._blockchain, primary_wallet: true)
+    end
+
     def touch_account
-      account.touch # rubocop:disable Rails/SkipsModelValidations
+      account&.touch # rubocop:disable Rails/SkipsModelValidations
     end
 
     def replace_existing_record

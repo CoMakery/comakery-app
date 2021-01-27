@@ -3,6 +3,7 @@
 
 class Project < ApplicationRecord
   include ApiAuthorizable
+  include ActiveStorageValidator
 
   nilify_blanks
 
@@ -56,6 +57,7 @@ class Project < ApplicationRecord
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
+  validate_image_attached :image, :square_image, :panoramic_image
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }

@@ -15,7 +15,8 @@ describe 'my account', js: true do
     expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     first('a.featured-mission__create-project').click
-    sleep 2
+
+    expect(find('.accounts-new')).to have_content 'Sign Up With Email'
     expect(page.current_url).to have_content '/accounts/new'
   end
 
@@ -25,7 +26,8 @@ describe 'my account', js: true do
     expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     find('.featured-mission__project__interest').click
-    sleep 2
+
+    expect(find('.accounts-new')).to have_content 'Sign Up With Email'
     expect(page.current_url).to have_content '/accounts/new'
   end
 
@@ -78,6 +80,17 @@ describe 'my account', js: true do
     expect(page).to have_content("First name can't be blank")
   end
 
+  scenario 'MetaMask button disabled' do
+    visit new_account_path
+    expect(page).not_to have_selector 'a', text: 'MetaMask', exact_text: true
+  end
+
+  scenario 'MetaMask button enabled' do
+    ENV['METAMASK_LOGIN'] = 'true'
+    visit new_account_path
+    expect(page).to have_selector 'a', text: 'MetaMask', exact_text: true
+  end
+
   scenario 'featured page is available after signup' do
     login(confirmed_account)
     mission.image = Rack::Test::UploadedFile.new(
@@ -92,9 +105,9 @@ describe 'my account', js: true do
     stub_airtable
     expect(page).to have_selector('.featured-mission__project__interest')
     find('.featured-mission__project__interest').click
-    sleep 2
+
+    expect(find('.featured-missions')).to have_content('UNFOLLOW')
     expect(confirmed_account.interests.count).to be_positive
-    expect(page).to have_content('UNFOLLOW')
   end
 
   scenario 'account page is available after signup' do

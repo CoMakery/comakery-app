@@ -12,6 +12,8 @@ RUN apt-get update -qq \
     build-essential \
     python2.7 \
     gnupg2 \
+    graphviz \
+    imagemagick \
     curl \
     less \
     git \
@@ -86,3 +88,8 @@ RUN gem update --system && \
 RUN mkdir -p /app
 
 WORKDIR /app
+
+COPY .dockerdev/entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+
+ENTRYPOINT ["entrypoint.sh"]

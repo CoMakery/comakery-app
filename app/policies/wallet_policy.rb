@@ -33,7 +33,9 @@ class WalletPolicy < ApplicationPolicy
 
   alias index? new?
   alias create? show?
+  alias algorand_opt_ins? show?
   alias edit? show?
   alias update? show?
+  alias make_primary? show?
   alias destroy? show?
 end

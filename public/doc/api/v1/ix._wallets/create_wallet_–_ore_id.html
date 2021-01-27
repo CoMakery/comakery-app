@@ -108,13 +108,13 @@ table th, table td {
     <div class="container">
       <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create, delete and retrieve account wallets.</p>
+        <p class="explanation">Create, update, delete and retrieve account wallets.</p>
 
       <div class="article">
         <h2>CREATE WALLET – ORE_ID</h2>
         <h3>POST /api/v1/accounts/:id/wallets</h3>
           <p class="explanation">
-            Returns created wallet (See INDEX for response details)
+            Returns created wallets (See INDEX for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -155,7 +155,47 @@ table th, table td {
                     <span class="name">tokens_to_provision</span>
                 </td>
                 <td>
-                  <span class="description">array of tokens to provision</span>
+                  <span class="description">array of params to tokens provision</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">tokens_to_provision[&quot;token_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">token_id is required if tokens_to_provision provided</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;max_balance&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">max_balance is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;lockup_until&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">lockup_until is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;reg_group_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">reg_group_id is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;account_frozen&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">account_frozen is required for security tokens only</span>
                 </td>
               </tr>
             </tbody>
@@ -168,52 +208,57 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/0705f83a-9dce-4e20-9df9-433a4e875d6d/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/7adf6b69-be9d-4f07-9178-e5215d21f926/wallets</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
     "data": {
-      "wallet": {
-        "blockchain": "algorand_test",
-        "source": "ore_id"
-      }
+      "wallets": [
+        {
+          "blockchain": "algorand_test",
+          "source": "ore_id",
+          "name": "Wallet"
+        }
+      ]
     },
-    "url": "http://example.org/api/v1/accounts/0705f83a-9dce-4e20-9df9-433a4e875d6d/wallets",
+    "url": "http://example.org/api/v1/accounts/7adf6b69-be9d-4f07-9178-e5215d21f926/wallets",
     "method": "POST",
-    "nonce": "e4340554c5088fd1f3272a6948eaba9a",
-    "timestamp": "1609148081"
+    "nonce": "7557d8d98197d98bd1662e26112565a7",
+    "timestamp": "1611655045"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "nAHJr3LYdkkcDwmBq69d63aiIbprOReM8jCPoWBt3+8jZ7qCo7XHx3a0IPqflOU3B5FgtxH6HSo8Yuf2M0ODCA=="
+    "signature": "NdHltpoK+dFPRHBvrn3/2w2kNRnNYELg4Au2vlkIoVgLbaBJKrC95FqAnnrL7r0lONWPjm1qAnoWDB3LquA0AA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;8f48cfe46fcff2c7ef9e6df440358c13&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;706869fc7307953e218a60fbc1a91f02&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 21,
-  &quot;address&quot;: null,
-  &quot;source&quot;: &quot;ore_id&quot;,
-  &quot;state&quot;: &quot;pending&quot;,
-  &quot;createdAt&quot;: &quot;2020-12-28T09:34:41.406Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-12-28T09:34:41.406Z&quot;,
-  &quot;blockchain&quot;: &quot;algorand_test&quot;,
-  &quot;tokens&quot;: [
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 23,
+    &quot;address&quot;: null,
+    &quot;source&quot;: &quot;ore_id&quot;,
+    &quot;state&quot;: &quot;pending&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-26T09:57:25.519Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-26T09:57:25.519Z&quot;,
+    &quot;blockchain&quot;: &quot;algorand_test&quot;,
+    &quot;tokens&quot;: [
 
-  ],
-  &quot;provisionTokens&quot;: [
+    ],
+    &quot;provisionTokens&quot;: [
 
-  ]
-}</pre>
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>
