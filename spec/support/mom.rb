@@ -631,8 +631,20 @@ class Mom
     Mission.new(defaults.merge(attrs))
   end
 
+  def whitelabel_mission(**attrs)
+    whitelabel_domain = attrs.key?(:whitelabel_domain) ? attrs[:whitelabel_domain] : 'wl.test.host'
+
+    create(
+      :mission,
+      whitelabel: true,
+      whitelabel_domain: whitelabel_domain,
+      whitelabel_api_public_key: build(:api_public_key),
+      whitelabel_api_key: build(:api_key)
+    )
+  end
+
   def active_whitelabel_mission
-    create(:mission, whitelabel: true, whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key))
+    create(:whitelabel_mission, whitelabel_domain: 'test.host')
   end
 
   def api_public_key
