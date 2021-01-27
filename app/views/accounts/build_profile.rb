@@ -40,17 +40,19 @@ class Views::Accounts::BuildProfile < Views::Base
               end
             end
 
-            column('large-12') do
-              if skip_validation
-                label do
-                  text 'Email'
-                  f.text_field :email
-                end
-              else
-                with_errors(account, :email) do
+            if account.email.blank?
+              column('large-12') do
+                if skip_validation
                   label do
                     text 'Email'
                     f.text_field :email
+                  end
+                else
+                  with_errors(account, :email) do
+                    label do
+                      text 'Email'
+                      f.text_field :email
+                    end
                   end
                 end
               end
