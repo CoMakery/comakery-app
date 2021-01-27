@@ -1,30 +1,23 @@
 class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
   include Api::V1::Concerns::AuthorizableByMissionKey
-  include Api::V1::Concerns::AuthorizableByProjectPolicy
   include Api::V1::Concerns::RequiresAnAuthorization
 
-  # GET /api/v1/projects/1/account_token_records
+  # GET /api/v1/tokens/:id/account_token_records
+  # GET /api/v1/tokens/:id/account_token_records/?account_id=:account_id
+  # GET /api/v1/tokens/:id/account_token_records/?wallet_id=:wallet_id
   def index
     fresh_when account_token_records, public: true
   end
 
-  # GET /api/v1/projects/1/account_token_records/1
-  def show
-    fresh_when account_token_record, public: true
-  end
-
-  # POST /api/v1/projects/1/account_token_records
+  # POST /api/v1/tokens/:id/account_token_records
   def create
-    account_token_record = project.token.account_token_records.new(account_token_record_params)
-    account_token_record.account = Account.find(
-      params.fetch(:body, {}).fetch(:data, {}).fetch(:account_token_record, {}).fetch(:account_id, nil)
-    )
+    account_token_record = account_token_records.new(account_token_record_params)
+    account_token_record.account = find_account_from_body
 
     if account_token_record.save
-      project.safe_add_interested(account_token_record.account)
       @account_token_record = account_token_record
 
-      render 'show.json', status: :created
+      render 'index.json', status: :created
     else
       @errors = account_token_record.errors
 
@@ -32,24 +25,49 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
     end
   end
 
-  # DELETE /api/v1/projects/1/account_token_records/1
-  def destroy
-    account_token_record.destroy
+  # DELETE /api/v1/tokens/:id/account_token_records/?account_id=:account_id
+  # DELETE /api/v1/tokens/:id/account_token_records/?wallet_id=:wallet_id
+  def destroy_all
+    @account_token_records = scoped
+    @account_token_records.destroy_all
     render 'index.json', status: :ok
   end
 
   private
 
-    def project
-      @project ||= project_scope.find(params[:project_id])
-    end
-
     def account_token_records
-      @account_token_records ||= paginate(project.account_token_records)
+      @account_token_records ||= paginate(collection)
     end
 
-    def account_token_record
-      @account_token_record ||= project.account_token_records.find(params[:id])
+    def collection
+      has_scope? ? scoped : general_scope
+    end
+
+    def has_scope?
+      params[:account_id] || params[:wallet_id]
+    end
+
+    def general_scope
+      @general_scope ||= token.account_token_records
+    end
+
+    def token
+      @token ||= Token.find(params[:token_id])
+    end
+
+    def scoped
+      general_scope.where(scope)
+    end
+
+    def scope
+      params[:account_id] ?
+        { account_id: params[:account_id] } :
+        { wallet_id: params[:wallet_id] }
+    end
+
+    def find_account_from_body
+      account_id = params.dig(:body, :data, :account_token_record, :account_id)
+      Account.find(account_id)
     end
 
     def account_token_record_params

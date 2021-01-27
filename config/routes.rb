@@ -168,13 +168,18 @@ Rails.application.routes.draw do
       resources :projects, only: [:show, :index] do
         resources :blockchain_transactions, only: [:create, :update, :destroy]
         resources :transfers, only: [:index, :show, :create, :destroy]
-        resources :account_token_records, only: [:index, :show, :create, :destroy]
         resources :transfer_rules, only: [:index, :show, :create, :destroy]
         resources :reg_groups, only: [:index, :show, :create, :destroy]
         resources :hot_wallet_addresses, only: :create
       end
 
-      resources :tokens, only: :index
+      resources :tokens, only: :index do
+        resources :account_token_records, only: [:index, :create] do
+          collection do
+            delete :index, action: :destroy_all
+          end
+        end
+      end
       get 'wallet_recovery/public_wrapping_key', to: 'wallet_recovery#public_wrapping_key'
     end
   end
