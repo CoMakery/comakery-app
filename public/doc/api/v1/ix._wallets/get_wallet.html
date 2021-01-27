@@ -4,7 +4,7 @@
     <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
-
+      
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -175,7 +175,7 @@ table th, table td {
                     <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;, &quot;hot_wallet&quot;]</span>
                 </td>
               </tr>
               <tr>
@@ -235,18 +235,18 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/e69149e7-0386-4d2c-9a80-2314cbd05208/wallets/24?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fe69149e7-0386-4d2c-9a80-2314cbd05208%2Fwallets%2F24&amp;body[method]=GET&amp;body[nonce]=7a34ea78607b4569bfec6c74627bd22f&amp;body[timestamp]=1611046123&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=e%2FbuO2aWTJ9oS4ndmeYNFLBSNOl0mXWziOvMO0u%2F4xTH7iP%2B8iVk%2BIWETV4oz4hYHX%2F3Z4XXDotdDsRqS%2FbTBQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/39e3c0ca-e233-4b17-99c5-fd1fe4ce2111/wallets/26?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F39e3c0ca-e233-4b17-99c5-fd1fe4ce2111%2Fwallets%2F26&amp;body[method]=GET&amp;body[nonce]=ac319cf759ec8c2afac024daaaa525c3&amp;body[timestamp]=1611755442&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ZY77hA%2BbkkfmvUConjaCry%2FbJO6NXtBPXnX1z0WI5SzbrUICufNlVMSWNnzisQXMS9CpIH0CXsz4wWUHG4aYCg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/e69149e7-0386-4d2c-9a80-2314cbd05208/wallets/24&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;7a34ea78607b4569bfec6c74627bd22f&quot;, &quot;timestamp&quot;=&gt;&quot;1611046123&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;e/buO2aWTJ9oS4ndmeYNFLBSNOl0mXWziOvMO0u/4xTH7iP+8iVk+IWETV4oz4hYHX/3Z4XXDotdDsRqS/bTBQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/39e3c0ca-e233-4b17-99c5-fd1fe4ce2111/wallets/26&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;ac319cf759ec8c2afac024daaaa525c3&quot;, &quot;timestamp&quot;=&gt;&quot;1611755442&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ZY77hA+bkkfmvUConjaCry/bJO6NXtBPXnX1z0WI5SzbrUICufNlVMSWNnzisQXMS9CpIH0CXsz4wWUHG4aYCg==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;f4cdd168bd1dd416681b85333fc4191a&quot;
-Last-Modified: Tue, 19 Jan 2021 08:48:43 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;e425733ee7edc1635a4a1af22b27cd76&quot;
+Last-Modified: Wed, 27 Jan 2021 13:50:42 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -255,8 +255,8 @@ Last-Modified: Tue, 19 Jan 2021 08:48:43 GMT</pre>
   &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
   &quot;source&quot;: &quot;user_provided&quot;,
   &quot;state&quot;: null,
-  &quot;createdAt&quot;: &quot;2021-01-19T08:48:43.656Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-01-19T08:48:43.656Z&quot;,
+  &quot;createdAt&quot;: &quot;2021-01-27T13:50:42.025Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-01-27T13:50:42.025Z&quot;,
   &quot;blockchain&quot;: &quot;bitcoin&quot;,
   &quot;tokens&quot;: [
 

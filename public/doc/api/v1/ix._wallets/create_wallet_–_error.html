@@ -4,7 +4,7 @@
     <title>IX. Wallets API</title>
     <meta charset="utf-8">
     <style>
-
+      
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -147,7 +147,7 @@ table th, table td {
                     <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;, &quot;hot_wallet&quot;]</span>
                 </td>
               </tr>
               <tr>
@@ -208,7 +208,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/04fe9cdf-69af-47c4-a59b-ee90f6aa8908/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/50e630b2-b9ae-4f31-b4dc-907c40d9f8dd/wallets</pre>
 
 
             <h4>Body</h4>
@@ -222,17 +222,22 @@ table th, table td {
         }
       ]
     },
-    "url": "http://example.org/api/v1/accounts/04fe9cdf-69af-47c4-a59b-ee90f6aa8908/wallets",
+    "url": "http://example.org/api/v1/accounts/50e630b2-b9ae-4f31-b4dc-907c40d9f8dd/wallets",
     "method": "POST",
-    "nonce": "0706396eadda249003b7ef8e2861f163",
-    "timestamp": "1611046122"
+    "nonce": "a0eb026d408c86a5cfb28289f73620df",
+    "timestamp": "1611755441"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "7/3fGyNgR3/savMYeZrgcARmhItG3rKSz9VnRyFYlkM+Q53Oifx44/L10avKYdbr4KnMGVbjfMr77GAnzrQtAA=="
+    "signature": "JJDg3Qt5oXhMnnqiL6wswJyCX1GxZadxCHkHP30UCqTQBRggY/29sSlo9pUkZiA+mo1HWmWyEDGkdv0+qk24Dw=="
   }
 }</pre>
+
+
+            <h3>Response</h3>
+            <h4>Status</h4>
+            <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {

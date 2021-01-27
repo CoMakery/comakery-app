@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Transfer Rules API</title>
+    <title>XII. Hot Wallet Addresses API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Transfer Rules API</h1>
+      <h1>XII. Hot Wallet Addresses API</h1>
 
-        <p class="explanation">Create and delete transfer rules, retrieve transfer rules data.</p>
+        <p class="explanation">Register hot wallets with a project.</p>
 
       <div class="article">
-        <h2>CREATE – ERROR</h2>
-        <h3>POST /api/v1/projects/:project_id/transfer_rules</h3>
+        <h2>CREATE HOT WALLET</h2>
+        <h3>POST /api/v1/projects/:project_id/hot_wallet_addresses</h3>
           <p class="explanation">
-            Returns an array of errors
+            Returns created hot wallet
           </p>
 
           <h3>Parameters</h3>
@@ -127,59 +127,32 @@ table th, table td {
             </thead>
             <tbody>
               <tr>
-                <td class="required">
-                    <span class="name">project_id</span>
+                <td>
+                    <span class="name">name</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">wallet name</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">transfer_rule[sending_group_id]</span>
+                    <span class="name">address</span>
                 </td>
                 <td>
-                  <span class="description">sending reg group id</span>
+                  <span class="description">wallet address</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">transfer_rule[receiving_group_id]</span>
+                    <span class="name">blockchain</span>
                 </td>
                 <td>
-                  <span class="description">receiving reg group id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer_rule[lockup_until]</span>
-                </td>
-                <td>
-                  <span class="description">lockup until</span>
+                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;, &quot;algorand_test&quot;, &quot;algorand_beta&quot;]</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -187,43 +160,52 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/52/transfer_rules</pre>
+          <pre class="request route highlight">POST /api/v1/projects/72/hot_wallet_addresses</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
     "data": {
-      "transfer_rule": {
-        "sending_group_id": "945677752"
+      "hot_wallet": {
+        "name": "Wallet",
+        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
+        "_blockchain": "bitcoin"
       }
     },
-    "url": "http://example.org/api/v1/projects/52/transfer_rules",
+    "url": "http://example.org/api/v1/projects/72/hot_wallet_addresses",
     "method": "POST",
-    "nonce": "cf2be83c34bf9f8870df1e6445d80e9e",
-    "timestamp": "1611755423"
+    "nonce": "87247fe103ab48d213331536011e9459",
+    "timestamp": "1611755444"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "CjvCx+WbLycS9DyTdeldYADOCuJd4zOSgnNMw1x5HGVTf6EYDt9TdUxQ+P4sCD5KWVUe9GSFWLGTZd6lSRywCQ=="
+    "signature": "ifLCGmH/WaBB+InkL9TgIn/xDEWMoWj5V7f1wq/X3CTCTVIG8PEOBBl5WMm3gJ09mCHe5q2y7BN2puWMKKykAA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;6d70792f3360ed86928e9ccd41a3a86c&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;sendingGroup&quot;: [
-      &quot;should belong to ComakeryDummyToken-5dad3987def623b55bb0c6d8e04169b2c001bc0e token&quot;
-    ],
-    &quot;receivingGroup&quot;: [
-      &quot;should belong to ComakeryDummyToken-5dad3987def623b55bb0c6d8e04169b2c001bc0e token&quot;
-    ]
-  }
+  &quot;id&quot;: 29,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;source&quot;: &quot;hot_wallet&quot;,
+  &quot;state&quot;: null,
+  &quot;createdAt&quot;: &quot;2021-01-27T13:50:44.255Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-01-27T13:50:44.355Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;tokens&quot;: [
+
+  ],
+  &quot;provisionTokens&quot;: [
+
+  ]
 }</pre>
       </div>
     </div>
