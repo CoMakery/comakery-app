@@ -108,7 +108,8 @@ table th, table td {
     <div class="container">
       <h1>X. Tokens API</h1>
 
-        <p class="explanation">Retrieve data tokens.Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.</p>
+        <p class="explanation">Retrieve data tokens. Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
+               By default requests use snake case, responses use camel case.</p>
 
       <div class="article">
         <h2>INDEX – ERROR</h2>
@@ -208,12 +209,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=75999a1ab70cd971ebe88fb3f01643f1&amp;body[timestamp]=1611755443&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=xnQoO%2FlndLEgogLLmbfzewk9KG1A6%2BIV%2B7TELwYQlI441WNnlsvPa9EUG6s30mHFP4c0cr6PiX%2BKjUJWGxyeBQ%3D%3D&amp;q[_blockchain_cont]=bitcoin</pre>
+          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=e14e68d2444c83d24b620a8b1fd34b42&amp;body[timestamp]=1612010916&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=oRGJ%2BkkeO195OREoevYB1j4FQwwREoWTRORcasNR%2F9WRw9ARHf2NnCoLE%2BBIGnvMvvPUl9zSZ%2BrPCMhMi6VsCg%3D%3D&amp;q[network_cont]=bitcoin</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;75999a1ab70cd971ebe88fb3f01643f1&quot;, &quot;timestamp&quot;=&gt;&quot;1611755443&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;xnQoO/lndLEgogLLmbfzewk9KG1A6+IV+7TELwYQlI441WNnlsvPa9EUG6s30mHFP4c0cr6PiX+KjUJWGxyeBQ==&quot;}
-q: {&quot;_blockchain_cont&quot;=&gt;&quot;bitcoin&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;e14e68d2444c83d24b620a8b1fd34b42&quot;, &quot;timestamp&quot;=&gt;&quot;1612010916&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;oRGJ+kkeO195OREoevYB1j4FQwwREoWTRORcasNR/9WRw9ARHf2NnCoLE+BIGnvMvvPUl9zSZ+rPCMhMi6VsCg==&quot;}
+q: {&quot;network_cont&quot;=&gt;&quot;bitcoin&quot;}</pre>
 
 
 
