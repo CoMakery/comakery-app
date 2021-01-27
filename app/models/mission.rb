@@ -43,7 +43,7 @@ class Mission < ApplicationRecord
   after_create :assign_display_order
   after_save :set_whitelabel_for_projects
 
-  validates :name, :subtitle, :description, presence: true
+  validates :name, :subtitle, :description, :logo, :image, presence: true
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
   validates :description, length: { maximum: 500 }
