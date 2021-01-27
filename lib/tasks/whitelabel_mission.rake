@@ -1,18 +1,20 @@
 namespace :mission do
-  desc 'Creating a default whitelabel mission on app init'
-  task default_whitelabel_mission: :environment do
-    new_whitelabel_mission = mission
-    new_whitelabel_mission.save(validate: false)
-  end
+  desc 'Creating a default whitelabel mission on app deploy to heroku'
+  task create_default_whitelabel_mission: :environment do
+    domain = ENV['APP_HOST'].presence || 'wl.comakery.com'
+    mission_for_domain = Mission.where(whitelabel: true, whitelabel_domain: domain)
+    if mission_for_domain.exists?
+      Rails.logger.info "== Skip creation because whitelabel mission for #{domain} domain already exists =="
+      exit
+    end
 
-  def mission
-    defaults = {
-      name: 'test1',
-      subtitle: 'test1',
-      description: 'test1',
+    title = "Whitelabel mission for #{domain}"
+    Mission.new(
+      name: title,
+      subtitle: title,
+      description: title,
       whitelabel: true,
-      whitelabel_domain: ENV['APP_HOST'].presence || 'test.test'
-    }
-    Mission.new(defaults)
+      whitelabel_domain: domain
+    ).save!
   end
 end
