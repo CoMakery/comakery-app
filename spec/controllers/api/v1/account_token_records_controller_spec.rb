@@ -74,25 +74,6 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
         expect(assigns[:account_token_records]).to eq([])
       end
     end
-
-    context 'account scope' do
-      it 'returns records' do
-        params = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, account_id: account.id), 'GET')
-        params.merge!(token_id: token.id, account_id: account.id, format: :json)
-
-        get :index, params: params
-        expect(response).to be_successful
-      end
-
-      it 'applies pagination' do
-        params = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, wallet_id: wallet.id), 'GET')
-        params.merge!(token_id: token.id, account_id: account.id, format: :json, page: 9999)
-
-        get :index, params: params
-        expect(response).to be_successful
-        expect(assigns[:account_token_records]).to eq([])
-      end
-    end
   end
 
   describe 'POST #create' do
@@ -132,18 +113,6 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
   end
 
   describe 'DELETE #destroy_all' do
-    context 'account scope' do
-      it 'deletes the record' do
-        expect do
-          params = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, account_id: account.id), 'DELETE')
-          params[:token_id] = token.id
-          params[:account_id] = account.id
-
-          delete :destroy_all, params: params
-        end.to change(token.account_token_records, :count).by(-1)
-      end
-    end
-
     context 'wallet scope' do
       it 'deletes the record' do
         expect do

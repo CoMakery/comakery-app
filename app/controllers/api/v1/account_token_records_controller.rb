@@ -28,7 +28,7 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
   # DELETE /api/v1/tokens/:id/account_token_records/?account_id=:account_id
   # DELETE /api/v1/tokens/:id/account_token_records/?wallet_id=:wallet_id
   def destroy_all
-    @account_token_records = scoped
+    @account_token_records = wallet_scope
     @account_token_records.destroy_all
     render 'index.json', status: :ok
   end
@@ -40,11 +40,15 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
     end
 
     def collection
-      any_scope? ? scoped : general_scope
+      wallet_scope? ? wallet_scope : general_scope
     end
 
-    def any_scope?
-      params[:account_id] || params[:wallet_id]
+    def wallet_scope?
+      params[:wallet_id].present?
+    end
+
+    def wallet_scope
+      general_scope.where(wallet_id: params[:wallet_id])
     end
 
     def general_scope
@@ -53,18 +57,6 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
 
     def token
       @token ||= Token.find(params[:token_id])
-    end
-
-    def scoped
-      general_scope.where(scope)
-    end
-
-    def scope
-      if params[:account_id]
-        { account_id: params[:account_id] }
-      else
-        { wallet_id: params[:wallet_id] }
-      end
     end
 
     def find_account_from_body
