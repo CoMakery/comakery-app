@@ -51,6 +51,7 @@ resource 'IV. Transfers' do
       response_field :transferTypeId, 'transfer type id', type: :string
       response_field :transactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
       response_field :status, 'transfer status (accepted paid cancelled)', type: :string
+      response_field :recipientWalletId, 'recipient wallet id', type: :string
       response_field :createdAt, 'transfer creation timestamp', type: :string
       response_field :updatedAt, 'transfer update timestamp', type: :string
     end
