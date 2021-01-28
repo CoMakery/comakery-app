@@ -27,7 +27,7 @@ describe 'transfers_index_page', js: true do
       login(owner)
       visit project_dashboard_transfers_path(project)
 
-      expect(page).to have_content("Hot Wallet:")
+      expect(page).to have_content('Hot Wallet:')
     end
   end
 
