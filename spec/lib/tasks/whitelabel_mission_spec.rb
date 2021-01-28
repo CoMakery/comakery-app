@@ -52,7 +52,7 @@ describe 'rake whitelabel_mission:create_default', type: :task do
 
     expect(Mission.count).to eq 1
 
-    task.execute
+    expect { task.execute }.to raise_error SystemExit
 
     expect(Mission.count).to eq 1
   end
