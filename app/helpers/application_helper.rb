@@ -41,4 +41,8 @@ module ApplicationHelper
     last = options.pop
     [options.join(', '), last].join(' or ')
   end
+
+  def middle_truncate(str, length: 5)
+    str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
+  end
 end
