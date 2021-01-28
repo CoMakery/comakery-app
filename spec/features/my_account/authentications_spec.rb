@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'refile/file_double'
 
 feature 'my account', js: true do
   let!(:team) { create :team }

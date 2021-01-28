@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'refile/file_double'
 
 feature 'pages' do
   scenario '#join_us' do

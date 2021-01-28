@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'refile/file_double'
 
 describe MissionsController do
   let!(:mission1) { create :mission, name: 'test1' }

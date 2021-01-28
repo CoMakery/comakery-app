@@ -41,8 +41,6 @@ jobs:
       ORE_ID_SERVICE_KEY: none
       SLACK_API_KEY: none
       SLACK_API_SECRET: none
-      REFILE_S3_REGION: dummy
-      REFILE_S3_BUCKET: dummy
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 
