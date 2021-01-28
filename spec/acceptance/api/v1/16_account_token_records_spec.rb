@@ -35,28 +35,6 @@ resource 'VI. Account Token Records' do
     end
   end
 
-  get '/api/v1/tokens/:token_id/account_token_records/?account_id=:id' do
-    with_options with_example: true do
-      parameter :token_id, 'token id', required: true, type: :integer
-      parameter :account_id, 'account id', required: false, type: :integer
-      parameter :page, 'page number', type: :integer
-    end
-
-    context '200' do
-      let!(:token_id) { token.id }
-      let!(:account_id) { account.id }
-      let!(:page) { 1 }
-
-      example 'INDEX' do
-        explanation 'Returns an array of account token records for the account. See GET for response fields description.'
-
-        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, account_id: account_id), 'GET', 'example.org')
-        do_request(request)
-        expect(status).to eq(200)
-      end
-    end
-  end
-
   get '/api/v1/tokens/:token_id/account_token_records/?wallet_id=:id' do
     with_options with_example: true do
       parameter :token_id, 'token id', required: true, type: :integer
@@ -137,28 +115,6 @@ resource 'VI. Account Token Records' do
         request = build(:api_signed_request, { account_token_record: invalid_attributes }, api_v1_token_account_token_records_path(token_id: token.id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(400)
-      end
-    end
-  end
-
-  delete '/api/v1/tokens/:token_id/account_token_records/?account_id=:account_id' do
-    with_options with_example: true do
-      parameter :id, 'account token record id', required: true, type: :integer
-      parameter :token_id, 'token id', required: true, type: :integer
-      parameter :account_id, 'account id', required: true, type: :integer
-    end
-
-    context '200' do
-      let!(:id) { account_token_record.id }
-      let!(:token_id) { token.id }
-      let!(:account_id) { account.id }
-
-      example 'DELETE' do
-        explanation 'Delete all account token records for the account and returns an array of present account token records (See GET for response details)'
-
-        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, account_id: account_id), 'DELETE', 'example.org')
-        do_request(request)
-        expect(status).to eq(200)
       end
     end
   end
