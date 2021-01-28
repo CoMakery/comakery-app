@@ -23,7 +23,7 @@ class Api::V1::HotWalletAddressesController < Api::V1::ApiController
   private
 
     def build_hot_wallet
-      @build_hot_wallet ||= project.create_hot_wallet(wallet_params)
+      @build_hot_wallet ||= project.build_hot_wallet(wallet_params)
     end
 
     def project

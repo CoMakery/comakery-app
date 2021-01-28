@@ -40,7 +40,7 @@ RSpec.describe Api::V1::HotWalletAddressesController, type: :controller do
       end
     end
 
-    context 'when project has assign a hot wallet' do
+    context 'when project has already an assigned hot wallet' do
       before do
         project.build_hot_wallet(valid_attributes)
         project.save
