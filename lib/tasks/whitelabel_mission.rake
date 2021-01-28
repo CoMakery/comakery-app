@@ -13,7 +13,9 @@ namespace :whitelabel_mission do
       subtitle: title,
       description: title,
       whitelabel: true,
-      whitelabel_domain: domain
+      whitelabel_domain: domain,
+      logo: { io: File.open(Rails.root.join('app/assets/images/defaults/mission_logo.png').to_s), filename: 'mission_logo.png' },
+      image: { io: File.open(Rails.root.join('app/assets/images/defaults/mission_image.png').to_s), filename: 'mission_image.png' }
     ).save!
   end
 
