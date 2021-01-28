@@ -46,4 +46,14 @@ describe 'rake whitelabel_mission:create_default', type: :task do
     expect(mission.whitelabel).to be true
     expect(mission.whitelabel_domain).to eq app_host_var
   end
+
+  it 'do not create WL mission with existing domain' do
+    create(:whitelabel_mission, whitelabel_domain: app_host_var)
+
+    expect(Mission.count).to eq 1
+
+    task.execute
+
+    expect(Mission.count).to eq 1
+  end
 end
