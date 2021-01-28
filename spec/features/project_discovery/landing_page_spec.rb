@@ -31,10 +31,7 @@ describe 'landing page' do
     expect(page).to have_content(/new project/i)
 
     expect(page.all('.project').size).to eq(16)
-
-    page.find_all('a.fa.fa-cog').each do |node|
-      expect(node[:href]).to match(%r{/projects/\d+/edit})
-    end
+    expect(page.first('a.fa.fa-cog')[:href]).to match(%r{/projects/\d+/edit})
 
     click_link 'Browse All'
 
