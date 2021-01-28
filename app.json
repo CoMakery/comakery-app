@@ -124,7 +124,7 @@
       "required": false
     },
     "WHITELABEL": {
-      "description": "Deploy whitelabel layout to heroku",
+      "description": "Create and apply whitelabel with APP_HOST as a default mission",
       "required": true,
       "value": "true"
     },
