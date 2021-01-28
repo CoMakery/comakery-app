@@ -14,7 +14,7 @@ class Api::V1::TokensController < Api::V1::ApiController
   private
 
     def tokens
-      @tokens ||= Token.ransack(params[:q]).result
+      @tokens ||= Token.includes([logo_image_attachment: :blob]).ransack(params[:q]).result
     end
 
     def error_operator_matcher

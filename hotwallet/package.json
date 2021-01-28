@@ -1,0 +1,10 @@
+{
+  "name": "hotwallet",
+  "version": "1.0.0",
+  "description": "Hotwallet process",
+  "main": "app.js",
+  "license": "Noncommercial Nonviolent Public License 1.1",
+  "dependencies": {
+    "pm2": "^4.5.1"
+  }
+}
