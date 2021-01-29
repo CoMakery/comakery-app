@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_18_172946) do
+ActiveRecord::Schema.define(version: 2021_01_26_102357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -462,7 +462,9 @@ ActiveRecord::Schema.define(version: 2021_01_18_172946) do
     t.text "governance_url"
     t.text "funding_url"
     t.text "video_conference_url"
+    t.bigint "hot_wallet_id"
     t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["hot_wallet_id"], name: "index_projects_on_hot_wallet_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["token_id"], name: "index_projects_on_token_id"
@@ -635,6 +637,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_172946) do
   add_foreign_key "interests", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "projects", "tokens"
+  add_foreign_key "projects", "wallets", column: "hot_wallet_id"
   add_foreign_key "reg_groups", "tokens"
   add_foreign_key "token_opt_ins", "tokens"
   add_foreign_key "token_opt_ins", "wallets"

@@ -12,7 +12,7 @@ describe Wallet, type: :model do
   it { is_expected.to validate_presence_of(:address) }
   it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id, :primary_wallet).with_message('has primary wallet already').ignoring_case_sensitivity }
   it { is_expected.to have_readonly_attribute(:_blockchain) }
-  it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1 }) }
+  it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1, hot_wallet: 2 }) }
   it { is_expected.not_to validate_presence_of(:ore_id_account) }
   it { expect(subject.ore_id_account).to be_nil }
   it { is_expected.to validate_presence_of(:name) }

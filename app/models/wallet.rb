@@ -8,6 +8,7 @@ class Wallet < ApplicationRecord
   has_many :wallet_provisions, dependent: :destroy
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
+  has_many :projects, foreign_key: :hot_wallet_id, inverse_of: :hot_wallet, dependent: :nullify
 
   validates :source, presence: true
   validates :address, presence: true, unless: :pending?
@@ -21,7 +22,7 @@ class Wallet < ApplicationRecord
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
 
-  enum source: { user_provided: 0, ore_id: 1 }
+  enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 
   def available_blockchains
     available_blockchains = Blockchain.available

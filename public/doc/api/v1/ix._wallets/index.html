@@ -175,7 +175,7 @@ table th, table td {
                     <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;, &quot;hot_wallet&quot;]</span>
                 </td>
               </tr>
               <tr>
@@ -235,12 +235,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/cfdf7bef-39ba-4e33-931f-106cc31d7cd0/wallets?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fcfdf7bef-39ba-4e33-931f-106cc31d7cd0%2Fwallets&amp;body[method]=GET&amp;body[nonce]=c6f5621d007608d73e1d25e8877aa03e&amp;body[timestamp]=1611655044&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=zFaN9I0nPrM6f%2BmurODIIftZKTDm44S%2FWm8NXye4ck0fTDvwIi%2FrnHacNTjE1378WlpDiKEDAKEGZKePifymBw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/07b6c5ba-d20a-4bc5-9321-56b0772152a1/wallets?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F07b6c5ba-d20a-4bc5-9321-56b0772152a1%2Fwallets&amp;body[method]=GET&amp;body[nonce]=4f0780b70e8e3e79bfaa50a608f19d61&amp;body[timestamp]=1611755439&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=FXD8KYOgtZ305mWnuvjAXw6ByzWs2Xn%2F%2BvwjywjLE4fH%2BJnriIdmtfObe%2FS5UA0ScdNKskWHqlzBPhZ5gGLNAw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/cfdf7bef-39ba-4e33-931f-106cc31d7cd0/wallets&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;c6f5621d007608d73e1d25e8877aa03e&quot;, &quot;timestamp&quot;=&gt;&quot;1611655044&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;zFaN9I0nPrM6f+murODIIftZKTDm44S/Wm8NXye4ck0fTDvwIi/rnHacNTjE1378WlpDiKEDAKEGZKePifymBw==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/07b6c5ba-d20a-4bc5-9321-56b0772152a1/wallets&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;4f0780b70e8e3e79bfaa50a608f19d61&quot;, &quot;timestamp&quot;=&gt;&quot;1611755439&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;FXD8KYOgtZ305mWnuvjAXw6ByzWs2Xn/+vwjywjLE4fH+JnriIdmtfObe/S5UA0ScdNKskWHqlzBPhZ5gGLNAw==&quot;}</pre>
 
 
 
@@ -248,8 +248,8 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;e9d0e01d2ee2de05d775def299875a8b&quot;
-Last-Modified: Tue, 26 Jan 2021 09:57:24 GMT</pre>
+ETag: W/&quot;ebf870e0a28ed9af66c3831fe367d5b5&quot;
+Last-Modified: Wed, 27 Jan 2021 13:50:39 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -259,8 +259,8 @@ Last-Modified: Tue, 26 Jan 2021 09:57:24 GMT</pre>
     &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
     &quot;source&quot;: &quot;user_provided&quot;,
     &quot;state&quot;: null,
-    &quot;createdAt&quot;: &quot;2021-01-26T09:57:24.013Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-26T09:57:24.013Z&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-27T13:50:39.710Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-27T13:50:39.710Z&quot;,
     &quot;blockchain&quot;: &quot;bitcoin&quot;,
     &quot;tokens&quot;: [
 
