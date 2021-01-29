@@ -124,7 +124,7 @@ gem 'possessive', '~> 1.0'
 
 gem 'omniauth-rails_csrf_protection', '~> 0.1.2'
 
-gem 'turbolinks', '~> 5.2'
+gem 'turbo-rails'
 
 gem 'ransack', '~> 2.3'
 

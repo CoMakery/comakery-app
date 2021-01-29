@@ -23,10 +23,27 @@ class Dashboard::AccountsController < ApplicationController
     if account_token_record.save
       @project.safe_add_interested(account_token_record.account)
       @account_token_record = account_token_record
+
       render 'api/v1/account_token_records/show.json', status: :created
     else
       @errors = account_token_record.errors
+
       render 'api/v1/error.json', status: :bad_request
+    end
+  end
+
+  def show
+    authorize @project, :accounts?
+
+    account = @project.interested.find(params[:id])
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("project_#{@project.id}_account_#{account.id}", partial: 'dashboard/accounts/account',
+                                                                                                  locals: { account: account })
+      end
+
+      format.html { redirect_to root_path }
     end
   end
 

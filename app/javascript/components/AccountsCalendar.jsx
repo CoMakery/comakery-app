@@ -2,8 +2,8 @@ import React from 'react'
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css'
 import { SingleDatePicker } from 'react-dates'
-import * as Turbolinks from 'turbolinks'
 import moment from 'moment'
+import { Turbo } from '@hotwired/turbo-rails'
 
 class AccountsCalendar extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class AccountsCalendar extends React.Component {
       let currentUrl = new URL(window.location.href)
       currentUrl.searchParams.set('q[account_token_records_lockup_until_lt]', startDate)
       currentUrl.searchParams.set('q[account_token_records_token_id_eq]', this.props.projectTokenId)
-      Turbolinks.visit(currentUrl)
+      Turbo.visit(currentUrl.href)
     }
   }
 

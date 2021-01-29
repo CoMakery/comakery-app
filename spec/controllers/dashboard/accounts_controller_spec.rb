@@ -80,4 +80,11 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #show' do
+    it 'returns a success response' do
+      get :show, params: { project_id: project.to_param, id: account.id }, as: :turbo_stream
+      expect(response.status).to eq 200
+    end
+  end
 end

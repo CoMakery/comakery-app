@@ -8,12 +8,10 @@ class TokensController < ApplicationController
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
-    props = {
+    @props = {
       tokens: serialized_tokens,
       pagination_html: helpers.paginate(tokens, window: 3)
     }
-
-    render component: 'TokenIndex', props: props
   end
 
   def new
@@ -21,7 +19,6 @@ class TokensController < ApplicationController
     authorize @token
 
     @props[:token] = @token.serializable_hash
-    render component: 'TokenForm', props: @props, prerender: false
   end
 
   def create
@@ -42,7 +39,6 @@ class TokensController < ApplicationController
 
     @props[:form_action] = 'PATCH'
     @props[:form_url]    = token_path(@token)
-    render component: 'TokenForm', props: @props
   end
 
   def edit
@@ -50,7 +46,6 @@ class TokensController < ApplicationController
 
     @props[:form_action] = 'PATCH'
     @props[:form_url]    = token_path(@token)
-    render component: 'TokenForm', props: @props
   end
 
   def update

@@ -26,7 +26,7 @@ const Wrapper = styled.div`
     margin-top: -25px;
     margin-bottom: 25px;
   `}
-  
+
     @media (max-width: 640px) {
       margin-left: -25px;
       margin-right: -25px;

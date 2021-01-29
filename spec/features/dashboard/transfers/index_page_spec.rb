@@ -60,8 +60,8 @@ describe 'transfers_index_page', js: true do
 
     expect(page).to have_select('select_transfers', selected: 'Manage Categories')
 
-    has_css?('.turbolinks-progress-bar', visible: true)
-    has_no_css?('.turbolinks-progress-bar')
+    has_css?('.turbo-progress-bar', visible: true)
+    has_no_css?('.turbo-progress-bar')
     expect(page).to have_content('TRANSFER CATEGORIES')
   end
 end

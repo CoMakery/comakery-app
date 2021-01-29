@@ -64,6 +64,13 @@ export default class extends ComakerySecurityTokenController {
     })
   }
 
+  _markButtonAsPending() {
+    this.buttonTarget.parentElement.classList.add('in-progress--metamask__paid')
+    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'processing'
+
+    this.formTarget.requestSubmit()
+  }
+
   showForm() {
     document.querySelectorAll('.transfers-table--edit-icon__pencil').forEach(e => {
       e.classList.add('hidden')

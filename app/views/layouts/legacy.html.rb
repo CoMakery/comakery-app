@@ -11,13 +11,15 @@ class Views::Layouts::Legacy < Views::Base
         render partial: 'shared/unbounce.html'
         render partial: 'shared/meta_tags'
 
-        stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+        stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,700&amp;subset=cyrillic,cyrillic-ext,latin-ext,vietnamese', defer: true
         stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css'
         javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js'
+        javascript_include_tag 'turbo', type: 'module'
+        yield :head
         javascript_include_tag :modernizr
-        javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+        javascript_include_tag 'application', 'data-turbo-track': 'reload'
 
         javascript_include_tag Webpacker.manifest.lookup!('application.js')
 
