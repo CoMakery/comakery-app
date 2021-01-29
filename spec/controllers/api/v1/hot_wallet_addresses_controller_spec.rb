@@ -40,6 +40,19 @@ RSpec.describe Api::V1::HotWalletAddressesController, type: :controller do
       end
     end
 
+    context 'with invalid params' do
+      let(:invalid_params) { { hot_wallet: valid_attributes.merge(address: 'invalid') } }
+
+      it 'returns an error' do
+        params = build(:api_signed_request, invalid_params, api_v1_project_hot_wallet_addresses_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+        params[:format] = :json
+
+        post :create, params: params
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
     context 'when project has already an assigned hot wallet' do
       before do
         project.build_hot_wallet(valid_attributes)
