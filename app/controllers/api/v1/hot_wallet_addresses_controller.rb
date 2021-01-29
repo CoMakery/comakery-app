@@ -8,7 +8,7 @@ class Api::V1::HotWalletAddressesController < Api::V1::ApiController
 
   def create
     build_hot_wallet
-    @build_hot_wallet.source = Wallet.sources[:hot_wallet]
+    @build_hot_wallet.source = :hot_wallet
     @build_hot_wallet.account = project.account
 
     if @build_hot_wallet.save
