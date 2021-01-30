@@ -28,7 +28,8 @@ module Api::V1::Concerns::RequiresSignature
       if Rails.cache.exist?(key)
         false
       else
-        Rails.cache.write(key, true, expires_in: 1.day)
+        cache_expiration = Comakery::APISignature::TIMESTAMP_EXPIRATION_SECONDS.seconds
+        CacheExtension.cache_write!(key, true, expires_in: cache_expiration)
       end
     end
   end

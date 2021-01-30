@@ -126,6 +126,21 @@ describe Comakery::APISignature do
       end
     end
 
+    context 'with too long nonce' do
+      let(:stubbed_nonce) { 'a' * 50 }
+
+      it 'cut it to MAX_NONCE_SIZE' do
+        is_nonce_unique = lambda do |nonce|
+          expect(nonce.size).to eq Comakery::APISignature::MAX_NONCE_SIZE
+          true
+        end
+
+        expect do
+          described_class.new(valid_signed_request, stubbed_url, stubbed_method, is_nonce_unique).verify(public_key)
+        end.to raise_error(Comakery::APISignatureError, 'Invalid proof signature')
+      end
+    end
+
     context 'with valid request' do
       it 'returns true' do
         expect(described_class.new(valid_signed_request, stubbed_url, stubbed_method).verify(public_key)).to be_truthy
