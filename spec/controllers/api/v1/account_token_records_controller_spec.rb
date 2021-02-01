@@ -10,7 +10,7 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
   let!(:account_token_record) { create(:account_token_record) }
   let(:account) { account_token_record.account }
   let(:wallet) { account_token_record.wallet }
-  let(:new_account) { create(:account) }
+  let(:new_account) { create(:account, managed_account_id: 'new_managed_account') }
   let(:token) { account_token_record.token }
 
   let(:valid_attributes) do
@@ -18,7 +18,7 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
       max_balance: '100',
       lockup_until: '1',
       reg_group_id: create(:reg_group, token: token).id.to_s,
-      account_id: new_account.id.to_s,
+      managed_account_id: new_account.managed_account_id,
       account_frozen: 'false'
     }
   end
@@ -28,7 +28,7 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
       max_balance: '-100',
       lockup_until: '1',
       reg_group_id: create(:reg_group, token: token).id.to_s,
-      account_id: new_account.id.to_s,
+      managed_account_id: new_account.managed_account_id,
       account_frozen: 'false'
     }
   end

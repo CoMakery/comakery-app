@@ -21,6 +21,19 @@ resource 'VI. Account Token Records' do
       parameter :page, 'page number', type: :integer
     end
 
+    with_options with_example: true do
+      response_field :id, 'account token record id', type: :integer
+      response_field :account_id, 'account id', type: :integer
+      response_field :token_id, 'token id', type: :integer
+      response_field :reg_group_id, 'reg group id', type: :integer
+      response_field :lockup_until, 'lockup until', type: :integer
+      response_field :max_balance, 'max balance', type: :integer
+      response_field :account_frozen, 'account frozen', type: :bool
+      response_field :status, 'account token record status (created synced)', type: :string
+      response_field :createdAt, 'creation timestamp', type: :string
+      response_field :updatedAt, 'update timestamp', type: :string
+    end
+
     context '200' do
       let!(:token_id) { token.id }
       let!(:page) { 1 }
@@ -40,6 +53,19 @@ resource 'VI. Account Token Records' do
       parameter :token_id, 'token id', required: true, type: :integer
       parameter :wallet_id, 'wallet id', required: false, type: :integer
       parameter :page, 'page number', type: :integer
+    end
+
+    with_options with_example: true do
+      response_field :id, 'account token record id', type: :integer
+      response_field :account_id, 'account id', type: :integer
+      response_field :token_id, 'token id', type: :integer
+      response_field :reg_group_id, 'reg group id', type: :integer
+      response_field :lockup_until, 'lockup until', type: :integer
+      response_field :max_balance, 'max balance', type: :integer
+      response_field :account_frozen, 'account frozen', type: :bool
+      response_field :status, 'account token record status (created synced)', type: :string
+      response_field :createdAt, 'creation timestamp', type: :string
+      response_field :updatedAt, 'update timestamp', type: :string
     end
 
     context '200' do

@@ -3,7 +3,7 @@
 <% last_record = account.account_token_records.where(token: @project.token).last %>
 <% last_record_is_not_synced = synced_record && last_record && synced_record.id != last_record.id %>
 <% form_url = last_record ? project_dashboard_account_path(@project, last_record) : root_path %>
-<% form_data = last_record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.address_for_blockchain(@project.token._blockchain), 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => api_v1_token_account_token_records_path(token_id: @project.token.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
+<% form_data = last_record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.address_for_blockchain(@project.token._blockchain), 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => project_dashboard_accounts_path(token_id: @project.token.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 
 <%= form_with model: last_record, url: form_url, data: form_data, class: 'account-form' do |f| %>
 
