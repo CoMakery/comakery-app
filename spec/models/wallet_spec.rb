@@ -25,6 +25,25 @@ describe Wallet, type: :model do
     )
   end
 
+  context 'blockchain_supported_by_ore_id validation' do
+    subject { wallet.valid? }
+
+    context 'pass for supported blockchain' do
+      let(:wallet) { build(:ore_id_wallet) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'fails on not supported blockchain' do
+      let(:wallet) { build(:ore_id_wallet, _blockchain: 'bitcoin') }
+
+      it do
+        is_expected.to be false
+        expect(wallet.errors.messages[:_blockchain]).to eq ['is not supported with for ore_id source']
+      end
+    end
+  end
+
   context 'when ore_id?' do
     subject { create(:ore_id_wallet) }
 
