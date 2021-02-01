@@ -2,7 +2,6 @@
   <div class="d-flex justify-content-between align-items-center flex-wrap">
     <h5 class="m-0">My Wallets</h5>
     <div class="d-flex flex-wrap">
-      <%= toggle_zero_balances_link %>
       <% unless wallets.ore_id.empty? %>
         <%= link_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold", data: { method: 'DELETE' } do %>
           <span>Unlink OREID</span>
