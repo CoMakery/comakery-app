@@ -152,12 +152,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/495bdfe8-7e56-4140-9afc-286f8f2b7259/transfers?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F495bdfe8-7e56-4140-9afc-286f8f2b7259%2Ftransfers&amp;body[method]=GET&amp;body[nonce]=738e3bf5680d4d2d4e1c5072083d4e1e&amp;body[timestamp]=1611755411&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=X1K2xb3wXMzPl6J6wdtlgmBVZPXwgZmCELjZl0x%2BAB0sz%2FP2hwg14gxxgXFs9O%2FnRffXITO62gZZlu7k%2BBAMDQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/7eb6e302-8aa8-47b0-b5a3-fe277d9ecf5a/transfers?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F7eb6e302-8aa8-47b0-b5a3-fe277d9ecf5a%2Ftransfers&amp;body[method]=GET&amp;body[nonce]=c63454bd28ea793dbed1a7019ceecea7&amp;body[timestamp]=1612010312&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ikf7hKYJLKrqwmQ2mvy9fwGgva%2ByKc82NI%2FoxqahhFQZDxsPOQlIvUZQFSnt%2BPecAsDZiyhxY6y%2FYPaPoAcSBw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/495bdfe8-7e56-4140-9afc-286f8f2b7259/transfers&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;738e3bf5680d4d2d4e1c5072083d4e1e&quot;, &quot;timestamp&quot;=&gt;&quot;1611755411&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;X1K2xb3wXMzPl6J6wdtlgmBVZPXwgZmCELjZl0x+AB0sz/P2hwg14gxxgXFs9O/nRffXITO62gZZlu7k+BAMDQ==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/7eb6e302-8aa8-47b0-b5a3-fe277d9ecf5a/transfers&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;c63454bd28ea793dbed1a7019ceecea7&quot;, &quot;timestamp&quot;=&gt;&quot;1612010312&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ikf7hKYJLKrqwmQ2mvy9fwGgva+yKc82NI/oxqahhFQZDxsPOQlIvUZQFSnt+PecAsDZiyhxY6y/YPaPoAcSBw==&quot;}</pre>
 
 
 
@@ -165,8 +165,8 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 50
 Total: 1
-ETag: W/&quot;686de361aa1df26e48a7f05aba4606d9&quot;
-Last-Modified: Wed, 27 Jan 2021 13:50:11 GMT</pre>
+ETag: W/&quot;82ff190a8ffb0dda638f0f973484d67b&quot;
+Last-Modified: Sat, 30 Jan 2021 12:38:32 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -174,15 +174,16 @@ Last-Modified: Wed, 27 Jan 2021 13:50:11 GMT</pre>
   {
     &quot;id&quot;: 4,
     &quot;transferTypeId&quot;: 98,
+    &quot;recipientWalletId&quot;: null,
     &quot;amount&quot;: &quot;1.0&quot;,
     &quot;quantity&quot;: &quot;1.0&quot;,
     &quot;totalAmount&quot;: &quot;1.0&quot;,
     &quot;description&quot;: &quot;none&quot;,
     &quot;transactionError&quot;: null,
     &quot;status&quot;: &quot;paid&quot;,
-    &quot;createdAt&quot;: &quot;2021-01-27T13:50:11.836Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-27T13:50:11.827Z&quot;,
-    &quot;accountId&quot;: &quot;495bdfe8-7e56-4140-9afc-286f8f2b7259&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-30T12:38:32.447Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-30T12:38:32.442Z&quot;,
+    &quot;accountId&quot;: &quot;7eb6e302-8aa8-47b0-b5a3-fe277d9ecf5a&quot;,
     &quot;projectId&quot;: 38
   }
 ]</pre>

@@ -228,6 +228,14 @@ table th, table td {
               </tr>
               <tr>
                 <td>
+                    <span class="name">recipientWalletId</span>
+                </td>
+                <td>
+                  <span class="description">recipient wallet id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
                     <span class="name">createdAt</span>
                 </td>
                 <td>
@@ -251,33 +259,34 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/44/transfers/9?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F44%2Ftransfers%2F9&amp;body[method]=GET&amp;body[nonce]=121ae2e152ba649d85b3757432c5dfd0&amp;body[timestamp]=1611755416&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=3Mt7YIGlBBJrNyTHhc7sMm91cSFtbDhBRdp0MEQ9YG%2Fn7IwwsgZLhYE%2F43k76%2FsEkgySF9sINVx275pLMUN6BA%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/44/transfers/9?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F44%2Ftransfers%2F9&amp;body[method]=GET&amp;body[nonce]=37868f3a3a4c4b3cc6591dafa46acd18&amp;body[timestamp]=1612010317&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=4kWzwygGGSIGxKlj6YZueB1VmuzIJGzTkkjF3ndx0jyBOU2TU8I6Wi2NnC2mf80sO%2B8F1ooTlO%2Fu2Sh50lA2Ag%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/44/transfers/9&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;121ae2e152ba649d85b3757432c5dfd0&quot;, &quot;timestamp&quot;=&gt;&quot;1611755416&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;3Mt7YIGlBBJrNyTHhc7sMm91cSFtbDhBRdp0MEQ9YG/n7IwwsgZLhYE/43k76/sEkgySF9sINVx275pLMUN6BA==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/44/transfers/9&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;37868f3a3a4c4b3cc6591dafa46acd18&quot;, &quot;timestamp&quot;=&gt;&quot;1612010317&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;4kWzwygGGSIGxKlj6YZueB1VmuzIJGzTkkjF3ndx0jyBOU2TU8I6Wi2NnC2mf80sO+8F1ooTlO/u2Sh50lA2Ag==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;fb8653880e0021436b45c46ec8283931&quot;
-Last-Modified: Wed, 27 Jan 2021 13:50:16 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;407f67f958d468b1ad7e6075c1dc993e&quot;
+Last-Modified: Sat, 30 Jan 2021 12:38:37 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: 9,
   &quot;transferTypeId&quot;: 123,
+  &quot;recipientWalletId&quot;: null,
   &quot;amount&quot;: &quot;50.0&quot;,
   &quot;quantity&quot;: &quot;1.0&quot;,
   &quot;totalAmount&quot;: &quot;50.0&quot;,
   &quot;description&quot;: &quot;Investment&quot;,
   &quot;transactionError&quot;: null,
   &quot;status&quot;: &quot;paid&quot;,
-  &quot;createdAt&quot;: &quot;2021-01-27T13:50:16.678Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-01-27T13:50:16.672Z&quot;,
-  &quot;accountId&quot;: &quot;d546848b-aea7-40a5-9fca-cc00a8155540&quot;,
+  &quot;createdAt&quot;: &quot;2021-01-30T12:38:37.744Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-01-30T12:38:37.739Z&quot;,
+  &quot;accountId&quot;: &quot;50f8f355-7556-46c7-a238-589c12e29688&quot;,
   &quot;projectId&quot;: 44
 }</pre>
       </div>

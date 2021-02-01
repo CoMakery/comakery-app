@@ -108,13 +108,14 @@ table th, table td {
     <div class="container">
       <h1>X. Tokens API</h1>
 
-        <p class="explanation">Retrieve data tokens.Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.</p>
+        <p class="explanation">Retrieve data tokens. Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
+               By default requests use snake case, responses use camel case.</p>
 
       <div class="article">
         <h2>GET</h2>
         <h3>GET /api/v1/tokens</h3>
           <p class="explanation">
-            Returns tokens
+            Returns tokens.
           </p>
 
 
@@ -208,18 +209,18 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=55fc1f7a0431a7cf65578b522a7f7af6&amp;body[timestamp]=1611755443&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=yRP8Xs%2FbCeV8wdj92X8QuznaeXclWJSFnDXWfJBfQmi6qn3Vjlqs930RHOFsFpgnr9kQiwg8X4Dna%2Fn4ACNQDg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=4eb20ffb8653e5eef4142297a79851b9&amp;body[timestamp]=1612010346&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=BtBSlSLIRJwDAcQBSVpCNVCLy4GHGlHFtnlU1ho%2B4AFtLV8xPD9UaC7SQTgjZ34OK2Q8TPYnej4DgD5se34TCQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;55fc1f7a0431a7cf65578b522a7f7af6&quot;, &quot;timestamp&quot;=&gt;&quot;1611755443&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;yRP8Xs/bCeV8wdj92X8QuznaeXclWJSFnDXWfJBfQmi6qn3Vjlqs930RHOFsFpgnr9kQiwg8X4Dna/n4ACNQDg==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;4eb20ffb8653e5eef4142297a79851b9&quot;, &quot;timestamp&quot;=&gt;&quot;1612010346&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;BtBSlSLIRJwDAcQBSVpCNVCLy4GHGlHFtnlU1ho+4AFtLV8xPD9UaC7SQTgjZ34OK2Q8TPYnej4DgD5se34TCQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;60b38c83d36fe9e3fc49d46d864d89fb&quot;
-Last-Modified: Wed, 27 Jan 2021 13:50:43 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;cbadd86bcff539c27ee14d8e8ac20830&quot;
+Last-Modified: Sat, 30 Jan 2021 12:39:06 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -227,13 +228,24 @@ Last-Modified: Wed, 27 Jan 2021 13:50:43 GMT</pre>
   {
     &quot;id&quot;: 116,
     &quot;name&quot;: &quot;Cats&quot;,
-    &quot;symbol&quot;: &quot;TKN0d8598269c4193a35a155a9c8ea821e3224118ea&quot;,
+    &quot;symbol&quot;: &quot;TKN3ac0e0544d7850e8c8587af96877767a8c33cab3&quot;,
     &quot;network&quot;: &quot;bitcoin&quot;,
     &quot;contractAddress&quot;: null,
     &quot;decimalPlaces&quot;: 8,
     &quot;logoUrl&quot;: &quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZ3dDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--6ac8ee377828f3a3dd98e0cdefd936fcb1be0108/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;,
-    &quot;createdAt&quot;: &quot;2021-01-27T13:50:43.005Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-27T13:50:43.012Z&quot;
+    &quot;createdAt&quot;: &quot;2021-01-30T12:39:05.912Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-30T12:39:05.919Z&quot;
+  },
+  {
+    &quot;id&quot;: 117,
+    &quot;name&quot;: &quot;Dogs&quot;,
+    &quot;symbol&quot;: &quot;TKN5bbe478fc72d9f57db8272fdbc3316c8f8ac6f6c&quot;,
+    &quot;network&quot;: &quot;cardano&quot;,
+    &quot;contractAddress&quot;: null,
+    &quot;decimalPlaces&quot;: 8,
+    &quot;logoUrl&quot;: &quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZzBDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e83273b62d27dab1e0346b5408cc0005e33eee39/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2021-01-30T12:39:06.010Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-01-30T12:39:06.016Z&quot;
   }
 ]</pre>
       </div>
