@@ -26,15 +26,7 @@ describe Wallet, type: :model do
   end
 
   context 'when ore_id?' do
-    subject do
-      create(
-        :wallet,
-        source: :ore_id,
-        ore_id_account: create(:ore_id, skip_jobs: true),
-        _blockchain: 'algorand_test',
-        address: build(:algorand_address_1)
-      )
-    end
+    subject { create(:ore_id_wallet) }
 
     it { is_expected.to validate_presence_of(:ore_id_account) }
     it { expect(subject.ore_id_account).to be_an(OreIdAccount) }
