@@ -123,6 +123,7 @@ describe Wallet, type: :model do
     let!(:wallet) { build(:wallet, _blockchain: :algorand_test, project_id: project.id, address: build(:algorand_address_1)) }
 
     it 'returns an error' do
+      expect(wallet).to be_invalid
       expect(wallet.errors[:project_id]).to be_present
     end
   end
