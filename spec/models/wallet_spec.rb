@@ -39,7 +39,7 @@ describe Wallet, type: :model do
 
       it do
         is_expected.to be false
-        expect(wallet.errors.messages[:_blockchain]).to eq ['is not supported with for ore_id source']
+        expect(wallet.errors.messages[:_blockchain]).to eq ['is not supported with ore_id source']
       end
     end
   end
