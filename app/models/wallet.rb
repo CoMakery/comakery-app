@@ -58,6 +58,6 @@ class Wallet < ApplicationRecord
   private
 
     def blockchain_supported_by_ore_id
-      errors.add(:_blockchain, 'is not supported with for ore_id source') unless blockchain.supported_by_ore_id?
+      errors.add(:_blockchain, 'is not supported with ore_id source') unless blockchain.supported_by_ore_id?
     end
 end
