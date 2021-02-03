@@ -142,11 +142,24 @@ describe MissionsController do
   end
 
   describe '#update' do
+    subject { get :update, params: { id: mission.id, mission: attributes } }
+
     it 'updates a mission' do
       expect do
         put :update, params: { id: mission1, mission: { name: 'test1_name' } }
         expect(response.status).to eq(200)
       end.to change { mission1.reload.name }.from('test1').to('test1_name')
+    end
+
+    context 'with wallet_recovery_api_public_key given' do
+      let(:mission) { mission1 }
+      let(:attributes) do
+        { wallet_recovery_api_public_key: '0x5633454c810b6e3c881e35f904a6215f1825e46429a54061d1b7448be1b4285e' }
+      end
+
+      it 'ignores wallet_recovery_api_public_key' do
+        expect { subject }.not_to change(mission, :wallet_recovery_api_public_key)
+      end
     end
 
     it 'renders error if param is blank' do

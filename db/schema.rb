@@ -368,6 +368,7 @@ ActiveRecord::Schema.define(version: 2021_02_01_142127) do
     t.string "whitelabel_contact_email"
     t.string "whitelabel_api_public_key"
     t.string "whitelabel_api_key"
+    t.string "wallet_recovery_api_public_key"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 

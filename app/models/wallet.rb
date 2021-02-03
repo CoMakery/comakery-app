@@ -16,6 +16,7 @@ class Wallet < ApplicationRecord
   validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
   validates :name, presence: true
+  validate :blockchain_supported_by_ore_id, if: :ore_id?
 
   validate :validate_project_id
 
@@ -60,4 +61,10 @@ class Wallet < ApplicationRecord
 
     first_wallet_in_network&.update_column(:primary_wallet, true) # rubocop:disable Rails/SkipsModelValidations
   end
+
+  private
+
+    def blockchain_supported_by_ore_id
+      errors.add(:_blockchain, 'is not supported with ore_id source') unless blockchain.supported_by_ore_id?
+    end
 end

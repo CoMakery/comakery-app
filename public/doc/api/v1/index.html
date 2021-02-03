@@ -263,7 +263,7 @@ table th, table td {
         <a href="/doc/api/v1/vi._account_token_records/index.html">INDEX</a>
       </li>
       <li>
-        <a href="/doc/api/v1/vi._account_token_records/get.html">GET</a>
+        <a href="/doc/api/v1/vi._account_token_records/index.html">INDEX</a>
       </li>
       <li>
         <a href="/doc/api/v1/vi._account_token_records/create.html">CREATE</a>
@@ -369,14 +369,32 @@ table th, table td {
   <div class="article">
     <h2>X. Tokens</h2>
 
-      <p class="explanation">Retrieve data tokens.Note 1: Filtering with fields named with capital letter ex: contractAddress should be contract_address.</p>
+      <p class="explanation">Retrieve data tokens. Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
+               By default requests use snake case, responses use camel case.</p>
 
     <ul>
       <li>
         <a href="/doc/api/v1/x._tokens/get.html">GET</a>
       </li>
       <li>
+        <a href="/doc/api/v1/x._tokens/get_–_filtering_with_or_condition.html">GET – FILTERING WITH OR CONDITION</a>
+      </li>
+      <li>
+        <a href="/doc/api/v1/x._tokens/get_–_filtering_with_and_condition.html">GET – FILTERING WITH AND CONDITION</a>
+      </li>
+      <li>
         <a href="/doc/api/v1/x._tokens/index_–_error.html">INDEX – ERROR</a>
+      </li>
+    </ul>
+  </div>
+  <div class="article">
+    <h2>XI. Wallet Recovery</h2>
+
+      <p class="explanation">Get public wrapping key.</p>
+
+    <ul>
+      <li>
+        <a href="/doc/api/v1/xi._wallet_recovery/get.html">GET</a>
       </li>
     </ul>
   </div>

@@ -52,7 +52,7 @@ class MissionsController < ApplicationController
 
   def update
     authorize @mission
-    if @mission.update(mission_params)
+    if @mission.update(mission_update_params)
       render json: { message: 'Successfully updated.' }, status: :ok
     else
       errors = @mission.errors.as_json
@@ -94,8 +94,13 @@ class MissionsController < ApplicationController
         :whitelabel_logo_dark,
         :whitelabel_favicon,
         :whitelabel_contact_email,
-        :whitelabel_api_public_key
+        :whitelabel_api_public_key,
+        :wallet_recovery_api_public_key
       )
+    end
+
+    def mission_update_params
+      mission_params.except(:wallet_recovery_api_public_key)
     end
 
     def find_mission_by_id
