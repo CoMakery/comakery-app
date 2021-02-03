@@ -1,12 +1,14 @@
 class Views::Shared::Auth < Views::Projects::Base
   def content
     column('large-12 no-h-pad', style: 'margin-top: 30px') do
-      h3 'Or With'
+      h3 'Or Sign Up With'
     end
 
-    column('large-12 no-h-pad', style: 'margin-top: 5px') do
-      link_to '#', data: { controller: 'auth-eth', action: 'click->auth-eth#auth', target: 'auth-eth.button', 'auth-eth-nonce-path' => new_auth_eth_path, 'auth-eth-auth-path' => auth_eth_index_path, 'auth-eth-csrf-token' => form_authenticity_token }, class: 'auth-button metamask' do
-        text 'MetaMask'
+    if ENV['METAMASK_LOGIN'].present?
+      column('large-12 no-h-pad', style: 'margin-top: 5px') do
+        link_to '#', data: { controller: 'auth-eth', action: 'click->auth-eth#auth', target: 'auth-eth.button', 'auth-eth-nonce-path' => new_auth_eth_path, 'auth-eth-auth-path' => auth_eth_index_path, 'auth-eth-csrf-token' => form_authenticity_token }, class: 'auth-button metamask' do
+          text 'MetaMask'
+        end
       end
     end
 
@@ -28,7 +30,7 @@ class Views::Shared::Auth < Views::Projects::Base
 
     column('large-12 no-h-pad', style: 'margin-top: 10px') do
       label do
-        text "By clicking a button to Sign Up with #{enabled_auth_labels}, you are agreeing to the "
+        text 'By Signing Up  you are agreeing to the '
         link_to 'CoMakery User Agreement', '/user-agreement'
         text ' and '
         link_to 'Privacy Policy Terms', '/privacy-policy'

@@ -33,6 +33,22 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
       expect(project.interested).to include(project_admin)
     end
 
+    context 'with whitelabel mission' do
+      let(:wl_mission) { create(:active_whitelabel_mission) }
+      let(:project) { create(:project, mission: wl_mission) }
+      let(:project_admin) { create(:account, managed_mission: wl_mission) }
+
+      it 'adds an admin by email to current project' do
+        post :add_admin, params: { project_id: project.to_param, email: project_admin.email }
+        project.reload
+
+        expect(response).to redirect_to(project_dashboard_accesses_path(project))
+        expect(flash[:notice]).to be_present
+        expect(project.admins).to match_array([project_admin])
+        expect(project.interested).to include(project_admin)
+      end
+    end
+
     context 'when account is not found' do
       it 'returns an error' do
         post :add_admin, params: { project_id: project.to_param, email: 'dummy_email' }
@@ -64,6 +80,20 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
         expect(response).to redirect_to(project_dashboard_accesses_path(project))
         expect(flash[:error]).not_to be_nil
         expect(project.admins).to match_array([])
+      end
+    end
+
+    context 'when accounts email exist in WL only' do
+      let(:wl_mission) { create(:whitelabel_mission) }
+      let(:wl_account) { create(:account, managed_mission: wl_mission) }
+
+      it 'returns an error' do
+        post :add_admin, params: { project_id: project.to_param, email: wl_account.email }
+        project.reload
+
+        expect(project.admins).to eq []
+        expect(response).to redirect_to(project_dashboard_accesses_path(project))
+        expect(flash[:error]).to eq 'Account is not found on CoMakery'
       end
     end
   end

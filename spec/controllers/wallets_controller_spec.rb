@@ -23,10 +23,27 @@ RSpec.describe WalletsController, type: :controller do
   end
 
   describe 'GET /index' do
-    it 'renders a successful response' do
+    before do
       account.wallets.create! valid_attributes
+    end
+
+    it 'renders a successful response' do
       get :index
       expect(response).to be_successful
+    end
+
+    it 'renders a successful response when wallets__hide_zero_balances is present' do
+      get :index, session: { wallets__hide_zero_balances: true }
+      expect(response).to be_successful
+    end
+
+    context 'json type' do
+      it 'renders a successful response' do
+        get :index, format: :json
+
+        expect(JSON.parse(response.body)).to have_key('content')
+        expect(response).to have_http_status(200)
+      end
     end
   end
 
@@ -204,7 +221,7 @@ RSpec.describe WalletsController, type: :controller do
 
     context 'when wallet cannot be destroyed' do
       it 'redirects to the wallets list' do
-        wallet = create(:wallet, source: :ore_id, account: account, ore_id_account: create(:ore_id, skip_jobs: true))
+        wallet = create(:ore_id_wallet, account: account)
         delete :destroy, params: { id: wallet.to_param }
         expect(response).to redirect_to(wallets_url)
       end

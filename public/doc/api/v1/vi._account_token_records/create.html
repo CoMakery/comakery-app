@@ -112,9 +112,9 @@ table th, table td {
 
       <div class="article">
         <h2>CREATE</h2>
-        <h3>POST /api/v1/projects/:project_id/account_token_records</h3>
+        <h3>POST /api/v1/tokens/:token_id/account_token_records</h3>
           <p class="explanation">
-            Returns created account token record details (See GET for response details)
+            Returns account token records details (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,10 +128,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">token id</span>
                 </td>
               </tr>
               <tr>
@@ -203,7 +203,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/56/account_token_records</pre>
+          <pre class="request route highlight">POST /api/v1/tokens/80/account_token_records</pre>
 
 
             <h4>Body</h4>
@@ -214,41 +214,57 @@ table th, table td {
         "max_balance": "100",
         "lockup_until": "1",
         "reg_group_id": "39",
-        "account_id": "176",
+        "account_id": "173",
         "account_frozen": "false"
       }
     },
-    "url": "http://example.org/api/v1/projects/56/account_token_records",
+    "url": "http://example.org/api/v1/tokens/80/account_token_records",
     "method": "POST",
-    "nonce": "c489ae2971fc3b602739588162faddc6",
-    "timestamp": "1611655029"
+    "nonce": "1ddba66f552186ce4b944c654703b157",
+    "timestamp": "1612227226"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "UMyH/2Wfef9D7cSob0vEWiihlZMO80eO5+4++g3oZuEFa7epXiTVcZuwujwrZNUqFJzgmglWIv0bAEtLcVzJBA=="
+    "signature": "hkiGqbtv7Bg8zN1TkuK7gy3GWzzJH1VSaeqwStB+o1wlGn6cnPQUuYE65w48jmTqq/I0ay2QGuhwjaqG2MriAA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;f87b1410f3835e7af0d7d759b164c4bb&quot;</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;0ee44ffd7424cbc1fa5535b86b7a3a2d&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 6,
-  &quot;accountId&quot;: 176,
-  &quot;tokenId&quot;: 82,
-  &quot;maxBalance&quot;: 100,
-  &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
-  &quot;regGroupId&quot;: 39,
-  &quot;accountFrozen&quot;: false,
-  &quot;status&quot;: &quot;created&quot;,
-  &quot;createdAt&quot;: &quot;2021-01-26T09:57:09.497Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-01-26T09:57:09.497Z&quot;
-}</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 5,
+    &quot;accountId&quot;: 171,
+    &quot;tokenId&quot;: 80,
+    &quot;maxBalance&quot;: 100000,
+    &quot;lockupUntil&quot;: &quot;2021-02-01T00:53:46.000Z&quot;,
+    &quot;regGroupId&quot;: 38,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-02-02T00:53:46.901Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-02-02T00:53:46.901Z&quot;
+  },
+  {
+    &quot;id&quot;: 6,
+    &quot;accountId&quot;: 172,
+    &quot;tokenId&quot;: 80,
+    &quot;maxBalance&quot;: 100,
+    &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
+    &quot;regGroupId&quot;: 39,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-02-02T00:53:46.955Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-02-02T00:53:46.955Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

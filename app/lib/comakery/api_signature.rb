@@ -88,6 +88,8 @@ module Comakery
     # Allowed ahead of time for timestamp
     TIMESTAMP_AHEAD_SECONDS = 3
 
+    MAX_NONCE_SIZE = 36
+
     # Creates a new request to be verified
     #
     # @param request [Hash] request including body and optioanl proof
@@ -164,7 +166,7 @@ module Comakery
       end
 
       def verify_nonce
-        raise Comakery::APISignatureError, 'Invalid nonce' unless @is_nonce_unique.call(@request.fetch('body', {}).fetch('nonce', ''))
+        raise Comakery::APISignatureError, 'Invalid nonce' unless @is_nonce_unique.call(normalize_nonce(@request.fetch('body', {}).fetch('nonce', '')))
       end
 
       def verify_timestamp
@@ -190,6 +192,10 @@ module Comakery
         )
       rescue Ed25519::VerifyError, ArgumentError
         raise Comakery::APISignatureError, 'Invalid proof signature'
+      end
+
+      def normalize_nonce(nonce)
+        nonce.slice(0, MAX_NONCE_SIZE)
       end
   end
 end

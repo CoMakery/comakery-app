@@ -6,20 +6,39 @@
       <%= render partial: "chart" %>
     <% end %>
 
-    <% if policy(@project).create_transfer? %>
-      <div class="transfers-filters">
-        <div class="transfers-filters--filter">
-          <div class="transfers-filters--filter--options">
-            <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
-              <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
-              <% if policy(@project).transfer_types? %>
-                <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transter_categories_path(@project) } %>
-              <% end %>
-            <% end %>
+    <div class="row">
+      <div class="col-6">
+        <% if policy(@project).create_transfer? %>
+          <div class="transfers-filters">
+            <div class="transfers-filters--filter">
+              <div class="transfers-filters--filter--options">
+                <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
+                  <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
+                  <% if policy(@project).transfer_types? %>
+                    <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transter_categories_path(@project) } %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
-    <% end %>
+
+      <div class="col-6">
+        <% hot_wallet = @project.hot_wallet %>
+        <% if hot_wallet.present? %>
+          <p class="text-right hot-wallet">
+            Hot Wallet:&emsp; <%= link_to(
+              middle_truncate(hot_wallet.address),
+              hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
+              target: :_blank,
+              class: 'mr-2',
+              data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+            ) %>
+          </p>
+        <% end %>
+      </div>
+    </div>
 
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>

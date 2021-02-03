@@ -174,7 +174,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
     end
 
     context 'when wallet cannot be destroyed' do
-      subject { create(:wallet, account: account, source: :ore_id) }
+      subject { create(:ore_id_wallet, account: account) }
 
       it 'renders an error' do
         params = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: subject.id.to_s), 'DELETE')
@@ -226,7 +226,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
   describe 'POST #password_reset' do
     context 'with valid params' do
       render_views
-      let!(:wallet) { account.wallets.create(_blockchain: :bitcoin, address: build(:bitcoin_address_1), source: :ore_id, name: 'Wallet') }
+      let(:wallet) { create(:ore_id_wallet, account: account) }
 
       it 'returns url for password reset and scedules a job for password' do
         params = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'POST')

@@ -7,7 +7,7 @@ class Auth::EthController < ApplicationController
   # GET /auth/eth/new
   def new
     @nonce = Comakery::Auth::Eth.random_stamp('Authentication Request ')
-    Rails.cache.write("auth_eth::nonce::#{auth_params[:public_address]}", @nonce, expires_in: 1.hour)
+    CacheExtension.cache_write!("auth_eth::nonce::#{auth_params[:public_address]}", @nonce, expires_in: 1.hour)
   end
 
   # POST /auth/eth

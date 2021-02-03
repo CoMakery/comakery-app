@@ -2,6 +2,8 @@ class Mission < ApplicationRecord
   include ActiveStorageValidator
   default_scope { order(display_order: :asc) }
 
+  attr_readonly :wallet_recovery_api_public_key
+
   # attachment :logo
   # attachment :image
   # attachment :whitelabel_logo

@@ -15,7 +15,7 @@ describe 'landing page' do
     team.build_authentication_team authentication1
   end
 
-  it 'when logged in shows some projects and the new button' do
+  it 'when logged in shows some projects and the new button and ger buttons leading to edit respective projects' do
     login(account)
     project = create(:project, title: 'member Private Project', visibility: 'member', account: account1)
     project.channels.create(team: team, channel_id: 'channel')
@@ -31,6 +31,7 @@ describe 'landing page' do
     expect(page).to have_content(/new project/i)
 
     expect(page.all('.project').size).to eq(16)
+    expect(page.first('a.fa.fa-cog')[:href]).to match(%r{/projects/\d+/edit})
 
     click_link 'Browse All'
 

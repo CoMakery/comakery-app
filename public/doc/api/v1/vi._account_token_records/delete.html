@@ -112,9 +112,9 @@ table th, table td {
 
       <div class="article">
         <h2>DELETE</h2>
-        <h3>DELETE /api/v1/projects/:project_id/account_token_records/:id</h3>
+        <h3>DELETE /api/v1/tokens/:token_id/account_token_records/?wallet_id=:wallet_id</h3>
           <p class="explanation">
-            Delete the account token record and returns an array of present account token records (See GET for response details)
+            Delete all account token records for the wallet and returns an array of present account token records (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -136,10 +136,18 @@ table th, table td {
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">token id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">wallet_id</span>
+                </td>
+                <td>
+                  <span class="description">wallet id</span>
                 </td>
               </tr>
             </tbody>
@@ -152,22 +160,25 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/58/account_token_records/8</pre>
+          <pre class="request route highlight">DELETE /api/v1/tokens/82/account_token_records/?wallet_id=8</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">wallet_id: 8</pre>
 
             <h4>Body</h4>
             <pre class="request body">{
+  "id": 8,
   "body": {
     "data": "",
-    "url": "http://example.org/api/v1/projects/58/account_token_records/8",
+    "url": "http://example.org/api/v1/tokens/82/account_token_records?wallet_id=8",
     "method": "DELETE",
-    "nonce": "cffa0fcda8b5b7ac302a3740086a8625",
-    "timestamp": "1611655031"
+    "nonce": "fbdf5fadf17b6692b9bb3b668a4dbdaa",
+    "timestamp": "1612227227"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "Op0qnKlCVpuYa12hUX9eN4zarsmpZ50GfmQCLQYcUExIfalBfJ/r1dSe/s3s0BKizq/C6ZvQiZ7aHGVEbD9mDw=="
+    "signature": "vCTldo/6ybIDYw1hs2C+X0ooNwEqAqrnX89GX88YFGf7sTuZweHk3167GyJSA4aGSITtBJ6XVKNzMxNg4z3DDg=="
   }
 }</pre>
 

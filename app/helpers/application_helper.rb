@@ -33,12 +33,7 @@ module ApplicationHelper
     end
   end
 
-  def enabled_auth_labels
-    options = []
-    options << 'Slack' if Comakery::Slack.enabled?
-    options << 'Metamask'
-    options << 'Discord' if Comakery::Discord.enabled?
-    last = options.pop
-    [options.join(', '), last].join(' or ')
+  def middle_truncate(str, length: 5)
+    str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
   end
 end

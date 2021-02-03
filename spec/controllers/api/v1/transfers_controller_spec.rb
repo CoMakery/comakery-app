@@ -64,6 +64,20 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
       get :show, params: params
       expect(response).to be_successful
     end
+
+    context 'with views' do
+      render_views
+
+      it 'returns proper json' do
+        params = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer.id, project_id: project.id), 'GET')
+        params.merge!(project_id: project.id, id: transfer.id, format: :json)
+
+        get :show, params: params
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response.keys).to include('recipient_wallet_id')
+        expect(parsed_response['recipient_wallet_id']).to eq(transfer.recipient_wallet_id)
+      end
+    end
   end
 
   describe 'POST #create' do

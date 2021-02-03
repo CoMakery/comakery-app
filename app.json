@@ -5,7 +5,7 @@
   "logo": "https://avatars0.githubusercontent.com/u/17172662",
   "success_url": "/",
   "scripts": {
-    "postdeploy": "bundle exec rails db:prepare"
+    "postdeploy": "bundle exec rails whitelabel_mission:create_default"
   },
   "buildpacks": [
     {
@@ -74,6 +74,11 @@
       "description": "Discord API client secret",
       "required": false
     },
+    "METAMASK_LOGIN": {
+      "description": "Enable login and signup with MetaMask",
+      "required": true,
+      "value": false
+    },
     "ORE_ID_API_KEY": {
       "description": "Aikon ORE ID API key",
       "required": false
@@ -117,6 +122,11 @@
     "SIDEKIQ_USERNAME": {
       "description": "Username for Sidekiq admin panel",
       "required": false
+    },
+    "WHITELABEL": {
+      "description": "Create and apply whitelabel with APP_HOST as a default mission",
+      "required": true,
+      "value": "true"
     },
     "NODE_MODULES_CACHE": "false"
   }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_18_172946) do
+ActiveRecord::Schema.define(version: 2021_02_01_142127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -368,6 +368,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_172946) do
     t.string "whitelabel_contact_email"
     t.string "whitelabel_api_public_key"
     t.string "whitelabel_api_key"
+    t.string "wallet_recovery_api_public_key"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
@@ -609,11 +610,13 @@ ActiveRecord::Schema.define(version: 2021_01_18_172946) do
     t.bigint "ore_id_account_id"
     t.string "name"
     t.boolean "primary_wallet", default: false
+    t.bigint "project_id"
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
     t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true
     t.index ["account_id", "primary_wallet", "_blockchain"], name: "index_wallets_on_account_id_and_primary_wallet_and__blockchain", unique: true, where: "(primary_wallet IS TRUE)"
     t.index ["account_id"], name: "index_wallets_on_account_id"
     t.index ["ore_id_account_id"], name: "index_wallets_on_ore_id_account_id"
+    t.index ["project_id"], name: "index_wallets_on_project_id"
   end
 
   add_foreign_key "account_token_records", "accounts"
@@ -645,4 +648,5 @@ ActiveRecord::Schema.define(version: 2021_01_18_172946) do
   add_foreign_key "wallet_provisions", "wallets"
   add_foreign_key "wallets", "accounts"
   add_foreign_key "wallets", "ore_id_accounts"
+  add_foreign_key "wallets", "projects"
 end

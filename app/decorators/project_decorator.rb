@@ -27,6 +27,10 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
+  def hot_wallet_address
+    hot_wallet&.address
+  end
+
   def currency_denomination
     token&.decorate&.currency_denomination
   end
