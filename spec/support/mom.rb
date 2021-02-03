@@ -28,6 +28,16 @@ class Mom
     Wallet.new(defaults.merge(attrs))
   end
 
+  def ore_id_wallet(**attrs)
+    defaults = {
+      source: :ore_id,
+      ore_id_account: build(:ore_id, skip_jobs: true),
+      _blockchain: 'algorand_test',
+      address: build(:algorand_address_1)
+    }
+    build(:wallet, defaults.merge(attrs))
+  end
+
   def balance(**attrs)
     defaults = {
       wallet: create(:wallet),
