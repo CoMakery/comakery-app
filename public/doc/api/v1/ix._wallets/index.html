@@ -172,6 +172,14 @@ table th, table td {
               </tr>
               <tr>
                 <td>
+                    <span class="name">primary_wallet</span>
+                </td>
+                <td>
+                  <span class="description">primary wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
                     <span class="name">source</span>
                 </td>
                 <td>
@@ -235,12 +243,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/e9ef5847-a353-4167-a816-44059216ff76/wallets?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fe9ef5847-a353-4167-a816-44059216ff76%2Fwallets&amp;body[method]=GET&amp;body[nonce]=8b31020a6b50b4a98fd42c3d0c1da9c1&amp;body[timestamp]=1612010342&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=JdPWnfvpPz4EL%2BTJy9OKe1JOFRhzmdXMzoh99x3UOfIoAmj7L9arEnmPNX0ukBjrcI7jnh%2F8%2BElAYx59CUy8Bg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/4b61fb9c-9f84-40b6-90b7-62a2d627d144/wallets?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F4b61fb9c-9f84-40b6-90b7-62a2d627d144%2Fwallets&amp;body[method]=GET&amp;body[nonce]=6f26173bc13c10d1e35376e11ee9756b&amp;body[timestamp]=1612344495&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ThaFI3Bz3PWgzSGkauLwQOCJWLAfhb%2FyhrPRF3t%2FHWMADmEndzfjyipMbF0ythtgbL0mT4pBgdSZsA9jILVOAA%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/e9ef5847-a353-4167-a816-44059216ff76/wallets&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;8b31020a6b50b4a98fd42c3d0c1da9c1&quot;, &quot;timestamp&quot;=&gt;&quot;1612010342&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;JdPWnfvpPz4EL+TJy9OKe1JOFRhzmdXMzoh99x3UOfIoAmj7L9arEnmPNX0ukBjrcI7jnh/8+ElAYx59CUy8Bg==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/4b61fb9c-9f84-40b6-90b7-62a2d627d144/wallets&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;6f26173bc13c10d1e35376e11ee9756b&quot;, &quot;timestamp&quot;=&gt;&quot;1612344495&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ThaFI3Bz3PWgzSGkauLwQOCJWLAfhb/yhrPRF3t/HWMADmEndzfjyipMbF0ythtgbL0mT4pBgdSZsA9jILVOAA==&quot;}</pre>
 
 
 
@@ -248,8 +256,8 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;9d9cead3b2c2744f94a30a47ca728525&quot;
-Last-Modified: Sat, 30 Jan 2021 12:39:02 GMT</pre>
+ETag: W/&quot;1c8e37769fe1def3b04c83f779bc8ddf&quot;
+Last-Modified: Wed, 03 Feb 2021 09:28:15 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -257,10 +265,11 @@ Last-Modified: Sat, 30 Jan 2021 12:39:02 GMT</pre>
   {
     &quot;id&quot;: 21,
     &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+    &quot;primaryWallet&quot;: true,
     &quot;source&quot;: &quot;user_provided&quot;,
     &quot;state&quot;: null,
-    &quot;createdAt&quot;: &quot;2021-01-30T12:39:02.220Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-01-30T12:39:02.220Z&quot;,
+    &quot;createdAt&quot;: &quot;2021-02-03T09:28:15.685Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-02-03T09:28:15.685Z&quot;,
     &quot;blockchain&quot;: &quot;bitcoin&quot;,
     &quot;tokens&quot;: [
 
