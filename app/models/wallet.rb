@@ -2,7 +2,7 @@ class Wallet < ApplicationRecord
   include BelongsToBlockchain
   include BelongsToOreId
 
-  belongs_to :account
+  belongs_to :account, optional: true
   belongs_to :project, optional: true
   has_many :balances, dependent: :destroy
   has_many :token_opt_ins, dependent: :destroy
@@ -16,9 +16,9 @@ class Wallet < ApplicationRecord
   validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
   validates :name, presence: true
+  validates :project_id, presence: true, if: :hot_wallet?
+  validates :account_id, presence: true, unless: :hot_wallet?
   validate :blockchain_supported_by_ore_id, if: :ore_id?
-
-  validate :validate_project_id
 
   attr_readonly :_blockchain
 
@@ -31,10 +31,6 @@ class Wallet < ApplicationRecord
     available_blockchains = Blockchain.available
     available_blockchains.reject!(&:supported_by_ore_id?)
     available_blockchains.map(&:key)
-  end
-
-  def validate_project_id
-    errors.add(:project_id, 'can be assigned only for hot wallet') if project.present? && !hot_wallet?
   end
 
   def pending?
