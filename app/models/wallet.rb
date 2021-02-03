@@ -2,13 +2,13 @@ class Wallet < ApplicationRecord
   include BelongsToBlockchain
   include BelongsToOreId
 
-  belongs_to :account
+  belongs_to :account, optional: true
+  belongs_to :project, optional: true
   has_many :balances, dependent: :destroy
   has_many :token_opt_ins, dependent: :destroy
   has_many :wallet_provisions, dependent: :destroy
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
-  has_many :projects, foreign_key: :hot_wallet_id, inverse_of: :hot_wallet, dependent: :nullify
 
   validates :source, presence: true
   validates :address, presence: true, unless: :pending?
@@ -16,6 +16,8 @@ class Wallet < ApplicationRecord
   validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
   validates :name, presence: true
+  validates :project_id, presence: true, if: :hot_wallet?
+  validates :account_id, presence: true, unless: :hot_wallet?
   validate :blockchain_supported_by_ore_id, if: :ore_id?
 
   attr_readonly :_blockchain

@@ -19,8 +19,7 @@ describe 'transfers_index_page', js: true do
 
   context 'when project has an assigned hot walled' do
     before do
-      wallet = create(:wallet)
-      project.update(hot_wallet_id: wallet.id)
+      create(:wallet, source: :hot_wallet, project_id: project.id)
     end
 
     it 'returns the hot wallet address' do

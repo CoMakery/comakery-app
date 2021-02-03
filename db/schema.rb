@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_102357) do
+ActiveRecord::Schema.define(version: 2021_02_01_142127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -463,9 +463,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_102357) do
     t.text "governance_url"
     t.text "funding_url"
     t.text "video_conference_url"
-    t.bigint "hot_wallet_id"
     t.index ["account_id"], name: "index_projects_on_account_id"
-    t.index ["hot_wallet_id"], name: "index_projects_on_hot_wallet_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["token_id"], name: "index_projects_on_token_id"
@@ -612,11 +610,13 @@ ActiveRecord::Schema.define(version: 2021_01_26_102357) do
     t.bigint "ore_id_account_id"
     t.string "name"
     t.boolean "primary_wallet", default: false
+    t.bigint "project_id"
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
     t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true
     t.index ["account_id", "primary_wallet", "_blockchain"], name: "index_wallets_on_account_id_and_primary_wallet_and__blockchain", unique: true, where: "(primary_wallet IS TRUE)"
     t.index ["account_id"], name: "index_wallets_on_account_id"
     t.index ["ore_id_account_id"], name: "index_wallets_on_ore_id_account_id"
+    t.index ["project_id"], name: "index_wallets_on_project_id"
   end
 
   add_foreign_key "account_token_records", "accounts"
@@ -638,7 +638,6 @@ ActiveRecord::Schema.define(version: 2021_01_26_102357) do
   add_foreign_key "interests", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "projects", "tokens"
-  add_foreign_key "projects", "wallets", column: "hot_wallet_id"
   add_foreign_key "reg_groups", "tokens"
   add_foreign_key "token_opt_ins", "tokens"
   add_foreign_key "token_opt_ins", "wallets"
@@ -649,4 +648,5 @@ ActiveRecord::Schema.define(version: 2021_01_26_102357) do
   add_foreign_key "wallet_provisions", "wallets"
   add_foreign_key "wallets", "accounts"
   add_foreign_key "wallets", "ore_id_accounts"
+  add_foreign_key "wallets", "projects"
 end
