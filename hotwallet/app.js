@@ -1,6 +1,7 @@
 require('dotenv').config()
 const algosdk = require('algosdk')
-const redis = require("redis");
+const redis = require("redis")
+const axios = require('axios')
 
 const projectId = process.env.PROJECT_ID
 const projectApiKey = process.env.PROJECT_API_KEY
@@ -8,7 +9,9 @@ const comakeryServerUrl = process.env.COMAKERY_SERVER_URL
 const purestakeApi = process.env.PURESTAKE_API
 const redisUrl = process.env.REDIS_URL
 
-const keyName = "wallet_for_project_" + projectId
+const keyName = `wallet_for_project_${projectId}`
+const registerHotWalletPath = `/api/v1/projects/${projectId}/hot_wallet_addresses`
+const redisClient = redis.createClient(redisUrl)
 
 function generateAlgorandKeyPair() {
   const account = algosdk.generateAccount()
@@ -26,38 +29,55 @@ function isAllVariablesSet() {
 function initialize() {
   if (isAllVariablesSet()) { return "Some ENV vars was not set" }
 
-  const redisClient = redis.createClient(redisUrl)
   setRedisErrorHandler(redisClient)
 
-  redisClient.hgetall(keyName, function (err, wallet_keys) {
+  redisClient.hgetall(keyName, function (err, walletKeys) {
     if (err) { return "Can't get a wallet keys: " + err }
 
-    if (wallet_keys) {
-      console.error("wallet already created, do nothing...")
+    if (walletKeys) {
+      console.log("wallet already created, do nothing...")
     } else {
       console.log("Key file does not exists, generating...")
-      var new_wallet = generateAlgorandKeyPair()
-      // TODO: call Comakery API to register the wallet and save file bellow on succesfull response
-
-      redisClient.hset(keyName, "address", new_wallet.address, "mnemonic", new_wallet.mnemonic, function (err) {
-        return "Can't set a wallet key: " + err
-      })
+      var newWallet = generateAlgorandKeyPair()
+      registerHotWallet(newWallet)
     }
   })
 
   return false // no errors
 }
 
+function registerHotWallet(wallet) {
+  const url = comakeryServerUrl + registerHotWalletPath
+  const params = { body: { data: { hot_wallet: { address: wallet.address } } } }
+  const config = { headers: { "API-Transaction-Key": projectApiKey }}
+  axios
+    .post(url, params, config)
+    .then(res => {
+      console.log("Hot wallet address has been registered")
+      if (res.status == 201) { storeHotWalletKeys(wallet) }
+    })
+    .catch(error => {
+      console.error(error)
+      console.error(`registerHotWallet call failed with ${error.response.status} (${error.response.statusText})`)
+    })
+}
+
+function storeHotWalletKeys(wallet) {
+  redisClient.hset(keyName, "address", wallet.address, "mnemonic", wallet.mnemonic, function (err) {
+    return `Can't set a wallet key: ${err}`
+  })
+  console.log(`Keys for a new hot wallet has been saved into ${keyName}`)
+}
+
 function setRedisErrorHandler(redisClient) {
   redisClient.on("error", function (err) {
-    console.error("Redis client error: " + err);
+    console.error(`Redis client error: ${err}`);
   });
 }
 
 function deleteCurrentKey() {
-  const redisClient = redis.createClient(redisUrl)
   redisClient.del(keyName)
-  console.log("Wallet keys has been deleted: " + keyName)
+  console.log(`Wallet keys has been deleted: ${keyName}`)
 }
 
 (async () => {
