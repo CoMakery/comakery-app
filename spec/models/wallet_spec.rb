@@ -5,7 +5,8 @@ describe Wallet, type: :model do
   it_behaves_like 'belongs_to_blockchain', { blockchain_addressable_columns: [:address] }
 
   subject { build(:wallet) }
-  it { is_expected.to belong_to(:account) }
+  it { is_expected.to belong_to(:account).optional }
+  it { is_expected.to belong_to(:project).optional }
   it { is_expected.to belong_to(:ore_id_account).optional }
   it { is_expected.to have_many(:awards).with_foreign_key(:recipient_wallet_id).dependent(:nullify) }
   it { is_expected.to have_many(:balances).dependent(:destroy) }
@@ -25,8 +26,27 @@ describe Wallet, type: :model do
     )
   end
 
+  context 'blockchain_supported_by_ore_id validation' do
+    subject { wallet.valid? }
+
+    context 'pass for supported blockchain' do
+      let(:wallet) { build(:ore_id_wallet) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'fails on not supported blockchain' do
+      let(:wallet) { build(:ore_id_wallet, _blockchain: 'bitcoin') }
+
+      it do
+        is_expected.to be false
+        expect(wallet.errors.messages[:_blockchain]).to eq ['is not supported with ore_id source']
+      end
+    end
+  end
+
   context 'when ore_id?' do
-    subject { create(:wallet, source: :ore_id, ore_id_account: create(:ore_id, skip_jobs: true)) }
+    subject { create(:ore_id_wallet) }
 
     it { is_expected.to validate_presence_of(:ore_id_account) }
     it { expect(subject.ore_id_account).to be_an(OreIdAccount) }
@@ -115,6 +135,24 @@ describe Wallet, type: :model do
       wallet.destroy
 
       expect(wallet2.reload.primary_wallet).to be true
+    end
+  end
+
+  describe '#validate presence of project_id' do
+    let!(:wallet) { build(:wallet, _blockchain: :algorand_test, source: :hot_wallet, address: build(:algorand_address_1)) }
+
+    it 'returns an error' do
+      expect(wallet).to be_invalid
+      expect(wallet.errors[:project_id]).to be_present
+    end
+  end
+
+  describe '#validate presence of account_id' do
+    let!(:wallet) { Wallet.new(_blockchain: :algorand_test, source: :user_provided, address: build(:algorand_address_1)) }
+
+    it 'returns an error' do
+      expect(wallet).to be_invalid
+      expect(wallet.errors[:account_id]).to be_present
     end
   end
 end
