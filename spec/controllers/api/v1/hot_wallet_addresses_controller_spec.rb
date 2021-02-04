@@ -9,13 +9,7 @@ RSpec.describe Api::V1::HotWalletAddressesController, type: :controller do
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
-  let(:valid_attributes) do
-    {
-      name: build(:wallet).name,
-      address: build(:wallet).address,
-      _blockchain: build(:wallet)._blockchain
-    }
-  end
+  let(:valid_attributes) { { address: build(:wallet).address } }
 
   before do
     allow(controller).to receive(:authorized).and_return(true)

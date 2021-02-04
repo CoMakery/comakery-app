@@ -7,13 +7,7 @@ resource 'XII. Hot Wallet Addresses' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, api_key: ApiKey.new(key: build(:api_key))) }
 
-  let(:valid_attributes) do
-    {
-      name: build(:wallet).name,
-      address: build(:wallet).address,
-      _blockchain: build(:wallet)._blockchain
-    }
-  end
+  let(:valid_attributes) { { address: build(:wallet).address } }
 
   explanation 'Register hot wallets with a project.'
 
@@ -22,9 +16,8 @@ resource 'XII. Hot Wallet Addresses' do
 
   post '/api/v1/projects/:project_id/hot_wallet_addresses' do
     with_options with_example: true do
-      parameter :name, 'wallet name', required: false, type: :string
+      parameter :name, 'wallet name ("Hot Wallet" by default)', required: false, type: :string
       parameter :address, 'wallet address', required: true, type: :string
-      parameter :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", required: true, type: :string
     end
 
     context '201' do
