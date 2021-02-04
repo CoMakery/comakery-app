@@ -7,6 +7,8 @@ class Api::V1::HotWalletAddressesController < Api::V1::ApiController
   def create
     @hot_wallet = project.build_hot_wallet(wallet_params)
     @hot_wallet.source = :hot_wallet
+    @hot_wallet._blockchain = project.token&._blockchain
+    @hot_wallet.name ||= 'Hot Wallet'
 
     if @hot_wallet.save
       render 'show.json', status: :created
@@ -23,7 +25,7 @@ class Api::V1::HotWalletAddressesController < Api::V1::ApiController
     end
 
     def wallet_params
-      params.fetch(:body, {}).fetch(:data, {}).fetch(:hot_wallet, {}).permit(:address, :name, :_blockchain)
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:hot_wallet, {}).permit(:address, :name)
     end
 
     def verify_hot_wallet
