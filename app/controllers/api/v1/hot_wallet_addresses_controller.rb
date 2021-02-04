@@ -7,10 +7,8 @@ class Api::V1::HotWalletAddressesController < Api::V1::ApiController
   def create
     @hot_wallet = project.build_hot_wallet(wallet_params)
     @hot_wallet.source = :hot_wallet
-    @hot_wallet.account = project.account
 
     if @hot_wallet.save
-      project.save
       render 'show.json', status: :created
     else
       @errors = @hot_wallet.errors

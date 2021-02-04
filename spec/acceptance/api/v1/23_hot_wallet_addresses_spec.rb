@@ -45,8 +45,7 @@ resource 'XII. Hot Wallet Addresses' do
       let!(:create_params) { { hot_wallet: valid_attributes } }
 
       before do
-        project.build_hot_wallet(valid_attributes)
-        project.save
+        create(:wallet, source: :hot_wallet, project_id: project.id)
       end
 
       example 'CREATE HOT WALLET – ERROR' do
