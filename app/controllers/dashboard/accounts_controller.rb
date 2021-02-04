@@ -4,7 +4,7 @@ class Dashboard::AccountsController < ApplicationController
   before_action :set_accounts, only: [:index]
   before_action :create_token_records, only: [:index]
   before_action :authorize_project, only: :create
-  skip_before_action :require_login, only: [:index]
+  skip_before_action :require_login, only: %i[index show]
   skip_after_action :verify_policy_scoped, only: %i[index create]
 
   fragment_cache_key do

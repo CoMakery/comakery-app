@@ -28,7 +28,8 @@ export default class extends ComakerySecurityTokenController {
         }
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       }
     }).then(response => {
       if (response.status === 201) {
