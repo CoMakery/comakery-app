@@ -90,6 +90,16 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         expect(assigns[:errors]).not_to be_nil
       end
     end
+
+    context 'with invalid date_of_birth param' do
+      let(:invalid_attributes) { { email: "me+#{SecureRandom.hex(20)}@example.com", date_of_birth: '01' } }
+
+      it 'renders an error' do
+        params = build(:api_signed_request, { account: invalid_attributes }, api_v1_accounts_path, 'POST')
+
+        expect { post :create, params: params }.to change(Account, :count).by(0)
+      end
+    end
   end
 
   describe 'PUT #update' do
