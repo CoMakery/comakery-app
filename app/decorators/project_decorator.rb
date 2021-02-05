@@ -162,7 +162,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def transfers_chart_colors
-    project.transfer_types.pluck(:name).reverse.map.with_index { |t, i| [t, Comakery::ChartColors.lookup(i)] }.to_h
+    project.transfer_types.pluck(:name).map.with_index { |t, i| [t, Comakery::ChartColors.lookup(i)] }.to_h
   end
 
   def transfers_chart_colors_objects
@@ -170,10 +170,10 @@ class ProjectDecorator < Draper::Decorator
   end
 
   # rubocop:todo Metrics/CyclomaticComplexity
-  def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty)
+  def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty, negative)
     chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(
-        set.group_by(&:transfer_type).map { |k, v| [k.name, v.sum(&:total_amount)] }.to_h.merge(
+        set.group_by(&:transfer_type).map { |k, v| [k.name, negative ? -v.sum(&:total_amount) : v.sum(&:total_amount)] }.to_h.merge(
           timeframe: timeframe.strftime(date_modifier),
           i: timeframe.to_i
         )
@@ -184,43 +184,47 @@ class ProjectDecorator < Draper::Decorator
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
-  def transfers_stacked_chart_year(transfers)
+  def transfers_stacked_chart_year(transfers, negative: false)
     transfers_stacked_chart(
       transfers,
       10.years.ago,
       :beginning_of_year,
       '%Y',
-      (10.years.ago.year..Time.current.year).map { |k| transfers_chart_types.merge(timeframe: k.to_s, i: DateTime.strptime(k.to_s, '%Y').to_i) }
+      (10.years.ago.year..Time.current.year).map { |k| transfers_chart_types.merge(timeframe: k.to_s, i: DateTime.strptime(k.to_s, '%Y').to_i) },
+      negative
     )
   end
 
-  def transfers_stacked_chart_month(transfers)
+  def transfers_stacked_chart_month(transfers, negative: false)
     transfers_stacked_chart(
       transfers,
       1.year.ago,
       :beginning_of_month,
       "%b%t'%y",
-      (1.year.ago.beginning_of_month.to_date..Time.current.to_date).select { |d| d.day == 1 }.map { |k| transfers_chart_types.merge(timeframe: k.strftime("%b%t'%y"), i: k.to_time.to_i) }
+      (1.year.ago.beginning_of_month.to_date..Time.current.to_date).select { |d| d.day == 1 }.map { |k| transfers_chart_types.merge(timeframe: k.strftime("%b%t'%y"), i: k.to_time.to_i) },
+      negative
     )
   end
 
-  def transfers_stacked_chart_week(transfers)
+  def transfers_stacked_chart_week(transfers, negative: false)
     transfers_stacked_chart(
       transfers,
       12.weeks.ago,
       :beginning_of_week,
       '%d%t%b',
-      (12.weeks.ago.beginning_of_week.to_date..Time.current.to_date).each_slice(7).map { |k| transfers_chart_types.merge(timeframe: k.first.strftime('%d%t%b'), i: k.first.to_time.to_i) }
+      (12.weeks.ago.beginning_of_week.to_date..Time.current.to_date).each_slice(7).map { |k| transfers_chart_types.merge(timeframe: k.first.strftime('%d%t%b'), i: k.first.to_time.to_i) },
+      negative
     )
   end
 
-  def transfers_stacked_chart_day(transfers)
+  def transfers_stacked_chart_day(transfers, negative: false)
     transfers_stacked_chart(
       transfers,
       1.week.ago,
       :beginning_of_day,
       '%a',
-      (1.week.ago.to_date..Time.current.to_date).map { |k| transfers_chart_types.merge(timeframe: k.strftime('%a'), i: k.to_time.to_i) }
+      (1.week.ago.to_date..Time.current.to_date).map { |k| transfers_chart_types.merge(timeframe: k.strftime('%a'), i: k.to_time.to_i) },
+      negative
     )
   end
 

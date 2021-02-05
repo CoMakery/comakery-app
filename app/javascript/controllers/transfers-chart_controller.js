@@ -75,6 +75,7 @@ export default class extends Controller {
     let width = 300
     let height = 300
     let data = this.donutChartData
+    let net = (this.data.get('transferType') === 'burn' ? 'Net' : '')
 
     let svg = d3.select('svg#donut-chart')
       .attr('viewBox', [0, 0, width, height])
@@ -98,7 +99,7 @@ export default class extends Controller {
       .attr('font-weight', '500')
       .attr('fill', '#3a3a3a')
       .attr('text-anchor', 'middle')
-      .text('Transfer Type')
+      .text('Category Type')
 
     let tooltipSecond = svg.append('text')
       .attr('x', 0)
@@ -119,7 +120,7 @@ export default class extends Controller {
         .on('mouseover', function(d) {
           tooltipFirst.text(d.data.name)
           tooltipSecond.text(d.data.value + ' ' + this.data.get('tokenSymbol'))
-          this.donutAmountTarget.textContent = d.data.ratio + ' of ' + this.total + ' ' + this.data.get('tokenSymbol') + ' Total'
+          this.donutAmountTarget.textContent = d.data.ratio + ' of ' + this.total + ' ' + this.data.get('tokenSymbol') + ' ' + net + ' Total'
 
           if (d.data.ratio !== d.data['ratio_filtered']) {
             this.donutAmountFilteredTarget.textContent = d.data['ratio_filtered'] + ' of ' + this.totalFiltered + ' ' + this.data.get('tokenSymbol') + ' Filtered Total'
@@ -130,13 +131,13 @@ export default class extends Controller {
             .style('stroke-width', '3px')
         }.bind(this))
         .on('mouseout', function() {
-          tooltipFirst.text('Transfer Type')
+          tooltipFirst.text('Category Type')
           tooltipSecond.text('Totals')
 
-          this.donutAmountTarget.textContent = this.total + ' ' + this.data.get('tokenSymbol') + ' Total'
+          this.donutAmountTarget.textContent = this.total + ' ' + this.data.get('tokenSymbol') + ' ' + net + ' Total'
 
           if (this.total !== this.totalFiltered) {
-            this.donutAmountFilteredTarget.textContent = this.totalFiltered + ' ' + this.data.get('tokenSymbol') + ' Filtered Total'
+            this.donutAmountFilteredTarget.textContent = '- ' + this.totalFiltered + ' ' + this.data.get('tokenSymbol') + ' Filtered Total'
           }
 
           d3.select(d3.event.target)
@@ -174,7 +175,7 @@ export default class extends Controller {
       .call(g => g.selectAll('.domain').remove())
 
     let y = d3.scaleLinear()
-      .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
+      .domain([d3.min(series, d => d3.min(d, d => d[1])), d3.max(series, d => d3.max(d, d => d[1]))])
       .rangeRound([height - margin.bottom, margin.top])
 
     let x = d3.scaleBand()
@@ -203,8 +204,8 @@ export default class extends Controller {
       .data(d => d)
       .join('rect')
       .attr('x', (d, i) => x(d.data.timeframe))
-      .attr('y', d => y(d[1]))
-      .attr('height', d => y(d[0]) - y(d[1]))
+      .attr("y", d => y(Math.max(0, d[1])))
+      .attr('height', d => Math.abs(y(d[0]) - y(d[1])))
       .attr('width', x.bandwidth())
       .on('mouseover', function() {
         tooltip

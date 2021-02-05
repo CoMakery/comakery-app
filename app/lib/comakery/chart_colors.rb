@@ -1,11 +1,12 @@
 class Comakery::ChartColors
+  #TODO: Check colors if are ordered correctly
   def self.array
     [
       # these are nice
-      '#7B00D7',
-      '#E5004F',
-      '#0884FF',
       '#73C30E',
+      '#7B00D7',
+      '#0884FF',
+      '#E5004F',
       '#D5E301',
       '#F6A504',
       '#C500FF',
