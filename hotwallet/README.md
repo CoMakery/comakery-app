@@ -3,6 +3,7 @@
 ### Installation:
 ```shell
 yarn install
+cp .env.required .env
 ```
 
 ### Manage process:
