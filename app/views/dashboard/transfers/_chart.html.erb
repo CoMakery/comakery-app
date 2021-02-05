@@ -1,4 +1,4 @@
-<% @negative = @transfer_type == 'burn' %>
+<% @negative = @transfer_type_name == 'burn' %>
 <div
   class="transfers-chart transfers-filters animated fadeIn faster"
   data-controller="transfers-chart"
@@ -43,7 +43,7 @@
         <% end %>
       </div>
       <div class="donut-amount" data-target='transfers-chart.donutAmount'>
-        <%= "#{@transfers_unfiltered.not_burned.sum(&:total_amount)} #{@project.token&.symbol} #{@transfer_type == 'burn' ? 'Net' : '' } Total" %>
+        <%= "#{@transfers_unfiltered.not_burned.sum(&:total_amount)} #{@project.token&.symbol} #{@negative ? 'Net' : '' } Total" %>
       </div>
     </div>
     <div id="stacked-chart-tooltip"></div>

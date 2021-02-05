@@ -24,7 +24,7 @@ class Dashboard::TransfersController < ApplicationController
     @transfer = @award_type.awards.new(transfer_params)
     name = @transfer.transfer_type.name
 
-    #TODO: I am using source to filter transfers but before source was set by default earned for all transfer types, is any logic behind?
+    # TODO: I am using source to filter transfers but before source was set by default earned for all transfer types, is any logic behind?
     @transfer.name = name.titlecase
     @transfer.account_id = params[:award][:account_id]
     @transfer.issuer = current_account
@@ -81,7 +81,7 @@ class Dashboard::TransfersController < ApplicationController
     end
 
     def transfer_type_name
-      @transfer_type ||= TransferType.find_by(id: params.fetch(:q, {}).fetch(:transfer_type_id_eq, nil))&.name
+      @transfer_type_name ||= TransferType.find_by(id: params.fetch(:q, {}).fetch(:transfer_type_id_eq, nil))&.name
     end
 
     def transfer_params

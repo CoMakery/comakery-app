@@ -204,7 +204,7 @@ export default class extends Controller {
       .data(d => d)
       .join('rect')
       .attr('x', (d, i) => x(d.data.timeframe))
-      .attr("y", d => y(Math.max(0, d[1])))
+      .attr('y', d => y(Math.max(0, d[1])))
       .attr('height', d => Math.abs(y(d[0]) - y(d[1])))
       .attr('width', x.bandwidth())
       .on('mouseover', function() {
