@@ -28,7 +28,7 @@ class Dashboard::TransfersController < ApplicationController
     @transfer.name = name.titlecase
     @transfer.account_id = params[:award][:account_id]
     @transfer.issuer = current_account
-    @transfer.source = name.to_sym
+    @transfer.source = Award.sources[name.to_sym] || 0
     @transfer.status = :accepted
 
     if @transfer.save
