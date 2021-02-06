@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VIII. Reg Groups API</title>
+    <title>VI. Account Token Records API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>VIII. Reg Groups API</h1>
+      <h1>VI. Account Token Records API</h1>
 
-        <p class="explanation">Create and delete reg groups, retrieve reg group data.</p>
+        <p class="explanation">Create and delete account token records, retrieve account token record data.</p>
 
       <div class="article">
         <h2>GET</h2>
-        <h3>GET /api/v1/projects/:project_id/reg_groups/:id</h3>
+        <h3>GET /api/v1/projects/:project_id/account_token_records/:id</h3>
           <p class="explanation">
-            Returns data for a single reg group.
+            Returns data for a single account token record.
           </p>
 
           <h3>Parameters</h3>
@@ -139,7 +139,7 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">reg group id</span>
+                  <span class="description">account token record id</span>
                 </td>
               </tr>
             </tbody>
@@ -159,23 +159,15 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">reg group id</span>
+                  <span class="description">account token record id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">name</span>
+                    <span class="name">account_id</span>
                 </td>
                 <td>
-                  <span class="description">reg group name</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">blockchain_id</span>
-                </td>
-                <td>
-                  <span class="description">reg group id on blockchain</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
@@ -183,7 +175,47 @@ table th, table td {
                     <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">reg group token id</span>
+                  <span class="description">token id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">reg_group_id</span>
+                </td>
+                <td>
+                  <span class="description">reg group id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">lockup_until</span>
+                </td>
+                <td>
+                  <span class="description">lockup until</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">max_balance</span>
+                </td>
+                <td>
+                  <span class="description">max balance</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account_frozen</span>
+                </td>
+                <td>
+                  <span class="description">account frozen</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">status</span>
+                </td>
+                <td>
+                  <span class="description">account token record status (created synced)</span>
                 </td>
               </tr>
               <tr>
@@ -211,28 +243,32 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/68/reg_groups/58?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F68%2Freg_groups%2F58&amp;body[method]=GET&amp;body[nonce]=6c63f043a009673af23e0dfeb6bdf2d1&amp;body[timestamp]=1612344489&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=oPgczMbK6IV81oFx4JaMsftmZhp8H2ZUT3cpFMxDTpY6XtestvL1oDOB3dF5YOLxjp497uwAC8HL1GPt1GddBA%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/55/account_token_records/4?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F55%2Faccount_token_records%2F4&amp;body[method]=GET&amp;body[nonce]=d5a362106d22374590e3ac98fd008cd9&amp;body[timestamp]=1612344465&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=nUcQZcZPo6vtuP0VBhqAl7sFMepTzeqeF2hojYxmJLzWRiOaYyLXxZTPcEzc49q065Zcg%2BKGOT8EwGDDHKtzAg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/68/reg_groups/58&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;6c63f043a009673af23e0dfeb6bdf2d1&quot;, &quot;timestamp&quot;=&gt;&quot;1612344489&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;oPgczMbK6IV81oFx4JaMsftmZhp8H2ZUT3cpFMxDTpY6XtestvL1oDOB3dF5YOLxjp497uwAC8HL1GPt1GddBA==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/55/account_token_records/4&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;d5a362106d22374590e3ac98fd008cd9&quot;, &quot;timestamp&quot;=&gt;&quot;1612344465&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;nUcQZcZPo6vtuP0VBhqAl7sFMepTzeqeF2hojYxmJLzWRiOaYyLXxZTPcEzc49q065Zcg+KGOT8EwGDDHKtzAg==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;8146d27c1a892f23968fa83031bd7d77&quot;
-Last-Modified: Wed, 03 Feb 2021 09:28:09 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;617cd153d038c0bc821a728ccc29743b&quot;
+Last-Modified: Wed, 03 Feb 2021 09:27:44 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 58,
-  &quot;name&quot;: &quot;RegGroup f05dc16f97ef7c354dbfb1b2a00f1e0a99c038aa&quot;,
-  &quot;tokenId&quot;: 106,
-  &quot;blockchainId&quot;: 1057,
-  &quot;createdAt&quot;: &quot;2021-02-03T09:28:09.034Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-02-03T09:28:09.034Z&quot;
+  &quot;id&quot;: 4,
+  &quot;accountId&quot;: 170,
+  &quot;tokenId&quot;: 80,
+  &quot;maxBalance&quot;: 100000,
+  &quot;lockupUntil&quot;: &quot;2021-02-02T09:27:44.000Z&quot;,
+  &quot;regGroupId&quot;: 36,
+  &quot;accountFrozen&quot;: false,
+  &quot;status&quot;: &quot;created&quot;,
+  &quot;createdAt&quot;: &quot;2021-02-03T09:27:44.944Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-02-03T09:27:44.944Z&quot;
 }</pre>
       </div>
     </div>
