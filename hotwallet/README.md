@@ -16,3 +16,8 @@ bin/restart # Restart hotwallet
 bin/list    # List processes
 bin/logs    # Show logs
 ```
+
+### Run tests:
+```shell
+yarn test
+```
