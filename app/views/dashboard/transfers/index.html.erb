@@ -15,7 +15,7 @@
                 <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
                   <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
                   <% if policy(@project).transfer_types? %>
-                    <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transter_categories_path(@project) } %>
+                    <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transfer_categories_path(@project) } %>
                   <% end %>
                 <% end %>
               </div>
