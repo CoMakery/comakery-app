@@ -103,6 +103,9 @@ jobs:
     - name: Run Jest
       run: yarn test
 
+    - name: Run Jest for HotWallet
+      run: cd hotwallet && yarn test
+
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
