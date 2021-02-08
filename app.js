@@ -15,14 +15,6 @@ const keyName = `wallet_for_project_${envs.projectId}`
 const registerHotWalletPath = `/api/v1/projects/${envs.projectId}/hot_wallet_addresses`
 const redisClient = redis.createClient(envs.redisUrl)
 
-function generateAlgorandKeyPair() {
-  const account = algosdk.generateAccount()
-  const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
-  const new_wallet = { address: account.addr, mnemonic: mnemonic }
-
-  return new_wallet
-}
-
 function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
