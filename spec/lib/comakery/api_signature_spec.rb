@@ -137,7 +137,7 @@ describe Comakery::APISignature do
 
         expect do
           described_class.new(valid_signed_request, stubbed_url, stubbed_method, is_nonce_unique).verify(public_key)
-        end.to raise_error(Comakery::APISignatureError, 'Invalid proof signature')
+        end.to raise_error(Comakery::APISignatureError, 'Nonce is too long')
       end
     end
 
