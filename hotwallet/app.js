@@ -2,16 +2,19 @@ require('dotenv').config()
 const algosdk = require('algosdk')
 const redis = require("redis")
 const axios = require('axios')
+const hwUtils = require('./lib/hotwalletUtils')
 
-const projectId = process.env.PROJECT_ID
-const projectApiKey = process.env.PROJECT_API_KEY
-const comakeryServerUrl = process.env.COMAKERY_SERVER_URL
-const purestakeApi = process.env.PURESTAKE_API
-const redisUrl = process.env.REDIS_URL
+const envs = {
+  projectId: process.env.PROJECT_ID,
+  projectApiKey: process.env.PROJECT_API_KEY,
+  comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
+  purestakeApi: process.env.PURESTAKE_API,
+  redisUrl: process.env.REDIS_URL
+}
 
-const keyName = `wallet_for_project_${projectId}`
-const registerHotWalletPath = `/api/v1/projects/${projectId}/hot_wallet_addresses`
-const redisClient = redis.createClient(redisUrl)
+const keyName = `wallet_for_project_${envs.projectId}`
+const registerHotWalletPath = `/api/v1/projects/${envs.projectId}/hot_wallet_addresses`
+const redisClient = redis.createClient(envs.redisUrl)
 
 function generateAlgorandKeyPair() {
   const account = algosdk.generateAccount()
@@ -21,13 +24,8 @@ function generateAlgorandKeyPair() {
   return new_wallet
 }
 
-function checkAllVariablesAreSet() {
-  projectId === undefined || projectApiKey === undefined || comakeryServerUrl === undefined ||
-    purestakeApi === undefined || redisUrl === undefined
-}
-
 function initialize() {
-  if (checkAllVariablesAreSet()) { return "Some ENV vars was not set" }
+  if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
   setRedisErrorHandler(redisClient)
 
@@ -47,9 +45,9 @@ function initialize() {
 }
 
 function registerHotWallet(wallet) {
-  const url = comakeryServerUrl + registerHotWalletPath
+  const url = envs.comakeryServerUrl + registerHotWalletPath
   const params = { body: { data: { hot_wallet: { address: wallet.address } } } }
-  const config = { headers: { "API-Transaction-Key": projectApiKey }}
+  const config = { headers: { "API-Transaction-Key": envs.projectApiKey }}
   axios
     .post(url, params, config)
     .then(res => {
