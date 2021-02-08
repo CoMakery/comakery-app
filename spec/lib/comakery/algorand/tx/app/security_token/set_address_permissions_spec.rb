@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe Comakery::Algorand::Tx::App::SecurityToken::Pause do
-  let!(:tx) { build(:algorand_app_pause_tx) }
+describe Comakery::Algorand::Tx::App::SecurityToken::SetAddressPermissions do
+  let!(:tx) { build(:algorand_app_set_address_permissions_tx) }
   let(:app_id) { tx.app_id }
 
   before do
@@ -12,7 +12,7 @@ describe Comakery::Algorand::Tx::App::SecurityToken::Pause do
 
   describe '#app_args' do
     subject { tx.app_args }
-    it { is_expected.to eq(['pause', 1]) }
+    it { is_expected.to eq(['setAddressPermissions', 0, 100, 1, 1]) }
   end
 
   describe '#valid?' do

@@ -2,7 +2,7 @@ class Comakery::Algorand::Tx::App::SecurityToken::Transfer < Comakery::Algorand:
   def app_args
     [
       'transfer',
-      blockchain_transaction.amount.to_s
+      blockchain_transaction.amount
     ]
   end
 
@@ -10,5 +10,9 @@ class Comakery::Algorand::Tx::App::SecurityToken::Transfer < Comakery::Algorand:
     [
       blockchain_transaction.destination
     ]
+  end
+
+  def valid_amount?
+    valid_app_args?
   end
 end

@@ -32,7 +32,7 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
     transaction_data.dig('asset-transfer-transaction', 'amount') || 0
   end
 
-  def valid?(_)
-    super && asset_id.to_i == transaction_asset_id
+  def valid?(_ = nil)
+    super && asset_id == transaction_asset_id.to_s
   end
 end

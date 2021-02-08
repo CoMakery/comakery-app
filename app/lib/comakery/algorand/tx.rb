@@ -44,7 +44,6 @@ class Comakery::Algorand::Tx
     transaction_data.dig('payment-transaction', 'receiver') || ''
   end
 
-  # In MicroAlgos for ALGO transaction
   def amount
     transaction_data.dig('payment-transaction', 'amount') || 0
   end
@@ -53,7 +52,7 @@ class Comakery::Algorand::Tx
     confirmed_round.present? && current_round >= confirmed_round
   end
 
-  def valid?(_)
+  def valid?(_ = nil)
     return false unless confirmed?
     return false unless valid_addresses?
     return false unless valid_amount?
@@ -62,18 +61,16 @@ class Comakery::Algorand::Tx
     true
   end
 
-  private
+  def valid_addresses?
+    blockchain_transaction.source == sender_address &&
+      blockchain_transaction.destination == receiver_address
+  end
 
-    def valid_addresses?
-      blockchain_transaction.source == sender_address &&
-        blockchain_transaction.destination == receiver_address
-    end
+  def valid_amount?
+    blockchain_transaction.amount == amount
+  end
 
-    def valid_amount?
-      blockchain_transaction.amount == amount
-    end
-
-    def valid_round?
-      blockchain_transaction.current_block < confirmed_round
-    end
+  def valid_round?
+    blockchain_transaction.current_block < confirmed_round
+  end
 end

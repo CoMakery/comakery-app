@@ -29,8 +29,30 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     []
   end
 
-  def encode_app_args(args)
-    args.map { |a| Base64.encode64(a).strip }
+  def encode_app_args(args, int_base64 = false)
+    args.map do |a|
+      case a
+      when String
+        encode_str(a)
+      when Integer
+        int_base64 ? encode_int_base64(a) : encode_int(a)
+      else
+        raise "Unsupported app argument: #{a}:#{a.class}"
+      end
+    end
+  end
+
+  def encode_str(str)
+    Base64.encode64(str).strip
+  end
+
+  def encode_int(int)
+    int.to_s(16).chars.each_slice(2).map { |s| s.join.to_i(16) }
+  end
+
+  # NOTE: Algoexplorer always returns all args as base64 regardless type
+  def encode_int_base64(int)
+    Base64.encode64(encode_int(int).pack('c')).strip
   end
 
   def app_transaction_on_completion
@@ -55,32 +77,38 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def transaction_app_args
-    transaction_data.dig('application-transaction', 'application-args')&.map do |arg|
-      Base64.decode64(arg)
-    end
+    transaction_data.dig('application-transaction', 'application-args')
   end
 
   def transaction_on_completion
     transaction_data.dig('application-transaction', 'on-completion')
   end
 
+  def receiver_address
+    transaction_app_accounts.first
+  end
+
   def valid_app_id?
-    transaction_app_id == app_id.to_i
+    transaction_app_id == to_object[:appIndex].to_i
   end
 
   def valid_app_accounts?
-    transaction_app_accounts == app_accounts
+    transaction_app_accounts == to_object[:appAccounts]
   end
 
   def valid_app_args?
-    transaction_app_args == app_args
+    # NOTE: Algoexplorer always returns all args as base64 regardless type
+
+    transaction_app_args == encode_app_args(app_args, true)
   end
 
   def valid_transaction_on_completion?
+    # NOTE: Algoexplorer always returns transaction_on_completion as string
+
     transaction_on_completion == app_transaction_on_completion
   end
 
-  def valid?(_)
+  def valid?(_ = nil)
     super \
     && valid_app_id? \
     && valid_app_accounts? \

@@ -23,6 +23,22 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
       expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
       expect(response).to redirect_to('/dummy_sign_url')
     end
+
+    context 'with account token record' do
+      it 'creates a BlockchainTransaction and redirects to a sign_url' do
+        get :new, params: { account_token_record_id: account_token_record.id }
+        expect(account_token_record.blockchain_transactions.last.source).to eq('dummy_source_address')
+        expect(response).to redirect_to('/dummy_sign_url')
+      end
+    end
+
+    context 'with token' do
+      it 'creates a BlockchainTransaction and redirects to a sign_url' do
+        get :new, params: { token_id: token.id }
+        expect(token.blockchain_transactions.last.source).to eq('dummy_source_address')
+        expect(response).to redirect_to('/dummy_sign_url')
+      end
+    end
   end
 
   describe 'GET /receive' do

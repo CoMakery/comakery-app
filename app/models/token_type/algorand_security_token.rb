@@ -60,37 +60,37 @@ class TokenType::AlgorandSecurityToken < TokenType
   # Does it have custom account data stored on chain?
   # @return [Boolean] flag
   def operates_with_account_records?
-    false
+    true
   end
 
   # Does it have support for account groups?
   # @return [Boolean] flag
   def operates_with_reg_groups?
-    false
+    true
   end
 
   # Does it have support for transfer restrictions between accounts/groups?
   # @return [Boolean] flag
   def operates_with_transfer_rules?
-    false
+    true
   end
 
   # Does it have support for minting new tokens to a custom address?
   # @return [Boolean] flag
   def supports_token_mint?
-    false
+    true
   end
 
   # Does it have support for burning existing tokens from a custom address?
   # @return [Boolean] flag
   def supports_token_burn?
-    false
+    true
   end
 
   # Does it have support for temporal freezing of all token transactions?
   # @return [Boolean] flag
   def supports_token_freeze?
-    false
+    true
   end
 
   def contract_address

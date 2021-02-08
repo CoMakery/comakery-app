@@ -1,13 +1,17 @@
 class Sign::OreIdController < ApplicationController
   include OreIdCallbacks
   skip_after_action :verify_authorized, only: :receive, unless: :verify_errorless
+  skip_after_action :verify_authorized, only: :new, unless: :transfer
 
   # POST /sign/ore_id/new
   def new
-    authorize transfer, :pay?
+    # TODO: Add token admin role to policy token related tx
+    authorize transfer, :pay? if transfer
+
+    transactable = transfer || account_token_record || token
 
     transaction = BlockchainTransaction.create!(
-      blockchain_transactable: transfer,
+      blockchain_transactable: transactable,
       source: current_account.address_for_blockchain(transfer.token._blockchain)
     )
 
@@ -40,6 +44,14 @@ class Sign::OreIdController < ApplicationController
 
     def transfer
       @transfer ||= policy_scope(Award).find(params.require(:transfer_id))
+    end
+
+    def account_token_record
+      @account_token_record ||= AccountTokenRecord.find(params.require(:account_token_record_id))
+    end
+
+    def token
+      @account_token_record ||= AccountTokenRecord.find(params.require(:token_id))
     end
 
     def received_transaction

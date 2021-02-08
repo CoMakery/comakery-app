@@ -2,7 +2,7 @@ class Comakery::Algorand::Tx::App::SecurityToken::Mint < Comakery::Algorand::Tx:
   def app_args
     [
       'mint',
-      blockchain_transaction.amount.to_s
+      blockchain_transaction.amount
     ]
   end
 
@@ -10,5 +10,13 @@ class Comakery::Algorand::Tx::App::SecurityToken::Mint < Comakery::Algorand::Tx:
     [
       blockchain_transaction.destination
     ]
+  end
+
+  def valid_amount?
+    valid_app_args?
+  end
+
+  def valid_addresses?
+    blockchain_transaction.source == sender_address
   end
 end
