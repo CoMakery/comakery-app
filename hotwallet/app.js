@@ -21,13 +21,13 @@ function generateAlgorandKeyPair() {
   return new_wallet
 }
 
-function isAllVariablesSet() {
+function checkAllVariablesAreSet() {
   projectId === undefined || projectApiKey === undefined || comakeryServerUrl === undefined ||
     purestakeApi === undefined || redisUrl === undefined
 }
 
 function initialize() {
-  if (isAllVariablesSet()) { return "Some ENV vars was not set" }
+  if (checkAllVariablesAreSet()) { return "Some ENV vars was not set" }
 
   setRedisErrorHandler(redisClient)
 
