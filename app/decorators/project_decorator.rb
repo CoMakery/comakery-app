@@ -169,11 +169,17 @@ class ProjectDecorator < Draper::Decorator
     project.transfer_types.map.with_index { |t, i| [t, Comakery::ChartColors.lookup(i)] }.to_h
   end
 
+  def transfers_chart_amount(negative, amount)
+    return -amount if negative
+
+    amount
+  end
+
   # rubocop:todo Metrics/CyclomaticComplexity
   def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty, negative)
     chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(
-        set.group_by(&:transfer_type).map { |k, v| [k.name, negative ? -v.sum(&:total_amount) : v.sum(&:total_amount)] }.to_h.merge(
+        set.group_by(&:transfer_type).map { |k, v| [k.name, transfers_chart_amount(negative, v.sum(&:total_amount))] }.to_h.merge(
           timeframe: timeframe.strftime(date_modifier),
           i: timeframe.to_i
         )
