@@ -38,7 +38,7 @@ module OreIdCallbacks
 
   def verify_errorless
     if received_error
-      flash[:error] = received_error
+      flash[:error] = received_error.truncate(1_000) # Error Message can exceed the 4KB limit for cookies
       false
     else
       true
