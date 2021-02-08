@@ -3,8 +3,10 @@
 ### Installation:
 ```shell
 yarn install
-cp .env.required .env
+cp .env.example .env
 ```
+
+Change ENV variables to actual in `.env` file.
 
 ### Manage process:
 ```shell
