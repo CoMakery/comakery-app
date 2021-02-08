@@ -11,13 +11,22 @@ class Sign::OreIdController < ApplicationController
       source: current_account.address_for_blockchain(transfer.token._blockchain)
     )
 
+    session[:project_id] = transfer.award_type.project_id
+
     redirect_to sign_url(transaction)
   end
 
   # GET /sign/ore_id/receive
   def receive
     unless verify_errorless
-      redirect_to wallets_url
+      if session[:project_id]
+        project_id = session.delete(:project_id)
+
+        redirect_to project_dashboard_transfers_path(project_id)
+      else
+        redirect_to wallets_url
+      end
+
       return
     end
 
