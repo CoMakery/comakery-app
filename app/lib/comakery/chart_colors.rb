@@ -1,5 +1,4 @@
 class Comakery::ChartColors
-  # TODO: Check colors if are ordered correctly
   def self.array
     [
       # these are nice
