@@ -8,7 +8,7 @@ test('all ENVs are set', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(true);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(true)
 })
 
 test('projectId is null', async () => {
@@ -19,7 +19,7 @@ test('projectId is null', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
 
 test('projectId is undefined', async () => {
@@ -29,7 +29,7 @@ test('projectId is undefined', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
 
 test('projectId is undefined', async () => {
@@ -40,7 +40,7 @@ test('projectId is undefined', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
 
 test('projectApiKey is null', async () => {
@@ -51,7 +51,7 @@ test('projectApiKey is null', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
 
 test('comakeryServerUrl is null', async () => {
@@ -62,7 +62,7 @@ test('comakeryServerUrl is null', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
 
 test('purestakeApi is null', async () => {
@@ -73,7 +73,7 @@ test('purestakeApi is null', async () => {
     purestakeApi: null,
     redisUrl: "redis://localhost:6379/0"
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
 
 test('redisUrl is null', async () => {
@@ -84,5 +84,5 @@ test('redisUrl is null', async () => {
     purestakeApi: "purestake_api_key",
     redisUrl: null
   }
-  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false);
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
