@@ -112,7 +112,7 @@ table th, table td {
 
       <div class="article">
         <h2>CREATE – ERROR</h2>
-        <h3>POST /api/v1/projects/:project_id/account_token_records</h3>
+        <h3>POST /api/v1/tokens/:token_id/account_token_records</h3>
           <p class="explanation">
             Returns an array of errors
           </p>
@@ -128,10 +128,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">token id</span>
                 </td>
               </tr>
               <tr>
@@ -203,7 +203,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/57/account_token_records</pre>
+          <pre class="request route highlight">POST /api/v1/tokens/81/account_token_records</pre>
 
 
             <h4>Body</h4>
@@ -214,24 +214,27 @@ table th, table td {
         "max_balance": "-100",
         "lockup_until": "1",
         "reg_group_id": "42",
-        "account_id": "180",
+        "account_id": "176",
         "account_frozen": "false"
       }
     },
-    "url": "http://example.org/api/v1/projects/57/account_token_records",
+    "url": "http://example.org/api/v1/tokens/81/account_token_records",
     "method": "POST",
-    "nonce": "f440a8d0518e30788d8be938eabdc930",
-    "timestamp": "1612344469"
+    "nonce": "534ad87a5b852e4ec424f70152d3cbfb",
+    "timestamp": "1612801534"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "YRbhEsSi4ZeNx4HPehSUky3ctXw2RBq51vRTe2uT8Bx2jBHx6s/1QN3gpMNJBN2HDqZW39vqxCQoYJuaGHLwAQ=="
+    "signature": "3sbvxJPBJ/KIjo+H2258lngNBWtYPk+oLyWgasTKJX7RtEWy6XmeI+N26dUHgTuwB2u+r1x8Cj4hsadPJkYnDQ=="
   }
 }</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1</pre>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>

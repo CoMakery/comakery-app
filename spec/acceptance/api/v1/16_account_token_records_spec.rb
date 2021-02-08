@@ -48,7 +48,7 @@ resource 'VI. Account Token Records' do
     end
   end
 
-  get '/api/v1/tokens/:token_id/account_token_records/?wallet_id=:id' do
+  get '/api/v1/tokens/:token_id/account_token_records' do
     with_options with_example: true do
       parameter :token_id, 'token id', required: true, type: :integer
       parameter :wallet_id, 'wallet id', required: false, type: :integer
@@ -73,10 +73,12 @@ resource 'VI. Account Token Records' do
       let!(:wallet_id) { wallet.id }
       let!(:page) { 1 }
 
-      example 'INDEX' do
+      example 'INDEX - FILTER' do
         explanation 'Returns an array of account token records for the wallet. See GET for response fields description.'
 
-        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, wallet_id: wallet_id), 'GET', 'example.org')
+        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id), 'GET', 'example.org')
+        request[:wallet_id] = wallet_id
+
         do_request(request)
         expect(status).to eq(200)
       end
