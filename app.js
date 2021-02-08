@@ -1,5 +1,4 @@
 require('dotenv').config()
-const algosdk = require('algosdk')
 const redis = require("redis")
 const axios = require('axios')
 const hwUtils = require('./lib/hotwalletUtils')
@@ -27,7 +26,7 @@ function generateAlgorandKeyPair() {
 function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
-  setRedisErrorHandler(redisClient)
+  hwUtils.setRedisErrorHandler(redisClient)
 
   redisClient.hgetall(keyName, function (err, walletKeys) {
     if (err) { return "Can't get a wallet keys: " + err }
@@ -36,7 +35,7 @@ function initialize() {
       console.log("wallet already created, do nothing...")
     } else {
       console.log("Key file does not exists, generating...")
-      var newWallet = generateAlgorandKeyPair()
+      var newWallet = hwUtils.generateAlgorandKeyPair()
       registerHotWallet(newWallet)
     }
   })
@@ -65,12 +64,6 @@ function storeHotWalletKeys(wallet) {
     return `Can't set a wallet key: ${err}`
   })
   console.log(`Keys for a new hot wallet has been saved into ${keyName}`)
-}
-
-function setRedisErrorHandler(redisClient) {
-  redisClient.on("error", function (err) {
-    console.error(`Redis client error: ${err}`);
-  });
 }
 
 function deleteCurrentKey() {
