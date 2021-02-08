@@ -1,6 +1,8 @@
 module OreIdCallbacks
   extend ActiveSupport::Concern
 
+  ERROR_MESSAGE_SIZE_LIMIT = 1_000
+
   def current_ore_id_account
     @current_ore_id_account ||= (current_account.ore_id_account || current_account.create_ore_id_account(state: :pending_manual))
   end
@@ -38,7 +40,7 @@ module OreIdCallbacks
 
   def verify_errorless
     if received_error
-      flash[:error] = received_error.truncate(1_000) # Error Message can exceed the 4KB limit for cookies
+      flash[:error] = received_error.truncate(ERROR_MESSAGE_SIZE_LIMIT) # Error Message can exceed the 4KB limit for cookies
       false
     else
       true
