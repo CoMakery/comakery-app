@@ -11,17 +11,16 @@ class Sign::OreIdController < ApplicationController
     new_transaction.source = current_account.address_for_blockchain(new_transaction.blockchain_transactable._blockchain)
     new_transaction.save!
 
-    session[:sign_ore_id_fallback_redirect_url] = request.referer
-
     redirect_to sign_url(new_transaction)
   end
 
   # GET /sign/ore_id/receive
   def receive
-    fallback_redirect_url = session.delete(:sign_ore_id_fallback_redirect_url)
+    fallback_state
 
     unless verify_errorless
-      redirect_to fallback_redirect_url || wallets_url
+      fallback_transaction.update_status(:cancelled, received_error&.truncate(100))
+      redirect_to fallback_state['redirect_back_to'] || wallets_url
       return
     end
 
@@ -39,10 +38,6 @@ class Sign::OreIdController < ApplicationController
     else
       flash[:error] = received_transaction.errors.full_messages.join(', ')
     end
-
-    # TODO: Cancel transaction on received_error if we somehow can get `state`
-    #
-    # received_transaction.update_status(:cancelled, received_error)
 
     redirect_to received_state['redirect_back_to']
   end
@@ -71,5 +66,9 @@ class Sign::OreIdController < ApplicationController
 
     def received_transaction
       @received_transaction ||= BlockchainTransaction.find(received_state['transaction_id'])
+    end
+
+    def fallback_transaction
+      @fallback_transaction ||= BlockchainTransaction.find(fallback_state['transaction_id'])
     end
 end
