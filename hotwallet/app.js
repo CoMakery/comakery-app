@@ -18,16 +18,10 @@ async function initialize() {
   hwUtils.setRedisErrorHandler(redisClient)
   hwUtils.hotWalletInitialization(envs, redisClient)
 
-  return false // no errors
-}
-
-function deleteCurrentKey() {
-  redisClient.del(keyName)
-  console.log(`Wallet keys has been deleted: ${keyName}`)
+  return true
 }
 
 (async () => {
-  // deleteCurrentKey()
-  const res = await initialize()
-  if (res) { console.error(res); }
+  await hwUtils.deleteCurrentKey(envs, redisClient)
+  await initialize()
 })();
