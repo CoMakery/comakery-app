@@ -79,7 +79,7 @@ class Dashboard::TransfersController < ApplicationController
     end
 
     def transfer_type_name
-      @transfer_type_name ||= TransferType.find_by(id: params.fetch(:q, {}).fetch(:transfer_type_id_eq, nil))&.name
+      @transfer_type_name ||= TransferType.find_by(id: params.dig(:q, :transfer_type_id_eq))&.name
     end
 
     def transfer_params
