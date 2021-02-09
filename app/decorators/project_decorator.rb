@@ -175,9 +175,13 @@ class ProjectDecorator < Draper::Decorator
     amount
   end
 
-  # rubocop:todo Metrics/CyclomaticComplexity
   def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty, negative)
-    chart = transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
+    chart = transfers_grouping(transfers, limit, grouping, date_modifier, negative)
+    chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| x[:i] }
+  end
+
+  def transfers_grouping(transfers, limit, grouping, date_modifier, negative)
+    transfers.includes([:transfer_type]).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(
         set.group_by(&:transfer_type).map { |k, v| [k.name, transfers_chart_amount(negative, v.sum(&:total_amount))] }.to_h.merge(
           timeframe: timeframe.strftime(date_modifier),
@@ -185,10 +189,7 @@ class ProjectDecorator < Draper::Decorator
         )
       )
     end
-
-    chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| x[:i] }
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   def transfers_stacked_chart_year(transfers, negative: false)
     transfers_stacked_chart(
