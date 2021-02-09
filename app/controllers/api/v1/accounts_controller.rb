@@ -16,7 +16,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
 
   # POST /api/v1/accounts
   def create
-    account = whitelabel_mission.managed_accounts.create(account_params)
+    account = whitelabel_mission.managed_accounts.build(account_params)
     account.name_required = true
     account.specialty = Specialty.default
 
