@@ -22,10 +22,25 @@ afterAll(() => {
   redisClient.quit()
 });
 
-test("return successfull response", async () => {
+test("API returns successfull response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: {} }))
   res = await hwUtils.registerHotWallet(wallet, envs, redisClient)
 
   expect(res).toBe(true)
+})
+
+test("API returns failed response", async () => {
+  const data = {
+    response: {
+      status: 422,
+      statusText: "Unprocessable Entity",
+      data: { errors: { hot_wallet: 'already exists' } }
+    }
+  }
+
+  axios.post.mockReturnValue(Promise.reject(data));
+  res = await hwUtils.registerHotWallet(wallet, envs, redisClient)
+
+  expect(res).toBe(false)
 })
