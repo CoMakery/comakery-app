@@ -8,7 +8,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     @app_id = blockchain_transaction.token.contract_address
   end
 
-  def to_object
+  def to_object(**args)
     {
       type: 'appl',
       from: blockchain_transaction.source,
@@ -16,7 +16,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
       amount: nil,
       appIndex: app_id,
       appAccounts: app_accounts,
-      appArgs: encode_app_args(app_args),
+      appArgs: self.send("encode_app_args_#{args[:app_args_format]}"),
       appOnComplete: encode_app_transaction_on_completion(app_transaction_on_completion)
     }
   end
@@ -29,30 +29,52 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     []
   end
 
-  def encode_app_args(args, int_base64 = false)
-    args.map do |a|
+  # Note: ChainJS appArgs format
+  def encode_app_args_hex
+    app_args.map do |a|
       case a
       when String
-        encode_str(a)
+        '0x' + a.unpack("H*").first
       when Integer
-        int_base64 ? encode_int_base64(a) : encode_int(a)
+        '0x' + a.to_s(16)
       else
         raise "Unsupported app argument: #{a}:#{a.class}"
       end
     end
   end
 
-  def encode_str(str)
-    Base64.encode64(str).strip
+  # Note: Algosinger appArgs format
+  def encode_app_args_base64_and_uint
+    app_args.map do |a|
+      case a
+      when String
+        Base64.encode64(a).strip
+      when Integer
+        encode_int_as_bytes(a)
+      else
+        raise "Unsupported app argument: #{a}:#{a.class}"
+      end
+    end
   end
 
-  def encode_int(int)
+  # Note: Algoexplorer appArgs format
+  def encode_app_args_base64
+    app_args.map do |a|
+      case a
+      when String
+        Base64.encode64(a).strip
+      when Integer
+        Base64.encode64(encode_int_as_bytes(a).pack('c')).strip
+      else
+        raise "Unsupported app argument: #{a}:#{a.class}"
+      end
+    end
+  end
+
+  def encode_int_as_bytes(int)
+    # Note: [int].pack("N").bytes.drop_while(&:zero?) might be more performant
+
     int.to_s(16).chars.each_slice(2).map { |s| s.join.to_i(16) }
-  end
-
-  # NOTE: Algoexplorer always returns all args as base64 regardless type
-  def encode_int_base64(int)
-    Base64.encode64(encode_int(int).pack('c')).strip
   end
 
   def app_transaction_on_completion
@@ -89,17 +111,17 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def valid_app_id?
-    transaction_app_id == to_object[:appIndex].to_i
+    transaction_app_id == app_id.to_i
   end
 
   def valid_app_accounts?
-    transaction_app_accounts == to_object[:appAccounts]
+    transaction_app_accounts == app_accounts
   end
 
   def valid_app_args?
     # NOTE: Algoexplorer always returns all args as base64 regardless type
 
-    transaction_app_args == encode_app_args(app_args, true)
+    transaction_app_args == to_object(app_args_format: :base64)[:appArgs]
   end
 
   def valid_transaction_on_completion?

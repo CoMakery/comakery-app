@@ -52,7 +52,7 @@ describe Comakery::Algorand::Tx::App do
   end
 
   describe '#to_object' do
-    subject { algorand_app_tx.to_object }
+    subject { algorand_app_tx.to_object(app_args_format: :hex) }
 
     specify { expect(subject[:type]).to eq('appl') }
     specify { expect(subject[:from]).to eq(algorand_app_tx.blockchain_transaction.source) }
@@ -64,27 +64,67 @@ describe Comakery::Algorand::Tx::App do
     specify { expect(subject[:appOnComplete]).to eq(0) }
   end
 
-  describe 'encode_app_args' do
+  describe 'encode_app_args_hex' do
+    subject { algorand_app_tx.encode_app_args_hex.first }
+    
     context 'when arg is a String' do
-      subject { algorand_app_tx.encode_app_args(['dummy']).first }
+      before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
+
+      it { is_expected.to eq('0x64756d6d79') }
+    end
+
+    context 'when arg is an Integer' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([10000]) }
+
+      it { is_expected.to eq('0x2710') }
+    end
+
+    context 'when arg is unsupported' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1..9]) }
+
+      it { expect { subject }.to raise_exception }
+    end
+  end
+
+  describe 'encode_app_args_base64_and_uint' do
+    subject { algorand_app_tx.encode_app_args_base64_and_uint.first }
+    
+    context 'when arg is a String' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
 
       it { is_expected.to eq('ZHVtbXk=') }
     end
 
     context 'when arg is an Integer' do
-      subject { algorand_app_tx.encode_app_args([1999]).first }
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1999]) }
 
       it { is_expected.to eq([124, 15]) }
     end
 
-    context 'when arg is an Integer which should be encoded as base64' do
-      subject { algorand_app_tx.encode_app_args([1999], true).first }
+    context 'when arg is unsupported' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1..9]) }
+
+      it { expect { subject }.to raise_exception }
+    end
+  end
+
+  describe 'encode_app_args_base64' do
+    subject { algorand_app_tx.encode_app_args_base64.first }
+
+    context 'when arg is a String' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
+
+      it { is_expected.to eq('ZHVtbXk=') }
+    end
+
+    context 'when arg is an Integer' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1999]) }
 
       it { is_expected.to eq('fA==') }
     end
 
     context 'when arg is unsupported' do
-      subject { algorand_app_tx.encode_app_args([1.9]).first }
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1..9]) }
 
       it { expect { subject }.to raise_exception }
     end
