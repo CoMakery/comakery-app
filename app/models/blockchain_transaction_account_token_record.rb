@@ -16,7 +16,7 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
   end
 
   def on_chain_ast
-    Comakery::Algorand::Tx::App::SecurityToken::TransferRestrictions.new(self)
+    Comakery::Algorand::Tx::App::SecurityToken::SetAddressPermissions.new(self)
   end
 
   private

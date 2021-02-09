@@ -6,6 +6,8 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
   let(:transaction) { create(:blockchain_transaction) }
   let(:tranfser) { create(:blockchain_transaction).blockchain_transactable }
+  let(:account_token_record) { create(:algo_sec_dummy_restrictions) }
+  let(:token) { create(:algo_sec_token) }
 
   before do
     login(tranfser.project.account)
@@ -18,10 +20,12 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
       allow_any_instance_of(Account).to receive(:address_for_blockchain).and_return('dummy_source_address')
     end
 
-    it 'creates a BlockchainTransaction and redirects to a sign_url' do
-      get :new, params: { transfer_id: tranfser.id }
-      expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
-      expect(response).to redirect_to('/dummy_sign_url')
+    context 'with transfer' do
+      it 'creates a BlockchainTransaction and redirects to a sign_url' do
+        get :new, params: { transfer_id: tranfser.id }
+        expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
+        expect(response).to redirect_to('/dummy_sign_url')
+      end
     end
 
     context 'with account token record' do

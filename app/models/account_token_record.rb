@@ -22,6 +22,8 @@ class AccountTokenRecord < ApplicationRecord
 
   enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
 
+  delegate :_blockchain, :blockchain, to: :token
+
   def lockup_until
     super && Time.zone.at(super)
   end

@@ -107,6 +107,8 @@ class Award < ApplicationRecord
   enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
   enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }
 
+  delegate :_blockchain, :blockchain, to: :token
+
   def self.ransackable_scopes(_ = nil)
     %i[transfer_ready transfer_blocked_by_wallet]
   end

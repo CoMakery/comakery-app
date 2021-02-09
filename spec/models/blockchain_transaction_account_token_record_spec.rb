@@ -23,7 +23,7 @@ describe BlockchainTransactionAccountTokenRecord, vcr: true do
 
     context 'with algorand security token' do
       subject { build(:blockchain_transaction_account_token_record_algo).on_chain }
-      specify { expect(subject).to be_an(Comakery::Algorand::Tx::App::SecurityToken::TransferRestrictions) }
+      specify { expect(subject).to be_an(Comakery::Algorand::Tx::App::SecurityToken::SetAddressPermissions) }
     end
   end
 

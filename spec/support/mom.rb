@@ -907,9 +907,9 @@ class Mom
   def algorand_asset_opt_in_tx
     Comakery::Algorand::Tx::Asset::OptIn.new(
       create(
-        :blockchain_transaction,
+        :blockchain_transaction_opt_in,
         token: create(:asa_token, contract_address: '13076367'),
-        amount: 400,
+        amount: 0,
         tx_hash: 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ',
         source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
         destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
@@ -1023,7 +1023,7 @@ class Mom
 
     Comakery::Algorand::Tx::App::SecurityToken::SetTransferRule.new(
       create(
-        :blockchain_transaction_account_token_record,
+        :blockchain_transaction_transfer_rule,
         token: r.token,
         blockchain_transactable: r,
         amount: 0,
