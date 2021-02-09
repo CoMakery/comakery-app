@@ -7,7 +7,7 @@ class Comakery::Algorand::Tx
     @hash = blockchain_transaction.tx_hash
   end
 
-  def to_object(**args)
+  def to_object(**_args)
     {
       type: 'pay',
       from: blockchain_transaction.source,

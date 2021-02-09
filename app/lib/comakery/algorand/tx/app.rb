@@ -16,7 +16,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
       amount: nil,
       appIndex: app_id,
       appAccounts: app_accounts,
-      appArgs: self.send("encode_app_args_#{args[:app_args_format]}"),
+      appArgs: send("encode_app_args_#{args[:app_args_format]}"),
       appOnComplete: encode_app_transaction_on_completion(app_transaction_on_completion)
     }
   end
@@ -34,7 +34,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     app_args.map do |a|
       case a
       when String
-        '0x' + a.unpack("H*").first
+        '0x' + a.unpack1('H*')
       when Integer
         '0x' + a.to_s(16)
       else

@@ -8,7 +8,7 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
     @asset_id = blockchain_transaction.token.contract_address
   end
 
-  def to_object(**args)
+  def to_object(**_args)
     {
       type: 'axfer',
       from: blockchain_transaction.source,

@@ -66,7 +66,7 @@ describe Comakery::Algorand::Tx::App do
 
   describe 'encode_app_args_hex' do
     subject { algorand_app_tx.encode_app_args_hex.first }
-    
+
     context 'when arg is a String' do
       before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
 
@@ -88,7 +88,7 @@ describe Comakery::Algorand::Tx::App do
 
   describe 'encode_app_args_base64_and_uint' do
     subject { algorand_app_tx.encode_app_args_base64_and_uint.first }
-    
+
     context 'when arg is a String' do
       before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
 
