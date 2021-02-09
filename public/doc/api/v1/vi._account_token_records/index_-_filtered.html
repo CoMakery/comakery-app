@@ -111,10 +111,10 @@ table th, table td {
         <p class="explanation">Create and delete account token records, retrieve account token record data.</p>
 
       <div class="article">
-        <h2>GET</h2>
-        <h3>GET /api/v1/projects/:project_id/account_token_records/:id</h3>
+        <h2>INDEX - FILTERED</h2>
+        <h3>GET /api/v1/tokens/:token_id/account_token_records</h3>
           <p class="explanation">
-            Returns data for a single account token record.
+            Returns an array of account token records for the wallet. See GET for response fields description.
           </p>
 
           <h3>Parameters</h3>
@@ -128,18 +128,26 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">token id</span>
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">id</span>
+                <td>
+                    <span class="name">wallet_id</span>
                 </td>
                 <td>
-                  <span class="description">account token record id</span>
+                  <span class="description">wallet id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
@@ -243,33 +251,39 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/55/account_token_records/4?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F55%2Faccount_token_records%2F4&amp;body[method]=GET&amp;body[nonce]=d5a362106d22374590e3ac98fd008cd9&amp;body[timestamp]=1612344465&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=nUcQZcZPo6vtuP0VBhqAl7sFMepTzeqeF2hojYxmJLzWRiOaYyLXxZTPcEzc49q065Zcg%2BKGOT8EwGDDHKtzAg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/tokens/79/account_token_records?wallet_id=5&amp;page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens%2F79%2Faccount_token_records&amp;body[method]=GET&amp;body[nonce]=3fce90259fcaa033be8c34ce39069ce0&amp;body[timestamp]=1612867567&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=GX161KiEHD1gVv713Lhu8OMXI7lLG%2B7qVmX7IgoiRWzoMJR36nq4KVgI6xgfqFCQoXrjYcScbi2WH4SYRC0rDQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/55/account_token_records/4&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;d5a362106d22374590e3ac98fd008cd9&quot;, &quot;timestamp&quot;=&gt;&quot;1612344465&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;nUcQZcZPo6vtuP0VBhqAl7sFMepTzeqeF2hojYxmJLzWRiOaYyLXxZTPcEzc49q065Zcg+KGOT8EwGDDHKtzAg==&quot;}</pre>
+            <pre class="request query_parameters highlight">wallet_id: 5
+page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens/79/account_token_records&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;3fce90259fcaa033be8c34ce39069ce0&quot;, &quot;timestamp&quot;=&gt;&quot;1612867567&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;GX161KiEHD1gVv713Lhu8OMXI7lLG+7qVmX7IgoiRWzoMJR36nq4KVgI6xgfqFCQoXrjYcScbi2WH4SYRC0rDQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;617cd153d038c0bc821a728ccc29743b&quot;
-Last-Modified: Wed, 03 Feb 2021 09:27:44 GMT</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;b1a6e57d0e6b88580d36d91113052d61&quot;
+Last-Modified: Tue, 09 Feb 2021 10:46:07 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 4,
-  &quot;accountId&quot;: 170,
-  &quot;tokenId&quot;: 80,
-  &quot;maxBalance&quot;: 100000,
-  &quot;lockupUntil&quot;: &quot;2021-02-02T09:27:44.000Z&quot;,
-  &quot;regGroupId&quot;: 36,
-  &quot;accountFrozen&quot;: false,
-  &quot;status&quot;: &quot;created&quot;,
-  &quot;createdAt&quot;: &quot;2021-02-03T09:27:44.944Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-02-03T09:27:44.944Z&quot;
-}</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 4,
+    &quot;accountId&quot;: 169,
+    &quot;tokenId&quot;: 79,
+    &quot;maxBalance&quot;: 100000,
+    &quot;lockupUntil&quot;: &quot;2021-02-08T10:46:07.000Z&quot;,
+    &quot;regGroupId&quot;: 36,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-02-09T10:46:07.549Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-02-09T10:46:07.549Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>
