@@ -4,7 +4,7 @@ class BlockchainTransactionTokenUnfreeze < BlockchainTransaction
   end
 
   def on_chain
-    Comakery::Algorand::Tx::App::SecurityToken::Unfreeze.new(self)
+    Comakery::Algorand::Tx::App::SecurityToken::Unpause.new(self)
   end
 
   private

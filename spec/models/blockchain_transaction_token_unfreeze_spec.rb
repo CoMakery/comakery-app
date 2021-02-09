@@ -3,7 +3,7 @@ require 'rails_helper'
 describe BlockchainTransactionTokenUnfreeze do
   subject { create(:blockchain_transaction_token_unfreeze) }
 
-  specify { expect(subject.on_chain).to be_a(Comakery::Algorand::Tx::App::SecurityToken::Unfreeze) }
+  specify { expect(subject.on_chain).to be_a(Comakery::Algorand::Tx::App::SecurityToken::Unpause) }
   specify { expect(subject.token).to eq(subject.blockchain_transactable) }
 
   context 'when succeed' do
