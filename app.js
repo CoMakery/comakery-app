@@ -16,20 +16,7 @@ async function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
   hwUtils.setRedisErrorHandler(redisClient)
-
-  const keyName = hwUtils.keyName(envs.projectId)
-
-  redisClient.hgetall(keyName, function (err, walletKeys) {
-    if (err) { return "Can't get a wallet keys: " + err }
-
-    if (walletKeys) {
-      console.log("wallet already created, do nothing...")
-    } else {
-      console.log("Key file does not exists, generating...")
-      var newWallet = hwUtils.generateAlgorandKeyPair()
-      hwUtils.registerHotWallet(newWallet, envs, redisClient)
-    }
-  })
+  hwUtils.hotWalletInitialization(envs, redisClient)
 
   return false // no errors
 }
