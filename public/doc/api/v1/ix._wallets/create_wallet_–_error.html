@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>IX. Wallets API</h1>
 
-        <p class="explanation">Create, delete and retrieve account wallets.</p>
+        <p class="explanation">Create, update, delete and retrieve account wallets.</p>
 
       <div class="article">
         <h2>CREATE WALLET – ERROR</h2>
@@ -147,7 +147,7 @@ table th, table td {
                     <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;]</span>
+                  <span class="description">wallet source [&quot;user_provided&quot;, &quot;ore_id&quot;, &quot;hot_wallet&quot;]</span>
                 </td>
               </tr>
               <tr>
@@ -155,7 +155,47 @@ table th, table td {
                     <span class="name">tokens_to_provision</span>
                 </td>
                 <td>
-                  <span class="description">array of tokens to provision</span>
+                  <span class="description">array of params to tokens provision</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">tokens_to_provision[&quot;token_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">token_id is required if tokens_to_provision provided</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;max_balance&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">max_balance is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;lockup_until&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">lockup_until is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;reg_group_id&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">reg_group_id is required for security tokens only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tokens_to_provision[&quot;account_frozen&quot;]</span>
+                </td>
+                <td>
+                  <span class="description">account_frozen is required for security tokens only</span>
                 </td>
               </tr>
             </tbody>
@@ -168,26 +208,29 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/b64c9843-6de9-4553-a587-176ec117f978/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/489f44e1-8dfb-43b8-8a78-354826dec373/wallets</pre>
 
 
             <h4>Body</h4>
             <pre class="request body">{
   "body": {
     "data": {
-      "wallet": {
-        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
-      }
+      "wallets": [
+        {
+          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
+          "name": "Wallet"
+        }
+      ]
     },
-    "url": "http://example.org/api/v1/accounts/b64c9843-6de9-4553-a587-176ec117f978/wallets",
+    "url": "http://example.org/api/v1/accounts/489f44e1-8dfb-43b8-8a78-354826dec373/wallets",
     "method": "POST",
-    "nonce": "6866768149c4ea41919e0d284250ff2f",
-    "timestamp": "1608721145"
+    "nonce": "248a17eec16fb09591c5791fdf221ce8",
+    "timestamp": "1612867598"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "3dKV9O6NiWnG8Ef6q1xXW4r8CGTJ8ZUEyXERriIx0C+xQMTk8Q7GJybhfq9v4In2jAy/cE+Hde/fSIbjAcOtAw=="
+    "signature": "yA1CKgi09jFFp1tdiH7Zmf4w49yiujfw2PbIvnxJYRex0yEaH8V+7lOEyqrWUb4db7ovNry8THhpKK4qfN8fDA=="
   }
 }</pre>
 
@@ -198,9 +241,11 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;blockchain&quot;: [
-      &quot;unknown blockchain value&quot;
-    ]
+    &quot;0&quot;: {
+      &quot;blockchain&quot;: [
+        &quot;unknown blockchain value&quot;
+      ]
+    }
   }
 }</pre>
       </div>

@@ -27,6 +27,10 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
+  def hot_wallet_address
+    hot_wallet&.address
+  end
+
   def currency_denomination
     token&.decorate&.currency_denomination
   end
@@ -90,10 +94,16 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def header_props
+    project_image_path = GetImageVariantPath.call(
+      attachment: panoramic_image,
+      resize_to_fill: [1500, 300],
+      fallback: helpers.asset_url('default_project.jpg')
+    ).path
+
     {
       title: title,
       owner: legal_project_owner,
-      image_url: helpers.attachment_url(self, :panoramic_image, :fill, 1500, 300, fallback: 'defaul_project.jpg'),
+      image_url: project_image_path,
       settings_url: edit_project_path(self),
       access_url: project_dashboard_accesses_path(self),
       batches_url: project_award_types_path(self),
@@ -120,9 +130,9 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def team_top
-    team = (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+    team = (admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
 
-    team += interested.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
+    team += interested.with_attached_image.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
 
     team
   end
@@ -140,7 +150,11 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def image_url(size = 1000)
-    helpers.attachment_url(self, :square_image, :fill, size, size, fallback: 'defaul_project.jpg')
+    GetImageVariantPath.call(
+      attachment: square_image,
+      resize_to_fill: [size, size],
+      fallback: helpers.image_url('default_project.jpg')
+    ).path
   end
 
   def transfers_chart_types

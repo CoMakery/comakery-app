@@ -11,13 +11,24 @@ class Sign::OreIdController < ApplicationController
     new_transaction.source = current_account.address_for_blockchain(new_transaction.blockchain_transactable._blockchain)
     new_transaction.save!
 
+    session[:sign_ore_id_fallback_redirect_url] = request.referer
+
     redirect_to sign_url(new_transaction)
   end
 
   # GET /sign/ore_id/receive
   def receive
-    verify_errorless or return
-    verify_received_account or return
+    fallback_redirect_url = session.delete(:sign_ore_id_fallback_redirect_url)
+
+    unless verify_errorless
+      redirect_to fallback_redirect_url || wallets_url
+      return
+    end
+
+    unless verify_received_account
+      head 401
+      return
+    end
 
     authorize received_transaction.blockchain_transactable, :pay?
 

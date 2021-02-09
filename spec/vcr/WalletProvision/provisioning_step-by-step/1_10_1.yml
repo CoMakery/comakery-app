@@ -1,0 +1,107 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/v2/status
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 14 Jan 2021 11:56:41 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d5ac08be24340eb715798ca028d9a81d01610625401; expires=Sat, 13-Feb-21
+        11:56:41 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 07a25a58f00000f21083ae3000000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=MhgUi1a%2F%2FIB6e566FxsPpg3WJWG%2FmWM38giBJLe%2FNe1VIftR9F%2BuDTJmRTEzxmeUtmC%2F1iiYSkkViC5RawxWHvjp2vK9x5L1H1WREuMTqxwKN%2FXE2EBvDehgms3xHUtSSIWZRSxG5%2Bo%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 61172cd4ba51f210-ARN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"catchpoint":"","catchpoint-acquired-blocks":0,"catchpoint-processed-accounts":0,"catchpoint-total-accounts":0,"catchpoint-total-blocks":0,"catchpoint-verified-accounts":0,"catchup-time":0,"last-catchpoint":"11710000#JKZTCGNE5GIYI2XVBFEJIVXC5O6TNMUD6REJHN3UXBMKSS3FL5VQ","last-round":11714236,"last-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version-round":11714237,"next-version-supported":true,"stopped-at-unsupported-round":false,"time-since-last-round":4030148334}
+
+        '
+    http_version: null
+  recorded_at: Thu, 14 Jan 2021 11:56:41 GMT
+- request:
+    method: post
+    uri: https://service.oreid.io/api/transaction/sign
+    body:
+      encoding: UTF-8
+      string: '{"account":"ore1raevigpd","user_password":"b1002674f2b8fc0a794ecbf1ea78bfdb79a9bac1f3effdcea7c1c3929aa5647b!","chain_account":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","broadcast":true,"chain_network":"algo_test","return_signed_transaction":true,"transaction":"eyJmcm9tIjoiWUZHTTNVT0RPWlZIU0k0SFhLUFhPS0ZJNlQyWUNJSzNIS1dK\nWVhZRlFCT05KRDREM0hEMkRQTVlXNCIsInRvIjoiWUZHTTNVT0RPWlZIU0k0\nSFhLUFhPS0ZJNlQyWUNJSzNIS1dKWVhZRlFCT05KRDREM0hEMkRQTVlXNCIs\nImFtb3VudCI6MCwidHlwZSI6ImF4ZmVyIiwiYXNzZXRJbmRleCI6MTMwNzYz\nNjd9\n"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_API_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Thu, 14 Jan 2021 11:56:42 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '108'
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"6c-3FkJhC21EFGiRxCEzvJ47Mbffd4"
+      Via:
+      - 1.1 google
+    body:
+      encoding: UTF-8
+      string: '{"processId":"6150c755a0ab","message":"Problem handling /sign request","error":"Error:
+        api-key isn''t valid"}'
+    http_version: null
+  recorded_at: Thu, 14 Jan 2021 11:56:42 GMT
+recorded_with: VCR 5.1.0

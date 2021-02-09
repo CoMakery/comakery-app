@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe OreIdWalletOptInTxSyncJob, type: :job do
-  subject { create(:wallet_provision) }
+  subject { create(:wallet_provision, state: :opt_in_created) }
 
   context 'when sync is allowed' do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }

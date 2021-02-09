@@ -15,7 +15,8 @@ describe 'my account', js: true do
     expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     first('a.featured-mission__create-project').click
-    sleep 2
+
+    expect(find('.accounts-new')).to have_content 'Sign Up With Email'
     expect(page.current_url).to have_content '/accounts/new'
   end
 
@@ -25,7 +26,8 @@ describe 'my account', js: true do
     expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     find('.featured-mission__project__interest').click
-    sleep 2
+
+    expect(find('.accounts-new')).to have_content 'Sign Up With Email'
     expect(page.current_url).to have_content '/accounts/new'
   end
 
@@ -65,15 +67,7 @@ describe 'my account', js: true do
     fill_in 'Password', with: '12345678'
     page.check('account_agreed_to_user_agreement')
     click_on 'Create Your Account'
-    expect(page).to have_content('Build Your Profile')
-  end
-
-  scenario 'show email input field if email is empty' do
-    # rubocop:disable Rails/SkipsModelValidations
-    confirmed_account.update_column('email', nil)
-    login(confirmed_account)
-    visit build_profile_accounts_path
-    expect(page).to have_content('E-mail *')
+    expect(page).to have_content('Setup Your Account')
   end
 
   scenario 'Sign up flow with metamask' do
@@ -82,15 +76,27 @@ describe 'my account', js: true do
     login(metamask_account)
     visit build_profile_accounts_path
     expect(page).not_to have_content("can't be blank")
-    click_on 'Save'
-    expect(page).to have_content("Email can't be blank, Email is invalid")
+    click_on 'Get Started'
+    expect(page).to have_content("First name can't be blank")
+  end
+
+  scenario 'MetaMask button disabled' do
+    visit new_account_path
+    expect(page).not_to have_selector 'a', text: 'MetaMask', exact_text: true
+  end
+
+  scenario 'MetaMask button enabled' do
+    ENV['METAMASK_LOGIN'] = 'true'
+    visit new_account_path
+    expect(page).to have_selector 'a', text: 'MetaMask', exact_text: true
   end
 
   scenario 'featured page is available after signup' do
     login(confirmed_account)
-    File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file| # rubocop:todo Rails/FilePath
-      mission.image = file
-    end
+    mission.image = Rack::Test::UploadedFile.new(
+      Rails.root.join('spec/fixtures/helmet_cat.png').to_s,
+      'image/png'
+    )
     mission.save
 
     visit '/'
@@ -99,9 +105,9 @@ describe 'my account', js: true do
     stub_airtable
     expect(page).to have_selector('.featured-mission__project__interest')
     find('.featured-mission__project__interest').click
-    sleep 2
+
+    expect(find('.featured-missions')).to have_content('UNFOLLOW')
     expect(confirmed_account.interests.count).to be_positive
-    expect(page).to have_content('UNFOLLOW')
   end
 
   scenario 'account page is available after signup' do

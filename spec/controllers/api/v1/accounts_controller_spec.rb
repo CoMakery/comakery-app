@@ -34,6 +34,24 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     allow(controller).to receive(:authorized).and_return(true)
   end
 
+  describe 'signature check' do
+    render_views
+
+    it 'existing nonce' do
+      params = build(:api_signed_request, '', api_v1_account_path(id: account.managed_account_id), 'GET')
+      params[:id] = account.managed_account_id
+      params[:format] = :json
+
+      nonce = params['body']['nonce']
+      key = "api::v1::nonce_history:#{active_whitelabel_mission.id}:#{nonce}"
+      Rails.cache.write(key, true, expires_in: 1.day)
+
+      get :show, params: params
+      expect(response.status).to eq 401
+      expect(response.body).to eq '{"errors":{"authentication":"Invalid nonce"}}'
+    end
+  end
+
   describe 'GET #show' do
     it 'returns account info by managed_account_id' do
       params = build(:api_signed_request, '', api_v1_account_path(id: account.managed_account_id), 'GET')
@@ -70,6 +88,16 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         post :create, params: params
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
+      end
+    end
+
+    context 'with invalid date_of_birth param' do
+      let(:invalid_attributes) { { email: "me+#{SecureRandom.hex(20)}@example.com", date_of_birth: '01' } }
+
+      it 'renders an error' do
+        params = build(:api_signed_request, { account: invalid_attributes }, api_v1_accounts_path, 'POST')
+
+        expect { post :create, params: params }.to change(Account, :count).by(0)
       end
     end
   end

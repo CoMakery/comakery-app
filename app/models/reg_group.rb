@@ -14,7 +14,7 @@ class RegGroup < ApplicationRecord
 
   attr_readonly :blockchain_id
 
-  validates_with ComakeryTokenValidator
+  validates_with SecurityTokenValidator
   validates :name, :blockchain_id, presence: true
   validates :name, :blockchain_id, uniqueness: { scope: :token_id } # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :blockchain_id, inclusion: { in: BLOCKCHAIN_ID_MIN..BLOCKCHAIN_ID_MAX }

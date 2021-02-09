@@ -86,10 +86,7 @@ describe 'tokens features', js: true do
 
     click_on 'cancel'
 
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
-
-    expect(page).to have_content 'Create a Token'
+    expect(find('.token-index')).to have_content 'Create a Token'
   end
 
   scenario 'admin views list of tokens and token details' do

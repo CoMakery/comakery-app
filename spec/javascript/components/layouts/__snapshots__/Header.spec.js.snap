@@ -56,6 +56,12 @@ exports[`Header renders correctly without props 1`] = `
         </a>
         <a
           className={null}
+          href="/wallets"
+        >
+          Wallets
+        </a>
+        <a
+          className={null}
           href="/account"
         >
           My Account

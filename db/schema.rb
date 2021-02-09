@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_17_111225) do
+ActiveRecord::Schema.define(version: 2021_02_01_142127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,9 +27,11 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.datetime "updated_at", null: false
     t.decimal "balance", precision: 78
     t.integer "status", default: 0
+    t.bigint "wallet_id"
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
+    t.index ["wallet_id"], name: "index_account_token_records_on_wallet_id"
   end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
@@ -100,6 +102,33 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.bigint "project_id", null: false
     t.index ["account_id", "project_id"], name: "index_accounts_projects_on_account_id_and_project_id"
     t.index ["project_id", "account_id"], name: "index_accounts_projects_on_project_id_and_account_id"
+  end
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_postgresql_files", force: :cascade do |t|
+    t.oid "oid"
+    t.string "key"
+    t.index ["key"], name: "index_active_storage_postgresql_files_on_key", unique: true
   end
 
   create_table "api_keys", force: :cascade do |t|
@@ -214,6 +243,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.boolean "transaction_success"
     t.string "transaction_error"
     t.bigint "transfer_type_id"
+    t.bigint "recipient_wallet_id"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
@@ -338,6 +368,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.string "whitelabel_contact_email"
     t.string "whitelabel_api_public_key"
     t.string "whitelabel_api_key"
+    t.string "wallet_recovery_api_public_key"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
@@ -577,17 +608,26 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ore_id_account_id"
-    t.index ["_blockchain", "account_id"], name: "idx_blockchain_account_id", unique: true
+    t.string "name"
+    t.boolean "primary_wallet", default: false
+    t.bigint "project_id"
+    t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
+    t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true
+    t.index ["account_id", "primary_wallet", "_blockchain"], name: "index_wallets_on_account_id_and_primary_wallet_and__blockchain", unique: true, where: "(primary_wallet IS TRUE)"
     t.index ["account_id"], name: "index_wallets_on_account_id"
     t.index ["ore_id_account_id"], name: "index_wallets_on_ore_id_account_id"
+    t.index ["project_id"], name: "index_wallets_on_project_id"
   end
 
   add_foreign_key "account_token_records", "accounts"
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
+  add_foreign_key "account_token_records", "wallets"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
+  add_foreign_key "awards", "wallets", column: "recipient_wallet_id"
   add_foreign_key "balances", "tokens"
   add_foreign_key "balances", "wallets"
   add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
@@ -608,4 +648,5 @@ ActiveRecord::Schema.define(version: 2020_12_17_111225) do
   add_foreign_key "wallet_provisions", "wallets"
   add_foreign_key "wallets", "accounts"
   add_foreign_key "wallets", "ore_id_accounts"
+  add_foreign_key "wallets", "projects"
 end

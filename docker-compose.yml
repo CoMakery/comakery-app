@@ -9,7 +9,7 @@ x-app: &app
       PG_MAJOR: '11'
       NODE_MAJOR: '12'
       YARN_VERSION: '1.12.3'
-      BUNDLER_VERSION: '2.0.1'
+      BUNDLER_VERSION: '2.2.3'
   environment: &env
     NODE_ENV: development
     RAILS_ENV: ${RAILS_ENV:-development}
@@ -40,21 +40,7 @@ x-backend: &backend
     WEB_CONCURRENCY: 1
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
-    EDITOR: vi
-    APP_PROTOCOL: http://
-    ASSET_HOST: http://localhost:3000
-    MAILER_HOST: localhost:3000
-    AWS_API_KEY: dummy
-    AWS_API_SECRET: dummy
-    DISCORD_CLIENT_ID: none
-    DISCORD_CLIENT_SECRET: none
-    INFURA_PROJECT_ID: none
-    ORE_ID_API_KEY: none
-    ORE_ID_SERVICE_KEY: none
-    SLACK_API_KEY: none
-    SLACK_API_SECRET: none
-    REFILE_S3_REGION: dummy
-    REFILE_S3_BUCKET: dummy
+    DOCKER: 'true'
   depends_on:
     postgres:
       condition: service_healthy

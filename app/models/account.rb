@@ -4,9 +4,11 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
-  attachment :image, type: :image
+  # attachment :image, type: :image
+  has_one_attached :image
 
   include EthereumAddressable
+  include ActiveStorageValidator
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
@@ -72,11 +74,10 @@ class Account < ApplicationRecord
   validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :password, length: { minimum: 8 }, if: :password_required
-  validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
+  validates :first_name, :last_name, :country, presence: true, if: :name_required
   validates :date_of_birth, presence: { message: 'should be present in correct format' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
-
   # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   # rubocop:enable Rails/UniqueValidationWithoutIndex
@@ -94,6 +95,7 @@ class Account < ApplicationRecord
     record.errors.add(attr, 'is unsafe') if ApplicationController.helpers.sanitize(value) != value
   end
 
+  validate_image_attached :image
   validate :validate_age, on: :create
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
   after_validation :normalize_ethereum_auth_address
@@ -326,7 +328,7 @@ class Account < ApplicationRecord
   end
 
   def address_for_blockchain(blockchain)
-    wallets.find_by(_blockchain: blockchain)&.address
+    wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
   private

@@ -1,4 +1,3 @@
-require 'refile/file_double'
 require 'webmock/rspec'
 include WebMock::API # rubocop:todo Style/MixinUsage
 
@@ -21,11 +20,22 @@ class Mom
 
   def wallet(**attrs)
     defaults = {
+      name: 'Wallet',
       _blockchain: :bitcoin,
       account: create(:account),
       address: bitcoin_address_1
     }
     Wallet.new(defaults.merge(attrs))
+  end
+
+  def ore_id_wallet(**attrs)
+    defaults = {
+      source: :ore_id,
+      ore_id_account: build(:ore_id, skip_jobs: true),
+      _blockchain: 'algorand_test',
+      address: build(:algorand_address_1)
+    }
+    build(:wallet, defaults.merge(attrs))
   end
 
   def balance(**attrs)
@@ -114,26 +124,31 @@ class Mom
     TransferRule.new(defaults.merge(attrs))
   end
 
-  def account_token_record(**attrs)
+  def account_token_record(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     token = attrs[:token] || build(:comakery_dummy_token)
+    account = attrs[:account] || create(:account)
+    reg_group = attrs[:reg_group] || create(:reg_group, token: token)
+    wallet =
+      if attrs.key?(:wallet)
+        attrs[:wallet]
+      elsif (account_wallet = account.wallets.find_by(_blockchain: token._blockchain))
+        account_wallet
+      else
+        create(
+          :wallet,
+          account: account,
+          _blockchain: token._blockchain,
+          address: attrs[:address] || build(:ethereum_address_2)
+        )
+      end
 
-    account = attrs[:account] || create(
-      :account
-    )
-
-    account.wallets.find_by(_blockchain: token._blockchain) || create(
-      :wallet,
-      account: account,
-      _blockchain: token._blockchain,
-      address: attrs[:address] || build(:ethereum_address_2)
-    )
-
-    attrs.delete(:address)
+    attrs.except!(:address, :account, :reg_group, :wallet)
 
     defaults = {
       account: account,
       token: token,
-      reg_group: create(:reg_group, token: token),
+      wallet: wallet,
+      reg_group: reg_group,
       max_balance: 100000,
       balance: 200,
       account_frozen: false,
@@ -394,8 +409,8 @@ class Mom
       maximum_tokens: 1_000_000_000_000_000_000,
       token: create(:token),
       mission: create(:mission),
-      square_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
-      panoramic_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
+      square_image: dummy_image,
+      panoramic_image: dummy_image
     }
     Project.new(defaults.merge(attrs))
   end
@@ -404,7 +419,7 @@ class Mom
     defaults = {
       name: "Token-#{SecureRandom.hex(20)}",
       symbol: "TKN#{SecureRandom.hex(20)}",
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false
     }
 
@@ -476,7 +491,7 @@ class Mom
     defaults = {
       name: "Algorand-#{SecureRandom.hex(20)}",
       symbol: 'ALGO',
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
       _token_type: 'algo'
@@ -490,7 +505,7 @@ class Mom
       name: "Asa-#{SecureRandom.hex(20)}",
       symbol: "TKN-#{SecureRandom.hex(20)}",
       contract_address: attrs[:contract_address] || '13076367',
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
       _token_type: 'asa'
@@ -509,7 +524,7 @@ class Mom
       symbol: "TKN-#{SecureRandom.hex(20)}",
       contract_address: attrs[:contract_address] || '13258116',
       decimal_places: 8,
-      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
       _token_type: 'algorand_security_token'
@@ -659,14 +674,26 @@ class Mom
       name: 'test1',
       subtitle: 'test1',
       description: 'test1',
-      image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
-      logo: Refile::FileDouble.new('dummy_logo', 'logo.png', content_type: 'image/png')
+      image: dummy_image,
+      logo: dummy_image
     }
     Mission.new(defaults.merge(attrs))
   end
 
+  def whitelabel_mission(**attrs)
+    whitelabel_domain = attrs.key?(:whitelabel_domain) ? attrs[:whitelabel_domain] : 'wl.test.host'
+
+    create(
+      :mission,
+      whitelabel: true,
+      whitelabel_domain: whitelabel_domain,
+      whitelabel_api_public_key: build(:api_public_key),
+      whitelabel_api_key: build(:api_key)
+    )
+  end
+
   def active_whitelabel_mission
-    create(:mission, whitelabel: true, whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key))
+    create(:whitelabel_mission, whitelabel_domain: 'test.host')
   end
 
   def api_public_key
@@ -1069,6 +1096,10 @@ class Mom
     '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt'
   end
 
+  def bitcoin_address_2
+    '3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5'
+  end
+
   def constellation_address_1
     'DAG8LvRqfJchUjkw5Fpm3DohFqgXhqeqRAVUWKKY'
   end
@@ -1153,5 +1184,8 @@ def create(thing, *args)
 end
 
 def dummy_image
-  Refile::FileDouble.new('dummy_image', 'dummy_image.png', content_type: 'image/png')
+  Rack::Test::UploadedFile.new(
+    Rails.root.join('spec/fixtures/dummy_image.png').to_s,
+    'image/png'
+  )
 end

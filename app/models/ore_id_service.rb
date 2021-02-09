@@ -116,7 +116,7 @@ class OreIdService
         'name' => account.name,
         'user_name' => account.nickname || '',
         'email' => account.email,
-        'picture' => account.image ? Refile.attachment_url(account, :image) : '',
+        'picture' => Attachment::GetPath.call(attachment: account.image).path,
         'user_password' => ore_id.temp_password,
         'phone' => '',
         'account_type' => 'native'
@@ -163,7 +163,7 @@ class OreIdService
       when 'userAlreadyExists'
         raise OreIdService::RemoteUserExistsError
       else
-        raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})"
+        raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})\nFull details: #{body}"
       end
     end
 

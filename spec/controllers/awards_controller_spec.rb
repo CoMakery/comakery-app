@@ -59,6 +59,15 @@ RSpec.describe AwardsController, type: :controller do
       expect(assigns[:project]).to eq(project)
     end
 
+    it 'do not show wl projects for main' do
+      wl_mission = create :mission, whitelabel_domain: 'wl.test.host', whitelabel: true, whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)
+      wl_project = create :project, mission: wl_mission, title: 'WL project title'
+
+      get :index, params: { project_id: wl_project.id }
+      expect(response.status).to eq(200)
+      expect(assigns[:project]).to be nil
+    end
+
     it 'sets default project filter if user has no experience' do
       project = create(:project)
       ENV['DEFAULT_PROJECT_ID'] = project.id.to_s
@@ -414,15 +423,14 @@ RSpec.describe AwardsController, type: :controller do
       )
     end
 
-    before do
-      login(issuer.account)
-      request.env['HTTP_REFERER'] = "/projects/#{project.to_param}"
-    end
-
     context 'logged in' do
+      before do
+        login(issuer.account)
+        request.env['HTTP_REFERER'] = "/projects/#{project.to_param}"
+      end
+
       it 'records a slack award being created' do
         expect_any_instance_of(Award).to receive(:send_award_notifications)
-        allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
 
         award.update(account: nil, status: 'ready')
 
@@ -449,7 +457,6 @@ RSpec.describe AwardsController, type: :controller do
 
       it 'records a discord award being created' do
         expect_any_instance_of(Award).to receive(:send_award_notifications)
-        allow_any_instance_of(Account).to receive(:ethereum_issue_ready?) { true }
 
         stub_discord_channels
         channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
@@ -475,6 +482,31 @@ RSpec.describe AwardsController, type: :controller do
         expect(award2.award_type).to eq(award_type)
         expect(award2.account).to eq(receiver.account)
         expect(award2.quantity).to eq(1.5)
+      end
+    end
+
+    context 'logged in not as project owner' do
+      before do
+        account = create(:account)
+        login(account)
+        request.env['HTTP_REFERER'] = "/projects/#{project.to_param}"
+      end
+
+      it 'can not send the award' do
+        award.update(account: nil, status: 'ready')
+
+        post :send_award, params: {
+          project_id: project.to_param,
+          award_type_id: award_type.to_param,
+          award_id: award.to_param,
+          task: {
+            email: 'test@example.com',
+            quantity: 1.5,
+            message: 'Great work'
+          }
+        }
+
+        expect(response.status).to eq(302)
       end
     end
   end

@@ -1,10 +1,12 @@
 class Token < ApplicationRecord
+  include ActiveStorageValidator
   include BelongsToBlockchain
   include BlockchainTransactable
 
   nilify_blanks
 
-  attachment :logo_image, type: :image
+  # attachment :logo_image, type: :image
+  has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :interested
@@ -17,11 +19,13 @@ class Token < ApplicationRecord
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_token_type, :denomination, presence: true
 
+  validate_image_attached :logo_image
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 
   scope :listed, -> { where unlisted: false }
   scope :available_for_algorand_opt_in, -> { where(_token_type: %w[asa algorand_security_token]) }
+  scope :available_for_provision, -> { where(_token_type: %w[asa algorand_security_token]) }
 
   enum denomination: {
     USD: 0,
@@ -66,6 +70,10 @@ class Token < ApplicationRecord
 
   enum _token_type: TokenType.list, _prefix: :_token_type
   delegate :contract, :abi, to: :token_type
+
+  ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
+    parent.table[:_blockchain]
+  end
 
   def token_type
     if _token_type

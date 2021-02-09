@@ -16,11 +16,11 @@ describe ApplicationController do
     end
 
     def new
-      raise Slack::Web::Api::Error, 'boom'
+      raise Slack::Web::Api::Error, 'Slack error'
     end
 
     def show
-      raise Pundit::NotAuthorizedError, 'boooom'
+      raise Pundit::NotAuthorizedError, 'Pundit error'
     end
   end
 
@@ -49,7 +49,7 @@ describe ApplicationController do
       expect(response).to render_template('accounts/build_profile')
       expect(assigns[:account]).to eq(account)
       expect(assigns[:skip_validation]).to be true
-      expect(flash[:error]).to eq('Please complete your profile info for Country, Specialty')
+      expect(flash[:error]).to eq('Please complete your profile info for Country')
     end
   end
 
@@ -183,7 +183,7 @@ describe ApplicationController do
 
     describe 'Slack::Web::Api::Error' do
       it 'redirects to logout page' do
-        expect(Rails.logger).to receive(:error)
+        expect(Rails.logger).to receive(:error).at_least(:once)
         session[:account_id] = 432
 
         get :new
@@ -196,7 +196,7 @@ describe ApplicationController do
 
     describe 'Pundit::NotAuthorizedError' do
       it 'redirects to root path and logs the error' do
-        expect(Rails.logger).to receive(:error)
+        expect(Rails.logger).to receive(:error).at_least(:once)
 
         get :show, params: { id: 1 }
 

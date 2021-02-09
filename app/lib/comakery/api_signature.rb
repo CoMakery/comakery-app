@@ -88,6 +88,8 @@ module Comakery
     # Allowed ahead of time for timestamp
     TIMESTAMP_AHEAD_SECONDS = 3
 
+    MAX_NONCE_SIZE = 36
+
     # Creates a new request to be verified
     #
     # @param request [Hash] request including body and optioanl proof
@@ -164,6 +166,8 @@ module Comakery
       end
 
       def verify_nonce
+        nonce = @request.fetch('body', {}).fetch('nonce', '')
+        raise Comakery::APISignatureError, 'Nonce is too long' if nonce.length > MAX_NONCE_SIZE
         raise Comakery::APISignatureError, 'Invalid nonce' unless @is_nonce_unique.call(@request.fetch('body', {}).fetch('nonce', ''))
       end
 

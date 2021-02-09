@@ -18,9 +18,9 @@ class Dashboard::TransferTypesController < ApplicationController
     @transfer_type = @project.transfer_types.new(transfer_type_params)
 
     if @transfer_type.save
-      redirect_to project_dashboard_transfer_types_path(@project), notice: 'Transfer Type created'
+      redirect_to project_dashboard_transfer_categories_path(@project), notice: 'Transfer Category created'
     else
-      redirect_to project_dashboard_transfer_types_path(@project), flash: { error: @transfer_type.errors.full_messages.join(', ') }
+      redirect_to project_dashboard_transfer_categories_path(@project), flash: { error: @transfer_type.errors.full_messages.join(', ') }
     end
   end
 
@@ -28,9 +28,9 @@ class Dashboard::TransferTypesController < ApplicationController
     authorize @project, :transfer_types?
 
     if @transfer_type.update(transfer_type_params)
-      redirect_to project_dashboard_transfer_types_path(@project), notice: 'Transfer Type updated'
+      redirect_to project_dashboard_transfer_categories_path(@project), notice: 'Transfer Category updated'
     else
-      redirect_to project_dashboard_transfer_types_path(@project), flash: { error: @transfer_type.errors.full_messages.join(', ') }
+      redirect_to project_dashboard_transfer_categories_path(@project), flash: { error: @transfer_type.errors.full_messages.join(', ') }
     end
   end
 
@@ -38,9 +38,9 @@ class Dashboard::TransferTypesController < ApplicationController
     authorize @project, :transfer_types?
 
     if @transfer_type.destroy
-      redirect_to project_dashboard_transfer_types_path(@project), notice: 'Transfer Type destroyed'
+      redirect_to project_dashboard_transfer_categories_path(@project), notice: 'Transfer Category destroyed'
     else
-      redirect_to project_dashboard_transfer_types_path(@project), flash: { error: @transfer_type.errors.full_messages.join(', ') }
+      redirect_to project_dashboard_transfer_categories_path(@project), flash: { error: @transfer_type.errors.full_messages.join(', ') }
     end
   end
 

@@ -14,7 +14,12 @@ class Dashboard::AccessesController < ApplicationController
 
   def add_admin
     authorize @project
-    account = Account.find_by(email: params[:email])
+    account =
+      if @whitelabel_mission
+        @whitelabel_mission.managed_accounts.find_by email: params[:email]
+      else
+        Account.find_by(email: params[:email], managed_mission_id: nil)
+      end
 
     return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Account is not found on CoMakery' } unless account
 

@@ -33,14 +33,15 @@ module Comakery
     # app/lib/ is for code that expects Rails (esp. models) but which is not itself a model
     config.autoload_paths << Rails.root.join("app", "lib")
     config.autoload_paths << Rails.root.join("app", "interactors")
+    config.autoload_paths << Rails.root.join("app", "queries")
 
     routes.default_url_options[:host] = ENV['APP_HOST'].presence || "localhost:#{ENV['PORT'].presence || 3000}"
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'].presence || 'https://'
 
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
-    cloudfront_host = ENV['CLOUDFRONT_HOST']
-    if cloudfront_host.present?
-      config.action_controller.asset_host = cloudfront_host
+    cdn_host = ENV['EDGE_URL']
+    if cdn_host.present?
+      config.action_controller.asset_host = cdn_host
       config.font_assets.origin = "*"
     end
 

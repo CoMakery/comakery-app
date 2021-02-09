@@ -112,9 +112,9 @@ table th, table td {
 
       <div class="article">
         <h2>CREATE</h2>
-        <h3>POST /api/v1/projects/:project_id/account_token_records</h3>
+        <h3>POST /api/v1/tokens/:token_id/account_token_records</h3>
           <p class="explanation">
-            Returns created account token record details (See GET for response details)
+            Returns account token records details (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,10 +128,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">token id</span>
                 </td>
               </tr>
               <tr>
@@ -156,6 +156,14 @@ table th, table td {
                 </td>
                 <td>
                   <span class="description">reg group id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">account_token_record[account_id]</span>
+                </td>
+                <td>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
@@ -195,7 +203,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/56/account_token_records</pre>
+          <pre class="request route highlight">POST /api/v1/tokens/80/account_token_records</pre>
 
 
             <h4>Body</h4>
@@ -210,37 +218,53 @@ table th, table td {
         "account_frozen": "false"
       }
     },
-    "url": "http://example.org/api/v1/projects/56/account_token_records",
+    "url": "http://example.org/api/v1/tokens/80/account_token_records",
     "method": "POST",
-    "nonce": "75e11aaef65c986eb17be5e7b5e5cc88",
-    "timestamp": "1604580140"
+    "nonce": "4dc7a826745e1a6aa663b555072cc72d",
+    "timestamp": "1612867568"
   },
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "LuI62MrjjUqNl/91lYacm+EKWtQVS+QXPWEorH9nWKXcM+za5TVb/sxfsQlX0S9eCa96s3XSOPBFJXOHp7buCA=="
+    "signature": "fdlTm8YCasLHU+XFi1Lr8QRuY720SWcxgKn4nP0xXPQC5msmDlYEl84eNE2imrUsPQI65eOGrcW9bXArFbgPAg=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;d2c75c96c4545256d19dc2d64f4e528c&quot;</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;9e88128bcb73987e66db5e2ef1d02210&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;id&quot;: 6,
-  &quot;accountId&quot;: 173,
-  &quot;tokenId&quot;: 82,
-  &quot;maxBalance&quot;: 100,
-  &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
-  &quot;regGroupId&quot;: 39,
-  &quot;accountFrozen&quot;: false,
-  &quot;status&quot;: &quot;created&quot;,
-  &quot;createdAt&quot;: &quot;2020-11-05T12:42:20.364Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-11-05T12:42:20.364Z&quot;
-}</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 5,
+    &quot;accountId&quot;: 171,
+    &quot;tokenId&quot;: 80,
+    &quot;maxBalance&quot;: 100000,
+    &quot;lockupUntil&quot;: &quot;2021-02-08T10:46:08.000Z&quot;,
+    &quot;regGroupId&quot;: 38,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-02-09T10:46:08.231Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-02-09T10:46:08.231Z&quot;
+  },
+  {
+    &quot;id&quot;: 6,
+    &quot;accountId&quot;: 172,
+    &quot;tokenId&quot;: 80,
+    &quot;maxBalance&quot;: 100,
+    &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
+    &quot;regGroupId&quot;: 39,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-02-09T10:46:08.323Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-02-09T10:46:08.323Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

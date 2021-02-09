@@ -26,6 +26,8 @@ class WalletProvision < ApplicationRecord
   }
 
   def sync_balance
+    return unless pending?
+
     if wallet.coin_balance&.value&.positive?
       initial_balance_confirmed!
     else
@@ -34,6 +36,8 @@ class WalletProvision < ApplicationRecord
   end
 
   def create_opt_in_tx
+    return unless initial_balance_confirmed?
+
     transaction do
       opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
       opt_in.pending!
@@ -46,6 +50,8 @@ class WalletProvision < ApplicationRecord
   end
 
   def sync_opt_in_tx
+    return unless opt_in_created?
+
     if wallet.token_opt_ins.all?(&:opted_in?)
       provisioned!
     else

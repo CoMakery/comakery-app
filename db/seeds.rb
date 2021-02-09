@@ -1,4 +1,3 @@
-require 'refile/file_double'
 require_relative '../spec/support/mom.rb'
 
 # This file should contain all the record creation needed to seed the database with its default values.
@@ -10,8 +9,6 @@ require_relative '../spec/support/mom.rb'
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 if Rails.env.development? || Rails.env.test?
-  Specialty.initializer_setup
-
   Account.create(
     email: 'dev@dev.dev',
     password: 'dev',
@@ -30,15 +27,15 @@ if Rails.env.development? || Rails.env.test?
     _blockchain: 'ethereum_ropsten',
     _token_type: 'erc20',
     contract_address: '0x' + 'a' * 40,
-    logo_image: Refile::FileDouble.new('dummy_logo_image', 'logo_image.png', content_type: 'image/png')
+    logo_image: dummy_image
   )
 
   dummy_mission = Mission.create(
     name: 'Dummy Mission',
     subtitle: 'Fake',
     description: 'Created for development',
-    image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
-    logo: Refile::FileDouble.new('dummy_logo', 'logo.png', content_type: 'image/png')
+    image: dummy_image,
+    logo: dummy_image
   )
 
   dummy_project = Project.create(
@@ -51,8 +48,8 @@ if Rails.env.development? || Rails.env.test?
     visibility: :public_listed,
     long_id: SecureRandom.hex(20),
     maximum_tokens: 10_000_000,
-    square_image: Refile::FileDouble.new('dummy_square_image', 'image.png', content_type: 'image/png'),
-    panoramic_image: Refile::FileDouble.new('dummy_panoramic_image', 'image.png', content_type: 'image/png'),
+    square_image: dummy_image,
+    panoramic_image: dummy_image,
     token: Token.last,
     mission: dummy_mission,
     account: Account.last

@@ -16,7 +16,9 @@ JS_CONSOLE_FILTER = Regexp.union([
                                    '"[WDS] Hot Module Replacement enabled."',
                                    'https://fb.me/react-devtools',
                                    'Failed to load resource: net::ERR_FAILED',
-                                   "No 'Access-Control-Allow-Origin' header is present on the requested resource."
+                                   "No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+                                   'Warning: componentWillReceiveProps has been renamed',
+                                   'https://api-iam.intercom.io/messenger/web/ping'
                                  ])
 
 Capybara.register_driver :chrome do |app|
@@ -40,7 +42,7 @@ Capybara.register_driver :chrome do |app|
   options.add_argument('headless') unless /^(false|no|0)$/i.match?(ENV['CHROME_HEADLESS'])
 
   # Disable /dev/shm use in CI. See https://gitlab.com/gitlab-org/gitlab-ee/issues/4252
-  options.add_argument('disable-dev-shm-usage') if ENV['CI'] || ENV['CI_SERVER']
+  options.add_argument('disable-dev-shm-usage') if ENV['CI'] || ENV['CI_SERVER'] || ENV['DOCKER']
 
   # avoid Selenium::WebDriver::Error::UnknownCommandError: Cannot call non W3C standard command while in W3C mode
   options.add_option('w3c', false)
@@ -56,6 +58,7 @@ end
 Capybara.javascript_driver = :chrome
 Capybara.ignore_hidden_elements = true
 Capybara.server = :webrick
+Capybara.default_max_wait_time = 30
 
 # Keep only the screenshots generated from the last failing test suite
 Capybara::Screenshot.prune_strategy = :keep_last_run

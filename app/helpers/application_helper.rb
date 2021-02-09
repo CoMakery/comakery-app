@@ -1,10 +1,18 @@
 module ApplicationHelper
   def account_image_url(account, size)
-    attachment_url(account, :image, :fill, size, size, fallback: 'default_account_image.jpg')
+    GetImageVariantPath.call(
+      attachment: account&.image,
+      resize_to_fill: [size, size],
+      fallback: asset_url('default_account_image.jpg')
+    ).path
   end
 
   def project_image_url(obj, size)
-    attachment_url(obj, :square_image, :fill, size, size, fallback: 'defaul_project.jpg')
+    GetImageVariantPath.call(
+      attachment: obj&.square_image,
+      resize_to_fill: [size, size],
+      fallback: asset_url('default_project.jpg')
+    ).path
   end
 
   def project_page
@@ -23,5 +31,9 @@ module ApplicationHelper
 
       true
     end
+  end
+
+  def middle_truncate(str, length: 5)
+    str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
   end
 end
