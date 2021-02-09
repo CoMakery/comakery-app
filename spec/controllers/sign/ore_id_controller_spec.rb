@@ -15,8 +15,6 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
   describe 'GET /new' do
     before do
-      # request.env['HTTP_REFERER'] = '/dummy_referer'
-
       allow_any_instance_of(AwardPolicy).to receive(:pay?).and_return(true)
       allow_any_instance_of(described_class).to receive(:sign_url).and_return('/dummy_sign_url')
       allow_any_instance_of(Account).to receive(:address_for_blockchain).and_return('dummy_source_address')
@@ -26,7 +24,6 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
       it 'creates a BlockchainTransaction and redirects to a sign_url' do
         get :new, params: { transfer_id: tranfser.id }
         expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
-        # expect(request.session[:sign_ore_id_fallback_redirect_url]).to eq('/dummy_referer')
         expect(response).to redirect_to('/dummy_sign_url')
       end
     end
