@@ -11,7 +11,7 @@ class TokenType::AlgorandSecurityToken < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    contract.app_global_state_value(key: 'unitname', type: 'bytes')
+    contract.app_global_state_value(key: 'symbol', type: 'bytes')
   end
 
   # Number of decimals
