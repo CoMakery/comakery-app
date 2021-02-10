@@ -4,7 +4,7 @@ require 'models/token_type_spec'
 describe TokenType::AlgorandSecurityToken, vcr: true do
   it_behaves_like 'a token type'
 
-  let(:attrs) { { contract_address: '13258116', blockchain: Blockchain::AlgorandTest.new } }
+  let(:attrs) { { contract_address: '13997710', blockchain: Blockchain::AlgorandTest.new } }
 
   specify { expect(described_class.new(**attrs).name).to eq('ALGORAND_SECURITY_TOKEN') }
   specify { expect(described_class.new(**attrs).symbol).to eq('ABCTEST') }
