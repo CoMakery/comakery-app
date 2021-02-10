@@ -20,3 +20,6 @@ system! 'bin/rails db:migrate'
 
 puts "\n== Data migrations =="
 system! 'bin/rails data:migrate'
+
+puts "\n== Generate docs =="
+system! 'RAILS_ENV=test bundle exec rake docs:generate'
