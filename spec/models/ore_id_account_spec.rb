@@ -178,40 +178,4 @@ RSpec.describe OreIdAccount, type: :model do
       subject.unlink
     end
   end
-
-  describe '#provisioned?' do
-    specify 'with no wallets' do
-      expect(subject.wallets).to be_empty
-      expect(subject.provisioned?).to be true
-    end
-
-    specify 'with wallet and no wallet_provision' do
-      subject.wallets << create(:wallet)
-      expect(subject.wallets.count).to eq 1
-      expect(subject.wallets.first.wallet_provisions).to be_empty
-      expect(subject.provisioned?).to be true
-    end
-
-    specify 'with pending wallet_provision' do
-      wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
-      create(:wallet_provision, wallet: wallet, state: :pending)
-      subject.wallets << wallet
-
-      expect(subject.wallets.count).to eq 1
-      expect(subject.wallets.first.wallet_provisions.count).to eq 1
-      expect(subject.wallets.first.wallet_provisions.first.state).to eq 'pending'
-      expect(subject.provisioned?).to be false
-    end
-
-    specify 'with provisioned wallet_provision' do
-      wallet = create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
-      create(:wallet_provision, wallet: wallet, state: :provisioned)
-      subject.wallets << wallet
-
-      expect(subject.wallets.count).to eq 1
-      expect(subject.wallets.first.wallet_provisions.count).to eq 1
-      expect(subject.wallets.first.wallet_provisions.first.state).to eq 'provisioned'
-      expect(subject.provisioned?).to be true
-    end
-  end
 end
