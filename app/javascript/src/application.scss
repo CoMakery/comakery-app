@@ -3065,6 +3065,13 @@ input.button--right-space {
 .token-form--form,
 .project-form--form {
   margin-bottom: 30px;
+
+  h2 {
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    font-weight: bold;
+  }
 }
 
 .project-form--form--channels--header {
