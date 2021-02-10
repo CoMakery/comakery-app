@@ -22,6 +22,7 @@ async function initialize() {
 }
 
 (async () => {
-  await hwUtils.deleteCurrentKey(envs, redisClient)
+  // await hwUtils.deleteCurrentKey(envs, redisClient)
   await initialize()
+
 })();
