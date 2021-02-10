@@ -62,6 +62,6 @@ describe 'transfers_index_page', js: true do
 
     has_css?('.turbo-progress-bar', visible: true)
     has_no_css?('.turbo-progress-bar')
-    expect(page).to have_content('TRANSFER CATEGORIES')
+    expect(page).to have_content('Transfer Categories')
   end
 end

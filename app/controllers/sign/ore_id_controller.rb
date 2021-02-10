@@ -11,13 +11,16 @@ class Sign::OreIdController < ApplicationController
       source: current_account.address_for_blockchain(transfer.token._blockchain)
     )
 
+    session[:ore_id_callback_url] = request.referer
+
     redirect_to sign_url(transaction)
   end
 
   # GET /sign/ore_id/receive
   def receive
     unless verify_errorless
-      redirect_to wallets_url
+      redirect_to session.delete(:ore_id_callback_url) || wallets_url
+
       return
     end
 

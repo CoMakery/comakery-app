@@ -6,6 +6,7 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
   let(:transaction) { create(:blockchain_transaction) }
   let(:tranfser) { create(:blockchain_transaction).blockchain_transactable }
+  let(:project_id) { tranfser.award_type.project_id }
 
   before do
     login(tranfser.project.account)
@@ -13,6 +14,8 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
   describe 'GET /new' do
     before do
+      request.env['HTTP_REFERER'] = project_dashboard_transfers_url(project_id)
+
       allow_any_instance_of(AwardPolicy).to receive(:pay?).and_return(true)
       allow_any_instance_of(described_class).to receive(:sign_url).and_return('/dummy_sign_url')
       allow_any_instance_of(Account).to receive(:address_for_blockchain).and_return('dummy_source_address')
@@ -21,6 +24,7 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
     it 'creates a BlockchainTransaction and redirects to a sign_url' do
       get :new, params: { transfer_id: tranfser.id }
       expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
+      expect(request.session[:ore_id_callback_url]).to eq(project_dashboard_transfers_url(project_id))
       expect(response).to redirect_to('/dummy_sign_url')
     end
   end
@@ -53,6 +57,17 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
       it 'redirects to wallets page with the error' do
         get :receive, params: { transaction_id: 'dummy_tx_hash', signed_transaction: Base64.encode64('dummy_raw_tx') }
         expect(response).to redirect_to(wallets_url)
+      end
+
+      context 'when session has project_id' do
+        before do
+          request.session[:ore_id_callback_url] = project_dashboard_transfers_url(project_id)
+        end
+
+        it 'redirects to project transfers page with the error' do
+          get :receive, params: { transaction_id: 'dummy_tx_hash', signed_transaction: Base64.encode64('dummy_raw_tx') }
+          expect(response).to redirect_to(project_dashboard_transfers_url(project_id))
+        end
       end
     end
 

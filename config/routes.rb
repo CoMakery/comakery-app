@@ -95,7 +95,7 @@ Rails.application.routes.draw do
       end
       resources :reg_groups, only: [:create, :update, :destroy]
 
-      get 'transfer_categories', to: 'transfer_types#index', as: :transter_categories
+      get 'transfer_categories', to: 'transfer_types#index', as: :transfer_categories
 
       resources :transfer_types, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
