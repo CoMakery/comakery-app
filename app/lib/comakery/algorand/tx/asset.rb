@@ -1,10 +1,21 @@
 class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
   attr_reader :asset_id
 
-  def initialize(blockchain, hash, asset_id)
-    @algorand = Comakery::Algorand.new(blockchain, asset_id)
-    @hash = hash
-    @asset_id = asset_id
+  def initialize(blockchain_transaction)
+    @blockchain_transaction = blockchain_transaction
+    @algorand = Comakery::Algorand.new(blockchain_transaction.token.blockchain, nil)
+    @hash = blockchain_transaction.tx_hash
+    @asset_id = blockchain_transaction.token.contract_address
+  end
+
+  def to_object(**_args)
+    {
+      type: 'axfer',
+      from: blockchain_transaction.source,
+      to: blockchain_transaction.destination,
+      amount: blockchain_transaction.amount,
+      assetId: asset_id
+    }
   end
 
   def transaction_asset_id
@@ -21,7 +32,7 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
     transaction_data.dig('asset-transfer-transaction', 'amount') || 0
   end
 
-  def valid?(blockchain_transaction)
-    super && asset_id.to_i == transaction_asset_id
+  def valid?(_ = nil)
+    super && asset_id == transaction_asset_id.to_s
   end
 end

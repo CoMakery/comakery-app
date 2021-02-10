@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/transactions?txid=DPPKH4IUFEGGV44TVQPVOOMP2BCGHBDELGBBCC7HBSFMWO2HSS6A
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 05 Feb 2021 17:18:01 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=deee32b2b06c4cd90e38efe4217f853f61612545481; expires=Sun, 07-Mar-21
+        17:18:01 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '0814cc72cb00001f396c21a000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"max_age":604800,"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=iRxorz36afwZqokU3zR0%2Bmpv5HzU2nO9VpaZFvsLvXt6paBZZXVrchsuNwyR95zmfQqCIcluyD7YEZMJtWFdaW1rDMLDAu%2Fsj16DhkE8BtrWDDUvkSA%2BppqmzU8%3D"}]}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 61ce49cad9ad1f39-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"current-round":12164462,"next-token":"zUW5AAAAAAAAAAAA","transactions":[{"application-transaction":{"accounts":[],"application-args":["cGF1c2U=","AA=="],"application-id":13997710,"foreign-apps":[],"foreign-assets":[],"global-state-schema":{"num-byte-slice":0,"num-uint":0},"local-state-schema":{"num-byte-slice":0,"num-uint":0},"on-completion":"noop"},"close-rewards":0,"closing-amount":0,"confirmed-round":12142029,"fee":227000,"first-valid":12141970,"genesis-hash":"SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=","genesis-id":"testnet-v1.0","global-state-delta":[{"key":"cGF1c2Vk","value":{"action":2,"uint":0}}],"id":"DPPKH4IUFEGGV44TVQPVOOMP2BCGHBDELGBBCC7HBSFMWO2HSS6A","intra-round-offset":0,"last-valid":12142970,"receiver-rewards":0,"round-time":1612449656,"sender":"IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA","sender-rewards":0,"signature":{"sig":"nS+BrxZopP4pTjdYB1Zp/fG2vq3xrs1Z5z0Hb4/Umw2/DOvlaxxDVyx0+89LAxrFDotbl6RMVsdinMA47GdADQ=="},"tx-type":"appl"}]}
+
+'
+    http_version: null
+  recorded_at: Fri, 05 Feb 2021 17:18:01 GMT
+recorded_with: VCR 5.1.0
