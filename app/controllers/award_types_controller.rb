@@ -9,19 +9,13 @@ class AwardTypesController < ApplicationController
   skip_after_action :verify_policy_scoped, only: %i[index]
   skip_before_action :require_login, only: %i[index]
 
-  def index
-    render component: 'BatchIndex', props: @props
-  end
+  def index; end
 
-  def new
-    render component: 'BatchForm', props: @props
-  end
+  def new; end
 
   def edit
     @props[:form_url] = project_award_type_path(@project, @award_type)
     @props[:form_action] = 'PATCH'
-
-    render component: 'BatchForm', props: @props
   end
 
   def create

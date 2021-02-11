@@ -15,11 +15,13 @@ class WalletsController < ApplicationController
   end
 
   def algorand_opt_ins
+    tokens = Token.available_for_algorand_opt_in
+
     content = render_to_string(
       partial: 'wallets/opt_ins_collection',
       formats: :html,
       layout: false,
-      locals: { wallet: @wallet, opt_ins: @wallet.token_opt_ins }
+      locals: { wallet: @wallet, tokens: tokens, opt_ins: @wallet.token_opt_ins.group_by(&:token_id) }
     )
     render json: { content: content }, status: :ok
   end

@@ -1,5 +1,5 @@
 import { Controller } from 'stimulus'
-import * as Turbolinks from 'turbolinks'
+import { Turbo } from '@hotwired/turbo-rails'
 
 export default class extends Controller {
   goOption(e) {
@@ -8,9 +8,9 @@ export default class extends Controller {
     let url = e.target.value
 
     if (url !== '') {
-      Turbolinks.visit(url)
+      Turbo.visit(url)
     } else {
-      Turbolinks.visit(this.data.get('defaultUrl'))
+      Turbo.visit(this.data.get('defaultUrl'))
     }
   }
 }

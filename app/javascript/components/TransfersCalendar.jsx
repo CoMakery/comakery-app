@@ -2,7 +2,7 @@ import React from 'react'
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css'
 import { DateRangePicker } from 'react-dates'
-import * as Turbolinks from 'turbolinks'
+import { Turbo } from '@hotwired/turbo-rails'
 import moment from 'moment'
 
 class TransfersCalendar extends React.Component {
@@ -27,7 +27,7 @@ class TransfersCalendar extends React.Component {
       let currentUrl = new URL(window.location.href)
       currentUrl.searchParams.set('q[created_at_gteq]', startDate)
       currentUrl.searchParams.set('q[created_at_lteq]', endDate)
-      Turbolinks.visit(currentUrl)
+      Turbo.visit(currentUrl)
     }
   }
 
