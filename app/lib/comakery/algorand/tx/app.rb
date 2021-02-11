@@ -5,7 +5,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     @blockchain_transaction = blockchain_transaction
     @algorand = Comakery::Algorand.new(blockchain_transaction.token.blockchain, nil)
     @hash = blockchain_transaction.tx_hash
-    @app_id = blockchain_transaction.token.contract_address
+    @app_id = blockchain_transaction.token.contract_address.to_i
   end
 
   def to_object(**args)
@@ -111,7 +111,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def valid_app_id?
-    transaction_app_id == app_id.to_i
+    transaction_app_id == app_id
   end
 
   def valid_app_accounts?

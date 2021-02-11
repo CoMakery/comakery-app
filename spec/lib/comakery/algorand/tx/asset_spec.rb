@@ -22,7 +22,7 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
 
   describe '#transaction_asset_id' do
     subject { algorand_asset_tx.transaction_asset_id }
-    it { is_expected.to eq(asset_id.to_i) }
+    it { is_expected.to eq(asset_id) }
   end
 
   describe '#receiver_address' do
@@ -40,7 +40,7 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
     before { allow(algorand_asset_tx.blockchain_transaction).to receive(:current_block).and_return(algorand_asset_tx.confirmed_round - 1) }
 
     context 'for incorrect asset_id' do
-      before { allow(algorand_asset_tx).to receive(:asset_id).and_return('0') }
+      before { allow(algorand_asset_tx).to receive(:asset_id).and_return(0) }
       it { is_expected.to be false }
     end
 

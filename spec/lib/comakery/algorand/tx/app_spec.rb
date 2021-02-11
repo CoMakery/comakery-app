@@ -28,7 +28,7 @@ describe Comakery::Algorand::Tx::App do
 
   describe '#transaction_app_id' do
     subject { algorand_app_tx.transaction_app_id }
-    it { is_expected.to eq(app_id.to_i) }
+    it { is_expected.to eq(app_id) }
   end
 
   describe '#transaction_app_accounts' do
@@ -149,7 +149,7 @@ describe Comakery::Algorand::Tx::App do
     before { allow(algorand_app_tx).to receive(:app_args).and_return(['transfer', 15]) }
 
     context 'for incorrect app_id' do
-      before { allow(algorand_app_tx).to receive(:app_id).and_return('0') }
+      before { allow(algorand_app_tx).to receive(:app_id).and_return(0) }
 
       it { is_expected.to be false }
     end
