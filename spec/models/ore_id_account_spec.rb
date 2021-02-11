@@ -76,7 +76,7 @@ RSpec.describe OreIdAccount, type: :model do
 
     context 'when wallet is initialized locally' do
       before do
-        create(:wallet, _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
+        create(:wallet, name: 'Test Wallet', _blockchain: :algorand_test, source: :ore_id, account: subject.account, ore_id_account: subject, address: nil)
       end
 
       it 'sets correct wallet params' do
@@ -90,6 +90,7 @@ RSpec.describe OreIdAccount, type: :model do
         expect(wallet.address).to eq '4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ'
         expect(wallet._blockchain).to eq 'algorand_test'
         expect(wallet.source).to eq 'ore_id'
+        expect(wallet.name).to eq 'Test Wallet'
 
         expect(subject.state).to eq 'ok'
       end
