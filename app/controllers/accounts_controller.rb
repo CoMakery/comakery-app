@@ -67,7 +67,7 @@ class AccountsController < ApplicationController
       redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -101,7 +101,7 @@ class AccountsController < ApplicationController
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
       @skip_validation = false
-      render :build_profile
+      render :build_profile, status: :unprocessable_entity
     end
   end
 
@@ -157,7 +157,7 @@ class AccountsController < ApplicationController
           # Legacy code caused issue
           @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
           @awards = current_account.awards&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
-          render :show
+          render :show, status: :unprocessable_entity
         end
         format.json do
           errors = current_account.errors.messages

@@ -12,8 +12,7 @@ class PagesController < ApplicationController
     more_missions = Mission.active.with_attached_image.offset(4).limit(10)
 
     flash[:warning] = 'Please confirm your email address to continue' if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-
-    render component: 'FeaturedMissions', props: {
+    @props = {
       csrf_token: form_authenticity_token,
       top_missions: top_missions.map { |mission| featured_mission_props(mission) },
       more_missions: more_missions.map { |mission| more_mission_props(mission) },
@@ -38,8 +37,6 @@ class PagesController < ApplicationController
 
   def styleguide
     return redirect_to :root unless Rails.env.development?
-
-    render component: 'styleguide/Index'
   end
 
   private

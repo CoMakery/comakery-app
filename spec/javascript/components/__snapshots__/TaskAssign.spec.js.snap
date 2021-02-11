@@ -140,7 +140,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "cvNMCl",
+                        "lastClassName": "efrfjy",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -165,7 +165,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
   ",
                           [Function],
                           "
-  
+
     @media (max-width: 640px) {
       margin-left: -25px;
       margin-right: -25px;
@@ -186,7 +186,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa cvNMCl"
+                    className="sc-bdVaJa efrfjy"
                   >
                     <styled.div>
                       <StyledComponent

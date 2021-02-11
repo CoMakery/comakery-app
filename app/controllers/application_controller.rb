@@ -1,8 +1,8 @@
 require 'application_responder'
 
 class ApplicationController < ActionController::Base
-  self.responder = ApplicationResponder
-  respond_to :html
+  # self.responder = ApplicationResponder
+  # respond_to :html
   # layout 'raw'
   include Pundit
   after_action :verify_authorized, except: :index # rubocop:todo Rails/LexicallyScopedActionFilter
