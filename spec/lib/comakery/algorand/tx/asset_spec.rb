@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Comakery::Algorand::Tx::Asset, vcr: true do
-  let(:asset_id) { '13076367' }
-  let!(:algorand_asset_tx) { build(:algorand_asset_tx, asset_id: asset_id) }
+  let!(:algorand_asset_tx) { build(:algorand_asset_tx) }
+  let(:asset_id) { algorand_asset_tx.asset_id }
 
   before do
     VCR.use_cassette("Algorand/transcation/#{algorand_asset_tx.hash}") do
@@ -10,85 +10,37 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
     end
   end
 
-  describe '#algorand' do
-    it 'returns Comakery::Algorand' do
-      expect(algorand_asset_tx.algorand).to be_a(Comakery::Algorand)
-    end
+  describe '#to_object' do
+    subject { algorand_asset_tx.to_object }
+
+    specify { expect(subject[:type]).to eq('axfer') }
+    specify { expect(subject[:from]).to eq(algorand_asset_tx.blockchain_transaction.source) }
+    specify { expect(subject[:to]).to eq(algorand_asset_tx.blockchain_transaction.destination) }
+    specify { expect(subject[:amount]).to eq(algorand_asset_tx.blockchain_transaction.amount) }
+    specify { expect(subject[:assetId]).to eq(algorand_asset_tx.asset_id) }
   end
 
-  describe '#data' do
-    it 'returns all data' do
-      expect(algorand_asset_tx.data).to be_a(Hash)
-    end
+  describe '#transaction_asset_id' do
+    subject { algorand_asset_tx.transaction_asset_id }
+    it { is_expected.to eq(asset_id) }
   end
 
-  describe '#transaction_data' do
-    it 'returns transaction data' do
-      expect(algorand_asset_tx.transaction_data).to be_a(Hash)
-    end
+  describe '#receiver_address' do
+    subject { algorand_asset_tx.receiver_address }
+    it { is_expected.to eq('E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE') }
   end
 
-  describe '#confirmed_round' do
-    it 'returns transaction confirmed round' do
-      expect(algorand_asset_tx.confirmed_round).to eq(10699047)
-    end
-  end
-
-  describe '#confirmed?' do
-    context 'for unconfirmed transaction' do
-      let!(:algorand_asset_tx) { build(:algorand_asset_tx, hash: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') }
-
-      it 'returns false' do
-        expect(algorand_asset_tx.confirmed?).to be false
-      end
-    end
-
-    context 'for confirmed transaction' do
-      it 'returns true' do
-        expect(algorand_asset_tx.confirmed?).to be true
-      end
-    end
+  describe 'amount' do
+    subject { algorand_asset_tx.amount }
+    it { is_expected.to eq(400) }
   end
 
   describe '#valid?' do
-    let(:amount) { 400 }
-    let(:source) { 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA' }
-    let(:destination) { build(:algorand_address_2) }
-    let(:current_round) { 10661139 }
-    let(:blockchain_transaction) do
-      build(
-        :blockchain_transaction,
-        token: create(:algorand_token),
-        amount: amount,
-        source: source,
-        destination: destination,
-        current_block: current_round,
-        contract_address: asset_id
-      )
-    end
-    subject { algorand_asset_tx.valid?(blockchain_transaction) }
-
-    context 'for incorrect source' do
-      let(:source) { build(:algorand_address_2) }
-
-      it { is_expected.to be false }
-    end
-
-    context 'for incorrect destination' do
-      let(:destination) { build(:algorand_address_1) }
-
-      it { is_expected.to be false }
-    end
-
-    context 'for incorrect amount' do
-      let(:amount) { 399 }
-
-      it { is_expected.to be false }
-    end
+    subject { algorand_asset_tx.valid? }
+    before { allow(algorand_asset_tx.blockchain_transaction).to receive(:current_block).and_return(algorand_asset_tx.confirmed_round - 1) }
 
     context 'for incorrect asset_id' do
-      let(:asset_id) { '00000000' }
-
+      before { allow(algorand_asset_tx).to receive(:asset_id).and_return(0) }
       it { is_expected.to be false }
     end
 

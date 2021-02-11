@@ -181,105 +181,20 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       expect(subject).to receive(:create_token).and_return('test')
     end
 
-    context 'with Algo token' do
-      let(:transaction) do
-        create(
-          :blockchain_transaction,
-          token: create(:algorand_token),
-          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
-        )
-      end
-
-      specify do
-        generated_url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
-        expected_url = 'https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6InBheSJ9%0A'
-        hmac = build(:ore_id_hmac, expected_url)
-        expect(generated_url).to eq("#{expected_url}&hmac=#{hmac}")
-      end
+    let(:transaction) do
+      create(
+        :blockchain_transaction,
+        token: create(:algorand_token),
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
     end
 
-    context 'with ASA token' do
-      let(:transaction) do
-        create(
-          :blockchain_transaction,
-          token: create(:asa_token),
-          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
-        )
-      end
-
-      specify do
-        generated_url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
-        expected_url = 'https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJmcm9tIjoiWUY2RkFMU1hJNEJSVUZYQkZIWVZDT0tGUk9BV0JRWjQyWTRC%0AWFVLN1NESFRXN0IyN1RFUUIzQUhTQSIsInRvIjoiRTNJVDJURFdFSlM1NVhD%0ASTVOT0IySE9ONlhVQklaNlNEVDJUQUhUS0RRTUtSNEFIRVFDUk9PWEZJRSIs%0AImFtb3VudCI6MSwidHlwZSI6ImF4ZmVyIiwiYXNzZXRJbmRleCI6MTMwNzYz%0ANjd9%0A'
-        hmac = build(:ore_id_hmac, expected_url)
-        expect(generated_url).to eq("#{expected_url}&hmac=#{hmac}")
-      end
-    end
-  end
-
-  describe '#algorand_transaction' do
-    context 'with ALGO token' do
-      let(:transaction) do
-        create(
-          :blockchain_transaction,
-          token: create(:algorand_token),
-          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
-        )
-      end
-
-      specify do
-        expect(subject.send(:algorand_transaction, transaction)).to eq(
-          amount: 1,
-          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
-          type: 'pay'
-        )
-      end
-    end
-
-    context 'with ASA token' do
-      let(:transaction) do
-        create(
-          :blockchain_transaction,
-          token: create(:asa_token),
-          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
-        )
-      end
-
-      specify do
-        expect(subject.send(:algorand_transaction, transaction)).to eq(
-          amount: 1,
-          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          to: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE',
-          type: 'axfer',
-          assetIndex: 13076367
-        )
-      end
-    end
-
-    context 'with Algorand Security token' do
-      let(:transaction) do
-        create(
-          :blockchain_transaction,
-          token: create(:algo_sec_token),
-          source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
-        )
-      end
-
-      specify do
-        expect(subject.send(:algorand_transaction, transaction)).to eq(
-          amount: nil,
-          from: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
-          to: nil,
-          type: 'appl',
-          appIndex: 13258116,
-          appOnComplete: 1
-        )
-      end
+    specify do
+      generated_url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
+      expected_url = 'https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=true&state=dummystate&transaction=eyJ0eXBlIjoicGF5IiwiZnJvbSI6IllGNkZBTFNYSTRCUlVGWEJGSFlWQ09L%0ARlJPQVdCUVo0Mlk0QlhVSzdTREhUVzdCMjdURVFCM0FIU0EiLCJ0byI6IkUz%0ASVQyVERXRUpTNTVYQ0k1Tk9CMkhPTjZYVUJJWjZTRFQyVEFIVEtEUU1LUjRB%0ASEVRQ1JPT1hGSUUiLCJhbW91bnQiOjF9%0A'
+      hmac = build(:ore_id_hmac, expected_url)
+      expect(generated_url).to eq("#{expected_url}&hmac=#{hmac}")
     end
   end
 end

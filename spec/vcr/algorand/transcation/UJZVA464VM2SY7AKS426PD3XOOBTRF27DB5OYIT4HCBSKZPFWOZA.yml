@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/transactions?txid=UJZVA464VM2SY7AKS426PD3XOOBTRF27DB5OYIT4HCBSKZPFWOZA
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 08 Feb 2021 15:34:30 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d2f2d1e84a53dcadf9b77db9046fd35981612798469; expires=Wed, 10-Mar-21
+        15:34:29 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '0823e0bede000005f1789ab000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"max_age":604800,"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=EOelAD6qxhwYYa%2BKHxLJhnru8EzincczVIkqsSuoIyv7ZDqiYPOpRqW3%2BAJ7QncT2oEU%2FjudUmVHwcOwq0iZ%2BurV1d%2B5ZhMniniiggiYpR4VhBJbtdzDe9U77FI%3D"}],"group":"cf-nel"}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 61e66a449ba205f1-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"current-round":12223755,"next-token":"rkW5AAAAAAABAAAA","transactions":[{"application-transaction":{"accounts":["6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU"],"application-args":["c2V0QWRkcmVzc1Blcm1pc3Npb25z","AA==","ZA==","AQ==","AQ=="],"application-id":13997710,"foreign-apps":[],"foreign-assets":[],"global-state-schema":{"num-byte-slice":0,"num-uint":0},"local-state-schema":{"num-byte-slice":0,"num-uint":0},"on-completion":"noop"},"close-rewards":0,"closing-amount":0,"confirmed-round":12141998,"fee":292000,"first-valid":12141970,"genesis-hash":"SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=","genesis-id":"testnet-v1.0","id":"UJZVA464VM2SY7AKS426PD3XOOBTRF27DB5OYIT4HCBSKZPFWOZA","intra-round-offset":1,"last-valid":12142970,"local-state-delta":[{"address":"6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU","delta":[{"key":"ZnJvemVu","value":{"action":2,"uint":0}},{"key":"bG9ja1VudGls","value":{"action":2,"uint":1}},{"key":"bWF4QmFsYW5jZQ==","value":{"action":2,"uint":100}}]}],"receiver-rewards":0,"round-time":1612449523,"sender":"IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA","sender-rewards":0,"signature":{"sig":"i1lgXck5UKgUUqt5XQ+PqRSaT73Zd3Z4WarE4NsaVj+4GvNKQw5JLNV5E8s3nY5vJLMxT/H35qxpWnzLXgK3Ag=="},"tx-type":"appl"}]}
+
+'
+    http_version: null
+  recorded_at: Mon, 08 Feb 2021 15:34:30 GMT
+recorded_with: VCR 5.1.0

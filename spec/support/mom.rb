@@ -208,6 +208,28 @@ class Mom
     end
   end
 
+  def blockchain_transaction_token_freeze(**attrs)
+    defaults = {
+      blockchain_transactable: create(:algo_sec_token),
+      status: :created
+    }
+
+    VCR.use_cassette('algorand_test/status') do
+      BlockchainTransactionTokenFreeze.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_token_unfreeze(**attrs)
+    defaults = {
+      blockchain_transactable: create(:algo_sec_token),
+      status: :created
+    }
+
+    VCR.use_cassette('algorand_test/status') do
+      BlockchainTransactionTokenUnfreeze.create!(defaults.merge(attrs))
+    end
+  end
+
   def blockchain_transaction_account_token_record(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
     attrs.delete(:token)
@@ -224,6 +246,22 @@ class Mom
     VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
     end
+  end
+
+  def blockchain_transaction_account_token_record_algo(**attrs)
+    token = attrs[:token] || create(:algo_sec_token)
+    attrs.delete(:token)
+
+    defaults = {
+      blockchain_transactable: create(:account_token_record, token: token, address: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
   end
 
   def blockchain_transaction__award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
@@ -485,6 +523,7 @@ class Mom
       name: "Asa-#{SecureRandom.hex(20)}",
       symbol: "TKN-#{SecureRandom.hex(20)}",
       contract_address: attrs[:contract_address] || '13258116',
+      decimal_places: 8,
       logo_image: dummy_image,
       token_frozen: false,
       _blockchain: 'algorand_test',
@@ -826,45 +865,231 @@ class Mom
     end
   end
 
-  def algorand_tx(**attrs)
-    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
-    hash = attrs[:hash] || 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A'
+  def algo_sec_project_dummy_setup
+    project = create(:project, token: create(:algo_sec_token, contract_address: '13997710'))
+    admin_wallet = create(:wallet, _blockchain: project.token._blockchain, address: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA')
+    contributor_wallet = create(:wallet, _blockchain: project.token._blockchain, address: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU')
 
-    # From:
-    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
-    # To:
-    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
-    # Amount:
-    # 9 algos
-
-    Comakery::Algorand::Tx.new(blockchain, hash)
+    [project, admin_wallet.account, contributor_wallet.account]
   end
 
-  def algorand_asset_tx(**attrs)
-    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
-    hash = attrs[:hash] || 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ'
-    asset_id = attrs[:asset_id] || '13076367'
+  def algo_sec_dummy_transfer(type: 'earned', amount: 0)
+    project, admin, contributor = algo_sec_project_dummy_setup
 
-    # From:
-    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
-    # To:
-    # E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE
-    # Amount:
-    # 4 CMTTEST tokens
-
-    Comakery::Algorand::Tx::Asset.new(blockchain, hash, asset_id)
+    create(
+      :transfer,
+      issuer: admin,
+      account: contributor,
+      amount: amount,
+      transfer_type: project.transfer_types.find_or_create_by(name: type),
+      award_type: project.default_award_type
+    )
   end
 
-  def algorand_app_opt_in_tx(**attrs)
-    blockchain = attrs[:blockchain] || Blockchain::AlgorandTest.new
-    hash = attrs[:hash] || 'Y5HSTSGQMAGYJW4SXIWTGSJAVSN4LKKN3GNUFVFAS5QBOFOQ6KYQ'
-    app_id = attrs[:app_id] || '13258116'
+  def algo_sec_dummy_restrictions(reg_group: 1, max_balance: 100, frozen: false, lockup_until: 1)
+    project, _admin, contributor = algo_sec_project_dummy_setup
 
-    # For:
-    # YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
-    # Opt in to Algorand Security Token (ABCTEST)
+    AccountTokenRecord.create(
+      account: contributor,
+      token: project.token,
+      reg_group: create(:reg_group, blockchain_id: reg_group, token: project.token),
+      max_balance: max_balance,
+      balance: 0,
+      account_frozen: frozen,
+      lockup_until: lockup_until
+    )
+  end
 
-    Comakery::Algorand::Tx::App.new(blockchain, hash, app_id)
+  def algo_sec_dummy_transfer_rule(from: 0, to: 0, lockup_until: 0)
+    project, _admin, _contributor = algo_sec_project_dummy_setup
+    gr_from = create(:reg_group, token: project.token, blockchain_id: from)
+
+    gr_to = if from == to
+      gr_from
+    else
+      create(:reg_group, token: project.token, blockchain_id: to)
+    end
+
+    TransferRule.new(
+      token: project.token,
+      sending_group: gr_from,
+      receiving_group: gr_to,
+      lockup_until: lockup_until
+    )
+  end
+
+  def algorand_tx
+    Comakery::Algorand::Tx.new(
+      create(
+        :blockchain_transaction,
+        token: create(:algorand_token),
+        amount: 9000000,
+        tx_hash: 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A',
+        source: 'YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
+  end
+
+  def algorand_asset_opt_in_tx
+    Comakery::Algorand::Tx::Asset::OptIn.new(
+      create(
+        :blockchain_transaction_opt_in,
+        token: create(:asa_token, contract_address: '13076367'),
+        amount: 0,
+        tx_hash: 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ',
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
+  end
+
+  def algorand_asset_tx
+    Comakery::Algorand::Tx::Asset.new(
+      create(
+        :blockchain_transaction,
+        token: create(:asa_token, contract_address: '13076367'),
+        amount: 400,
+        tx_hash: 'D2SAP75JSXW3D43ZBHNLTJGASBCJDJIFLLQ5TQCZWMC33JHHQDPQ',
+        source: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA',
+        destination: 'E3IT2TDWEJS55XCI5NOB2HON6XUBIZ6SDT2TAHTKDQMKR4AHEQCROOXFIE'
+      )
+    )
+  end
+
+  def algorand_app_tx
+    Comakery::Algorand::Tx::App.new(
+      create(
+        :blockchain_transaction,
+        token: create(:algo_sec_token, contract_address: '13997710'),
+        amount: 0,
+        tx_hash: 'UV7YMGF6ZQHHLGO63BSPLR5TFV4PYYMHPJDEUIDXMZNVVUCNLIRQ',
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'
+      )
+    )
+  end
+
+  def algorand_app_opt_in_tx
+    Comakery::Algorand::Tx::App::OptIn.new(
+      create(
+        :blockchain_transaction_opt_in,
+        token: create(:algo_sec_token, contract_address: '13997710'),
+        amount: 0,
+        tx_hash: 'DHLXHTA6PZP222T6GKMXWYDZV5KIZXWJ4TTZ5AKL6SNWGCE3MH4A',
+        source: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'
+      )
+    )
+  end
+
+  def algorand_app_burn_tx
+    tr = algo_sec_dummy_transfer(type: 'burn', amount: 30)
+
+    Comakery::Algorand::Tx::App::SecurityToken::Burn.new(
+      create(
+        :blockchain_transaction,
+        token: tr.token,
+        blockchain_transactable: tr,
+        amount: tr.total_amount,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        tx_hash: 'IR2UCCC4A7VDF65AJXMAIDSIINQCTNXIZAFC4GPSYY2HEZT7GB6Q'
+      )
+    )
+  end
+
+  def algorand_app_set_address_permissions_tx
+    r = algo_sec_dummy_restrictions
+
+    Comakery::Algorand::Tx::App::SecurityToken::SetAddressPermissions.new(
+      create(
+        :blockchain_transaction_account_token_record,
+        token: r.token,
+        blockchain_transactable: r,
+        amount: 0,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU',
+        tx_hash: 'UJZVA464VM2SY7AKS426PD3XOOBTRF27DB5OYIT4HCBSKZPFWOZA'
+      )
+    )
+  end
+
+  def algorand_app_mint_tx
+    tr = algo_sec_dummy_transfer(type: 'mint', amount: 50)
+
+    Comakery::Algorand::Tx::App::SecurityToken::Mint.new(
+      create(
+        :blockchain_transaction,
+        token: tr.token,
+        blockchain_transactable: tr,
+        amount: tr.total_amount,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        tx_hash: 'IWT2FUQOQQTGIMOLJAULGAPAU4ZCYE7AZQY7L2U7RFWOHAVXG2EA'
+      )
+    )
+  end
+
+  def algorand_app_pause_tx
+    t = create(:algo_sec_token, contract_address: '13997710', token_frozen: false)
+
+    Comakery::Algorand::Tx::App::SecurityToken::Pause.new(
+      create(
+        :blockchain_transaction_token_freeze,
+        token: t,
+        blockchain_transactable: t,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        tx_hash: 'EGVNJAAQEUJPOKAPJZIZQBWVOPCIVUTAIDG7X7XCIMOBAY7TCUXQ'
+      )
+    )
+  end
+
+  def algorand_app_set_transfer_rule_tx
+    r = algo_sec_dummy_transfer_rule(from: 1, to: 1, lockup_until: 1)
+
+    Comakery::Algorand::Tx::App::SecurityToken::SetTransferRule.new(
+      create(
+        :blockchain_transaction_transfer_rule,
+        token: r.token,
+        blockchain_transactable: r,
+        amount: 0,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        tx_hash: 'HQU2F6OX2GONFDQRTKTOUG4XYXMGOXVQSTIGKA6R6PNJJPIQWQQQ'
+      )
+    )
+  end
+
+  def algorand_app_transfer_tx
+    tr = algo_sec_dummy_transfer(amount: 15)
+
+    Comakery::Algorand::Tx::App::SecurityToken::Transfer.new(
+      create(
+        :blockchain_transaction,
+        token: tr.token,
+        blockchain_transactable: tr,
+        amount: tr.total_amount,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU',
+        tx_hash: 'UV7YMGF6ZQHHLGO63BSPLR5TFV4PYYMHPJDEUIDXMZNVVUCNLIRQ'
+      )
+    )
+  end
+
+  def algorand_app_unpause_tx
+    t = create(:algo_sec_token, contract_address: '13997710', token_frozen: true)
+
+    Comakery::Algorand::Tx::App::SecurityToken::Unpause.new(
+      create(
+        :blockchain_transaction_token_unfreeze,
+        token: t,
+        blockchain_transactable: t,
+        source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
+        tx_hash: 'DPPKH4IUFEGGV44TVQPVOOMP2BCGHBDELGBBCC7HBSFMWO2HSS6A'
+      )
+    )
   end
 
   def bitcoin_address_1

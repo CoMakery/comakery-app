@@ -86,6 +86,7 @@ class Award < ApplicationRecord
   scope :listed, -> { where 'awards.status not in(6,7)' }
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
+  scope :not_burned, -> { joins(:transfer_type).where.not(transfer_types: { name: 'burn' }) }
 
   scope :transfer_ready, ->(blockchain) { accepted.joins(account: :wallets).where(wallets: { _blockchain: blockchain, primary_wallet: true }) }
   scope :transfer_blocked_by_wallet, ->(blockchain) { accepted.where.not(id: transfer_ready(blockchain).group('awards.id').pluck(:id)) }
@@ -113,6 +114,8 @@ class Award < ApplicationRecord
 
   enum status: { ready: 0, started: 1, submitted: 2, accepted: 3, rejected: 4, paid: 5, cancelled: 6, invite_ready: 7 }
   enum source: { earned: 0, bought: 1, mint: 2, burn: 3 }
+
+  delegate :_blockchain, :blockchain, to: :token
 
   def self.ransackable_scopes(_ = nil)
     %i[transfer_ready transfer_blocked_by_wallet]

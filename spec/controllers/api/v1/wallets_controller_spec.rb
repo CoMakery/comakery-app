@@ -236,6 +236,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
 
         expect(OreIdPasswordUpdateSyncJob).to receive_message_chain(:set, :perform_later)
+        expect(wallet.ore_id_account.state).to eq 'pending'
 
         post :password_reset, params: params
 
@@ -254,6 +255,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
           'state' => request_signature,
           'hmac' => build(:ore_id_hmac, parsed_response['reset_url'], url_encode: false)
         )
+        expect(wallet.ore_id_account.reload.state).to eq 'unclaimed'
       end
     end
   end
