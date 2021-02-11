@@ -1,6 +1,7 @@
 class Token < ApplicationRecord
   include ActiveStorageValidator
   include BelongsToBlockchain
+  include BlockchainTransactable
 
   nilify_blanks
 

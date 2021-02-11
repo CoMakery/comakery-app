@@ -101,8 +101,8 @@ class BlockchainTransaction < ApplicationRecord
 
   private
 
-    def populate_data # rubocop:todo Metrics/CyclomaticComplexity
-      self.token ||= blockchain_transactable.token
+    def populate_data # rubocop:todo Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      self.token ||= blockchain_transactable.is_a?(Token) ? blockchain_transactable : blockchain_transactable.token
       self.contract_address ||= token.contract_address
       self.network ||= token._blockchain if token._token_type_on_ethereum? || token._token_type_dag? || token._token_type_algo? || token._token_type_asa? || token._token_type_algorand_security_token?
 
