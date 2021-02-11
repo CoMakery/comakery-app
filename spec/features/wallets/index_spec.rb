@@ -22,4 +22,25 @@ describe 'wallets page' do
       expect(page).to have_current_path(new_account_path)
     end
   end
+
+  context 'when has linked ORE ID wallet', js: true do
+    let(:ore_id_account) { create(:ore_id, skip_jobs: true) }
+    let!(:wallet) { create(:wallet, ore_id_account: ore_id_account, account: ore_id_account.account, _blockchain: :algorand_test, source: :ore_id, address: build(:algorand_address_1)) }
+    let!(:asa_token) { create(:asa_token) }
+
+    before do
+      login(wallet.account)
+    end
+
+    it 'disaplays avaliable tokens for opt in' do
+      visit wallets_path
+
+      expect(find('table.table')).to have_content wallet.name
+
+      find('.dropdown').click
+      find('.dropdown-item.opt-ins').click
+
+      expect(find('table.opt-ins')).to have_content asa_token.name
+    end
+  end
 end

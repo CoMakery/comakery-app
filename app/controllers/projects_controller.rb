@@ -40,7 +40,7 @@ class ProjectsController < ApplicationController
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
 
-    render 'awards/index'
+    render 'awards/index.html.rb'
   end
 
   def index
@@ -61,7 +61,6 @@ class ProjectsController < ApplicationController
       url: "https://#{current_domain}/p/#{@project.long_id}",
       mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
     )
-    render component: 'ProjectForm', props: @props
   end
 
   def create
@@ -90,13 +89,10 @@ class ProjectsController < ApplicationController
     @meta_title = 'CoMakery Project'
     @meta_desc = "#{@project.title}: #{Comakery::Markdown.to_text(@project.description)}"
     @meta_image = Attachment::GetPath.call(attachment: @project.square_image).path
-
-    render component: 'Project', props: @props
   end
 
   def unlisted
     authorize @project
-    render component: 'Project', props: @props
   end
 
   def edit
@@ -106,8 +102,6 @@ class ProjectsController < ApplicationController
 
     @props[:form_action] = 'PATCH'
     @props[:form_url]    = project_path(@project)
-
-    render component: 'ProjectForm', props: @props
   end
 
   def update

@@ -16,10 +16,20 @@ describe BlockchainTransactionTransferRule, vcr: true do
   end
 
   describe 'on_chain' do
-    it 'returns Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer' do
-      blockchain_transaction = build(:blockchain_transaction_transfer_rule)
+    context 'with Comakery Security Token' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_transfer_rule)
 
-      expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer)
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer)
+      end
+    end
+
+    context 'with Algorand Security Token' do
+      specify do
+        blockchain_transaction = build(:algorand_app_set_transfer_rule_tx).blockchain_transaction
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::App::SecurityToken::SetTransferRule)
+      end
     end
   end
 

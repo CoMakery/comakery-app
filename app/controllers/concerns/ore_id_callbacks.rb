@@ -24,10 +24,20 @@ module OreIdCallbacks
   end
 
   def state(**additional_params)
-    @state ||= crypt.encrypt_and_sign({
+    @state = crypt.encrypt_and_sign({
       account_id: current_account.id,
       redirect_back_to: params[:redirect_back_to] || request.referer
     }.merge(additional_params).to_json)
+
+    session[:sign_ore_id_fallback_state] = @state
+
+    @state
+  end
+
+  def fallback_state
+    @fallback_state ||= JSON.parse(crypt.decrypt_and_verify(session.delete(:sign_ore_id_fallback_state)))
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    {}
   end
 
   def received_state

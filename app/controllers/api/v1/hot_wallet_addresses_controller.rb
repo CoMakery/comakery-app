@@ -1,35 +1,31 @@
 class Api::V1::HotWalletAddressesController < Api::V1::ApiController
-  include Api::V1::Concerns::AuthorizableByMissionKey
+  include Api::V1::Concerns::AuthorizableByProjectKey
   include Api::V1::Concerns::RequiresAnAuthorization
-  include Api::V1::Concerns::RequiresSignature
-  include Api::V1::Concerns::RequiresWhitelabelMission
 
   before_action :verify_hot_wallet, only: :create
 
   def create
-    build_hot_wallet
-    @build_hot_wallet.source = :hot_wallet
+    @hot_wallet = project.build_hot_wallet(wallet_params)
+    @hot_wallet.source = :hot_wallet
+    @hot_wallet._blockchain = project.token&._blockchain
+    @hot_wallet.name ||= 'Hot Wallet'
 
-    if @build_hot_wallet.save
+    if @hot_wallet.save
       render 'show.json', status: :created
     else
-      @errors = @build_hot_wallet.errors
+      @errors = @hot_wallet.errors
       render 'api/v1/error.json', status: :bad_request
     end
   end
 
   private
 
-    def build_hot_wallet
-      @build_hot_wallet ||= project.build_hot_wallet(wallet_params)
-    end
-
     def project
-      @project ||= Project.find(params[:project_id])
+      @project ||= Project.find(params.require(:project_id))
     end
 
     def wallet_params
-      params.fetch(:body, {}).fetch(:data, {}).fetch(:hot_wallet, {}).permit(:address, :name, :_blockchain)
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:hot_wallet, {}).permit(:address, :name)
     end
 
     def verify_hot_wallet

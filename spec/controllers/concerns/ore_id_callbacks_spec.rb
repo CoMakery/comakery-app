@@ -49,6 +49,23 @@ shared_examples 'having ore_id_callbacks' do
     it 'returns state to be added to url' do
       expect(controller.state).to be_a(String)
     end
+
+    it 'sets fallback state' do
+      controller.state
+
+      expect(controller.session[:sign_ore_id_fallback_state]).to be_a(String)
+    end
+  end
+
+  describe '#fallback_state' do
+    before do
+      controller.session[:sign_ore_id_fallback_state] = 'dummy fallback state'
+      expect(controller.crypt).to receive(:decrypt_and_verify).and_return('{"dummy": "dummy"}')
+    end
+
+    it 'returns parsed fallback state' do
+      expect(controller.fallback_state).to be_a(Hash)
+    end
   end
 
   describe '#received_state' do

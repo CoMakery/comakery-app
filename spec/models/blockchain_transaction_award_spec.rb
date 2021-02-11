@@ -114,7 +114,7 @@ describe BlockchainTransactionAward, vcr: true do
     end
 
     context 'with erc20 transfer' do
-      it 'returns Comakery::Erc20Transfer' do
+      specify do
         blockchain_transaction = build(:blockchain_transaction)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Transfer)
@@ -122,7 +122,7 @@ describe BlockchainTransactionAward, vcr: true do
     end
 
     context 'with erc20 mint' do
-      it 'returns Comakery::Erc20Mint' do
+      specify do
         blockchain_transaction = build(:blockchain_transaction)
         blockchain_transaction.blockchain_transactable.update(
           transfer_type: blockchain_transaction.blockchain_transactable.project.transfer_types.find_by(name: 'mint')
@@ -133,7 +133,7 @@ describe BlockchainTransactionAward, vcr: true do
     end
 
     context 'with erc20 burn' do
-      it 'returns Comakery::Erc20Burn' do
+      specify do
         blockchain_transaction = build(:blockchain_transaction)
         blockchain_transaction.blockchain_transactable.update(
           transfer_type: blockchain_transaction.blockchain_transactable.project.transfer_types.find_by(name: 'burn')
@@ -144,7 +144,7 @@ describe BlockchainTransactionAward, vcr: true do
     end
 
     context 'with DAG transfer' do
-      it 'returns Comakery::Dag::Tx' do
+      specify do
         blockchain_transaction = build(:blockchain_transaction_dag)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Dag::Tx)
@@ -152,10 +152,42 @@ describe BlockchainTransactionAward, vcr: true do
     end
 
     context 'with Algorand transfer' do
-      it 'returns Comakery::Algorand::Tx' do
+      specify do
         blockchain_transaction = build(:blockchain_transaction, token: create(:algorand_token), destination: build(:algorand_address_1))
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx)
+      end
+    end
+
+    context 'with Algorand Standart Asset transfer' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction, token: create(:asa_token), destination: build(:algorand_address_1))
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::Asset)
+      end
+    end
+
+    context 'with Algorand Security Token transfer' do
+      specify do
+        blockchain_transaction = build(:algorand_app_transfer_tx).blockchain_transaction
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::App::SecurityToken::Transfer)
+      end
+    end
+
+    context 'with Algorand Security Token mint' do
+      specify do
+        blockchain_transaction = build(:algorand_app_mint_tx).blockchain_transaction
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::App::SecurityToken::Mint)
+      end
+    end
+
+    context 'with Algorand Security Token burn' do
+      specify do
+        blockchain_transaction = build(:algorand_app_burn_tx).blockchain_transaction
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::App::SecurityToken::Burn)
       end
     end
   end
