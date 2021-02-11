@@ -5,7 +5,7 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
     @blockchain_transaction = blockchain_transaction
     @algorand = Comakery::Algorand.new(blockchain_transaction.token.blockchain, nil)
     @hash = blockchain_transaction.tx_hash
-    @asset_id = blockchain_transaction.token.contract_address
+    @asset_id = blockchain_transaction.token.contract_address.to_i
   end
 
   def to_object(**_args)
@@ -33,6 +33,6 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
   end
 
   def valid?(_ = nil)
-    super && asset_id == transaction_asset_id.to_s
+    super && asset_id == transaction_asset_id
   end
 end
