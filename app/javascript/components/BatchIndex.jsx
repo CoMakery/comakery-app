@@ -74,7 +74,7 @@ const BatchStyled = styled(Batch)`
 const Filter = styled.span`
   margin-bottom: 3px;
   margin-right: 15px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   color: #9b9b9b;
@@ -118,12 +118,12 @@ const Filter = styled.span`
 `
 
 const Tasks = styled.div`
-  margin: 20px 0;
+  margin: 30px 0;
 `
 
 const CreateTaskButton = styled.div`
   font-family: Montserrat;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   font-style: normal;
   font-stretch: normal;
@@ -290,31 +290,36 @@ class BatchIndex extends React.Component {
 
                 <BatchStyled batch={this.state.selectedBatch} editable={this.props.editable} />
 
-                {this.props.editable &&
-                  <CreateTaskButton>
-                    <a href={this.state.selectedBatch.newTaskPath}>
-                      create a task +
-                    </a>
-                  </CreateTaskButton>
-                }
-
-                <Tasks>
-                  {this.state.selectedBatch.tasks.length > 0 &&
-                    <FilterWrapper>
-                      <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all&nbsp;tasks</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'ready'} onClick={(_) => this.setState({selectedTaskFilter: 'ready'})}>ready</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'started'} onClick={(_) => this.setState({selectedTaskFilter: 'started'})}>started</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'submitted'} onClick={(_) => this.setState({selectedTaskFilter: 'submitted'})}>submitted</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'accepted'} onClick={(_) => this.setState({selectedTaskFilter: 'accepted'})}>accepted</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'paid'} onClick={(_) => this.setState({selectedTaskFilter: 'paid'})}>paid</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'rejected'} onClick={(_) => this.setState({selectedTaskFilter: 'rejected'})}>rejected</Filter>
-                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'cancelled'} onClick={(_) => this.setState({selectedTaskFilter: 'cancelled'})}>cancelled</Filter>
-                    </FilterWrapper>
-                  }
-                  {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter || (this.state.selectedTaskFilter === 'ready' && task.status === 'invite ready')).map((t, i) =>
-                    <Task editable={this.props.editable} key={i} task={t} />
-                  )}
-                </Tasks>
+                <div className='row'>
+                  <div className='col-10'>
+                    <Tasks>
+                      {this.state.selectedBatch.tasks.length > 0 &&
+                        <FilterWrapper>
+                          <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all&nbsp;tasks</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'ready'} onClick={(_) => this.setState({selectedTaskFilter: 'ready'})}>ready</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'started'} onClick={(_) => this.setState({selectedTaskFilter: 'started'})}>started</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'submitted'} onClick={(_) => this.setState({selectedTaskFilter: 'submitted'})}>submitted</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'accepted'} onClick={(_) => this.setState({selectedTaskFilter: 'accepted'})}>accepted</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'paid'} onClick={(_) => this.setState({selectedTaskFilter: 'paid'})}>paid</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'rejected'} onClick={(_) => this.setState({selectedTaskFilter: 'rejected'})}>rejected</Filter>
+                          <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'cancelled'} onClick={(_) => this.setState({selectedTaskFilter: 'cancelled'})}>cancelled</Filter>
+                        </FilterWrapper>
+                      }
+                      {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter || (this.state.selectedTaskFilter === 'ready' && task.status === 'invite ready')).map((t, i) =>
+                        <Task editable={this.props.editable} key={i} task={t} />
+                      )}
+                    </Tasks>
+                  </div>
+                  <div className='col-2'>
+                    {this.props.editable &&
+                    <CreateTaskButton>
+                      <a href={this.state.selectedBatch.newTaskPath}>
+                        create a task +
+                      </a>
+                    </CreateTaskButton>
+                    }
+                  </div>
+                </div>
               </Wrapper>
             </React.Fragment>
           }
