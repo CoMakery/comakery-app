@@ -98,7 +98,7 @@ describe Comakery::Algorand::Tx::App do
     context 'when arg is an Integer' do
       before { allow(algorand_app_tx).to receive(:app_args).and_return([1999]) }
 
-      it { is_expected.to eq([124, 15]) }
+      it { is_expected.to eq([7, 207]) }
     end
 
     context 'when arg is unsupported' do
@@ -120,7 +120,7 @@ describe Comakery::Algorand::Tx::App do
     context 'when arg is an Integer' do
       before { allow(algorand_app_tx).to receive(:app_args).and_return([1999]) }
 
-      it { is_expected.to eq('fA==') }
+      it { is_expected.to eq('B88=') }
     end
 
     context 'when arg is unsupported' do

@@ -12,8 +12,6 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
     {
       type: 'appl',
       from: blockchain_transaction.source,
-      to: nil,
-      amount: nil,
       appIndex: app_id,
       appAccounts: app_accounts,
       appArgs: send("encode_app_args_#{args[:app_args_format]}"),
@@ -36,7 +34,10 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
       when String
         '0x' + a.unpack1('H*')
       when Integer
-        '0x' + a.to_s(16)
+        i = a.to_s(16)
+        i = '0' + i if i.size.odd?
+
+        '0x' + i
       else
         raise "Unsupported app argument: #{a}:#{a.class}"
       end
@@ -64,7 +65,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
       when String
         Base64.encode64(a).strip
       when Integer
-        Base64.encode64(encode_int_as_bytes(a).pack('c')).strip
+        Base64.encode64(encode_int_as_bytes(a).pack('c*')).strip
       else
         raise "Unsupported app argument: #{a}:#{a.class}"
       end
@@ -72,9 +73,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def encode_int_as_bytes(int)
-    # Note: [int].pack("N").bytes.drop_while(&:zero?) might be more performant
-
-    int.to_s(16).chars.each_slice(2).map { |s| s.join.to_i(16) }
+    [int].pack('N').bytes.drop_while(&:zero?)
   end
 
   def app_transaction_on_completion

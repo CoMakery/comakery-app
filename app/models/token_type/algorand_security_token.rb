@@ -11,13 +11,13 @@ class TokenType::AlgorandSecurityToken < TokenType
   # Symbol of the token type for UI purposes
   # @return [String] symbol
   def symbol
-    contract.app_global_state_value(key: 'symbol', type: 'bytes')
+    contract.app_global_state_decoded['symbol']
   end
 
   # Number of decimals
   # @return [Integer] number
   def decimals
-    contract.app_global_state_value(key: 'decimals', type: 'uint')
+    contract.app_global_state_decoded['decimals']
   end
 
   # Wallet logo filename for UI purposes (relative to `app/assets/images`)
