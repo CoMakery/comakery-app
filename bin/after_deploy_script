@@ -22,4 +22,4 @@ puts "\n== Data migrations =="
 system! 'bin/rails data:migrate'
 
 puts "\n== Generate docs =="
-system! 'bin/rails docs:generate'
+# system! 'bin/rails docs:generate' #TODO: fix me
