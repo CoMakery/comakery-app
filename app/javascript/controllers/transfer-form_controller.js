@@ -1,7 +1,6 @@
 import { Controller } from 'stimulus'
 import { Decimal } from 'decimal.js'
-import * as Turbolinks from 'turbolinks'
-
+import { Turbo } from '@hotwired/turbo-rails'
 export default class extends Controller {
   static targets = [ 'amount', 'quantity', 'total', 'form', 'formChild', 'create' ]
 
@@ -25,7 +24,7 @@ export default class extends Controller {
     let transfer = this.targets.find('create').value
 
     if (transfer === 'Manage Categories') {
-      Turbolinks.visit(url)
+      Turbo.visit(url)
     }    else if (transfer === '') {
       this.formChildTarget.style.display = 'none'
     }    else {

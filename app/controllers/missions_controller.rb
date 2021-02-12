@@ -9,7 +9,7 @@ class MissionsController < ApplicationController
 
   def index
     authorize Mission.new
-    render component: 'MissionIndex', props: { csrf_token: form_authenticity_token, missions: @missions }
+    @props = { csrf_token: form_authenticity_token, missions: @missions }
   end
 
   def new
@@ -17,7 +17,6 @@ class MissionsController < ApplicationController
     authorize @mission
 
     @props[:mission] = @mission&.serialize
-    render component: 'MissionForm', props: @props
   end
 
   def show
@@ -26,8 +25,6 @@ class MissionsController < ApplicationController
     @meta_title = 'CoMakery Mission'
     @meta_desc = "#{@mission.name}: #{@mission.description}"
     @meta_image = Attachment::GetPath.call(attachment: @mission.image)
-
-    render component: 'Mission', props: @props
   end
 
   def create
@@ -47,7 +44,6 @@ class MissionsController < ApplicationController
 
     @props[:form_url] = mission_path(@mission)
     @props[:form_action] = 'PATCH'
-    render component: 'MissionForm', props: @props
   end
 
   def update

@@ -7,8 +7,8 @@ describe Comakery::Algorand, vcr: true do
   specify { expect(subject.asset_details).to be_an(HTTParty::Response) }
   specify { expect(subject.app_details).to be_an(HTTParty::Response) }
   specify { expect(subject.app_global_state).to be_an(Array) }
-  specify { expect(subject.app_global_state_value(key: 'decimals', type: 'uint')).to eq(8) }
-  specify { expect(subject.app_global_state_value(key: 'unitname', type: 'bytes')).to eq('ABCTEST') }
+  specify { expect(subject.app_global_state_decoded['decimals']).to eq(8) }
+  specify { expect(subject.app_global_state_decoded['unitname']).to eq('ABCTEST') }
   specify { expect(subject.symbol).to be_an(String) }
   specify { expect(subject.decimals).to be_an(Integer) }
   specify { expect(subject.transaction_details('MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A')).to be_an(HTTParty::Response) }

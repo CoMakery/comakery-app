@@ -58,7 +58,7 @@ exports[`Project renders correctly without props 1`] = `
               "componentStyle": ComponentStyle {
                 "componentId": "sc-htoDjs",
                 "isStatic": false,
-                "lastClassName": "eAvYzW",
+                "lastClassName": "jJqKrV",
                 "rules": Array [
                   "
   font-size: 16px;
@@ -83,7 +83,7 @@ exports[`Project renders correctly without props 1`] = `
   ",
                   [Function],
                   "
-  
+
     @media (max-width: 640px) {
       margin-left: -25px;
       margin-right: -25px;
@@ -104,7 +104,7 @@ exports[`Project renders correctly without props 1`] = `
           forwardedRef={null}
         >
           <div
-            className="sc-htoDjs eAvYzW"
+            className="sc-htoDjs jJqKrV"
           >
             <styled.div>
               <StyledComponent

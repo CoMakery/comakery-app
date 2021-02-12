@@ -335,6 +335,7 @@ class TaskDetails extends React.Component {
                   <CancelButton
                     href={this.props.cancelUrl}
                     data-method='delete'
+                    data-turbo='false'
                   >
                     Cancel
                   </CancelButton>

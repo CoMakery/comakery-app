@@ -85,7 +85,7 @@ Rails.application.routes.draw do
 
     namespace :dashboard do
       resources :transfers, only: [:index, :show, :create]
-      resources :accounts, only: [:index, :create]
+      resources :accounts, only: [:index, :show, :create]
       resources :accesses, only: [:index] do
         collection do
           post :regenerate_api_key
