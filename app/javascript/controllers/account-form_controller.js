@@ -28,7 +28,8 @@ export default class extends ComakerySecurityTokenController {
         }
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       }
     }).then(response => {
       if (response.status === 201) {
@@ -62,6 +63,13 @@ export default class extends ComakerySecurityTokenController {
       e.readOnly = false
       e.style.pointerEvents = null
     })
+  }
+
+  _markButtonAsPending() {
+    this.buttonTarget.parentElement.classList.add('in-progress--metamask__paid')
+    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'processing'
+
+    this.formTarget.requestSubmit()
   }
 
   showForm() {

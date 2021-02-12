@@ -22,7 +22,9 @@ class Dashboard::TransfersController < ApplicationController
     authorize @project, :create_transfer?
 
     @transfer = @award_type.awards.new(transfer_params)
-    @transfer.name = @transfer.transfer_type.name.titlecase
+    name = @transfer.transfer_type.name
+
+    @transfer.name = name.titlecase
     @transfer.account_id = params[:award][:account_id]
     @transfer.issuer = current_account
     @transfer.status = :accepted
@@ -44,6 +46,7 @@ class Dashboard::TransfersController < ApplicationController
         .includes(issuer: [image_attachment: :blob], account: [image_attachment: :blob])
 
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
+      @transfers_unfiltered = @transfers_unfiltered.not_burned unless transfer_type_name == 'burn'
 
       @q = @transfers_unfiltered.ransack(params[:q])
     end
@@ -73,6 +76,10 @@ class Dashboard::TransfersController < ApplicationController
 
     def set_award_type
       @award_type = @project.default_award_type
+    end
+
+    def transfer_type_name
+      @transfer_type_name ||= TransferType.find_by(id: params.dig(:q, :transfer_type_id_eq))&.name
     end
 
     def transfer_params

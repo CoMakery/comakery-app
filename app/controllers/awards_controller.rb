@@ -31,34 +31,25 @@ class AwardsController < ApplicationController
   before_action :redirect_back_to_session, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
-  def index
-    render component: 'MyTasks', props: @props
-  end
+  def index; end
 
-  def new
-    render component: 'TaskForm', props: @props
-  end
+  def new; end
+
+  def award; end
+
+  def assignment; end
 
   def clone
     @props[:task][:image_from_id] = @award.id
-
-    render component: 'TaskForm', props: @props
   end
 
   def show
     @skip_search_box = true
-    render component: 'TaskDetails', props: @props
-  end
-
-  def award
-    render component: 'TaskShow', props: @props
   end
 
   def edit
     @props[:form_url] = project_award_type_award_path(@project, @award_type, @award)
     @props[:form_action] = 'PATCH'
-
-    render component: 'TaskForm', props: @props
   end
 
   def create
@@ -89,10 +80,6 @@ class AwardsController < ApplicationController
       error_response
       render json: @error_response, status: :unprocessable_entity
     end
-  end
-
-  def assignment
-    render component: 'TaskAssign', props: @props
   end
 
   def assign # rubocop:todo Metrics/CyclomaticComplexity

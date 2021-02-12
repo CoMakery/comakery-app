@@ -131,8 +131,8 @@ def click_remove(award_type_row)
 end
 
 def wait_for_turbolinks
-  has_css?('.turbolinks-progress-bar', visible: true)
-  has_no_css?('.turbolinks-progress-bar')
+  has_css?('.turbo-progress-bar', visible: true)
+  has_no_css?('.turbo-progress-bar')
 end
 
 include SlackStubs # rubocop:todo Style/MixinUsage

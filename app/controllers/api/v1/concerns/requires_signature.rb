@@ -19,7 +19,7 @@ module Api::V1::Concerns::RequiresSignature
     rescue Comakery::APISignatureError => e
       @errors = { authentication: e.message }
 
-      render 'api/v1/error.json', status: :unauthorized
+      render 'api/v1/error.json', status: :unauthorized, layout: false
     end
 
     def nonce_unique?(nonce)

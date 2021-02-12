@@ -1,6 +1,6 @@
 import { Controller } from 'stimulus'
 import Web3 from 'web3'
-import Turbolinks from 'turbolinks'
+import { Turbo } from '@hotwired/turbo-rails'
 import { fetch } from 'whatwg-fetch'
 import { Decimal } from 'decimal.js'
 import { bufferToHex } from 'ethereumjs-util'
@@ -230,7 +230,7 @@ export default class extends Controller {
   }
 
   _reload() {
-    Turbolinks.visit(window.location.toString())
+    Turbo.visit(window.location.toString())
   }
 
   // TODO: Following Metamask initialization deprecates in 2020

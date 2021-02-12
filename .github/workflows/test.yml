@@ -97,11 +97,17 @@ jobs:
     - name: Install Node dependencies
       run: yarn install
 
+    - name: HotWallet - Install Node dependencies
+      run: cd hotwallet && yarn install
+
     - name: Run Eslint
       run: yarn lint
 
     - name: Run Jest
       run: yarn test
+
+    - name: HotWallet - Run Jest
+      run: cd hotwallet && yarn test
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1

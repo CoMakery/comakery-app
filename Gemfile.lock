@@ -662,9 +662,8 @@ GEM
     truncato (0.7.11)
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.7.0, <= 2.0)
-    turbolinks (5.2.1)
-      turbolinks-source (~> 5.2)
-    turbolinks-source (5.2.0)
+    turbo-rails (0.5.8)
+      rails (>= 6.0.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
@@ -817,7 +816,7 @@ DEPENDENCIES
   sprockets (= 3.7.2)
   trollop
   truncato (~> 0.7.11)
-  turbolinks (~> 5.2)
+  turbo-rails
   uglifier
   underscore-rails
   validate_url (~> 1.0)

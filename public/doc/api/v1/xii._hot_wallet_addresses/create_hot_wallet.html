@@ -4,7 +4,7 @@
     <title>XII. Hot Wallet Addresses API</title>
     <meta charset="utf-8">
     <style>
-      
+
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -131,7 +131,7 @@ table th, table td {
                     <span class="name">name</span>
                 </td>
                 <td>
-                  <span class="description">wallet name</span>
+                  <span class="description">wallet name (&quot;Hot Wallet&quot; by default)</span>
                 </td>
               </tr>
               <tr>
@@ -142,14 +142,6 @@ table th, table td {
                   <span class="description">wallet address</span>
                 </td>
               </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">blockchain</span>
-                </td>
-                <td>
-                  <span class="description">wallet blockchain [&quot;bitcoin&quot;, &quot;bitcoin_test&quot;, &quot;cardano&quot;, &quot;cardano_test&quot;, &quot;qtum&quot;, &quot;qtum_test&quot;, &quot;eos&quot;, &quot;eos_test&quot;, &quot;tezos&quot;, &quot;constellation&quot;, &quot;constellation_test&quot;, &quot;ethereum&quot;, &quot;ethereum_ropsten&quot;, &quot;ethereum_kovan&quot;, &quot;ethereum_rinkeby&quot;, &quot;algorand&quot;, &quot;algorand_test&quot;, &quot;algorand_beta&quot;]</span>
-                </td>
-              </tr>
             </tbody>
           </table>
 
@@ -157,7 +149,7 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+            <pre class="request headers">Api-Transaction-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
           <pre class="request route highlight">POST /api/v1/projects/67/hot_wallet_addresses</pre>
@@ -168,27 +160,16 @@ table th, table td {
   "body": {
     "data": {
       "hot_wallet": {
-        "name": "Wallet",
-        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-        "_blockchain": "bitcoin"
+        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
       }
-    },
-    "url": "http://example.org/api/v1/projects/67/hot_wallet_addresses",
-    "method": "POST",
-    "nonce": "35ee3b4e0266b26226fe74ea6a580915",
-    "timestamp": "1612867607"
-  },
-  "proof": {
-    "type": "Ed25519Signature2018",
-    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "4ZqjzH8nnBPfFeQcU+l9xxm4NN3HcbeOqKKbimDRaYmvZ1BT2v3b+C9ZTWFXItnBhceUkKAiIK9dYAawTctKCg=="
+    }
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;b002041da137f8f45a1028a21e5a0ad2&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;32f429b9d1db18cec16e4deaf70bd515&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -198,8 +179,8 @@ table th, table td {
   &quot;primaryWallet&quot;: true,
   &quot;source&quot;: &quot;hot_wallet&quot;,
   &quot;state&quot;: null,
-  &quot;createdAt&quot;: &quot;2021-02-09T10:46:48.231Z&quot;,
-  &quot;updatedAt&quot;: &quot;2021-02-09T10:46:48.231Z&quot;,
+  &quot;createdAt&quot;: &quot;2021-02-04T09:59:18.025Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-02-04T09:59:18.025Z&quot;,
   &quot;blockchain&quot;: &quot;bitcoin&quot;,
   &quot;tokens&quot;: [
 

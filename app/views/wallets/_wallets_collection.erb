@@ -57,7 +57,7 @@
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <% if wallet.ore_id? %>
-                    <%= link_to 'Opt In To Algorand Tokens', '', class: 'dropdown-item', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
+                    <%= link_to 'Opt In To Algorand Tokens', '', class: 'dropdown-item opt-ins', data: { toggle: :modal, target: '#algorandOptIns', src: algorand_opt_ins_wallet_path(wallet) }  %>
                   <% end %>
                   <% unless wallet.primary_wallet %>
                     <%= link_to "Make Primary Wallet for #{wallet.blockchain.name}", make_primary_wallet_path(wallet), method: :patch, class: 'dropdown-item' %>
