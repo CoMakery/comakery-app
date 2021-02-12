@@ -9,7 +9,7 @@
           Add wallet
         </button>
         <% if @wallets.ore_id.empty? %>
-          <%= link_to auth_ore_id_new_url(redirect_back_to: wallets_url), type: :button, class: 'btn btn-primary font-weight-bold', data: { method: 'POST' } do %>
+          <%= link_to auth_ore_id_new_url(redirect_back_to: wallets_url), type: :button, class: 'btn btn-primary font-weight-bold', data: { method: 'POST', turbo: "false" } do %>
             <i class="fas fa-plus"></i> <span>Link OREID</span>
           <% end %>
         <% end %>

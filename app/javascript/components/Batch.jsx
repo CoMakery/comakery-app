@@ -151,7 +151,7 @@ class Batch extends React.Component {
                   <a href={this.props.batch.editPath}>
                     <StyledIcon name='iconEdit.svg' />
                   </a>
-                  <a rel='nofollow' data-method='delete' href={this.props.batch.destroyPath}>
+                  <a rel='nofollow' data-method='delete' data-turbo='false' href={this.props.batch.destroyPath}>
                     <StyledIcon name='iconTrash.svg' />
                   </a>
                 </Buttons>
