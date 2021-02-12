@@ -82,13 +82,13 @@ describe 'my account', js: true do
 
   scenario 'MetaMask button disabled' do
     visit new_account_path
-    expect(page).not_to have_selector 'a', text: 'MetaMask', exact_text: true
+    expect(page).not_to have_selector 'button', text: 'MetaMask', exact_text: true
   end
 
   scenario 'MetaMask button enabled' do
     ENV['METAMASK_LOGIN'] = 'true'
     visit new_account_path
-    expect(page).to have_selector 'a', text: 'MetaMask', exact_text: true
+    expect(page).to have_selector 'button', text: 'MetaMask', exact_text: true
   end
 
   scenario 'featured page is available after signup' do
