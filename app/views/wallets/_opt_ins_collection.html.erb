@@ -50,11 +50,11 @@
           <td>
             <div class="text-right">
               <% if !opt_in.opted_in? %>
-                <%= link_to(
+                <%= button_to(
                       'OPT-IN',
                       algorand_opt_ins_url(wallet_id: wallet.id, token_id: token),
-                      method: :post,
                       type: "button",
+                      data: {turbo: "false"},
                       class: "btn btn-link font-weight-bold"
                     ) %>
               <% end %>

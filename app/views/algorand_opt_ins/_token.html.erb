@@ -17,7 +17,7 @@
   <div class="transfers-table__transfer__action">
     <% if !token_opt_in.opted_in? && token_opt_in_policy.create? %>
       <div class="transfer-button">
-        <%= link_to 'Opt-in', algorand_opt_ins_url(wallet_id: wallet.id, token_id: token), method: :post %>
+        <%= button_to 'Opt-in', algorand_opt_ins_url(wallet_id: wallet.id, token_id: token), data: {turbo: "false"} %>
       </div>
     <% end %>
   </div>
