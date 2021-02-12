@@ -3,7 +3,7 @@
     <h5 class="m-0">My Wallets</h5>
     <div class="d-flex flex-wrap">
       <% unless wallets.ore_id.empty? %>
-        <%= link_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold", data: { method: 'DELETE', turbo: "false" } do %>
+        <%= button_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold",  method: :delete, data: { turbo: "false" } do %>
           <span>Unlink OREID</span>
         <% end %>
       <% end %>
