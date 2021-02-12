@@ -8,6 +8,7 @@
     "test": "jest -i"
   },
   "dependencies": {
+    "@open-rights-exchange/chainjs": "^0.28.6",
     "algosdk": "^1.8.1",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
