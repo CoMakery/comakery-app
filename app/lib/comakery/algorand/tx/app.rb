@@ -73,7 +73,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def encode_int_as_bytes(int)
-    [int].pack('N').bytes.drop_while(&:zero?)
+    int.zero? ? [0] : [int].pack('N').bytes.drop_while(&:zero?)
   end
 
   def app_transaction_on_completion
