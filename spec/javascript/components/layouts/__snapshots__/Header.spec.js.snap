@@ -68,6 +68,7 @@ exports[`Header renders correctly without props 1`] = `
         </a>
         <a
           data-method="delete"
+          data-turbo="false"
           href="/session"
           rel="nofollow"
         >

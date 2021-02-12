@@ -25,10 +25,26 @@ class Comakery::Algorand
     app_details.dig('application', 'params', 'global-state')
   end
 
-  def app_global_state_value(key:, type:)
-    value = app_global_state&.find { |entry| entry['key'] == Base64.encode64(key).strip }&.dig('value', type)
-    value = Base64.decode64(value) if value && type == 'bytes'
-    value
+  def app_global_state_decoded
+    decode_storage(app_global_state)
+  end
+
+  def decode_storage(storage)
+    storage.map do |e|
+      [
+        Base64.decode64(e['key']),
+        decode_storage_value(e['value'])
+      ]
+    end.to_h
+  end
+
+  def decode_storage_value(value)
+    case value['type']
+    when 1
+      Base64.decode64(value['bytes'])
+    when 2
+      value['uint']
+    end
   end
 
   def transaction_details(tx_hash)
@@ -51,6 +67,14 @@ class Comakery::Algorand
 
   def account_apps(addr)
     account_details(addr).dig('account', 'apps-local-state') || []
+  end
+
+  def account_local_state(addr)
+    account_apps(addr).find { |app| app['id'] == @app_id }
+  end
+
+  def account_local_state_decoded(addr)
+    decode_storage(account_local_state(addr)['key-value'])
   end
 
   def status

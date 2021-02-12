@@ -530,6 +530,17 @@ form.form-with-submit-button {
     }
   }
 
+  .transfer-algo-btn {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin-right: inherit;
+    min-width: inherit;
+    font-size: inherit;
+    text-transform: inherit;
+  }
+
   &:hover {
     background-color: #efefef;
 

@@ -383,7 +383,7 @@ class Task extends React.Component {
                   }
 
                   {task.destroyPath &&
-                    <a rel='nofollow' data-method='delete' href={task.destroyPath}>
+                    <a rel='nofollow' data-method='delete' data-turbo='false' href={task.destroyPath}>
                       <StyledIcon name='iconTrash.svg' />
                     </a>
                   }
