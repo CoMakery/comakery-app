@@ -17,6 +17,7 @@
 html,
 body {
   width: 100%;
+  height: 100%;
 }
 
 body {
@@ -33,6 +34,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   hyphens: auto;
+  display: flex;
+  flex-flow: column;
 }
 
 .body--overflow {
@@ -379,7 +382,6 @@ form.project_search {
   min-height: 15em;
   display: flex;
   flex-direction: column;
-  min-height: 55vh;
 
   .project_settings__content--modal__icon {
     align-self: flex-end;
@@ -528,6 +530,17 @@ form.form-with-submit-button {
     .wallet-logo {
       margin: 0.25em 0.5em 0 0;
     }
+  }
+
+  .transfer-algo-btn {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin-right: inherit;
+    min-width: inherit;
+    font-size: inherit;
+    text-transform: inherit;
   }
 
   &:hover {
@@ -2072,9 +2085,11 @@ a.header--nav--links--current {
   min-height: 50vh;
 }
 
+footer {
+  margin-top: auto;
+}
+
 .footer {
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   color: #e8eff7;
   padding: 70px 150px 0px 150px;

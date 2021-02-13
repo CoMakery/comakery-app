@@ -35,4 +35,7 @@ FileUtils.chdir APP_ROOT do
 
   puts "\n== Enabling caching =="
   system! 'touch tmp/caching-dev.txt'
+
+  puts "\n== Generate docs =="
+  system! 'RAILS_ENV=test bundle exec rake docs:generate'
 end

@@ -103,7 +103,7 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
           My Account
         </a>
 
-        <a rel="nofollow" href="/session" data-method="delete">
+        <a rel="nofollow" href="/session" data-method="delete" data-turbo="false">
           Sign out
         </a>
       </div>
