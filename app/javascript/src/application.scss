@@ -38,6 +38,32 @@ body {
   flex-flow: column;
 }
 
+//#TODO: remove !important when only bootstrap will be loaded
+button.transfers-create,
+button.transfer-rule-create,
+button.reg-groups-create,
+.admins__create input[type="submit"],
+.project-api-key__create a,
+.project-api-key__create button,
+.transfer-rules__refresh_from_blockchain input[type="submit"] {
+  margin-bottom: 1.5em;
+  border-radius: 6px !important;
+  border: solid 1px #e6e8ed !important;
+  height: 35px !important;
+  padding: 9px 16px 8px 15px !important;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px !important;
+  background-color: #1560fa !important;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+
+  &:disabled {
+    background-color: #c7c7c7;
+    cursor: not-allowed;
+  }
+}
+
 .body--overflow {
   overflow: hidden;
 }
@@ -76,31 +102,6 @@ label {
   margin-right: 0.5em;
   flex-grow: 0;
   font-family: Montserrat, sans-serif;
-}
-
-button.transfers-create,
-button.transfer-rule-create,
-button.reg-groups-create,
-.admins__create input[type="submit"],
-.project-api-key__create a,
-.project-api-key__create button,
-.transfer-rules__refresh_from_blockchain input[type="submit"] {
-  margin-bottom: 1.5em;
-  border-radius: 6px;
-  border: solid 1px #e6e8ed;
-  height: 35px;
-  padding: 9px 16px 8px 15px;
-  font-family: Montserrat, sans-serif;
-  font-size: 12px;
-  background-color: #1560fa;
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
-
-  &:disabled {
-    background-color: #c7c7c7;
-    cursor: not-allowed;
-  }
 }
 
 input:not(.btn):not(.close):matches([type="button"], [type="submit"], [type="reset"]),
