@@ -60,7 +60,7 @@ describe BlockchainTransaction, vcr: true do
     before do
       allow(subject).to receive(:generate_transaction).and_return(nil)
     end
-    
+
     it { is_expected.to validate_presence_of(:tx_hash) }
   end
 
