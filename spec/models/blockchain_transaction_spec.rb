@@ -64,14 +64,6 @@ describe BlockchainTransaction, vcr: true do
     it { is_expected.to validate_presence_of(:tx_hash) }
   end
 
-  describe 'validations' do
-    it 'makes attributes readonly' do
-      %i[amount source destination network contract_address current_block].each do |attr|
-        expect(described_class.readonly_attributes).to include(attr.to_s)
-      end
-    end
-  end
-
   describe 'populate_data' do
     subject { create(:blockchain_transaction) }
 
