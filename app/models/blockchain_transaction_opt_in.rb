@@ -1,9 +1,9 @@
-# Algorand Standard Assets and Apps (Algorand Security Token) Opt-in transactions
 class BlockchainTransactionOptIn < BlockchainTransaction
   def update_transactable_status
     blockchain_transactable.update!(status: :opted_in)
   end
 
+  # TODO: Refactor on_chain condition into TokenType
   def on_chain
     @on_chain ||=
       begin

@@ -5,6 +5,7 @@ class BlockchainTransactionAward < BlockchainTransaction
     blockchain_transactable.update!(status: :paid)
   end
 
+  # TODO: Refactor on_chain condition into TokenType
   def on_chain # rubocop:todo Metrics/CyclomaticComplexity
     @on_chain ||= if token._token_type_on_ethereum?
       on_chain_eth

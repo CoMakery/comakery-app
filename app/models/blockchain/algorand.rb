@@ -147,4 +147,10 @@ class Blockchain::Algorand < Blockchain
   def account_coin_balance(addr)
     Comakery::Algorand.new(self).account_balance(addr)
   end
+
+  # Return current block
+  # @return [Integer] current block
+  def current_block
+    Comakery::Algorand.new(self).last_round
+  end
 end

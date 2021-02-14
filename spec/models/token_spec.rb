@@ -74,6 +74,11 @@ describe Token, type: :model, vcr: true do
     end
   end
 
+  describe 'token' do
+    subject { described_class.new }
+    specify { expect(subject.token).to eq(subject) }
+  end
+
   describe 'token_type' do
     it 'returns a TokenType instance' do
       expect(described_class.new.token_type).to be_a(TokenType::Btc)

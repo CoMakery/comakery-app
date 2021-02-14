@@ -3,6 +3,7 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
     blockchain_transactable.update!(status: :synced)
   end
 
+  # TODO: Refactor on_chain condition into TokenType
   def on_chain
     @on_chain ||= if token._token_type_on_ethereum?
       on_chain_eth

@@ -5,6 +5,7 @@ describe BlockchainTransactionOptIn do
     let(:blockchain_transaction) { create(:blockchain_transaction_opt_in) }
 
     before do
+      blockchain_transaction.update(tx_hash: '0')
       blockchain_transaction.update_status(:pending, 'test')
     end
 
