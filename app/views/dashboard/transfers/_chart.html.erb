@@ -14,7 +14,7 @@
   data-transfers-chart-total-filtered="<%= @transfers_all.sum(&:total_amount) %>"
   data-transfers-chart-decimals="<%= @project.token&.decimal_places || 0 %>"
   data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
-  data-transfers-chart-transfer-type="<%= @transfer_type %>">
+  data-transfers-chart-transfer-type-burn="<%= @negative %>">
   <h2>transfer history</h2>
 
   <div class="transfers-chart__info">
