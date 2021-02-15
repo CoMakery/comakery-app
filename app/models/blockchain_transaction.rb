@@ -10,11 +10,14 @@ class BlockchainTransaction < ApplicationRecord
 
   validates_with TxSupportTokenValidator
   validates :source, :network, :status, presence: true
-  validates :contract_address, presence: true, if: -> { token._token_type_token? }
-  validates :tx_raw, :tx_hash, presence: true, if: -> { generate_transaction? }
+  validates :contract_address, presence: true, if: -> { token.token_type.operates_with_smart_contracts? }
+  validates :tx_raw, presence: true, if: -> { generate_algo_transaction? || generate_eth_transaction? }
+  validates :tx_hash, presence: true, if: -> { pending? || succeed? }
 
-  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
   enum status: { created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }
+  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
+
+  validates :network, inclusion: { in: networks.keys.map(&:to_s), message: 'unknown network value' }
 
   def self.number_of_confirmations
     ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i
@@ -91,6 +94,7 @@ class BlockchainTransaction < ApplicationRecord
     on_chain.valid?(self)
   end
 
+  # TODO: Move the logic into on_chain
   def contract
     if token._token_type_on_ethereum?
       @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, token.blockchain.explorer_api_host, nonce)
@@ -99,29 +103,48 @@ class BlockchainTransaction < ApplicationRecord
     end
   end
 
-  private
+  def populate_data
+    self.token ||= blockchain_transactable.token
+    self.contract_address ||= token.contract_address
+    self.network ||= token._blockchain
+    self.current_block ||= token.blockchain.current_block
+  end
 
-    def populate_data # rubocop:todo Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      self.token ||= blockchain_transactable.is_a?(Token) ? blockchain_transactable : blockchain_transactable.token
-      self.contract_address ||= token.contract_address
-      self.network ||= token._blockchain if token._token_type_on_ethereum? || token._token_type_dag? || token._token_type_algo? || token._token_type_asa? || token._token_type_algorand_security_token?
+  def generate_transaction
+    generate_algo_transaction if generate_algo_transaction?
+    generate_eth_transaction if generate_eth_transaction?
+  end
 
-      self.current_block ||= Comakery::Eth.new(token.blockchain.explorer_api_host).current_block if token._token_type_on_ethereum?
-      self.current_block ||= Comakery::Algorand.new(token.blockchain).last_round if token._token_type_algo? || token._token_type_asa? || token._token_type_algorand_security_token?
-    end
+  def generate_algo_transaction?
+    token.blockchain.is_a?(Blockchain::Algorand)
+  end
 
-    # @abstract Subclass is expected to implement #tx
-    # @!method tx
-    #    Return a new contract transaction instance for blockchain_transactable record
+  def generate_algo_transaction
+    self.tx_raw ||= on_chain.to_object(app_args_format: :hex).to_json
+  end
 
-    def generate_transaction?
-      token._token_type_comakery_security_token? && nonce.present? && tx.present?
-    end
+  # TODO: Refactor generate_eth_transaction into ETH tx subclasses
+  # and call via on_chain similar to algo
+  def generate_eth_transaction?
+    token._token_type_comakery_security_token? && nonce.present? && tx.present?
+  end
 
-    def generate_transaction
-      if generate_transaction?
-        self.tx_raw ||= tx.hex
-        self.tx_hash ||= tx.hash
-      end
-    end
+  # @abstract Subclass is expected to implement #tx
+  # @!method tx
+  #    Return a new contract transaction instance for blockchain_transactable record
+
+  # TODO: Refactor generate_eth_transaction into ETH tx subclasses
+  # and call via on_chain similar to algo
+  def generate_eth_transaction
+    self.tx_raw ||= tx.hex
+    self.tx_hash ||= tx.hash
+  end
+
+  # Overwrite the setter to rely on validations instead of [ArgumentError]
+  def network=(value)
+    super
+  rescue ArgumentError
+    # Skip argument and reset `network`
+    self.network = nil
+  end
 end

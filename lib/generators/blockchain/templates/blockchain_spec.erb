@@ -16,4 +16,5 @@ describe Blockchain::<%= class_name %> do
   specify { expect(described_class.new.url_for_tx_api('null')).to eq('https://example.org/tx/null') }
   specify { expect(described_class.new.url_for_address_human('null')).to eq('https://example.org/addr/null') }
   specify { expect(described_class.new.url_for_address_api('null')).to eq('https://example.org/addr/null') }
+  specify { expect(described_class.new.current_block).to be_nil }
 end
