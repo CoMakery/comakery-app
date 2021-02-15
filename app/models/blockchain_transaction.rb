@@ -14,8 +14,10 @@ class BlockchainTransaction < ApplicationRecord
   validates :tx_raw, presence: true, if: -> { generate_algo_transaction? || generate_eth_transaction? }
   validates :tx_hash, presence: true, if: -> { pending? || succeed? }
 
-  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
   enum status: { created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }
+  enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
+
+  validates :network, inclusion: { in: networks.keys.map(&:to_s), message: 'unknown network value' }
 
   def self.number_of_confirmations
     ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i
@@ -136,5 +138,13 @@ class BlockchainTransaction < ApplicationRecord
   def generate_eth_transaction
     self.tx_raw ||= tx.hex
     self.tx_hash ||= tx.hash
+  end
+
+  # Overwrite the setter to rely on validations instead of [ArgumentError]
+  def network=(value)
+    super
+  rescue ArgumentError
+    # Skip argument and reset `network`
+    self.network = nil
   end
 end
