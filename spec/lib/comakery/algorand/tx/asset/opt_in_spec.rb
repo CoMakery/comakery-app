@@ -12,6 +12,6 @@ describe Comakery::Algorand::Tx::Asset::OptIn do
     specify { expect(subject[:from]).to eq(tx.blockchain_transaction.source) }
     specify { expect(subject[:to]).to eq(tx.blockchain_transaction.destination) }
     specify { expect(subject[:amount]).to eq(tx.blockchain_transaction.amount) }
-    specify { expect(subject[:assetId]).to eq(tx.asset_id) }
+    specify { expect(subject[:assetIndex]).to eq(tx.asset_id) }
   end
 end

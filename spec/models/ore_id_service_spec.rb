@@ -139,7 +139,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
       end
     end
 
-    context 'when remote password has been updated' do
+    context 'when remote password has not been updated' do
       specify do
         VCR.use_cassette('ore_id_service/ore1ryuzfqwy', match_requests_on: %i[method uri]) do
           expect(subject.password_updated?).to be_falsey

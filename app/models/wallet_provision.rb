@@ -4,7 +4,7 @@
 # -- opt in tx created via ORE ID API --> (OreIdAccount#state: pending, WalletProvision#state: opt_in_created)
 # -- opt in tx confirmed on chain --> (OreIdAccount#state: pending, WalletProvision#state: provisioned)
 # -- CoMakery password reset api endpoint called --> (OreIdAccount#state: unclaimed, WalletProvision#state: provisioned)
-# -- passwordUpdatedAt on ORE ID API response has been changed --> (OreIdAccount#state: ok, WalletProvision#state: provisioned)
+# -- passwordUpdatedOn on ORE ID API response has been changed --> (OreIdAccount#state: ok, WalletProvision#state: provisioned)
 
 class WalletProvision < ApplicationRecord
   class WalletProvision::ProvisioningError < StandardError; end
