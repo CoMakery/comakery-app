@@ -50,11 +50,11 @@ class Comakery::Algorand
   def transaction_details(tx_hash)
     return {} if tx_hash.blank?
 
-    @transaction_details ||= get_request(@blockchain.url_for_tx_api(tx_hash))
+    get_request(@blockchain.url_for_tx_api(tx_hash))
   end
 
   def account_details(addr)
-    @account_details ||= get_request(@blockchain.url_for_address_api(addr))
+    get_request(@blockchain.url_for_address_api(addr))
   end
 
   def account_balance(addr)

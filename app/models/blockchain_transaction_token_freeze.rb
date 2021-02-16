@@ -3,6 +3,7 @@ class BlockchainTransactionTokenFreeze < BlockchainTransaction
     blockchain_transactable.update!(token_frozen: true)
   end
 
+  # TODO: Refactor on_chain condition into TokenType
   def on_chain
     Comakery::Algorand::Tx::App::SecurityToken::Pause.new(self)
   end

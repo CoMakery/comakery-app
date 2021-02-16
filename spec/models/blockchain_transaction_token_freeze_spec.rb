@@ -9,6 +9,7 @@ describe BlockchainTransactionTokenFreeze do
   context 'when succeed' do
     before do
       subject.token.update(token_frozen: false)
+      subject.update(tx_hash: '0')
       subject.update_status(:pending, 'test')
       subject.update_status(:succeed)
     end

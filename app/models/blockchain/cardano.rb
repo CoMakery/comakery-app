@@ -105,4 +105,10 @@ class Blockchain::Cardano < Blockchain
   def ore_id_name
     nil
   end
+
+  # Return current block
+  # @return [void]
+  def current_block
+    nil
+  end
 end

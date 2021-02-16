@@ -16,7 +16,7 @@ describe 'login page' do
     visit '/session/new'
 
     expect(page).to have_content 'Discord'
-    expect(page).to have_link 'Discord'
+    expect(page).to have_button 'Discord'
   end
 
   specify 'without slack' do
@@ -25,7 +25,7 @@ describe 'login page' do
     visit '/session/new'
 
     expect(page).not_to have_content 'Slack'
-    expect(page).not_to have_link 'Slack'
+    expect(page).not_to have_button 'Slack'
   end
 
   specify 'with slack' do
@@ -34,6 +34,6 @@ describe 'login page' do
     visit '/session/new'
 
     expect(page).to have_content 'Slack'
-    expect(page).to have_link 'Slack'
+    expect(page).to have_button 'Slack'
   end
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'models/blockchain_spec'
 
-describe Blockchain::Algorand do
+describe Blockchain::Algorand, vcr: true do
   it_behaves_like 'a blockchain'
 
   specify { expect(described_class.new.name).to eq('Algorand') }
@@ -19,6 +19,7 @@ describe Blockchain::Algorand do
   specify { expect(described_class.new.url_for_app_api('null')).to eq('https://api.algoexplorer.io/idx2/v2/applications/null') }
   specify { expect(described_class.new.supported_by_ore_id?).to be_truthy }
   specify { expect(described_class.new.ore_id_name).to eq('algo_main') }
+  specify { expect(described_class.new.current_block).to be_an(Integer) }
 
   describe '#account_coin_balance' do
     specify do

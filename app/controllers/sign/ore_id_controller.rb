@@ -54,9 +54,17 @@ class Sign::OreIdController < ApplicationController
           blockchain_transactable: AccountTokenRecord.find(params.require(:account_token_record_id))
         )
       elsif params[:token_id]
-        BlockchainTransactionAccountTokenRecord.new(
-          blockchain_transactable: Token.find(params.require(:token_id))
-        )
+        t = Token.find(params.require(:token_id))
+
+        if t.token_frozen?
+          BlockchainTransactionTokenFreeze.new(
+            blockchain_transactable: t
+          )
+        else
+          BlockchainTransactionTokenUnfreeze.new(
+            blockchain_transactable: t
+          )
+        end
       end
     end
 

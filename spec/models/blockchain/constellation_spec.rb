@@ -18,4 +18,5 @@ describe Blockchain::Constellation do
   specify { expect(described_class.new.url_for_address_api('null')).to eq("https://#{ENV['BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET']}/transactions?address=null") }
   specify { expect(described_class.new.supported_by_ore_id?).to be_falsey }
   specify { expect(described_class.new.ore_id_name).to be_nil }
+  specify { expect(described_class.new.current_block).to be_nil }
 end

@@ -103,4 +103,10 @@ class Blockchain::Ethereum < Blockchain
   def ore_id_name
     nil
   end
+
+  # Return current block
+  # @return [Integer] current block
+  def current_block
+    Comakery::Eth.new(explorer_api_host).current_block
+  end
 end
