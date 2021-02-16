@@ -67,7 +67,7 @@ class OreIdService
   end
 
   def password_updated?
-    @password_updated ||= remote['passwordUpdatedAt'].present?
+    @password_updated ||= remote['passwordUpdatedOn'].present?
   end
 
   def create_token
