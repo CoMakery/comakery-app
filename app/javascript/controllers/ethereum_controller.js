@@ -84,7 +84,6 @@ export default class extends Controller {
     this.buttonTarget.getElementsByTagName('span')[0].textContent = 'processing'
   }
 
-  // TODO: See here
   _createTransaction(transactionType = 'transfer') {
     fetch(this.transactionsPath, {
       credentials: 'same-origin',

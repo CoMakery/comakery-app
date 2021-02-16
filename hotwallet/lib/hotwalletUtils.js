@@ -119,36 +119,52 @@ exports.deleteCurrentKey = async function deleteCurrentKey(envs, redisClient) {
 exports.runServer = async function runServer(envs, redisClient) {
   while (true) {
     await exports.waitForNewTransaction(envs, redisClient)
-    // await exports.sleep(10000) // 10 second
+    await exports.sleep(30000) // 30 second
   }
 }
 
 exports.waitForNewTransaction = async function waitForNewTransaction(envs, redisClient) {
   console.log("waitForNewTransaction tick")
-  const transactionToSign = await exports.getNextTransactionToSignFromAPI(envs)
+
+  const hget = promisify(redisClient.hget).bind(redisClient)
+  let hwAddress
+  await hget(exports.keyName(envs.projectId), "address").then(function (res) { hwAddress = res })
+
+  const transactionToSign = await exports.getNextTransactionToSignFromAPI(hwAddress, envs)
 
   if (!exports.isEmptyObject(transactionToSign)) {
-    await exports.singAndSendTx(transactionToSign, envs)
+    const tx = await exports.singAndSendTx(transactionToSign, envs, redisClient)
+    if (!exports.isEmptyObject(tx)) {
+      transactionToSign.txHash = tx.transactionId
+      await exports.updateTransactionHash(transactionToSign, envs)
+    }
   }
 }
 
-exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs) {
-  const mnemonic = "turtle basic force reject inspire orchard believe lucky remain true purpose pulse museum school salt flame addict fortune solar brand giggle material bomb absent grab"
+exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, redisClient) {
+  const hget = promisify(redisClient.hget).bind(redisClient)
+  let mnemonic
+  await hget(exports.keyName(envs.projectId), "mnemonic").then(function (res) { mnemonic = res })
+
   const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, exports.algoTestnetEndpoints(envs.purestakeApi))
   const { addr, sk } = algosdk.mnemonicToSecretKey(mnemonic)
 
   await algoChain.connect()
   if (algoChain.isConnected) { console.log(`Connected to ${algoChain.chainId}`) }
   const transaction = await algoChain.new.Transaction()
-  // TODO: Fill txn from transactionToSign.tx_raw
-  const txn = {
-    type: "appl",
-    from: addr,
-    appIndex: 13997710,
-    appOnComplete: 0,
-    appArgs: ["dHJhbnNmZXI=", new Uint8Array([15])],
-    appAccounts: ["6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU"]
-  }
+  const txn = JSON.parse(transactionToSign.txRaw)
+
+  console.log(JSON.stringify(txn))
+  // const txn = {
+  //   type: "appl",
+  //   from: addr,
+  //   appIndex: 13997710,
+  //   appOnComplete: 0,
+  //   appArgs: ["dHJhbnNmZXI=", new Uint8Array([1])],
+  //   // appArgs: ["0x7472616e73666572", "0x0f"],
+  //   appAccounts: ["A5OZTZ4HA2KJYCB7EU4GT5RFGMRTQSGXHMDP4LUSU45Y54REDHCEXUA244"]
+  // }
+
   const action = await algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppNoOp, txn)
   transaction.actions = [action]
   await transaction.prepareToBeSigned()
@@ -156,17 +172,19 @@ exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs) {
   await transaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(sk)])
 
   try {
-    console.log('send response: %o', JSON.stringify(await transaction.send(chainjs.Models.ConfirmType.After001)))
-    // TODO: Send update request to blockchain transaction to update tx_hash with hash of the sent transaction.
+    const tx_result = await transaction.send(chainjs.Models.ConfirmType.After001)
+    console.log(`Transaction has successfully signed and sent to blockchain tx hash: ${tx_result.transactionId}`)
+    return tx_result
   } catch (err) {
     console.error(err)
+    return {}
   }
 }
 
 // Successfull response:
 // '{"transactionId":"VQSZLDQVOLBU65W4UWFDWBGMZHGU5KVKNCPL6P3GQ7W6DOJRTEWQ","chainResponse":{"application-transaction":{"accounts":[],"application-args":[],"application-id":13997710,"foreign-apps":[],"foreign-assets":[],"global-state-schema":{"num-byte-slice":0,"num-uint":0},"local-state-schema":{"num-byte-slice":0,"num-uint":0},"on-completion":"optin"},"close-rewards":0,"closing-amount":0,"confirmed-round":12361696,"fee":1000,"first-valid":12361693,"genesis-hash":"SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=","genesis-id":"testnet-v1.0","id":"VQSZLDQVOLBU65W4UWFDWBGMZHGU5KVKNCPL6P3GQ7W6DOJRTEWQ","intra-round-offset":0,"last-valid":12362693,"local-state-delta":[{"address":"RZ5AZRAQF2GRL32PIM6T67W4WOUKIS3HXB3HHSSH6YDZYT5CI2SNQZGZEA","delta":[{"key":"YmFsYW5jZQ==","value":{"action":2,"uint":0}},{"key":"bG9ja1VudGls","value":{"action":2,"uint":0}},{"key":"bWF4QmFsYW5jZQ==","value":{"action":2,"uint":0}},{"key":"dHJhbnNmZXJHcm91cA==","value":{"action":2,"uint":1}}]}],"note":"qnRlc3Qgb3B0SW4=","receiver-rewards":0,"round-time":1613386979,"sender":"RZ5AZRAQF2GRL32PIM6T67W4WOUKIS3HXB3HHSSH6YDZYT5CI2SNQZGZEA","sender-rewards":100,"signature":{"sig":"jyNWv/UotKTDi4x0yHG54pCreYCsbSefiLjVwow2nUHtEiBbUWz2QVRPTYse4emjiJ0j+1ft30ciNR/S9t9tBw=="},"tx-type":"appl"}}'
 exports.optInToApp = async function optInToApp(envs) {
-  const mnemonic = "turtle basic force reject inspire orchard believe lucky remain true purpose pulse museum school salt flame addict fortune solar brand giggle material bomb absent grab"
+  const mnemonic = "gold bright menu main glimpse crisp sibling animal lounge axis dog brick evidence little sport chef float alien remove salad skate hurdle resemble able curtain"
   const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, exports.algoTestnetEndpoints(envs.purestakeApi))
   const { addr, sk } = algosdk.mnemonicToSecretKey(mnemonic)
 
@@ -191,9 +209,9 @@ exports.optInToApp = async function optInToApp(envs) {
   }
 }
 
-exports.getNextTransactionToSignFromAPI = async function getNextTransactionToSignFromAPI(envs) {
+exports.getNextTransactionToSignFromAPI = async function getNextTransactionToSignFromAPI(hwAddress, envs) {
   const blockchainTransactionsUrl = `${envs.comakeryServerUrl}/api/v1/projects/${envs.projectId}/blockchain_transactions`
-  const params = { body: { data: { transaction: { source: "WDD3X6B4WFQDCH5N345I4F47LP5KCBI7YCDWFPJ2NO3YBNGQXBMYXT7T7U" } } } }
+  const params = { body: { data: { transaction: { source: hwAddress } } } }
   const config = { headers: { "API-Transaction-Key": envs.projectApiKey } }
 
   try {
