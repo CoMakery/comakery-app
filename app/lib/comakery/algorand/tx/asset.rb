@@ -14,7 +14,7 @@ class Comakery::Algorand::Tx::Asset < Comakery::Algorand::Tx
       from: blockchain_transaction.source,
       to: blockchain_transaction.destination,
       amount: blockchain_transaction.amount,
-      assetId: asset_id
+      assetIndex: asset_id
     }
   end
 

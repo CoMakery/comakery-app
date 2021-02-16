@@ -17,7 +17,7 @@ describe Comakery::Algorand::Tx::Asset, vcr: true do
     specify { expect(subject[:from]).to eq(algorand_asset_tx.blockchain_transaction.source) }
     specify { expect(subject[:to]).to eq(algorand_asset_tx.blockchain_transaction.destination) }
     specify { expect(subject[:amount]).to eq(algorand_asset_tx.blockchain_transaction.amount) }
-    specify { expect(subject[:assetId]).to eq(algorand_asset_tx.asset_id) }
+    specify { expect(subject[:assetIndex]).to eq(algorand_asset_tx.asset_id) }
   end
 
   describe '#transaction_asset_id' do
