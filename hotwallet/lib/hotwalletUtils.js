@@ -43,7 +43,7 @@ exports.endpointsByNetwork = function endpointsByNetwork(network, envs) {
 
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
   return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
-    Boolean(envs.purestakeApi) && Boolean(envs.redisUrl)
+    Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay)
 }
 
 exports.isEmptyObject = function isEmptyObject(obj) {
