@@ -26,11 +26,5 @@ async function initialize() {
   await initialize()
   hwUtils.runServer(envs, redisClient)
 
-  // hwUtils.optInToApp(envs)
-  // hwUtils.singAndSendTx({}, envs)
-
-  // const tx = await hwUtils.getNextTransactionToSignFromAPI(envs)
-  // tx.txHash = "VQSZLDQVOLBU65W4UWFDWBGMZHGU5KVKNCPL6P3GQ7W6DOJRTEWQ"
-  // const res = await hwUtils.updateTransactionHash(tx, envs)
-  // console.log(res)
+  // hwUtils.optInToApp('algorand_testnet', envs, redisClient)
 })();
