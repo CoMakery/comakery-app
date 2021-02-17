@@ -6,7 +6,8 @@ test('all ENVs are set', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(true)
 })
@@ -17,7 +18,8 @@ test('projectId is null', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -27,7 +29,8 @@ test('projectId is undefined', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -38,7 +41,8 @@ test('projectId is undefined', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -49,7 +53,8 @@ test('projectApiKey is null', async () => {
     projectApiKey: null,
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -60,7 +65,8 @@ test('comakeryServerUrl is null', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: null,
     purestakeApi: "purestake_api_key",
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -71,7 +77,8 @@ test('purestakeApi is null', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: null,
-    redisUrl: "redis://localhost:6379/0"
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -82,7 +89,20 @@ test('redisUrl is null', async () => {
     projectApiKey: "project_api_key",
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
-    redisUrl: null
+    redisUrl: null,
+    checkForNewTransactionsDelay: 30
+  }
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
+})
+
+test('checkForNewTransactionsDelay is null', async () => {
+  const envs = {
+    projectId: "1",
+    projectApiKey: "project_api_key",
+    comakeryServerUrl: "http://cmk.server",
+    purestakeApi: "purestake_api_key",
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: null
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
