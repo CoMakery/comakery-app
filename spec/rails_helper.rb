@@ -1,18 +1,21 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'simplecov'
-SimpleCov.start :rails do
-  SimpleCov.minimum_coverage 98
-  SimpleCov.minimum_coverage_by_file 50
-  SimpleCov.refuse_coverage_drop
+# CI ENV is set by default on GitHub actions
+if ENV['CI'] == 'true'
+  require 'simplecov'
+  SimpleCov.start :rails do
+    SimpleCov.minimum_coverage 98
+    SimpleCov.minimum_coverage_by_file 50
+    SimpleCov.refuse_coverage_drop
 
-  # add_filter == do not track coverage
-  # add_filter %r{^/lib/generators/}
+    # add_filter == do not track coverage
+    # add_filter %r{^/lib/generators/}
 
-  add_group 'Decorators', 'app/decorators'
-  add_group 'Interactors', 'app/interactors'
-  add_group 'Policies', 'app/policies'
+    add_group 'Decorators', 'app/decorators'
+    add_group 'Interactors', 'app/interactors'
+    add_group 'Policies', 'app/policies'
+  end
 end
 
 require 'spec_helper'
