@@ -19,9 +19,10 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     if @transaction&.persisted?
       render 'show.json', status: :created
     else
-      @errors = { blockchain_transaction: 'No transactables available' }
-
-      render 'api/v1/error.json', status: :no_content
+      # TODO: either no_content or return error. Can't be both
+      # @errors = { blockchain_transaction: 'No transactables available' }
+      # render 'api/v1/error.json', status: :no_content
+      head :no_content
     end
   end
 

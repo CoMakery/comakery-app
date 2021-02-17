@@ -99,7 +99,7 @@ class BlockchainTransaction < ApplicationRecord
     if token._token_type_on_ethereum?
       @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, token.blockchain.explorer_api_host, nonce)
     else
-      raise "Contract parsing is not implemented for #{token}"
+      raise "Contract parsing is not implemented for #{token._token_type}"
     end
   end
 
