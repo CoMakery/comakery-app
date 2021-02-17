@@ -1,0 +1,73 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: JS
+
+on:
+  push:
+#   pull_request:
+#     branches: [ acceptance, master ]
+#   schedule:
+#     - cron: "0 2 * * 1-5"
+
+jobs:
+  js:
+    strategy:
+      matrix:
+        node: [12.x]
+
+    name: JS
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:5.0.6-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Use a specific Yarn version
+        run: yarn policies set-version 1.12.3
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node dependencies
+        uses: actions/cache@v1.1.2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ matrix.node }}-yarn-
+
+      - name: Install Node dependencies
+        run: yarn install
+
+      - name: HotWallet - Install Node dependencies
+        run: cd hotwallet && yarn install
+
+      - name: Run Lint
+        run: yarn lint
+
+      - name: YARN tests
+        run: yarn test
+
+      - name: HotWallet tests
+        run: cd hotwallet && yarn test
