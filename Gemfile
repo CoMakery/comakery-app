@@ -96,7 +96,7 @@ group(:development) do
   gem 'web-console'
 end
 
-group(:test) do
+group(:test, :production) do
   gem 'capybara'
   gem 'capybara-screenshot', '~> 1.0'
   gem 'database_cleaner'
