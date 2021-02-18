@@ -188,7 +188,7 @@ exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, re
   }
 }
 
-exports.optInToApp = async function optInToApp(network, envs, redisClient) {
+exports.optInToApp = async function optInToApp(network, appIndex, envs, redisClient) {
   const hget = promisify(redisClient.hget).bind(redisClient)
   let mnemonic
   await hget(exports.keyName(envs.projectId), "mnemonic").then(function (res) { mnemonic = res })
@@ -202,7 +202,7 @@ exports.optInToApp = async function optInToApp(network, envs, redisClient) {
   const txn = {
     from: addr,
     note: 'test optIn',
-    appIndex: 13997710,
+    appIndex: appIndex,
   }
   const action = await algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
   transaction.actions = [action]
