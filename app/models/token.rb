@@ -1,10 +1,10 @@
 class Token < ApplicationRecord
   include ActiveStorageValidator
   include BelongsToBlockchain
+  include BlockchainTransactable
 
   nilify_blanks
 
-  # attachment :logo_image, type: :image
   has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
@@ -72,6 +72,10 @@ class Token < ApplicationRecord
 
   ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
     parent.table[:_blockchain]
+  end
+
+  def token
+    self
   end
 
   def token_type

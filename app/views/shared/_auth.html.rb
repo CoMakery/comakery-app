@@ -6,7 +6,7 @@ class Views::Shared::Auth < Views::Projects::Base
 
     if ENV['METAMASK_LOGIN'].present?
       column('large-12 no-h-pad', style: 'margin-top: 5px') do
-        link_to '#', data: { controller: 'auth-eth', action: 'click->auth-eth#auth', target: 'auth-eth.button', 'auth-eth-nonce-path' => new_auth_eth_path, 'auth-eth-auth-path' => auth_eth_index_path, 'auth-eth-csrf-token' => form_authenticity_token }, class: 'auth-button metamask' do
+        button_to '#', data: { controller: 'auth-eth', action: 'click->auth-eth#auth', target: 'auth-eth.button', 'auth-eth-nonce-path' => new_auth_eth_path, 'auth-eth-auth-path' => auth_eth_index_path, 'auth-eth-csrf-token' => form_authenticity_token }, class: 'auth-button metamask' do
           text 'MetaMask'
         end
       end
@@ -14,7 +14,7 @@ class Views::Shared::Auth < Views::Projects::Base
 
     if Comakery::Slack.enabled?
       column('large-12 no-h-pad', style: 'margin-top: 10px') do
-        link_to '/auth/slack', method: :post, class: 'auth-button slack' do
+        button_to '/auth/slack', method: :post, class: 'auth-button slack', data: { turbo: 'false' } do
           text 'Slack'
         end
       end
@@ -22,7 +22,7 @@ class Views::Shared::Auth < Views::Projects::Base
 
     if Comakery::Discord.enabled?
       column('large-12 no-h-pad', style: 'margin-top: 10px') do
-        link_to login_discord_path, method: :post, class: 'auth-button discord' do
+        button_to login_discord_path, method: :post, class: 'auth-button discord', data: { turbo: 'false' } do
           text 'Discord'
         end
       end

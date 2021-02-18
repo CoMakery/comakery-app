@@ -1,6 +1,8 @@
 module OreIdCallbacks
   extend ActiveSupport::Concern
 
+  ERROR_MESSAGE_SIZE_LIMIT = 1_000
+
   def current_ore_id_account
     @current_ore_id_account ||= (current_account.ore_id_account || current_account.create_ore_id_account(state: :pending_manual))
   end
@@ -22,10 +24,20 @@ module OreIdCallbacks
   end
 
   def state(**additional_params)
-    @state ||= crypt.encrypt_and_sign({
+    @state = crypt.encrypt_and_sign({
       account_id: current_account.id,
       redirect_back_to: params[:redirect_back_to] || request.referer
     }.merge(additional_params).to_json)
+
+    session[:sign_ore_id_fallback_state] = @state
+
+    @state
+  end
+
+  def fallback_state
+    @fallback_state ||= JSON.parse(crypt.decrypt_and_verify(session.delete(:sign_ore_id_fallback_state)))
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    {}
   end
 
   def received_state
@@ -38,7 +50,7 @@ module OreIdCallbacks
 
   def verify_errorless
     if received_error
-      flash[:error] = received_error
+      flash[:error] = received_error.truncate(ERROR_MESSAGE_SIZE_LIMIT) # Error Message can exceed the 4KB limit for cookies
       false
     else
       true

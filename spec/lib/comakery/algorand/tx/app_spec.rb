@@ -1,91 +1,179 @@
 require 'rails_helper'
 
 describe Comakery::Algorand::Tx::App do
-  describe 'opt-in' do
-    let(:app_id) { '13258116' }
-    let!(:algorand_app_opt_in_tx) { build(:algorand_app_opt_in_tx, app_id: app_id) }
+  let!(:algorand_app_tx) { build(:algorand_app_tx) }
+  let(:app_id) { algorand_app_tx.app_id }
 
-    before do
-      VCR.use_cassette("Algorand/transcation/#{algorand_app_opt_in_tx.hash}") do
-        algorand_app_opt_in_tx.data
-      end
+  before do
+    VCR.use_cassette("Algorand/transcation/#{algorand_app_tx.hash}") do
+      algorand_app_tx.data
+    end
+  end
+
+  describe '#algorand' do
+    it 'returns Comakery::Algorand' do
+      expect(algorand_app_tx.algorand).to be_a(Comakery::Algorand)
+    end
+  end
+
+  describe '#app_accounts' do
+    subject { algorand_app_tx.app_accounts }
+    it { is_expected.to eq([]) }
+  end
+
+  describe '#app_args' do
+    subject { algorand_app_tx.app_args }
+    it { is_expected.to eq([]) }
+  end
+
+  describe '#transaction_app_id' do
+    subject { algorand_app_tx.transaction_app_id }
+    it { is_expected.to eq(app_id) }
+  end
+
+  describe '#transaction_app_accounts' do
+    subject { algorand_app_tx.transaction_app_accounts }
+    it { is_expected.to eq(['6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU']) }
+  end
+
+  describe '#transaction_app_args' do
+    subject { algorand_app_tx.transaction_app_args }
+    it { is_expected.to eq(['dHJhbnNmZXI=', 'Dw==']) }
+  end
+
+  describe '#transaction_on_completion' do
+    subject { algorand_app_tx.transaction_on_completion }
+    it { is_expected.to eq('noop') }
+  end
+
+  describe '#receiver_address' do
+    subject { algorand_app_tx.receiver_address }
+    it { is_expected.to eq(algorand_app_tx.transaction_app_accounts.first) }
+  end
+
+  describe '#to_object' do
+    subject { algorand_app_tx.to_object(app_args_format: :hex) }
+
+    specify { expect(subject[:type]).to eq('appl') }
+    specify { expect(subject[:from]).to eq(algorand_app_tx.blockchain_transaction.source) }
+    specify { expect(subject[:to]).to be_nil }
+    specify { expect(subject[:amount]).to be_nil }
+    specify { expect(subject[:appIndex]).to eq(algorand_app_tx.app_id) }
+    specify { expect(subject[:appAccounts]).to eq([]) }
+    specify { expect(subject[:appArgs]).to eq([]) }
+    specify { expect(subject[:appOnComplete]).to eq(0) }
+  end
+
+  describe 'encode_app_args_hex' do
+    subject { algorand_app_tx.encode_app_args_hex.first }
+
+    context 'when arg is a String' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
+
+      it { is_expected.to eq('0x64756d6d79') }
     end
 
-    describe '#algorand' do
-      it 'returns Comakery::Algorand' do
-        expect(algorand_app_opt_in_tx.algorand).to be_a(Comakery::Algorand)
-      end
+    context 'when arg is an Integer' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([10000]) }
+
+      it { is_expected.to eq('0x2710') }
     end
 
-    describe '#data' do
-      it 'returns all data' do
-        expect(algorand_app_opt_in_tx.data).to be_a(Hash)
-      end
+    context 'when arg is unsupported' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1..9]) }
+
+      it { expect { subject }.to raise_exception }
+    end
+  end
+
+  describe 'encode_app_args_base64_and_uint' do
+    subject { algorand_app_tx.encode_app_args_base64_and_uint.first }
+
+    context 'when arg is a String' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
+
+      it { is_expected.to eq('ZHVtbXk=') }
     end
 
-    describe '#transaction_data' do
-      it 'returns transaction data' do
-        expect(algorand_app_opt_in_tx.transaction_data).to be_a(Hash)
-      end
+    context 'when arg is an Integer' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1999]) }
+
+      it { is_expected.to eq([7, 207]) }
     end
 
-    describe '#confirmed_round' do
-      it 'returns transaction confirmed round' do
-        expect(algorand_app_opt_in_tx.confirmed_round).to eq(11105424)
-      end
+    context 'when arg is unsupported' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1..9]) }
+
+      it { expect { subject }.to raise_exception }
+    end
+  end
+
+  describe 'encode_app_args_base64' do
+    subject { algorand_app_tx.encode_app_args_base64.first }
+
+    context 'when arg is a String' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return(['dummy']) }
+
+      it { is_expected.to eq('ZHVtbXk=') }
     end
 
-    describe '#confirmed?' do
-      context 'for unconfirmed transaction' do
-        let!(:algorand_app_opt_in_tx) { build(:algorand_app_opt_in_tx, hash: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') }
+    context 'when arg is an Integer' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1999]) }
 
-        it 'returns false' do
-          expect(algorand_app_opt_in_tx.confirmed?).to be false
-        end
-      end
-
-      context 'for confirmed transaction' do
-        it 'returns true' do
-          expect(algorand_app_opt_in_tx.confirmed?).to be true
-        end
-      end
+      it { is_expected.to eq('B88=') }
     end
 
-    describe '#valid?' do
-      let(:source) { 'IF3NLBLMC7A76RYCHZEIOJZULW7NDYQW4FHLJT3HZSU6GL6SEXLQLXFDXI' }
-      let(:current_round) { 10661139 }
-      let(:blockchain_transaction) do
-        build(
-          :blockchain_transaction_opt_in,
-          token: create(:algorand_token),
-          source: source,
-          current_block: current_round,
-          contract_address: app_id
-        )
-      end
-      subject { algorand_app_opt_in_tx.valid?(blockchain_transaction) }
+    context 'when arg is unsupported' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([1..9]) }
 
-      context 'for incorrect source' do
-        let(:source) { build(:algorand_address_2) }
+      it { expect { subject }.to raise_exception }
+    end
+  end
 
-        it { is_expected.to be false }
-      end
+  describe 'encode_app_transaction_on_completion' do
+    context 'when noop' do
+      subject { algorand_app_tx.encode_app_transaction_on_completion('noop') }
+      it { is_expected.to eq(0) }
+    end
 
-      context 'ignore destination check' do
-        let(:destination) { build(:algorand_address_1) }
+    context 'when optin' do
+      subject { algorand_app_tx.encode_app_transaction_on_completion('optin') }
+      it { is_expected.to eq(1) }
+    end
+  end
 
-        it { is_expected.to be true }
-      end
+  describe '#valid?' do
+    subject { algorand_app_tx.valid? }
+    before { allow(algorand_app_tx.blockchain_transaction).to receive(:current_block).and_return(algorand_app_tx.confirmed_round - 1) }
+    before { allow(algorand_app_tx).to receive(:app_accounts).and_return(['6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU']) }
+    before { allow(algorand_app_tx).to receive(:app_args).and_return(['transfer', 15]) }
 
-      context 'for incorrect app_id' do
-        let(:app_id) { '00000000' }
+    context 'for incorrect app_id' do
+      before { allow(algorand_app_tx).to receive(:app_id).and_return(0) }
 
-        it { is_expected.to be false }
-      end
+      it { is_expected.to be false }
+    end
 
-      context 'for valid data' do
-        it { is_expected.to be true }
-      end
+    context 'for incorrect app_accounts' do
+      before { allow(algorand_app_tx).to receive(:app_accounts).and_return([0]) }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for incorrect app_args' do
+      before { allow(algorand_app_tx).to receive(:app_args).and_return([0]) }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for incorrect app_transaction_on_completion' do
+      before { allow(algorand_app_tx).to receive(:app_transaction_on_completion).and_return('op') }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for valid data' do
+      it { is_expected.to be true }
     end
   end
 end

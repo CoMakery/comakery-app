@@ -17,6 +17,7 @@
 html,
 body {
   width: 100%;
+  height: 100%;
 }
 
 body {
@@ -33,6 +34,34 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   hyphens: auto;
+  display: flex;
+  flex-flow: column;
+}
+
+//#TODO: remove !important when only bootstrap will be loaded
+button.transfers-create,
+button.transfer-rule-create,
+button.reg-groups-create,
+.admins__create input[type="submit"],
+.project-api-key__create a,
+.project-api-key__create button,
+.transfer-rules__refresh_from_blockchain input[type="submit"] {
+  margin-bottom: 1.5em;
+  border-radius: 6px !important;
+  border: solid 1px #e6e8ed !important;
+  height: 35px !important;
+  padding: 9px 16px 8px 15px !important;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px !important;
+  background-color: #1560fa !important;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+
+  &:disabled {
+    background-color: #c7c7c7;
+    cursor: not-allowed;
+  }
 }
 
 .body--overflow {
@@ -73,31 +102,6 @@ label {
   margin-right: 0.5em;
   flex-grow: 0;
   font-family: Montserrat, sans-serif;
-}
-
-button.transfers-create,
-button.transfer-rule-create,
-button.reg-groups-create,
-.admins__create input[type="submit"],
-.project-api-key__create a,
-.project-api-key__create button,
-.transfer-rules__refresh_from_blockchain input[type="submit"] {
-  margin-bottom: 1.5em;
-  border-radius: 6px;
-  border: solid 1px #e6e8ed;
-  height: 35px;
-  padding: 9px 16px 8px 15px;
-  font-family: Montserrat, sans-serif;
-  font-size: 12px;
-  background-color: #1560fa;
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
-
-  &:disabled {
-    background-color: #c7c7c7;
-    cursor: not-allowed;
-  }
 }
 
 input:not(.btn):not(.close):matches([type="button"], [type="submit"], [type="reset"]),
@@ -238,7 +242,7 @@ select::-ms-expand {
 /* 3rd-party styling */
 /**/
 
-.turbolinks-progress-bar {
+.turbo-progress-bar {
   height: 2px;
   background-color: var(--primary-blue);
   z-index: 4;
@@ -527,6 +531,17 @@ form.form-with-submit-button {
     .wallet-logo {
       margin: 0.25em 0.5em 0 0;
     }
+  }
+
+  .transfer-algo-btn {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin-right: inherit;
+    min-width: inherit;
+    font-size: inherit;
+    text-transform: inherit;
   }
 
   &:hover {
@@ -2071,9 +2086,11 @@ a.header--nav--links--current {
   min-height: 50vh;
 }
 
+footer {
+  margin-top: auto;
+}
+
 .footer {
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   color: #e8eff7;
   padding: 70px 150px 0px 150px;
@@ -3064,6 +3081,13 @@ input.button--right-space {
 .token-form--form,
 .project-form--form {
   margin-bottom: 30px;
+
+  h2 {
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    font-weight: bold;
+  }
 }
 
 .project-form--form--channels--header {

@@ -17,7 +17,7 @@
   </div>
 </div>
 <div class="card-body p-0 table-responsive">
-  <table class="table table-borderless table-striped cm-table">
+  <table class="opt-ins table table-borderless table-striped cm-table">
     <thead>
       <tr>
         <th scope="col">Asset</th>
@@ -29,8 +29,8 @@
       </tr>
     </thead>
     <tbody>
-      <% opt_ins.each do |opt_in| %>
-        <% token = opt_in.token %>
+      <% tokens.each do |token| %>
+        <% opt_in = opt_ins[token.id]&.first || wallet.token_opt_ins.build(token: token) %>
         <tr>
           <td class="font-weight-bolder">
             <div data-controller="utils--truncate" data-target="utils--clipboard.source" data-width="100">
@@ -50,11 +50,11 @@
           <td>
             <div class="text-right">
               <% if !opt_in.opted_in? %>
-                <%= link_to(
+                <%= button_to(
                       'OPT-IN',
                       algorand_opt_ins_url(wallet_id: wallet.id, token_id: token),
-                      method: :post,
                       type: "button",
+                      data: {turbo: "false"},
                       class: "btn btn-link font-weight-bold"
                     ) %>
               <% end %>

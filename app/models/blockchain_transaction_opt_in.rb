@@ -1,16 +1,16 @@
-# Algorand Standard Assets and Apps (Algorand Security Token) Opt-in transactions
 class BlockchainTransactionOptIn < BlockchainTransaction
   def update_transactable_status
     blockchain_transactable.update!(status: :opted_in)
   end
 
+  # TODO: Refactor on_chain condition into TokenType
   def on_chain
     @on_chain ||=
       begin
         if token._token_type_asa?
-          Comakery::Algorand::Tx::Asset.new(token.blockchain, tx_hash, contract_address)
-        else
-          Comakery::Algorand::Tx::App.new(token.blockchain, tx_hash, contract_address)
+          Comakery::Algorand::Tx::Asset::OptIn.new(self)
+        elsif token._token_type_algorand_security_token?
+          Comakery::Algorand::Tx::App::OptIn.new(self)
         end
       end
   end

@@ -37,6 +37,7 @@ junk.txt
 /public/packs
 /public/packs-test
 /public/assets
+/public/doc
 /node_modules
 .vscode
 /.yarn/

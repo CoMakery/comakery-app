@@ -1,9 +1,11 @@
 require 'rails_helper'
 require 'models/concerns/belongs_to_blockchain_spec'
+require 'models/concerns/blockchain_transactable_spec'
 require 'models/concerns/active_storage_validator_spec'
 
 describe Token, type: :model, vcr: true do
   it_behaves_like 'belongs_to_blockchain'
+  it_behaves_like 'blockchain_transactable'
   it_behaves_like 'active_storage_validator', ['logo_image']
 
   it { is_expected.to have_many(:projects) }
@@ -70,6 +72,11 @@ describe Token, type: :model, vcr: true do
         expect(described_class.new(_token_type: :erc20, _blockchain: :ethereum_ropsten, contract_address: '1').valid?).to be_falsey
       end
     end
+  end
+
+  describe 'token' do
+    subject { described_class.new }
+    specify { expect(subject.token).to eq(subject) }
   end
 
   describe 'token_type' do

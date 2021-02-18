@@ -9,7 +9,7 @@ module Api::V1::Concerns::RequiresAnAuthorization
       unless authorized
         @errors = { authentication: 'Missing an authorization' }
 
-        render 'api/v1/error.json', status: :unauthorized
+        render 'api/v1/error.json', status: :unauthorized, layout: false
       end
     end
   end

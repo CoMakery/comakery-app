@@ -4,6 +4,7 @@ class OreIdAccount < ApplicationRecord
 
   belongs_to :account
   has_many :wallets, dependent: :destroy
+  has_many :wallet_provisions, through: :wallets
 
   before_create :set_temp_password
   after_create :schedule_sync, unless: :pending_manual?
@@ -46,15 +47,11 @@ class OreIdAccount < ApplicationRecord
 
       w.ore_id_account = self
       w.address = permission[:address]
-      w.name = w.blockchain.name
+      w.name ||= w.blockchain.name
       w.save!
     end
 
-    ok! if provisioned?
-  end
-
-  def provisioned?
-    wallets.map(&:wallet_provisions).flatten.all?(&:provisioned?)
+    ok! if wallet_provisions.empty?
   end
 
   def sync_opt_ins

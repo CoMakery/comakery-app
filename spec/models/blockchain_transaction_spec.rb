@@ -1,49 +1,97 @@
 require 'rails_helper'
 
 describe BlockchainTransaction, vcr: true do
-  describe 'associations' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction) }
-    let!(:blockchain_transaction_update) { create(:blockchain_transaction_update, blockchain_transaction: blockchain_transaction) }
+  subject { build(:blockchain_transaction) }
 
-    it 'belongs to blockchain_transactable' do
-      expect(blockchain_transaction.blockchain_transactable).to be_an(Award)
+  it { is_expected.to belong_to(:token) }
+  it { is_expected.to belong_to(:blockchain_transactable) }
+  it { is_expected.to have_many(:updates).class_name('BlockchainTransactionUpdate').dependent(:destroy) }
+  it { is_expected.to have_readonly_attribute(:amount) }
+  it { is_expected.to have_readonly_attribute(:source) }
+  it { is_expected.to have_readonly_attribute(:destination) }
+  it { is_expected.to have_readonly_attribute(:network) }
+  it { is_expected.to have_readonly_attribute(:contract_address) }
+  it { is_expected.to have_readonly_attribute(:current_block) }
+  it { is_expected.to validate_presence_of(:source) }
+  it { is_expected.to validate_presence_of(:status) }
+  it { is_expected.to define_enum_for(:network).with_values({ ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }) }
+  it { is_expected.to define_enum_for(:status).with_values({ created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }) }
+
+  context 'when operating with smart contracts' do
+    subject { build(:algorand_app_tx).blockchain_transaction }
+    before do
+      allow(subject.token).to receive(:contract_address).and_return(nil)
     end
 
-    it 'has_one token' do
-      expect(blockchain_transaction.token).to be_a(Token)
+    it { is_expected.to validate_presence_of(:contract_address) }
+  end
+
+  context 'with Algorand blockchain' do
+    subject { build(:algorand_tx).blockchain_transaction }
+    before do
+      allow(subject).to receive(:generate_transaction).and_return(nil)
     end
 
-    it 'has_many updates' do
-      expect(blockchain_transaction.updates.last).to eq(blockchain_transaction_update)
+    it { is_expected.to validate_presence_of(:tx_raw) }
+  end
+
+  context 'with Comakery Security Token' do
+    context 'and nonce present' do
+      subject { build(:blockchain_transaction, nonce: 0) }
+      before do
+        allow(subject).to receive(:generate_transaction).and_return(nil)
+      end
+
+      it { is_expected.to validate_presence_of(:tx_raw) }
     end
   end
 
-  describe 'validations' do
-    it 'makes attributes readonly' do
-      %i[amount source destination network contract_address current_block].each do |attr|
-        expect(described_class.readonly_attributes).to include(attr.to_s)
-      end
+  context 'when pending?' do
+    subject { build(:blockchain_transaction, status: :pending) }
+    before do
+      allow(subject).to receive(:generate_transaction).and_return(nil)
+    end
+
+    it { is_expected.to validate_presence_of(:tx_hash) }
+  end
+
+  context 'when succeed?' do
+    subject { build(:blockchain_transaction, status: :succeed) }
+    before do
+      allow(subject).to receive(:generate_transaction).and_return(nil)
+    end
+
+    it { is_expected.to validate_presence_of(:tx_hash) }
+  end
+
+  describe 'populate_data' do
+    subject { create(:blockchain_transaction) }
+
+    it 'populates' do
+      expect(subject.token).to eq(subject.blockchain_transactable.token)
+      expect(subject.contract_address).to eq(subject.blockchain_transactable.token.contract_address)
+      expect(subject.network).to eq(subject.blockchain_transactable.token._blockchain)
+      expect(subject.current_block).to be_an(Integer)
     end
   end
 
-  describe 'callbacks' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:blockchain_transaction_dag) { create(:blockchain_transaction_dag) }
+  describe 'generate_transaction' do
+    context 'with an algorand blockchain' do
+      subject { build(:algorand_tx).blockchain_transaction }
 
-    context 'with an ethereum coin type' do
-      it 'populates contract address and network from token' do
-        expect(blockchain_transaction.network).to eq(blockchain_transaction.token._blockchain)
-        expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.contract_address)
-      end
-
-      it 'sets current block' do
-        expect(blockchain_transaction.current_block).to eq(8697793)
+      it 'generates' do
+        expect(subject.tx_raw).to be_a(String)
       end
     end
 
-    context 'with a dag token' do
-      it 'populates network from token' do
-        expect(blockchain_transaction_dag.network).to eq(blockchain_transaction_dag.token._blockchain)
+    context 'with a comakery security token' do
+      context 'and nonce present' do
+        subject { create(:blockchain_transaction, nonce: 0) }
+
+        it 'generates' do
+          expect(subject.tx_raw).to be_a(String)
+          expect(subject.tx_hash).to be_a(String)
+        end
       end
     end
   end

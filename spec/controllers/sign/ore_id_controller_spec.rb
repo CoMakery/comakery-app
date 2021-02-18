@@ -6,6 +6,8 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
   let(:transaction) { create(:blockchain_transaction) }
   let(:tranfser) { create(:blockchain_transaction).blockchain_transactable }
+  let(:account_token_record) { create(:algo_sec_dummy_restrictions) }
+  let(:token) { create(:algo_sec_token) }
 
   before do
     login(tranfser.project.account)
@@ -18,10 +20,28 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
       allow_any_instance_of(Account).to receive(:address_for_blockchain).and_return('dummy_source_address')
     end
 
-    it 'creates a BlockchainTransaction and redirects to a sign_url' do
-      get :new, params: { transfer_id: tranfser.id }
-      expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
-      expect(response).to redirect_to('/dummy_sign_url')
+    context 'with transfer' do
+      it 'creates a BlockchainTransaction and redirects to a sign_url' do
+        get :new, params: { transfer_id: tranfser.id }
+        expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
+        expect(response).to redirect_to('/dummy_sign_url')
+      end
+    end
+
+    context 'with account token record' do
+      it 'creates a BlockchainTransaction and redirects to a sign_url' do
+        get :new, params: { account_token_record_id: account_token_record.id }
+        expect(account_token_record.blockchain_transactions.last.source).to eq('dummy_source_address')
+        expect(response).to redirect_to('/dummy_sign_url')
+      end
+    end
+
+    context 'with token' do
+      it 'creates a BlockchainTransaction and redirects to a sign_url' do
+        get :new, params: { token_id: token.id }
+        expect(token.blockchain_transactions.last.source).to eq('dummy_source_address')
+        expect(response).to redirect_to('/dummy_sign_url')
+      end
     end
   end
 
@@ -48,11 +68,14 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
     context 'when callback includes error' do
       before do
         expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(2).times.and_return(false)
+        allow_any_instance_of(described_class).to receive(:fallback_state).and_return({ 'transaction_id' => transaction.id, 'redirect_back_to' => '/dummy_redir_url' })
       end
 
-      it 'redirects to wallets page with the error' do
+      it 'cancels fallback transaction and redirects to redirect_back_to from fallback state with the error' do
+        expect_any_instance_of(BlockchainTransaction).to receive(:update_status)
+
         get :receive, params: { transaction_id: 'dummy_tx_hash', signed_transaction: Base64.encode64('dummy_raw_tx') }
-        expect(response).to redirect_to(wallets_url)
+        expect(response).to redirect_to('/dummy_redir_url')
       end
     end
 

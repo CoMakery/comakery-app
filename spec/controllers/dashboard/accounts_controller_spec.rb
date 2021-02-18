@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Dashboard::AccountsController, type: :controller do
   let(:account_token_record) { create(:account_token_record) }
   let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
-  let(:account) { create(:account_token_record, token: project.token, max_balance: 2) }
+  let(:account) { account_token_record.account }
   let(:new_account) { create(:account) }
 
   describe 'GET #index' do
@@ -78,6 +78,17 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
+    end
+  end
+
+  describe 'GET #show' do
+    before do
+      project.interested << account
+    end
+
+    it 'returns a success response' do
+      get :show, params: { project_id: project.to_param, id: account.id }, as: :turbo_stream
+      expect(response.status).to eq 200
     end
   end
 end

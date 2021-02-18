@@ -8,9 +8,9 @@
 // to the appropriate layout file
 
 require('@rails/ujs').start()
-require('turbolinks').start()
 
 import '../src/application.js'
+import '@hotwired/turbo-rails'
 
 // Support component names relative to this directory:
 let componentRequireContext = require.context('components', true)
@@ -22,3 +22,6 @@ import 'controllers'
 require.context('../src/images', true)
 
 import '../src/application.scss'
+
+ReactRailsUJS.handleEvent('turbo:load', ReactRailsUJS.handleMount)
+ReactRailsUJS.handleEvent('turbo:before-render', ReactRailsUJS.handleUnmount)

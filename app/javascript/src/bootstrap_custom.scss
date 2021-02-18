@@ -4,7 +4,7 @@ $border-color: #E8E9EE;
 
 $table-accent-bg: #F9FAFC;
 
-@import '../../../node_modules/bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 .table.cm-table{
   th {

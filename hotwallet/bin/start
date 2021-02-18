@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-node_modules/pm2/bin/pm2 start app.js --name "hotwallet"
+node_modules/pm2/bin/pm2 start app.js --name "hotwallet" --log logs/pm2.log

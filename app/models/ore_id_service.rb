@@ -67,7 +67,7 @@ class OreIdService
   end
 
   def password_updated?
-    @password_updated ||= remote['passwordUpdatedAt'].present?
+    @password_updated ||= remote['passwordUpdatedOn'].present?
   end
 
   def create_token
@@ -101,7 +101,7 @@ class OreIdService
       broadcast: true,
       chain_network: transaction.token.blockchain.ore_id_name,
       return_signed_transaction: true,
-      transaction: Base64.encode64(algorand_transaction(transaction).to_json),
+      transaction: Base64.encode64(transaction.tx_raw),
       callback_url: callback_url,
       state: state
     }
@@ -131,7 +131,7 @@ class OreIdService
         broadcast: true,
         chain_network: transaction.token.blockchain.ore_id_name,
         return_signed_transaction: true,
-        transaction: Base64.encode64(algorand_transaction(transaction).to_json)
+        transaction: Base64.encode64(transaction.tx_raw)
       }
     end
 
@@ -140,36 +140,6 @@ class OreIdService
         'api-key' => ENV['ORE_ID_API_KEY'],
         'service-key' => ENV['ORE_ID_SERVICE_KEY'],
         'Content-Type' => 'application/json'
-      }
-    end
-
-    def algorand_transaction(transaction)
-      tx = {
-        from: transaction.source,
-        to: transaction.destination,
-        amount: transaction.amount,
-        type: 'pay'
-      }
-
-      tx.merge!(asa_transaction(transaction)) if transaction.token._token_type_asa?
-      tx.merge!(app_transaction(transaction)) if transaction.token._token_type_algorand_security_token?
-      tx
-    end
-
-    def asa_transaction(transaction)
-      {
-        type: 'axfer',
-        assetIndex: transaction.token.contract_address.to_i
-      }
-    end
-
-    def app_transaction(transaction)
-      {
-        type: 'appl',
-        appIndex: transaction.token.contract_address.to_i,
-        to: nil,
-        amount: nil,
-        appOnComplete: 1 # OptIn type
       }
     end
 

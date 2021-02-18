@@ -5,6 +5,7 @@ describe BlockchainTransactionOptIn do
     let(:blockchain_transaction) { create(:blockchain_transaction_opt_in) }
 
     before do
+      blockchain_transaction.update(tx_hash: '0')
       blockchain_transaction.update_status(:pending, 'test')
     end
 
@@ -16,10 +17,20 @@ describe BlockchainTransactionOptIn do
   end
 
   describe 'on_chain' do
-    let(:blockchain_transaction) { build(:blockchain_transaction_opt_in) }
+    context 'with Algorand Standart Asset' do
+      specify do
+        blockchain_transaction = build(:algorand_asset_opt_in_tx).blockchain_transaction
 
-    it 'returns Comakery::Algorand::Tx::Asset' do
-      expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::Asset)
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::Asset::OptIn)
+      end
+    end
+
+    context 'with Algorand Security Token' do
+      specify do
+        blockchain_transaction = build(:algorand_app_opt_in_tx).blockchain_transaction
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Algorand::Tx::App::OptIn)
+      end
     end
   end
 end

@@ -2,6 +2,7 @@ json.call(
   wallet,
   :id,
   :address,
+  :primary_wallet,
   :source,
   :state,
   :created_at,

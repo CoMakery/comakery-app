@@ -16,8 +16,17 @@ class Auth::OreIdController < ApplicationController
 
   # GET /auth/ore_id/receive
   def receive
-    verify_errorless or return
-    verify_received_account or return
+    fallback_state
+
+    unless verify_errorless
+      redirect_to fallback_state['redirect_back_to'] || wallets_url
+      return
+    end
+
+    unless verify_received_account
+      head 401
+      return
+    end
 
     if current_ore_id_account.update(account_name: params.require(:account), state: :ok)
       flash[:notice] = 'ORE ID Linked. Synchronising wallets...'

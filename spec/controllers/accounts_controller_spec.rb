@@ -47,7 +47,7 @@ describe AccountsController do
             password: '1'
           }
         }
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(422)
       end.not_to change { Account.count }
       new_account = assigns[:account]
       expect(new_account.errors.full_messages.first).to eq 'Password is too short (minimum is 8 characters)'
@@ -61,7 +61,7 @@ describe AccountsController do
             password: '1234678'
           }
         }
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(422)
       end.not_to change { Account.count }
       new_account = assigns[:account]
       expect(new_account.errors.full_messages.first).to eq "Email can't be blank"
@@ -160,7 +160,7 @@ describe AccountsController do
             password: '12345678'
           }
         }
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(422)
       end.not_to change { Account.count }
       new_account = assigns[:account]
       expect(new_account.errors.full_messages.first).to eq 'Email has already been taken'

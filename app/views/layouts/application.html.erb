@@ -25,11 +25,11 @@
 
     <%= stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,700,900&amp;subset=cyrillic,cyrillic-ext,latin-ext,vietnamese', defer: true %>
     <%= stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css', defer: true %>
-    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbo-track': 'reload' %>
 
     <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js', defer: true %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
   </head>
 
   <body>
@@ -67,17 +67,19 @@
       <%= yield %>
     </div>
     <%= react_component('IntercomButton') unless @whitelabel_mission %>
-    <%= react_component(
-      'layouts/Footer',
-      {
-        is_logged_in: (current_account ? true : false),
-        is_whitelabel: @whitelabel_mission.present?,
-        whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
-        whitelabel_logo_dark: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo_dark).path
-      },
-      {
-        prerender: true
-      }
-    ) %>
+    <footer>
+      <%= react_component(
+        'layouts/Footer',
+        {
+          is_logged_in: (current_account ? true : false),
+          is_whitelabel: @whitelabel_mission.present?,
+          whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
+          whitelabel_logo_dark: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo_dark).path
+        },
+        {
+          prerender: true
+        }
+      ) %>
+    </footer>
   </body>
 </html>

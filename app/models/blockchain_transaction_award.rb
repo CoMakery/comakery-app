@@ -5,13 +5,18 @@ class BlockchainTransactionAward < BlockchainTransaction
     blockchain_transactable.update!(status: :paid)
   end
 
-  def on_chain
+  # TODO: Refactor on_chain condition into TokenType
+  def on_chain # rubocop:todo Metrics/CyclomaticComplexity
     @on_chain ||= if token._token_type_on_ethereum?
       on_chain_eth
     elsif token._token_type_dag?
       on_chain_dag
-    elsif token._token_type_algo? || token._token_type_asa?
+    elsif token._token_type_algo?
       on_chain_algo
+    elsif token._token_type_asa?
+      on_chain_asa
+    elsif token._token_type_algorand_security_token?
+      on_chain_ast
     end
   end
 
@@ -37,11 +42,34 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
 
     def on_chain_algo
-      if token._token_type_algo?
-        Comakery::Algorand::Tx.new(token.blockchain, tx_hash)
-      elsif token._token_type_asa?
-        Comakery::Algorand::Tx::Asset.new(token.blockchain, tx_hash, contract_address)
+      Comakery::Algorand::Tx.new(self)
+    end
+
+    def on_chain_asa
+      Comakery::Algorand::Tx::Asset.new(self)
+    end
+
+    def on_chain_ast
+      case blockchain_transactable.transfer_type.name
+      when 'mint'
+        on_chain_ast_mint
+      when 'burn'
+        on_chain_ast_burn
+      else
+        on_chain_ast_transfer
       end
+    end
+
+    def on_chain_ast_transfer
+      Comakery::Algorand::Tx::App::SecurityToken::Transfer.new(self)
+    end
+
+    def on_chain_ast_burn
+      Comakery::Algorand::Tx::App::SecurityToken::Burn.new(self)
+    end
+
+    def on_chain_ast_mint
+      Comakery::Algorand::Tx::App::SecurityToken::Mint.new(self)
     end
 
     def populate_data
