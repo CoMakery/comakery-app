@@ -100,8 +100,7 @@ Rails.application.routes.draw do
       resources :transfer_types, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
         collection do
-          post :pause
-          post :unpause
+          post :freeze
           post :refresh_from_blockchain
         end
       end
@@ -147,7 +146,7 @@ Rails.application.routes.draw do
   end
 
   namespace :sign, defaults: { format: :json } do
-    post 'ore_id/new'
+    match 'ore_id/new', to: 'ore_id#new', via: [:get, :post]
     get 'ore_id/receive'
   end
 
