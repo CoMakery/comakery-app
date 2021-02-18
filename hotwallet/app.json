@@ -1,0 +1,49 @@
+{
+  "name": "Hot Wallet",
+  "description": "Hot wallet program that will sign and transfer blockchain transactions",
+  "repository": "https://github.com/CoMakery/comakery-server/",
+  "logo": "https://avatars0.githubusercontent.com/u/17172662",
+  "success_url": "/",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "heroku-18",
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1x"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-redis:hobby-dev",
+      "as": "REDIS"
+    }
+  ],
+  "env": {
+    "PROJECT_ID": {
+      "description": "The hot wallet will be registered to sign transactions for that CoMakery's project id",
+      "required": true
+    },
+    "PROJECT_API_KEY": {
+      "description": "Api key generated on CoMakery for the PROJECT_ID provided",
+      "required": true
+    },
+    "COMAKERY_SERVER_URL": {
+      "description": "Api key generated on CoMakery for the PROJECT_ID provided",
+      "required": true,
+      "value": "https://comakery.com"
+    },
+    "PURESTAKE_API": {
+      "description": "Api key generated on Purestake to operate with Algorand blockchain",
+      "required": true
+    },
+    "CHECK_FOR_NEW_TRANSACTIONS_DELAY": {
+      "description": "Timeout in second between checking for new transactions to send",
+      "required": true,
+      "value": 30
+    }
+  }
+}
