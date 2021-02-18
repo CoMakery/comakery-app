@@ -1,2 +1,2 @@
-worker: yarn start
-release: yarn install
+web: yarn start
+release: yarn install && pm2 reload ecosystem.config.js --env production
