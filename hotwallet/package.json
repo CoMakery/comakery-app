@@ -5,6 +5,7 @@
   "main": "app.js",
   "license": "Noncommercial Nonviolent Public License 1.1",
   "scripts": {
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "test": "jest -i"
   },
   "dependencies": {
