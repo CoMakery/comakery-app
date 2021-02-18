@@ -17,7 +17,7 @@ async function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
   hwUtils.setRedisErrorHandler(redisClient)
-  hwUtils.hotWalletInitialization(envs, redisClient)
+  await hwUtils.hotWalletInitialization(envs, redisClient)
 
   return true
 }
