@@ -4,6 +4,9 @@
   "repository": "https://github.com/CoMakery/comakery-server/",
   "logo": "https://avatars0.githubusercontent.com/u/17172662",
   "success_url": "/",
+  "scripts": {
+    "postdeploy": "bin/restart"
+  },
   "buildpacks": [
     {
       "url": "heroku/nodejs"
@@ -43,7 +46,7 @@
     "CHECK_FOR_NEW_TRANSACTIONS_DELAY": {
       "description": "Timeout in second between checking for new transactions to send",
       "required": true,
-      "value": 30
+      "value": "30"
     }
   }
 }
