@@ -5,7 +5,7 @@
 # This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
 # For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
-name: Test
+name: RSpec
 
 on:
   push:
@@ -15,13 +15,19 @@ on:
 #     - cron: "0 2 * * 1-5"
 
 jobs:
-  test:
+  rspec:
     strategy:
       matrix:
         ruby: [2.7.1]
         node: [12.x]
+        command: [
+          'spec/features',
+          'spec/controllers',
+          'spec/models',
+          '--exclude-pattern "spec/{features,controllers, models}/**/*_spec.rb"'
+        ]
 
-    name: Lints, Specs and Security Checks
+    name: RSpec ${{ matrix.command }}
     runs-on: ubuntu-latest
 
     env:
@@ -97,18 +103,6 @@ jobs:
     - name: Install Node dependencies
       run: yarn install
 
-    - name: HotWallet - Install Node dependencies
-      run: cd hotwallet && yarn install
-
-    - name: Run Eslint
-      run: yarn lint
-
-    - name: Run Jest
-      run: yarn test
-
-    - name: HotWallet - Run Jest
-      run: cd hotwallet && yarn test
-
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -118,7 +112,7 @@ jobs:
       uses: actions/cache@v1.1.2
       with:
         path: vendor/bundle
-        key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock')}}
+        key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: ${{ matrix.ruby }}-gems-
 
     - name: Install OS dependenices
@@ -130,29 +124,35 @@ jobs:
     - name: Install Ruby dependencies
       run: bundle install --jobs 4 --retry 3
 
-    - name: Run Rubocop
-      run: bin/rubocop
+    - name: Assets Cache
+      id: assets-cache
+      uses: actions/cache@v1
+      with:
+        path: public/assets
+        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-${{ steps.extract_branch.outputs.branch }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.ruby }}-assets-
 
-    - name: Run Erblint
-      run: bin/erblint_ci
-
-    - name: Run Brakeman
-      run: bundle exec brakeman --exit-on-warn --quiet
+    - name: Webpack Cache
+      id: webpack-cache
+      uses: actions/cache@v1
+      with:
+        path: public/packs
+        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-${{ steps.extract_branch.outputs.branch }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.ruby }}-packs-
 
     - name: Precompile assets
       run: bundle exec rails assets:precompile
 
-    - name: Run migrations
-      run: bundle exec rails db:migrate
-
-    - name: Drop database
-      run: bundle exec rails db:drop
-
     - name: Setup database
-      run: bundle exec rails db:prepare
+      run: env bundle exec rails db:create
 
-    - name: Run Rspec
-      run: env bundle exec rspec --format documentation
+    - name: Run migrations
+      run: env bundle exec rails db:migrate
+
+    - name: Run Command
+      run: env bundle exec rspec ${{ matrix.command }} --format documentation
 
     - name: Upload a Build Artifact
       if: always()
