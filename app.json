@@ -11,7 +11,7 @@
   ],
   "stack": "heroku-18",
   "formation": {
-    "web": {
+    "service": {
       "quantity": 1,
       "size": "standard-1x"
     }
