@@ -17,15 +17,17 @@ async function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
   hwUtils.setRedisErrorHandler(redisClient)
-  await hwUtils.hotWalletInitialization(envs, redisClient)
+
+  const args = process.argv.slice(2)
+  const network = args[0]
+  const appIndex = parseInt(args[1])
+  console.log(network, appIndex)
+  await hwUtils.optInToApp(network, appIndex, envs, redisClient)
 
   return true
 }
 
-(async () => {
-  // await hwUtils.deleteCurrentKey(envs, redisClient)
+(async function () {
   await initialize()
-  hwUtils.runServer(envs, redisClient)
-
-  // hwUtils.optInToApp('algorand_testnet', envs, redisClient)
+  process.exit(0)
 })();
