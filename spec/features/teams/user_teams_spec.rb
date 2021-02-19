@@ -18,7 +18,7 @@ describe 'teams' do
 
   scenario 'user teams list', js: true do
     visit new_project_path
-    first('.project-form--form--channels--add').click
+    find('.project-form--form--channels--add').click
     expect(page).to have_content 'TEAM OR GUILD'
     expect(page).to have_content 'CHANNEL'
   end

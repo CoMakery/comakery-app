@@ -12,3 +12,5 @@ task default: :specs_thorough
 task specs_thorough: :environment do
   system 'bin/rspect'
 end
+
+Knapsack.load_tasks if defined?(Knapsack)

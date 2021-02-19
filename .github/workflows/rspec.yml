@@ -20,17 +20,14 @@ jobs:
       matrix:
         ruby: [2.7.1]
         node: [12.x]
-        command: [
-          'spec/features',
-          'spec/controllers',
-          'spec/models',
-          '--exclude-pattern "spec/{features,controllers, models}/**/*_spec.rb"'
-        ]
+        knapsack_node: [0, 1, 2, 3, 4]
 
-    name: RSpec ${{ matrix.command }}
+    name: "knapsack:${{ matrix.knapsack_node }}"
     runs-on: ubuntu-latest
 
     env:
+      CI_NODE_TOTAL: 5
+      CI_NODE_INDEX: ${{ matrix.knapsack_node }}
       BUNDLER_VERSION: 2.2.3
       RACK_ENV: test
       RAILS_ENV: test
@@ -93,7 +90,7 @@ jobs:
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
     - name: Cache Node dependencies
-      uses: actions/cache@v1.1.2
+      uses: actions/cache@v2
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
         key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -109,7 +106,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
 
     - name: Cache Ruby dependencies
-      uses: actions/cache@v1.1.2
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -126,24 +123,20 @@ jobs:
 
     - name: Assets Cache
       id: assets-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: public/assets
-        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-${{ steps.extract_branch.outputs.branch }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-assets-
+        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-
 
     - name: Webpack Cache
       id: webpack-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: public/packs
-        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-${{ steps.extract_branch.outputs.branch }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-packs-
+        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-
 
     - name: Precompile assets
-      run: bundle exec rails assets:precompile
+      run: env bundle exec rails assets:precompile
 
     - name: Setup database
       run: env bundle exec rails db:create
@@ -152,7 +145,7 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run Command
-      run: env bundle exec rspec ${{ matrix.command }} --format documentation
+      run: env bundle exec rake knapsack:rspec
 
     - name: Upload a Build Artifact
       if: always()
