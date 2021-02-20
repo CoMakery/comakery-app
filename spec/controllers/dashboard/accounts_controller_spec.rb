@@ -41,7 +41,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
       }
     end
 
-    subject { post :create, params: { project_id: project.id, body: { data: { account_token_record: attributes } } } }
+    subject { post :create, params: { project_id: project.id, account_token_record: attributes } }
 
     before do
       login(project.account)
@@ -59,14 +59,20 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(account_token_record.wallet).to eq new_account.wallets.first
       end
 
-      it 'returns created record' do
-        subject
-        expect(response).to have_http_status(:created)
+      context 'with comakery security token' do
+        it 'returns created record' do
+          subject
+          expect(response).to have_http_status(:created)
+        end
       end
 
-      it 'adds record account to project interested' do
-        subject
-        expect(project.interested).to include(AccountTokenRecord.last.account)
+      context 'with algorand security token', :vcr do
+        let(:account_token_record) { create(:blockchain_transaction_account_token_record_algo).blockchain_transactable }
+
+        it 'redirects to ore_id' do
+          subject
+          expect(response).to have_http_status(:found)
+        end
       end
     end
 

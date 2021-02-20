@@ -65,7 +65,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
       when String
         Base64.encode64(a).strip
       when Integer
-        Base64.encode64(encode_int_as_bytes(a).pack('c*')).strip
+        Base64.encode64(encode_int_as_bytes(a).pack('C*')).strip
       else
         raise "Unsupported app argument: #{a}:#{a.class}"
       end
@@ -73,7 +73,7 @@ class Comakery::Algorand::Tx::App < Comakery::Algorand::Tx
   end
 
   def encode_int_as_bytes(int)
-    int.zero? ? [0] : [int].pack('N').bytes.drop_while(&:zero?)
+    int.zero? ? [0] : [int].pack('Q').bytes.reverse.drop_while(&:zero?)
   end
 
   def app_transaction_on_completion

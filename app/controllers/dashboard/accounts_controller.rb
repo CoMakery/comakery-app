@@ -17,14 +17,17 @@ class Dashboard::AccountsController < ApplicationController
 
   def create
     account_token_record = @project.token.account_token_records.new(account_token_record_params)
-    account_id = params.dig(:body, :data, :account_token_record, :account_id)
-    account_token_record.account = Account.find(account_id)
+    account_token_record.account_id = params.dig(:account_token_record, :account_id)
+    account_token_record.lockup_until = Time.zone.parse(account_token_record_params[:lockup_until])
 
     if account_token_record.save
-      @project.safe_add_interested(account_token_record.account)
-      @account_token_record = account_token_record
+      if account_token_record.token.blockchain.supported_by_ore_id?
+        redirect_to sign_ore_id_new_path(account_token_record_id: account_token_record.id)
+      else
+        @account_token_record = account_token_record
 
-      render 'api/v1/account_token_records/show.json', status: :created
+        render 'api/v1/account_token_records/show.json', status: :created
+      end
     else
       @errors = account_token_record.errors
 
@@ -70,11 +73,12 @@ class Dashboard::AccountsController < ApplicationController
     end
 
     def account_token_record_params
-      params
-        .fetch(:body, {})
-        .fetch(:data, {})
-        .fetch(:account_token_record, {})
-        .permit(:max_balance, :lockup_until, :reg_group_id, :account_frozen)
+      params.fetch(:account_token_record, {}).permit(
+        :max_balance,
+        :lockup_until,
+        :reg_group_id,
+        :account_frozen
+      )
     end
 
     # TODO: Extract creation of account_token_records to model or service

@@ -15,4 +15,5 @@ describe TokenType::ComakerySecurityToken, vcr: true do
   specify { expect(described_class.new(**attrs).supports_token_mint?).to be_truthy }
   specify { expect(described_class.new(**attrs).supports_token_burn?).to be_truthy }
   specify { expect(described_class.new(**attrs).supports_token_freeze?).to be_truthy }
+  specify { expect(described_class.new(**attrs).default_reg_group).to eq(0) }
 end

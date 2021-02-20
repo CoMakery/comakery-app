@@ -17,6 +17,7 @@ class Dashboard::TransferRulesController < ApplicationController
   def create
     authorize @project, :edit_transfer_rules?
     transfer_rule = @project.token.transfer_rules.new(transfer_rule_params)
+    transfer_rule.lockup_until = Time.zone.parse(transfer_rule_params[:lockup_until])
 
     if transfer_rule.save
       redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
@@ -30,12 +31,9 @@ class Dashboard::TransferRulesController < ApplicationController
     transfer_rule = @transfer_rule.dup
     transfer_rule.lockup_until = 0
     transfer_rule.status = nil
+    transfer_rule.save!
 
-    if transfer_rule.save
-      redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
-    else
-      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @transfer_rule.errors.full_messages.join(', ') }
-    end
+    redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
   end
 
   def freeze

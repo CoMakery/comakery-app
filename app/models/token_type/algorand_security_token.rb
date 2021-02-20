@@ -100,4 +100,10 @@ class TokenType::AlgorandSecurityToken < TokenType
   def blockchain
     attrs[:blockchain]
   end
+
+  # Default reg group when a record is created
+  # @return [Integer] reg_group
+  def default_reg_group
+    1
+  end
 end

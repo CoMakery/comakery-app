@@ -51,4 +51,10 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
   def supports_token_freeze?
     true
   end
+
+  # Default reg group when a record is created
+  # @return [Integer] reg_group
+  def default_reg_group
+    0
+  end
 end

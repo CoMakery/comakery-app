@@ -20,6 +20,11 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
     Comakery::Algorand::Tx::App::SecurityToken::SetAddressPermissions.new(self)
   end
 
+  def populate_data
+    super
+    self.destination ||= blockchain_transactable.wallet.address
+  end
+
   private
 
     def tx

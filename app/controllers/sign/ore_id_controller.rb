@@ -3,6 +3,7 @@ class Sign::OreIdController < ApplicationController
   skip_after_action :verify_authorized, only: %i[new receive]
 
   # POST /sign/ore_id/new
+  # GET /sign/ore_id/new
   def new
     # TODO: Add token admin role to policy token related tx
     authorize new_transaction.blockchain_transactable, :pay? if new_transaction_for_award?
@@ -14,7 +15,7 @@ class Sign::OreIdController < ApplicationController
   end
 
   # GET /sign/ore_id/receive
-  def receive
+  def receive # rubocop:todo Metrics/CyclomaticComplexity
     fallback_state
 
     unless verify_errorless
@@ -44,7 +45,7 @@ class Sign::OreIdController < ApplicationController
 
   private
 
-    def new_transaction
+    def new_transaction # rubocop:todo Metrics/CyclomaticComplexity
       @new_transaction ||= if params[:transfer_id]
         BlockchainTransactionAward.new(
           blockchain_transactable: policy_scope(Award).find(params.require(:transfer_id))
