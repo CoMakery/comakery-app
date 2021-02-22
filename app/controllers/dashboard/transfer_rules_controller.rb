@@ -16,6 +16,7 @@ class Dashboard::TransferRulesController < ApplicationController
 
   def create
     authorize @project, :edit_transfer_rules?
+
     transfer_rule = @project.token.transfer_rules.new(transfer_rule_params)
     transfer_rule.lockup_until = Time.zone.parse(transfer_rule_params[:lockup_until])
 
@@ -43,10 +44,20 @@ class Dashboard::TransferRulesController < ApplicationController
 
   def refresh_from_blockchain
     authorize @project, :refresh_transfer_rules?
-    authorize @project.token, :refresh_transfer_rules_enabled?
 
-    BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob.perform_now(@project.token)
-    redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rules were synced from the blockchain'
+    if @project.token.transfer_rules.fresh?
+      notice = 'Transfer rules were already synced'
+    else
+      if @project.token.token_type.is_a?(TokenType::AlgorandSecurityToken)
+        AlgorandSecurityToken::TransferRulesSyncJob.perform_now(@project.token)
+      else
+        BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob.perform_now(@project.token)
+      end
+
+      notice = 'Transfer rules were synced from the blockchain'
+    end
+
+    redirect_to project_dashboard_transfer_rules_path(@project), notice: notice
   end
 
   private

@@ -12,11 +12,6 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         get :index, params: { project_id: project.to_param }
         expect(response).to be_successful
       end
-
-      it 'creates token records for accounts' do
-        get :index, params: { project_id: project.to_param }
-        expect(project.account.account_token_records.find_by(token: project.token)).not_to be_nil
-      end
     end
   end
 
@@ -95,6 +90,38 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
     it 'returns a success response' do
       get :show, params: { project_id: project.to_param, id: account.id }, as: :turbo_stream
       expect(response.status).to eq 200
+    end
+  end
+
+  describe 'POST #refresh_from_blockchain' do
+    before do
+      login(project.account)
+    end
+
+    context 'when accounts have been refreshed recently' do
+      before do
+        create(:account_token_record, token: account_token_record.token, status: :synced, synced_at: Time.current)
+      end
+
+      it 'does not run refresh job' do
+        expect(AlgorandSecurityToken::AccountTokenRecordsSyncJob).not_to receive(:perform_now)
+        post :refresh_from_blockchain, params: { project_id: project.to_param }
+
+        expect(response).to redirect_to(project_dashboard_accounts_path(project))
+      end
+    end
+
+    context 'when accounts have not been refreshed recently' do
+      context 'with algorand security token', :vcr do
+        let(:account_token_record) { create(:blockchain_transaction_account_token_record_algo).blockchain_transactable }
+
+        it 'runs refresh job' do
+          expect(AlgorandSecurityToken::AccountTokenRecordsSyncJob).to receive(:perform_now).and_return(true)
+          post :refresh_from_blockchain, params: { project_id: project.to_param }
+
+          expect(response).to redirect_to(project_dashboard_accounts_path(project))
+        end
+      end
     end
   end
 end

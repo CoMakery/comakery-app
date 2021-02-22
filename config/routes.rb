@@ -85,7 +85,11 @@ Rails.application.routes.draw do
 
     namespace :dashboard do
       resources :transfers, only: [:index, :show, :create]
-      resources :accounts, only: [:index, :show, :create]
+      resources :accounts, only: [:index, :show, :create] do
+        collection do
+          post :refresh_from_blockchain
+        end
+      end
       resources :accesses, only: [:index] do
         collection do
           post :regenerate_api_key

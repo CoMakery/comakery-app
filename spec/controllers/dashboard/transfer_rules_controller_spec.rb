@@ -96,12 +96,39 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
   end
 
   describe 'POST #refresh_from_blockchain' do
-    context 'with valid params' do
-      it 'run refresh job' do
-        expect(BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob).to receive(:perform_now).and_return(true)
+    context 'when rules have been refreshed recently' do
+      before do
+        create(:transfer_rule, token: token, status: :synced, synced_at: Time.current)
+      end
+
+      it 'does not run refresh job' do
+        expect(AlgorandSecurityToken::TransferRulesSyncJob).not_to receive(:perform_now)
         post :refresh_from_blockchain, params: { project_id: project.to_param }
 
         expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
+      end
+    end
+
+    context 'when rules have not been refreshed recently' do
+      context 'with algorand security token', :vcr do
+        it 'runs refresh job' do
+          expect(AlgorandSecurityToken::TransferRulesSyncJob).to receive(:perform_now).and_return(true)
+          post :refresh_from_blockchain, params: { project_id: project.to_param }
+
+          expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
+        end
+      end
+
+      context 'with comakery security token' do
+        let!(:token) { create(:comakery_dummy_token) }
+        let!(:project) { create(:project, visibility: :public_listed, token: token) }
+
+        it 'runs refresh job' do
+          expect(BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob).to receive(:perform_now).and_return(true)
+          post :refresh_from_blockchain, params: { project_id: project.to_param }
+
+          expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
+        end
       end
     end
   end

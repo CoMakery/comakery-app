@@ -1,5 +1,6 @@
 class AccountTokenRecord < ApplicationRecord
   include BlockchainTransactable
+  include Refreshable
 
   belongs_to :account
   belongs_to :token

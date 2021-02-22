@@ -2,7 +2,6 @@ class Dashboard::AccountsController < ApplicationController
   before_action :assign_project
   before_action :normalize_account_token_records_lockup_until_lt, only: [:index]
   before_action :set_accounts, only: [:index]
-  before_action :create_token_records, only: [:index]
   before_action :authorize_project, only: :create
   skip_before_action :require_login, only: %i[index show]
   skip_after_action :verify_policy_scoped, only: %i[index create]
@@ -16,6 +15,8 @@ class Dashboard::AccountsController < ApplicationController
   end
 
   def create
+    authorize @project, :edit_accounts?
+
     account_token_record = @project.token.account_token_records.new(account_token_record_params)
     account_token_record.account_id = params.dig(:account_token_record, :account_id)
     account_token_record.lockup_until = Time.zone.parse(account_token_record_params[:lockup_until])
@@ -50,6 +51,20 @@ class Dashboard::AccountsController < ApplicationController
     end
   end
 
+  def refresh_from_blockchain
+    authorize @project, :accounts?
+
+    if @project.token.account_token_records.fresh?
+      notice = 'Accounts were already synced'
+    else
+      AlgorandSecurityToken::AccountTokenRecordsSyncJob.perform_now(@project.token) if @project.token.token_type.is_a?(TokenType::AlgorandSecurityToken)
+
+      notice = 'Accounts were synced from the blockchain'
+    end
+
+    redirect_to project_dashboard_accounts_path(@project), notice: notice
+  end
+
   private
 
     def normalize_account_token_records_lockup_until_lt
@@ -59,7 +74,13 @@ class Dashboard::AccountsController < ApplicationController
 
     def set_accounts
       @page = (params[:page] || 1).to_i
-      @q = @project.interested.includes(:verifications, :awards, :latest_verification, account_token_records: [:reg_group]).ransack(params[:q])
+      @q = @project.interested.includes(
+        :verifications,
+        :awards,
+        :latest_verification,
+        account_token_records: [:reg_group]
+      ).where.not(account_token_records: { id: nil }).ransack(params[:q])
+
       @accounts_all = @q.result
       @accounts_all.size
       @accounts = @accounts_all.page(@page).per(10)
@@ -79,10 +100,5 @@ class Dashboard::AccountsController < ApplicationController
         :reg_group_id,
         :account_frozen
       )
-    end
-
-    # TODO: Extract creation of account_token_records to model or service
-    def create_token_records
-      @project.interested.each { |a| a.account_token_records.find_or_create_by!(token: @project.token) } if @project.token&.token_type&.operates_with_account_records?
     end
 end

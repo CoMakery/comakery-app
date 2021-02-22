@@ -29,25 +29,4 @@ describe TokenPolicy do
       end
     end
   end
-
-  describe '#refresh_transfer_rules_enabled?' do
-    let(:account) { create(:account) }
-    let!(:token) { create(:token, _token_type: :comakery_security_token, symbol: 'TEST', contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37', decimal_places: 1) }
-
-    specify 'no transfer rules' do
-      expect(described_class.new(account, token).refresh_transfer_rules_enabled?).to be true
-    end
-
-    specify 'transfer rule synced more than 10 minutes ago' do
-      create(:transfer_rule, token: token, status: 'synced', synced_at: 11.minutes.ago)
-
-      expect(described_class.new(account, token).refresh_transfer_rules_enabled?).to be true
-    end
-
-    specify 'transfer rule synced less than 10 minutes ago' do
-      create(:transfer_rule, token: token, status: 'synced', synced_at: 9.minutes.ago)
-
-      expect(described_class.new(account, token).refresh_transfer_rules_enabled?).to be false
-    end
-  end
 end
