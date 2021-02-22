@@ -1,0 +1,163 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: RSpec
+
+on:
+  push:
+#   pull_request:
+#     branches: [ acceptance, master ]
+#   schedule:
+#     - cron: "0 2 * * 1-5"
+
+jobs:
+  rspec:
+    strategy:
+      matrix:
+        ruby: [2.7.1]
+        node: [12.x]
+        command: [
+          'spec/features',
+          'spec/controllers',
+          'spec/models',
+          '--exclude-pattern "spec/{features,controllers, models}/**/*_spec.rb"'
+        ]
+
+    name: RSpec ${{ matrix.command }}
+    runs-on: ubuntu-latest
+
+    env:
+      BUNDLER_VERSION: 2.2.3
+      RACK_ENV: test
+      RAILS_ENV: test
+      SECRET_KEY_BASE: dummy
+      DATABASE_URL: postgres://rails@localhost:5432/rails
+      AWS_API_KEY: dummy
+      AWS_API_SECRET: dummy
+      BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET: none
+      BLOCK_EXPLORER_URL_CONSTELLATION_TESTNET: dummy
+      DISCORD_CLIENT_ID: none
+      DISCORD_CLIENT_SECRET: none
+      INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
+      ORE_ID_API_KEY: none
+      ORE_ID_SERVICE_KEY: none
+      SLACK_API_KEY: none
+      SLACK_API_SECRET: none
+      REFILE_S3_REGION: dummy
+      REFILE_S3_BUCKET: dummy
+      SIMPLECOV_ENABLED: true
+      # Settings -> Secrets
+      # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
+
+    services:
+      postgres:
+        image: postgres:10.1-alpine
+        env:
+          POSTGRES_USER: rails
+          POSTGRES_DB: rails
+          POSTGRES_PASSWORD: ""
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+        - 5432:5432
+
+      redis:
+        image: redis:5.0.6-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Use a specific Yarn version
+      run: yarn policies set-version 1.12.3
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Cache Node dependencies
+      uses: actions/cache@v1.1.2
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ matrix.node }}-yarn-
+
+    - name: Install Node dependencies
+      run: yarn install
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+
+    - name: Cache Ruby dependencies
+      uses: actions/cache@v1.1.2
+      with:
+        path: vendor/bundle
+        key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ matrix.ruby }}-gems-
+
+    - name: Install OS dependenices
+      run: sudo apt-get install libpq-dev libssl-dev graphviz imagemagick
+
+    - name: Set up Bundler to use cache
+      run: bundle config path 'vendor/bundle'
+
+    - name: Install Ruby dependencies
+      run: bundle install --jobs 4 --retry 3
+
+    - name: Assets Cache
+      id: assets-cache
+      uses: actions/cache@v1
+      with:
+        path: public/assets
+        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-${{ steps.extract_branch.outputs.branch }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.ruby }}-assets-
+
+    - name: Webpack Cache
+      id: webpack-cache
+      uses: actions/cache@v1
+      with:
+        path: public/packs
+        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-${{ steps.extract_branch.outputs.branch }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.ruby }}-packs-
+
+    - name: Precompile assets
+      run: bundle exec rails assets:precompile
+
+    - name: Setup database
+      run: env bundle exec rails db:create
+
+    - name: Run migrations
+      run: env bundle exec rails db:migrate
+
+    - name: Run Command
+      run: env bundle exec rspec ${{ matrix.command }} --format documentation
+
+    - name: Upload a Build Artifact
+      if: always()
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: SimpleCov Report
+        path: coverage/
