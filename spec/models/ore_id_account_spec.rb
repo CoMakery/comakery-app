@@ -115,14 +115,25 @@ RSpec.describe OreIdAccount, type: :model do
   end
 
   describe '#sync_password_update' do
+    before do
+      allow_any_instance_of(OreIdService).to receive(:password_updated?).and_return(true)
+    end
+
     context 'when remote password has been updated' do
-      before do
-        allow_any_instance_of(OreIdService).to receive(:password_updated?).and_return(true)
-      end
+      subject { create(:ore_id, state: 'unclaimed') }
 
       specify do
         expect(subject).to receive(:ok!)
         subject.sync_password_update
+      end
+    end
+
+    context 'when Ore Id Account has wrong state' do
+      subject { create(:ore_id, state: 'ok') }
+
+      specify do
+        expect(subject).not_to receive(:ok!)
+        expect(subject.sync_password_update).to be nil
       end
     end
   end
