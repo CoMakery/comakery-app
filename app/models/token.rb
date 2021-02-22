@@ -111,16 +111,6 @@ class Token < ApplicationRecord
     RegGroup.default_for(self)
   end
 
-  def transfer_rules_fresh?
-    last_sync = transfer_rules.synced.order(synced_at: :desc).first&.synced_at
-    last_sync.nil? || last_sync < 10.minutes.ago
-  end
-
-  def account_token_records_fresh?
-    last_sync = account_token_records.synced.order(synced_at: :desc).first&.synced_at
-    last_sync.nil? || last_sync < 10.minutes.ago
-  end
-
   private
 
     def set_values_from_token_type # rubocop:todo Metrics/CyclomaticComplexity
