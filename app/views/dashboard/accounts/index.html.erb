@@ -3,7 +3,7 @@
 
     <div class="transfer-rules__buttons">
       <div class="transfer-rules__refresh_from_blockchain">
-        <% if policy(@project).edit_accounts? %>
+        <% if policy(@project).edit_accounts? && @project.token.token_type.accounts_sync_job %>
           <%= button_to 'refresh accounts', refresh_from_blockchain_project_dashboard_accounts_path(@project), class: 'transfer-rules__refresh_from_blockchain_button', method: :post, disabled: @project.token.account_token_records.fresh?, data: { disable_with: "..." } %>
         <% end %>
       </div>

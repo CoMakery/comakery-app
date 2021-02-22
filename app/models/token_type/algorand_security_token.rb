@@ -106,4 +106,16 @@ class TokenType::AlgorandSecurityToken < TokenType
   def default_reg_group
     1
   end
+
+  # ApplicationJob class to perform transfer rule sync
+  # @return [Class] job
+  def transfer_rule_sync_job
+    ::AlgorandSecurityToken::TransferRulesSyncJob
+  end
+
+  # ApplicationJob class to perform account sync
+  # @return [Class] job
+  def accounts_sync_job
+    ::AlgorandSecurityToken::AccountTokenRecordsSyncJob
+  end
 end

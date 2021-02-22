@@ -5,7 +5,7 @@
 
   <div class="transfer-rules__buttons">
     <div class="transfer-rules__create">
-      <% if policy(@project).edit_transfer_rules? %>
+      <% if policy(@project).edit_transfer_rules? && @project.token.token_type.transfer_rule_sync_job %>
         <%= button_tag "create transfer rule ＋", type: 'button', class: 'transfer-rule-create', data: { target: 'transfer-rules.button', action: 'transfer-rules#showForm' } %>
       <% end %>
     </div>

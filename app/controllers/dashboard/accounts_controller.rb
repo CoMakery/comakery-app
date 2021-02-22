@@ -57,7 +57,7 @@ class Dashboard::AccountsController < ApplicationController
     if @project.token.account_token_records.fresh?
       notice = 'Accounts were already synced'
     else
-      AlgorandSecurityToken::AccountTokenRecordsSyncJob.perform_now(@project.token) if @project.token.token_type.is_a?(TokenType::AlgorandSecurityToken)
+      @project.token.token_type.accounts_sync_job&.perform_now(@project.token)
 
       notice = 'Accounts were synced from the blockchain'
     end

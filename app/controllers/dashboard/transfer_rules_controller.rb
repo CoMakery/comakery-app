@@ -48,12 +48,7 @@ class Dashboard::TransferRulesController < ApplicationController
     if @project.token.transfer_rules.fresh?
       notice = 'Transfer rules were already synced'
     else
-      if @project.token.token_type.is_a?(TokenType::AlgorandSecurityToken)
-        AlgorandSecurityToken::TransferRulesSyncJob.perform_now(@project.token)
-      else
-        BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob.perform_now(@project.token)
-      end
-
+      @project.token.token_type.transfer_rule_sync_job&.perform_now(@project.token)
       notice = 'Transfer rules were synced from the blockchain'
     end
 
