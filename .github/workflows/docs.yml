@@ -5,29 +5,19 @@
 # This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
 # For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
-name: RSpec
+name: Docs
 
 on:
   push:
-#   pull_request:
-#     branches: [ acceptance, master ]
-#   schedule:
-#     - cron: "0 2 * * 1-5"
 
 jobs:
-  rspec:
+  docs:
     strategy:
       matrix:
         ruby: [2.7.1]
         node: [12.x]
-        command: [
-          'spec/features',
-          'spec/controllers',
-          'spec/models',
-          '--exclude-pattern "spec/{features,controllers, models}/**/*_spec.rb"'
-        ]
 
-    name: RSpec ${{ matrix.command }}
+    name: Generate Docs
     runs-on: ubuntu-latest
 
     env:
@@ -49,7 +39,7 @@ jobs:
       SLACK_API_SECRET: none
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
-      SIMPLECOV_ENABLED: true
+      SIMPLECOV_ENABLED: false
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 
@@ -125,27 +115,6 @@ jobs:
     - name: Install Ruby dependencies
       run: bundle install --jobs 4 --retry 3
 
-    - name: Assets Cache
-      id: assets-cache
-      uses: actions/cache@v1
-      with:
-        path: public/assets
-        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-${{ steps.extract_branch.outputs.branch }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-assets-
-
-    - name: Webpack Cache
-      id: webpack-cache
-      uses: actions/cache@v1
-      with:
-        path: public/packs
-        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-${{ steps.extract_branch.outputs.branch }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-packs-
-
-    - name: Precompile assets
-      run: bundle exec rails assets:precompile
-
     - name: Setup database
       run: env bundle exec rails db:create
 
@@ -153,11 +122,11 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run Command
-      run: env bundle exec rspec ${{ matrix.command }} --format documentation
+      run: env bundle exec rake docs:generate
 
     - name: Upload a Build Artifact
       if: always()
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: SimpleCov Report
-        path: coverage/
+        name: API Docs
+        path: public/doc/api/v1/
