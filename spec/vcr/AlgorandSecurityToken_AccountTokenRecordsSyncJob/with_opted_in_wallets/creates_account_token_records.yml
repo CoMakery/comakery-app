@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/QLL4PEGFO7MGQJGUOPUT3MANOI2U3TG5YF3ZM66FPF4GMORTIKPHOYIGSI
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 22 Feb 2021 19:13:22 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=da4b9c2612b079348f2588c8b120469451614021202; expires=Wed, 24-Mar-21
+        19:13:22 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '086cc22a240000323cdba97000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=OR%2FG4WfXUFG04EXQIiTrDEwwWB77%2BpY2KBGdk7GP8GCJvsc0R2h4edpRLBmap%2Botv6xgFNSeHlYvKVjZA0ScHfXWJQSmUAUfJj%2BfCE7XRPgtjMH0Hlj%2BleULymo%3D"}]}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 625b06236d08323c-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"account":{"address":"QLL4PEGFO7MGQJGUOPUT3MANOI2U3TG5YF3ZM66FPF4GMORTIKPHOYIGSI","amount":100212500,"amount-without-pending-rewards":100204000,"apps-local-state":[{"id":13258116,"key-value":[{"key":"YmFsYW5jZQ==","value":{"bytes":"","type":2,"uint":0}},{"key":"dHJhbnNmZXIgZ3JvdXA=","value":{"bytes":"","type":2,"uint":1}}],"schema":{"num-byte-slice":0,"num-uint":4}},{"id":13997710,"key-value":[{"key":"YmFsYW5jZQ==","value":{"bytes":"","type":2,"uint":106250051}},{"key":"bG9ja1VudGls","value":{"bytes":"","type":2,"uint":1614299570}},{"key":"bWF4QmFsYW5jZQ==","value":{"bytes":"","type":2,"uint":22000000000}},{"key":"dHJhbnNmZXJHcm91cA==","value":{"bytes":"","type":2,"uint":1}},{"key":"ZnJvemVu","value":{"bytes":"","type":2,"uint":0}},{"key":"cm9sZXM=","value":{"bytes":"","type":2,"uint":15}}],"schema":{"num-byte-slice":8,"num-uint":8}}],"pending-rewards":8500,"reward-base":26445,"rewards":0,"round":12509999,"sig-type":"sig","status":"Offline"},"current-round":12509999}
+
+'
+    http_version: null
+  recorded_at: Mon, 22 Feb 2021 19:13:22 GMT
+recorded_with: VCR 5.1.0

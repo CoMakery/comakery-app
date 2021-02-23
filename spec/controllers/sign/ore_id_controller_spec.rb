@@ -8,6 +8,7 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
   let(:tranfser) { create(:blockchain_transaction).blockchain_transactable }
   let(:account_token_record) { create(:algo_sec_dummy_restrictions) }
   let(:token) { create(:algo_sec_token) }
+  let(:transfer_rule) { create(:transfer_rule, token: token) }
 
   before do
     login(tranfser.project.account)
@@ -21,26 +22,58 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
     end
 
     context 'with transfer' do
-      it 'creates a BlockchainTransaction and redirects to a sign_url' do
-        get :new, params: { transfer_id: tranfser.id }
-        expect(tranfser.blockchain_transactions.last.source).to eq('dummy_source_address')
+      subject { get :new, params: { transfer_id: tranfser.id } }
+
+      it 'creates a correct BlockchainTransaction' do
+        subject
+        expect(BlockchainTransaction.last).to be_a(BlockchainTransactionAward)
+      end
+
+      it 'populates source' do
+        subject
+        expect(BlockchainTransaction.last.source).to eq('dummy_source_address')
+      end
+
+      it 'redirects to sign_url' do
+        subject
         expect(response).to redirect_to('/dummy_sign_url')
       end
     end
 
     context 'with account token record' do
-      it 'creates a BlockchainTransaction and redirects to a sign_url' do
-        get :new, params: { account_token_record_id: account_token_record.id }
-        expect(account_token_record.blockchain_transactions.last.source).to eq('dummy_source_address')
-        expect(response).to redirect_to('/dummy_sign_url')
+      subject { get :new, params: { account_token_record_id: account_token_record.id } }
+
+      it 'creates a correct BlockchainTransaction' do
+        subject
+        expect(BlockchainTransaction.last).to be_a(BlockchainTransactionAccountTokenRecord)
       end
     end
 
-    context 'with token' do
-      it 'creates a BlockchainTransaction and redirects to a sign_url' do
-        get :new, params: { token_id: token.id }
-        expect(token.blockchain_transactions.last.source).to eq('dummy_source_address')
-        expect(response).to redirect_to('/dummy_sign_url')
+    context 'with transfer rule' do
+      subject { get :new, params: { transfer_rule_id: transfer_rule.id } }
+
+      it 'creates a correct BlockchainTransaction' do
+        subject
+        expect(BlockchainTransaction.last).to be_a(BlockchainTransactionTransferRule)
+      end
+    end
+
+    context 'with a token' do
+      subject { get :new, params: { token_id: token.id } }
+
+      it 'creates a correct BlockchainTransaction' do
+        subject
+        expect(BlockchainTransaction.last).to be_a(BlockchainTransactionTokenFreeze)
+      end
+    end
+
+    context 'with a frozen token' do
+      subject { get :new, params: { token_id: token.id } }
+      before { token.update(token_frozen: true) }
+
+      it 'creates a correct BlockchainTransaction' do
+        subject
+        expect(BlockchainTransaction.last).to be_a(BlockchainTransactionTokenUnfreeze)
       end
     end
   end
@@ -50,7 +83,7 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
     context 'with correct callback' do
       before do
-        expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(2).times.and_return(true)
+        expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(1).times.and_return(true)
         expect_any_instance_of(described_class).to receive(:verify_received_account).and_return(true)
         allow_any_instance_of(AwardPolicy).to receive(:pay?).and_return(true)
         allow_any_instance_of(BlockchainJob::BlockchainTransactionSyncJob).to receive(:perform_later)
@@ -67,7 +100,7 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
     context 'when callback includes error' do
       before do
-        expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(2).times.and_return(false)
+        expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(1).times.and_return(false)
         allow_any_instance_of(described_class).to receive(:fallback_state).and_return({ 'transaction_id' => transaction.id, 'redirect_back_to' => '/dummy_redir_url' })
       end
 
@@ -81,7 +114,7 @@ RSpec.describe Sign::OreIdController, type: :controller, vcr: true do
 
     context 'when callbacks account doesnt match current one' do
       before do
-        expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(2).times.and_return(true)
+        expect_any_instance_of(described_class).to receive(:verify_errorless).exactly(1).times.and_return(true)
         expect_any_instance_of(described_class).to receive(:verify_received_account).and_return(false)
       end
 

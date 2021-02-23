@@ -1,6 +1,7 @@
 import { Controller } from 'stimulus'
 import { Decimal } from 'decimal.js'
 import { Turbo } from '@hotwired/turbo-rails'
+
 export default class extends Controller {
   static targets = [ 'amount', 'quantity', 'total', 'form', 'formChild', 'create' ]
 

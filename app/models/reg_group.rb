@@ -23,7 +23,7 @@ class RegGroup < ApplicationRecord
   before_validation :set_name
 
   def self.default_for(token)
-    RegGroup.find_or_create_by!(token_id: token.id, blockchain_id: 0)
+    RegGroup.find_or_create_by!(token_id: token.id, blockchain_id: token.token_type.default_reg_group)
   end
 
   private

@@ -892,7 +892,7 @@ class Mom
     AccountTokenRecord.create(
       account: contributor,
       token: project.token,
-      reg_group: create(:reg_group, blockchain_id: reg_group, token: project.token),
+      reg_group: RegGroup.find_or_create_by!(token_id: project.token.id, blockchain_id: reg_group),
       max_balance: max_balance,
       balance: 0,
       account_frozen: frozen,
@@ -902,12 +902,12 @@ class Mom
 
   def algo_sec_dummy_transfer_rule(from: 0, to: 0, lockup_until: 0)
     project, _admin, _contributor = algo_sec_project_dummy_setup
-    gr_from = create(:reg_group, token: project.token, blockchain_id: from)
+    gr_from = RegGroup.find_or_create_by!(token_id: project.token.id, blockchain_id: from)
 
     gr_to = if from == to
       gr_from
     else
-      create(:reg_group, token: project.token, blockchain_id: to)
+      RegGroup.find_or_create_by!(token_id: project.token.id, blockchain_id: to)
     end
 
     TransferRule.new(

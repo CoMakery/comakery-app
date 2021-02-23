@@ -67,7 +67,7 @@ class Comakery::Algorand::Tx
   end
 
   def valid_amount?
-    blockchain_transaction.amount == amount
+    blockchain_transaction.amount.to_i == amount
   end
 
   def valid_round?

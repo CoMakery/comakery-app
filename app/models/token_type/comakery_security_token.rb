@@ -51,4 +51,22 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
   def supports_token_freeze?
     true
   end
+
+  # Default reg group when a record is created
+  # @return [Integer] reg_group
+  def default_reg_group
+    0
+  end
+
+  # ApplicationJob class to perform transfer rule sync
+  # @return [Class] job
+  def transfer_rule_sync_job
+    ::BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob
+  end
+
+  # ApplicationJob class to perform account sync
+  # @return [Class] job
+  def accounts_sync_job
+    nil
+  end
 end

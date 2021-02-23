@@ -15,6 +15,14 @@ describe BlockchainTransactionAccountTokenRecord, vcr: true do
     end
   end
 
+  describe 'populate_data' do
+    subject { create(:blockchain_transaction_account_token_record) }
+
+    it 'populates' do
+      expect(subject.destination).to eq(subject.blockchain_transactable.wallet.address)
+    end
+  end
+
   describe 'on_chain' do
     context 'with comakery security token' do
       subject { build(:blockchain_transaction_account_token_record).on_chain }

@@ -59,8 +59,8 @@ button.reg-groups-create,
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
 
   &:disabled {
-    background-color: #c7c7c7;
-    cursor: not-allowed;
+    background-color: #c7c7c7 !important;
+    cursor: not-allowed !important;
   }
 }
 
@@ -1220,7 +1220,7 @@ button.reg-groups-create,
 .admins__create input[type="submit"],
 .project-api-key__create a,
 .project-api-key__create button,
-.transfer-rules__refresh_from_blockchain input[type="submit"] {
+input.transfer-rules__refresh_from_blockchain_button {
   margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;

@@ -11,7 +11,7 @@ class Wallet < ApplicationRecord
   has_many :account_token_records, dependent: :destroy
 
   validates :source, presence: true
-  validates :address, presence: true, unless: :pending?
+  validates :address, presence: true, unless: :empty_address_allowed?
   validates :address, blockchain_address: true
   validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
@@ -31,10 +31,6 @@ class Wallet < ApplicationRecord
     available_blockchains = Blockchain.available
     available_blockchains.reject!(&:supported_by_ore_id?)
     available_blockchains.map(&:key)
-  end
-
-  def pending?
-    ore_id? && ore_id_account&.pending?
   end
 
   def coin_balance
@@ -62,5 +58,9 @@ class Wallet < ApplicationRecord
 
     def blockchain_supported_by_ore_id
       errors.add(:_blockchain, 'is not supported with ore_id source') unless blockchain.supported_by_ore_id?
+    end
+
+    def empty_address_allowed?
+      ore_id? && (wallet_provisions.empty? || wallet_provisions.any?(&:pending?))
     end
 end

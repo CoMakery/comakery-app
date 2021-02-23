@@ -1,5 +1,6 @@
 class AccountTokenRecord < ApplicationRecord
   include BlockchainTransactable
+  include Refreshable
 
   belongs_to :account
   belongs_to :token
@@ -37,7 +38,7 @@ class AccountTokenRecord < ApplicationRecord
   private
 
     def set_defaults
-      self.lockup_until ||= Time.current
+      self.lockup_until ||= 0
       self.reg_group ||= RegGroup.default_for(token)
     end
 

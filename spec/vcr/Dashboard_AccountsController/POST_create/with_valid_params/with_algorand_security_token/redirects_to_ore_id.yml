@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/v2/status
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 20 Feb 2021 02:26:08 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d617d2a208fc5c1ecbab42a397c343e831613787968; expires=Mon, 22-Mar-21
+        02:26:08 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '085edb4baa00004df41c3df000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=wUDhTMU9ovBNizc8ZOYFHs0sN8AadnEX0nhct853%2Fvjidx7%2FIRHi2gqYyo4icnAfW3mMrRIaB7%2BQ81deawTdsEdFBW4XktzTx9sM%2BAcwVnT0jn%2FesPfF3RUh%2FwY%3D"}],"max_age":604800,"group":"cf-nel"}'
+      Nel:
+      - '{"max_age":604800,"report_to":"cf-nel"}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6244c7f2ab2f4df4-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"catchpoint":"","catchpoint-acquired-blocks":0,"catchpoint-processed-accounts":0,"catchpoint-total-accounts":0,"catchpoint-total-blocks":0,"catchpoint-verified-accounts":0,"catchup-time":0,"last-catchpoint":"12450000#CGD2TFVZKAXHJ3JPB5JYBCR2BAEX4BX6IOLJ4MP7VZWHNXNY2NXQ","last-round":12455485,"last-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version":"https://github.com/algorandfoundation/specs/tree/3a83c4c743f8b17adfd73944b4319c25722a6782","next-version-round":12455486,"next-version-supported":true,"stopped-at-unsupported-round":false,"time-since-last-round":3131666150}
+
+'
+    http_version: null
+  recorded_at: Sat, 20 Feb 2021 02:26:08 GMT
+recorded_with: VCR 5.1.0
