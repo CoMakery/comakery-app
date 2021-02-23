@@ -72,8 +72,8 @@ describe Comakery::Discord do
 
     context 'when DISCORD_BOT_TOKEN and DISCORD_CLIENT_ID defined' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = 'DISCORD_BOT_TOKEN'
-        ENV['DISCORD_CLIENT_ID'] = 'DISCORD_CLIENT_ID'
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => 'DISCORD_BOT_TOKEN'))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => 'DISCORD_CLIENT_ID'))
       end
 
       it { is_expected.to be_truthy }
@@ -81,8 +81,8 @@ describe Comakery::Discord do
 
     context 'when only DISCORD_BOT_TOKEN defined' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = 'DISCORD_BOT_TOKEN'
-        ENV['DISCORD_CLIENT_ID'] = nil
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => 'DISCORD_BOT_TOKEN'))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => nil))
       end
 
       it { is_expected.to be_falsey }
@@ -90,8 +90,8 @@ describe Comakery::Discord do
 
     context 'when only DISCORD_CLIENT_ID defined' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = nil
-        ENV['DISCORD_CLIENT_ID'] = 'DISCORD_CLIENT_ID'
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => nil))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => 'DISCORD_CLIENT_ID'))
       end
 
       it { is_expected.to be_falsey }
@@ -99,8 +99,8 @@ describe Comakery::Discord do
 
     context 'when only DISCORD_BOT_TOKEN defined and DISCORD_CLIENT_ID is blank' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = 'DISCORD_BOT_TOKEN'
-        ENV['DISCORD_CLIENT_ID'] = ''
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => 'DISCORD_BOT_TOKEN'))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => ''))
       end
 
       it { is_expected.to be_falsey }
@@ -108,8 +108,8 @@ describe Comakery::Discord do
 
     context 'when only DISCORD_CLIENT_ID defined and DISCORD_BOT_TOKEN is blank' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = ''
-        ENV['DISCORD_CLIENT_ID'] = 'DISCORD_CLIENT_ID'
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => ''))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => 'DISCORD_CLIENT_ID'))
       end
 
       it { is_expected.to be_falsey }
@@ -117,8 +117,8 @@ describe Comakery::Discord do
 
     context 'when both constants missing' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = nil
-        ENV['DISCORD_CLIENT_ID'] = nil
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => nil))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => nil))
       end
 
       it { is_expected.to be_falsey }
@@ -126,8 +126,8 @@ describe Comakery::Discord do
 
     context 'when both constants are blank' do
       before do
-        ENV['DISCORD_BOT_TOKEN'] = ''
-        ENV['DISCORD_CLIENT_ID'] = ''
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_BOT_TOKEN' => ''))
+        stub_const('ENV', ENV.to_hash.merge('DISCORD_CLIENT_ID' => ''))
       end
 
       it { is_expected.to be_falsey }

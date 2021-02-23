@@ -35,16 +35,16 @@ RSpec.describe Auth::EthController, type: :controller do
   end
 
   describe 'POST #create' do
+    before do
+      Rails.cache.write("auth_eth::nonce::#{valid_public_address}", valid_nonce, expires_in: 1.hour)
+      travel_to Time.zone.at(valid_timestamp)
+    end
+
+    after do
+      travel_back
+    end
+
     context 'with valid signature and timestamp' do
-      before do
-        Rails.cache.write("auth_eth::nonce::#{valid_public_address}", valid_nonce, expires_in: 1.hour)
-        travel_to Time.zone.at(valid_timestamp)
-      end
-
-      after do
-        travel_back
-      end
-
       context 'with existing account' do
         let!(:account) { create(:account, ethereum_auth_address: valid_public_address) }
 

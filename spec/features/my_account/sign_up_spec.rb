@@ -86,7 +86,7 @@ describe 'my account', js: true do
   end
 
   scenario 'MetaMask button enabled' do
-    ENV['METAMASK_LOGIN'] = 'true'
+    stub_const('ENV', ENV.to_hash.merge('METAMASK_LOGIN' => 'true'))
     visit new_account_path
     expect(page).to have_selector 'button', text: 'MetaMask', exact_text: true
   end

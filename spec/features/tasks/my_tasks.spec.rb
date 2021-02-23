@@ -9,7 +9,7 @@ describe 'my tasks page', :js do
   let!(:expired_task) { create(:award, status: 'started') }
 
   before do
-    ENV['DEFAULT_PROJECT_ID'] = create(:project).id.to_s
+    stub_const('ENV', ENV.to_hash.merge('DEFAULT_PROJECT_ID' => create(:project).id.to_s))
     create(:experience, account: ready_task.account)
   end
 

@@ -102,10 +102,10 @@ group(:test) do
   gem 'database_cleaner'
   gem 'generator_spec'
   gem 'guard-rspec', require: false
+  gem 'knapsack'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 4.0.0.beta3'
-  gem 'knapsack'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
