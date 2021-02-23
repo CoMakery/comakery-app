@@ -61,6 +61,6 @@ class Wallet < ApplicationRecord
     end
 
     def empty_address_allowed?
-      ore_id? && wallet_provisions.empty?
+      ore_id? && (wallet_provisions.empty? || wallet_provisions.any?(&:pending?))
     end
 end

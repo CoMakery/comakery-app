@@ -62,8 +62,15 @@ describe Wallet, type: :model do
       it { is_expected.not_to validate_presence_of(:address) }
     end
 
+    context 'and there is a pending wallet_provision' do
+      let(:wallet_provision) { create(:wallet_provision, state: :pending) }
+      subject { wallet_provision.wallet }
+
+      it { is_expected.not_to validate_presence_of(:address) }
+    end
+
     context 'and wallet_provisions are not empty' do
-      let(:wallet_provision) { create(:wallet_provision) }
+      let(:wallet_provision) { create(:wallet_provision, state: :provisioned) }
       subject { wallet_provision.wallet }
 
       it { is_expected.to validate_presence_of(:address) }
