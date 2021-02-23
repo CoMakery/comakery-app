@@ -17,7 +17,7 @@ module AlgorandSecurityToken
           lockup_until: state['lockUntil'],
           max_balance: state['maxBalance'],
           reg_group: RegGroup.find_or_create_by!(token: token, blockchain_id: state['transferGroup']),
-          account_frozen: !state['frozen'].zero?,
+          account_frozen: state['frozen'] == 1,
           status: :synced,
           synced_at: Time.current
         )
