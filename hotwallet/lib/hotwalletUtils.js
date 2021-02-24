@@ -3,6 +3,62 @@ const algosdk = require("algosdk")
 const chainjs = require("@open-rights-exchange/chainjs")
 const axios = require("axios")
 
+class HotWallet {
+  constructor(address, mnemonic) {
+    this.address = address
+    this.mnemonic = mnemonic
+  }
+}
+class HotWalletRedis {
+  constructor(envs, redisClient) {
+    this.envs = envs
+    this.client = redisClient
+
+    // Set error handler
+    this.client.on("error", function (err) {
+      console.error(`Redis client error: ${err}`);
+    })
+  }
+
+  walletKeyName() {
+    return `wallet_for_project_${this.envs.projectId}`
+  }
+
+  async hotWallet() {
+    const savedHW = await this.hgetall(this.walletKeyName())
+
+    if (savedHW) {
+      return new HotWallet(savedHW.address, savedHW.mnemonic)
+    } else {
+      return undefined
+    }
+  }
+
+  async isHotWalletCreated() {
+    return (await this.hotWallet()) !== undefined
+  }
+
+  async saveHotWallet(wallet) {
+    await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
+    console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
+    return true
+  }
+
+  async hset(...args) {
+    return await (promisify(this.client.hset).bind(this.client))(...args)
+  }
+
+  async hget(...args) {
+    return await (promisify(this.client.hget).bind(this.client))(...args)
+  }
+
+  async hgetall(...args) {
+    return await (promisify(this.client.hgetall).bind(this.client))(...args)
+  }
+}
+
+exports.HotWalletRedis = HotWalletRedis
+
 exports.keyName = function keyName(projectId) {
   return `wallet_for_project_${projectId}`
 }
@@ -104,21 +160,16 @@ exports.registerHotWallet = async function registerHotWallet(wallet, envs, redis
 }
 
 exports.hotWalletInitialization = async function hotWalletInitialization(envs, redisClient) {
-  const keyName = exports.keyName(envs.projectId)
-  const getWalletKeys = promisify(redisClient.hgetall).bind(redisClient)
+  const walletRedis = new HotWalletRedis(envs, redisClient)
+  const hwCreated = await walletRedis.isHotWalletCreated()
 
-  await getWalletKeys(keyName)
-    .then(function (walletKeys) {
-      if (walletKeys) {
-        console.log("wallet already created, do nothing...")
-      } else {
-        console.log("Key file does not exists, generating...")
-        const newWallet = exports.generateAlgorandKeyPair()
-        exports.registerHotWallet(newWallet, envs, redisClient)
-      }
-    }).catch(function (err) {
-      console.error("Can't get a wallet keys: " + err)
-    })
+  if (hwCreated) {
+    console.log("wallet already created, do nothing...")
+  } else {
+    console.log("Key file does not exists, generating...")
+    const newWallet = exports.generateAlgorandKeyPair()
+    await exports.registerHotWallet(newWallet, envs, redisClient)
+  }
   return true
 }
 
@@ -131,7 +182,12 @@ exports.deleteCurrentKey = async function deleteCurrentKey(envs, redisClient) {
 
 exports.runServer = async function runServer(envs, redisClient) {
   while (true) {
+    // if (optedIn) {
     await exports.waitForNewTransaction(envs, redisClient)
+    // } else {
+    // await exports.tryToOptIn(envs,redisClient)
+    // }
+
     await exports.sleep(envs.checkForNewTransactionsDelay * 1000) // 30 seconds by default
   }
 }
