@@ -9,14 +9,15 @@ const envs = {
   redisUrl: "redis://localhost:6379/0",
   checkForNewTransactionsDelay: 30
 }
-const wallet = { address: "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", mnemonic: "mnemonic phrase" }
+const wallet = new hwUtils.HotWallet("YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
 
 jest.mock("axios")
 
 const redisClient = redis.createClient()
 
 beforeEach(async () => {
-  await hwUtils.storeHotWalletKeys(wallet, envs, redisClient)
+  const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
+  await hwRedis.saveNewHotWallet(wallet)
 })
 
 afterAll(() => {
