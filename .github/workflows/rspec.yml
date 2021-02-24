@@ -113,7 +113,7 @@ jobs:
       uses: actions/cache@v1.1.2
       with:
         path: vendor/bundle
-        key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}1
         restore-keys: ${{ matrix.ruby }}-gems-
 
     - name: Install OS dependenices
