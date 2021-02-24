@@ -8,7 +8,7 @@ const envs = {
   purestakeApi: "purestake_api_key",
   redisUrl: "redis://localhost:6379/0"
 }
-const wallet = { address: "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", mnemonic: "mnemonic phrase" }
+const wallet = new hwUtils.HotWallet("YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
 
 jest.mock("axios")
 

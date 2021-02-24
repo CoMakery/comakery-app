@@ -9,6 +9,9 @@ class HotWallet {
     this.mnemonic = mnemonic
   }
 }
+
+exports.HotWallet = HotWallet
+
 class HotWalletRedis {
   constructor(envs, redisClient) {
     this.envs = envs
@@ -38,7 +41,7 @@ class HotWalletRedis {
     return (await this.hotWallet()) !== undefined
   }
 
-  async saveHotWallet(wallet) {
+  async saveNewHotWallet(wallet) {
     await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
     return true
@@ -124,20 +127,8 @@ exports.setRedisErrorHandler = function setRedisErrorHandler(redisClient) {
 exports.generateAlgorandKeyPair = function generateAlgorandKeyPair() {
   const account = algosdk.generateAccount()
   const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
-  const new_wallet = { address: account.addr, mnemonic: mnemonic }
 
-  return new_wallet
-}
-
-exports.storeHotWalletKeys = async function storeHotWalletKeys(wallet, envs, redisClient) {
-  const keyName = exports.keyName(envs.projectId)
-  const writeKeys = promisify(redisClient.hset).bind(redisClient)
-  await writeKeys(keyName, "address", wallet.address, "mnemonic", wallet.mnemonic)
-    .catch(function (error) {
-      console.error(`Can't set a wallet key: ${error}`)
-    })
-  console.log(`Keys for a new hot wallet has been saved into ${keyName}`)
-  return true
+  return new HotWallet(account.addr, mnemonic)
 }
 
 exports.registerHotWallet = async function registerHotWallet(wallet, envs, redisClient) {
@@ -149,8 +140,10 @@ exports.registerHotWallet = async function registerHotWallet(wallet, envs, redis
     const res = await axios.post(registerHotWalletUrl, params, config)
 
     if (res.status == 201) {
-      await exports.storeHotWalletKeys(wallet, envs, redisClient)
+      const hwRedis = new HotWalletRedis(envs, redisClient)
+      await hwRedis.saveNewHotWallet(wallet)
     }
+
     return true
   } catch (error) {
     console.error(`registerHotWallet call failed with ${error.response.status} (${error.response.statusText}) data:`)
