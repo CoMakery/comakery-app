@@ -12,11 +12,11 @@ const envs = {
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
+const hwRedis = new hwUtils.HotWalletRedis(redisClient, envs)
 
 async function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
 
-  hwUtils.setRedisErrorHandler(redisClient)
   await hwUtils.hotWalletInitialization(envs, redisClient)
 
   return true
@@ -25,7 +25,5 @@ async function initialize() {
 (async () => {
   // await hwUtils.deleteCurrentKey(envs, redisClient)
   await initialize()
-  hwUtils.runServer(envs, redisClient)
-
-  // hwUtils.optInToApp('algorand_testnet', envs, redisClient)
+  // hwUtils.runServer(envs, redisClient)
 })();
