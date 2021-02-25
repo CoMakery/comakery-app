@@ -18,7 +18,7 @@ jest.mock("axios")
 test("API returns empty response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 204, data: null }))
-  res = await hwApi.getNextTransactionToSignFromAPI(wallet.address)
+  res = await hwApi.getNextTransactionToSign(wallet.address)
 
   expect(res).toEqual({})
 })
@@ -26,7 +26,7 @@ test("API returns empty response", async () => {
 test("API returns a blockchain transaction", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: blockchainTransaction }))
-  res = await hwApi.getNextTransactionToSignFromAPI(wallet.address)
+  res = await hwApi.getNextTransactionToSign(wallet.address)
 
   expect(res).toEqual(blockchainTransaction)
 })
@@ -41,7 +41,7 @@ test("API returns failed response", async () => {
   }
 
   axios.post.mockReturnValue(Promise.reject(data));
-  res = await hwApi.getNextTransactionToSignFromAPI(wallet.address)
+  res = await hwApi.getNextTransactionToSign(wallet.address)
 
   expect(res).toEqual({})
 })
