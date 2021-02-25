@@ -1,8 +1,8 @@
 class Comakery::Algorand
   def initialize(blockchain, asset_id = nil, app_id = nil)
     @blockchain = blockchain
-    @asset_id = asset_id
-    @app_id = app_id
+    @asset_id = asset_id.to_i
+    @app_id = app_id.to_i
   end
 
   def symbol

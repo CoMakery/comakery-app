@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/refreshable_spec'
 
 describe TransferRule do
+  it_behaves_like 'refreshable'
+
   describe 'associations' do
     let!(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let!(:sending_group) { create(:reg_group, token: token) }

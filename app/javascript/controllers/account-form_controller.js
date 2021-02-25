@@ -15,16 +15,12 @@ export default class extends ComakerySecurityTokenController {
       credentials: 'same-origin',
       method     : 'POST',
       body       : JSON.stringify({
-        body: {
-          data: {
-            account_token_record: {
-              'max_balance'   : this.data.get('addressMaxBalance'),
-              'lockup_until'  : this.data.get('addressLockupUntil'),
-              'reg_group_id'  : this.data.get('addressGroupId'),
-              'account_frozen': this.data.get('addressFrozen'),
-              'account_id'    : this.data.get('accountId')
-            }
-          }
+        account_token_record: {
+          'max_balance'   : this.data.get('addressMaxBalance'),
+          'lockup_until'  : this.data.get('addressLockupUntil'),
+          'reg_group_id'  : this.data.get('addressGroupId'),
+          'account_frozen': this.data.get('addressFrozen'),
+          'account_id'    : this.data.get('accountId')
         }
       }),
       headers: {
@@ -70,39 +66,6 @@ export default class extends ComakerySecurityTokenController {
     this.buttonTarget.getElementsByTagName('span')[0].textContent = 'processing'
 
     this.formTarget.requestSubmit()
-  }
-
-  showForm() {
-    document.querySelectorAll('.transfers-table--edit-icon__pencil').forEach(e => {
-      e.classList.add('hidden')
-    })
-
-    this.outputsTargets.forEach((e) => {
-      e.classList.add('hidden')
-    })
-
-    this.inputsTargets.forEach((e) => {
-      e.classList.remove('hidden')
-    })
-
-    this.formTarget.classList.add('account-form--active')
-  }
-
-  hideForm() {
-    document.querySelectorAll('.transfers-table--edit-icon__pencil').forEach(e => {
-      e.classList.remove('hidden')
-    })
-
-    this.inputsTargets.forEach((e) => {
-      e.classList.add('hidden')
-    })
-
-    this.outputsTargets.forEach((e) => {
-      e.classList.remove('hidden')
-    })
-
-    this.formTarget.classList.remove('account-form--active')
-    this.formTarget.reset()
   }
 
   get accountTokenRecordsPath() {

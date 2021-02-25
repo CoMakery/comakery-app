@@ -2,14 +2,14 @@
 <% synced_record = account.account_token_records.where(token: @project.token, status: :synced).last %>
 <% last_record = account.account_token_records.where(token: @project.token).last %>
 <% last_record_is_not_synced = synced_record && last_record && synced_record.id != last_record.id %>
-<% form_url = last_record ? project_dashboard_account_path(@project, account) : root_path %>
 
-<% form_data = last_record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.address_for_blockchain(@project.token._blockchain), 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => project_dashboard_accounts_path(token_id: @project.token.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 <div id="project_<%= @project.id %>_account_<%= account.id %>">
-  <%= form_with model: last_record, url: form_url, method: :get, data: form_data, class: 'account-form' do |f| %>
-    <% if policy(@project).edit_accounts? && last_record && last_record.synced? && account.address_for_blockchain(@project.token._blockchain) %>
-      <%= image_tag 'pencil.svg', data: {action: 'click->account-form#showForm', target: 'account-form.outputs'}, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
-      <%= image_tag 'iconCloseDark.svg', data: {action: 'click->account-form#hideForm', target: 'account-form.inputs'}, class: 'transfers-table--edit-icon hidden' %>
+  <%= form_with(last_record.decorate.form_attrs(@project)) do |f| %>
+    <%= f.hidden_field :account_id, value: account.id %>
+
+    <% if policy(@project).edit_accounts? && account.address_for_blockchain(@project.token._blockchain) %>
+      <%= image_tag 'pencil.svg', data: { action: 'click->account-form-controls#showForm', target: 'account-form-controls.outputs' }, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
+      <%= image_tag 'iconCloseDark.svg', data: { action: 'click->account-form-controls#hideForm', target: 'account-form-controls.inputs' }, class: 'transfers-table--edit-icon hidden' %>
     <% end %>
 
     <div class="transfers-table__transfer">
@@ -57,7 +57,7 @@
         <div class="transfers-table__transfer__max_balance">
           <label>max balance</label>
 
-          <div data-target="account-form.outputs">
+          <div data-target="account-form-controls.outputs">
             <% if last_record&.max_balance && last_record.max_balance > 0 %>
               <% if last_record_is_not_synced %>
                 <div class="accounts-table_outdated_data">
@@ -70,13 +70,13 @@
             <% end %>
           </div>
 
-          <%= f.number_field(:max_balance, required: false, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
+          <%= f.number_field(:max_balance, required: false, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__lockup_until">
           <label>lockup until</label>
 
-          <div data-target="account-form.outputs">
+          <div data-target="account-form-controls.outputs">
             <% if last_record_is_not_synced %>
               <div class="accounts-table_outdated_data">
                 <%= synced_record&.decorate&.lockup_until_pretty %>
@@ -85,13 +85,13 @@
             <%= last_record&.decorate&.lockup_until_pretty %>
           </div>
 
-          <%= f.date_field(:lockup_until, required: false, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form.inputs"}, class: 'hidden') %>
+          <%= f.datetime_local_field(:lockup_until, step: 1, required: false, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form-controls.inputs"}, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__reg_group">
           <label>reg group</label>
 
-          <div data-target="account-form.outputs">
+          <div data-target="account-form-controls.outputs">
             <% if last_record_is_not_synced %>
               <div class="accounts-table_outdated_data">
                 <%= synced_record&.reg_group ? "#{synced_record.reg_group.name} (#{synced_record.reg_group.blockchain_id})" : "–" %>
@@ -100,13 +100,13 @@
             <%= last_record&.reg_group ? "#{last_record.reg_group.name} (#{last_record.reg_group.blockchain_id})" : "–" %>
           </div>
 
-          <%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
+          <%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form-controls.inputs"} }) %>
         </div>
 
         <div class="transfers-table__transfer__frozen">
           <label>frozen</label>
 
-          <div data-target="account-form.outputs">
+          <div data-target="account-form-controls.outputs">
             <% if last_record_is_not_synced %>
               <div class="accounts-table_outdated_data">
                 <%= synced_record&.account_frozen? ? "Yes" : "No" %>
@@ -120,13 +120,13 @@
             <% end %>
           </div>
 
-          <%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressFrozen account-form.inputs"} }) %>
+          <%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressFrozen account-form-controls.inputs"} }) %>
         </div>
 
         <div class="transfers-table__transfer__status">
           <label>status</label>
 
-          <div data-target="account-form.outputs">
+          <div data-target="account-form-controls.outputs">
             <% if last_record&.status %>
               <div>
                 <% if last_record.synced? %>
@@ -146,7 +146,7 @@
             <% end %>
           </div>
 
-          <div class="hidden" data-target="account-form.inputs">
+          <div class="hidden" data-target="account-form-controls.inputs">
             –
           </div>
         </div>
@@ -154,13 +154,17 @@
     </div>
 
     <% if policy(@project).edit_accounts? && last_record && account.address_for_blockchain(@project.token._blockchain) %>
-      <div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
+      <div class="transfers-table--edit-save hidden" data-target="account-form-controls.inputs">
         <div class='transfer-button'>
-          <% if @project.token&.token_frozen? %>
+          <% if @project.token.token_frozen? %>
             frozen
-
+          <% elsif @project.token.blockchain.supported_by_ore_id? %>
+            <%= f.button type: :submit, class: 'transfer-algo-btn', data: { turbo: "false" } do %>
+              <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+              <span>Save</span>
+            <% end %>
           <% else %>
-            <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
+            <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form-controls.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
               <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
               <span>Save</span>
             <% end %>

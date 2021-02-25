@@ -14,44 +14,45 @@ class Dashboard::TransferRulesController < ApplicationController
     authorize @project, :show_transfer_rules?
   end
 
-  def destroy
+  def create
     authorize @project, :edit_transfer_rules?
 
-    if @transfer_rule.destroy
-      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rule destroyed'
+    transfer_rule = @project.token.transfer_rules.new(transfer_rule_params)
+    transfer_rule.lockup_until = Time.zone.parse(transfer_rule_params[:lockup_until])
+
+    if transfer_rule.save
+      redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
     else
-      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @transfer_rule.errors.full_messages.join(', ') }
+      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: transfer_rule.errors.full_messages.join(', ') }
     end
   end
 
-  def pause
-    authorize @project, :freeze_token?
+  def destroy
+    authorize @project, :edit_transfer_rules?
+    transfer_rule = @transfer_rule.dup
+    transfer_rule.lockup_until = 0
+    transfer_rule.status = nil
+    transfer_rule.save!
 
-    if @project.token.update(token_frozen: true)
-      BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob.perform_later(@project.token)
-      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Token tranfers are frozen'
-    else
-      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @project.token.errors.full_messages.join(', ') }
-    end
+    redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
   end
 
-  def unpause
+  def freeze
     authorize @project, :freeze_token?
-
-    if @project.token.update(token_frozen: false)
-      BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob.perform_later(@project.token)
-      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Token tranfers are unfrozen'
-    else
-      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @project.token.errors.full_messages.join(', ') }
-    end
+    redirect_to sign_ore_id_new_path(token_id: @project.token.id)
   end
 
   def refresh_from_blockchain
     authorize @project, :refresh_transfer_rules?
-    authorize @project.token, :refresh_transfer_rules_enabled?
 
-    BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob.perform_now(@project.token)
-    redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rules were synced from the blockchain'
+    if @project.token.transfer_rules.fresh?
+      notice = 'Transfer rules were already synced'
+    else
+      @project.token.token_type.transfer_rule_sync_job&.perform_now(@project.token)
+      notice = 'Transfer rules were synced from the blockchain'
+    end
+
+    redirect_to project_dashboard_transfer_rules_path(@project), notice: notice
   end
 
   private
@@ -70,5 +71,13 @@ class Dashboard::TransferRulesController < ApplicationController
 
     def set_transfer_rule
       @transfer_rule = @project.token.transfer_rules.find(params[:id])
+    end
+
+    def transfer_rule_params
+      params.fetch(:transfer_rule, {}).permit(
+        :sending_group_id,
+        :receiving_group_id,
+        :lockup_until
+      )
     end
 end
