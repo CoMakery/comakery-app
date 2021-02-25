@@ -1,6 +1,42 @@
 require 'rails_helper'
 
 RSpec.describe TransferRuleDecorator do
+  describe 'form_attrs' do
+    subject { transfer_rule.decorate.form_attrs(project) }
+
+    context 'with comakery security token' do
+      let(:transfer_rule) { create(:transfer_rule) }
+      let(:project) { create(:project, token: transfer_rule.token) }
+
+      it { is_expected.to be_a(Hash) }
+    end
+
+    context 'with algorand security token', :vcr do
+      let(:transfer_rule) { create(:algo_sec_dummy_transfer_rule) }
+      let(:project) { create(:project, token: transfer_rule.token) }
+
+      it { is_expected.to be_a(Hash) }
+    end
+  end
+
+  describe 'form_attrs_del' do
+    subject { transfer_rule.decorate.form_attrs_del(project) }
+
+    context 'with comakery security token' do
+      let(:transfer_rule) { create(:transfer_rule) }
+      let(:project) { create(:project, token: transfer_rule.token) }
+
+      it { is_expected.to be_a(Hash) }
+    end
+
+    context 'with algorand security token', :vcr do
+      let(:transfer_rule) { create(:algo_sec_dummy_transfer_rule) }
+      let(:project) { create(:project, token: transfer_rule.token) }
+
+      it { is_expected.to be_a(Hash) }
+    end
+  end
+
   describe 'eth_data' do
     let!(:transfer_rule) { create(:transfer_rule) }
 

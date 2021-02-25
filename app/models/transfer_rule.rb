@@ -1,5 +1,6 @@
 class TransferRule < ApplicationRecord
   include BlockchainTransactable
+  include Refreshable
 
   belongs_to :token
   belongs_to :sending_group, class_name: 'RegGroup'

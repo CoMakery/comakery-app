@@ -1,21 +1,21 @@
 class Sign::OreIdController < ApplicationController
   include OreIdCallbacks
-  skip_after_action :verify_authorized, only: :receive, unless: :verify_errorless
-  skip_after_action :verify_authorized, only: :new, unless: :new_transaction_for_award?
+  skip_after_action :verify_authorized, only: %i[new receive]
 
   # POST /sign/ore_id/new
+  # GET /sign/ore_id/new
   def new
     # TODO: Add token admin role to policy token related tx
-    authorize new_transaction.blockchain_transactable, :pay? if new_transaction.is_a?(BlockchainTransactionAward)
+    authorize new_transaction.blockchain_transactable, :pay? if new_transaction_for_award?
 
-    new_transaction.source = current_account.address_for_blockchain(new_transaction.blockchain_transactable._blockchain)
+    new_transaction.source = current_account.address_for_blockchain(new_transaction.blockchain_transactable.token._blockchain)
     new_transaction.save!
 
     redirect_to sign_url(new_transaction)
   end
 
   # GET /sign/ore_id/receive
-  def receive
+  def receive # rubocop:todo Metrics/CyclomaticComplexity
     fallback_state
 
     unless verify_errorless
@@ -29,7 +29,8 @@ class Sign::OreIdController < ApplicationController
       return
     end
 
-    authorize received_transaction.blockchain_transactable, :pay?
+    # TODO: Add token admin role to policy token related tx
+    authorize received_transaction.blockchain_transactable, :pay? if received_transaction_for_award?
 
     if received_transaction.update(tx_hash: params.require(:transaction_id), tx_raw: Base64.decode64(params.require(:signed_transaction)))
       received_transaction.update_status(:pending)
@@ -44,7 +45,7 @@ class Sign::OreIdController < ApplicationController
 
   private
 
-    def new_transaction
+    def new_transaction # rubocop:todo Metrics/CyclomaticComplexity
       @new_transaction ||= if params[:transfer_id]
         BlockchainTransactionAward.new(
           blockchain_transactable: policy_scope(Award).find(params.require(:transfer_id))
@@ -53,15 +54,19 @@ class Sign::OreIdController < ApplicationController
         BlockchainTransactionAccountTokenRecord.new(
           blockchain_transactable: AccountTokenRecord.find(params.require(:account_token_record_id))
         )
+      elsif params[:transfer_rule_id]
+        BlockchainTransactionTransferRule.new(
+          blockchain_transactable: TransferRule.find(params.require(:transfer_rule_id))
+        )
       elsif params[:token_id]
         t = Token.find(params.require(:token_id))
 
         if t.token_frozen?
-          BlockchainTransactionTokenFreeze.new(
+          BlockchainTransactionTokenUnfreeze.new(
             blockchain_transactable: t
           )
         else
-          BlockchainTransactionTokenUnfreeze.new(
+          BlockchainTransactionTokenFreeze.new(
             blockchain_transactable: t
           )
         end
@@ -70,6 +75,10 @@ class Sign::OreIdController < ApplicationController
 
     def new_transaction_for_award?
       new_transaction.is_a?(BlockchainTransactionAward)
+    end
+
+    def received_transaction_for_award?
+      received_transaction.is_a?(BlockchainTransactionAward)
     end
 
     def received_transaction

@@ -33,9 +33,4 @@ class TokenPolicy < ApplicationPolicy
   alias edit? new?
   alias update? new?
   alias fetch_contract_details? new?
-
-  def refresh_transfer_rules_enabled?
-    last_synced_transfer_rule = token.transfer_rules.where.not(synced_at: nil).order(synced_at: :desc).first
-    last_synced_transfer_rule.nil? || last_synced_transfer_rule.synced_at < 10.minutes.ago
-  end
 end

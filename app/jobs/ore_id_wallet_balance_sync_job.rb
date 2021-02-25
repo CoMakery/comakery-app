@@ -23,6 +23,14 @@ class OreIdWalletBalanceSyncJob < ApplicationJob
   end
 
   def reschedule(wallet_provision)
-    self.class.set(wait: wallet_provision.next_sync_allowed_after - Time.current).perform_later(wallet_provision)
+    self.class.set(wait: wait_to_perform(wallet_provision)).perform_later(wallet_provision)
+  end
+
+  def wait_to_perform(wallet_provision)
+    if wallet_provision.next_sync_allowed_after < Time.current
+      0
+    else
+      wallet_provision.next_sync_allowed_after - Time.current
+    end
   end
 end

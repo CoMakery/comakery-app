@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/refreshable_spec'
 
 describe AccountTokenRecord do
+  it_behaves_like 'refreshable'
+
   describe 'associations' do
     let(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
     let(:reg_group) { create(:reg_group, token: token) }
@@ -62,6 +65,12 @@ describe AccountTokenRecord do
 
     it 'requires balance to be not greater than max value' do
       account_token_record = build(:account_token_record, balance: described_class::BALANCE_MAX + 1)
+      expect(account_token_record).not_to be_valid
+    end
+
+    it 'requires max_balance to be present' do
+      account_token_record = build(:account_token_record)
+      account_token_record.max_balance = nil
       expect(account_token_record).not_to be_valid
     end
 

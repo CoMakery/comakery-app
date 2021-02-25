@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/applications/13997710
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 22 Feb 2021 17:44:05 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d0ba4e41caa53dad4b1913ea41c8458951614015844; expires=Wed, 24-Mar-21
+        17:44:04 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '086c7069230000324006271000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=EogBAHEJTP4bkeFVvT%2BsiOuopPqsPhKyUnR2rf8HC0n4aDHrmFMHqE%2FrsHQZ2syiB1dCELj5QQlm%2BOYSdjsKF2fj5rAu4ZSRiEKYnMs9aZJEsh3bqKWPKPr2Oxo%3D"}],"max_age":604800}'
+      Nel:
+      - '{"max_age":604800,"report_to":"cf-nel"}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 625a83550b263240-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"application":{"id":13997710,"params":{"approval-program":"AiAHAAUEAgEPCCYWBXBhdXNlCmdyYW50Um9sZXMPc2V0VHJhbnNmZXJSdWxlFXNldEFkZHJlc3NQZXJtaXNzaW9ucwRtaW50BGJ1cm4IdHJhbnNmZXIGZGV0ZWN0C3RvdGFsU3VwcGx5A2NhcAdyZXNlcnZlBnBhdXNlZAhkZWNpbWFscwZzeW1ib2wEbmFtZQ10cmFuc2Zlckdyb3VwB2JhbGFuY2UFcm9sZXMKbWF4QmFsYW5jZQlsb2NrVW50aWwEcnVsZQZmcm96ZW4xGCISQABiMRkjEkAAmzEZJBJAAJkxGSUSQACdMRkhBBJAAJo2GgAoEkAArTYaACkSQAC3NhoAKhJAAOs2GgArEkABBjYaACcEEkABODYaACcFEkABjjYaACcGEkAByjYaACcHEkACSQAnCCJnJwk2GgAXZycKNhoAF2cnCyJnJww2GgEXZycNNhoCZycONhoDZyInDyEEZiInECJmIicRIQVmIQRDQgJsIkNCAmciJxFiIQYaQ0ICXCJDQgJXIicQImYiJxIiZiInEyJmIicPIQRmIQRDQgI8Jws2GgEXZyInEWIhBhpDQgIqIicRYiEGGjEdIQQSEDYaARchBQ4QQAABADEANhwBEkEACzYaARchBhpAAAEAIQQnETYaARdmIQRDQgHuIicRYiUaQAABACcUNhoBFxZQNhoCFxZQNhoDF2chBENCAcsiJxFiIQQaMR0hBBIQQAABACEEJxU2GgEXZiEEJxI2GgIXZiEEJxM2GgMXZiEEJw82GgQXZiEEQ0IBkCInEWIkGjEdIQQSEDYaARcnCmQOEEAAAQAhBCcSYiISIQQnEmIhBCcQYjYaARcIDxFAAAEAJwonCmQ2GgEXCWchBCcQIQQnEGI2GgEXCGYnCCcJZCcKZAlnIQRDQgExIicRYiQaMR0hBBIQNhoBFyEEJxBiDhBAAAEAJwonCmQ2GgEXCGchBCcQIQQnEGI2GgEXCWYnCCcJZCcKZAlnIQRDQgDsMR0hBBIiJxBiNhoBFwwnC2QRIicVYhEiJxNiMgcPEScUIicPYhZQIQQnD2IWUGQhBAwRJxQiJw9iFlAhBCcPYhZQZDIHDxEhBCcSYiINIQQnEmIhBCcQYjYaARcIDBARFBBAAAEAIicQIicQYjYaARcJZiEEJxAhBCcQYjYaARcIZiEEQ0IAZCEEJxBiNhoBFwwnC2QRIQQnFWIRIQQnE2IyBw8RJxQhBCcPYhZQJScPYhZQZCEEDBEnFCEEJw9iFlAlJw9iFlBkMgcPESEEJxJiIg0lJxJiJScQYjYaARcIDBARFEAAAQAhBEM=","clear-state-program":"AiACAAEmBAdyZXNlcnZlB2JhbGFuY2ULdG90YWxTdXBwbHkDY2FwKChkIiliCGcqK2QoZAlnI0M=","creator":"IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA","global-state":[{"key":"Y2Fw","value":{"bytes":"","type":2,"uint":80000000000000000}},{"key":"ZGVjaW1hbHM=","value":{"bytes":"","type":2,"uint":8}},{"key":"bmFtZQ==","value":{"bytes":"VGhlIFhZWiBUZXN0IFRva2Vu","type":1,"uint":0}},{"key":"cGF1c2Vk","value":{"bytes":"","type":2,"uint":0}},{"key":"cmVzZXJ2ZQ==","value":{"bytes":"","type":2,"uint":79999998893749429}},{"key":"c3ltYm9s","value":{"bytes":"QUJDVEVTVA==","type":1,"uint":0}},{"key":"dG90YWxTdXBwbHk=","value":{"bytes":"","type":2,"uint":1106250571}},{"key":"cnVsZQAAAAAAAAABAAAAAAAAAAE=","value":{"bytes":"","type":2,"uint":1}},{"key":"cnVsZQAAAAAAAAACAAAAAAAAAAI=","value":{"bytes":"","type":2,"uint":2021}},{"key":"cnVsZQAAAAAAAAABAAAAAAAAAAI=","value":{"bytes":"","type":2,"uint":0}},{"key":"cnVsZQAAAAAAAAACAAAAAAAAAAE=","value":{"bytes":"","type":2,"uint":1614129708}}],"global-state-schema":{"num-byte-slice":54,"num-uint":10},"local-state-schema":{"num-byte-slice":8,"num-uint":8}}},"current-round":12508741}
+
+'
+    http_version: null
+  recorded_at: Mon, 22 Feb 2021 17:44:05 GMT
+recorded_with: VCR 5.1.0

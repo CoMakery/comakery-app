@@ -15,4 +15,7 @@ describe TokenType::ComakerySecurityToken, vcr: true do
   specify { expect(described_class.new(**attrs).supports_token_mint?).to be_truthy }
   specify { expect(described_class.new(**attrs).supports_token_burn?).to be_truthy }
   specify { expect(described_class.new(**attrs).supports_token_freeze?).to be_truthy }
+  specify { expect(described_class.new(**attrs).default_reg_group).to eq(0) }
+  specify { expect(described_class.new(**attrs).transfer_rule_sync_job).to eq(BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob) }
+  specify { expect(described_class.new(**attrs).accounts_sync_job).to be_nil }
 end
