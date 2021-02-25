@@ -126,7 +126,7 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
 
           context 'and corrent private wrapping key' do
             context 'and incorrect transport public key' do
-              let(:transport_public_key) { '0' }
+              let(:transport_public_key) { '' }
 
               it { is_expected.to have_http_status(:bad_request) }
             end
