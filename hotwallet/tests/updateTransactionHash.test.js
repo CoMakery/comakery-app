@@ -10,13 +10,14 @@ const envs = {
   checkForNewTransactionsDelay: 30
 }
 const blockchainTransaction = { id: 99, network: "algorand_test", txHash: "TXHASH" }
+const hwApi = new hwUtils.ComakeryApi(envs)
 
 jest.mock("axios")
 
 test("API returns a blockchain transaction", async () => {
   expect.assertions(1)
   axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: blockchainTransaction }))
-  res = await hwUtils.updateTransactionHash(blockchainTransaction, envs)
+  res = await hwApi.updateTransactionHash(blockchainTransaction, envs)
 
   expect(res).toEqual(blockchainTransaction)
 })
@@ -31,7 +32,7 @@ test("API returns failed response", async () => {
   }
 
   axios.put.mockReturnValue(Promise.reject(data));
-  res = await hwUtils.updateTransactionHash(blockchainTransaction, envs)
+  res = await hwApi.updateTransactionHash(blockchainTransaction, envs)
 
   expect(res).toEqual({})
 })

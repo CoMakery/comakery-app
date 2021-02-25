@@ -9,7 +9,6 @@ class HotWallet {
     this.mnemonic = mnemonic
   }
 }
-
 exports.HotWallet = HotWallet
 
 class HotWalletRedis {
@@ -77,7 +76,6 @@ class HotWalletRedis {
     return await (promisify(this.client.del).bind(this.client))(...args)
   }
 }
-
 exports.HotWalletRedis = HotWalletRedis
 
 class AlgorandBlockchain {
@@ -126,7 +124,6 @@ class AlgorandBlockchain {
     return new HotWallet(account.addr, mnemonic)
   }
 }
-
 exports.AlgorandBlockchain = AlgorandBlockchain
 
 class ComakeryApi {
@@ -148,7 +145,7 @@ class ComakeryApi {
     }
   }
 
-  async getNextTransactionToSignFromAPI(hotWalletAddress) {
+  async getNextTransactionToSign(hotWalletAddress) {
     const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions`
     const params = { body: { data: { transaction: { source: hotWalletAddress } } } }
     const config = { headers: { "API-Transaction-Key": this.envs.projectApiKey } }
@@ -161,13 +158,32 @@ class ComakeryApi {
         return {}
       }
     } catch (error) {
-      console.error(`getNextTransactionToSignFromAPI call failed with ${error.response.status} (${error.response.statusText}) data:`)
+      console.error(`getNextTransactionToSign call failed with ${error.response.status} (${error.response.statusText}) data:`)
+      console.error(error.response.data)
+      return {}
+    }
+  }
+
+  async updateTransactionHash(blockchainTransaction) {
+    const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions/${blockchainTransaction.id}`
+    const params = { body: { data: { transaction: { tx_hash: blockchainTransaction.txHash } } } }
+    const config = { headers: { "API-Transaction-Key": this.envs.projectApiKey } }
+
+    try {
+      const res = await axios.put(blockchainTransactionsUrl, params, config)
+      if (res.status == 200) {
+        console.log("Transaction hash was successfully updated")
+        return res.data
+      } else {
+        return {}
+      }
+    } catch (error) {
+      console.error(`updateTransactionHash call failed with ${error.response.status} (${error.response.statusText}) data:`)
       console.error(error.response.data)
       return {}
     }
   }
 }
-
 exports.ComakeryApi = ComakeryApi
 
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
@@ -222,14 +238,15 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, redis
   const hwRedis = new HotWalletRedis(envs, redisClient)
   const hwApi = new ComakeryApi(envs)
   const hwAddress = await hwRedis.hotWalletAddress()
-  const transactionToSign = await hwApi.getNextTransactionToSignFromAPI(hwAddress)
+  const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
 
   if (!exports.isEmptyObject(transactionToSign)) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
     const tx = await exports.singAndSendTx(transactionToSign, envs, redisClient)
     if (!exports.isEmptyObject(tx)) {
+      const hwApi = new ComakeryApi(envs)
       transactionToSign.txHash = tx.transactionId
-      await exports.updateTransactionHash(transactionToSign, envs)
+      await hwApi.updateTransactionHash(transactionToSign)
     } else {
       return false
     }
@@ -295,26 +312,6 @@ exports.optInToApp = async function optInToApp(network, appIndex, envs, redisCli
     return tx_result
   } catch (err) {
     console.error(err)
-    return {}
-  }
-}
-
-exports.updateTransactionHash = async function updateTransactionHash(blockchainTransaction, envs) {
-  const blockchainTransactionsUrl = `${envs.comakeryServerUrl}/api/v1/projects/${envs.projectId}/blockchain_transactions/${blockchainTransaction.id}`
-  const params = { body: { data: { transaction: { tx_hash: blockchainTransaction.txHash } } } }
-  const config = { headers: { "API-Transaction-Key": envs.projectApiKey } }
-
-  try {
-    const res = await axios.put(blockchainTransactionsUrl, params, config)
-    if (res.status == 200) {
-      console.log("Transaction hash was successfully updated")
-      return res.data
-    } else {
-      return {}
-    }
-  } catch (error) {
-    console.error(`updateTransactionHash call failed with ${error.response.status} (${error.response.statusText}) data:`)
-    console.error(error.response.data)
     return {}
   }
 }
