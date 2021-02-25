@@ -236,12 +236,15 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def transfers_donut_chart(transfers) # rubocop:todo Metrics/CyclomaticComplexity
+    completed_sum = awards.completed.sum(&:total_amount)
+    filtered_sum = transfers.sum(&:total_amount)
+
     chart = transfers.includes([:transfer_type]).group_by(&:transfer_type).map do |type, set|
       {
         name: type.name,
         value: set.sum(&:total_amount),
-        ratio: ratio_pretty(set.sum(&:total_amount), awards.completed.sum(&:total_amount)),
-        ratio_filtered: ratio_pretty(set.sum(&:total_amount), transfers.sum(&:total_amount))
+        ratio: ratio_pretty(set.sum(&:total_amount), completed_sum),
+        ratio_filtered: ratio_pretty(set.sum(&:total_amount), filtered_sum)
       }
     end
 
