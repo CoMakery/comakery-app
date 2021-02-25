@@ -37,6 +37,14 @@ class HotWalletRedis {
     }
   }
 
+  async hotWalletAddress() {
+    return await this.hget(this.walletKeyName(), "address")
+  }
+
+  async hotWalletMnenonic() {
+    return await this.hget(this.walletKeyName(), "mnemonic")
+  }
+
   async isHotWalletCreated() {
     return (await this.hotWallet()) !== undefined
   }
@@ -184,11 +192,8 @@ exports.runServer = async function runServer(envs, redisClient) {
 
 exports.waitForNewTransaction = async function waitForNewTransaction(envs, redisClient) {
   console.log("Checking for a new transaction to send...")
-
-  const hget = promisify(redisClient.hget).bind(redisClient)
-  let hwAddress
-  await hget(exports.keyName(envs.projectId), "address").then(function (res) { hwAddress = res })
-
+  const hwRedis = new HotWalletRedis(envs, redisClient)
+  const hwAddress = await hwRedis.hotWalletAddress()
   const transactionToSign = await exports.getNextTransactionToSignFromAPI(hwAddress, envs)
 
   if (!exports.isEmptyObject(transactionToSign)) {
@@ -207,9 +212,8 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, redis
 }
 
 exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, redisClient) {
-  const hget = promisify(redisClient.hget).bind(redisClient)
-  let mnemonic
-  await hget(exports.keyName(envs.projectId), "mnemonic").then(function (res) { mnemonic = res })
+  const hwRedis = new HotWalletRedis(envs, redisClient)
+  const mnemonic = await hwRedis.hotWalletMnenonic()
 
   const endpoints = exports.endpointsByNetwork(transactionToSign.network, envs)
   const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)

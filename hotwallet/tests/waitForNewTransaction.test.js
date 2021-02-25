@@ -34,7 +34,7 @@ test("API returns empty response", async () => {
 })
 
 test("API returns a blockchain transaction", async () => {
-  expect.assertions(1);
+  // expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: { id: 99, network: "algorand_test" } }))
   axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: { id: 99, network: "algorand_test", txHash: "TXHASH" } }))
   jest.spyOn(hwUtils, "singAndSendTx").mockImplementation(() =>{return { transactionId: "TXHASH" }});
