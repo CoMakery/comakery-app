@@ -88,6 +88,8 @@ class OreIdAccount < ApplicationRecord
   end
 
   def sync_password_update
+    return unless unclaimed?
+
     if service.password_updated?
       ok!
     else

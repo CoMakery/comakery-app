@@ -74,12 +74,15 @@ class Dashboard::AccountsController < ApplicationController
 
     def set_accounts
       @page = (params[:page] || 1).to_i
-      @q = @project.interested.includes(
-        :verifications,
-        :awards,
-        :latest_verification,
-        account_token_records: [:reg_group]
-      ).where.not(account_token_records: { id: nil }).ransack(params[:q])
+      @q = @project.interested
+                   .joins('inner join projects on projects.id = interests.project_id')
+                   .joins('inner join account_token_records on account_token_records.token_id = projects.token_id and account_token_records.account_id = accounts.id')
+                   .includes(
+                     :verifications,
+                     :awards,
+                     :latest_verification,
+                     account_token_records: [:reg_group]
+                   ).ransack(params[:q])
 
       @accounts_all = @q.result
       @accounts_all.size

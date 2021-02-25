@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
-  subject { create(:ore_id, skip_jobs: true) }
+  subject { create(:ore_id, skip_jobs: true, state: 'unclaimed') }
 
   context 'when sync is allowed' do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }
