@@ -118,6 +118,13 @@ class AlgorandBlockchain {
         console.error("Unknown or unsupported network")
     }
   }
+
+  generateAlgorandKeyPair() {
+    const account = algosdk.generateAccount()
+    const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
+
+    return new HotWallet(account.addr, mnemonic)
+  }
 }
 
 exports.AlgorandBlockchain = AlgorandBlockchain
@@ -146,13 +153,6 @@ exports.isEmptyObject = function isEmptyObject(obj) {
 
 exports.sleep = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-exports.generateAlgorandKeyPair = function generateAlgorandKeyPair() {
-  const account = algosdk.generateAccount()
-  const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
-
-  return new HotWallet(account.addr, mnemonic)
 }
 
 exports.registerHotWallet = async function registerHotWallet(wallet, envs, redisClient) {
@@ -184,7 +184,8 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
     console.log("wallet already created, do nothing...")
   } else {
     console.log("Key file does not exists, generating...")
-    const newWallet = exports.generateAlgorandKeyPair()
+    const hwAlgorand = new AlgorandBlockchain(envs)
+    const newWallet = hwAlgorand.generateAlgorandKeyPair()
     await exports.registerHotWallet(newWallet, envs, redisClient)
   }
   return true
