@@ -14,6 +14,7 @@ jest.mock("axios")
 
 const redisClient = redis.createClient()
 const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
+const hwApi = new hwUtils.ComakeryApi(envs)
 
 beforeEach(async () => {
   await hwRedis.deleteCurrentKey()
@@ -26,9 +27,9 @@ afterAll(() => {
 test("API returns successfull response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: {} }))
-  res = await hwUtils.registerHotWallet(wallet, envs, redisClient)
+  res = await hwApi.registerHotWallet(wallet)
 
-  expect(res).toBe(true)
+  expect(res.status).toEqual(201)
 })
 
 test("API returns failed response", async () => {
@@ -41,7 +42,7 @@ test("API returns failed response", async () => {
   }
 
   axios.post.mockReturnValue(Promise.reject(data));
-  res = await hwUtils.registerHotWallet(wallet, envs, redisClient)
+  res = await hwApi.registerHotWallet(wallet)
 
   expect(res).toBe(false)
 })
