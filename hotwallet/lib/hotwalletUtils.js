@@ -262,7 +262,6 @@ exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, re
   const mnemonic = await hwRedis.hotWalletMnenonic()
 
   const endpoints = hwAlgorand.endpointsByNetwork(transactionToSign.network)
-  console.log(endpoints);
   const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
   const { sk } = algosdk.mnemonicToSecretKey(mnemonic)
 
