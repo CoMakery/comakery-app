@@ -30,13 +30,13 @@ test("successfully writed keys to redis", async () => {
   expect(res).toBe(true)
 
   const storedKeys = promisify(redisClient.hgetall).bind(redisClient);
-  const keys = await storedKeys(hwUtils.keyName(envs.projectId))
+  const keys = await storedKeys(hwRedis.walletKeyName())
   expect(keys.address.length).toEqual(58)
   expect(keys.mnemonic.length).toBeGreaterThan(100)
 })
 
 test("don't overwrite existing keys", async () => {
-  const keyName = hwUtils.keyName(envs.projectId)
+  const keyName = hwRedis.walletKeyName()
   const wallet = { address: "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", mnemonic: "mnemonic phrase" }
   const hset = promisify(redisClient.hset).bind(redisClient);
   await hset(keyName, "address", wallet.address, "mnemonic", wallet.mnemonic)
