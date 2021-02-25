@@ -203,6 +203,7 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
     easy_shell (0.0.1)
+    ecies (0.3.0)
     ed25519 (1.2.4)
     erb_lint (0.0.35)
       activesupport
@@ -726,6 +727,7 @@ DEPENDENCIES
   dotenv-rails
   draper
   easy_shell
+  ecies (~> 0.3.0)
   ed25519 (~> 1.2)
   erb_lint (~> 0.0.35)
   eth (~> 0.4.10)

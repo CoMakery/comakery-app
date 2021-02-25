@@ -81,13 +81,14 @@ class OreIdService
     response['appAccessToken']
   end
 
-  def authorization_url(callback_url, state = nil)
+  def authorization_url(callback_url, state = nil, recovery_token = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
       callback_url: callback_url,
       background_color: 'FFFFFF',
-      state: state
+      state: state,
+      recovery_token: recovery_token
     }
 
     append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"

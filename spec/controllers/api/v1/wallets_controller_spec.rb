@@ -252,7 +252,8 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
           'background_color' => 'FFFFFF',
           'callback_url' => 'https://localhost',
           'provider' => 'email',
-          'state' => request_signature,
+          'recovery_token' => request_signature,
+          'state' => '',
           'hmac' => build(:ore_id_hmac, parsed_response['reset_url'], url_encode: false)
         )
         expect(wallet.ore_id_account.reload.state).to eq 'unclaimed'
