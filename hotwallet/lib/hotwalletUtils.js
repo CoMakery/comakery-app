@@ -47,6 +47,12 @@ class HotWalletRedis {
     return true
   }
 
+  async deleteCurrentKey() {
+    await this.del(this.walletKeyName())
+    console.log(`Wallet keys has been deleted: ${this.walletKeyName()}`)
+    return true
+  }
+
   async hset(...args) {
     return await (promisify(this.client.hset).bind(this.client))(...args)
   }
@@ -57,6 +63,10 @@ class HotWalletRedis {
 
   async hgetall(...args) {
     return await (promisify(this.client.hgetall).bind(this.client))(...args)
+  }
+
+  async del(...args) {
+    return await (promisify(this.client.del).bind(this.client))(...args)
   }
 }
 
@@ -164,13 +174,6 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
     await exports.registerHotWallet(newWallet, envs, redisClient)
   }
   return true
-}
-
-exports.deleteCurrentKey = async function deleteCurrentKey(envs, redisClient) {
-  const keyName = exports.keyName(envs.projectId)
-  const deleteKey = promisify(redisClient.del).bind(redisClient)
-  await deleteKey(keyName)
-  console.log(`Wallet keys has been deleted: ${keyName}`)
 }
 
 exports.runServer = async function runServer(envs, redisClient) {

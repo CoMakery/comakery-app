@@ -13,9 +13,10 @@ const envs = {
 jest.mock("axios")
 
 const redisClient = redis.createClient();
+const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
 
 beforeEach(async () => {
-  await hwUtils.deleteCurrentKey(envs, redisClient)
+  await hwRedis.deleteCurrentKey()
 })
 
 afterAll(() => {
