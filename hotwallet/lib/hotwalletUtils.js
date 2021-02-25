@@ -147,6 +147,25 @@ class ComakeryApi {
       return false
     }
   }
+
+  async getNextTransactionToSignFromAPI(hotWalletAddress) {
+    const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions`
+    const params = { body: { data: { transaction: { source: hotWalletAddress } } } }
+    const config = { headers: { "API-Transaction-Key": this.envs.projectApiKey } }
+
+    try {
+      const res = await axios.post(blockchainTransactionsUrl, params, config)
+      if (res.status == 201) {
+        return res.data
+      } else {
+        return {}
+      }
+    } catch (error) {
+      console.error(`getNextTransactionToSignFromAPI call failed with ${error.response.status} (${error.response.statusText}) data:`)
+      console.error(error.response.data)
+      return {}
+    }
+  }
 }
 
 exports.ComakeryApi = ComakeryApi
@@ -201,8 +220,9 @@ exports.runServer = async function runServer(envs, redisClient) {
 exports.waitForNewTransaction = async function waitForNewTransaction(envs, redisClient) {
   console.log("Checking for a new transaction to send...")
   const hwRedis = new HotWalletRedis(envs, redisClient)
+  const hwApi = new ComakeryApi(envs)
   const hwAddress = await hwRedis.hotWalletAddress()
-  const transactionToSign = await exports.getNextTransactionToSignFromAPI(hwAddress, envs)
+  const transactionToSign = await hwApi.getNextTransactionToSignFromAPI(hwAddress)
 
   if (!exports.isEmptyObject(transactionToSign)) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
@@ -275,25 +295,6 @@ exports.optInToApp = async function optInToApp(network, appIndex, envs, redisCli
     return tx_result
   } catch (err) {
     console.error(err)
-    return {}
-  }
-}
-
-exports.getNextTransactionToSignFromAPI = async function getNextTransactionToSignFromAPI(hwAddress, envs) {
-  const blockchainTransactionsUrl = `${envs.comakeryServerUrl}/api/v1/projects/${envs.projectId}/blockchain_transactions`
-  const params = { body: { data: { transaction: { source: hwAddress } } } }
-  const config = { headers: { "API-Transaction-Key": envs.projectApiKey } }
-
-  try {
-    const res = await axios.post(blockchainTransactionsUrl, params, config)
-    if (res.status == 201) {
-      return res.data
-    } else {
-      return {}
-    }
-  } catch (error) {
-    console.error(`getNextTransactionToSignFromAPI call failed with ${error.response.status} (${error.response.statusText}) data:`)
-    console.error(error.response.data)
     return {}
   }
 }
