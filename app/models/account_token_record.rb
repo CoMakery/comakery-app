@@ -21,7 +21,7 @@ class AccountTokenRecord < ApplicationRecord
   validates_with SecurityTokenValidator
   validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
   validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
-  validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
+  validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }
 
   enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
 
