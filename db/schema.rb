@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_01_142127) do
+ActiveRecord::Schema.define(version: 2021_02_24_145046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,6 +138,13 @@ ActiveRecord::Schema.define(version: 2021_02_01_142127) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["api_authorizable_type", "api_authorizable_id"], name: "index_api_keys_on_api_authorizable_type_and_api_authorizable_id"
+  end
+
+  create_table "api_ore_id_wallet_recoveries", force: :cascade do |t|
+    t.bigint "api_request_log_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_request_log_id"], name: "index_api_ore_id_wallet_recoveries_on_api_request_log_id", unique: true
   end
 
   create_table "api_request_logs", force: :cascade do |t|
@@ -608,8 +615,8 @@ ActiveRecord::Schema.define(version: 2021_02_01_142127) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ore_id_account_id"
-    t.string "name"
     t.boolean "primary_wallet", default: false
+    t.string "name"
     t.bigint "project_id"
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
     t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true
@@ -625,6 +632,7 @@ ActiveRecord::Schema.define(version: 2021_02_01_142127) do
   add_foreign_key "account_token_records", "wallets"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "api_ore_id_wallet_recoveries", "api_request_logs"
   add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
   add_foreign_key "awards", "wallets", column: "recipient_wallet_id"

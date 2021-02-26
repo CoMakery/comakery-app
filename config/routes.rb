@@ -183,7 +183,11 @@ Rails.application.routes.draw do
           end
         end
       end
-      get 'wallet_recovery/public_wrapping_key', to: 'wallet_recovery#public_wrapping_key'
+
+      namespace :wallet_recovery do
+        get :public_wrapping_key
+        post :recover
+      end
     end
   end
 

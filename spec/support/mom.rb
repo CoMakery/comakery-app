@@ -1163,6 +1163,18 @@ def wallet_provision(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
   WalletProvision.new(params.merge(attrs))
 end
 
+def api_request_log(**attrs)
+  params = {
+    signature: 'test_signature',
+    ip: IPAddr.new('0.0.0.0'),
+    body: {
+      test: :test
+    }
+  }
+
+  ApiRequestLog.new(params.merge(attrs))
+end
+
 def ore_id_hmac(url, url_encode: true)
   url_wo_hmac = /^(.+?)(&hmac=\S+|)$/.match(url)[1]
   hmac = OpenSSL::HMAC.digest('SHA256', ENV['ORE_ID_API_KEY'], url_wo_hmac)
