@@ -48,6 +48,11 @@
       "description": "Timeout in second between checking for new transactions to send",
       "required": true,
       "value": "30"
+    },
+    "OPT_IN_APP": {
+      "description": "Algorand App index. The hot wallet will automatically opt-in to that App",
+      "required": true,
+      "value": "30"
     }
   }
 }

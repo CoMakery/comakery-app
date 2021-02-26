@@ -8,7 +8,8 @@ const envs = {
   comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
   purestakeApi: process.env.PURESTAKE_API,
   redisUrl: process.env.REDIS_URL,
-  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY)
+  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
+  optInApp: parseInt(process.env.OPT_IN_APP)
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
@@ -21,5 +22,10 @@ async function initialize() {
 
 (async () => {
   await initialize()
-  hwUtils.runServer(envs, redisClient)
+
+  // hwUtils.runServer(envs, redisClient)
+  console.log(
+    "auto opt in:",
+    await hwUtils.autoOptIn(envs, redisClient)
+  )
 })();
