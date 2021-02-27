@@ -96,7 +96,7 @@ resource 'XI. Wallet Recovery' do
     end
 
     context '401' do
-      let(:recovery_token) { '0' }
+      let(:recovery_token) { '' }
 
       example 'RECOVER DATA ENCRYPTED WITH PUBLIC WRAPPING KEY – INVALID RECOVERY TOKEN' do
         explanation 'Returns array of errors'
