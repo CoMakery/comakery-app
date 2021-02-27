@@ -96,7 +96,7 @@ resource 'XI. Wallet Recovery' do
     end
 
     context '401' do
-      let(:recovery_token) { '' }
+      let(:recovery_token) { '0' }
 
       example 'RECOVER DATA ENCRYPTED WITH PUBLIC WRAPPING KEY – INVALID RECOVERY TOKEN' do
         explanation 'Returns array of errors'
@@ -128,7 +128,7 @@ resource 'XI. Wallet Recovery' do
     end
 
     context '400' do
-      let(:transport_public_key) { '0' }
+      let(:transport_public_key) { '' }
 
       example 'RECOVER DATA ENCRYPTED WITH PUBLIC WRAPPING KEY – INVALID TRANSPORT PUBLIC KEY' do
         explanation 'Returns array of errors'
