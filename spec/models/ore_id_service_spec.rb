@@ -170,9 +170,9 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     specify do
-      url = 'https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=dummystate'
+      url = 'https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&recovery_token=dummmyrecovery&state=dummystate'
       hmac = build(:ore_id_hmac, url)
-      expect(subject.authorization_url('localhost', 'dummystate')).to eq("#{url}&hmac=#{hmac}")
+      expect(subject.authorization_url('localhost', 'dummystate', 'dummmyrecovery')).to eq("#{url}&hmac=#{hmac}")
     end
   end
 

@@ -55,7 +55,7 @@ class Api::V1::WalletsController < Api::V1::ApiController
   # POST /api/v1/accounts/1/wallets/1/password_reset
   def password_reset
     ore_id_account = wallet.ore_id_account
-    @auth_url = ore_id_account.service.authorization_url(redirect_url, params.dig(:proof, :signature))
+    @auth_url = ore_id_account.service.authorization_url(redirect_url, nil, params.dig(:proof, :signature))
     ore_id_account.unclaimed!
     ore_id_account.schedule_password_update_sync
 
