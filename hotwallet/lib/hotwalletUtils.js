@@ -62,6 +62,12 @@ class HotWalletRedis {
     return true
   }
 
+  async saveOptedInApps(optedInApps) {
+    await this.hset(this.walletKeyName(), "optedInApps", optedInApps)
+    console.log(`Opted-in apps (${optedInApps}) has been saved into ${this.walletKeyName()}`)
+    return true
+  }
+
   async deleteCurrentKey() {
     await this.del(this.walletKeyName())
     console.log(`Wallet keys has been deleted: ${this.walletKeyName()}`)
@@ -87,8 +93,13 @@ class HotWalletRedis {
 exports.HotWalletRedis = HotWalletRedis
 
 class AlgorandBlockchain {
-  constructor(envs) {
+  constructor(network = "algorand_network", envs) {
     this.envs = envs
+    const endpoints = this.endpointsByNetwork(network)
+    this.algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
+    // Need to cache values gotten from blockchain
+    this.optedInApps = {}
+    this.balances = {}
   }
 
   algoMainnetEndpoints() {
@@ -130,6 +141,40 @@ class AlgorandBlockchain {
     const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
 
     return new HotWallet(account.addr, mnemonic)
+  }
+
+  async connect() {
+    if (!this.algoChain.isConnected) {
+      await this.algoChain.connect()
+    }
+  }
+
+  async getOptedInAppsForHotWallet(hotWalletAddress) {
+    if (hotWalletAddress in this.optedInApps) { return this.optedInApps[hotWalletAddress] }
+
+    await this.connect()
+    const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+    this.optedInApps[hotWalletAddress] = hwAccountDetails.account['apps-local-state'].filter(app => app.deleted == false).map(app => app.id)
+    return this.optedInApps[hotWalletAddress]
+  }
+
+  async getBalanceForHotWallet(hotWalletAddress) {
+    if (hotWalletAddress in this.balances) { return this.balances[hotWalletAddress] }
+
+    await this.connect()
+    const blockchainBalance = await this.algoChain.fetchBalance(hotWalletAddress, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
+    this.balances[hotWalletAddress] = parseFloat(blockchainBalance.balance)
+    return this.balances[hotWalletAddress]
+  }
+
+  async isOptedInToCurrentApp(hotWalletAddress) {
+    const optedInApps = await this.getOptedInAppsForHotWallet(hotWalletAddress)
+    return optedInApps.includes(this.envs.optInApp)
+  }
+
+  async enoughBalanceToOptInForHotWallet(hotWalletAddress) {
+    const balance = await this.getBalanceForHotWallet(hotWalletAddress)
+    return balance > 0.1
   }
 }
 exports.AlgorandBlockchain = AlgorandBlockchain
@@ -326,21 +371,27 @@ exports.optInToApp = async function optInToApp(network, appIndex, envs, redisCli
 }
 
 exports.autoOptIn = async function autoOptIn(envs, redisClient) {
-  const walletRedis = new HotWalletRedis(envs, redisClient)
-  const hw = await walletRedis.hotWallet()
-  // Already opted-in
+  const hwRedis = new HotWalletRedis(envs, redisClient)
+  const hw = await hwRedis.hotWallet()
+  // Already opted-in and we already know about it
   if (hw.isOptedInToApp(envs.optInApp)) { return hw.optedInApps }
 
-  // TODO:
-  // 1. Check if it already opted in on blockchain, add to "optedInApps" if exists
-  // 2. Check if the wallet has enough balance to send opt-in transaction. If so send the transaction and add to "optedInApps"
-
   const network = 'algorand_test' // TODO: Extract it to ENV
-  const hwAlgorand = new AlgorandBlockchain(envs)
-  const endpoints = hwAlgorand.endpointsByNetwork(network)
-  const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
-  await algoChain.connect()
+  const hwAlgorand = new AlgorandBlockchain(network, envs)
 
-  const balance = await algoChain.fetchBalance(hw.address, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
-  console.log(balance)
+  // Check if already opted-in on blockchain
+  if (await hwAlgorand.isOptedInToCurrentApp(hw.address)) {
+    // Save it in Redis and return
+    const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
+    hwRedis.saveOptedInApps(optedInApps)
+    return optedInApps
+  }
+
+  // Check if the wallet has enough balance to send opt-in transaction
+  if (await hwAlgorand.enoughBalanceToOptInForHotWallet(hw.address)) {
+    // TODO:
+    // sign and send opt-in transaction
+    // save opted-in transaction to Redis
+    // return optedInApps
+  }
 }
