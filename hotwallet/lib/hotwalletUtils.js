@@ -325,26 +325,25 @@ exports.runServer = async function runServer(envs, redisClient) {
     const optedIn = await hwAlgorand.isOptedInToCurrentApp(hw.address)
 
     if (optedIn) {
-      await exports.waitForNewTransaction(envs, redisClient)
+      await exports.waitForNewTransaction(envs, hwRedis)
     } else {
       console.log("The Hot Wallet doesn't opted-in to the App. Trying to opt-in")
-      await exports.autoOptIn(envs, redisClient)
+      await exports.autoOptIn(envs, hwRedis)
     }
 
     await exports.sleep(envs.checkForNewTransactionsDelay * 1000) // 30 seconds by default
   }
 }
 
-exports.waitForNewTransaction = async function waitForNewTransaction(envs, redisClient) {
+exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRedis) {
   console.log("Checking for a new transaction to send...")
-  const hwRedis = new HotWalletRedis(envs, redisClient)
   const hwApi = new ComakeryApi(envs)
   const hwAddress = await hwRedis.hotWalletAddress()
   const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
 
   if (!exports.isEmptyObject(transactionToSign)) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
-    const tx = await exports.singAndSendTx(transactionToSign, envs, redisClient)
+    const tx = await exports.singAndSendTx(transactionToSign, envs, hwRedis)
     if (!exports.isEmptyObject(tx)) {
       const hwApi = new ComakeryApi(envs)
       transactionToSign.txHash = tx.transactionId
@@ -358,8 +357,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, redis
   return true
 }
 
-exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, redisClient) {
-  const hwRedis = new HotWalletRedis(envs, redisClient)
+exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, hwRedis) {
   const hwAlgorand = new AlgorandBlockchain(envs)
   const mnemonic = await hwRedis.hotWalletMnenonic()
 
@@ -386,8 +384,7 @@ exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, re
   }
 }
 
-exports.autoOptIn = async function autoOptIn(envs, redisClient) {
-  const hwRedis = new HotWalletRedis(envs, redisClient)
+exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
   const hw = await hwRedis.hotWallet()
   // Already opted-in and we already know about it
   if (hw.isOptedInToApp(envs.optInApp)) {
@@ -395,7 +392,6 @@ exports.autoOptIn = async function autoOptIn(envs, redisClient) {
     return hw.optedInApps
   }
 
-  const network = 'algorand_test' // TODO: Extract it to ENV
   const hwAlgorand = new AlgorandBlockchain(envs)
 
   // Check if already opted-in on blockchain
