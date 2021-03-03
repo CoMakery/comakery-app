@@ -19,9 +19,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     if @transaction&.persisted?
       render 'show.json', status: :created
     else
-      # TODO: either no_content or return error. Can't be both
-      # @errors = { blockchain_transaction: 'No transactables available' }
-      # render 'api/v1/error.json', status: :no_content
       head :no_content
     end
   end
@@ -38,7 +35,8 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # DELETE /api/v1/projects/1/blockchain_transactions/1
   def destroy
-    transaction.update_status(:cancelled, transaction_update_params[:status_message])
+    status = transaction_failed? ? :failed : :cancelled
+    transaction.update_status(status, transaction_update_params[:status_message])
 
     render 'show.json', status: :ok
   end
@@ -95,6 +93,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
         :tx_hash,
         :status_message
       )
+    end
+
+    def transaction_failed?
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
+        :failed
+      ).present?
     end
 
     def verify_hash

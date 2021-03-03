@@ -150,8 +150,19 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
   end
 
   describe 'DELETE #destroy', vcr: true do
+    context 'with failed param' do
+      it 'marks transaction as failed' do
+        params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash, failed: 'true' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
+        params[:project_id] = project.id
+        params[:id] = blockchain_transaction.id
+
+        delete :destroy, params: params
+        expect(blockchain_transaction.reload.status).to eq('failed')
+      end
+    end
+
     it 'marks transaction as cancelled' do
-      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
       params[:project_id] = project.id
       params[:id] = blockchain_transaction.id
 
@@ -160,7 +171,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
 
     it 'returns a success response' do
-      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
       params[:project_id] = project.id
       params[:id] = blockchain_transaction.id
 
