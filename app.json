@@ -53,6 +53,11 @@
       "description": "Algorand App index. The hot wallet will automatically opt-in to that App",
       "required": true,
       "value": "30"
+    },
+    "BLOCKCHAIN_NETWORK": {
+      "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta",
+      "required": true,
+      "value": "algorand"
     }
   }
 }
