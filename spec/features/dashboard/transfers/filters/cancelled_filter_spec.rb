@@ -8,6 +8,8 @@ describe 'test_cancelled_filter', js: true do
   [1, 6, 9].each do |number_of_transfers|
     context "With #{number_of_transfers} cancelled transfers" do
       it 'Returns correct number of transfers after applying filter' do
+        skip 'The Chart was disabled'
+
         number_of_transfers.times do
           create(:award, status: :cancelled, award_type: project_award_type)
         end
