@@ -2,9 +2,10 @@
   <div data-controller="transfer-form" data-transfer-form-decimal-places="<%= @project.token ? @project.token.decimal_places : 0 %>">
     <%= render partial: "filters" %>
 
-    <% if @transfers_all.present? %>
-      <%= render partial: "chart" %>
-    <% end %>
+    <%# TODO: Uncomment me after the chart perfomance will be fixed %>
+    <%# if @transfers_all.present? %>
+      <%#= render partial: "chart" %>
+    <%# end %>
 
     <div class="row">
       <div class="col-6">
