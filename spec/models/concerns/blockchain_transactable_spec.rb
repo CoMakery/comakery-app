@@ -14,13 +14,27 @@ shared_examples 'blockchain_transactable' do
 
   describe 'blockchain_transaction_class' do
     subject { described_class.new.blockchain_transaction_class }
+    let(:classname) do
+      if described_class == Token
+        'BlockchainTransactionTokenFreeze'
+      else
+        "BlockchainTransaction#{described_class}"
+      end
+    end
 
-    it { is_expected.to eq("BlockchainTransaction#{described_class}".constantize) }
+    it { is_expected.to eq(classname.constantize) }
   end
 
   describe 'new_blockchain_transaction' do
     subject { described_class.new.new_blockchain_transaction({}) }
+    let(:classname) do
+      if described_class == Token
+        'BlockchainTransactionTokenFreeze'
+      else
+        "BlockchainTransaction#{described_class}"
+      end
+    end
 
-    it { is_expected.to be_a("BlockchainTransaction#{described_class}".constantize) }
+    it { is_expected.to be_a(classname.constantize) }
   end
 end
