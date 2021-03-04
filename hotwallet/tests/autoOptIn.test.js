@@ -1,4 +1,3 @@
-const axios = require("axios")
 const redis = require("redis")
 const hwUtils = require("../lib/hotwalletUtils")
 const envs = {
@@ -12,11 +11,8 @@ const envs = {
   blockchainNetwork: "algorand_test"
 }
 
-jest.mock("axios")
-
 const redisClient = redis.createClient()
 const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
-// const hwApi = new hwUtils.ComakeryApi(envs)
 
 beforeEach(async () => {
   await hwRedis.deleteCurrentKey()
