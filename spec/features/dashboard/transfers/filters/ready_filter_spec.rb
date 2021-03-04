@@ -35,6 +35,8 @@ describe 'test_ready_filter', js: true do
   end
 
   it 'orders by issuer first_name' do
+    skip 'The Chart was disabled'
+
     issuer1 = create(:account, first_name: 'John', last_name: 'Snow')
     issuer2 = create(:account, first_name: 'Ned', last_name: 'Stark')
     create(:transfer, award_type: project_award_type, account: owner, issuer: issuer1)
