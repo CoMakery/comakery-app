@@ -62,6 +62,7 @@ class HotWalletRedis {
   }
 
   async saveNewHotWallet(wallet) {
+
     await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
     return true
@@ -180,6 +181,7 @@ class AlgorandBlockchain {
   }
 
   async isOptedInToCurrentApp(hotWalletAddress) {
+    console.log("CALLED!!!")
     const optedInApps = await this.getOptedInAppsForHotWallet(hotWalletAddress)
     return optedInApps.includes(this.envs.optInApp)
   }
@@ -386,6 +388,7 @@ exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, hw
 
 exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
   const hw = await hwRedis.hotWallet()
+
   // Already opted-in and we already know about it
   if (hw.isOptedInToApp(envs.optInApp)) {
     console.log("HW opted-in. Cached in Redis")
@@ -399,7 +402,7 @@ exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
 
     // Save it in Redis and return
     const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
-    hwRedis.saveOptedInApps(optedInApps)
+    await hwRedis.saveOptedInApps(optedInApps)
     return optedInApps
   }
 
@@ -413,7 +416,7 @@ exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
 
       // Successfully opted-in
       const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
-      hwRedis.saveOptedInApps(optedInApps)
+      await hwRedis.saveOptedInApps(optedInApps)
       return optedInApps
     }
   }
