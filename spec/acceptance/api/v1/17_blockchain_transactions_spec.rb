@@ -192,6 +192,7 @@ resource 'VII. Blockchain Transactions' do
     with_options scope: :transaction, with_example: true do
       parameter :tx_hash, 'transaction hash', required: true, type: :string
       parameter :status_message, 'transaction status message', type: :string
+      parameter :failed, 'marks transaction as failed, to exclude the transactable from further transactions', type: :string
     end
 
     context '200', vcr: true do
@@ -201,12 +202,33 @@ resource 'VII. Blockchain Transactions' do
       let!(:transaction) do
         {
           tx_hash: blockchain_transaction.tx_hash,
-          status_message: 'hot wallet error: crash'
+          status_message: 'hot wallet error: insufficient balance'
         }
       end
 
       example 'CANCEL TRANSACTION' do
         explanation 'Marks transaction as cancelled and releases transfer for a new transaction, see GENERATE TRANSACTION for response fields'
+
+        request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE', 'example.org')
+        do_request(request)
+        expect(status).to eq(200)
+      end
+    end
+
+    context '200', vcr: true do
+      let!(:project_id) { project.id }
+      let!(:id) { blockchain_transaction.id }
+
+      let!(:transaction) do
+        {
+          tx_hash: blockchain_transaction.tx_hash,
+          status_message: 'hot wallet error: unprocessable tx',
+          failed: 'true'
+        }
+      end
+
+      example 'FAIL TRANSACTION' do
+        explanation 'Marks transaction as failed and excludes transfer from further transactions, see GENERATE TRANSACTION for response fields'
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE', 'example.org')
         do_request(request)
