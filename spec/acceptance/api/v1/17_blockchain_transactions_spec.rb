@@ -45,8 +45,8 @@ resource 'VII. Blockchain Transactions' do
     end
 
     with_options with_example: true do
-      parameter :blockchain_transactable_id, 'transactable id to generate transaction for', required: false, type: :string
-      parameter :blockchain_transactable_type, 'transactable type to generate transaction for – Award (Default), TransferRule, AccountTokenRecord', required: false, type: :string
+      parameter :blockchain_transactable_type, 'transactable type to generate transaction for (awards, transfer_rules, account_token_records)', required: false, type: :string
+      parameter :blockchain_transactable_id, 'transactable id of transactable type to generate transaction for', required: false, type: :string
     end
 
     context '201' do
@@ -89,10 +89,11 @@ resource 'VII. Blockchain Transactions' do
         expect(status).to eq(201)
       end
 
-      example 'GENERATE TRANSACTION – TRANSACTABLE ID' do
-        explanation 'Generates a new blockchain transaction for transactable with supplied id and locks the transactable for 10 minutes'
+      example 'GENERATE TRANSACTION – TRANSACTABLE TYPE' do
+        explanation 'Generates a new blockchain transaction for transactable with supplied type and locks the transactable for 10 minutes'
+        create(:transfer_rule, token: project.token)
 
-        request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_id: award.id }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+        request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: 'transfer_rules' }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
@@ -101,10 +102,11 @@ resource 'VII. Blockchain Transactions' do
         expect(status).to eq(201)
       end
 
-      example 'GENERATE TRANSACTION – TRANSACTABLE TYPE' do
-        explanation 'Generates a new blockchain transaction for transactable with supplied type and locks the transactable for 10 minutes'
+      example 'GENERATE TRANSACTION – TRANSACTABLE TYPE AND TRANSACTABLE ID' do
+        explanation 'Generates a new blockchain transaction for transactable with supplied type and id and locks the transactable for 10 minutes'
+        t = create(:transfer_rule, token: project.token)
 
-        request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: create(:transfer_rule, token: project.token) && 'TransferRule' }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+        request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: 'transfer_rules', blockchain_transactable_id: t.id }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)

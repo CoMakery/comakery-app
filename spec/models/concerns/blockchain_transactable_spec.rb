@@ -11,4 +11,16 @@ shared_examples 'blockchain_transactable' do
       expect(account_token_record.latest_blockchain_transaction).to be_nil
     end
   end
+
+  describe 'blockchain_transaction_class' do
+    subject { described_class.new.blockchain_transaction_class }
+
+    it { is_expected.to eq("BlockchainTransaction#{described_class}".constantize) }
+  end
+
+  describe 'new_blockchain_transaction' do
+    subject { described_class.new.new_blockchain_transaction({}) }
+
+    it { is_expected.to be_a("BlockchainTransaction#{described_class}".constantize) }
+  end
 end
