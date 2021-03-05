@@ -1,7 +1,7 @@
 json.call(
   account_token_record,
   :id,
-  :account_id,
+  :wallet_id,
   :token_id,
   :max_balance,
   :lockup_until,
@@ -11,3 +11,5 @@ json.call(
   :created_at,
   :updated_at
 )
+
+json.managed_account_id account_token_record.account.managed_account_id
