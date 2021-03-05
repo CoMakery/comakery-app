@@ -4,9 +4,20 @@ const chainjs = require("@open-rights-exchange/chainjs")
 const axios = require("axios")
 
 class HotWallet {
-  constructor(address, mnemonic) {
+  constructor(address, mnemonic, optedInApps = []) {
     this.address = address
     this.mnemonic = mnemonic
+    this.optedInApps = optedInApps
+  }
+
+  isOptedInToApp(appIndexToCheck) {
+    if (!this.optedInApps) { return false }
+    return this.optedInApps.includes(appIndexToCheck)
+  }
+
+  secretKey() {
+    const { sk } = algosdk.mnemonicToSecretKey(this.mnemonic)
+    return sk
   }
 }
 exports.HotWallet = HotWallet
@@ -30,7 +41,9 @@ class HotWalletRedis {
     const savedHW = await this.hgetall(this.walletKeyName())
 
     if (savedHW) {
-      return new HotWallet(savedHW.address, savedHW.mnemonic)
+      const optedInApps = JSON.parse(savedHW.optedInApps || "[]")
+
+      return new HotWallet(savedHW.address, savedHW.mnemonic, optedInApps)
     } else {
       return undefined
     }
@@ -49,8 +62,16 @@ class HotWalletRedis {
   }
 
   async saveNewHotWallet(wallet) {
+
     await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
+    return true
+  }
+
+  async saveOptedInApps(optedInApps) {
+    optedInApps = JSON.stringify(optedInApps)
+    await this.hset(this.walletKeyName(), "optedInApps", optedInApps)
+    console.log(`Opted-in apps (${optedInApps}) has been saved into ${this.walletKeyName()}`)
     return true
   }
 
@@ -81,6 +102,12 @@ exports.HotWalletRedis = HotWalletRedis
 class AlgorandBlockchain {
   constructor(envs) {
     this.envs = envs
+    this.blockchainNetwork = envs.blockchainNetwork
+    const endpoints = this.endpointsByNetwork(this.blockchainNetwork)
+    this.algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
+    // It is necessary to cache values gotten from blockchain
+    this.optedInApps = {}
+    this.balances = {}
   }
 
   algoMainnetEndpoints() {
@@ -122,6 +149,70 @@ class AlgorandBlockchain {
     const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
 
     return new HotWallet(account.addr, mnemonic)
+  }
+
+  async connect() {
+    if (!this.algoChain.isConnected) {
+      await this.algoChain.connect()
+    }
+  }
+
+  async getOptedInAppsForHotWallet(hotWalletAddress) {
+    if (hotWalletAddress in this.optedInApps) { return this.optedInApps[hotWalletAddress] }
+
+    await this.connect()
+    try {
+      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+      this.optedInApps[hotWalletAddress] = hwAccountDetails.account['apps-local-state'].filter(app => app.deleted == false).map(app => app.id)
+      return this.optedInApps[hotWalletAddress]
+    } catch (err) {
+      console.log(`The Hot Wallet either has zero algos balance or doesn't opted-in to any app. Please send ALGOs to the wallet ${hotWalletAddress}`)
+      return []
+    }
+  }
+
+  async getBalanceForHotWallet(hotWalletAddress) {
+    if (hotWalletAddress in this.balances) { return this.balances[hotWalletAddress] }
+
+    await this.connect()
+    const blockchainBalance = await this.algoChain.fetchBalance(hotWalletAddress, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
+    this.balances[hotWalletAddress] = parseFloat(blockchainBalance.balance)
+    return this.balances[hotWalletAddress]
+  }
+
+  async isOptedInToCurrentApp(hotWalletAddress) {
+    const optedInApps = await this.getOptedInAppsForHotWallet(hotWalletAddress)
+    return optedInApps.includes(this.envs.optInApp)
+  }
+
+  async enoughBalanceToOptInForHotWallet(hotWalletAddress) {
+    const balance = await this.getBalanceForHotWallet(hotWalletAddress)
+    return balance > 0.1
+  }
+
+  async optInToApp(hotWallet, appToOptIn) {
+    await this.connect()
+
+    const transaction = await this.algoChain.new.Transaction()
+    const txn = {
+      from: hotWallet.address,
+      note: 'Opt-in from a HotWallet',
+      appIndex: appToOptIn,
+    }
+    const action = await this.algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
+    transaction.actions = [action]
+    await transaction.prepareToBeSigned()
+    await transaction.validate()
+    await transaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(hotWallet.secretKey())])
+
+    try {
+      const tx_result = await transaction.send(chainjs.Models.ConfirmType.After001)
+      console.log(`Opt-in was successfully sent to blockchain, tx hash: ${tx_result.transactionId}`)
+      return tx_result
+    } catch (err) {
+      console.error(err)
+      return {}
+    }
   }
 }
 exports.AlgorandBlockchain = AlgorandBlockchain
@@ -188,11 +279,12 @@ exports.ComakeryApi = ComakeryApi
 
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
   return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
-    Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay)
+    Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay) &&
+    Boolean(envs.optInApp) && Boolean(envs.blockchainNetwork)
 }
 
 exports.isEmptyObject = function isEmptyObject(obj) {
-  for(var prop in obj) {
+  for (var prop in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
       return false
     }
@@ -226,23 +318,32 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
 }
 
 exports.runServer = async function runServer(envs, redisClient) {
+  const hwRedis = new HotWalletRedis(envs, redisClient)
+
   while (true) {
-    await exports.waitForNewTransaction(envs, redisClient)
+    const hw = await hwRedis.hotWallet()
+    const optedIn = await hw.isOptedInToApp(envs.optInApp)
+
+    if (optedIn) {
+      await exports.waitForNewTransaction(envs, hwRedis)
+    } else {
+      console.log("The Hot Wallet doesn't opted-in to the App. Trying to opt-in")
+      await exports.autoOptIn(envs, hwRedis)
+    }
 
     await exports.sleep(envs.checkForNewTransactionsDelay * 1000) // 30 seconds by default
   }
 }
 
-exports.waitForNewTransaction = async function waitForNewTransaction(envs, redisClient) {
+exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRedis) {
   console.log("Checking for a new transaction to send...")
-  const hwRedis = new HotWalletRedis(envs, redisClient)
   const hwApi = new ComakeryApi(envs)
   const hwAddress = await hwRedis.hotWalletAddress()
   const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
 
   if (!exports.isEmptyObject(transactionToSign)) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
-    const tx = await exports.singAndSendTx(transactionToSign, envs, redisClient)
+    const tx = await exports.singAndSendTx(transactionToSign, envs, hwRedis)
     if (!exports.isEmptyObject(tx)) {
       const hwApi = new ComakeryApi(envs)
       transactionToSign.txHash = tx.transactionId
@@ -256,8 +357,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, redis
   return true
 }
 
-exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, redisClient) {
-  const hwRedis = new HotWalletRedis(envs, redisClient)
+exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, hwRedis) {
   const hwAlgorand = new AlgorandBlockchain(envs)
   const mnemonic = await hwRedis.hotWalletMnenonic()
 
@@ -284,34 +384,38 @@ exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, re
   }
 }
 
-exports.optInToApp = async function optInToApp(network, appIndex, envs, redisClient) {
-  const hwRedis = new HotWalletRedis(envs, redisClient)
-  const hwAlgorand = new AlgorandBlockchain(envs)
-  const mnemonic = await hwRedis.hotWalletMnenonic()
-  const endpoints = hwAlgorand.endpointsByNetwork(transactionToSign.network)
+exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
+  const hw = await hwRedis.hotWallet()
 
-  const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
-  const { addr, sk } = algosdk.mnemonicToSecretKey(mnemonic)
-  await algoChain.connect()
-  if (algoChain.isConnected) { console.log(`Connected to ${algoChain.chainId}`) }
-  const transaction = await algoChain.new.Transaction()
-  const txn = {
-    from: addr,
-    note: 'test optIn',
-    appIndex: appIndex,
+  // Already opted-in and we already know about it
+  if (hw.isOptedInToApp(envs.optInApp)) {
+    console.log("HW opted-in. Cached in Redis")
+    return hw.optedInApps
   }
-  const action = await algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
-  transaction.actions = [action]
-  await transaction.prepareToBeSigned()
-  await transaction.validate()
-  await transaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(sk)])
 
-  try {
-    const tx_result = await transaction.send(chainjs.Models.ConfirmType.After001)
-    console.log(`Opt-in was successfully sent to blockchain, tx hash: ${tx_result.transactionId}`)
-    return tx_result
-  } catch (err) {
-    console.error(err)
-    return {}
+  const hwAlgorand = new AlgorandBlockchain(envs)
+  // Check if already opted-in on blockchain
+  if (await hwAlgorand.isOptedInToCurrentApp(hw.address)) {
+    console.log("HW opted-in. Got from Blockchain")
+
+    // Save it in Redis and return
+    const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
+    await hwRedis.saveOptedInApps(optedInApps)
+    return optedInApps
+  }
+
+  // Check if the wallet has enough balance to send opt-in transaction
+  if (await hwAlgorand.enoughBalanceToOptInForHotWallet(hw.address)) {
+    tx_result = await hwAlgorand.optInToApp(hw, envs.optInApp)
+    if (exports.isEmptyObject(tx_result)) {
+      console.log(`Failed to opt-in into app ${envs.optInApp} for wallet ${hw.address}`)
+    } else {
+      console.log("HW successfully opted-in!")
+
+      // Successfully opted-in
+      const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
+      await hwRedis.saveOptedInApps(optedInApps)
+      return optedInApps
+    }
   }
 }

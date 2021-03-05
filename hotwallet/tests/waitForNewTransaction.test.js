@@ -29,17 +29,17 @@ afterAll(() => {
 test("API returns empty response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 204, data: null }))
-  res = await hwUtils.waitForNewTransaction(envs, redisClient)
+  res = await hwUtils.waitForNewTransaction(envs, hwRedis)
 
   expect(res).toBe(false)
 })
 
 test("API returns a blockchain transaction", async () => {
-  // expect.assertions(1);
+  expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: { id: 99, network: "algorand_test" } }))
   axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: { id: 99, network: "algorand_test", txHash: "TXHASH" } }))
   jest.spyOn(hwUtils, "singAndSendTx").mockImplementation(() =>{return { transactionId: "TXHASH" }});
-  res = await hwUtils.waitForNewTransaction(envs, redisClient)
+  res = await hwUtils.waitForNewTransaction(envs, hwRedis)
 
   expect(res).toBe(true)
 })

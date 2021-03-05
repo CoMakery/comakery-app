@@ -8,7 +8,9 @@ const envs = {
   comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
   purestakeApi: process.env.PURESTAKE_API,
   redisUrl: process.env.REDIS_URL,
-  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY)
+  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
+  optInApp: parseInt(process.env.OPT_IN_APP),
+  blockchainNetwork: process.env.BLOCKCHAIN_NETWORK
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
@@ -21,5 +23,6 @@ async function initialize() {
 
 (async () => {
   await initialize()
+
   hwUtils.runServer(envs, redisClient)
 })();
