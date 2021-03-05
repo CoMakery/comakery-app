@@ -157,18 +157,27 @@ class AlgorandBlockchain {
     }
   }
 
+  async getOptedInAppsFromBlockchain(hotWalletAddress) {
+    try {
+      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+      return hwAccountDetails.account['apps-local-state'].filter(app => app.deleted == false).map(app => app.id)
+    } catch (err) {
+      return []
+    }
+  }
+
   async getOptedInAppsForHotWallet(hotWalletAddress) {
     if (hotWalletAddress in this.optedInApps) { return this.optedInApps[hotWalletAddress] }
 
     await this.connect()
-    try {
-      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
-      this.optedInApps[hotWalletAddress] = hwAccountDetails.account['apps-local-state'].filter(app => app.deleted == false).map(app => app.id)
-      return this.optedInApps[hotWalletAddress]
-    } catch (err) {
+    const optedInApps = await this.getOptedInAppsFromBlockchain(hotWalletAddress)
+    if (optedInApps.length > 0) {
+      this.optedInApps[hotWalletAddress] = optedInApps
+    } else {
       console.log(`The Hot Wallet either has zero algos balance or doesn't opted-in to any app. Please send ALGOs to the wallet ${hotWalletAddress}`)
-      return []
     }
+
+    return optedInApps
   }
 
   async getBalanceForHotWallet(hotWalletAddress) {
