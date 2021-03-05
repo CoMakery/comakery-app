@@ -78,6 +78,14 @@ class Token < ApplicationRecord
     self
   end
 
+  def blockchain_transaction_class
+    if token_frozen?
+      'BlockchainTransactionTokenUnfreeze'
+    else
+      'BlockchainTransactionTokenFreeze'
+    end.constantize
+  end
+
   def token_type
     if _token_type
       @token_type ||= "TokenType::#{_token_type.camelize}".constantize.new(

@@ -11,4 +11,30 @@ shared_examples 'blockchain_transactable' do
       expect(account_token_record.latest_blockchain_transaction).to be_nil
     end
   end
+
+  describe 'blockchain_transaction_class' do
+    subject { described_class.new.blockchain_transaction_class }
+    let(:classname) do
+      if described_class == Token
+        'BlockchainTransactionTokenFreeze'
+      else
+        "BlockchainTransaction#{described_class}"
+      end
+    end
+
+    it { is_expected.to eq(classname.constantize) }
+  end
+
+  describe 'new_blockchain_transaction' do
+    subject { described_class.new.new_blockchain_transaction({}) }
+    let(:classname) do
+      if described_class == Token
+        'BlockchainTransactionTokenFreeze'
+      else
+        "BlockchainTransaction#{described_class}"
+      end
+    end
+
+    it { is_expected.to be_a(classname.constantize) }
+  end
 end

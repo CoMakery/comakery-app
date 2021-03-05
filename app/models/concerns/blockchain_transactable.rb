@@ -7,21 +7,24 @@ module BlockchainTransactable
     has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', as: :blockchain_transactable, foreign_key: :blockchain_transactable_id
     # rubocop:enable Rails/InverseOf
 
-    # Return accepted awards matching at least one of the following conditions:
+    # Return accepted transactables matching at least one of the following conditions:
     # – Doesn't have any blockchain transactions yet
     # – Latest blockchain transaction state is "cancelled"
     # – (Optionally) Latest blockchain transaction state is "failed"
     # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
     scope :ready_for_blockchain_transaction, lambda { |include_failed = false|
-      q = joins(
-        ''"
+      q = joins(sanitize_sql_array([
+                                     ''"
         LEFT JOIN blockchain_transactions
         ON blockchain_transactions.blockchain_transactable_id = #{table_name}.id
+        AND blockchain_transactions.blockchain_transactable_type = '#{table_name.camelize.singularize}'
         AND blockchain_transactions.id = (
-          SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.blockchain_transactable_id = #{table_name}.id
+          SELECT MAX(id) FROM blockchain_transactions
+          WHERE blockchain_transactions.blockchain_transactable_id = #{table_name}.id
+          AND blockchain_transactions.blockchain_transactable_type = '#{table_name.camelize.singularize}'
         )
         "''
-      )
+                                   ]))
           .distinct
           .where(
             ''"
@@ -42,5 +45,17 @@ module BlockchainTransactable
     scope :ready_for_manual_blockchain_transaction, lambda {
       ready_for_blockchain_transaction(true)
     }
+
+    def blockchain_transaction_class
+      "BlockchainTransaction#{self.class}".constantize
+    end
+
+    def new_blockchain_transaction(params)
+      blockchain_transaction_class.new(
+        params.merge(
+          blockchain_transactable: self
+        )
+      )
+    end
   end
 end
