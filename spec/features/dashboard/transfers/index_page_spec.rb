@@ -6,6 +6,8 @@ describe 'transfers_index_page', js: true do
   let!(:project_award_type) { (create :award_type, project: project) }
 
   it 'returns transfers ordered by create desc' do
+    skip 'The Chart was disabled'
+
     create(:award, name: 'second', status: :paid, award_type: project_award_type)
     create(:award, name: 'first', status: :paid, award_type: project_award_type)
 

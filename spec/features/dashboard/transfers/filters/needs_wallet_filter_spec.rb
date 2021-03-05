@@ -8,6 +8,8 @@ describe 'test_needs_wallet_filter', js: true do
   [1, 3, 6].each do |number_of_transfers|
     context "With #{number_of_transfers} 'needs wallet' status transfers" do
       it 'Returns correct number of transfers after applying filter' do
+        skip 'The Chart was disabled'
+
         number_of_transfers.times do
           create(:transfer, award_type: project_award_type, account: owner)
         end

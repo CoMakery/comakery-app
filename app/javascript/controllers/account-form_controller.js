@@ -31,7 +31,7 @@ export default class extends ComakerySecurityTokenController {
       if (response.status === 201) {
         response.json().then(r => {
           this.data.set('id', r.id)
-          this.data.set('type', 'AccountTokenRecord')
+          this.data.set('type', 'account_token_records')
           this._createTransaction('setAddressPermissions')
         })
       } else {

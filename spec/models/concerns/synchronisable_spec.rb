@@ -54,15 +54,23 @@ shared_examples 'synchronisable' do
 
   describe '#failed_transactions_row' do
     context 'when latest_transaction is failed' do
-      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[ok failed failed]) }
+      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[failed failed ok]) }
 
       it 'returns number of failed transactions in row' do
         expect(subject.failed_transactions_row).to eq(2)
       end
     end
 
-    context 'when latest_transaction is not failed' do
-      before { allow(subject.synchronisations).to receive(:pluck).and_return(['ok']) }
+    context 'when latest_transaction is in_progress' do
+      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[in_progress failed failed]) }
+
+      it 'returns number of failed transactions in row' do
+        expect(subject.failed_transactions_row).to eq(2)
+      end
+    end
+
+    context 'when latest_transaction is ok' do
+      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[ok failed failed]) }
       specify { expect(subject.failed_transactions_row).to eq(0) }
     end
   end
@@ -94,6 +102,40 @@ shared_examples 'synchronisable' do
       end
 
       specify { expect(subject.next_sync_allowed_after).to eq(subject.latest_synchronisation.updated_at + subject.min_seconds_between_syncs**2) }
+    end
+  end
+
+  describe '#timeout' do
+    let(:failed_transactions_row) { 2 }
+
+    before do
+      allow(subject).to receive(:failed_transactions_row).and_return(failed_transactions_row)
+    end
+
+    context 'with exponential scale' do
+      specify do
+        expect(subject.timeout(scale: :exponential)).to eq(subject.min_seconds_between_syncs**failed_transactions_row)
+      end
+    end
+
+    context 'with linear scale' do
+      specify do
+        expect(subject.timeout(scale: :linear)).to eq(subject.min_seconds_between_syncs * failed_transactions_row)
+      end
+    end
+
+    context 'without scale' do
+      specify do
+        expect(subject.timeout).to eq(subject.min_seconds_between_syncs)
+      end
+    end
+
+    context 'with a value over a month' do
+      let(:failed_transactions_row) { 55356 }
+
+      specify do
+        expect(subject.timeout(scale: :exponential)).to eq(1.month.to_i)
+      end
     end
   end
 end

@@ -8,20 +8,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
-    if transactable
-      @transaction = type.create(
-        transaction_create_params.merge(
-          blockchain_transactable: transactable
-        )
-      )
-    end
+    @transaction = transactable.new_blockchain_transaction(transaction_create_params) if transactable
+    @transaction&.save
 
     if @transaction&.persisted?
       render 'show.json', status: :created
     else
-      # TODO: either no_content or return error. Can't be both
-      # @errors = { blockchain_transaction: 'No transactables available' }
-      # render 'api/v1/error.json', status: :no_content
       head :no_content
     end
   end
@@ -38,7 +30,8 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # DELETE /api/v1/projects/1/blockchain_transactions/1
   def destroy
-    transaction.update_status(:cancelled, transaction_update_params[:status_message])
+    status = transaction_failed? ? :failed : :cancelled
+    transaction.update_status(status, transaction_update_params[:status_message])
 
     render 'show.json', status: :ok
   end
@@ -53,34 +46,41 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       @transaction ||= project.blockchain_transactions.find(params[:id])
     end
 
-    def type
-      @type ||= case params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_type, nil)
-                when 'TransferRule'
-                  BlockchainTransactionTransferRule
-                when 'AccountTokenRecord'
-                  BlockchainTransactionAccountTokenRecord
-                else
-                  BlockchainTransactionAward
+    def transactable_type
+      @transactable_type ||= %w[
+        account_token_records
+        transfer_rules
+        awards
+      ].find do |type|
+        type == params.dig(:body, :data, :blockchain_transactable_type)
       end
     end
 
-    def transactables
-      @transactables ||= case params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_type, nil)
-                         when 'TransferRule'
-                           project.token.transfer_rules
-                         when 'AccountTokenRecord'
-                           project.token.account_token_records
-                         else
-                           project.awards
-      end
+    def transactable_id
+      @transactable_id ||= params.dig(:body, :data, :blockchain_transactable_id)
     end
 
     def transactable
-      @transactable ||= if params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_id, nil)
-        transactables.ready_for_manual_blockchain_transaction.find_by(id: params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_id, nil))
+      @transactable ||= if transactable_type
+        custom_transactable
       else
-        transactables.ready_for_blockchain_transaction.first
+        default_transactable
       end
+    end
+
+    def custom_transactable
+      collection = project.send(transactable_type)
+
+      if transactable_id
+        collection.ready_for_manual_blockchain_transaction.find(transactable_id)
+      else
+        collection.ready_for_blockchain_transaction.first
+      end
+    end
+
+    def default_transactable
+      project.account_token_records.ready_for_blockchain_transaction.first \
+      || project.awards.ready_for_blockchain_transaction.first
     end
 
     def transaction_create_params
@@ -95,6 +95,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
         :tx_hash,
         :status_message
       )
+    end
+
+    def transaction_failed?
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
+        :failed
+      ).present?
     end
 
     def verify_hash

@@ -38,7 +38,7 @@ export default class extends ComakerySecurityTokenController {
     }).then(response => {
       if (response.status === 201) {
         response.json().then(r => {
-          this.data.set('type', 'TransferRule')
+          this.data.set('type', 'transfer_rules')
           this.data.set('id', r.id)
           this._createTransaction('setAllowGroupTransfer')
         })
