@@ -46,17 +46,23 @@ module Synchronisable
       return Time.current unless latest_synchronisation
       return max_seconds_in_pending.seconds.from_now if sync_in_progress?
       return latest_synchronisation.updated_at + timeout if latest_synchronisation.ok?
-      return latest_synchronisation.updated_at + timeout(scale) if latest_synchronisation.failed?
+      return latest_synchronisation.updated_at + timeout(scale: scale) if latest_synchronisation.failed?
     end
 
-    def timeout(scale = nil)
-      case scale
-      when :exponential
-        min_seconds_between_syncs**failed_transactions_row
-      when :linear
-        min_seconds_between_syncs * failed_transactions_row
+    def timeout(scale: nil)
+      t = case scale
+          when :exponential
+            min_seconds_between_syncs**failed_transactions_row
+          when :linear
+            min_seconds_between_syncs * failed_transactions_row
+          else
+            min_seconds_between_syncs
+      end
+
+      if t > 1.month
+        1.month.to_i
       else
-        min_seconds_between_syncs
+        t
       end
     end
 
