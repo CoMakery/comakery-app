@@ -25,10 +25,10 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
 
   let(:invalid_attributes) do
     {
-      max_balance: '-100',
+      max_balance: '100',
       lockup_until: '1',
       reg_group_id: create(:reg_group, token: token).id.to_s,
-      managed_account_id: new_account.managed_account_id,
+      managed_account_id: nil,
       account_frozen: 'false'
     }
   end
