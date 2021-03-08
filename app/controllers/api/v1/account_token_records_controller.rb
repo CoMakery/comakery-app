@@ -14,7 +14,7 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
     account_token_record = account_token_records.new(account_token_record_params)
     account_token_record.account = find_account_from_body
 
-    if account_token_record.save
+    if account_token_record.account && account_token_record.save
       @account_token_record = account_token_record
 
       render 'index.json', status: :created
@@ -36,7 +36,7 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
   private
 
     def account_token_records
-      @account_token_records ||= paginate(collection)
+      @account_token_records ||= paginate(collection.includes([:account]))
     end
 
     def collection
@@ -61,7 +61,7 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
 
     def find_account_from_body
       account_id = params.dig(:body, :data, :account_token_record, :managed_account_id)
-      Account.find_by(managed_account_id: account_id)
+      Account.find_by(managed_account_id: account_id) if account_id
     end
 
     def account_token_record_params
@@ -69,6 +69,6 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
         .fetch(:body, {})
         .fetch(:data, {})
         .fetch(:account_token_record, {})
-        .permit(:max_balance, :lockup_until, :reg_group_id, :account_frozen)
+        .permit(:max_balance, :lockup_until, :reg_group_id, :account_frozen, :wallet_id)
     end
 end

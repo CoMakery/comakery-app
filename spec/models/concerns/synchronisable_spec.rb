@@ -104,4 +104,38 @@ shared_examples 'synchronisable' do
       specify { expect(subject.next_sync_allowed_after).to eq(subject.latest_synchronisation.updated_at + subject.min_seconds_between_syncs**2) }
     end
   end
+
+  describe '#timeout' do
+    let(:failed_transactions_row) { 2 }
+
+    before do
+      allow(subject).to receive(:failed_transactions_row).and_return(failed_transactions_row)
+    end
+
+    context 'with exponential scale' do
+      specify do
+        expect(subject.timeout(scale: :exponential)).to eq(subject.min_seconds_between_syncs**failed_transactions_row)
+      end
+    end
+
+    context 'with linear scale' do
+      specify do
+        expect(subject.timeout(scale: :linear)).to eq(subject.min_seconds_between_syncs * failed_transactions_row)
+      end
+    end
+
+    context 'without scale' do
+      specify do
+        expect(subject.timeout).to eq(subject.min_seconds_between_syncs)
+      end
+    end
+
+    context 'with a value over a month' do
+      let(:failed_transactions_row) { 55356 }
+
+      specify do
+        expect(subject.timeout(scale: :exponential)).to eq(1.month.to_i)
+      end
+    end
+  end
 end

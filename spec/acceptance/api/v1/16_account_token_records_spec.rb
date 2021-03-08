@@ -18,12 +18,14 @@ resource 'VI. Account Token Records' do
   get '/api/v1/tokens/:token_id/account_token_records' do
     with_options with_example: true do
       parameter :token_id, 'token id', required: true, type: :integer
+      parameter :wallet_id, 'wallet id', required: false, type: :integer
       parameter :page, 'page number', type: :integer
     end
 
     with_options with_example: true do
       response_field :id, 'account token record id', type: :integer
-      response_field :account_id, 'account id', type: :integer
+      response_field :managed_account_id, 'account id', type: :integer
+      response_field :wallet_id, 'wallet id', type: :integer
       response_field :token_id, 'token id', type: :integer
       response_field :reg_group_id, 'reg group id', type: :integer
       response_field :lockup_until, 'lockup until', type: :integer
@@ -46,34 +48,13 @@ resource 'VI. Account Token Records' do
         expect(status).to eq(200)
       end
     end
-  end
-
-  get '/api/v1/tokens/:token_id/account_token_records' do
-    with_options with_example: true do
-      parameter :token_id, 'token id', required: true, type: :integer
-      parameter :wallet_id, 'wallet id', required: false, type: :integer
-      parameter :page, 'page number', type: :integer
-    end
-
-    with_options with_example: true do
-      response_field :id, 'account token record id', type: :integer
-      response_field :account_id, 'account id', type: :integer
-      response_field :token_id, 'token id', type: :integer
-      response_field :reg_group_id, 'reg group id', type: :integer
-      response_field :lockup_until, 'lockup until', type: :integer
-      response_field :max_balance, 'max balance', type: :integer
-      response_field :account_frozen, 'account frozen', type: :bool
-      response_field :status, 'account token record status (created synced)', type: :string
-      response_field :createdAt, 'creation timestamp', type: :string
-      response_field :updatedAt, 'update timestamp', type: :string
-    end
 
     context '200' do
       let!(:token_id) { token.id }
       let!(:wallet_id) { wallet.id }
       let!(:page) { 1 }
 
-      example 'INDEX - FILTERED' do
+      example 'INDEX - FILTERED BY WALLET' do
         explanation 'Returns an array of account token records for the wallet. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id), 'GET', 'example.org')
@@ -98,7 +79,8 @@ resource 'VI. Account Token Records' do
       parameter :max_balance, 'max balance', required: true, type: :string
       parameter :lockup_until, 'lockup until', required: true, type: :string
       parameter :reg_group_id, 'reg group id', required: true, type: :string
-      parameter :account_id, 'account id', required: true, type: :string
+      parameter :managed_account_id, 'account id', required: true, type: :string
+      parameter :wallet_id, 'wallet id (uses primary wallet by default)', required: false, type: :string
       parameter :account_frozen, 'frozen', required: true, type: :string
     end
 
@@ -110,7 +92,7 @@ resource 'VI. Account Token Records' do
           max_balance: '100',
           lockup_until: '1',
           reg_group_id: create(:reg_group, token: account_token_record.token).id.to_s,
-          account_id: create(:account).id.to_s,
+          managed_account_id: create(:account, managed_account_id: 'new_managed_account').managed_account_id,
           account_frozen: 'false'
         }
       end
@@ -132,7 +114,7 @@ resource 'VI. Account Token Records' do
           max_balance: '-100',
           lockup_until: '1',
           reg_group_id: create(:reg_group, token: account_token_record.token).id.to_s,
-          account_id: create(:account).id.to_s,
+          managed_account_id: create(:account, managed_account_id: 'new_managed_account').managed_account_id,
           account_frozen: 'false'
         }
       end
