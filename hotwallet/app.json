@@ -24,6 +24,10 @@
     {
       "plan": "heroku-redis:hobby-dev",
       "as": "REDIS"
+    },
+    {
+      "plan": "papertrail:choklad",
+      "as": "PAPERTRAIL"
     }
   ],
   "env": {
