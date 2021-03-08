@@ -2,6 +2,7 @@ module Api::V1::Concerns::LogRequest
   extend ActiveSupport::Concern
 
   included do
+    # See `config/initializers/filter_parameter_logging.rb` to filter the paramater from Rails logger
     FILTERED_DATA_KEYS = [:payload].freeze
 
     def log_request(request_body, ip)
