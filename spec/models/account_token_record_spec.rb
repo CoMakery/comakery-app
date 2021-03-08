@@ -108,7 +108,13 @@ describe AccountTokenRecord do
       expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
     end
 
-    it 'doesnt return account_token_records with lates blockchain_transaction Created less than 10 minutes ago' do
+    it 'doesnt return synced account_token_records without blockchain_transaction' do
+      account_token_record.synced!
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(account_token_record)
+    end
+
+    it 'doesnt return account_token_records with latest blockchain_transaction Created less than 10 minutes ago' do
       create(:blockchain_transaction_account_token_record, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)

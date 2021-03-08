@@ -19,6 +19,7 @@ class TransferRule < ApplicationRecord
   validate :groups_belong_to_same_token
 
   enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
+  scope :not_synced, -> { where.not(status: :synced) }
 
   def lockup_until
     super && Time.zone.at(super)

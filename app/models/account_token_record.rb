@@ -24,6 +24,7 @@ class AccountTokenRecord < ApplicationRecord
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
 
   enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
+  scope :not_synced, -> { where.not(status: :synced) }
 
   delegate :_blockchain, :blockchain, to: :token
 
