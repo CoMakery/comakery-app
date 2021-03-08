@@ -62,7 +62,6 @@ class HotWalletRedis {
   }
 
   async saveNewHotWallet(wallet) {
-
     await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
     return true
@@ -240,7 +239,7 @@ class ComakeryApi {
       return await axios.post(registerHotWalletUrl, params, config)
     } catch (error) {
       this.logError('registerHotWallet', error)
-      return false
+      return {}
     }
   }
 
@@ -289,8 +288,9 @@ class ComakeryApi {
         `${error.response.status} (${error.response.statusText}) data:\n`,
         error.response.data
       )
-    } else
+    } else {
       console.error(error)
+    }
   }
 }
 exports.ComakeryApi = ComakeryApi
@@ -330,6 +330,8 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
     if (registerRes && registerRes.status == 201) {
       const hwRedis = new HotWalletRedis(envs, redisClient)
       await hwRedis.saveNewHotWallet(newWallet)
+    } else {
+      return false
     }
   }
   return true

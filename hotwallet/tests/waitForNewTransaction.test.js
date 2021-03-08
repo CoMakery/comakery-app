@@ -15,7 +15,6 @@ jest.mock("axios")
 
 const redisClient = redis.createClient()
 const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
-const hwApi = new hwUtils.ComakeryApi(envs)
 
 beforeEach(async () => {
   await hwRedis.saveNewHotWallet(wallet)
@@ -29,7 +28,7 @@ afterAll(() => {
 test("API returns empty response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 204, data: null }))
-  res = await hwUtils.waitForNewTransaction(envs, hwRedis)
+  const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
 
   expect(res).toBe(false)
 })
@@ -39,22 +38,22 @@ test("API returns a blockchain transaction", async () => {
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: { id: 99, network: "algorand_test" } }))
   axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: { id: 99, network: "algorand_test", txHash: "TXHASH" } }))
   jest.spyOn(hwUtils, "singAndSendTx").mockImplementation(() =>{return { transactionId: "TXHASH" }});
-  res = await hwUtils.waitForNewTransaction(envs, hwRedis)
+  const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
 
   expect(res).toBe(true)
 })
 
 test("API returns failed response", async () => {
-  const data = {
-    response: {
-      status: 422,
-      statusText: "Unprocessable Entity",
-      data: { errors: { any: "error" } }
-    }
-  }
+  jest.spyOn(hwUtils.ComakeryApi.prototype, "getNextTransactionToSign").mockReturnValue({});
 
-  axios.post.mockReturnValue(Promise.reject(data));
-  res = await hwApi.registerHotWallet(wallet)
+  const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
+  expect(res).toBe(false)
+})
 
+test("singAndSendTx returns empty object", async () => {
+  jest.spyOn(hwUtils.ComakeryApi.prototype, "getNextTransactionToSign").mockReturnValue({ txHash: "TXHASH" });
+  jest.spyOn(hwUtils, "singAndSendTx").mockReturnValue({});
+
+  const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
   expect(res).toBe(false)
 })
