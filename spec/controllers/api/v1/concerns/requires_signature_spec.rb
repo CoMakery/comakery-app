@@ -6,14 +6,45 @@ shared_examples 'requires_signature' do
       end
     end
 
+    subject do
+      get :index, params: {
+        proof: {
+          signature: 'dummy'
+        }
+      }
+    end
+
     context 'when signature is present' do
       before do
-        allow(controller).to receive(:verify_signature).and_return(true)
+        allow_any_instance_of(Comakery::APISignature).to receive(:verify).and_return(true)
       end
 
-      it 'does nothing' do
-        get :index
-        expect(response).to be_successful
+      it { is_expected.to have_http_status(:success) }
+
+      it 'creates ApiRequestLog' do
+        expect { subject }.to change(ApiRequestLog, :count).by(1)
+      end
+
+      context 'with sensitive data to be filtered' do
+        subject do
+          get :index, params: {
+            body: {
+              data: {
+                payload: 'SENSITIVE'
+              }
+            },
+            proof: {
+              signature: 'dummy'
+            }
+          }
+        end
+
+        it { is_expected.to have_http_status(:success) }
+
+        it 'filters the data' do
+          subject
+          expect(ApiRequestLog.last.body.dig('body', 'data', 'payload')).to eq('FILTERED')
+        end
       end
     end
 
@@ -22,10 +53,7 @@ shared_examples 'requires_signature' do
         allow(controller).to receive(:verify_signature).and_call_original
       end
 
-      it 'returns an error' do
-        get :index
-        expect(response.status).to eq(401)
-      end
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 end
