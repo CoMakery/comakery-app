@@ -44,5 +44,5 @@ test("API returns failed response", async () => {
   axios.post.mockReturnValue(Promise.reject(data));
   res = await hwApi.registerHotWallet(wallet)
 
-  expect(res).toBe(false)
+  expect(res).toEqual({})
 })

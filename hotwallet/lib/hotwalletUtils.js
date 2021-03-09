@@ -62,7 +62,6 @@ class HotWalletRedis {
   }
 
   async saveNewHotWallet(wallet) {
-
     await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
     return true
@@ -239,9 +238,8 @@ class ComakeryApi {
     try {
       return await axios.post(registerHotWalletUrl, params, config)
     } catch (error) {
-      console.error(`registerHotWallet call failed with ${error.response.status} (${error.response.statusText}) data:`)
-      console.error(error.response.data)
-      return false
+      this.logError('registerHotWallet', error)
+      return {}
     }
   }
 
@@ -258,8 +256,7 @@ class ComakeryApi {
         return {}
       }
     } catch (error) {
-      console.error(`getNextTransactionToSign call failed with ${error.response.status} (${error.response.statusText}) data:`)
-      console.error(error.response.data)
+      this.logError('getNextTransactionToSign', error)
       return {}
     }
   }
@@ -278,9 +275,21 @@ class ComakeryApi {
         return {}
       }
     } catch (error) {
-      console.error(`updateTransactionHash call failed with ${error.response.status} (${error.response.statusText}) data:`)
-      console.error(error.response.data)
+      this.logError('updateTransactionHash', error)
       return {}
+    }
+  }
+
+  logError(functionName, error) {
+    console.error(`${functionName} API call failed with:\n`)
+
+    if (error.response) {
+      console.error(
+        `${error.response.status} (${error.response.statusText}) data:\n`,
+        error.response.data
+      )
+    } else {
+      console.error(`${functionName} produced an unknown error on API call`)
     }
   }
 }
@@ -321,6 +330,8 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
     if (registerRes && registerRes.status == 201) {
       const hwRedis = new HotWalletRedis(envs, redisClient)
       await hwRedis.saveNewHotWallet(newWallet)
+    } else {
+      return false
     }
   }
   return true
