@@ -76,6 +76,22 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       end
     end
 
+    context 'with frozen token' do
+      let!(:account_token_record) { create(:account_token_record, account: project.account, token: project.token) }
+
+      before do
+        project.token.update(token_frozen: true)
+      end
+
+      it 'returns an error' do
+        params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
     context 'without transactables available for transaction' do
       it 'returns an error' do
         params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')

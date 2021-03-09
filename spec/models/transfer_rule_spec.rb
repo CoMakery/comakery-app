@@ -118,7 +118,13 @@ describe TransferRule do
       expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
     end
 
-    it 'doesnt return transfer_rules with lates blockchain_transaction Created less than 10 minutes ago' do
+    it 'doesnt return synced transfer_rules without blockchain_transaction' do
+      transfer_rule.synced!
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(transfer_rule)
+    end
+
+    it 'doesnt return transfer_rules with latest blockchain_transaction Created less than 10 minutes ago' do
       create(:blockchain_transaction_transfer_rule, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)

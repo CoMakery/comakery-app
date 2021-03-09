@@ -7,11 +7,17 @@ module BlockchainTransactable
     has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', as: :blockchain_transactable, foreign_key: :blockchain_transactable_id
     # rubocop:enable Rails/InverseOf
 
-    # Return accepted transactables matching at least one of the following conditions:
+    # Return transactables matching at least one of the following conditions:
     # – Doesn't have any blockchain transactions yet
     # – Latest blockchain transaction state is "cancelled"
     # – (Optionally) Latest blockchain transaction state is "failed"
     # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
+    # – Doesn't have a  (AccountTokenRecord and TransferRule)
+    # – Is in accepted state (Award)
+    #
+    # Model specific conditions:
+    # - Award must be in `accepted` state
+    # - AccountTokenRecord, TransferRule must be not in `synced` status
     scope :ready_for_blockchain_transaction, lambda { |include_failed = false|
       q = joins(sanitize_sql_array([
                                      ''"
@@ -37,6 +43,8 @@ module BlockchainTransactable
 
       if table_name == 'awards'
         q.accepted
+      elsif table_name.in? %w[account_token_records transfer_rules]
+        q.not_synced
       else
         q
       end

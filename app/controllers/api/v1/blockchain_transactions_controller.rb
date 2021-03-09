@@ -8,6 +8,8 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
+    return head :no_content if project.token.token_frozen?
+
     @transaction = transactable.new_blockchain_transaction(transaction_create_params) if transactable
     @transaction&.save
 
