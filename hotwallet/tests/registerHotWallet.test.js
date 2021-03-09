@@ -8,14 +8,16 @@ const envs = {
   purestakeApi: "purestake_api_key",
   redisUrl: "redis://localhost:6379/0"
 }
-const wallet = { address: "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", mnemonic: "mnemonic phrase" }
+const wallet = new hwUtils.HotWallet("YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
 
 jest.mock("axios")
 
 const redisClient = redis.createClient()
+const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
+const hwApi = new hwUtils.ComakeryApi(envs)
 
 beforeEach(async () => {
-  await hwUtils.deleteCurrentKey(envs, redisClient)
+  await hwRedis.deleteCurrentKey()
 })
 
 afterAll(() => {
@@ -25,9 +27,9 @@ afterAll(() => {
 test("API returns successfull response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: {} }))
-  res = await hwUtils.registerHotWallet(wallet, envs, redisClient)
+  res = await hwApi.registerHotWallet(wallet)
 
-  expect(res).toBe(true)
+  expect(res.status).toEqual(201)
 })
 
 test("API returns failed response", async () => {
@@ -40,7 +42,7 @@ test("API returns failed response", async () => {
   }
 
   axios.post.mockReturnValue(Promise.reject(data));
-  res = await hwUtils.registerHotWallet(wallet, envs, redisClient)
+  res = await hwApi.registerHotWallet(wallet)
 
-  expect(res).toBe(false)
+  expect(res).toEqual({})
 })
