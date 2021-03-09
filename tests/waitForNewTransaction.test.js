@@ -25,9 +25,19 @@ afterAll(() => {
   jest.restoreAllMocks()
 });
 
+test("not enough ALGOs to send transactions", async () => {
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToSendTransaction").mockReturnValue(false)
+
+  const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
+
+  expect(res).toBe(false)
+})
+
 test("API returns empty response", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 204, data: null }))
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToSendTransaction").mockReturnValue(true)
+
   const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
 
   expect(res).toBe(false)
@@ -37,7 +47,9 @@ test("API returns a blockchain transaction", async () => {
   expect.assertions(1);
   axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: { id: 99, network: "algorand_test" } }))
   axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: { id: 99, network: "algorand_test", txHash: "TXHASH" } }))
-  jest.spyOn(hwUtils, "singAndSendTx").mockImplementation(() =>{return { transactionId: "TXHASH" }});
+  jest.spyOn(hwUtils, "signAndSendTx").mockImplementation(() => { return { transactionId: "TXHASH" } });
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToSendTransaction").mockReturnValue(true)
+
   const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
 
   expect(res).toBe(true)
@@ -45,14 +57,16 @@ test("API returns a blockchain transaction", async () => {
 
 test("API returns failed response", async () => {
   jest.spyOn(hwUtils.ComakeryApi.prototype, "getNextTransactionToSign").mockReturnValue({});
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToSendTransaction").mockReturnValue(true)
 
   const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
   expect(res).toBe(false)
 })
 
-test("singAndSendTx returns empty object", async () => {
+test("signAndSendTx returns empty object", async () => {
   jest.spyOn(hwUtils.ComakeryApi.prototype, "getNextTransactionToSign").mockReturnValue({ txHash: "TXHASH" });
-  jest.spyOn(hwUtils, "singAndSendTx").mockReturnValue({});
+  jest.spyOn(hwUtils, "signAndSendTx").mockReturnValue({});
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToSendTransaction").mockReturnValue(true)
 
   const res = await hwUtils.waitForNewTransaction(envs, hwRedis)
   expect(res).toBe(false)
