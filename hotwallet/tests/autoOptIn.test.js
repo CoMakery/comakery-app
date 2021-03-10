@@ -57,7 +57,7 @@ test("with wallet with enough amount to opt-in", async () => {
   expect(hw.optedInApps).toEqual([])
 
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "isOptedInToCurrentApp").mockImplementation(() => {return false});
-  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToSendTransaction").mockImplementation(() => {return true});
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughBalanceToOptInForHotWallet").mockImplementation(() => {return true});
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "optInToApp").mockImplementation(() => { return { tx: true} });
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "getOptedInAppsForHotWallet").mockImplementation(() => {return [13997710]});
 

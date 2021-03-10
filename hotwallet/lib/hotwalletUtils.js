@@ -193,9 +193,9 @@ class AlgorandBlockchain {
     return optedInApps.includes(this.envs.optInApp)
   }
 
-  async enoughBalanceToSendTransaction(hotWalletAddress) {
+  async enoughBalanceToOptInForHotWallet(hotWalletAddress) {
     const balance = await this.getBalanceForHotWallet(hotWalletAddress)
-    return balance > 0.001 // 1000 microalgos
+    return balance > 0.1
   }
 
   async optInToApp(hotWallet, appToOptIn) {
@@ -356,22 +356,14 @@ exports.runServer = async function runServer(envs, redisClient) {
 }
 
 exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRedis) {
-  const hwAddress = await hwRedis.hotWalletAddress()
-  const hwAlgorand = new AlgorandBlockchain(envs)
-  const enoughBalance = await hwAlgorand.enoughBalanceToSendTransaction(hwAddress)
-
-  if (!enoughBalance) {
-    console.log(`The Hot Wallet does not have enough balance of ALGOs to send transactions. Please top up the ${hwAddress}`)
-    return false
-  }
-
   console.log("Checking for a new transaction to send...")
   const hwApi = new ComakeryApi(envs)
+  const hwAddress = await hwRedis.hotWalletAddress()
   const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
 
   if (!exports.isEmptyObject(transactionToSign)) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
-    const tx = await exports.signAndSendTx(transactionToSign, envs, hwRedis)
+    const tx = await exports.singAndSendTx(transactionToSign, envs, hwRedis)
     if (!exports.isEmptyObject(tx)) {
       const hwApi = new ComakeryApi(envs)
       transactionToSign.txHash = tx.transactionId
@@ -385,9 +377,10 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
   return true
 }
 
-exports.signAndSendTx = async function signAndSendTx(transactionToSign, envs, hwRedis) {
+exports.singAndSendTx = async function singAndSendTx(transactionToSign, envs, hwRedis) {
   const hwAlgorand = new AlgorandBlockchain(envs)
   const mnemonic = await hwRedis.hotWalletMnenonic()
+
   const endpoints = hwAlgorand.endpointsByNetwork(transactionToSign.network)
   const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
   const { sk } = algosdk.mnemonicToSecretKey(mnemonic)
@@ -432,7 +425,7 @@ exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
   }
 
   // Check if the wallet has enough balance to send opt-in transaction
-  if (await hwAlgorand.enoughBalanceToSendTransaction(hw.address)) {
+  if (await hwAlgorand.enoughBalanceToOptInForHotWallet(hw.address)) {
     tx_result = await hwAlgorand.optInToApp(hw, envs.optInApp)
     if (exports.isEmptyObject(tx_result)) {
       console.log(`Failed to opt-in into app ${envs.optInApp} for wallet ${hw.address}`)
