@@ -17,7 +17,7 @@ test("with succesfully response", async () => {
   jest.spyOn(hwAlgorand, "connect").mockImplementation(() => {return true});
   jest.spyOn(hwAlgorand.algoChain, "fetchBalance").mockImplementation(() => { return { balance: 99.5 } });
 
-  res = await hwAlgorand.getBalanceForHotWallet(hwAddress)
+  res = await hwAlgorand.getAlgoBalanceForHotWallet(hwAddress)
 
 
   expect(res).toEqual(99.5)
