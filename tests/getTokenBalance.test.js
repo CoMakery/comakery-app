@@ -32,12 +32,12 @@ test("return actual amount from blockchain", async () => {
   }
   jest.spyOn(hwAlgorand, "getAppLocalState").mockReturnValueOnce(localState)
 
-  res = await hwAlgorand.getTokenBalance(hwAddress, 13997710)
+  res = await hwAlgorand.getTokenBalance(hwAddress)
 
   expect(res).toEqual(99)
 
   // result cached
-  res = await hwAlgorand.getTokenBalance(hwAddress, 13997710)
+  res = await hwAlgorand.getTokenBalance(hwAddress)
   expect(res).toEqual(99)
 })
 
@@ -46,7 +46,7 @@ test("when local state is empty", async () => {
   const localState = {}
   jest.spyOn(hwAlgorand, "getAppLocalState").mockReturnValueOnce(localState)
 
-  res = await hwAlgorand.getTokenBalance(hwAddress, 13997710)
+  res = await hwAlgorand.getTokenBalance(hwAddress)
 
 
   expect(res).toEqual(0)
