@@ -270,6 +270,12 @@ class AlgorandBlockchain {
       // Checks for transfer transaction
       if (transaction.appArgs[0] === "0x7472616e73666572") {
         const txTokensAmount = parseInt(transaction.appArgs[1])
+
+        if (this.envs.maxAmountForTransfer > 0 && txTokensAmount > this.envs.maxAmountForTransfer) {
+          console.log(`The transaction has too big amount for transfer (${txTokensAmount}). Max amount is ${this.envs.maxAmountForTransfer}`)
+          return false
+        }
+
         const hwTokensBalance = await this.getTokenBalance(hotWalletAddress)
         if (hwTokensBalance < txTokensAmount) {
           console.log(`The Hot Wallet has not enough tokens to transfer (${hwTokensBalance} < ${txTokensAmount})`)
@@ -357,7 +363,7 @@ exports.ComakeryApi = ComakeryApi
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
   return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
     Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay) &&
-    Boolean(envs.optInApp) && Boolean(envs.blockchainNetwork)
+    Boolean(envs.optInApp) && Boolean(envs.blockchainNetwork) && Boolean(envs.maxAmountForTransfer)
 }
 
 exports.isEmptyObject = function isEmptyObject(obj) {

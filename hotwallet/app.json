@@ -61,6 +61,10 @@
       "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta",
       "required": true,
       "value": "algorand"
+    },
+    "MAX_AMOUNT_FOR_TRANSFER": {
+      "description": "Maximum amount of tokens to send. Value 100000000 is mean 1 NOTE token (1 x 10^-8), 0 for unlimited. Unlimited by default",
+      "required": false
     }
   }
 }

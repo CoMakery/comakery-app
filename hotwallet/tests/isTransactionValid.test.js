@@ -7,7 +7,7 @@ const envs = {
   redisUrl: "redis://localhost:6379/0",
   checkForNewTransactionsDelay: 30,
   optInApp: 13997710,
-  blockchainNetwork: "algorand_test"
+  blockchainNetwork: "algorand_test",
 }
 
 const hwAddress = "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4"
@@ -20,6 +20,15 @@ afterAll(() => {
 
 test("valid", async () => {
   const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
+  jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(5)
+
+  res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
+
+  expect(res).toBe(true)
+})
+
+test("valid: maxAmountForTransfer is 0", async () => {
+  const hwAlgorand = new hwUtils.AlgorandBlockchain(Object.assign(envs, {maxAmountForTransfer: 0}))
   jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(5)
 
   res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
@@ -63,6 +72,15 @@ test("invalid: transaction for another app", async () => {
 test("invalid: HW has not enough tokens to transfer", async () => {
   const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
   jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(4)
+
+  res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
+
+  expect(res).toBe(false)
+})
+
+test("invalid: limited by maxAmountForTransfer", async () => {
+  const hwAlgorand = new hwUtils.AlgorandBlockchain(Object.assign(envs, {maxAmountForTransfer: 4}))
+  jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(5)
 
   res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
 
