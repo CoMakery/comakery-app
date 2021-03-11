@@ -168,10 +168,10 @@ class AlgorandBlockchain {
     }
   }
 
-  async getTokenBalance(hotWalletAddress, appIndex) {
+  async getTokenBalance(hotWalletAddress) {
     if (hotWalletAddress in this.tokenBalances) { return this.tokenBalances[hotWalletAddress] }
 
-    const localState = (await this.getAppLocalState(hotWalletAddress, appIndex))
+    const localState = (await this.getAppLocalState(hotWalletAddress, this.envs.optInApp))
     const values = localState["key-value"]
     if (!values) { return 0 }
 
@@ -226,8 +226,8 @@ class AlgorandBlockchain {
     return algoBalance > 0.001 // 1000 microalgos
   }
 
-  async positiveTokenBalance(hotWalletAddress, appIndex) {
-    const tokenBalance = await this.getTokenBalance(hotWalletAddress, appIndex)
+  async positiveTokenBalance(hotWalletAddress) {
+    const tokenBalance = await this.getTokenBalance(hotWalletAddress)
     return tokenBalance > 0
   }
 
@@ -253,6 +253,38 @@ class AlgorandBlockchain {
     } catch (err) {
       console.error(err)
       return {}
+    }
+  }
+
+  async isTransactionValid(transaction, hotWalletAddress) {
+    if (typeof transaction !== 'string') { return false }
+    try {
+      transaction = JSON.parse(transaction)
+
+      // Is AppIndex for the current App?
+      if (transaction.appIndex !== this.envs.optInApp) {
+        console.log("The transaction is not for configured App.")
+        return false
+      }
+
+      // Checks for transfer transaction
+      if (transaction.appArgs[0] === "0x7472616e73666572") {
+        const txTokensAmount = parseInt(transaction.appArgs[1])
+
+        if (this.envs.maxAmountForTransfer > 0 && txTokensAmount > this.envs.maxAmountForTransfer) {
+          console.log(`The transaction has too big amount for transfer (${txTokensAmount}). Max amount is ${this.envs.maxAmountForTransfer}`)
+          return false
+        }
+
+        const hwTokensBalance = await this.getTokenBalance(hotWalletAddress)
+        if (hwTokensBalance < txTokensAmount) {
+          console.log(`The Hot Wallet has not enough tokens to transfer (${hwTokensBalance} < ${txTokensAmount})`)
+          return false
+        }
+      }
+      return true
+    } catch (err) {
+      return false
     }
   }
 }
@@ -331,7 +363,7 @@ exports.ComakeryApi = ComakeryApi
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
   return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
     Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay) &&
-    Boolean(envs.optInApp) && Boolean(envs.blockchainNetwork)
+    Boolean(envs.optInApp) && Boolean(envs.blockchainNetwork) && Boolean(envs.maxAmountForTransfer)
 }
 
 exports.isEmptyObject = function isEmptyObject(obj) {
@@ -398,17 +430,19 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     return false
   }
 
-  const hasTokens = await hwAlgorand.positiveTokenBalance(hwAddress, envs.optInApp)
+  const hasTokens = await hwAlgorand.positiveTokenBalance(hwAddress)
   if (!hasTokens) {
     console.log(`The Hot Wallet does not have NOTE tokens. Please top up the ${hwAddress}`)
     return false
   }
 
+  // hwAlgorand
   console.log("Checking for a new transaction to send...")
   const hwApi = new ComakeryApi(envs)
   const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
+  const txValid = await hwAlgorand.isTransactionValid(transactionToSign.txRaw, hwAddress)
 
-  if (!exports.isEmptyObject(transactionToSign)) {
+  if (txValid) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
     const tx = await exports.signAndSendTx(transactionToSign, envs, hwRedis)
     if (!exports.isEmptyObject(tx)) {
