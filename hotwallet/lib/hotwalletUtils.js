@@ -266,7 +266,7 @@ class AlgorandBlockchain {
       if (transaction.appIndex !== this.envs.optInApp) {
         const errorMessage = "The transaction is not for configured App."
         console.log(errorMessage)
-        return { valid: false, error: errorMessage }
+        return { valid: false, markAsFailed: true, error: errorMessage }
       }
 
       // Checks for transfer transaction
@@ -276,7 +276,7 @@ class AlgorandBlockchain {
         if (this.envs.maxAmountForTransfer > 0 && txTokensAmount > this.envs.maxAmountForTransfer) {
           const errorMessage = `The transaction has too big amount for transfer (${txTokensAmount}). Max amount is ${this.envs.maxAmountForTransfer}`
           console.log(errorMessage)
-          return { valid: false, error: errorMessage }
+          return { valid: false, markAsFailed: true, error: errorMessage }
         }
 
         const hwTokensBalance = await this.getTokenBalance(hotWalletAddress)
@@ -288,7 +288,7 @@ class AlgorandBlockchain {
       }
       return { valid: true }
     } catch (err) {
-      return { valid: false, error: `Unknown error: ${err}` }
+      return { valid: false, markAsFailed: true, error: `Unknown error: ${err}` }
     }
   }
 }
@@ -345,6 +345,25 @@ class ComakeryApi {
       }
     } catch (error) {
       this.logError('updateTransactionHash', error)
+      return {}
+    }
+  }
+
+  async failTransaction(blockchainTransaction, errorMessage) {
+    const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions/${blockchainTransaction.id}`
+    const params = { body: { data: { transaction: { failed: true, status_message: errorMessage } } } }
+    const config = { data: params, headers: { "API-Transaction-Key": this.envs.projectApiKey } }
+
+    try {
+      const res = await axios.delete(blockchainTransactionsUrl, config)
+      if (res.status == 200) {
+        console.log("The transaction has been marked as failed")
+        return res.data
+      } else {
+        return {}
+      }
+    } catch (error) {
+      this.logError('failTransaction', error)
       return {}
     }
   }
@@ -454,9 +473,10 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     } else {
       return false
     }
-  } else {
-    if (txValidation.error) {
-      // TODO: Mark tx as failed with reason through API
+  } else { // tx is invalid
+    console.log(txValidation);
+    if (txValidation.markAsFailed) {
+      await hwApi.failTransaction(transactionToSign, txValidation.error)
     }
     return false
   }
