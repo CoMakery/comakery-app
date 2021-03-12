@@ -257,14 +257,16 @@ class AlgorandBlockchain {
   }
 
   async isTransactionValid(transaction, hotWalletAddress) {
-    if (typeof transaction !== 'string') { return false }
+    if (typeof transaction !== 'string') { return { valid: false } }
+
     try {
       transaction = JSON.parse(transaction)
 
       // Is AppIndex for the current App?
       if (transaction.appIndex !== this.envs.optInApp) {
-        console.log("The transaction is not for configured App.")
-        return false
+        const errorMessage = "The transaction is not for configured App."
+        console.log(errorMessage)
+        return { valid: false, markAsFailed: true, error: errorMessage }
       }
 
       // Checks for transfer transaction
@@ -272,19 +274,21 @@ class AlgorandBlockchain {
         const txTokensAmount = parseInt(transaction.appArgs[1])
 
         if (this.envs.maxAmountForTransfer > 0 && txTokensAmount > this.envs.maxAmountForTransfer) {
-          console.log(`The transaction has too big amount for transfer (${txTokensAmount}). Max amount is ${this.envs.maxAmountForTransfer}`)
-          return false
+          const errorMessage = `The transaction has too big amount for transfer (${txTokensAmount}). Max amount is ${this.envs.maxAmountForTransfer}`
+          console.log(errorMessage)
+          return { valid: false, markAsFailed: true, error: errorMessage }
         }
 
         const hwTokensBalance = await this.getTokenBalance(hotWalletAddress)
         if (hwTokensBalance < txTokensAmount) {
-          console.log(`The Hot Wallet has not enough tokens to transfer (${hwTokensBalance} < ${txTokensAmount})`)
-          return false
+          const errorMessage = `The Hot Wallet has not enough tokens to transfer (${hwTokensBalance} < ${txTokensAmount})`
+          console.log(errorMessage)
+          return { valid: false, error: errorMessage }
         }
       }
-      return true
+      return { valid: true }
     } catch (err) {
-      return false
+      return { valid: false, markAsFailed: true, error: `Unknown error: ${err}` }
     }
   }
 }
@@ -341,6 +345,25 @@ class ComakeryApi {
       }
     } catch (error) {
       this.logError('updateTransactionHash', error)
+      return {}
+    }
+  }
+
+  async failTransaction(blockchainTransaction, errorMessage) {
+    const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions/${blockchainTransaction.id}`
+    const params = { body: { data: { transaction: { failed: true, status_message: errorMessage } } } }
+    const config = { data: params, headers: { "API-Transaction-Key": this.envs.projectApiKey } }
+
+    try {
+      const res = await axios.delete(blockchainTransactionsUrl, config)
+      if (res.status == 200) {
+        console.log("The transaction has been marked as failed")
+        return res.data
+      } else {
+        return {}
+      }
+    } catch (error) {
+      this.logError('failTransaction', error)
       return {}
     }
   }
@@ -436,23 +459,25 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     return false
   }
 
-  // hwAlgorand
   console.log("Checking for a new transaction to send...")
   const hwApi = new ComakeryApi(envs)
   const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
-  const txValid = await hwAlgorand.isTransactionValid(transactionToSign.txRaw, hwAddress)
+  const txValidation = await hwAlgorand.isTransactionValid(transactionToSign.txRaw, hwAddress)
 
-  if (txValid) {
+  if (txValidation.valid) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
     const tx = await exports.signAndSendTx(transactionToSign, envs, hwRedis)
     if (!exports.isEmptyObject(tx)) {
-      const hwApi = new ComakeryApi(envs)
       transactionToSign.txHash = tx.transactionId
       await hwApi.updateTransactionHash(transactionToSign)
     } else {
       return false
     }
-  } else {
+  } else { // tx is invalid
+    console.log(txValidation);
+    if (txValidation.markAsFailed) {
+      await hwApi.failTransaction(transactionToSign, txValidation.error)
+    }
     return false
   }
   return true
