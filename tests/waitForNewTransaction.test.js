@@ -95,7 +95,7 @@ test("validation mark the transaction as failed", async () => {
   const transaction = { txHash: "TXHASH" }
   jest.spyOn(hwUtils.ComakeryApi.prototype, "getNextTransactionToSign").mockReturnValueOnce(transaction);
   jest.spyOn(hwUtils.ComakeryApi.prototype, "failTransaction").mockReturnValueOnce({ status: 200, data: transaction })
-  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "isTransactionValid").mockReturnValueOnce({ valid: false, error: "Some error", markAsFailed: true })
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "isTransactionValid").mockReturnValueOnce({ valid: false, error: "Some error", markAs: "failed" })
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughAlgoBalanceToSendTransaction").mockReturnValueOnce(true)
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "positiveTokenBalance").mockReturnValueOnce(true)
 
@@ -107,7 +107,7 @@ test("validation mark the transaction as failed", async () => {
 test("validation does not mark the transaction as failed", async () => {
   const transaction = { txHash: "TXHASH" }
   jest.spyOn(hwUtils.ComakeryApi.prototype, "getNextTransactionToSign").mockReturnValueOnce({ status: 200, data: transaction });
-  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "isTransactionValid").mockReturnValueOnce({ valid: false, error: "Some error", markAsFailed: false })
+  jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "isTransactionValid").mockReturnValueOnce({ valid: false, error: "Some error" })
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "enoughAlgoBalanceToSendTransaction").mockReturnValueOnce(true)
   jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "positiveTokenBalance").mockReturnValueOnce(true)
 
