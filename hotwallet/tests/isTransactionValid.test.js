@@ -75,7 +75,7 @@ test("invalid: HW has not enough tokens to transfer", async () => {
 
   res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
 
-  expect(res).toEqual({ valid: false, error: "The Hot Wallet has not enough tokens to transfer (4 < 5)" })
+  expect(res).toEqual({ valid: false, markAs: "cancelled", error: "The Hot Wallet has insufficient tokens to transfer (4 < 5)" })
 })
 
 test("invalid: limited by maxAmountForTransfer", async () => {

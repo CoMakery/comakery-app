@@ -281,9 +281,9 @@ class AlgorandBlockchain {
 
         const hwTokensBalance = await this.getTokenBalance(hotWalletAddress)
         if (hwTokensBalance < txTokensAmount) {
-          const errorMessage = `The Hot Wallet has not enough tokens to transfer (${hwTokensBalance} < ${txTokensAmount})`
+          const errorMessage = `The Hot Wallet has insufficient tokens to transfer (${hwTokensBalance} < ${txTokensAmount})`
           console.log(errorMessage)
-          return { valid: false, error: errorMessage }
+          return { valid: false, markAs: "cancelled", error: errorMessage }
         }
       }
       return { valid: true }
@@ -349,21 +349,23 @@ class ComakeryApi {
     }
   }
 
-  async failTransaction(blockchainTransaction, errorMessage) {
+  async cancelTransaction(blockchainTransaction, errorMessage, status ) {
     const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions/${blockchainTransaction.id}`
-    const params = { body: { data: { transaction: { failed: true, status_message: errorMessage } } } }
+    let transactionParams = { status_message: errorMessage }
+    if (status == "failed") { transactionParams["failed"] = true }
+    const params = { body: { data: { transaction: transactionParams } } }
     const config = { data: params, headers: { "API-Transaction-Key": this.envs.projectApiKey } }
 
     try {
       const res = await axios.delete(blockchainTransactionsUrl, config)
       if (res.status == 200) {
-        console.log("The transaction has been marked as failed")
+        console.log(`The transaction has been marked as ${status}`)
         return res.data
       } else {
         return {}
       }
     } catch (error) {
-      this.logError('failTransaction', error)
+      this.logError('cancelTransaction', error)
       return {}
     }
   }
@@ -474,8 +476,8 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
       return false
     }
   } else { // tx is invalid
-    if (txValidation.markAs === "failed") {
-      await hwApi.failTransaction(transactionToSign, txValidation.error)
+    if (txValidation.markAs) {
+      await hwApi.cancelTransaction(transactionToSign, txValidation.error, txValidation.markAs)
     }
     return false
   }
