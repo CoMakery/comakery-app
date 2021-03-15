@@ -266,7 +266,7 @@ class AlgorandBlockchain {
       if (transaction.appIndex !== this.envs.optInApp) {
         const errorMessage = "The transaction is not for configured App."
         console.log(errorMessage)
-        return { valid: false, markAsFailed: true, error: errorMessage }
+        return { valid: false, markAs: "failed", error: errorMessage }
       }
 
       // Checks for transfer transaction
@@ -276,7 +276,7 @@ class AlgorandBlockchain {
         if (this.envs.maxAmountForTransfer > 0 && txTokensAmount > this.envs.maxAmountForTransfer) {
           const errorMessage = `The transaction has too big amount for transfer (${txTokensAmount}). Max amount is ${this.envs.maxAmountForTransfer}`
           console.log(errorMessage)
-          return { valid: false, markAsFailed: true, error: errorMessage }
+          return { valid: false, markAs: "failed", error: errorMessage }
         }
 
         const hwTokensBalance = await this.getTokenBalance(hotWalletAddress)
@@ -288,7 +288,7 @@ class AlgorandBlockchain {
       }
       return { valid: true }
     } catch (err) {
-      return { valid: false, markAsFailed: true, error: `Unknown error: ${err}` }
+      return { valid: false, markAs: "failed", error: `Unknown error: ${err}` }
     }
   }
 }
@@ -474,8 +474,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
       return false
     }
   } else { // tx is invalid
-    console.log(txValidation);
-    if (txValidation.markAsFailed) {
+    if (txValidation.markAs === "failed") {
       await hwApi.failTransaction(transactionToSign, txValidation.error)
     }
     return false
