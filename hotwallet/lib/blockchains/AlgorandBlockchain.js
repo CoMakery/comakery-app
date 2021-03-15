@@ -129,7 +129,7 @@ class AlgorandBlockchain {
 
   async enoughAlgoBalanceToSendTransaction(hotWalletAddress) {
     const algoBalance = await this.getAlgoBalanceForHotWallet(hotWalletAddress)
-    return algoBalance.isLessThan(new BigNumber(0.001)) // 1000 microalgos
+    return algoBalance.isGreaterThan(new BigNumber(0.001)) // 1000 microalgos
   }
 
   async positiveTokenBalance(hotWalletAddress) {
