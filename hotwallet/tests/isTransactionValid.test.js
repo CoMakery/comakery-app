@@ -55,7 +55,7 @@ test("invalid: tx is incorrect JSON", async () => {
 
   res = await hwAlgorand.isTransactionValid(wrongAppTx, hwAddress)
 
-  expect(res).toEqual({ valid: false, markAsFailed: true, error: "Unknown error: SyntaxError: Unexpected end of JSON input" })
+  expect(res).toEqual({ valid: false, markAs: "failed", error: "Unknown error: SyntaxError: Unexpected end of JSON input" })
 })
 
 test("invalid: transaction for another app", async () => {
@@ -66,7 +66,7 @@ test("invalid: transaction for another app", async () => {
 
   res = await hwAlgorand.isTransactionValid(wrongAppTx, hwAddress)
 
-  expect(res).toEqual({ valid: false, markAsFailed: true, error: "The transaction is not for configured App." })
+  expect(res).toEqual({ valid: false, markAs: "failed", error: "The transaction is not for configured App." })
 })
 
 test("invalid: HW has not enough tokens to transfer", async () => {
@@ -75,7 +75,7 @@ test("invalid: HW has not enough tokens to transfer", async () => {
 
   res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
 
-  expect(res).toEqual({ valid: false, error: "The Hot Wallet has not enough tokens to transfer (4 < 5)" })
+  expect(res).toEqual({ valid: false, markAs: "cancelled", error: "The Hot Wallet has insufficient tokens to transfer (4 < 5)" })
 })
 
 test("invalid: limited by maxAmountForTransfer", async () => {
@@ -84,5 +84,5 @@ test("invalid: limited by maxAmountForTransfer", async () => {
 
   res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
 
-  expect(res).toEqual({ valid: false, markAsFailed: true, error: "The transaction has too big amount for transfer (5). Max amount is 4" })
+  expect(res).toEqual({ valid: false, markAs: "failed", error: "The transaction has too big amount for transfer (5). Max amount is 4" })
 })
