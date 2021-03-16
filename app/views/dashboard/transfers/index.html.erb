@@ -28,15 +28,27 @@
       <div class="col-6">
         <% hot_wallet = @project.hot_wallet %>
         <% if hot_wallet.present? %>
-          <p class="text-right hot-wallet">
-            Hot Wallet:&emsp; <%= link_to(
-              middle_truncate(hot_wallet.address),
-              hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
-              target: :_blank,
-              class: 'mr-2',
-              data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
-            ) %>
-          </p>
+          <div class="text-right hot-wallet">
+            <div class="hot-wallet-switcher"
+              data-controller="hot-wallet-mode-switcher"
+              data-hot-wallet-mode-switcher-update-url="<%= project_path(@project) %>">
+              <label>
+                <input type="checkbox"
+                  data-action="hot-wallet-mode-switcher#toggle"
+                  data-target="hot-wallet-mode-switcher.hotWalletMode"
+                  <% if @project.auto_sending? %> checked <% end %>>
+                Hot Wallet Auto-Pay
+              </label>
+            </div>
+            <div class="hot-wallet-address">
+              Hot Wallet:&emsp; <%= link_to(
+                middle_truncate(hot_wallet.address),
+                hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
+                target: :_blank,
+                class: 'mr-2',
+                data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+              ) %>
+            </div>
         <% end %>
       </div>
     </div>

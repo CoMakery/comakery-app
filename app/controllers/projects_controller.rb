@@ -288,6 +288,7 @@ class ProjectsController < ApplicationController
         :visibility,
         :status,
         :display_team,
+        :hot_wallet_mode,
         channels_attributes: %i[
           _destroy
           id
