@@ -46,6 +46,7 @@ class Project < ApplicationRecord
   }
   enum visibility: { member: 0, public_listed: 1, member_unlisted: 2, public_unlisted: 3, archived: 4 }
   enum status: { active: 0, passive: 1 }
+  enum hot_wallet_mode: { disabled: 0, auto_sending: 1 }
 
   validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
