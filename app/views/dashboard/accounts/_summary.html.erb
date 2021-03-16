@@ -25,7 +25,8 @@
     <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
 
     <% cache @project.awards do %>
-      <%= @accounts_all.sum { |a| a.total_awards_earned(@project) } %>
+      <%#= @accounts_all.sum { |a| a.total_awards_earned(@project) } %>
+      <%=@project.total_awards_earned(@accounts_all)%>
     <% end %>
   </div>
 

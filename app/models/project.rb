@@ -112,6 +112,10 @@ class Project < ApplicationRecord
     interested << interested_account unless interested_account.interested?(id)
   end
 
+  def total_awards_earned(all_accounts)
+    Award.joins(project: :account).completed.where('projects.id =? AND accounts.id IN(?)', self.id, all_accounts.ids).sum(:total_amount).to_f
+  end
+
   def top_contributors
     Account
       .with_attached_image
