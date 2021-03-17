@@ -66,6 +66,7 @@ class Project < ApplicationRecord
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
   after_create :add_owner_as_interested
   after_create :create_default_transfer_types
+  after_update_commit :broadcast_hot_wallet_mode, if: :saved_change_to_hot_wallet_mode?
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -278,5 +279,11 @@ class Project < ApplicationRecord
 
     def set_whitelabel
       self.whitelabel = mission&.whitelabel
+    end
+
+    def broadcast_hot_wallet_mode
+      broadcast_replace_later_to 'project_hot_wallet_modes',
+                                 target: "project_#{id}_hot_wallet_mode",
+                                 partial: 'dashboard/transfers/hot_wallet_mode', locals: { project: self }
     end
 end
