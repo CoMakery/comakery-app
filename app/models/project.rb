@@ -113,7 +113,7 @@ class Project < ApplicationRecord
   end
 
   def total_awards_earned(all_accounts)
-    Award.joins(project: :account).completed.where('projects.id =? AND accounts.id IN(?)', self.id, all_accounts.ids).sum(:total_amount).to_f
+    Award.joins(project: :account).completed.where('projects.id =? AND accounts.id IN(?)', id, all_accounts.ids).sum(:total_amount).to_f
   end
 
   def top_contributors
