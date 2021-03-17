@@ -8,7 +8,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
-    return head :no_content if project.token.token_frozen?
+    return head :no_content if creation_disabled?
 
     @transaction = transactable.new_blockchain_transaction(transaction_create_params) if transactable
     @transaction&.save
@@ -112,5 +112,13 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
         render 'api/v1/error.json', status: :bad_request
       end
+    end
+
+    def hot_wallet_disabled?
+      project.hot_wallet_disabled? && project.hot_wallet&.address == transaction_create_params[:source]
+    end
+
+    def creation_disabled?
+      hot_wallet_disabled? || project.token.token_frozen?
     end
 end

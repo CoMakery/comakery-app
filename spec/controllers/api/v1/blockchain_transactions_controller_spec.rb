@@ -51,6 +51,64 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
         post :create, params: params
         expect(response).to have_http_status(:created)
       end
+
+      context 'with request from a hot wallet' do
+        before do
+          project.update(hot_wallet: hot_wallet, hot_wallet_mode: hot_wallet_mode)
+        end
+
+        context 'with registered hw and hot_wallet_mode = disabled' do
+          let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+          let(:hot_wallet_mode) { 'disabled' }
+
+          it 'returns no_content' do
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:no_content)
+          end
+        end
+
+        context 'with registered hw and hot_wallet_mode = auto_sending' do
+          let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+          let(:hot_wallet_mode) { 'auto_sending' }
+
+          it 'returns the created transaction' do
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:created)
+          end
+        end
+
+        context 'with NOT registered hw and hot_wallet_mode = disabled' do
+          let(:hot_wallet) { nil }
+          let(:hot_wallet_mode) { 'disabled' }
+
+          it 'returns the created transaction' do
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:created)
+          end
+        end
+
+        context 'with registered hw and hot_wallet_mode = auto_sending but another source' do
+          let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_2)) }
+          let(:hot_wallet_mode) { 'auto_sending' }
+
+          it 'returns the created transaction' do
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:created)
+          end
+        end
+      end
     end
 
     context 'with account_token_records available for transaction' do

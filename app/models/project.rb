@@ -229,6 +229,10 @@ class Project < ApplicationRecord
     TransferType.create_defaults_for(self) if transfer_types.empty?
   end
 
+  def hot_wallet_disabled?
+    hot_wallet_mode == 'disabled'
+  end
+
   private
 
     def valid_tracker_url
