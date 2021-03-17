@@ -29,8 +29,9 @@
         <% hot_wallet = @project.hot_wallet %>
         <% if hot_wallet.present? %>
           <div class="text-right hot-wallet">
-            <%# TODO: show swither to admins only and make sure it can be updated by admins only %>
-            <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+            <% if policy(@project).edit_hot_wallet_mode? %>
+              <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+            <% end %>
             <div class="hot-wallet-address">
               Hot Wallet:&emsp; <%= link_to(
                 middle_truncate(hot_wallet.address),
