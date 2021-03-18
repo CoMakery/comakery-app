@@ -4,7 +4,7 @@
   <div
     class="transfers-chart transfers-filters animated fadeIn faster"
     data-controller="transfers-chart"
-    data-transfers-chart-stacked-chart-scale-x="<%=params[:duration] || 'Year' %>"
+    data-transfers-chart-stacked-chart-scale-x="<%= params[:duration] || 'Year' %>"
     data-transfers-chart-stacked-chart-data-status="Created"
     data-transfers-chart-stacked-chart-data-day="<%= params[:duration] == 'Day' ? @project.transfers_stacked_chart_day(@transfers_all, negative: @negative).to_json : '' %>"
     data-transfers-chart-stacked-chart-data-week="<%= params[:duration] == 'Week' ? @project.transfers_stacked_chart_week(@transfers_all, negative: @negative).to_json : '' %>"
