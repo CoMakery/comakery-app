@@ -2,7 +2,7 @@
 <%= turbo_frame_tag "project_hot_wallet_modes" do %>
     <div id="project_<%= project.id %>_hot_wallet_mode" class="hot-wallet-switcher" data-controller="hot-wallet-mode-switcher" data-hot-wallet-mode-switcher-update-url="<%= project_path(project) %>">
       <label>
-        <input type="checkbox"
+        <input id="project_hot_wallet_mode" type="checkbox"
           data-action="hot-wallet-mode-switcher#toggle"
           data-target="hot-wallet-mode-switcher.hotWalletMode"
           <% if project.auto_sending? %> checked<% end %>>
