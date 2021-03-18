@@ -557,6 +557,11 @@ form.form-with-submit-button {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
   padding: 10px;
+
+  .hot-wallet-switcher label{
+    font-weight: normal;
+    text-transform: none;
+  }
 }
 
 .transfers-filters {
