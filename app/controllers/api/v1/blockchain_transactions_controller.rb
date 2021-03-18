@@ -114,8 +114,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       end
     end
 
+    def hot_wallet_request?
+      project.hot_wallet&.address == transaction_create_params[:source]
+    end
+
     def hot_wallet_disabled?
-      project.hot_wallet_disabled? && project.hot_wallet&.address == transaction_create_params[:source]
+      project.hot_wallet_disabled? && hot_wallet_request?
     end
 
     def creation_disabled?
