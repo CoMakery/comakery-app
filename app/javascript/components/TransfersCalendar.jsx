@@ -27,7 +27,8 @@ class TransfersCalendar extends React.Component {
       let currentUrl = new URL(window.location.href)
       currentUrl.searchParams.set('q[created_at_gteq]', startDate)
       currentUrl.searchParams.set('q[created_at_lteq]', endDate)
-      Turbo.visit(currentUrl)
+      //Turbo.visit(currentUrl)
+      window.location.href = currentUrl
     }
   }
 

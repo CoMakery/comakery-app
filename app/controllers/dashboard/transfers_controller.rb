@@ -1,10 +1,10 @@
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
-  before_action :set_transfers, only: [:index]
+  before_action :set_transfers, only: %i[index fetch_chart_data]
   before_action :set_transfer, only: [:show]
-  skip_before_action :require_login, only: %i[index show]
-  skip_after_action :verify_policy_scoped, only: %i[index show]
+  skip_before_action :require_login, only: %i[index show fetch_chart_data]
+  skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
 
   fragment_cache_key do
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
@@ -36,6 +36,11 @@ class Dashboard::TransfersController < ApplicationController
     end
   end
 
+  def fetch_chart_data
+    authorize @project, :transfers?
+    render partial: 'chart'
+  end
+
   private
 
     def query
@@ -55,12 +60,11 @@ class Dashboard::TransfersController < ApplicationController
       @page = (params[:page] || 1).to_i
       @transfers_all = query.result(distinct: true)
                             .reorder('')
-                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
+                            .includes(:transfer_type, :issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
 
       @transfers_all.size
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)
-
       if (@page > 1) && @transfers.out_of_range?
         flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
         @page = 1
