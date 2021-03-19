@@ -8,24 +8,25 @@ const envs = {
   comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
   purestakeApi: process.env.PURESTAKE_API,
   redisUrl: process.env.REDIS_URL,
-  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY)
+  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
+  optInApp: parseInt(process.env.OPT_IN_APP),
+  blockchainNetwork: process.env.BLOCKCHAIN_NETWORK,
+  maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER)
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
 
 async function initialize() {
-  if (!hwUtils.checkAllVariablesAreSet(envs)) { return "Some ENV vars was not set" }
-
-  hwUtils.setRedisErrorHandler(redisClient)
-  await hwUtils.hotWalletInitialization(envs, redisClient)
-
-  return true
+  if (!hwUtils.checkAllVariablesAreSet(envs)) {
+    console.error("Some ENV vars was not set")
+    return false
+  }
+  return await hwUtils.hotWalletInitialization(envs, redisClient)
 }
 
 (async () => {
-  // await hwUtils.deleteCurrentKey(envs, redisClient)
-  await initialize()
-  hwUtils.runServer(envs, redisClient)
-
-  // hwUtils.optInToApp('algorand_testnet', envs, redisClient)
+  const initialized = await initialize()
+  if (initialized) {
+    hwUtils.runServer(envs, redisClient)
+  }
 })();

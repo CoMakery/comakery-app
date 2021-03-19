@@ -54,15 +54,23 @@ shared_examples 'synchronisable' do
 
   describe '#failed_transactions_row' do
     context 'when latest_transaction is failed' do
-      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[ok failed failed]) }
+      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[failed failed ok]) }
 
       it 'returns number of failed transactions in row' do
         expect(subject.failed_transactions_row).to eq(2)
       end
     end
 
-    context 'when latest_transaction is not failed' do
-      before { allow(subject.synchronisations).to receive(:pluck).and_return(['ok']) }
+    context 'when latest_transaction is in_progress' do
+      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[in_progress failed failed]) }
+
+      it 'returns number of failed transactions in row' do
+        expect(subject.failed_transactions_row).to eq(2)
+      end
+    end
+
+    context 'when latest_transaction is ok' do
+      before { allow(subject.synchronisations).to receive(:pluck).and_return(%w[ok failed failed]) }
       specify { expect(subject.failed_transactions_row).to eq(0) }
     end
   end

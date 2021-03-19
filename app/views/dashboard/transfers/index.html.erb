@@ -2,9 +2,10 @@
   <div data-controller="transfer-form" data-transfer-form-decimal-places="<%= @project.token ? @project.token.decimal_places : 0 %>">
     <%= render partial: "filters" %>
 
-    <% if @transfers_all.present? %>
-      <%= render partial: "chart" %>
-    <% end %>
+    <%# TODO: Uncomment me after the chart perfomance will be fixed %>
+    <%# if @transfers_all.present? %>
+      <%#= render partial: "chart" %>
+    <%# end %>
 
     <div class="row">
       <div class="col-6">
@@ -27,15 +28,19 @@
       <div class="col-6">
         <% hot_wallet = @project.hot_wallet %>
         <% if hot_wallet.present? %>
-          <p class="text-right hot-wallet">
-            Hot Wallet:&emsp; <%= link_to(
-              middle_truncate(hot_wallet.address),
-              hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
-              target: :_blank,
-              class: 'mr-2',
-              data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
-            ) %>
-          </p>
+          <div class="text-right hot-wallet">
+            <% if policy(@project).edit_hot_wallet_mode? %>
+              <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+            <% end %>
+            <div class="hot-wallet-address">
+              Hot Wallet:&emsp; <%= link_to(
+                middle_truncate(hot_wallet.address),
+                hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
+                target: :_blank,
+                class: 'mr-2',
+                data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+              ) %>
+            </div>
         <% end %>
       </div>
     </div>

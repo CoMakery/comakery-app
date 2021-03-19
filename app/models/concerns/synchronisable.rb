@@ -38,7 +38,7 @@ module Synchronisable
     end
 
     def failed_transactions_row
-      latest_status, latest_status_row = synchronisations.pluck(:status).chunk(&:itself).to_a.last
+      latest_status, latest_status_row = synchronisations.pluck(:status).reject { |s| s == 'in_progress' }.chunk(&:itself).to_a.first
       latest_status == 'failed' ? latest_status_row.size : 0
     end
 

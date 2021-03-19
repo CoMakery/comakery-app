@@ -7,7 +7,10 @@ test('all ENVs are set', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(true)
 })
@@ -19,7 +22,10 @@ test('projectId is null', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -30,7 +36,10 @@ test('projectId is undefined', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -42,7 +51,10 @@ test('projectId is undefined', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -54,7 +66,10 @@ test('projectApiKey is null', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -66,7 +81,10 @@ test('comakeryServerUrl is null', async () => {
     comakeryServerUrl: null,
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -78,7 +96,10 @@ test('purestakeApi is null', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: null,
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -90,7 +111,10 @@ test('redisUrl is null', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: null,
-    checkForNewTransactionsDelay: 30
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
@@ -102,7 +126,56 @@ test('checkForNewTransactionsDelay is null', async () => {
     comakeryServerUrl: "http://cmk.server",
     purestakeApi: "purestake_api_key",
     redisUrl: "redis://localhost:6379/0",
-    checkForNewTransactionsDelay: null
+    checkForNewTransactionsDelay: null,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
+  }
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
+})
+
+test('optInApp is null', async () => {
+  const envs = {
+    projectId: "1",
+    projectApiKey: "project_api_key",
+    comakeryServerUrl: "http://cmk.server",
+    purestakeApi: "purestake_api_key",
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30,
+    optInApp: null,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: 100000000
+  }
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
+})
+
+
+test('blockchainNetwork is null', async () => {
+  const envs = {
+    projectId: "1",
+    projectApiKey: "project_api_key",
+    comakeryServerUrl: "http://cmk.server",
+    purestakeApi: "purestake_api_key",
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: null,
+    maxAmountForTransfer: 100000000
+  }
+  expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
+})
+
+test('maxAmountForTransfer is null', async () => {
+  const envs = {
+    projectId: "1",
+    projectApiKey: "project_api_key",
+    comakeryServerUrl: "http://cmk.server",
+    purestakeApi: "purestake_api_key",
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: 'algorand_test',
+    maxAmountForTransfer: null
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })

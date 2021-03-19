@@ -70,7 +70,7 @@
             <% end %>
           </div>
 
-          <%= f.number_field(:max_balance, required: false, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
+          <%= f.number_field(:max_balance, required: true, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__lockup_until">
@@ -85,7 +85,7 @@
             <%= last_record&.decorate&.lockup_until_pretty %>
           </div>
 
-          <%= f.datetime_local_field(:lockup_until, step: 1, required: false, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form-controls.inputs"}, class: 'hidden') %>
+          <%= f.datetime_local_field(:lockup_until, step: 1, required: true, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form-controls.inputs"}, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__reg_group">
@@ -100,7 +100,7 @@
             <%= last_record&.reg_group ? "#{last_record.reg_group.name} (#{last_record.reg_group.blockchain_id})" : "–" %>
           </div>
 
-          <%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form-controls.inputs"} }) %>
+          <%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: true }, { required: true, class: 'hidden', data: {target: "account-form.addressGroupId account-form-controls.inputs"} }) %>
         </div>
 
         <div class="transfers-table__transfer__frozen">
@@ -120,7 +120,7 @@
             <% end %>
           </div>
 
-          <%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressFrozen account-form-controls.inputs"} }) %>
+          <%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: true }, { required: true, class: 'hidden', data: {target: "account-form.addressFrozen account-form-controls.inputs"} }) %>
         </div>
 
         <div class="transfers-table__transfer__status">

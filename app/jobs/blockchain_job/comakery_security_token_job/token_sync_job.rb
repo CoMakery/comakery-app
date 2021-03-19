@@ -9,8 +9,8 @@ module BlockchainJob
 
       def sync_accounts
         @record.accounts.distinct.each do |account|
-          record = @token.account_token_records.find_or_create_by(account: account)
-          BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob.perform_later(record)
+          record = @token.account_token_records.find_by(account: account)
+          BlockchainJob::ComakerySecurityTokenJob::AccountSyncJob.perform_later(record) if record
         end
       end
     end

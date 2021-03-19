@@ -6,6 +6,7 @@ RSpec.describe BlockchainJob::ComakerySecurityTokenJob::TokenSyncJob, type: :job
   let!(:wallet) { create(:wallet, address: '0x0000000000000000000000000000000000000000', _blockchain: token._blockchain) }
   let!(:account) { wallet.account }
   let!(:project) { create(:project, token: token, account: account) }
+  let!(:account_token_record) { create(:account_token_record, token: token, account: account) }
 
   it 'updates token record' do
     described_class.perform_now(token)

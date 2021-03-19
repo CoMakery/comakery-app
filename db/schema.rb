@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_153451) do
+ActiveRecord::Schema.define(version: 2021_03_16_081514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -472,6 +472,7 @@ ActiveRecord::Schema.define(version: 2021_03_10_153451) do
     t.text "governance_url"
     t.text "funding_url"
     t.text "video_conference_url"
+    t.integer "hot_wallet_mode", default: 0, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

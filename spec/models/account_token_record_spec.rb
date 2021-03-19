@@ -68,6 +68,12 @@ describe AccountTokenRecord do
       expect(account_token_record).not_to be_valid
     end
 
+    it 'requires max_balance to be present' do
+      account_token_record = build(:account_token_record)
+      account_token_record.max_balance = nil
+      expect(account_token_record).not_to be_valid
+    end
+
     it 'requires max_balance to be not less than min value' do
       account_token_record = build(:account_token_record, max_balance: described_class::BALANCE_MIN - 1)
       expect(account_token_record).not_to be_valid

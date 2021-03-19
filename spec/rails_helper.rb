@@ -61,6 +61,7 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
+    $stdout.puts "\n🐢  Precompiling assets.\n"
     Webpacker.compile
   end
 

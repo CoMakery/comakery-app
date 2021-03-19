@@ -12,6 +12,7 @@
     "@open-rights-exchange/chainjs": "^0.28.6",
     "algosdk": "^1.8.1",
     "axios": "^0.21.1",
+    "bignumber.js": "^9.0.1",
     "dotenv": "^8.2.0",
     "pm2": "^4.5.1",
     "redis": "^3.0.2"
