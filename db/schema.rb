@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_081514) do
+ActiveRecord::Schema.define(version: 2021_03_19_092031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_081514) do
     t.string "transaction_error"
     t.bigint "transfer_type_id"
     t.bigint "recipient_wallet_id"
+    t.datetime "prioritized_at"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
