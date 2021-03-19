@@ -93,17 +93,18 @@ describe Wallet, type: :model do
       allow(Blockchain).to receive(:testnets_available?).and_return(true)
 
       expect(subject.available_blockchains).to include('bitcoin_test')
+      expect(subject.available_blockchains).to include('ethereum')
     end
 
     it 'doesnt return testnets if TESTNETS_AVAILABLE set to false' do
       allow(Blockchain).to receive(:testnets_available?).and_return(false)
 
       expect(subject.available_blockchains).not_to include('bitcoin_test')
+      expect(subject.available_blockchains).not_to include('ethereum_ropsten')
     end
 
     it 'doesnt include blockchains with supported_by_ore_id flag' do
       expect(subject.available_blockchains).not_to include('algorand')
-      expect(subject.available_blockchains).not_to include('ethereum')
     end
   end
 

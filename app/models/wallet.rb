@@ -29,7 +29,9 @@ class Wallet < ApplicationRecord
 
   def available_blockchains
     available_blockchains = Blockchain.available
-    available_blockchains.reject!(&:supported_by_ore_id?)
+
+    # TODO: Add Blockchain flag to indicate availability, regardless ore_id support
+    available_blockchains.reject! { |b| b.is_a? Blockchain::Algorand }
     available_blockchains.map(&:key)
   end
 
