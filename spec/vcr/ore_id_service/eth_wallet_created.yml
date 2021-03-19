@@ -1,0 +1,139 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://service.oreid.io/api/custodial/new-user
+    body:
+      encoding: UTF-8
+      string: '{"name":"Eva Smith","user_name":"hunter-f902c7fa14a74f1dd1dd2ba75dfbae34759b1995","email":"me+44122360fa0e31f369ae5c0a0a1cd2e6e49bdf48@example.com","picture":null,"user_password":"5cf960ffcb55411b76eec70e53ce2ca4dd257d26838d6ae42f0e2aaa61bd61a6!","phone":"","account_type":"native"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Mar 2021 15:46:05 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"39-b2skT6lbMEn/i250VmrjJ3vPEY0"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"b3efab6fd4e1","accountName":"ore1rmsq13f1"}'
+    http_version: null
+  recorded_at: Thu, 18 Mar 2021 15:46:05 GMT
+- request:
+    method: post
+    uri: https://service.oreid.io/api/custodial/new-chain-account
+    body:
+      encoding: UTF-8
+      string: '{"account_name":"ore1rmsq13f1","account_type":"native","user_password":"5cf960ffcb55411b76eec70e53ce2ca4dd257d26838d6ae42f0e2aaa61bd61a6!","chain_network":"eth_ropsten"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Mar 2021 15:46:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"58-/JMPXAW/cyTyxVZ3oou7FR8MvTA"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"14ef92d0456d","chainAccount":"0xf793073fb7e94fb0659cb5a45a03e7bfa4f532b2"}'
+    http_version: null
+  recorded_at: Thu, 18 Mar 2021 15:46:15 GMT
+- request:
+    method: get
+    uri: https://service.oreid.io/api/account/user?account=ore1ryuzfqwy 
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Mar 2021 15:46:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"503-8FRV/Mns2OUuRWgV8HGay+b5rng"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"e7f6eac8b11e","accountName":"ore1rmsq13f1","email":"me+44122360fa0e31f369ae5c0a0a1cd2e6e49bdf48@example.com","picture":null,"name":"Eva
+        Smith","username":"hunter-f902c7fa14a74f1dd1dd2ba75dfbae34759b1995","permissions":[{"chainNetwork":"algo_test","chainAccount":"MZFRFE4NT4JZWK4CJOU3SQ4XO6AWWCD2Z6MQ7GCLYE3BVQOPSR4TS6GB3M","permissionName":"active","publicKey":"664b12938d9f139b2b824ba9b9439777816b087acf990f984bc1361ac1cf9479","privateKeyStoredExterally":false,"externalWalletType":null,"accountType":"native","permission":"active"},{"chainNetwork":"eth_ropsten","chainAccount":"0x13579066c95f7bca4e77536db5bb410d2f75cf6f","permissionName":"active","publicKey":"0xe3545b343e0652fe894e5bc6c3e01ad0dbeb295897df4b3f4ad9aa01a1502573fbe87b9f186f9f46886f64969be3ba7232ee79c49c9997462ff69b292bdfa319","privateKeyStoredExterally":false,"externalWalletType":null,"accountType":"native","permission":"active"},{"chainNetwork":"eth_ropsten","chainAccount":"0xf793073fb7e94fb0659cb5a45a03e7bfa4f532b2","permissionName":"active","publicKey":"0x25b414da8d7e9814656a96164385332340d528688688a49e21a874e80648b4780d0bd6d43f5ce24d59d95b5d0932a703e80e4b607302b7e143d9a26d4faca506","privateKeyStoredExterally":false,"externalWalletType":null,"accountType":"native","permission":"active"}]}'
+    http_version: null
+  recorded_at: Thu, 18 Mar 2021 15:46:15 GMT
+recorded_with: VCR 5.1.0

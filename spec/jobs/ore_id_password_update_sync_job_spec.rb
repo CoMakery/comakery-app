@@ -6,8 +6,8 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
   context 'when sync is allowed' do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }
 
-    it 'calls sync_password_update and sets synchronisation status to ok' do
-      expect_any_instance_of(subject.class).to receive(:sync_password_update)
+    it 'calls claim and sets synchronisation status to ok' do
+      expect_any_instance_of(subject.class).to receive(:claim!)
       described_class.perform_now(subject.id)
       expect(subject.synchronisations.last).to be_ok
     end

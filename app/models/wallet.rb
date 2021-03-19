@@ -54,6 +54,34 @@ class Wallet < ApplicationRecord
     first_wallet_in_network&.update_column(:primary_wallet, true) # rubocop:disable Rails/SkipsModelValidations
   end
 
+  # TODO: Move opt-in logic into `Blockchain` and `TokenType`
+  def sync_opt_ins
+    if blockchain.is_a?(Blockchain::Algorand)
+      sync_assets_opt_ins
+      sync_apps_opt_ins
+    end
+  end
+
+  def sync_assets_opt_ins
+    assets = Comakery::Algorand.new(blockchain).account_assets(address)
+    asset_ids = assets.map { |a| a.fetch('asset-id') }
+    asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
+    asset_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: self, token: token)
+      opt_in.opted_in!
+    end
+  end
+
+  def sync_apps_opt_ins
+    apps = Comakery::Algorand.new(blockchain).account_apps(address)
+    app_ids = apps.map { |a| a.fetch('id') }
+    app_tokens = Token._token_type_algorand_security_token.where(contract_address: app_ids)
+    app_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: self, token: token)
+      opt_in.opted_in!
+    end
+  end
+
   private
 
     def blockchain_supported_by_ore_id

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_145046) do
+ActiveRecord::Schema.define(version: 2021_03_10_153451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -387,6 +387,8 @@ ActiveRecord::Schema.define(version: 2021_02_24_145046) do
     t.integer "state", default: 0, null: false
     t.integer "provisioning_stage", default: 0, null: false
     t.string "temp_password"
+    t.datetime "unclaimed_at"
+    t.datetime "ok_at"
     t.index ["account_id"], name: "index_ore_id_accounts_on_account_id"
     t.index ["account_name"], name: "index_ore_id_accounts_on_account_name", unique: true
   end

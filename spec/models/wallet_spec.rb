@@ -169,4 +169,30 @@ describe Wallet, type: :model do
       expect(wallet.errors[:account_id]).to be_present
     end
   end
+
+  describe '#sync_opt_ins', vcr: true do
+    subject { create(:ore_id_wallet, address: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA') }
+
+    context 'with an asset to opt-in' do
+      before do
+        create(:asa_token)
+      end
+
+      it 'creates an opt-in record' do
+        expect { subject.sync_opt_ins }.to change(subject.token_opt_ins, :count).by(1)
+        expect(subject.token_opt_ins.last).to be_opted_in
+      end
+    end
+
+    context 'with an app to opt-in' do
+      before do
+        create(:algo_sec_token)
+      end
+
+      it 'creates an opt-in record' do
+        expect { subject.sync_opt_ins }.to change(subject.token_opt_ins, :count).by(1)
+        expect(subject.token_opt_ins.last).to be_opted_in
+      end
+    end
+  end
 end
