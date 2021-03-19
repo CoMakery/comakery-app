@@ -42,8 +42,7 @@ module ApplicationHelper
       total_accounts: transfers_totals.pluck(:account_id).uniq.size,
       total_admins: transfers_totals.paid.pluck(:issuer_id).uniq.size,
       total_quantity: transfers_totals.sum(&:quantity),
-      total_amount: transfers_totals.sum(&:total_amount)
-    }
+      total_amount: transfers_totals.sum(&:total_amount) }
   end
 
   def middle_truncate(str, length: 5)
