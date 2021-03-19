@@ -1,4 +1,7 @@
 module ApplicationHelper
+  include Turbo::FramesHelper
+  include Turbo::StreamsHelper
+
   def account_image_url(account, size)
     GetImageVariantPath.call(
       attachment: account&.image,

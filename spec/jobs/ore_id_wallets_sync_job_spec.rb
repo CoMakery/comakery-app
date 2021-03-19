@@ -6,8 +6,8 @@ RSpec.describe OreIdWalletsSyncJob, type: :job do
   context 'when sync is allowed' do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }
 
-    it 'calls sync_wallets and sets synchronisation status to ok' do
-      expect_any_instance_of(subject.class).to receive(:sync_wallets)
+    it 'calls sync_remote and sets synchronisation status to ok' do
+      expect_any_instance_of(subject.class).to receive(:sync_remote!)
       described_class.perform_now(subject.id)
       expect(subject.synchronisations.last).to be_ok
     end

@@ -22,7 +22,8 @@ class Dashboard::AccountsController < ApplicationController
     account_token_record.lockup_until = Time.zone.parse(account_token_record_params[:lockup_until])
 
     if account_token_record.save
-      if account_token_record.token.blockchain.supported_by_ore_id?
+      # TODO: Add a blockchain flag whether a tx should by processed by OREID UI, regardless OREID blockchain support
+      if account_token_record.token.blockchain.is_a?(Blockchain::Algorand)
         redirect_to sign_ore_id_new_path(account_token_record_id: account_token_record.id)
       else
         @account_token_record = account_token_record

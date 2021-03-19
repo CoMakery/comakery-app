@@ -20,6 +20,12 @@ class Blockchain::EthereumRinkeby < Blockchain::Ethereum
     'rinkeby.etherscan.io'
   end
 
+  # Name of the blockchain on OreId service, if supported
+  # @return [String] name
+  def ore_id_name
+    'eth_rinkeby'
+  end
+
   # Is mainnet?
   # @return [Boolean] mainnet?
   def mainnet?

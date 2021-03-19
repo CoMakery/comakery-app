@@ -25,15 +25,19 @@
       <div class="col-6">
         <% hot_wallet = @project.hot_wallet %>
         <% if hot_wallet.present? %>
-          <p class="text-right hot-wallet">
-            Hot Wallet:&emsp; <%= link_to(
-              middle_truncate(hot_wallet.address),
-              hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
-              target: :_blank,
-              class: 'mr-2',
-              data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
-            ) %>
-          </p>
+          <div class="text-right hot-wallet">
+            <% if policy(@project).edit_hot_wallet_mode? %>
+              <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+            <% end %>
+            <div class="hot-wallet-address">
+              Hot Wallet:&emsp; <%= link_to(
+                middle_truncate(hot_wallet.address),
+                hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
+                target: :_blank,
+                class: 'mr-2',
+                data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+              ) %>
+            </div>
         <% end %>
       </div>
     </div>

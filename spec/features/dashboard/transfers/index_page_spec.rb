@@ -22,11 +22,22 @@ describe 'transfers_index_page', js: true do
       create(:wallet, source: :hot_wallet, project_id: project.id)
     end
 
-    it 'returns the hot wallet address' do
+    it 'returns the hot wallet address and change the hot wallet mode through websocket' do
       login(owner)
       visit project_dashboard_transfers_path(project)
 
       expect(page).to have_content('Hot Wallet:')
+
+      # Turbo update check
+      expect(page).to have_content('Hot Wallet Auto-Pay')
+      expect(project.hot_wallet_mode).to eq 'disabled'
+      expect(page).to have_unchecked_field('project_hot_wallet_mode')
+
+      project.update(hot_wallet_mode: 'auto_sending')
+      expect(page).to have_checked_field('project_hot_wallet_mode')
+
+      project.update(hot_wallet_mode: 'disabled')
+      expect(page).to have_unchecked_field('project_hot_wallet_mode')
     end
   end
 

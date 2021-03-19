@@ -159,3 +159,6 @@ gem 'validate_url', '~> 1.0'
 gem 'overcommit', '~> 0.53.0'
 
 gem 'fuubar', '~> 2.5'
+
+gem 'aasm', '~> 5.1'
+gem 'after_commit_everywhere', '~> 1.0'

@@ -1,0 +1,202 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://service.oreid.io/api/custodial/new-user
+    body:
+      encoding: UTF-8
+      string: '{"name":"Eva Smith","user_name":"hunter-29e3e791666d5b539ab90fde6938df15c26ef55f","email":"me+e03263b2c9ee235e34332db4cc6174fbbc5e7e28@example.com","picture":null,"user_password":"2d3d80dd3c1ce3315b7c3a96574e987f6d4ac162dd40aec6618ecf481fb11a34!","phone":"","account_type":"native"}'
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 00:55:23 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"39-yRU1gzFUzwBcP7hK1Z0UpUhTF9M"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"393db909cb55","accountName":"ore1rmtumbzt"}'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 00:55:23 GMT
+- request:
+    method: get
+    uri: https://service.oreid.io/api/account/user?account=ore1rmtumbzt
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Api-Key:
+      - ENV[ORE_ID_API_KEY]
+      Service-Key:
+      - ENV[ORE_ID_SERVICE_KEY]
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 00:55:23 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"394-YI/Ip82dJmSDhsdkPBPQ/f0Zy9A"
+      Via:
+      - 1.1 google
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"processId":"f56a1c6b113d","accountName":"ore1rmtumbzt","email":"me+e03263b2c9ee235e34332db4cc6174fbbc5e7e28@example.com","picture":null,"name":"Eva
+        Smith","username":"hunter-29e3e791666d5b539ab90fde6938df15c26ef55f","permissions":[{"chainNetwork":"algo_test","chainAccount":"ZKZRPQUL42ITB7EVJL6LYP3HSN62MQUIJTTKGIONICUEEAIGBDCHMJLJFM","permissionName":"active","publicKey":"cab317c28be69130fc954afcbc3f67937da642884ce6a321cd40a842010608c4","privateKeyStoredExterally":false,"externalWalletType":null,"accountType":"native","permission":"active"},{"chainNetwork":"eth_ropsten","chainAccount":"0xa39e6f41186b4dec47ea9b08ef3d16fb02fea33c","permissionName":"active","publicKey":"0xa636706cc3b051c1ecec184f5d19172b08ecc39e548c9683675074ef61afd67d0e7292bc8f4886694c55fbfcb996743ee952e85b00b5bc91911d32b1bba21e8c","privateKeyStoredExterally":false,"externalWalletType":null,"accountType":"native","permission":"active"}]}'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 00:55:23 GMT
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/ZKZRPQUL42ITB7EVJL6LYP3HSN62MQUIJTTKGIONICUEEAIGBDCHMJLJFM
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 00:55:23 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d5394a7a5d10895a8c3f4b28b9f8ab1fe1616115323; expires=Sun, 18-Apr-21
+        00:55:23 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e993eb24000005f9dd3f9000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"max_age":604800,"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=IuUQ%2Fr9o%2F329yPqsFeWlT0eZkEjyJWM%2FuSELa%2FfhI26noxJ52xYzAr1wXMZV6CDWs32%2B2OyzlTJj1Wo7mow%2BT4841A7LONONmPMXLr2HlJedCAgNdqxGT0qLVhE%3D"}],"group":"cf-nel"}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6322bc250a5105f9-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"no accounts found for address: ZKZRPQUL42ITB7EVJL6LYP3HSN62MQUIJTTKGIONICUEEAIGBDCHMJLJFM"}
+
+'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 00:55:23 GMT
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/ZKZRPQUL42ITB7EVJL6LYP3HSN62MQUIJTTKGIONICUEEAIGBDCHMJLJFM
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 00:55:23 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=df1f654b98b99b302e877aca9b07431e31616115323; expires=Sun, 18-Apr-21
+        00:55:23 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e993eb5e0000536a88300000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=2wG6BLF66V6VCXjOXmuJmBxT2IBFhfkOGYUNJVRVfeLsTO38Ba7ZJMuJ5FU6X9Eg916MiZWAc9tn7Se%2BrZ56DgT7S8ZI0ghFdZsa0f4YPHs5VbmwyO3ZPYFa3Hw%3D"}],"max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6322bc2568f5536a-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"no accounts found for address: ZKZRPQUL42ITB7EVJL6LYP3HSN62MQUIJTTKGIONICUEEAIGBDCHMJLJFM"}
+
+'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 00:55:23 GMT
+recorded_with: VCR 5.1.0

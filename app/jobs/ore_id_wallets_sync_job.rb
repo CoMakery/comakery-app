@@ -12,7 +12,7 @@ class OreIdWalletsSyncJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.sync_wallets
+      ore_id.sync_remote!
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)

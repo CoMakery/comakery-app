@@ -46,6 +46,7 @@ class Project < ApplicationRecord
   }
   enum visibility: { member: 0, public_listed: 1, member_unlisted: 2, public_unlisted: 3, archived: 4 }
   enum status: { active: 0, passive: 1 }
+  enum hot_wallet_mode: { disabled: 0, auto_sending: 1 }
 
   validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
@@ -65,6 +66,7 @@ class Project < ApplicationRecord
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
   after_create :add_owner_as_interested
   after_create :create_default_transfer_types
+  after_update_commit :broadcast_hot_wallet_mode, if: :saved_change_to_hot_wallet_mode?
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -110,6 +112,10 @@ class Project < ApplicationRecord
 
   def safe_add_interested(interested_account)
     interested << interested_account unless interested_account.interested?(id)
+  end
+
+  def total_awards_earned(all_accounts)
+    Award.joins(project: :account).completed.where('projects.id =? AND accounts.id IN(?)', id, all_accounts.ids).sum(:total_amount).to_f
   end
 
   def top_contributors
@@ -227,6 +233,10 @@ class Project < ApplicationRecord
     TransferType.create_defaults_for(self) if transfer_types.empty?
   end
 
+  def hot_wallet_disabled?
+    hot_wallet_mode == 'disabled'
+  end
+
   private
 
     def valid_tracker_url
@@ -277,5 +287,11 @@ class Project < ApplicationRecord
 
     def set_whitelabel
       self.whitelabel = mission&.whitelabel
+    end
+
+    def broadcast_hot_wallet_mode
+      broadcast_replace_later_to 'project_hot_wallet_modes',
+                                 target: "project_#{id}_hot_wallet_mode",
+                                 partial: 'dashboard/transfers/hot_wallet_mode', locals: { project: self }
     end
 end

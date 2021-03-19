@@ -95,13 +95,13 @@ class Blockchain::Ethereum < Blockchain
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?
-    false
+    true
   end
 
   # Name of the blockchain on OreId service, if supported
   # @return [String] name
   def ore_id_name
-    nil
+    'eth_main'
   end
 
   # Return current block

@@ -12,8 +12,6 @@ module BlockchainTransactable
     # – Latest blockchain transaction state is "cancelled"
     # – (Optionally) Latest blockchain transaction state is "failed"
     # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
-    # – Doesn't have a  (AccountTokenRecord and TransferRule)
-    # – Is in accepted state (Award)
     #
     # Model specific conditions:
     # - Award must be in `accepted` state
