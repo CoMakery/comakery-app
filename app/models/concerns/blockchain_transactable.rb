@@ -38,9 +38,8 @@ module BlockchainTransactable
             "'',
             timestamp: 10.minutes.ago
           )
-
       if table_name == 'awards'
-        q.accepted
+        q.accepted.order('awards.prioritized_at DESC, awards.created_at ASC')
       elsif table_name.in? %w[account_token_records transfer_rules]
         q.not_synced
       else
@@ -50,6 +49,14 @@ module BlockchainTransactable
 
     scope :ready_for_manual_blockchain_transaction, lambda {
       ready_for_blockchain_transaction(true)
+    }
+
+    scope :ready_for_hw_manual_blockchain_transaction, lambda {
+      if table_name == 'awards'
+        ready_for_blockchain_transaction(true).where('awards.prioritized_at is not null')
+      else
+        self.class.none
+      end
     }
 
     def blockchain_transaction_class
