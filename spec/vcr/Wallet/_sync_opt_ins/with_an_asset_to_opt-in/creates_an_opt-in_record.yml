@@ -1,0 +1,123 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 01:28:55 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d93ff985b54919d40ce1f242556664ad71616117335; expires=Sun, 18-Apr-21
+        01:28:55 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e9b29d5a00004a5b40244000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"max_age":604800,"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=NZNIjc1FDBn6zhf9hsQOc3HitUpMFD3CR%2F3vVcIFhsDvK%2FAoARSmtHt2I%2Bun5qhF1RiIjIVAtMUGVRN%2B%2Fyo4IIENnmGHNneVYVsjtbeToTucVP5CJsFkIvTHAUk%3D"}]}'
+      Nel:
+      - '{"max_age":604800,"report_to":"cf-nel"}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6322ed422a884a5b-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"account":{"address":"YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA","amount":98657211,"amount-without-pending-rewards":98559995,"apps-local-state":[{"id":13258116,"key-value":[{"key":"YmFsYW5jZQ==","value":{"bytes":"","type":2,"uint":0}},{"key":"dHJhbnNmZXIgZ3JvdXA=","value":{"bytes":"","type":2,"uint":1}}],"schema":{"num-byte-slice":0,"num-uint":4}}],"assets":[{"amount":9994900,"asset-id":13076367,"creator":"","is-frozen":false}],"pending-rewards":97216,"reward-base":25538,"rewards":0,"round":13000006,"sig-type":"sig","status":"Offline"},"current-round":13000006}
+
+'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 01:28:55 GMT
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 01:28:55 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d4c586585d7ee5465d6e28d18c281bca71616117335; expires=Sun, 18-Apr-21
+        01:28:55 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e9b29dc600002bdd9e153000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=lkOHu3suhtQn1OmBvZn57kr5gkqj81QPRNjtMTXvoIhC9F6SCFsYf%2BpLiKPRcfBsc3K9ZbroaJj2m4cKDQdkU3czLUKoraF%2FkfEAJFcwFTS3ovwDEU%2Fo17JKHJU%3D"}]}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6322ed42de7e2bdd-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"account":{"address":"YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA","amount":98657211,"amount-without-pending-rewards":98559995,"apps-local-state":[{"id":13258116,"key-value":[{"key":"YmFsYW5jZQ==","value":{"bytes":"","type":2,"uint":0}},{"key":"dHJhbnNmZXIgZ3JvdXA=","value":{"bytes":"","type":2,"uint":1}}],"schema":{"num-byte-slice":0,"num-uint":4}}],"assets":[{"amount":9994900,"asset-id":13076367,"creator":"","is-frozen":false}],"pending-rewards":97216,"reward-base":25538,"rewards":0,"round":13000006,"sig-type":"sig","status":"Offline"},"current-round":13000006}
+
+'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 01:28:55 GMT
+recorded_with: VCR 5.1.0

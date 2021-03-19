@@ -7,7 +7,7 @@ RSpec.describe OreIdSyncJob, type: :job do
     before { allow_any_instance_of(subject.class).to receive(:sync_allowed?).and_return(true) }
 
     it 'calls create_remote and sets synchronisation status to ok' do
-      expect_any_instance_of(subject.service.class).to receive(:create_remote)
+      expect_any_instance_of(subject.class).to receive(:create_remote!)
       described_class.perform_now(subject.id)
       expect(subject.synchronisations.last).to be_ok
     end

@@ -29,12 +29,24 @@ class OreIdService
   def remote
     raise OreIdService::RemoteInvalidError unless ore_id.account_name
 
-    @remote ||= handle_response(
+    handle_response(
       self.class.get(
         "/account/user?account=#{ore_id.account_name}",
         headers: request_headers
       )
     )
+  end
+
+  def create_wallet(blockchain)
+    handle_response(
+      self.class.post(
+        '/custodial/new-chain-account',
+        headers: request_headers,
+        body: create_wallet_params(blockchain).to_json
+      )
+    )
+
+    ore_id.pull_wallets
   end
 
   def create_tx(transaction)
@@ -56,7 +68,7 @@ class OreIdService
   end
 
   def permissions
-    @permissions ||= filtered_permissions.map do |params|
+    filtered_permissions.map do |params|
       {
         _blockchain: Blockchain.find_with_ore_id_name(params['chainNetwork']).name.underscore,
         address: params['chainAccount']
@@ -124,6 +136,15 @@ class OreIdService
       }
     end
 
+    def create_wallet_params(blockchain)
+      {
+        account_name: ore_id.account_name,
+        account_type: 'native',
+        user_password: ore_id.temp_password,
+        chain_network: blockchain.ore_id_name
+      }
+    end
+
     def create_tx_params(transaction)
       {
         account: ore_id.account_name,
@@ -145,7 +166,7 @@ class OreIdService
     end
 
     def filtered_permissions
-      remote['permissions'].select { |p| p['permission'] == 'active' }.uniq { |p| p['chainNetwork'] }
+      remote['permissions'].select { |p| p['permission'] == 'active' }
     end
 
     def handle_response(resp)

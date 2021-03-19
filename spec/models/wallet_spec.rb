@@ -93,18 +93,17 @@ describe Wallet, type: :model do
       allow(Blockchain).to receive(:testnets_available?).and_return(true)
 
       expect(subject.available_blockchains).to include('bitcoin_test')
-      expect(subject.available_blockchains).to include('ethereum')
     end
 
     it 'doesnt return testnets if TESTNETS_AVAILABLE set to false' do
       allow(Blockchain).to receive(:testnets_available?).and_return(false)
 
       expect(subject.available_blockchains).not_to include('bitcoin_test')
-      expect(subject.available_blockchains).to include('ethereum')
     end
 
     it 'doesnt include blockchains with supported_by_ore_id flag' do
       expect(subject.available_blockchains).not_to include('algorand')
+      expect(subject.available_blockchains).not_to include('ethereum')
     end
   end
 
@@ -167,6 +166,32 @@ describe Wallet, type: :model do
     it 'returns an error' do
       expect(wallet).to be_invalid
       expect(wallet.errors[:account_id]).to be_present
+    end
+  end
+
+  describe '#sync_opt_ins', vcr: true do
+    subject { create(:ore_id_wallet, address: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA') }
+
+    context 'with an asset to opt-in' do
+      before do
+        create(:asa_token)
+      end
+
+      it 'creates an opt-in record' do
+        expect { subject.sync_opt_ins }.to change(subject.token_opt_ins, :count).by(1)
+        expect(subject.token_opt_ins.last).to be_opted_in
+      end
+    end
+
+    context 'with an app to opt-in' do
+      before do
+        create(:algo_sec_token)
+      end
+
+      it 'creates an opt-in record' do
+        expect { subject.sync_opt_ins }.to change(subject.token_opt_ins, :count).by(1)
+        expect(subject.token_opt_ins.last).to be_opted_in
+      end
     end
   end
 end

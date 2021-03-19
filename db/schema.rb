@@ -387,6 +387,8 @@ ActiveRecord::Schema.define(version: 2021_03_16_081514) do
     t.integer "state", default: 0, null: false
     t.integer "provisioning_stage", default: 0, null: false
     t.string "temp_password"
+    t.datetime "unclaimed_at"
+    t.datetime "ok_at"
     t.index ["account_id"], name: "index_ore_id_accounts_on_account_id"
     t.index ["account_name"], name: "index_ore_id_accounts_on_account_name", unique: true
   end

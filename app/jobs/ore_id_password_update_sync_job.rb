@@ -12,7 +12,7 @@ class OreIdPasswordUpdateSyncJob < ApplicationJob
     sync = ore_id.create_synchronisation
 
     begin
-      ore_id.sync_password_update
+      ore_id.claim!
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)

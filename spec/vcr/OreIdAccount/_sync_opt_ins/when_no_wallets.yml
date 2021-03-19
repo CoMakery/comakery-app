@@ -1,0 +1,123 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Mar 2021 16:13:06 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d5ac8df68a8b17b43c0c1b9ccde22e4db1616083986; expires=Sat, 17-Apr-21
+        16:13:06 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e7b5bfce00004e2b58812000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=yH0CZmzQgM69YdxZl%2FjvRogz%2BgEfHllcZ8Q5UjgFchY0JL3o8OQGy0%2FoCSyPogwrKlVL%2BUUOGFWPoEv%2BL%2B6qiVvSGX06Mely9%2FY0GyTG3Ool5RRlGb%2FQVnXlXD4%3D"}],"max_age":604800,"group":"cf-nel"}'
+      Nel:
+      - '{"max_age":604800,"report_to":"cf-nel"}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 631fbf12ea574e2b-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"account":{"address":"4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ","amount":200000,"amount-without-pending-rewards":200000,"pending-rewards":0,"reward-base":25538,"rewards":0,"round":12992187,"status":"Offline"},"current-round":12992187}
+
+'
+    http_version: null
+  recorded_at: Thu, 18 Mar 2021 16:13:06 GMT
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Mar 2021 16:13:06 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=dce11941b68d9538ef25a758f465470c21616083986; expires=Sat, 17-Apr-21
+        16:13:06 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Access-Control-Allow-Methods:
+      - GET,POST,OPTIONS
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Disable-Tracking, X-Algoexplorer-Api-Key, X-Debug-Stats, Authorization
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e7b5c1000000637dfcb22000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"max_age":604800,"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=SeJpoCHiqnhzjNB1bfGfteTfYN3LgV258D%2Fwau%2BgceBEADPsxuEgyD0gTEcoOBE4Ys4AnMkFj30ovnRqO9GyZhnpjB1JxyZdyFkaqoTOPR%2B2XwrkDdy44BzjM7g%3D"}]}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 631fbf14c916637d-FRA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"account":{"address":"4ZZ7D5JPF2MGHSHMAVDUJIVFFILYBHHFQ2J3RQGOCDHYCM33FHXRTLI4GQ","amount":200000,"amount-without-pending-rewards":200000,"pending-rewards":0,"reward-base":25538,"rewards":0,"round":12992187,"status":"Offline"},"current-round":12992187}
+
+'
+    http_version: null
+  recorded_at: Thu, 18 Mar 2021 16:13:06 GMT
+recorded_with: VCR 5.1.0
