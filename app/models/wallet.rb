@@ -13,7 +13,7 @@ class Wallet < ApplicationRecord
   validates :source, presence: true
   validates :address, presence: true, unless: :empty_address_allowed?
   validates :address, blockchain_address: true
-  validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
+  validates :address, uniqueness: { scope: %i[account_id _blockchain], allow_nil: true, message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
   validates :name, presence: true
   validates :project_id, presence: true, if: :hot_wallet?
