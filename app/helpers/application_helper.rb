@@ -33,6 +33,19 @@ module ApplicationHelper
     end
   end
 
+  def transfer_type(transfer_type_id)
+    TransferType.find(transfer_type_id)
+  end
+
+  def transfers_totals_data(transfers_totals)
+    { total_transfers: transfers_totals.size,
+      total_accounts: transfers_totals.pluck(:account_id).uniq.size,
+      total_admins: transfers_totals.paid.pluck(:issuer_id).uniq.size,
+      total_quantity: transfers_totals.sum(&:quantity),
+      total_amount: transfers_totals.sum(&:total_amount)
+    }
+  end
+
   def middle_truncate(str, length: 5)
     str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
   end

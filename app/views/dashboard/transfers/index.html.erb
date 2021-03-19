@@ -41,7 +41,7 @@
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
-      <%= render partial: "form" %>
+      <%= render partial: "form" if policy(@project).create_transfer? %>
       <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: false %>
     </div>
 
