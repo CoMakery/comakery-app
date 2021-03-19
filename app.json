@@ -117,11 +117,11 @@
     },
     "SIDEKIQ_PASSWORD": {
       "description": "Password for Sidekiq admin panel",
-      "required": false
+      "required": true
     },
     "SIDEKIQ_USERNAME": {
       "description": "Username for Sidekiq admin panel",
-      "required": false
+      "required": true
     },
     "WHITELABEL": {
       "description": "Create and apply whitelabel with APP_HOST as a default mission",
