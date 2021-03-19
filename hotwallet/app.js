@@ -10,7 +10,8 @@ const envs = {
   redisUrl: process.env.REDIS_URL,
   checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
   optInApp: parseInt(process.env.OPT_IN_APP),
-  blockchainNetwork: process.env.BLOCKCHAIN_NETWORK
+  blockchainNetwork: process.env.BLOCKCHAIN_NETWORK,
+  maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER)
 }
 
 const redisClient = redis.createClient(envs.redisUrl)

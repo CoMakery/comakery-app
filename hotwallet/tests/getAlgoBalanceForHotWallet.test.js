@@ -1,4 +1,5 @@
 const hwUtils = require("../lib/hotwalletUtils")
+const BigNumber = require('bignumber.js')
 const envs = {
   projectId: "1",
   projectApiKey: "project_api_key",
@@ -15,10 +16,9 @@ const hwAddress = "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4"
 
 test("with succesfully response", async () => {
   jest.spyOn(hwAlgorand, "connect").mockImplementation(() => {return true});
-  jest.spyOn(hwAlgorand.algoChain, "fetchBalance").mockImplementation(() => { return { balance: 99.5 } });
+  jest.spyOn(hwAlgorand.algoChain, "fetchBalance").mockImplementation(() => { return { balance: "99.5" } });
 
-  res = await hwAlgorand.getBalanceForHotWallet(hwAddress)
+  res = await hwAlgorand.getAlgoBalanceForHotWallet(hwAddress)
 
-
-  expect(res).toEqual(99.5)
+  expect(res).toEqual(new BigNumber("99.5"))
 })
