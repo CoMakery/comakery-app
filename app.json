@@ -77,7 +77,7 @@
     "METAMASK_LOGIN": {
       "description": "Enable login and signup with MetaMask",
       "required": true,
-      "value": false
+      "value": "false"
     },
     "ORE_ID_API_KEY": {
       "description": "Aikon ORE ID API key",
