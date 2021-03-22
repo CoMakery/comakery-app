@@ -16,6 +16,7 @@ on:
 
 jobs:
   rspec:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby: [2.7.1]
