@@ -52,8 +52,8 @@ module BlockchainTransactable
     }
 
     scope :ready_for_hw_manual_blockchain_transaction, lambda {
-      if table_name == 'awards'
-        ready_for_blockchain_transaction(true).where('awards.prioritized_at is not null')
+      if table_name.in?(%w[awards account_token_records])
+        ready_for_blockchain_transaction(true).where("#{table_name}.prioritized_at is not null")
       else
         self.class.none
       end

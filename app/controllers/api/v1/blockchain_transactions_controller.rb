@@ -88,9 +88,16 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       end
     end
 
+    def default_next_account_token_record_blockchain_transactable
+      if project.hot_wallet_manual_sending? && hot_wallet_request?
+        project.account_token_records.ready_for_hw_manual_blockchain_transaction.first
+      else
+        project.account_token_records.ready_for_blockchain_transaction.first
+      end
+    end
+
     def default_transactable
-      project.account_token_records.ready_for_blockchain_transaction.first \
-      || default_next_award_blockchain_transactable
+      default_next_account_token_record_blockchain_transactable || default_next_award_blockchain_transactable
     end
 
     def transaction_create_params
