@@ -1,4 +1,4 @@
-<% t_account = transfer_account(transfer) %>
+<% t_account = transfer_account(transfer.account_id) %>
 <div class="transfer-button <%= transfer.decorate.transfer_button_state_class %>">
   <% if transfer.project.token&._token_type? %>
     <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
@@ -12,7 +12,7 @@
 
     <% elsif transfer.recipient_address.blank? && current_account == t_account %>
       <%= link_to 'needs wallet', account_path %>
-    <% elsif transfer.token&.blockchain&.supported_by_ore_id? && (transfer.issuer&.ore_id_account.nil? || t_account&.ore_id_account.nil?) %>
+    <% elsif transfer.token&.blockchain&.supported_by_ore_id? && (transfer_account(transfer.issuer_id)&.ore_id_account.nil? || t_account&.ore_id_account.nil?) %>
       <%= link_to 'needs wallet', account_path %>
     <% elsif transfer.recipient_address.blank? %>
       needs wallet

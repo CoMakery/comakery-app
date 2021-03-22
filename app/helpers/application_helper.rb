@@ -48,8 +48,8 @@ module ApplicationHelper
       total_amount: transfers_totals.sum(&:total_amount) }
   end
 
-  def transfer_account(transfer)
-    Account.includes(:ore_id_account).find_by(id: transfer.account_id)
+  def transfer_account(account_id)
+    Account.includes(:ore_id_account).find_by(id: account_id)
   end
 
   def middle_truncate(str, length: 5)
