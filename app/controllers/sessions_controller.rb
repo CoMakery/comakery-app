@@ -37,7 +37,9 @@ class SessionsController < ApplicationController
       Account.find_by(email: params[:email], managed_mission_id: nil)
     end
 
-    if @account&.password_digest && @account&.authenticate(params[:password])
+    recaptcha = RecaptchaVerifier.new(model: @account, action: 'login')
+
+    if recaptcha.valid? && @account&.password_digest && @account&.authenticate(params[:password])
       session[:account_id] = @account.id
       redirect_to redirect_path
     else

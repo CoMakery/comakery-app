@@ -57,7 +57,7 @@ class AccountsController < ApplicationController
       Date.current
     end
 
-    if @account.save
+    if RecaptchaVerifier.new(model: @account, action: 'registration').valid? && @account.save
       session[:account_id] = @account.id
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       Project.where(auto_add_interest: true).each do |auto_interest_project|
@@ -187,6 +187,7 @@ class AccountsController < ApplicationController
 
     def account_params
       result = params.require(:account).permit(
+        :agreed_to_user_agreement,
         :email,
         :ethereum_auth_address,
         :first_name,

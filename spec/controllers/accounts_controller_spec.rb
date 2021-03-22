@@ -39,6 +39,8 @@ describe AccountsController do
   end
 
   describe '#create' do
+    before { allow_any_instance_of(RecaptchaVerifier).to receive(:valid?).and_return(true) }
+
     it 'renders errors for invalid password' do
       expect do # rubocop:todo Lint/AmbiguousBlockAssociation
         post :create, params: {

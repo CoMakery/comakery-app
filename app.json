@@ -115,6 +115,14 @@
       "description": "Intercom app id",
       "required": false
     },
+    "RECAPTCHA_SITE_KEY": {
+      "description": "Recaptcha site key",
+      "required": false
+    },
+    "RECAPTCHA_SECRET_KEY": {
+      "description": "Recaptcha secret key",
+      "required": false
+    },
     "SIDEKIQ_PASSWORD": {
       "description": "Password for Sidekiq admin panel",
       "required": false
