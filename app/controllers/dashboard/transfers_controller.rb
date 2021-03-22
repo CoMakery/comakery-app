@@ -36,6 +36,14 @@ class Dashboard::TransfersController < ApplicationController
     end
   end
 
+  def prioritize
+    authorize @project, :update_transfer?
+    @transfer = @project.awards.find(params[:id])
+
+    @transfer.update(prioritized_at: Time.zone.now)
+    redirect_to project_dashboard_transfers_path(@project), flash: { notice: 'Transfer will be sent soon' }
+  end
+
   private
 
     def query
@@ -91,5 +99,9 @@ class Dashboard::TransfersController < ApplicationController
         :requirements,
         :transfer_type_id
       )
+    end
+
+    def transfer_update_params
+      params.fetch(:award, {}).permit(:prioritized_at)
     end
 end

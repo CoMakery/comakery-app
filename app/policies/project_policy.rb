@@ -62,6 +62,7 @@ class ProjectPolicy < ApplicationPolicy
   alias add_admin? edit?
   alias remove_admin? edit?
   alias create_transfer? edit?
+  alias update_transfer? edit?
   alias transfers? show_contributions?
   alias accounts? show_contributions?
   alias edit_accounts? edit?
