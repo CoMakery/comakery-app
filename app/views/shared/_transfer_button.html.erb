@@ -1,4 +1,4 @@
-<%t_account = transfer_account(transfer)%>
+<% t_account = transfer_account(transfer) %>
 <div class="transfer-button <%= transfer.decorate.transfer_button_state_class %>">
   <% if transfer.project.token&._token_type? %>
     <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
