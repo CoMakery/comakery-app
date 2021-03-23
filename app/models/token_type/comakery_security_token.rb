@@ -67,6 +67,6 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
   # ApplicationJob class to perform account sync
   # @return [Class] job
   def accounts_sync_job
-    nil
+    ::BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob
   end
 end
