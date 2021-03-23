@@ -84,7 +84,11 @@ Rails.application.routes.draw do
     resources :interests, only: [:create, :destroy], defaults: { format: :json }
 
     namespace :dashboard do
-      resources :transfers, only: [:index, :show, :create]
+      resources :transfers, only: %i[index show create] do
+        member do
+          patch :prioritize
+        end
+      end
       resources :accounts, only: [:index, :show, :create] do
         collection do
           post :refresh_from_blockchain
