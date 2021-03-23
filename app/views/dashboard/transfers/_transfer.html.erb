@@ -63,9 +63,9 @@
         <div class="transfers-table__transfer__button__history">
           <%= link_to prioritize_project_dashboard_transfer_path(project_id: @project.id, id: transfer.id), class: 'transfer-algo-btn', rel: 'nofollow', method: :patch, data: {turbo: "false"} do %>
             <% if @project.hot_wallet_auto_sending? %>
-              <span>PAY BY HOT WALLET</span>
-            <% elsif @project.hot_wallet_manual_sending? %>
               <span>PRIORITIZE</span>
+            <% elsif @project.hot_wallet_manual_sending? %>
+              <span>PAY BY HOT WALLET</span>
             <% end %>
           <% end %>
         </div>
