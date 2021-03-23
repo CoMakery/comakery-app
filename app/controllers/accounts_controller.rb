@@ -40,33 +40,26 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = if @whitelabel_mission
-      @whitelabel_mission.managed_accounts.new(account_params)
-    else
-      Account.new(account_params)
-    end
+    register_account_result = Accounts::Register.call(whitelabel_mission: @whitelabel_mission,
+                                                      account_params: account_params)
 
-    @account.email_confirm_token = SecureRandom.hex
-    @account.password_required = true
-    @account.name_required = false
-    @account.agreement_required = @whitelabel_mission ? false : true
+    @account = register_account_result.account
 
-    @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
-      nil
-    else
-      Date.current
-    end
+    recaptcha_valid = verify_recaptcha(model: @account, action: 'registration')
 
-    if RecaptchaVerifier.new(model: @account, action: 'registration').valid? && @account.save
+    if recaptcha_valid && register_account_result.success?
       session[:account_id] = @account.id
+
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+
       Project.where(auto_add_interest: true).each do |auto_interest_project|
         auto_interest_project.safe_add_interested(@account)
       end
 
       redirect_to build_profile_accounts_path
     else
-      @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
+      @account.agreed_to_user_agreement = account_params[:agreed_to_user_agreement]
+
       render :new, status: :unprocessable_entity
     end
   end
