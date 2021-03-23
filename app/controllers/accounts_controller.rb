@@ -40,14 +40,14 @@ class AccountsController < ApplicationController
   end
 
   def create
+    render :new, status: :unprocessable_entity unless verify_recaptcha(model: @account, action: 'registration')
+
     register_account_result = Accounts::Register.call(whitelabel_mission: @whitelabel_mission,
                                                       account_params: account_params)
 
     @account = register_account_result.account
 
-    recaptcha_valid = verify_recaptcha(model: @account, action: 'registration')
-
-    if recaptcha_valid && register_account_result.success?
+    if register_account_result.success?
       session[:account_id] = @account.id
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
