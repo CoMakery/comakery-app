@@ -15,6 +15,11 @@ class WalletCreator
 
       wallet = account.wallets.new(wallet_attrs)
 
+      if wallet.errors.any?
+        errors[i] = wallet.errors
+        next
+      end
+
       provision = Provision.new(wallet, tokens_to_provision)
 
       if provision.should_be_provisioned?

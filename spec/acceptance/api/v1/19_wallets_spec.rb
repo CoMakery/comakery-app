@@ -20,12 +20,12 @@ resource 'IX. Wallets' do
 
     with_options with_example: true do
       response_field :id, 'wallet id', type: :integer
+      response_field :name, 'wallet name', type: :string
       response_field :address, 'wallet address', type: :string
       response_field :primary_wallet, 'primary wallet', type: :boolean
       response_field :source, "wallet source #{Wallet.sources.keys}", type: :string
       response_field :state, "wallet state #{OreIdAccount.states.keys}", type: :string
       response_field :blockchain, "wallet blockchain #{Wallet._blockchains.keys}", type: :string
-      response_field :tokens, 'wallet tokens', type: :array
       response_field :provision_tokens, 'wallet tokens which should be provisioned with state for each token', type: :array
       response_field :createdAt, 'creation timestamp', type: :string
       response_field :updatedAt, 'update timestamp', type: :string
