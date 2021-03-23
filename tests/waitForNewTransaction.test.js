@@ -9,7 +9,7 @@ const envs = {
   redisUrl: "redis://localhost:6379/0",
   checkForNewTransactionsDelay: 30
 }
-const wallet = new hwUtils.HotWallet("YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
+const wallet = new hwUtils.HotWallet("algorand_test", "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
 
 jest.mock("axios")
 

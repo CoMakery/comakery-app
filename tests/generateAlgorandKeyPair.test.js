@@ -7,7 +7,7 @@ const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
 test('return correct generated keys', async () => {
   const keys = hwAlgorand.generateAlgorandKeyPair()
   expect(keys).toBeInstanceOf(hwUtils.HotWallet)
-  expect(Object.keys(keys)).toEqual(["address", "mnemonic", "optedInApps"])
+  expect(Object.keys(keys)).toEqual(["klass", "address", "mnemonic", "optedInApps"])
   expect(keys.address).toBeDefined()
   expect(keys.address.length).toBe(58)
   expect(keys.mnemonic).toBeDefined()

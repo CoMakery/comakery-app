@@ -16,7 +16,7 @@ const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
 
 beforeEach(async () => {
   await hwRedis.deleteCurrentKey()
-  const wallet = new hwUtils.HotWallet("YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
+  const wallet = new hwUtils.HotWallet("algorand_test", "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
   await hwRedis.saveNewHotWallet(wallet)
 })
 

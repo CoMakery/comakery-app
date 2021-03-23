@@ -7,7 +7,8 @@ const envs = {
   projectApiKey: "project_api_key",
   comakeryServerUrl: null,
   purestakeApi: "purestake_api_key",
-  redisUrl: "redis://localhost:6379/0"
+  redisUrl: "redis://localhost:6379/0",
+  blockchainNetwork: "algorand_test"
 }
 
 jest.mock("axios")
