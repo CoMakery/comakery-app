@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe Accounts::Register do
   describe '#call' do
-
     context 'when data is valid' do
       let!(:account_params) { { email: 'example@gmail.com', password: 'password', agreed_to_user_agreement: '1' } }
 

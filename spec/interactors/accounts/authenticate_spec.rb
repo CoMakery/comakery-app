@@ -18,9 +18,11 @@ describe Accounts::Authenticate do
 
     context 'when the whitelabel mission is present' do
       let!(:whitelabel_mission) { create(:whitelabel_mission) }
-      let!(:account) { create(:account, managed_mission: whitelabel_mission,
-                              email: email,
-                              password: password) }
+      let!(:account) do
+        create(:account, managed_mission: whitelabel_mission,
+                         email: email,
+                         password: password)
+      end
 
       subject(:result) do
         described_class.call(whitelabel_mission: whitelabel_mission, email: email, password: password)
