@@ -148,8 +148,6 @@ describe SessionsController do
     let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
     let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
-    before { allow_any_instance_of(RecaptchaVerifier).to receive(:valid?).and_return(true) }
-
     it 'allows to login with managed account on according whitelabel instance' do
       active_whitelabel_mission = create(:active_whitelabel_mission)
       account = create(:account, managed_mission: active_whitelabel_mission, password: '12345678')
