@@ -13,7 +13,7 @@ class Wallet < ApplicationRecord
   validates :source, presence: true
   validates :address, presence: true, unless: :empty_address_allowed?
   validates :address, blockchain_address: true
-  validates :address, uniqueness: { scope: %i[account_id _blockchain], message: 'has already been taken for the blockchain' }
+  validates :address, uniqueness: { scope: %i[account_id _blockchain], allow_nil: true, message: 'has already been taken for the blockchain' }
   validates :_blockchain, uniqueness: { scope: %i[account_id primary_wallet], message: 'has primary wallet already' }, if: :primary_wallet?
   validates :name, presence: true
   validates :project_id, presence: true, if: :hot_wallet?
@@ -29,7 +29,9 @@ class Wallet < ApplicationRecord
 
   def available_blockchains
     available_blockchains = Blockchain.available
-    available_blockchains.reject!(&:supported_by_ore_id?)
+
+    # TODO: Add Blockchain flag to indicate availability, regardless ore_id support
+    available_blockchains.reject! { |b| b.is_a? Blockchain::Algorand }
     available_blockchains.map(&:key)
   end
 
@@ -52,6 +54,34 @@ class Wallet < ApplicationRecord
                               .first
 
     first_wallet_in_network&.update_column(:primary_wallet, true) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  # TODO: Move opt-in logic into `Blockchain` and `TokenType`
+  def sync_opt_ins
+    if blockchain.is_a?(Blockchain::Algorand)
+      sync_assets_opt_ins
+      sync_apps_opt_ins
+    end
+  end
+
+  def sync_assets_opt_ins
+    assets = Comakery::Algorand.new(blockchain).account_assets(address)
+    asset_ids = assets.map { |a| a.fetch('asset-id') }
+    asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
+    asset_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: self, token: token)
+      opt_in.opted_in!
+    end
+  end
+
+  def sync_apps_opt_ins
+    apps = Comakery::Algorand.new(blockchain).account_apps(address)
+    app_ids = apps.map { |a| a.fetch('id') }
+    app_tokens = Token._token_type_algorand_security_token.where(contract_address: app_ids)
+    app_tokens.each do |token|
+      opt_in = TokenOptIn.find_or_create_by(wallet: self, token: token)
+      opt_in.opted_in!
+    end
   end
 
   private

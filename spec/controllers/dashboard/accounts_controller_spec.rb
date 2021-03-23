@@ -122,6 +122,15 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
           expect(response).to redirect_to(project_dashboard_accounts_path(project))
         end
       end
+
+      context 'with comakery security token', :vcr do
+        it 'runs refresh job' do
+          expect(BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob).to receive(:perform_now).and_return(true)
+          post :refresh_from_blockchain, params: { project_id: project.to_param }
+
+          expect(response).to redirect_to(project_dashboard_accounts_path(project))
+        end
+      end
     end
   end
 end

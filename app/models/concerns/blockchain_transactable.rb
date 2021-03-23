@@ -12,8 +12,6 @@ module BlockchainTransactable
     # – Latest blockchain transaction state is "cancelled"
     # – (Optionally) Latest blockchain transaction state is "failed"
     # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
-    # – Doesn't have a  (AccountTokenRecord and TransferRule)
-    # – Is in accepted state (Award)
     #
     # Model specific conditions:
     # - Award must be in `accepted` state
@@ -40,18 +38,22 @@ module BlockchainTransactable
             "'',
             timestamp: 10.minutes.ago
           )
-
-      if table_name == 'awards'
-        q.accepted
-      elsif table_name.in? %w[account_token_records transfer_rules]
-        q.not_synced
-      else
-        q
-      end
+      q = q.accepted if table_name == 'awards'
+      q = q.not_synced if table_name.in? %w[account_token_records transfer_rules]
+      q = q.order("#{table_name}.prioritized_at DESC, #{table_name}.created_at ASC") if table_name.in? %w[account_token_records awards]
+      q
     }
 
     scope :ready_for_manual_blockchain_transaction, lambda {
       ready_for_blockchain_transaction(true)
+    }
+
+    scope :ready_for_hw_manual_blockchain_transaction, lambda {
+      if table_name.in?(%w[awards account_token_records])
+        ready_for_blockchain_transaction(true).where("#{table_name}.prioritized_at is not null")
+      else
+        self.class.none
+      end
     }
 
     def blockchain_transaction_class

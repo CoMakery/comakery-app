@@ -59,6 +59,18 @@
 
       <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
 
+      <% if current_account&.decorate&.can_send_awards?(@project) && transfer.accepted? && !@project.hot_wallet_disabled? && @project.hot_wallet %>
+        <div class="transfers-table__transfer__button__history">
+          <%= link_to prioritize_project_dashboard_transfer_path(project_id: @project.id, id: transfer.id), class: 'transfer-algo-btn', rel: 'nofollow', method: :patch, data: {turbo: "false"} do %>
+            <% if @project.hot_wallet_auto_sending? %>
+              <span>PRIORITIZE</span>
+            <% elsif @project.hot_wallet_manual_sending? %>
+              <span>PAY BY HOT WALLET</span>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+
       <% if transfer.blockchain_transactions.size > 0 %>
         <%= link_to "#{transfer.blockchain_transactions.size} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
       <% end %>

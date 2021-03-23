@@ -57,7 +57,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
           project.update(hot_wallet: hot_wallet, hot_wallet_mode: hot_wallet_mode)
         end
 
-        context 'with registered hw and hot_wallet_mode = disabled' do
+        context 'with registered hw and hot_wallet_mode is disabled' do
           let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
           let(:hot_wallet_mode) { 'disabled' }
 
@@ -70,7 +70,35 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
           end
         end
 
-        context 'with registered hw and hot_wallet_mode = auto_sending' do
+        context 'with registered hw and hot_wallet_mode is manual_sending without prioritized transfers' do
+          let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+          let(:hot_wallet_mode) { 'manual_sending' }
+
+          it 'returns no_content' do
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:no_content)
+          end
+        end
+
+        context 'with registered hw and hot_wallet_mode is manual_sending with prioritized transfers' do
+          let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+          let(:hot_wallet_mode) { 'manual_sending' }
+
+          it 'returns the created transaction' do
+            award.update(prioritized_at: Time.zone.now)
+
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:created)
+          end
+        end
+
+        context 'with registered hw and hot_wallet_mode is auto_sending' do
           let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
           let(:hot_wallet_mode) { 'auto_sending' }
 
@@ -83,7 +111,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
           end
         end
 
-        context 'with NOT registered hw and hot_wallet_mode = disabled' do
+        context 'with NOT registered hw and hot_wallet_mode is disabled' do
           let(:hot_wallet) { nil }
           let(:hot_wallet_mode) { 'disabled' }
 
@@ -96,7 +124,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
           end
         end
 
-        context 'with registered hw and hot_wallet_mode = auto_sending but another source' do
+        context 'with registered hw and hot_wallet_mode is auto_sending but another source' do
           let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_2)) }
           let(:hot_wallet_mode) { 'auto_sending' }
 
