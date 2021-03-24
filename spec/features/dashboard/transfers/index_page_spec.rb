@@ -29,15 +29,15 @@ describe 'transfers_index_page', js: true do
       expect(page).to have_content('Hot Wallet:')
 
       # Turbo update check
-      expect(page).to have_content('Hot Wallet Auto-Pay')
+      expect(page).to have_content('Hot Wallet Mode')
       expect(project.hot_wallet_mode).to eq 'disabled'
-      expect(page).to have_unchecked_field('project_hot_wallet_mode')
+      expect(page).to have_select('project_hot_wallet_mode', selected: 'Disabled')
 
       project.update(hot_wallet_mode: 'auto_sending')
-      expect(page).to have_checked_field('project_hot_wallet_mode')
+      expect(page).to have_select('project_hot_wallet_mode', selected: 'Auto sending')
 
-      project.update(hot_wallet_mode: 'disabled')
-      expect(page).to have_unchecked_field('project_hot_wallet_mode')
+      project.update(hot_wallet_mode: 'manual_sending')
+      expect(page).to have_select('project_hot_wallet_mode', selected: 'Manual sending')
     end
   end
 

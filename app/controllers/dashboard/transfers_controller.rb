@@ -1,7 +1,7 @@
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
-  before_action :set_transfers, only: %i[index fetch_chart_data]
+  before_action :set_transfers, only: %i[index]
   before_action :set_transfer, only: [:show]
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
   skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
@@ -38,7 +38,18 @@ class Dashboard::TransfersController < ApplicationController
 
   def fetch_chart_data
     authorize @project, :transfers?
+    @transfers_all = query.result(distinct: true)
+    @project_token = @project.token
+    @transfers_not_burned_total = @transfers_unfiltered.not_burned.sum(&:total_amount)
     render partial: 'chart'
+  end
+
+  def prioritize
+    authorize @project, :update_transfer?
+    @transfer = @project.awards.find(params[:id])
+
+    @transfer.update(prioritized_at: Time.zone.now)
+    redirect_to project_dashboard_transfers_path(@project), flash: { notice: 'Transfer will be sent soon' }
   end
 
   private
@@ -61,6 +72,7 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_totals = query.result(distinct: true).reorder('')
       @transfers_all = @transfers_totals.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
+      
       @transfers = ordered_transfers.page(@page).per(10)
 
       if (@page > 1) && @transfers.out_of_range?
@@ -93,5 +105,9 @@ class Dashboard::TransfersController < ApplicationController
         :requirements,
         :transfer_type_id
       )
+    end
+
+    def transfer_update_params
+      params.fetch(:award, {}).permit(:prioritized_at)
     end
 end

@@ -123,5 +123,12 @@ RSpec.describe WalletCreator do
       let(:tokens_to_provision) { [{ token_id: asa_token.id.to_s }] }
       it { expect(wallets[0].errors.messages).to eq(tokens_to_provision: ["Some tokens can't be provisioned: [#{asa_token.id}]"]) }
     end
+
+    context 'wallet is invalid' do
+      let(:asa_token) { create(:asa_token) }
+      let(:wallets_params) { [{ blockchain: :bitcoin, address: '', tokens_to_provision: tokens_to_provision, name: 'Wallet 1' }] }
+      let(:tokens_to_provision) { [] }
+      it { expect(wallets[0].errors.messages).to eq(address: ["can't be blank"]) }
+    end
   end
 end

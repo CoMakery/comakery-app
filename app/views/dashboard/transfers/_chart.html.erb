@@ -11,10 +11,10 @@
     data-transfers-chart-stacked-chart-data-month="<%= params[:duration] == 'Month'  ? @project.transfers_stacked_chart_month(@transfers_all, negative: @negative).to_json : '' %>"
     data-transfers-chart-stacked-chart-data-year="<%= (params[:duration] == 'Year' || params[:duration].blank?) ? @project.transfers_stacked_chart_year(@transfers_all, negative: @negative).to_json : '' %>"
     data-transfers-chart-donut-chart-data="<%= @project.transfers_donut_chart(@transfers_all).to_json %>"
-    data-transfers-chart-token-symbol="<%= @project.token&.symbol %>"
-    data-transfers-chart-total="<%= @transfers_unfiltered.not_burned.sum(&:total_amount) %>"
+    data-transfers-chart-token-symbol="<%= @project_token&.symbol %>"
+    data-transfers-chart-total="<%= @transfers_not_burned_total %>"
     data-transfers-chart-total-filtered="<%= @transfers_all.sum(&:total_amount) %>"
-    data-transfers-chart-decimals="<%= @project.token&.decimal_places || 0 %>"
+    data-transfers-chart-decimals="<%= @project_token&.decimal_places || 0 %>"
     data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
     data-transfers-chart-transfer-type-burn="<%= @negative %>">
     <h2>transfer history</h2>
@@ -40,11 +40,11 @@
         <svg id="donut-chart" width="300" height="300"></svg>
         <div class="donut-amount" data-target='transfers-chart.donutAmountFiltered'>
           <% if @transfers_all.sum(&:total_amount) != @transfers_unfiltered.sum(&:total_amount) %>
-            <%= "#{@negative ? '-' : ''} #{@transfers_all.sum(&:total_amount)} #{@project.token&.symbol} Filtered Total" %>
+            <%= "#{@negative ? '-' : ''} #{@transfers_all.sum(&:total_amount)} #{@project_token&.symbol} Filtered Total" %>
           <% end %>
         </div>
         <div class="donut-amount" data-target='transfers-chart.donutAmount'>
-          <%= "#{@transfers_unfiltered.not_burned.sum(&:total_amount)} #{@project.token&.symbol} #{@negative ? 'Net' : '' } Total" %>
+          <%= "#{@transfers_not_burned_total} #{@project_token&.symbol} #{@negative ? 'Net' : '' } Total" %>
         </div>
       </div>
       <div id="stacked-chart-tooltip"></div>
