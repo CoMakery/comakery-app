@@ -1,5 +1,5 @@
 module Accounts
-  class Register
+  class Initialize
     include Interactor
 
     def call
@@ -18,8 +18,6 @@ module Accounts
       account.agreed_to_user_agreement = agreed_to_user_agreement
 
       context.account = account
-
-      context.fail! unless account.save
     end
 
     private
