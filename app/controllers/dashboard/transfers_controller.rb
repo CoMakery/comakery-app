@@ -72,9 +72,7 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_totals = query.result(distinct: true).reorder('')
       @transfers_all = @transfers_totals.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
-      
       @transfers = ordered_transfers.page(@page).per(10)
-
       if (@page > 1) && @transfers.out_of_range?
         flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
         @page = 1
