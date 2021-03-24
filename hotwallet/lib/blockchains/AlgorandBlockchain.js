@@ -1,4 +1,3 @@
-const algosdk = require("algosdk")
 const chainjs = require("@open-rights-exchange/chainjs")
 const BigNumber = require('bignumber.js')
 const HotWallet = require("../HotWallet").HotWallet
@@ -8,7 +7,7 @@ class AlgorandBlockchain {
     this.envs = envs
     this.blockchainNetwork = envs.blockchainNetwork
     const endpoints = this.endpointsByNetwork(this.blockchainNetwork)
-    this.algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
+    this.chain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
     // It is necessary to cache values gotten from blockchain
     this.optedInApps = {}
     this.algoBalances = {}
@@ -49,17 +48,29 @@ class AlgorandBlockchain {
     }
   }
 
-  generateAlgorandKeyPair() {
-    const account = algosdk.generateAccount()
-    const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
-
-    return new HotWallet(this.blockchainNetwork, account.addr, mnemonic)
+  // TODO: Is this important?
+  createAccountOptions() {
+    return {
+      newKeysOptions: {
+        password: 'hot_wallet_pwd',
+        salt: 'hot_wallet_salt'
+      }
+    }
   }
 
   async connect() {
-    if (!this.algoChain.isConnected) {
-      await this.algoChain.connect()
+    if (!this.chain.isConnected) {
+      await this.chain.connect()
     }
+  }
+
+  async generateNewWallet() {
+    await this.connect()
+
+    const createAccount = this.chain.new.CreateAccount(this.createAccountOptions())
+    await createAccount.generateKeysIfNeeded()
+
+    return new HotWallet(this.blockchainNetwork, createAccount.accountName, createAccount.generatedKeys)
   }
 
   async getAppLocalState(hotWalletAddress, appIndex) {
