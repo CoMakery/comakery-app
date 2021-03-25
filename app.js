@@ -7,6 +7,7 @@ const envs = {
   projectApiKey: process.env.PROJECT_API_KEY,
   comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
   purestakeApi: process.env.PURESTAKE_API,
+  infuraProjectId: process.env.INFURA_PROJECT_ID,
   redisUrl: process.env.REDIS_URL,
   checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
   optInApp: parseInt(process.env.OPT_IN_APP),
