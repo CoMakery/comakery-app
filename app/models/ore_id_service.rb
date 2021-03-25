@@ -22,7 +22,7 @@ class OreIdService
       )
     )
 
-    ore_id.update(account_name: response['accountName'])
+    ore_id.update!(account_name: response['accountName'])
     response
   end
 
@@ -181,12 +181,14 @@ class OreIdService
     end
 
     def raise_error(body)
-      case body['errorCode']
-      when 'userAlreadyExists'
-        raise OreIdService::RemoteUserExistsError
-      else
-        raise OreIdService::Error, "#{body['message']} (#{body['errorCode']} #{body['error']})\nFull details: #{body}"
+      err = case body['errorCode']
+            when 'userAlreadyExists'
+              OreIdService::RemoteUserExistsError
+            else
+              OreIdService::Error
       end
+
+      raise err, "#{body['message']} (#{body['errorCode']} #{body['error']})\nFull details: #{body}"
     end
 
     def append_hmac_to_url(url)
