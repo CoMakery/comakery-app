@@ -326,6 +326,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
+    knapsack_pro (2.11.0)
+      rake
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.7.0)
@@ -349,7 +351,7 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.1009)
-    mimemagic (0.3.5)
+    mimemagic (0.3.6)
     mini_magick (4.11.0)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
@@ -756,6 +758,7 @@ DEPENDENCIES
   jquery-ui-rails
   json-canonicalization (~> 0.2.0)
   kaminari
+  knapsack_pro
   letter_opener
   loofah (>= 2.2.3)
   meta_request
@@ -836,4 +839,4 @@ RUBY VERSION
    ruby 2.7.1p83
 
 BUNDLED WITH
-   2.2.3
+   2.2.4

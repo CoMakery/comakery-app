@@ -10,8 +10,6 @@ describe 'test_ready_filter', js: true do
   [1, 5, 10].each do |number_of_transfers|
     context "With #{number_of_transfers} ready transfers" do
       it "Doesn't duplicate transfers" do
-        skip 'The Chart was disabled'
-
         number_of_transfers.times do
           create(:transfer, award_type: project_award_type, account: owner)
         end
@@ -35,13 +33,10 @@ describe 'test_ready_filter', js: true do
   end
 
   it 'orders by issuer first_name' do
-    skip 'The Chart was disabled'
-
     issuer1 = create(:account, first_name: 'John', last_name: 'Snow')
     issuer2 = create(:account, first_name: 'Ned', last_name: 'Stark')
     create(:transfer, award_type: project_award_type, account: owner, issuer: issuer1)
     create(:transfer, award_type: project_award_type, account: owner, issuer: issuer2)
-
     login(owner)
     visit project_path(project)
     click_link 'transfers'
