@@ -22,8 +22,13 @@ class HotWalletRedis {
     if (savedHW) {
       const network = savedHW.network || this.envs.blockchainNetwork
       const optedInApps = JSON.parse(savedHW.optedInApps || "[]")
+      const keys = {
+        publicKey: savedHW.publicKey,
+        privateKey: savedHW.privateKey,
+        privateKeyEncrypted: savedHW.privateKeyEncrypted
+      }
 
-      return new HotWallet(network, savedHW.address, savedHW.mnemonic, optedInApps)
+      return new HotWallet(network, savedHW.address, keys, optedInApps)
     } else {
       return undefined
     }
@@ -42,7 +47,13 @@ class HotWalletRedis {
   }
 
   async saveNewHotWallet(wallet) {
-    await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
+    await this.hset(
+      this.walletKeyName(),
+      "address", wallet.address,
+      "privateKey", wallet.privateKey,
+      "publicKey", wallet.publicKey,
+      "privateKeyEncrypted", wallet.privateKeyEncrypted
+      )
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
     return true
   }

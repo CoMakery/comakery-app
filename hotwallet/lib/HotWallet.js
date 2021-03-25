@@ -12,8 +12,8 @@ class HotWallet {
     }
 
     this.address = this.klass.address
-    this.privateKey = keys.privateKey
     this.publicKey = keys.publicKey
+    this.privateKey = keys.privateKey
     this.privateKeyEncrypted = keys.privateKeyEncrypted
     this.optedInApps = this.klass.optedInApps
   }
