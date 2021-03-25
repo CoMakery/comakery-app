@@ -3,8 +3,4 @@ class ApiRequestLog < ApplicationRecord
 
   validates :ip, :body, presence: true
   validates :signature, presence: true, uniqueness: true
-
-  def token_expired?
-    DateTime.current > created_at + 5.minutes
-  end
 end

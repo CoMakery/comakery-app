@@ -14,11 +14,9 @@ class Api::V1::WalletRecoveryController < Api::V1::ApiController
 
   # POST /api/v1/wallet_recovery/recover
   def recover
-    log_request = ApiRequestLog.find_by(signature: recovery_token)
+    recovery = ApiRequestLog.find_by(signature: recovery_token)&.create_api_ore_id_wallet_recovery
 
-    recovery = log_request&.create_api_ore_id_wallet_recovery
-
-    if !log_request&.token_expired? && recovery&.persisted?
+    if !recovery&.token_expired? && recovery&.persisted?
       begin
         # TODO: run `ore_id_account.schedule_password_update_sync` here instead of `WalletController#password_reset_url`
 
