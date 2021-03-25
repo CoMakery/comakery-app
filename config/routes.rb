@@ -85,6 +85,9 @@ Rails.application.routes.draw do
 
     namespace :dashboard do
       resources :transfers, only: %i[index show create] do
+        collection do
+          get :fetch_chart_data
+        end
         member do
           patch :prioritize
         end
