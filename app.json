@@ -54,7 +54,7 @@
     "APP_HOST": {
       "description": "Domain name of the app. If you don't know it at the time of deployment you can put in a dummy value. But you will want to change it once you have a domain name for your Heroku app.",
       "required": true,
-      "set_the_domain_name"
+      "value": "set_the_domain_name"
     },
     "BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET": {
       "description": "Block explorer url for constellation mainnet. This overrides the default explorer.",
