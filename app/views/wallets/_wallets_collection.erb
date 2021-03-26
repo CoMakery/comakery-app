@@ -41,7 +41,7 @@
                     wallet.blockchain.url_for_address_human(wallet.address),
                     target: :_blank,
                     class: 'mr-2',
-                    data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+                    data: { controller: "utils--truncate", target: "utils--clipboard.source" }
                   ) %>
               <div class="hidden" data-target="utils--clipboard.source"><%= wallet.address %></div>
               <span type="button" class="text-primary" data-action="click->utils--clipboard#copy">
