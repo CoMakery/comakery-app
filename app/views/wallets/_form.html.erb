@@ -17,7 +17,7 @@
       <%= form.label(:name) %>
       <%= form.text_field(
             :name,
-            value: (wallet.name || "#{wallet.blockchain.name} wallet"),
+            value: (wallet.name || 'Wallet'),
             required: true,
             class: 'form-control',
             data: { action: 'input->wallets--form#inputChanged' }) %>
