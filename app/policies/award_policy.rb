@@ -57,7 +57,18 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def cancel?
-    cancel_by_contributor? || cancel_by_admin?
+    (cancel_by_contributor? || cancel_by_admin?) && status_for_cancel?
+  end
+
+  def status_for_cancel?
+    flag = true
+    case @award.latest_blockchain_transaction&.status
+    when 'created'
+      flag = false if @award.latest_blockchain_transaction&.waiting_in_created?
+    when 'pending'
+      flag = false
+    end
+    flag
   end
 
   def cancel_by_contributor?
