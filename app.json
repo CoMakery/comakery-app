@@ -129,7 +129,7 @@
       "value": "true"
     },
     "NODE_MODULES_CACHE": "false",
-    "AWS_REGION": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
+    "AWS_REGION": "us-east-1",
     "AWS_API_KEY": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
     "AWS_API_SECRET": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
     "REFILE_S3_REGION": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
