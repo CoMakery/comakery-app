@@ -20,6 +20,12 @@ class Blockchain::EthereumRopsten < Blockchain::Ethereum
     'ropsten.etherscan.io'
   end
 
+  # Name of the blockchain on OreId service, if supported
+  # @return [String] name
+  def ore_id_name
+    'eth_ropsten'
+  end
+
   # Is mainnet?
   # @return [Boolean] mainnet?
   def mainnet?

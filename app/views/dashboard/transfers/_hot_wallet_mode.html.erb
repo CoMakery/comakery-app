@@ -1,12 +1,10 @@
 <%= turbo_stream_from "project_hot_wallet_modes" %>
 <%= turbo_frame_tag "project_hot_wallet_modes" do %>
     <div id="project_<%= project.id %>_hot_wallet_mode" class="hot-wallet-switcher" data-controller="hot-wallet-mode-switcher" data-hot-wallet-mode-switcher-update-url="<%= project_path(project) %>">
-      <label>
-        <input id="project_hot_wallet_mode" type="checkbox"
-          data-action="hot-wallet-mode-switcher#toggle"
-          data-target="hot-wallet-mode-switcher.hotWalletMode"
-          <% if project.auto_sending? %> checked<% end %>>
-        Hot Wallet Auto-Pay
-      </label>
+      <h4>Hot Wallet mode</h3>
+      <%= select_tag "project[hot_wallet_mode]",
+                     options_for_select(Project.hot_wallet_modes.keys.map{|name| [name.humanize, name]}, project.hot_wallet_mode),
+                     id: "project_hot_wallet_mode",
+                     data: {action: "hot-wallet-mode-switcher#toggle", target: "hot-wallet-mode-switcher.hotWalletMode"} %>
     </div>
 <% end %>

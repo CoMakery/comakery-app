@@ -1,6 +1,7 @@
 class OreIdAccount < ApplicationRecord
   class OreIdAccount::ProvisioningError < StandardError; end
   include Synchronisable
+  include AASM
 
   belongs_to :account
   has_many :wallets, dependent: :destroy
@@ -8,8 +9,7 @@ class OreIdAccount < ApplicationRecord
 
   before_create :set_temp_password
   after_create :schedule_sync, unless: :pending_manual?
-  after_update :schedule_wallet_sync, if: :saved_change_to_account_name?
-  after_update :schedule_opt_in_sync, if: :saved_change_to_state? && :ok?
+  after_create :schedule_wallet_sync, if: :pending_manual?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
@@ -29,72 +29,93 @@ class OreIdAccount < ApplicationRecord
     unlinking: 4
   }
 
+  aasm column: :state, enum: true, timestamps: true do
+    state :pending, initial: true
+    state :pending_manual
+    state :unclaimed
+    state :ok
+    state :unlinking
+
+    event :create_remote do
+      before do
+        create_account
+        pull_wallets
+        push_wallets
+        sync_opt_ins
+      end
+
+      transitions from: :pending, to: :unclaimed
+    end
+
+    event :sync_remote do
+      before do
+        pull_wallets
+        push_wallets unless ok?
+        sync_opt_ins
+      end
+
+      transitions from: :unclaimed, to: :unclaimed
+      transitions from: %i[pending_manual ok], to: :ok
+    end
+
+    event :claim do
+      before do
+        sync_password_update
+      end
+
+      transitions from: :unclaimed, to: :ok
+    end
+
+    event :unlink do
+      after do
+        destroy!
+      end
+
+      transitions to: :unlinking
+    end
+  end
+
   def service
     @service ||= OreIdService.new(self)
   end
 
-  def sync_account
+  def create_account
     service.create_remote
   end
 
-  def sync_wallets
+  def pull_wallets
     service.permissions.each do |permission|
-      w = Wallet.find_or_initialize_by(
-        account: account,
+      next if account.wallets.find_by(
         source: :ore_id,
-        _blockchain: permission[:_blockchain]
+        _blockchain: permission[:_blockchain],
+        address: permission[:address]
       )
 
-      w.ore_id_account = self
+      w = account.wallets.find_or_initialize_by(
+        source: :ore_id,
+        _blockchain: permission[:_blockchain],
+        address: nil
+      )
+
       w.address = permission[:address]
+      w.ore_id_account = self
       w.name ||= w.blockchain.name
       w.save!
     end
+  end
 
-    ok! if wallet_provisions.empty?
+  def push_wallets
+    account.wallets.where(source: :ore_id, address: nil).find_each do |wallet|
+      service.create_wallet(wallet.blockchain)
+    end
   end
 
   def sync_opt_ins
-    wallets.each do |wallet|
-      client = Comakery::Algorand.new(wallet.blockchain)
-      sync_assets_opt_ins(client, wallet)
-      sync_apps_opt_ins(client, wallet)
-    end
-  end
-
-  def sync_assets_opt_ins(client, wallet)
-    assets = client.account_assets(wallet.address)
-    asset_ids = assets.map { |a| a.fetch('asset-id') }
-    asset_tokens = Token._token_type_asa.where(contract_address: asset_ids)
-    asset_tokens.each do |token|
-      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
-      opt_in.opted_in!
-    end
-  end
-
-  def sync_apps_opt_ins(client, wallet)
-    apps = client.account_apps(wallet.address)
-    app_ids = apps.map { |a| a.fetch('id') }
-    app_tokens = Token._token_type_algorand_security_token.where(contract_address: app_ids)
-    app_tokens.each do |token|
-      opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
-      opt_in.opted_in!
-    end
-  end
-
-  def unlink
-    unlinking!
-    destroy!
+    wallets.each(&:sync_opt_ins)
   end
 
   def sync_password_update
-    return unless unclaimed?
-
-    if service.password_updated?
-      ok!
-    else
-      raise OreIdAccount::ProvisioningError, 'Password is not updated'
-    end
+    raise OreIdAccount::ProvisioningError, 'Password is not updated' unless service.password_updated?
   end
 
   def schedule_sync
@@ -107,10 +128,6 @@ class OreIdAccount < ApplicationRecord
 
   def schedule_password_update_sync
     OreIdPasswordUpdateSyncJob.set(wait: 60).perform_later(id)
-  end
-
-  def schedule_opt_in_sync
-    OreIdOptInSyncJob.perform_later(id)
   end
 
   private

@@ -11,7 +11,7 @@ describe Wallet, type: :model do
   it { is_expected.to have_many(:awards).with_foreign_key(:recipient_wallet_id).dependent(:nullify) }
   it { is_expected.to have_many(:balances).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:address) }
-  it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id, :primary_wallet).with_message('has primary wallet already').ignoring_case_sensitivity }
+  it { is_expected.to validate_uniqueness_of(:_blockchain).scoped_to(:account_id, :primary_wallet).with_message('has primary wallet already').ignoring_case_sensitivity.allow_nil }
   it { is_expected.to have_readonly_attribute(:_blockchain) }
   it { is_expected.to define_enum_for(:source).with_values({ user_provided: 0, ore_id: 1, hot_wallet: 2 }) }
   it { is_expected.not_to validate_presence_of(:ore_id_account) }
@@ -100,7 +100,7 @@ describe Wallet, type: :model do
       allow(Blockchain).to receive(:testnets_available?).and_return(false)
 
       expect(subject.available_blockchains).not_to include('bitcoin_test')
-      expect(subject.available_blockchains).to include('ethereum')
+      expect(subject.available_blockchains).not_to include('ethereum_ropsten')
     end
 
     it 'doesnt include blockchains with supported_by_ore_id flag' do
@@ -167,6 +167,32 @@ describe Wallet, type: :model do
     it 'returns an error' do
       expect(wallet).to be_invalid
       expect(wallet.errors[:account_id]).to be_present
+    end
+  end
+
+  describe '#sync_opt_ins', vcr: true do
+    subject { create(:ore_id_wallet, address: 'YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA') }
+
+    context 'with an asset to opt-in' do
+      before do
+        create(:asa_token)
+      end
+
+      it 'creates an opt-in record' do
+        expect { subject.sync_opt_ins }.to change(subject.token_opt_ins, :count).by(1)
+        expect(subject.token_opt_ins.last).to be_opted_in
+      end
+    end
+
+    context 'with an app to opt-in' do
+      before do
+        create(:algo_sec_token)
+      end
+
+      it 'creates an opt-in record' do
+        expect { subject.sync_opt_ins }.to change(subject.token_opt_ins, :count).by(1)
+        expect(subject.token_opt_ins.last).to be_opted_in
+      end
     end
   end
 end

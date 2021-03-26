@@ -46,7 +46,7 @@ class Project < ApplicationRecord
   }
   enum visibility: { member: 0, public_listed: 1, member_unlisted: 2, public_unlisted: 3, archived: 4 }
   enum status: { active: 0, passive: 1 }
-  enum hot_wallet_mode: { disabled: 0, auto_sending: 1 }
+  enum hot_wallet_mode: { disabled: 0, auto_sending: 1, manual_sending: 2 }, _prefix: :hot_wallet
 
   validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
@@ -231,10 +231,6 @@ class Project < ApplicationRecord
 
   def create_default_transfer_types
     TransferType.create_defaults_for(self) if transfer_types.empty?
-  end
-
-  def hot_wallet_disabled?
-    hot_wallet_mode == 'disabled'
   end
 
   private

@@ -89,8 +89,8 @@ describe Comakery::Slack do
 
     context 'when SLACK_API_KEY and SLACK_API_SECRET defined' do
       before do
-        ENV['SLACK_API_KEY'] = 'SLACK_API_KEY'
-        ENV['SLACK_API_SECRET'] = 'SLACK_API_SECRET'
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => 'SLACK_API_KEY'))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => 'SLACK_API_SECRET'))
       end
 
       it { is_expected.to be_truthy }
@@ -98,8 +98,8 @@ describe Comakery::Slack do
 
     context 'when only SLACK_API_KEY defined' do
       before do
-        ENV['SLACK_API_KEY'] = 'SLACK_API_KEY'
-        ENV['SLACK_API_SECRET'] = nil
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => 'SLACK_API_KEY'))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => nil))
       end
 
       it { is_expected.to be_falsey }
@@ -107,8 +107,8 @@ describe Comakery::Slack do
 
     context 'when only SLACK_API_KEY defined and SLACK_API_SECRET is blank' do
       before do
-        ENV['SLACK_API_KEY'] = 'SLACK_API_KEY'
-        ENV['SLACK_API_SECRET'] = ''
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => 'SLACK_API_KEY'))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => ''))
       end
 
       it { is_expected.to be_falsey }
@@ -116,8 +116,8 @@ describe Comakery::Slack do
 
     context 'when only SLACK_API_SECRET defined and SLACK_API_KEY is blank' do
       before do
-        ENV['SLACK_API_KEY'] = ''
-        ENV['SLACK_API_SECRET'] = 'SLACK_API_SECRET'
+        allow(ENV).to receive(:[]).with('SLACK_API_KEY').and_return('')
+        allow(ENV).to receive(:[]).with('SLACK_API_SECRET').and_return('SLACK_API_SECRET')
       end
 
       it { is_expected.to be_falsey }
@@ -125,8 +125,8 @@ describe Comakery::Slack do
 
     context 'when both constants missing' do
       before do
-        ENV['SLACK_API_KEY'] = nil
-        ENV['SLACK_API_SECRET'] = nil
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => nil))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => nil))
       end
 
       it { is_expected.to be_falsey }
@@ -134,8 +134,8 @@ describe Comakery::Slack do
 
     context 'when both constants are blank' do
       before do
-        ENV['SLACK_API_KEY'] = ''
-        ENV['SLACK_API_SECRET'] = ''
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => ''))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => ''))
       end
 
       it { is_expected.to be_falsey }

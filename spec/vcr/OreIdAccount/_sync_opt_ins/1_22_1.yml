@@ -1,0 +1,111 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 00:38:29 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '24'
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d30451d5b9a3ce93362566b5c8d974d4e1616114309; expires=Sun, 18-Apr-21
+        00:38:29 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e9846f9200001f45e1073000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=XMw3K%2FVbfk78wky1RpTVaT2crgAAyy1%2BoHZ92seG7QLDuCvIMAFPG0I6Bs5SOuakfQZy%2B13Ntgz%2FPyJ0ZRysmtkUlPXIVoLYEbRIaf2Qz2d4houwgvNcPBb0n7o%3D"}],"max_age":604800}'
+      Nel:
+      - '{"max_age":604800,"report_to":"cf-nel"}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6322a35f5f421f45-FRA
+    body:
+      encoding: UTF-8
+      string: '{"message":"Not Found"}
+
+'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 00:38:29 GMT
+- request:
+    method: get
+    uri: https://api.testnet.algoexplorer.io/idx2/v2/accounts/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 00:38:29 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '24'
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d681435d9663565fbd6ce74e0788a86c71616114309; expires=Sun, 18-Apr-21
+        00:38:29 GMT; path=/; domain=.algoexplorer.io; HttpOnly; SameSite=Lax
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Origin
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08e9846fc6000005d80621a000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"group":"cf-nel","endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=0WYh%2B5fDhv%2FrNRgQ8a6sHPiP1K6gDYiakdbOoGNNhk7zOyHxUNztSZhUwogDNADokQdyzQ%2FCscW%2Ftii4uatTFMag7zRYFDhoEdCS2tGzP7yJzIubEZjM%2BIap6vY%3D"}],"max_age":604800}'
+      Nel:
+      - '{"max_age":604800,"report_to":"cf-nel"}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6322a35fa81605d8-FRA
+    body:
+      encoding: UTF-8
+      string: '{"message":"Not Found"}
+
+'
+    http_version: null
+  recorded_at: Fri, 19 Mar 2021 00:38:29 GMT
+recorded_with: VCR 5.1.0

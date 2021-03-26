@@ -103,6 +103,7 @@ group(:test) do
   gem 'database_cleaner'
   gem 'generator_spec'
   gem 'guard-rspec', require: false
+  gem 'knapsack_pro'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 4.0.0.beta3'
@@ -160,3 +161,6 @@ gem 'validate_url', '~> 1.0'
 gem 'overcommit', '~> 0.53.0'
 
 gem 'fuubar', '~> 2.5'
+
+gem 'aasm', '~> 5.1'
+gem 'after_commit_everywhere', '~> 1.0'
