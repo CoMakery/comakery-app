@@ -195,4 +195,46 @@ describe Wallet, type: :model do
       end
     end
   end
+
+  describe '#state' do
+    subject { wallet.state }
+
+    context 'with source ore_id and no ore_id_account' do
+      let(:wallet) { build :wallet, source: :ore_id }
+
+      it { is_expected.to be nil }
+    end
+
+    context 'with source ore_id and pending state' do
+      let(:wallet) { build :ore_id_wallet }
+
+      it { is_expected.to eq 'pending' }
+    end
+
+    context 'with source ore_id and unclaimed state' do
+      let(:wallet) { build :ore_id_wallet }
+      before { wallet.ore_id_account.state = :unclaimed }
+
+      it { is_expected.to eq 'unclaimed' }
+    end
+
+    context 'with source ore_id and ok state' do
+      let(:wallet) { build :ore_id_wallet }
+      before { wallet.ore_id_account.state = :ok }
+
+      it { is_expected.to eq 'ok' }
+    end
+
+    context 'with source user_provided' do
+      let(:wallet) { build :wallet }
+
+      it { is_expected.to eq 'ok' }
+    end
+
+    context 'with source hot_wallet' do
+      let(:wallet) { build :wallet }
+
+      it { is_expected.to eq 'ok' }
+    end
+  end
 end
