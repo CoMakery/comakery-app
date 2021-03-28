@@ -26,6 +26,7 @@ jobs:
       RAILS_ENV: test
       SECRET_KEY_BASE: dummy
       DATABASE_URL: postgres://rails@localhost:5432/rails
+      AWS_REGION: us-east-1
       AWS_API_KEY: dummy
       AWS_API_SECRET: dummy
       BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET: none
