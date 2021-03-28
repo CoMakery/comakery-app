@@ -8,63 +8,20 @@
     <!-- CSS files -->
     <link href="./dist/css/upside.css" rel="stylesheet"/>
     <link href="./dist/css/upside-vendors.min.css" rel="stylesheet"/>
-    <link href="./dist/css/demo.min.css" rel="stylesheet"/>
+    <link href="./dist/css/admin.css" rel="stylesheet"/>
+
   </head>
   <body class="antialiased">
     <div class="page">
-      <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark navbar-collapsed">
-        <span class="handbar"></span>
+      <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark navbar-collapsed">
+        <!-- <span id="main-side-handbar" class="handbar"></span> -->
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
           </button>
           <h1 class="navbar-brand navbar-brand-autodark">
-            <a href=".">
-              <!-- <img src="./static/logo-white.svg" width="102" height="24" alt="Tabler" class="navbar-brand-image"> -->
-              <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 0C4.70101 0 0 4.70101 0 10.5C0 16.299 4.70101 21 10.5 21C16.299 21 21 16.299 21 10.5C21 4.70101 16.299 0 10.5 0ZM5.44375 14.7934L12.9954 10.1673L12.1546 13.5483L14.5266 14.1863L16.4166 6.58565L9.10829 4.61998L8.49486 7.08682L11.7621 7.96559L4.20029 12.598L5.44375 14.7934Z" fill="#FCFCFC"></path>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 0C4.70101 0 0 4.70101 0 10.5C0 16.299 4.70101 21 10.5 21C16.299 21 21 16.299 21 10.5C21 4.70101 16.299 0 10.5 0ZM5.44375 14.7934L12.9954 10.1673L12.1546 13.5483L14.5266 14.1863L16.4166 6.58565L9.10829 4.61998L8.49486 7.08682L11.7621 7.96559L4.20029 12.598L5.44375 14.7934Z" fill="url(#paint0_linear)"></path>
-                <defs>
-                <linearGradient id="paint0_linear" x1="26.25" y1="28.14" x2="-1.06146" y2="1.07096" gradientUnits="userSpaceOnUse">
-                <stop offset="0.203125" stop-color="#1652F0"></stop>
-                <stop offset="1" stop-color="white" stop-opacity="0.31"></stop>
-                </linearGradient>
-                </defs>
-              </svg>
-            </a>
-          </h1>
-          <div class="navbar-nav flex-row d-lg-none">
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
-                <span class="badge bg-red"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
-                <div class="d-none d-xl-block ps-2">
-                  <div>Paweł Kuna</div>
-                  <div class="mt-1 small text-muted">UI Designer</div>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item">Set status</a>
-                <a href="#" class="dropdown-item">Profile & account</a>
-                <a href="#" class="dropdown-item">Feedback</a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">Settings</a>
-                <a href="#" class="dropdown-item">Logout</a>
-              </div>
-            </div>
-          </div>
+            <img alt="Upside" class="navbar-brand-image">              
+          </h1> 
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="navbar-nav pt-lg-3">
               <li class="nav-item">
@@ -105,19 +62,19 @@
               </li>
             </ul>
           </div>
-          <div class="d-flex flex-row align-items-center">
+          <div class="profile d-flex flex-row align-items-center">
             <img class="rounded-circle" width="30" height="30" src="./static/avatars/000m.jpg">
-            <!-- <label class="ms-2 flex-fill h14 font-weight-medium n2-color ">Noah Thorp</label>
+            <label class="ms-2 flex-fill h14 font-weight-medium n2-color ">Noah Thorp</label>
             <a href="#">
               <svg class="n2-color" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
               </svg>
-            </a> -->
+            </a>
           </div>
         </div>
       </aside>   
-      <aside class="d-flex flex-column sidebar navbar-collapsed">
-        <span class="handbar"></span>
+      <aside id="second-side" class="d-flex flex-column sidebar navbar-collapsed">
+        <span id="second-side-handbar" class="handbar"></span>
         <div class="top">
           <a href="#" class="d-flex align-items-center n9-color text-decoration-none">
             <svg class="me-1" width="11" height="11" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -193,42 +150,44 @@
             <label class="form-label-round form-label-round-large h11 font-weight-medium p6-color p1-bg">Private</label>
           </div>          
         </div>
-      </aside>         
+      </aside>
       <div class="content navbar-collapsed navbar-ms-2">                
         <div class="container-xl">
           <!-- Page title -->
           <div class="page-header page-header-border">
-            <div class="row align-items-center">
-              <div class="d-flex col align-items-center">
-                <div class="page-title h18 n13-color">
-                  Transfers
+            <div class="row row-cards align-items-center">
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex align-items-center">
+                  <div class="page-title h18 n13-color">
+                    Transfers
+                  </div>
+                  <a href="#" class="btn btn-subtle h12">
+                    <svg class="me-1" width="12" height="12" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M5 0C4.44772 0 4 0.447715 4 1V2H3C1.34315 2 0 3.34315 0 5V7V17C0 18.6569 1.34315 20 3 20H15C16.6569 20 18 18.6569 18 17V7V5C18 3.34315 16.6569 2 15 2H14V1C14 0.447715 13.5523 0 13 0C12.4477 0 12 0.447715 12 1V2H6V1C6 0.447715 5.55228 0 5 0ZM13 4H5H3C2.44772 4 2 4.44772 2 5V6H16V5C16 4.44772 15.5523 4 15 4H13ZM2 17V8L16 8V17C16 17.5523 15.5523 18 15 18H3C2.44772 18 2 17.5523 2 17ZM4 11C4 10.4477 4.44772 10 5 10H7C7.55228 10 8 10.4477 8 11V13C8 13.5523 7.55228 14 7 14H5C4.44772 14 4 13.5523 4 13V11Z" fill="currentColor"></path>
+                    </svg>
+                    13 Jan, 2020 — 01 Feb, 2020
+                    <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
+                    </svg>                      
+                  </a>
                 </div>
-                <a href="#" class="btn btn-subtle h12">
-                  <svg class="me-1" width="12" height="12" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5 0C4.44772 0 4 0.447715 4 1V2H3C1.34315 2 0 3.34315 0 5V7V17C0 18.6569 1.34315 20 3 20H15C16.6569 20 18 18.6569 18 17V7V5C18 3.34315 16.6569 2 15 2H14V1C14 0.447715 13.5523 0 13 0C12.4477 0 12 0.447715 12 1V2H6V1C6 0.447715 5.55228 0 5 0ZM13 4H5H3C2.44772 4 2 4.44772 2 5V6H16V5C16 4.44772 15.5523 4 15 4H13ZM2 17V8L16 8V17C16 17.5523 15.5523 18 15 18H3C2.44772 18 2 17.5523 2 17ZM4 11C4 10.4477 4.44772 10 5 10H7C7.55228 10 8 10.4477 8 11V13C8 13.5523 7.55228 14 7 14H5C4.44772 14 4 13.5523 4 13V11Z" fill="currentColor"></path>
-                  </svg>
-                  13 Jan, 2020 — 01 Feb, 2020
-                  <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
-                  </svg>                      
-                </a>
               </div>
-              <div class="col-auto ms-auto">
-                <div class="d-flex">
-                  <label class="form-check form-switch">
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex justify-content-end">
+                  <label class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" checked="">
                     <span class="form-check-label h12 p5-color ms-2">Hot Wallet Auto-Pay</span>
                     <svg class="n9-color ms-2" width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10ZM9.99988 3.75C9.31775 3.75 8.77258 4.31742 8.79984 4.999L9.02491 10.6257C9.04584 11.149 9.47616 11.5625 9.99988 11.5625C10.5236 11.5625 10.9539 11.1491 10.9748 10.6258L11.1999 4.999C11.2272 4.31742 10.682 3.75 9.99988 3.75ZM8.5625 14.5312C8.5625 13.7546 9.1921 13.125 9.96875 13.125C10.7454 13.125 11.375 13.7546 11.375 14.5312C11.375 15.3079 10.7454 15.9375 9.96875 15.9375C9.1921 15.9375 8.5625 15.3079 8.5625 14.5312Z" fill="currentColor"></path>
                     </svg>
                   </label>
-                  <a href="#" class="btn btn-secondary h12 ms-3">
+                  <a href="#" class="btn btn-secondary h12 me-3">
                     <svg class="me-1" width="10" height="13" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M8 1.98753L13.5012 2.00093C13.7769 2.0016 14 2.22386 14 2.49781V17.4836C14 17.9512 13.4092 18.1599 13.1122 17.7972L11.5383 15.8749C11.1403 15.3888 10.3944 15.3857 9.99227 15.8685L8.35648 17.8324C8.16636 18.0607 7.81876 18.0739 7.61164 17.8607L5.61352 15.8045C5.17616 15.3544 4.43412 15.4132 4.07396 15.9264L2.91011 17.5847C2.63021 17.9835 2 17.7867 2 17.3005V2.48441C2 2.20999 2.22386 1.98753 2.5 1.98753H8ZM8.0049 5.92329e-06L13.5061 0.0134057C14.8844 0.016763 16 1.12808 16 2.49781V17.4836C16 19.8217 13.0458 20.8652 11.5608 19.0516L10.756 18.0686L9.89716 19.0997C8.94658 20.241 7.20855 20.3071 6.17295 19.2414L5.01912 18.054L4.55055 18.7217C3.15102 20.7158 0 19.7317 0 17.3005V2.48441C0 1.11231 1.11929 0 2.5 0L8.0049 5.92329e-06ZM4 10.9314C4 10.3826 4.44772 9.93763 5 9.93763H11C11.5523 9.93763 12 10.3826 12 10.9314C12 11.4802 11.5523 11.9252 11 11.9252H5C4.44772 11.9252 4 11.4802 4 10.9314ZM5 4.96881C4.44772 4.96881 4 5.41374 4 5.96258C4 6.51142 4.44772 6.95634 5 6.95634H11C11.5523 6.95634 12 6.51142 12 5.96258C12 5.41374 11.5523 4.96881 11 4.96881H5Z" fill="currentColor"></path>
                     </svg>
                     Transfer Rules
                   </a>
-                  <a href="#" class="btn btn-primary h12 ms-3" data-bs-toggle="modal" data-bs-target="#modal-create-vesting-schedule">                    
+                  <a href="#" class="btn btn-primary h12" data-bs-toggle="modal" data-bs-target="#modal-create-vesting-schedule">                    
                     Create New Transfer
                     <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
@@ -249,31 +208,31 @@
                   <div class="number h18 n12-color">124,987 TKN</div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4 cold-md-6">
                 <div class="statistic">
                   <div class="h14 font-weight-medium n11-color">Accounts</div>
                   <div class="number h18 n12-color">1,300</div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4 cold-md-6">
                 <div class="statistic">
                   <div class="h14 font-weight-medium n11-color">Authorized</div>
                   <div class="number h18 n12-color">800,000,000 TKN</div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4 cold-md-6">
                 <div class="statistic">
                   <div class="h14 font-weight-medium n11-color">Transfers</div>
                   <div class="number h18 n12-color">36</div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4 cold-md-6">
                 <div class="statistic">
                   <div class="h14 font-weight-medium n11-color">Burned</div>
                   <div class="number h18 n12-color">1,300 TKN</div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4 cold-md-6">
                 <div class="statistic">
                   <div class="h14 font-weight-medium n11-color">Transferred</div>
                   <div class="number h18 n12-color">124,987 TKN</div>
@@ -283,52 +242,54 @@
             <div class="card card-md rounded-3 mt-4">
               <div class="card-body">
                 <div class="row row-cards">
-                  <div class="col-lg-6 col-md-6">
+                  <div class="col-lg-6 col-md-12">
                     <div id="chart-mentions" class="chart-lg"></div>
                   </div>
-                  <div class="col-lg-3 col-md-6">
+                  <div class="col-lg-3 col-md-12">
                     <div id="chart-total-sales"></div>
                   </div>
-                  <div class="col-lg-3 col-md-6 row row-cards">
-                    <div class="col-lg-12">
-                      <div class="chart-legend">
-                        <span class="dot p2-bg"></span>
-                        <div class="title h12 font-weight-medium n11-color">Custome</div>
-                        <div class="number h12 n13-color">27,988</div>
-                        <div class="percent h12 p2-color">38%</div>
+                  <div class="col-lg-3 col-md-12">
+                    <div class="row row-cards">
+                      <div class="col-lg-12">
+                        <div class="chart-legend">
+                          <span class="dot p2-bg"></span>
+                          <div class="title h12 font-weight-medium n11-color">Custome</div>
+                          <div class="number h12 n13-color">27,988</div>
+                          <div class="percent h12 p2-color">38%</div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="chart-legend">
-                        <span class="dot p4-bg"></span>
-                        <div class="title h12 font-weight-medium n11-color">Earned</div>
-                        <div class="number h12 n13-color">27,988</div>
-                        <div class="percent h12 p4-color">38%</div>
-                      </div>  
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="chart-legend">
-                        <span class="dot y3-bg"></span>
-                        <div class="title h12 font-weight-medium n11-color">Minted</div>
-                        <div class="number h12 n13-color">27,988</div>
-                        <div class="percent h12 y3-color">38%</div>
-                      </div>  
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="chart-legend">
-                        <span class="dot g4-bg"></span>
-                        <div class="title h12 font-weight-medium n11-color">Bought</div>
-                        <div class="number h12 n13-color">27,988</div>
-                        <div class="percent h12 g4-color">38%</div>
-                      </div>  
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="chart-legend">
-                        <span class="dot r8-bg"></span>
-                        <div class="title h12 font-weight-medium n11-color">Burned</div>
-                        <div class="number h12 n13-color">27,988</div>
-                        <div class="percent h12 r8-color">38%</div>
-                      </div>  
+                      <div class="col-lg-12">
+                        <div class="chart-legend">
+                          <span class="dot p4-bg"></span>
+                          <div class="title h12 font-weight-medium n11-color">Earned</div>
+                          <div class="number h12 n13-color">27,988</div>
+                          <div class="percent h12 p4-color">38%</div>
+                        </div>  
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="chart-legend">
+                          <span class="dot y3-bg"></span>
+                          <div class="title h12 font-weight-medium n11-color">Minted</div>
+                          <div class="number h12 n13-color">27,988</div>
+                          <div class="percent h12 y3-color">38%</div>
+                        </div>  
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="chart-legend">
+                          <span class="dot g4-bg"></span>
+                          <div class="title h12 font-weight-medium n11-color">Bought</div>
+                          <div class="number h12 n13-color">27,988</div>
+                          <div class="percent h12 g4-color">38%</div>
+                        </div>  
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="chart-legend">
+                          <span class="dot r8-bg"></span>
+                          <div class="title h12 font-weight-medium n11-color">Burned</div>
+                          <div class="number h12 n13-color">27,988</div>
+                          <div class="percent h12 r8-color">38%</div>
+                        </div>  
+                      </div>
                     </div>
                   </div>
                 </div>                
@@ -567,7 +528,21 @@
       $(document).ready(function() {
         $("#main-table").clone(true).appendTo('#table-scroll').addClass('clone');   
       });
-    </script>
+    </script>    
+    <script>
+      $("#second-side-handbar").click(function(){
+        if($("#second-side").hasClass("sidebar-collapse")){
+          $("#second-side").removeClass("sidebar-collapse")
+          $(".content").removeClass("navbar-ms-1")
+          $(".content").addClass("navbar-ms-2")
+        }          
+        else{
+          $("#second-side").addClass("sidebar-collapse")
+          $(".content").addClass("navbar-ms-1")
+          $(".content").removeClass("navbar-ms-2")
+        }
+      })
+    </script>    
     <script>
       // @formatter:off
       document.addEventListener("DOMContentLoaded", function () {

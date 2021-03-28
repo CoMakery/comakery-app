@@ -8,56 +8,22 @@
     <!-- CSS files -->
     <link href="./dist/css/upside.css" rel="stylesheet"/>
     <link href="./dist/css/upside-vendors.min.css" rel="stylesheet"/>
-    <link href="./dist/css/demo.min.css" rel="stylesheet"/>
+    <link href="./dist/css/admin.css" rel="stylesheet"/>
   </head>
   <body class="antialiased">
     <div class="page">
-      <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
-        <span class="handbar"></span>
+      <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+        <span id="main-side-handbar" class="handbar"></span>
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
           </button>
           <h1 class="navbar-brand navbar-brand-autodark">
-            <a href=".">
-              <img src="./static/logo-white.svg" width="102" height="24" alt="Tabler" class="navbar-brand-image">
-            </a>
+            <img alt="Upside" class="navbar-brand-image">              
           </h1>
-          <div class="navbar-nav flex-row d-lg-none">
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
-                <span class="badge bg-red"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
-                <div class="d-none d-xl-block ps-2">
-                  <div>Paweł Kuna</div>
-                  <div class="mt-1 small text-muted">UI Designer</div>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item">Set status</a>
-                <a href="#" class="dropdown-item">Profile & account</a>
-                <a href="#" class="dropdown-item">Feedback</a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">Settings</a>
-                <a href="#" class="dropdown-item">Logout</a>
-              </div>
-            </div>
-          </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="navbar-nav pt-lg-3">
-              <li class="nav-item active dropdown">
+              <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,7 +47,7 @@
                   </span>
                 </a>         
               </li>
-              <li class="nav-item ">
+              <li class="nav-item active">
                 <a class="nav-link" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <svg width="15" height="16.67" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,7 +61,7 @@
               </li>
             </ul>
           </div>
-          <div class="d-flex flex-row align-items-center">
+          <div class="profile d-flex flex-row align-items-center">
             <img class="rounded-circle" width="30" height="30" src="./static/avatars/000m.jpg">
             <label class="ms-2 flex-fill h14 font-weight-medium n2-color ">Noah Thorp</label>
             <a href="#">
@@ -105,25 +71,27 @@
             </a>
           </div>
         </div>
-      </aside>      
+      </aside>       
       <div class="content">                
         <div class="container-xl">
           <!-- Page title -->
           <div class="page-header page-header-border">
-            <div class="row align-items-center">
-              <div class="col">
-                <span class="d-inline-block page-title h18 n13-color">
-                  Projects
-                </span>
-                <div class="d-inline-block input-icon">
-                  <span class="input-icon-addon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+            <div class="row row-cards align-items-center">
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex align-items-center">
+                  <span class="d-inline-block page-title h18 n13-color">
+                    Projects
                   </span>
-                  <input type="text" class="form-control" placeholder="Search Product">
-                </div>
+                  <div class="d-inline-block input-icon">
+                    <span class="input-icon-addon">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Search Product">
+                  </div>
+                </div>  
               </div>
-              <div class="col-auto ms-auto">
-                <div class="d-flex">
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex justify-content-end">
                   <div class="d-flex align-items-center">
                     <span class="h12 font-weight-medium n11-color">Sort by:</span>
                     <span class="ms-1 h12 p5-color">Alphabetical</span>
@@ -464,5 +432,18 @@
     <!-- Libs JS -->
     <!-- Tabler Core -->
     <script src="./dist/js/upside.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $("#main-side-handbar").click(function(){
+        console.log("main side bar")
+        if($("#main-side").hasClass("navbar-collapsed")){
+          $("#main-side").removeClass("navbar-collapsed")
+          $(".content").removeClass("navbar-ms-0")
+        }else{
+          $("#main-side").addClass("navbar-collapsed")
+          $(".content").addClass("navbar-ms-0")
+        }
+      })
+    </script>
   </body>
 </html>

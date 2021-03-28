@@ -8,53 +8,19 @@
     <!-- CSS files -->
     <link href="./dist/css/upside.css" rel="stylesheet"/>
     <link href="./dist/css/upside-vendors.min.css" rel="stylesheet"/>
-    <link href="./dist/css/demo.min.css" rel="stylesheet"/>
+    <link href="./dist/css/admin.css" rel="stylesheet"/>
   </head>
   <body class="antialiased">
     <div class="page">
-      <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
-        <span class="handbar"></span>
+      <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+        <span id="main-side-handbar" class="handbar"></span>
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
           </button>
           <h1 class="navbar-brand navbar-brand-autodark">
-            <a href=".">
-              <img src="./static/logo-white.svg" width="102" height="24" alt="Tabler" class="navbar-brand-image">
-            </a>
+            <img alt="Upside" class="navbar-brand-image">              
           </h1>
-          <div class="navbar-nav flex-row d-lg-none">
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
-                <span class="badge bg-red"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
-                <div class="d-none d-xl-block ps-2">
-                  <div>Paweł Kuna</div>
-                  <div class="mt-1 small text-muted">UI Designer</div>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item">Set status</a>
-                <a href="#" class="dropdown-item">Profile & account</a>
-                <a href="#" class="dropdown-item">Feedback</a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">Settings</a>
-                <a href="#" class="dropdown-item">Logout</a>
-              </div>
-            </div>
-          </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="navbar-nav pt-lg-3">
               <li class="nav-item">
@@ -95,7 +61,7 @@
               </li>
             </ul>
           </div>
-          <div class="d-flex flex-row align-items-center">
+          <div class="profile d-flex flex-row align-items-center">
             <img class="rounded-circle" width="30" height="30" src="./static/avatars/000m.jpg">
             <label class="ms-2 flex-fill h14 font-weight-medium n2-color ">Noah Thorp</label>
             <a href="#">
@@ -110,32 +76,36 @@
         <div class="container-xl">
           <!-- Page title -->
           <div class="page-header page-header-border">
-            <div class="row align-items-center">
-              <div class="d-flex col align-items-center">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-center">
-                    <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="10" cy="10" r="10" fill="#DCE1EF"></circle>
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4712 5.80482C10.7316 5.54447 10.7316 5.12236 10.4712 4.86201C10.2109 4.60166 9.78878 4.60166 9.52843 4.86201L4.86177 9.52868C4.79411 9.59633 4.74403 9.67491 4.71154 9.75874C4.68684 9.82231 4.67162 9.89061 4.66759 9.9619C4.66614 9.9873 4.66614 10.0128 4.66759 10.0382C4.67161 10.1096 4.6869 10.1781 4.7117 10.2418C4.7442 10.3255 4.79422 10.4039 4.86177 10.4715L9.52843 15.1382C9.78878 15.3985 10.2109 15.3985 10.4712 15.1382C10.7316 14.8778 10.7316 14.4557 10.4712 14.1953L6.94265 10.6667H14.6665C15.0347 10.6667 15.3332 10.3683 15.3332 10.0001C15.3332 9.63189 15.0347 9.33341 14.6665 9.33341H6.94265L10.4712 5.80482Z" fill="#7785AA"></path>
-                    </svg>
-                    <label class="h12 n8-color">Back to ...</label>
+            <div class="row row-cards align-items-center">
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex col align-items-center">
+                  <div class="d-inline-block">
+                    <div class="d-flex align-items-center">
+                      <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="10" fill="#DCE1EF"></circle>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4712 5.80482C10.7316 5.54447 10.7316 5.12236 10.4712 4.86201C10.2109 4.60166 9.78878 4.60166 9.52843 4.86201L4.86177 9.52868C4.79411 9.59633 4.74403 9.67491 4.71154 9.75874C4.68684 9.82231 4.67162 9.89061 4.66759 9.9619C4.66614 9.9873 4.66614 10.0128 4.66759 10.0382C4.67161 10.1096 4.6869 10.1781 4.7117 10.2418C4.7442 10.3255 4.79422 10.4039 4.86177 10.4715L9.52843 15.1382C9.78878 15.3985 10.2109 15.3985 10.4712 15.1382C10.7316 14.8778 10.7316 14.4557 10.4712 14.1953L6.94265 10.6667H14.6665C15.0347 10.6667 15.3332 10.3683 15.3332 10.0001C15.3332 9.63189 15.0347 9.33341 14.6665 9.33341H6.94265L10.4712 5.80482Z" fill="#7785AA"></path>
+                      </svg>
+                      <label class="h12 n8-color">Back to ...</label>
+                    </div>
                   </div>
-                </div>
-                <div class="d-inline-block ms-4">
-                  <div class="d-flex align-items-center">
-                    <img src="./static/xyz-icon.svg">
-                    <label class="h18 n13-color ms-2">XYZ</label>
+                  <div class="d-inline-block ms-4">
+                    <div class="d-flex align-items-center">
+                      <img src="./static/xyz-icon.svg">
+                      <label class="h18 n13-color ms-2">XYZ</label>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-auto ms-auto">
-                <div class="d-flex align-items-center"> 
-                  <svg class="n9-color" width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10ZM9.99988 3.75C9.31775 3.75 8.77258 4.31742 8.79984 4.999L9.02491 10.6257C9.04584 11.149 9.47616 11.5625 9.99988 11.5625C10.5236 11.5625 10.9539 11.1491 10.9748 10.6258L11.1999 4.999C11.2272 4.31742 10.682 3.75 9.99988 3.75ZM8.5625 14.5312C8.5625 13.7546 9.1921 13.125 9.96875 13.125C10.7454 13.125 11.375 13.7546 11.375 14.5312C11.375 15.3079 10.7454 15.9375 9.96875 15.9375C9.1921 15.9375 8.5625 15.3079 8.5625 14.5312Z" fill="currentColor"></path>
-                  </svg>   
-                  <a href="#" class="btn btn-subtle h12 ms-2">
-                    Freeze Token
-                  </a>          
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex justify-content-end">
+                  <div class="d-flex align-items-center">
+                    <svg class="n9-color" width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10ZM9.99988 3.75C9.31775 3.75 8.77258 4.31742 8.79984 4.999L9.02491 10.6257C9.04584 11.149 9.47616 11.5625 9.99988 11.5625C10.5236 11.5625 10.9539 11.1491 10.9748 10.6258L11.1999 4.999C11.2272 4.31742 10.682 3.75 9.99988 3.75ZM8.5625 14.5312C8.5625 13.7546 9.1921 13.125 9.96875 13.125C10.7454 13.125 11.375 13.7546 11.375 14.5312C11.375 15.3079 10.7454 15.9375 9.96875 15.9375C9.1921 15.9375 8.5625 15.3079 8.5625 14.5312Z" fill="currentColor"></path>
+                    </svg>   
+                    <a href="#" class="btn btn-subtle h12 ms-2">
+                      Freeze Token
+                    </a>            
+                  </div> 
                   <a href="#" class="btn btn-primary h12 ms-4">
                     <svg class="me-1" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M10.1943 1.11509C10.1943 0.499245 9.6951 0 9.07925 0C8.4634 0 7.96415 0.499245 7.96415 1.11509L7.96415 7.80566L1.1151 7.80566C0.499245 7.80566 0 8.3049 0 8.92075C0 9.5366 0.499245 10.0358 1.11509 10.0358H7.96415L7.96415 16.8849C7.96415 17.5008 8.4634 18 9.07924 18C9.6951 18 10.1943 17.5008 10.1943 16.8849L10.1943 10.0358H16.8849C17.5008 10.0358 18 9.5366 18 8.92075C18 8.3049 17.5008 7.80566 16.8849 7.80566L10.1943 7.80566L10.1943 1.11509Z" fill="currentColor"></path>
@@ -339,5 +309,18 @@
     <!-- Libs JS -->
     <!-- Tabler Core -->
     <script src="./dist/js/upside.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $("#main-side-handbar").click(function(){
+        console.log("main side bar")
+        if($("#main-side").hasClass("navbar-collapsed")){
+          $("#main-side").removeClass("navbar-collapsed")
+          $(".content").removeClass("navbar-ms-0")
+        }else{
+          $("#main-side").addClass("navbar-collapsed")
+          $(".content").addClass("navbar-ms-0")
+        }
+      })
+    </script>
   </body>
 </html>

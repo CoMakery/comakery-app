@@ -7,3 +7,11 @@
   padding: 8px 14px;
   border: 1px solid #ECEFF8;
 }
+
+.navbar-collapsed .profile > label{
+  display: none;
+}
+
+.navbar-collapsed .profile > a{
+  display: none;
+}
