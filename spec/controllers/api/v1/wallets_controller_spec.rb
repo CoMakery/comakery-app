@@ -265,11 +265,11 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       end
     end
 
-    context 'when non ore id wallet' do
+    context 'without ore id wallet' do
       render_views
       let(:wallet) { create(:wallet, account: account) }
 
-      it 'returns url for password reset and scedules a job for password' do
+      it 'returns bad request' do
         params = build(:api_signed_request,
                        { redirect_url: 'https://localhost' },
                        password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id,
