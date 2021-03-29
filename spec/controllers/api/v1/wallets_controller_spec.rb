@@ -232,8 +232,10 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         params = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'POST')
         params[:account_id] = account.managed_account_id
         params[:id] = wallet.id
+        request_signature = params.dig('proof', 'signature')
 
-        allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
+        allow_any_instance_of(OreIdService).to receive(:create_token).with(request_signature).and_return('dummy_token')
+        allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => 'dummyemail' })
 
         expect(OreIdPasswordUpdateSyncJob).to receive_message_chain(:set, :perform_later)
         expect(wallet.ore_id_account.state).to eq 'pending'
@@ -243,16 +245,15 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         expect(response).to have_http_status(:ok)
         parsed_response = JSON.parse(response.body)
         parsed_reset_url = URI.parse(parsed_response['reset_url'])
-        request_signature = params.dig('proof', 'signature')
 
         expect(parsed_reset_url.host).to eq 'service.oreid.io'
-        expect(parsed_reset_url.path).to eq '/auth'
+        expect(parsed_reset_url.path).to eq '/reset-password'
         expect(Rack::Utils.parse_nested_query(parsed_reset_url.query)).to eq(
           'app_access_token' => 'dummy_token',
           'background_color' => 'FFFFFF',
           'callback_url' => 'https://localhost',
+          'email' => 'dummyemail',
           'provider' => 'email',
-          'recovery_token' => request_signature,
           'state' => '',
           'hmac' => build(:ore_id_hmac, parsed_response['reset_url'], url_encode: false)
         )
