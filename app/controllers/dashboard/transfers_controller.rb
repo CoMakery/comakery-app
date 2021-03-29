@@ -1,10 +1,10 @@
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
-  before_action :set_transfers, only: [:index]
+  before_action :set_transfers, only: %i[index]
   before_action :set_transfer, only: [:show]
-  skip_before_action :require_login, only: %i[index show]
-  skip_after_action :verify_policy_scoped, only: %i[index show]
+  skip_before_action :require_login, only: %i[index show fetch_chart_data]
+  skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
 
   fragment_cache_key do
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
@@ -36,6 +36,14 @@ class Dashboard::TransfersController < ApplicationController
     end
   end
 
+  def fetch_chart_data
+    authorize @project, :transfers?
+    @transfers_all = query.result(distinct: true)
+    @project_token = @project.token
+    @transfers_not_burned_total = @transfers_unfiltered.not_burned.sum(&:total_amount)
+    render partial: 'chart'
+  end
+
   def prioritize
     authorize @project, :update_transfer?
     @transfer = @project.awards.find(params[:id])
@@ -51,24 +59,20 @@ class Dashboard::TransfersController < ApplicationController
         @project
         .awards
         .completed_or_cancelled
-        .includes(issuer: [image_attachment: :blob], account: [image_attachment: :blob])
+        .includes(issuer: [image_attachment: :blob], account: [:ore_id_account, image_attachment: :blob])
 
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
       @transfers_unfiltered = @transfers_unfiltered.not_burned unless transfer_type_name == 'burn'
-
       @q = @transfers_unfiltered.ransack(params[:q])
     end
 
     def set_transfers
+      @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
       @page = (params[:page] || 1).to_i
-      @transfers_all = query.result(distinct: true)
-                            .reorder('')
-                            .includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
-
-      @transfers_all.size
+      @transfers_totals = query.result(distinct: true).reorder('')
+      @transfers_all = @transfers_totals.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)
-
       if (@page > 1) && @transfers.out_of_range?
         flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
         @page = 1

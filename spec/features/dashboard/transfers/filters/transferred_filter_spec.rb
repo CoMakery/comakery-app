@@ -8,8 +8,6 @@ describe 'test_transferred_filter', js: true do
   [1, 5, 9].each do |number_of_transfers|
     context "With #{number_of_transfers} completed transfers" do
       it 'Returns correct number of transfers after applying filter' do
-        skip 'The Chart was disabled'
-
         number_of_transfers.times do
           create(:award, status: :paid, award_type: project_award_type)
         end

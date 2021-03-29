@@ -9,8 +9,6 @@ describe 'test_aml_kyc_failed_wallet_filter', js: true do
   [1, 2, 5].each do |number_of_transfers|
     context "With #{number_of_transfers} AML/KYC failed transfers" do
       it 'Returns correct number of transfers after applying filter' do
-        skip 'The Chart was disabled'
-
         number_of_transfers.times do
           create(:transfer, award_type: project_award_type, account: owner)
         end

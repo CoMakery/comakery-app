@@ -1,16 +1,16 @@
 require 'rails_helper'
 require 'controllers/api/v1/concerns/requires_an_authorization_spec'
-require 'controllers/api/v1/concerns/requires_signature_spec'
+require 'controllers/api/v1/concerns/requires_recovery_signature_spec'
 require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
 require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
 RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
   it_behaves_like 'requires_an_authorization'
-  it_behaves_like 'requires_signature'
+  it_behaves_like 'requires_recovery_signature'
   it_behaves_like 'requires_whitelabel_mission'
   it_behaves_like 'authorizable_by_mission_key'
 
-  let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_api_public_key: nil, wallet_recovery_api_public_key: build(:api_public_key), whitelabel_domain: 'test.host', whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
   # To check you can use https://gobittest.appspot.com/Address
@@ -97,6 +97,13 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
 
     context 'with invalid recovery_token' do
       let(:recovery_token) { '0' }
+
+      it { is_expected.to have_http_status(:unauthorized) }
+    end
+
+    context 'with expired recovery_token' do
+      let(:api_request_log) { create(:api_request_log, created_at: DateTime.current - 10.minutes) }
+      let(:recovery_token) { api_request_log.signature }
 
       it { is_expected.to have_http_status(:unauthorized) }
     end
