@@ -33,6 +33,17 @@ describe Mission do
       expect(mission_w_public_key).not_to be_valid
       expect(mission_wo_public_key).to be_valid
     end
+
+    it 'doesnt allow to overwrite whitelabel_recovery_service_api_public_key' do
+      mission_w_public_key = create(:mission, wallet_recovery_api_public_key: build(:api_public_key))
+      mission_wo_public_key = create(:mission)
+
+      mission_w_public_key.wallet_recovery_api_public_key = 'updated'
+      mission_wo_public_key.wallet_recovery_api_public_key = 'updated'
+
+      expect(mission_w_public_key).not_to be_valid
+      expect(mission_wo_public_key).to be_valid
+    end
   end
 
   describe '#stats' do
