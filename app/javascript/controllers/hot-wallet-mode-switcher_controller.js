@@ -6,7 +6,7 @@ export default class extends Controller {
 
   toggle() {
     const formData = new FormData()
-    const mode = this.hotWalletModeTarget.checked ? 'auto_sending' : 'disabled'
+    const mode = this.hotWalletModeTarget.value
     formData.append('project[hot_wallet_mode]', mode)
 
     fetch(this.data.get('update-url'), {

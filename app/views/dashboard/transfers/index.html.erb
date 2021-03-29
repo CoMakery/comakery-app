@@ -1,12 +1,9 @@
 <%= render layout: 'projects/project_settings' do %>
   <div data-controller="transfer-form" data-transfer-form-decimal-places="<%= @project.token ? @project.token.decimal_places : 0 %>">
     <%= render partial: "filters" %>
-
-    <%# TODO: Uncomment me after the chart perfomance will be fixed %>
-    <%# if @transfers_all.present? %>
-      <%#= render partial: "chart" %>
-    <%# end %>
-
+    <turbo-frame id="chart-data" target="_top" src="<%= fetch_chart_data_project_dashboard_transfers_path(@project, duration: params[:duration] || 'Year') %>">
+      <div class="centered"><%= image_tag 'spinner.gif' %></div>
+    </turbo-frame>
     <div class="row">
       <div class="col-6">
         <% if policy(@project).create_transfer? %>

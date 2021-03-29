@@ -16,21 +16,18 @@ on:
 
 jobs:
   rspec:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby: [2.7.1]
         node: [12.x]
-        command: [
-          'spec/features',
-          'spec/controllers',
-          'spec/models',
-          '--exclude-pattern "spec/{features,controllers, models}/**/*_spec.rb"'
-        ]
-
-    name: RSpec ${{ matrix.command }}
-    runs-on: ubuntu-latest
+        ci_node_total: [15]
+        ci_node_index: [0, 1, 2, 3, 4,5,6,7,8,9,10,11,12,13,14]
 
     env:
+      KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
+      KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
       BUNDLER_VERSION: 2.2.3
       RACK_ENV: test
       RAILS_ENV: test
@@ -49,7 +46,7 @@ jobs:
       SLACK_API_SECRET: none
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
-      SIMPLECOV_ENABLED: true
+      SIMPLECOV_ENABLED: false
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 
@@ -94,7 +91,7 @@ jobs:
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
     - name: Cache Node dependencies
-      uses: actions/cache@v1.1.2
+      uses: actions/cache@v2
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
         key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -110,7 +107,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
 
     - name: Cache Ruby dependencies
-      uses: actions/cache@v1.1.2
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ matrix.ruby }}-gems1-${{ hashFiles('**/Gemfile.lock') }}
@@ -127,24 +124,20 @@ jobs:
 
     - name: Assets Cache
       id: assets-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: public/assets
-        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-${{ steps.extract_branch.outputs.branch }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-assets-
+        key: ${{ runner.os }}-${{ matrix.ruby }}-assets-
 
     - name: Webpack Cache
       id: webpack-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: public/packs
-        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-${{ steps.extract_branch.outputs.branch }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-packs-
+        key: ${{ runner.os }}-${{ matrix.ruby }}-packs-
 
     - name: Precompile assets
-      run: bundle exec rails assets:precompile
+      run: env bundle exec rails assets:precompile
 
     - name: Setup database
       run: env bundle exec rails db:create
@@ -152,12 +145,12 @@ jobs:
     - name: Run migrations
       run: env bundle exec rails db:migrate
 
-    - name: Run Command
-      run: env bundle exec rspec ${{ matrix.command }} --format documentation
+    - name: Run tests
+      run: env bundle exec rake knapsack_pro:queue:rspec
 
-    - name: Upload a Build Artifact
-      if: always()
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: SimpleCov Report
-        path: coverage/
+    # - name: Upload a Build Artifact
+    #   if: always()
+    #   uses: actions/upload-artifact@v2.2.1
+    #   with:
+    #     name: SimpleCov Report
+    #     path: coverage/
