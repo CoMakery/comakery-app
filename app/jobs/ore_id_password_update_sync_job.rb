@@ -13,6 +13,9 @@ class OreIdPasswordUpdateSyncJob < ApplicationJob
 
     begin
       ore_id.claim!
+    rescue OreIdAccount::ProvisioningError
+      sync.failed!
+      reschedule(ore_id)
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)

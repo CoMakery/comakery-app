@@ -101,6 +101,13 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
       it { is_expected.to have_http_status(:unauthorized) }
     end
 
+    context 'with expired recovery_token' do
+      let(:api_request_log) { create(:api_request_log, created_at: DateTime.current - 10.minutes) }
+      let(:recovery_token) { api_request_log.signature }
+
+      it { is_expected.to have_http_status(:unauthorized) }
+    end
+
     context 'with valid recovery_token' do
       context 'which already has been used' do
         before do
