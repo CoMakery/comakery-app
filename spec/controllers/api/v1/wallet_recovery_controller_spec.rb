@@ -122,6 +122,13 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
       it { is_expected.to have_http_status(:unauthorized) }
     end
 
+    context 'with recovery_token associated with a request without account_id' do
+      let(:api_request_log) { create(:api_request_log) }
+      let(:recovery_token) { api_request_log.signature }
+
+      it { is_expected.to have_http_status(:unauthorized) }
+    end
+
     context 'with valid recovery_token' do
       context 'which already has been used' do
         before do
@@ -153,27 +160,37 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
             end
 
             context 'and correct transport public key' do
-              it { is_expected.to have_http_status(:created) }
-              it { is_expected.to render_template('api/v1/data.json') }
+              context 'and payload encnrypted for a wrong OreIdAccount' do
+                before do
+                  allow_any_instance_of(Account).to receive_message_chain(:ore_id_account, :account_name).and_return('differentoreidaccountname')
+                end
 
-              it 'returns decrypted with private wrapping key and oreId accountName as kdf_shared_info payload, reenncrypted with transport key' do
-                subject
-
-                data = JSON.parse(response.body)['data']
-
-                expect(
-                  ECIES::Crypt.new.decrypt(
-                    ECIES::Crypt.private_key_from_hex(transport_private_key),
-                    [data].pack('H*')
-                  )
-                ).to eq(original_message)
+                it { is_expected.to have_http_status(:bad_request) }
               end
 
-              it 'schedules password update sync' do
-                allow_any_instance_of(Account).to receive(:ore_id_account).and_return(create(:ore_id, skip_jobs: true))
-                expect_any_instance_of(OreIdAccount).to receive(:schedule_password_update_sync)
+              context 'and payload encnrypted for correct OreIdAccount' do
+                it { is_expected.to have_http_status(:created) }
+                it { is_expected.to render_template('api/v1/data.json') }
 
-                subject
+                it 'returns decrypted with private wrapping key and oreId accountName as kdf_shared_info payload, reenncrypted with transport key' do
+                  subject
+
+                  data = JSON.parse(response.body)['data']
+
+                  expect(
+                    ECIES::Crypt.new.decrypt(
+                      ECIES::Crypt.private_key_from_hex(transport_private_key),
+                      [data].pack('H*')
+                    )
+                  ).to eq(original_message)
+                end
+
+                it 'schedules password update sync' do
+                  allow_any_instance_of(Account).to receive(:ore_id_account).and_return(create(:ore_id, skip_jobs: true))
+                  expect_any_instance_of(OreIdAccount).to receive(:schedule_password_update_sync)
+
+                  subject
+                end
               end
             end
           end

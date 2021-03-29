@@ -14,7 +14,7 @@ class Api::V1::WalletRecoveryController < Api::V1::ApiController
 
   # POST /api/v1/wallet_recovery/recover
   def recover
-    if !recovery&.token_expired? && recovery&.persisted?
+    if recovery&.persisted? && requested_account
       begin
         requested_account.ore_id_account.schedule_password_update_sync
 
