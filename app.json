@@ -16,16 +16,6 @@
     }
   ],
   "stack": "heroku-18",
-  "formation": {
-    "web": {
-      "quantity": 1,
-      "size": "standard-1x"
-    },
-    "worker": {
-      "quantity": 1,
-      "size": "standard-1X"
-    }
-  },
   "addons": [
     {
       "plan": "heroku-postgresql:standard-0",
