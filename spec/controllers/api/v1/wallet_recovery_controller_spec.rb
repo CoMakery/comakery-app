@@ -10,7 +10,7 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
   it_behaves_like 'requires_whitelabel_mission'
   it_behaves_like 'authorizable_by_mission_key'
 
-  let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_api_public_key: nil, wallet_recovery_api_public_key: build(:api_public_key), whitelabel_domain: 'test.host', whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
   # To check you can use https://gobittest.appspot.com/Address
