@@ -85,7 +85,7 @@ class Mission < ApplicationRecord
 
     def whitelabel_api_public_keys_cannot_be_overwritten
       errors.add(:whitelabel_api_public_key, 'cannot be overwritten') if whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present?
-      errors.add(:whitelabel_recovery_service_api_public_key, 'cannot be overwritten') if whitelabel_recovery_service_api_public_key_changed? && whitelabel_recovery_service_api_public_key_was.present?
+      errors.add(:wallet_recovery_api_public_key, 'cannot be overwritten') if wallet_recovery_api_public_key_changed? && wallet_recovery_api_public_key_was.present?
     end
 
     def populate_api_key
