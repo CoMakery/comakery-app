@@ -14,11 +14,9 @@ class Api::V1::WalletRecoveryController < Api::V1::ApiController
 
   # POST /api/v1/wallet_recovery/recover
   def recover
-    recovery = ApiRequestLog.find_by(signature: recovery_token)&.create_api_ore_id_wallet_recovery
-
-    if !recovery&.token_expired? && recovery&.persisted?
+    if recovery&.persisted? && requested_account
       begin
-        # TODO: run `ore_id_account.schedule_password_update_sync` here instead of `WalletController#password_reset_url`
+        requested_account.ore_id_account.schedule_password_update_sync
 
         @data = re_encrypted_payload
         render 'api/v1/data.json', status: :created
@@ -50,12 +48,24 @@ class Api::V1::WalletRecoveryController < Api::V1::ApiController
       @recovery_token ||= params.dig(:body, :data, :recovery_token)
     end
 
+    def recovery
+      @recovery ||= ApiRequestLog.find_by(signature: recovery_token)&.create_api_ore_id_wallet_recovery
+    end
+
+    def requested_account
+      @requested_account ||= whitelabel_mission.managed_accounts.find_by(
+        managed_account_id: recovery.api_request_log.body.dig('account_id')
+      )
+    end
+
     def payload
       @payload ||= params.dig(:body, :data, :payload)
     end
 
     def decrypted_payload
-      @decrypted_payload ||= ECIES::Crypt.new.decrypt(wrapping_key_private, [payload].pack('H*'))
+      @decrypted_payload ||= ECIES::Crypt.new(
+        kdf_shared_info: requested_account.ore_id_account.account_name
+      ).decrypt(wrapping_key_private, [payload].pack('H*'))
     end
 
     def re_encrypted_payload
