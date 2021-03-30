@@ -43,6 +43,7 @@ gem 'rails_autoscale_agent', '>= 0.9.1'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
 gem 'react-rails'
+gem 'recaptcha'
 gem 'redcarpet'
 gem 'redis', '~> 4.0'
 gem 'refile', require: 'refile/rails', github: 'refile/refile', ref: 'e690bf5c2d83b3dfd805764d54e8f5daf14993b0' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)

@@ -228,7 +228,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       render_views
       let(:wallet) { create(:ore_id_wallet, account: account) }
 
-      it 'returns url for password reset and scedules a job for password' do
+      it 'returns url for password reset' do
         params = build(:api_signed_request,
                        { redirect_url: 'https://localhost' },
                        password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id,
@@ -240,9 +240,6 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
         allow_any_instance_of(OreIdService).to receive(:create_token).with(request_signature).and_return('dummy_token')
         allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => 'dummyemail' })
-
-        expect(OreIdPasswordUpdateSyncJob).to receive_message_chain(:set, :perform_later)
-        expect(wallet.ore_id_account.state).to eq 'pending'
 
         post :password_reset, params: params
 
@@ -261,7 +258,6 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
           'state' => '',
           'hmac' => build(:ore_id_hmac, parsed_response['reset_url'], url_encode: false)
         )
-        expect(wallet.ore_id_account.reload.state).to eq 'unclaimed'
       end
     end
 
