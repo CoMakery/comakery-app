@@ -161,12 +161,10 @@ class OreIdService
     def create_token_params(recovery_token = nil)
       if recovery_token
         {
-          metadata: {
-            secrets: {
-              type: 'republicAccountRecoveryToken',
-              value: recovery_token
-            }
-          }
+          secrets: [{
+            type: 'RepublicAccountRecoveryToken',
+            value: recovery_token
+          }]
         }
       end
     end
