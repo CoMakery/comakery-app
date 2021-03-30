@@ -111,6 +111,21 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
           end
         end
 
+        context 'with registered hw and hot_wallet_mode is auto_sending with prioritized transfer' do
+          let!(:prioritized_award) { create(:award, prioritized_at: Time.zone.now, account: award.account, status: :accepted, award_type: create(:award_type, project: project)) }
+          let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+          let(:hot_wallet_mode) { 'auto_sending' }
+
+          it 'creates the prioritized transaction' do
+            params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+            params[:project_id] = project.id
+
+            post :create, params: params
+            expect(response).to have_http_status(:created)
+            expect(BlockchainTransactionAward.last.blockchain_transactable).to eq prioritized_award
+          end
+        end
+
         context 'with NOT registered hw and hot_wallet_mode is disabled' do
           let(:hot_wallet) { nil }
           let(:hot_wallet_mode) { 'disabled' }

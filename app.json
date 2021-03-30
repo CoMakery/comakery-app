@@ -48,11 +48,13 @@
   "env": {
     "INFURA_PROJECT_ID": {
       "description": "Infura.io project id. This is needed to interact with the Ethereum blockchain. If you don't have this yet you can put in a dummy value and add it after deployment but you may seem some failures related to Ethereum transactions until you add it.",
-      "required": true
+      "required": true,
+      "value": "configure_infura_to_get_ethereum_blockchain_data"
     },
     "APP_HOST": {
       "description": "Domain name of the app. If you don't know it at the time of deployment you can put in a dummy value. But you will want to change it once you have a domain name for your Heroku app.",
-      "required": true
+      "required": true,
+      "value": "set_the_domain_name"
     },
     "BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET": {
       "description": "Block explorer url for constellation mainnet. This overrides the default explorer.",
@@ -77,7 +79,7 @@
     "METAMASK_LOGIN": {
       "description": "Enable login and signup with MetaMask",
       "required": true,
-      "value": false
+      "value": "false"
     },
     "ORE_ID_API_KEY": {
       "description": "Aikon ORE ID API key",
@@ -117,17 +119,23 @@
     },
     "SIDEKIQ_PASSWORD": {
       "description": "Password for Sidekiq admin panel",
-      "required": false
+      "generator": "secret"
     },
     "SIDEKIQ_USERNAME": {
       "description": "Username for Sidekiq admin panel",
-      "required": false
+      "required": true,
+      "value": "admin"
     },
     "WHITELABEL": {
       "description": "Create and apply whitelabel with APP_HOST as a default mission",
       "required": true,
       "value": "true"
     },
-    "NODE_MODULES_CACHE": "false"
+    "NODE_MODULES_CACHE": "false",
+    "AWS_REGION": "us-east-1",
+    "AWS_API_KEY": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
+    "AWS_API_SECRET": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
+    "REFILE_S3_REGION": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
+    "REFILE_S3_BUCKET": "dummy_value_to_be_removed_when_refile_is_no_longer_required"
   }
 }

@@ -40,7 +40,7 @@ module BlockchainTransactable
           )
       q = q.accepted if table_name == 'awards'
       q = q.not_synced if table_name.in? %w[account_token_records transfer_rules]
-      q = q.order("#{table_name}.prioritized_at DESC, #{table_name}.created_at ASC") if table_name.in? %w[account_token_records awards]
+      q = q.order("#{table_name}.prioritized_at DESC nulls last, #{table_name}.created_at ASC") if table_name.in? %w[account_token_records awards]
       q
     }
 
