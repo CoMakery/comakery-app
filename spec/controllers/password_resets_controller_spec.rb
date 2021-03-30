@@ -15,13 +15,14 @@ describe PasswordResetsController do
       post :create, params: { email: 'acb@somthing.com' }
       expect(account.reset_password_token).to be nil
       expect(flash[:error]).to eq 'Could not found account with given email'
+      expect(response).to redirect_to new_password_reset_path
     end
 
     it 'create reset password token for account' do
       post :create, params: { email: 'user@test.st' }
       expect(account.reload.reset_password_token).not_to be_nil
       expect(flash[:notice]).to eq 'please check your email for reset password instructions'
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to new_password_reset_path
     end
 
     it 'create reset password token for managed account on whitelabel' do
@@ -31,7 +32,7 @@ describe PasswordResetsController do
       post :create, params: { email: managed_account.email }
       expect(managed_account.reload.reset_password_token).not_to be_nil
       expect(flash[:notice]).to eq 'please check your email for reset password instructions'
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to new_password_reset_path
     end
 
     it 'doesnt create reset password token for comakery account on whitelabel' do

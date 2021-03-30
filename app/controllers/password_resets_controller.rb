@@ -18,11 +18,11 @@ class PasswordResetsController < ApplicationController
     if @account
       @account.send_reset_password_request(@whitelabel_mission)
       flash[:notice] = 'please check your email for reset password instructions'
-      redirect_to root_path
     else
       flash[:error] = 'Could not found account with given email'
-      redirect_to new_password_reset_path
     end
+
+    redirect_to new_password_reset_path
   end
 
   def edit; end
