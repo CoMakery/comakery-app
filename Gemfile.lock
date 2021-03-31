@@ -187,6 +187,7 @@ GEM
     crass (1.0.6)
     css_parser (1.7.1)
       addressable
+    csv-safe (1.2.0)
     d3-rails (3.5.17)
       railties (>= 3.1)
     database_cleaner (1.8.4)
@@ -734,6 +735,7 @@ DEPENDENCIES
   citizen-scripts!
   coffee-rails
   countries
+  csv-safe
   d3-rails (~> 3.5)
   database_cleaner
   dotenv-rails
