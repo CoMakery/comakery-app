@@ -34,7 +34,7 @@ describe 'Wallet configuration flow', type: :request do
     expect(ore_id_account.state).to eq 'pending'
 
     # to use recorded API call
-    ore_id_account.update_column :temp_password, '71a89055e394c22e0b9aaa05bfed628ea5a6b91ca1be990070abc0127ef23d2d!'
+    ore_id_account.update temp_password: '71a89055e394c22e0b9aaa05bfed628ea5a6b91ca1be990070abc0127ef23d2d!'
 
     VCR.use_cassette('wallet_configuration_flow/sync_ore_id', record: :once) do
       # In real app it runs from a job
