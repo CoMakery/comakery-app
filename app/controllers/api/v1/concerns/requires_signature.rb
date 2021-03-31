@@ -26,8 +26,12 @@ module Api::V1::Concerns::RequiresSignature
       whitelabel_mission&.whitelabel_api_public_key
     end
 
+    def nonce_key_prefix
+      'api::v1::nonce_history'
+    end
+
     def nonce_unique?(nonce)
-      key = "api::v1::nonce_history:#{whitelabel_mission.id}:#{nonce}"
+      key = "#{nonce_key_prefix}:#{whitelabel_mission.id}:#{nonce}"
 
       if Rails.cache.exist?(key)
         false
