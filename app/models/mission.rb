@@ -40,6 +40,8 @@ class Mission < ApplicationRecord
       .with_attached_whitelabel_favicon
   }
 
+  scope :without_whitelabel, -> { where(whitelabel: false) }
+
   after_create :assign_display_order
   after_save :set_whitelabel_for_projects
 
