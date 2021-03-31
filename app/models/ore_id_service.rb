@@ -87,7 +87,7 @@ class OreIdService
       self.class.post(
         '/app-token',
         headers: request_headers,
-        body: create_token_params(recovery_token)
+        body: create_token_params(recovery_token).to_json
       )
     )
 
@@ -161,10 +161,10 @@ class OreIdService
     def create_token_params(recovery_token = nil)
       if recovery_token
         {
-          secrets: {
-            type: 'republicAccountRecoveryToken',
+          secrets: [{
+            type: 'RepublicAccountRecoveryToken',
             value: recovery_token
-          }
+          }]
         }
       end
     end

@@ -31,18 +31,16 @@ class SessionsController < ApplicationController
   end
 
   def sign_in
-    @account = if @whitelabel_mission
-      @whitelabel_mission.managed_accounts.find_by email: params[:email]
-    else
-      Account.find_by(email: params[:email], managed_mission_id: nil)
-    end
+    authenticate_user_result = Accounts::Authenticate.call(whitelabel_mission: @whitelabel_mission,
+                                                           email: params[:email],
+                                                           password: params[:password])
 
-    if @account&.password_digest && @account&.authenticate(params[:password])
-      session[:account_id] = @account.id
+    if verify_recaptcha(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success?
+      session[:account_id] = authenticate_user_result.account.id
+
       redirect_to redirect_path
     else
-      flash[:error] = 'Invalid email or password'
-      redirect_to new_session_path
+      redirect_to new_session_path, flash: { error: 'Invalid email or password' }
     end
   end
 
