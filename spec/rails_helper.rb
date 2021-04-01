@@ -17,7 +17,7 @@ if enable_simplecov
     add_group 'Policies', 'app/policies'
   end
 
-  KnapsackPro::Hooks::Queue.before_queue do |queue_id|
+  KnapsackPro::Hooks::Queue.before_queue do |_queue_id|
     SimpleCov.command_name("rspec_ci_node_#{KnapsackPro::Config::Env.ci_node_index}")
   end
 end
