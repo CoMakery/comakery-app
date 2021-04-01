@@ -5,8 +5,8 @@ enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || false
 if enable_simplecov
   require 'simplecov'
   SimpleCov.start :rails do
-#     SimpleCov.minimum_coverage 98
-#     SimpleCov.minimum_coverage_by_file 38
+    #     SimpleCov.minimum_coverage 98
+    #     SimpleCov.minimum_coverage_by_file 38
     #     SimpleCov.refuse_coverage_drop
 
     # add_filter == do not track coverage
