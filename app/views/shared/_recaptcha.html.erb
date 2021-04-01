@@ -1,0 +1,3 @@
+<% if ENV['RECAPTCHA_SITE_KEY'].present? && ENV['RECAPTCHA_SECRET_KEY'].present? %>
+  <%= recaptcha_v3(action: action) %>
+<% end %>

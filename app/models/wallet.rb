@@ -84,6 +84,14 @@ class Wallet < ApplicationRecord
     end
   end
 
+  def state
+    if ore_id?
+      ore_id_account&.state
+    else
+      'ok'
+    end
+  end
+
   private
 
     def blockchain_supported_by_ore_id

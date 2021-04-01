@@ -8,8 +8,6 @@ module BelongsToOreId
     belongs_to :ore_id_account, optional: true
     validates :ore_id_account, presence: true, if: :ore_id?
 
-    delegate :state, to: :ore_id_account, allow_nil: true
-
     def can_be_destroyed?
       !ore_id? || ore_id_account.unlinking?
     end
