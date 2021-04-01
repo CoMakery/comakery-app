@@ -428,7 +428,8 @@ describe Award do
       described_class.statuses.keys.each do |status|
         a = create(:award)
         a.update(status: status)
-        if %w[ready invite_ready].include? status
+        statuses = %w[ready invite_ready]
+        if statuses.include? status
           expect { a.destroy }.to(change { described_class.count }.by(-1))
         else
           expect { a.destroy }.not_to(change { described_class.count })
