@@ -43,6 +43,7 @@ gem 'rails_autoscale_agent', '>= 0.9.1'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
 gem 'react-rails'
+gem 'recaptcha'
 gem 'redcarpet'
 gem 'redis', '~> 4.0'
 gem 'refile', require: 'refile/rails', github: 'refile/refile', ref: 'e690bf5c2d83b3dfd805764d54e8f5daf14993b0' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
@@ -106,6 +107,7 @@ group(:test) do
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 4.0.0.beta3'
+  gem 'rspec-retry'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
@@ -160,6 +162,8 @@ gem 'validate_url', '~> 1.0'
 gem 'overcommit', '~> 0.53.0'
 
 gem 'fuubar', '~> 2.5'
+
+gem 'csv-safe'
 
 gem 'aasm', '~> 5.1'
 gem 'after_commit_everywhere', '~> 1.0'
