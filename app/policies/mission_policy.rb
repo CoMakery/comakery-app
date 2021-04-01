@@ -24,7 +24,11 @@ class MissionPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    if mission&.whitelabel?
+      account.comakery_admin?
+    else
+      true
+    end
   end
 
   def new?

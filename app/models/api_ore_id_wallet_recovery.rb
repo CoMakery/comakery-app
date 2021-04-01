@@ -4,8 +4,11 @@ class ApiOreIdWalletRecovery < ApplicationRecord
   belongs_to :api_request_log
 
   validates :api_request_log_id, uniqueness: true
+  validate :request_expired?, on: :create, if: :api_request_log
 
-  def token_expired?
-    DateTime.current > api_request_log.created_at + TOKEN_EXPIRATION_TIME
-  end
+  private
+
+    def request_expired?
+      errors.add(:api_request_log, 'is expired for recovery') if DateTime.current > api_request_log.created_at + TOKEN_EXPIRATION_TIME
+    end
 end
