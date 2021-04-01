@@ -22,9 +22,6 @@ class Views::Sessions::New < Views::Base
                 password_field_tag :password, nil, tabindex: 2, placeholder: 'Password'
                 link_to 'Forgot Password?', new_password_reset_path
               end
-
-              render partial: 'shared/recaptcha', locals: { action: 'login' }
-
               submit_tag 'Sign In', class: buttonish(:medium), tabindex: 3
             end
           end

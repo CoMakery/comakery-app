@@ -73,21 +73,12 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
   describe 'POST #recover' do
     render_views
 
-    let(:api_request_log) { create(:api_request_log, body: { 'account_id' => account.managed_account_id }) }
+    let(:api_request_log) { create(:api_request_log) }
     let(:recovery_token) { api_request_log.signature }
+    let(:original_message) { 'Hello!' }
+    let(:payload) { '020919805e6e7444852762d9641f815365e0c227f627d0c98bced3a3e29366943f0e4064e0b7bd798daba361dd1b5c4e65e917a6926bed' }
     let(:transport_public_key) { '048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917' }
     let(:transport_private_key) { 'ADE3E0761CEB242A1BE92043825CD7C677A9A7E25C31F05F4D88DF4D13E2919C' }
-    let(:kdf_shared_info) { 'dummyoreidaccountname' }
-    let(:original_message) { 'Hello :)' }
-
-    let(:payload) do
-      ECIES::Crypt.new(
-        kdf_shared_info: kdf_shared_info
-      ).encrypt(
-        ECIES::Crypt.public_key_from_hex(public_wrapping_key),
-        original_message
-      ).unpack1('H*')
-    end
 
     subject do
       params = build(
@@ -104,11 +95,6 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
       post :recover, params: params
     end
 
-    before do
-      allow_any_instance_of(Account).to receive_message_chain(:ore_id_account, :account_name).and_return(kdf_shared_info)
-      allow_any_instance_of(Account).to receive_message_chain(:ore_id_account, :schedule_password_update_sync)
-    end
-
     context 'with invalid recovery_token' do
       let(:recovery_token) { '0' }
 
@@ -117,13 +103,6 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
 
     context 'with expired recovery_token' do
       let(:api_request_log) { create(:api_request_log, created_at: DateTime.current - 10.minutes) }
-      let(:recovery_token) { api_request_log.signature }
-
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
-
-    context 'with recovery_token associated with a request without account_id' do
-      let(:api_request_log) { create(:api_request_log) }
       let(:recovery_token) { api_request_log.signature }
 
       it { is_expected.to have_http_status(:unauthorized) }
@@ -160,37 +139,14 @@ RSpec.describe Api::V1::WalletRecoveryController, type: :controller do
             end
 
             context 'and correct transport public key' do
-              context 'and payload encnrypted for a wrong OreIdAccount' do
-                before do
-                  allow_any_instance_of(Account).to receive_message_chain(:ore_id_account, :account_name).and_return('differentoreidaccountname')
-                end
+              it { is_expected.to have_http_status(:created) }
+              it { is_expected.to render_template('api/v1/data.json') }
 
-                it { is_expected.to have_http_status(:bad_request) }
-              end
+              it 'returns decrypted payload, reenncrypted with transport key' do
+                subject
 
-              context 'and payload encnrypted for correct OreIdAccount' do
-                it { is_expected.to have_http_status(:created) }
-                it { is_expected.to render_template('api/v1/data.json') }
-
-                it 'returns decrypted with private wrapping key and oreId accountName as kdf_shared_info payload, reenncrypted with transport key' do
-                  subject
-
-                  data = JSON.parse(response.body)['data']
-
-                  expect(
-                    ECIES::Crypt.new.decrypt(
-                      ECIES::Crypt.private_key_from_hex(transport_private_key),
-                      [data].pack('H*')
-                    )
-                  ).to eq(original_message)
-                end
-
-                it 'schedules password update sync' do
-                  allow_any_instance_of(Account).to receive(:ore_id_account).and_return(create(:ore_id, skip_jobs: true))
-                  expect_any_instance_of(OreIdAccount).to receive(:schedule_password_update_sync)
-
-                  subject
-                end
+                data = JSON.parse(response.body)['data']
+                expect(ECIES::Crypt.new.decrypt(ECIES::Crypt.private_key_from_hex(transport_private_key), [data].pack('H*'))).to eq(original_message)
               end
             end
           end

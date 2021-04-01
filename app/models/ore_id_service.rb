@@ -87,7 +87,7 @@ class OreIdService
       self.class.post(
         '/app-token',
         headers: request_headers,
-        body: recovery_token ? create_token_params(recovery_token).to_json : nil
+        body: create_token_params(recovery_token)
       )
     )
 
@@ -113,12 +113,10 @@ class OreIdService
       callback_url: callback_url,
       background_color: 'FFFFFF',
       state: state,
-      recover_action: :republic,
-      email: remote['email'],
-      account: ore_id.account_name
+      email: remote['email']
     }
 
-    append_hmac_to_url "https://service.oreid.io/recover-account?#{params.to_query}"
+    append_hmac_to_url "https://service.oreid.io/reset-password?#{params.to_query}"
   end
 
   def sign_url(transaction:, callback_url:, state:)
@@ -163,10 +161,10 @@ class OreIdService
     def create_token_params(recovery_token = nil)
       if recovery_token
         {
-          secrets: [{
-            type: 'RepublicAccountRecoveryToken',
+          secrets: {
+            type: 'republicAccountRecoveryToken',
             value: recovery_token
-          }]
+          }
         }
       end
     end

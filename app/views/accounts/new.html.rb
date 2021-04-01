@@ -42,8 +42,6 @@ class Views::Accounts::New < Views::Base
                 end
               end
 
-              render partial: 'shared/recaptcha', locals: { action: 'registration' }
-
               f.submit 'Create Your Account', class: buttonish(:medium), style: 'margin: 0'
             end
           end

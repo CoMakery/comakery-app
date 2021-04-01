@@ -184,15 +184,6 @@ Enable caching (required for Metamask Auth and Rack-Attack):
 ```sh
 rails dev:cache
 ```
-
-### Gem installation debugging
-
-If you run into errors installing the gems, you may need to do something like the following. Versions may vary as time proceeds.
-* `gem install bundler:2.2.4`
-* `bundle install --redownload`
-* `brew install shared-mime-info`
-* `gem install puma:4.3.5 -- --with-cflags="-Wno-error=implicit-function-declaration"`
-
 ## React on Rails
 
 ###  Webpacker
