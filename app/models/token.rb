@@ -119,6 +119,10 @@ class Token < ApplicationRecord
     RegGroup.default_for(self)
   end
 
+  def blockchain_balance(wallet_address)
+    token_type.blockchain_balance(wallet_address)
+  end
+
   private
 
     def set_values_from_token_type # rubocop:todo Metrics/CyclomaticComplexity

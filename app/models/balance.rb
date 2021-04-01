@@ -9,4 +9,12 @@ class Balance < ApplicationRecord
   def value
     token.from_base_unit(base_unit_value)
   end
+
+  def blockchain_balance_value
+    @blockchain_balance ||= token.blockchain_balance(wallet.address)
+  end
+
+  def sync_with_blockchain!
+    update(base_unit_value: blockchain_balance_value)
+  end
 end

@@ -118,4 +118,8 @@ class TokenType::AlgorandSecurityToken < TokenType
   def accounts_sync_job
     ::AlgorandSecurityToken::AccountTokenRecordsSyncJob
   end
+
+  def blockchain_balance(wallet_address)
+    contract.app_balance(wallet_address)
+  end
 end

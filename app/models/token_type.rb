@@ -17,4 +17,10 @@ class TokenType
   def self.append_to_list(token_type)
     list.merge(token_type => (list.values.max + 1))
   end
+
+  # Return balance of symbol for provided addr
+  # Should be implemented for every particular token type
+  def blockchain_balance(_wallet_address)
+    raise NotImplementedError
+  end
 end

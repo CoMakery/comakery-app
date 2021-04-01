@@ -100,4 +100,8 @@ class TokenType::Asa < TokenType
   def blockchain
     attrs[:blockchain]
   end
+
+  def blockchain_balance(wallet_address)
+    contract.asset_balance(wallet_address)
+  end
 end
