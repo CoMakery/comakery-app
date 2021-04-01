@@ -248,13 +248,15 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         parsed_reset_url = URI.parse(parsed_response['reset_url'])
 
         expect(parsed_reset_url.host).to eq 'service.oreid.io'
-        expect(parsed_reset_url.path).to eq '/reset-password'
+        expect(parsed_reset_url.path).to eq '/recover-account'
         expect(Rack::Utils.parse_nested_query(parsed_reset_url.query)).to eq(
+          'account' => '',
           'app_access_token' => 'dummy_token',
           'background_color' => 'FFFFFF',
           'callback_url' => 'https://localhost',
           'email' => 'dummyemail',
           'provider' => 'email',
+          'recover_action' => 'republic',
           'state' => '',
           'hmac' => build(:ore_id_hmac, parsed_response['reset_url'], url_encode: false)
         )
