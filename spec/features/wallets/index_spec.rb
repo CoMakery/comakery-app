@@ -42,5 +42,11 @@ describe 'wallets page' do
 
       expect(find('table.opt-ins')).to have_content asa_token.name
     end
+
+    it 'disaplay full wallet address' do
+      visit wallets_path
+
+      expect(find('.full-address').text).to eq(wallet.address)
+    end
   end
 end

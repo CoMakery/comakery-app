@@ -40,7 +40,7 @@
                     wallet.address,
                     wallet.blockchain.url_for_address_human(wallet.address),
                     target: :_blank,
-                    class: 'mr-2',
+                    class: 'mr-2 full-address',
                     data: { controller: "utils--truncate", target: "utils--clipboard.source" }
                   ) %>
               <div class="hidden" data-target="utils--clipboard.source"><%= wallet.address %></div>
