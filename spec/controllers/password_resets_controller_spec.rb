@@ -21,7 +21,7 @@ describe PasswordResetsController do
     it 'create reset password token for account' do
       post :create, params: { email: 'user@test.st' }
       expect(account.reload.reset_password_token).not_to be_nil
-      expect(flash[:notice]).to eq 'please check your email for reset password instructions'
+      expect(flash[:notice]).to eq 'Please check your email for reset password instructions'
       expect(response).to redirect_to new_password_reset_path
     end
 
@@ -31,7 +31,7 @@ describe PasswordResetsController do
 
       post :create, params: { email: managed_account.email }
       expect(managed_account.reload.reset_password_token).not_to be_nil
-      expect(flash[:notice]).to eq 'please check your email for reset password instructions'
+      expect(flash[:notice]).to eq 'Please check your email for reset password instructions'
       expect(response).to redirect_to new_password_reset_path
     end
 
