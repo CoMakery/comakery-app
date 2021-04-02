@@ -69,15 +69,14 @@ module BlockchainTransactable
     end
 
     def cancelable?
-      flag = case latest_blockchain_transaction&.status
-             when 'created'
-               !latest_blockchain_transaction&.waiting_in_created?
-             when 'pending'
-               false
-             else
-               true
+      case latest_blockchain_transaction&.status
+      when 'created'
+        !latest_blockchain_transaction&.waiting_in_created?
+      when 'pending'
+        false
+      else
+        true
       end
-      flag
     end
   end
 end
