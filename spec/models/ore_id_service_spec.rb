@@ -213,7 +213,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     specify do
-      url = 'https://service.oreid.io/reset-password?app_access_token=test&background_color=FFFFFF&callback_url=localhost&email=dummyemail&provider=email&state=dummystate'
+      url = 'https://service.oreid.io/recover-account?account=ore1ryuzfqwy&app_access_token=test&background_color=FFFFFF&callback_url=localhost&email=dummyemail&provider=email&recover_action=republic&state=dummystate'
       hmac = build(:ore_id_hmac, url)
       expect(subject.reset_url('localhost', 'dummystate', 'dummmyrecovery')).to eq("#{url}&hmac=#{hmac}")
     end

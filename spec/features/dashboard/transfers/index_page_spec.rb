@@ -17,7 +17,7 @@ describe 'transfers_index_page', js: true do
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
   end
 
-  context 'when project has an assigned hot walled' do
+  xcontext 'when project has an assigned hot walled' do
     before do
       create(:wallet, source: :hot_wallet, project_id: project.id)
     end
