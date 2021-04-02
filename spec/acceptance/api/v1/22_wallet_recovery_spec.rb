@@ -4,6 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource 'XI. Wallet Recovery' do
   include Rails.application.routes.url_helpers
 
+  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: nil, wallet_recovery_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let(:private_wrapping_key) { '18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725' }
   let(:public_wrapping_key) { '0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6' }
@@ -54,12 +55,21 @@ resource 'XI. Wallet Recovery' do
   end
 
   post '/api/v1/wallet_recovery/recover' do
-    let(:api_request_log) { create(:api_request_log) }
+    let(:api_request_log) { create(:api_request_log, body: { 'account_id' => account.managed_account_id }) }
     let(:recovery_token) { api_request_log.signature }
-    let(:original_message) { 'Hello!' }
-    let(:payload) { '020919805e6e7444852762d9641f815365e0c227f627d0c98bced3a3e29366943f0e4064e0b7bd798daba361dd1b5c4e65e917a6926bed' }
     let(:transport_public_key) { '048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917' }
     let(:transport_private_key) { 'ADE3E0761CEB242A1BE92043825CD7C677A9A7E25C31F05F4D88DF4D13E2919C' }
+    let(:kdf_shared_info) { 'dummyoreidaccountname' }
+    let(:original_message) { 'Hello :)' }
+
+    let(:payload) do
+      ECIES::Crypt.new(
+        kdf_shared_info: kdf_shared_info
+      ).encrypt(
+        ECIES::Crypt.public_key_from_hex(public_wrapping_key),
+        original_message
+      ).unpack1('H*')
+    end
 
     with_options with_example: true do
       response_field :data, 'payload, ECIES-decrypted with secp256k1 private wrapping key, re-encrypted with provided secp256k1 public transport key', type: :string
@@ -85,6 +95,11 @@ resource 'XI. Wallet Recovery' do
           'example.org'
         )
       )
+    end
+
+    before do
+      allow_any_instance_of(Account).to receive_message_chain(:ore_id_account, :account_name).and_return(kdf_shared_info)
+      allow_any_instance_of(Account).to receive_message_chain(:ore_id_account, :schedule_password_update_sync)
     end
 
     context '201' do
