@@ -138,8 +138,8 @@ jobs:
         path: public/packs
         key: ${{ runner.os }}-${{ matrix.ruby }}-packs-
 
-    - name: Precompile assets
-      run: env bundle exec rails assets:precompile
+    - name: Run dev asset server
+      run: nohup env bin/webpack-dev-server &
 
     - name: Setup database
       run: env bundle exec rails db:create
