@@ -8,7 +8,7 @@ describe TokenType::Algo do
   specify { expect(described_class.new.symbol).to eq('ALGO') }
   specify { expect(described_class.new.decimals).to eq(6) }
   specify { expect(described_class.new.wallet_logo).to eq('OREID_Logo_Symbol.svg') }
-  specify { expect(described_class.new.contract).to be_nil }
+  specify { expect(described_class.new.contract).to be_a(Comakery::Algorand) }
   specify { expect(described_class.new.abi).to eq({}) }
   specify { expect(described_class.new.tx).to be_nil }
   specify { expect(described_class.new.operates_with_smart_contracts?).to be_falsey }
