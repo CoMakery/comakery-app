@@ -109,8 +109,13 @@ describe Wallet, type: :model do
   end
 
   describe '#coin_balance', vcr: true do
+    let!(:token) { create(:algorand_token) }
     subject { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
-    specify { expect(subject.coin_balance).to be_a(Balance) }
+
+    it 'returns a Balance' do
+      expect(SyncBalanceJob).to receive(:set).and_call_original
+      expect(subject.coin_balance).to be_a(Balance)
+    end
   end
 
   describe '#set_primary_flag' do
