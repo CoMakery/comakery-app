@@ -69,4 +69,8 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
   def accounts_sync_job
     ::BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob
   end
+
+  def blockchain_balance(wallet_address)
+    contract.contract.call.balance_of(wallet_address)
+  end
 end
