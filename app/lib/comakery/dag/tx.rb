@@ -8,7 +8,7 @@ class Comakery::Dag::Tx
   end
 
   def to_object(**_args)
-    nil
+    {}
   end
 
   def data

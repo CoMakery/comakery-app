@@ -11,7 +11,7 @@ describe Comakery::Dag::Tx do
   describe '#to_object' do
     subject { described_class.new(host, tx).to_object }
 
-    it { is_expected.to be_nil }
+    it { is_expected.to be_empty }
   end
 
   describe '#data' do
