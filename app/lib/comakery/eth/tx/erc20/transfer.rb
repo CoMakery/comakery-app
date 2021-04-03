@@ -3,6 +3,17 @@ class Comakery::Eth::Tx::Erc20::Transfer < Comakery::Eth::Tx::Erc20
     'a9059cbb'
   end
 
+  def method_name
+    'transfer'
+  end
+
+  def method_params
+    [
+      blockchain_transaction.destination,
+      blockchain_transaction.amount
+    ]
+  end
+
   def method_arg_0
     lookup_method_arg(0) && lookup_method_arg(0)&.to_s(16)&.insert(0, '0x') # rubocop:todo Rails/SkipsModelValidations
   end

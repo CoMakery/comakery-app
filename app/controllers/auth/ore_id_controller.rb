@@ -29,6 +29,7 @@ class Auth::OreIdController < ApplicationController
     end
 
     if current_ore_id_account.update(account_name: params.require(:account), state: :ok)
+      current_ore_id_account.schedule_wallet_sync
       flash[:notice] = 'ORE ID Linked. Synchronising wallets...'
     else
       flash[:error] = current_ore_id_account.errors.full_messages.join(', ')

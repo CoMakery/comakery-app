@@ -3,6 +3,20 @@ class Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions < Comakery:
     '45d11299'
   end
 
+  def method_name
+    'setAddressPermissions'
+  end
+
+  def method_params
+    [
+      blockchain_transaction.destination,
+      blockchain_transaction.blockchain_transactable.reg_group.blockchain_id,
+      blockchain_transaction.blockchain_transactable.lockup_until.to_i,
+      blockchain_transaction.blockchain_transactable.max_balance,
+      blockchain_transaction.blockchain_transactable.account_frozen
+    ]
+  end
+
   def method_arg_0
     lookup_method_arg(0)&.to_s(16)&.insert(0, '0x') # rubocop:todo Rails/SkipsModelValidations
   end

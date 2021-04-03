@@ -3,6 +3,37 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
     '00000000'
   end
 
+  def to_object(**_args)
+    super.merge({
+      to: blockchain_transaction.token.contract_address,
+      value: encode_value(0),
+      contract: {
+        abi: blockchain_transaction.token.abi,
+        method: method_name,
+        parameters: encode_method_params
+      }
+    })
+  end
+
+  def method_name
+    ''
+  end
+
+  def method_params
+    []
+  end
+
+  def encode_method_params
+    method_params.map do |pr|
+      case pr
+      when TrueClass, FalseClass
+        pr
+      else
+        pr.to_s
+      end
+    end
+  end
+
   def valid_method_id?
     input && input[0...8] == method_id
   end

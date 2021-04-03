@@ -7,6 +7,10 @@ class Comakery::Dag::Tx
     @hash = hash
   end
 
+  def to_object(**_args)
+    nil
+  end
+
   def data
     @data ||= constellation.tx(hash)
   end

@@ -17,6 +17,12 @@ describe BlockchainTransaction, vcr: true do
   it { is_expected.to define_enum_for(:network).with_values({ ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }) }
   it { is_expected.to define_enum_for(:status).with_values({ created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }) }
 
+  describe 'tx_raw' do
+    before { allow(subject).to receive(:generate_transaction) }
+
+    it { is_expected.to validate_presence_of(:tx_raw) }
+  end
+
   context 'when operating with smart contracts' do
     subject { build(:algorand_app_tx).blockchain_transaction }
     before do
@@ -26,28 +32,8 @@ describe BlockchainTransaction, vcr: true do
     it { is_expected.to validate_presence_of(:contract_address) }
   end
 
-  context 'with Algorand blockchain' do
-    subject { build(:algorand_tx).blockchain_transaction }
-    before do
-      allow(subject).to receive(:generate_transaction).and_return(nil)
-    end
-
-    it { is_expected.to validate_presence_of(:tx_raw) }
-  end
-
-  context 'with Comakery Security Token' do
-    context 'and nonce present' do
-      subject { build(:blockchain_transaction, nonce: 0) }
-      before do
-        allow(subject).to receive(:generate_transaction).and_return(nil)
-      end
-
-      it { is_expected.to validate_presence_of(:tx_raw) }
-    end
-  end
-
   context 'when pending?' do
-    subject { build(:blockchain_transaction, status: :pending) }
+    subject { build(:blockchain_transaction, status: :pending, tx_hash: '0') }
     before do
       allow(subject).to receive(:generate_transaction).and_return(nil)
     end
@@ -56,7 +42,7 @@ describe BlockchainTransaction, vcr: true do
   end
 
   context 'when succeed?' do
-    subject { build(:blockchain_transaction, status: :succeed) }
+    subject { build(:blockchain_transaction, status: :succeed, tx_hash: '0') }
     before do
       allow(subject).to receive(:generate_transaction).and_return(nil)
     end
@@ -85,19 +71,16 @@ describe BlockchainTransaction, vcr: true do
     end
 
     context 'with a comakery security token' do
-      context 'and nonce present' do
-        subject { create(:blockchain_transaction, nonce: 0) }
+      subject { create(:blockchain_transaction) }
 
-        it 'generates' do
-          expect(subject.tx_raw).to be_a(String)
-          expect(subject.tx_hash).to be_a(String)
-        end
+      it 'generates' do
+        expect(subject.tx_raw).to be_a(String)
       end
     end
   end
 
   describe 'update_status' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction) }
+    let!(:blockchain_transaction) { create(:blockchain_transaction, tx_hash: '0') }
 
     before do
       blockchain_transaction.update_status(:pending, 'test')
@@ -279,23 +262,6 @@ describe BlockchainTransaction, vcr: true do
       blockchain_transaction.reload
 
       expect(blockchain_transaction.status).to eq('cancelled')
-    end
-  end
-
-  describe 'contract' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:blockchain_transaction_dag) { create(:blockchain_transaction_dag) }
-
-    context 'with an ethereum coin type' do
-      it 'returns a contract instance' do
-        expect(blockchain_transaction.contract).to be_a(Comakery::Eth::Contract::Erc20)
-      end
-    end
-
-    context 'with an unsupported coin type' do
-      it 'raises error' do
-        expect { blockchain_transaction_dag.contract }.to raise_error(/Contract parsing is not implemented/)
-      end
     end
   end
 

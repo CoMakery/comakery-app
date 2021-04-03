@@ -1,7 +1,21 @@
 require 'rails_helper'
 
 describe Comakery::Eth::Tx, vcr: true do
-  let!(:eth_tx) { build(:eth_tx) }
+  let!(:eth_tx) { build(:eth_tx, blockchain_transaction: build(:blockchain_transaction)) }
+
+  describe '#to_object' do
+    subject { eth_tx.to_object }
+
+    specify { expect(subject[:from]).to eq(eth_tx.blockchain_transaction.source) }
+    specify { expect(subject[:to]).to eq(eth_tx.blockchain_transaction.destination) }
+    specify { expect(subject[:value]).to eq(eth_tx.encode_value(eth_tx.blockchain_transaction.amount)) }
+  end
+
+  describe '#encode_value' do
+    subject { eth_tx.encode_value(15) }
+
+    it { is_expected.to eq('0xf') }
+  end
 
   describe 'eth' do
     it 'returns Comakery::Eth' do
