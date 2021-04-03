@@ -17,7 +17,7 @@ describe 'transfers_index_page', js: true do
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
   end
 
-  context 'when project has an assigned hot walled' do
+  xcontext 'when project has an assigned hot walled' do
     before do
       create(:wallet, source: :hot_wallet, project_id: project.id)
     end
@@ -58,6 +58,34 @@ describe 'transfers_index_page', js: true do
 
         expect(page).to have_select('select_category', selected: transfer.capitalize)
       end
+    end
+  end
+
+  context 'When cancel link should appear' do
+    before do
+      @blockchain_transaction = create(:blockchain_transaction)
+      @award = @blockchain_transaction.blockchain_transactable
+      @project = @award.project
+      @project.update(account_id: @award.account_id)
+      @owner = @project.account
+    end
+
+    it 'Should not appear when the transfer is in process' do
+      login(@owner)
+      visit project_dashboard_transfers_path(@project)
+
+      expect(page).not_to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(@project, @award.award_type, @award)}']"
+
+      expect(page).to have_selector "a[href='#{project_dashboard_transfer_path(@award.project, @award)}']"
+    end
+
+    it 'Should appear when the transfer is not in process' do
+      @blockchain_transaction.update(status: :failed)
+
+      login(@owner)
+      visit project_dashboard_transfers_path(@project)
+
+      expect(page).to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(@project, @award.award_type, @award)}']"
     end
   end
 

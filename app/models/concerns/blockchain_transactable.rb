@@ -71,5 +71,16 @@ module BlockchainTransactable
         )
       )
     end
+
+    def cancelable?
+      case latest_blockchain_transaction&.status
+      when 'created'
+        !latest_blockchain_transaction&.waiting_in_created?
+      when 'pending'
+        false
+      else
+        true
+      end
+    end
   end
 end

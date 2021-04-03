@@ -228,17 +228,18 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       render_views
       let(:wallet) { create(:ore_id_wallet, account: account) }
 
-      it 'returns url for password reset and scedules a job for password' do
-        params = build(:api_signed_request, { redirect_url: 'https://localhost' }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet.id.to_s), 'POST')
+      it 'returns url for password reset' do
+        params = build(:api_signed_request,
+                       { redirect_url: 'https://localhost' },
+                       password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id,
+                                                                 id: wallet.id.to_s),
+                       'POST')
         params[:account_id] = account.managed_account_id
         params[:id] = wallet.id
         request_signature = params.dig('proof', 'signature')
 
         allow_any_instance_of(OreIdService).to receive(:create_token).with(request_signature).and_return('dummy_token')
         allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => 'dummyemail' })
-
-        expect(OreIdPasswordUpdateSyncJob).to receive_message_chain(:set, :perform_later)
-        expect(wallet.ore_id_account.state).to eq 'pending'
 
         post :password_reset, params: params
 
@@ -247,17 +248,38 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         parsed_reset_url = URI.parse(parsed_response['reset_url'])
 
         expect(parsed_reset_url.host).to eq 'service.oreid.io'
-        expect(parsed_reset_url.path).to eq '/reset-password'
+        expect(parsed_reset_url.path).to eq '/recover-account'
         expect(Rack::Utils.parse_nested_query(parsed_reset_url.query)).to eq(
+          'account' => '',
           'app_access_token' => 'dummy_token',
           'background_color' => 'FFFFFF',
           'callback_url' => 'https://localhost',
           'email' => 'dummyemail',
           'provider' => 'email',
+          'recover_action' => 'republic',
           'state' => '',
           'hmac' => build(:ore_id_hmac, parsed_response['reset_url'], url_encode: false)
         )
-        expect(wallet.ore_id_account.reload.state).to eq 'unclaimed'
+      end
+    end
+
+    context 'without ore id wallet' do
+      render_views
+      let(:wallet) { create(:wallet, account: account) }
+
+      it 'returns bad request' do
+        params = build(:api_signed_request,
+                       { redirect_url: 'https://localhost' },
+                       password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id,
+                                                                 id: wallet.id.to_s),
+                       'POST')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+
+        post :password_reset, params: params
+
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)['errors']['ore_id_account']).to eq('can\'t be blank')
       end
     end
   end
