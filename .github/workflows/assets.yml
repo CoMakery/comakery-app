@@ -72,8 +72,5 @@ jobs:
     - name: Install Ruby dependencies
       run: bundle install --jobs 4 --retry 3
     
-    - name: Install Node dependencies
-      run: yarn install
-      
     - name: Test assets precompilation
       run: bundle exec rails assets:precompile
