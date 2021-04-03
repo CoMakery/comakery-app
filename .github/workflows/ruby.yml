@@ -34,8 +34,6 @@ jobs:
     - name: Cache Ruby dependencies
       uses: actions/cache@v1.1.2
       
-    - name: Test assets precompilation
-      run: env bundle exec rails assets:precompile
       with:
         path: vendor/bundle
         key: ${{ matrix.ruby }}-gems1-${{ hashFiles('**/Gemfile.lock') }}
@@ -55,3 +53,6 @@ jobs:
 
     - name: Run Brakeman
       run: bundle exec brakeman --exit-on-warn --quiet
+      
+    - name: Test assets precompilation
+      run: env bundle exec rails assets:precompile
