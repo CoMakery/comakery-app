@@ -35,7 +35,7 @@ describe 'shared/_award_progress_bar.html.rb' do
 
       assign :project, project.decorate
       assign :current_account_deco, account.decorate
-      render
+      render 'shared/award_progress_bar.html.rb'
     end
 
     specify { expect(rendered).to have_css('.meter-box') }
