@@ -28,6 +28,8 @@ jobs:
       KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
       KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+      KNAPSACK_PRO_FIXED_QUEUE_SPLIT: "true"
+      RSPEC_RETRY_RETRY_COUNT: 4
       BUNDLER_VERSION: 2.2.3
       RACK_ENV: test
       RAILS_ENV: test
@@ -46,7 +48,7 @@ jobs:
       SLACK_API_SECRET: none
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
-      SIMPLECOV_ENABLED: false
+      SIMPLECOV_ENABLED: true
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 
@@ -136,8 +138,8 @@ jobs:
         path: public/packs
         key: ${{ runner.os }}-${{ matrix.ruby }}-packs-
 
-    - name: Precompile assets
-      run: env bundle exec rails assets:precompile
+    - name: Run dev asset server
+      run: nohup env bin/webpack-dev-server &
 
     - name: Setup database
       run: env bundle exec rails db:create
