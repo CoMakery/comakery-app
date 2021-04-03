@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BlockchainJob::SyncJob, type: :job do
   let!(:comakery_token) { stub_blockchain_sync && create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
-  let!(:blockchain_transaction) { create(:blockchain_transaction, status: :pending) }
+  let!(:blockchain_transaction) { create(:blockchain_transaction, status: :pending, tx_hash: '0') }
 
   before do
     ActiveJob::Base.queue_adapter = :test

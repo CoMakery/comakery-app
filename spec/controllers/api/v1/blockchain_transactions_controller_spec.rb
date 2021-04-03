@@ -284,7 +284,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
 
   describe 'PUT #update', vcr: true do
     it 'marks transaction as pending' do
-      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
+      params = build(:api_signed_request, { transaction: { tx_hash: '0' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
       params[:project_id] = project.id
       params[:id] = blockchain_transaction.id
 
@@ -293,7 +293,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
 
     it 'returns a success response' do
-      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
+      params = build(:api_signed_request, { transaction: { tx_hash: '0' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT')
       params[:project_id] = project.id
       params[:id] = blockchain_transaction.id
 

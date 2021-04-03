@@ -102,7 +102,7 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def generate_transaction
-    self.tx_raw ||= on_chain.to_object(app_args_format: :hex).to_json
+    self.tx_raw ||= on_chain&.to_object(app_args_format: :hex)&.to_json
   end
 
   # @abstract Subclass is expected to implement #tx

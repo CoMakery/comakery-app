@@ -152,7 +152,7 @@ resource 'VII. Blockchain Transactions' do
 
       let!(:transaction) do
         {
-          tx_hash: blockchain_transaction.tx_hash
+          tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
         }
       end
 
@@ -162,25 +162,6 @@ resource 'VII. Blockchain Transactions' do
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT', 'example.org')
         do_request(request)
         expect(status).to eq(200)
-      end
-    end
-
-    context '400' do
-      let!(:project_id) { project.id }
-      let!(:id) { blockchain_transaction.id }
-
-      let!(:transaction) do
-        {
-          tx_hash: '0x'
-        }
-      end
-
-      example 'SUBMIT TRANSACTION – HASH MISMATCH' do
-        explanation 'Returns an error if submitted transaction hash differs from generated on backend'
-
-        request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT', 'example.org')
-        do_request(request)
-        expect(status).to eq(400)
       end
     end
   end
