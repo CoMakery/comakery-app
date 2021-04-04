@@ -63,7 +63,7 @@ describe Award do
       wallet = create(:wallet, account: account, _blockchain: award.project.token._blockchain)
       award = build :award, account: account, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))
       award.recipient_wallet_id = wallet.id
-      latest_blockchain_transaction = create(:blockchain_transaction, status: :succeed)
+      latest_blockchain_transaction = create(:blockchain_transaction, status: :succeed, tx_hash: '0')
 
       expect(latest_blockchain_transaction.blockchain_transactable.cancelable?).to be_truthy
     end
@@ -84,7 +84,7 @@ describe Award do
     end
 
     it 'should not cancel when transaction status pending' do
-      pending_txn = create(:blockchain_transaction, status: :pending)
+      pending_txn = create(:blockchain_transaction, status: :pending, tx_hash: '0')
       expect(pending_txn.blockchain_transactable.cancelable?).to be_falsey
     end
   end
