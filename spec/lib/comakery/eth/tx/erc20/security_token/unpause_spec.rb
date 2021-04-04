@@ -6,7 +6,7 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::Unpause, vcr: true do
   describe '#method_id' do
     subject { erc20_unpause.method_id }
 
-    it { is_expected.to eq('3f4ba83af') }
+    it { is_expected.to eq('3f4ba83a') }
   end
 
   describe '#method_name' do

@@ -1,8 +1,4 @@
 class Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer < Comakery::Eth::Tx::Erc20
-  def method_id
-    'e98a0c64'
-  end
-
   def method_name
     'setAllowGroupTransfer'
   end

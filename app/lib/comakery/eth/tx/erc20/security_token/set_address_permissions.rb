@@ -1,8 +1,4 @@
 class Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions < Comakery::Eth::Tx::Erc20
-  def method_id
-    '45d11299'
-  end
-
   def method_name
     'setAddressPermissions'
   end

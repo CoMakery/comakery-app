@@ -1,8 +1,4 @@
 class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
-  def method_id
-    '00000000'
-  end
-
   def to_object(**_args)
     super.merge({
       to: blockchain_transaction.token.contract_address,
@@ -21,6 +17,12 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
 
   def method_params
     []
+  end
+
+  def method_id
+    @method_id ||= Ethereum::Abi.parse_abi(
+      JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/comakery.json')))
+    ).second.find { |f| f.name == method_name }.signature
   end
 
   def encode_method_params

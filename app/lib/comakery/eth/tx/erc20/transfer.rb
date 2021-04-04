@@ -1,8 +1,4 @@
 class Comakery::Eth::Tx::Erc20::Transfer < Comakery::Eth::Tx::Erc20
-  def method_id
-    'a9059cbb'
-  end
-
   def method_name
     'transfer'
   end

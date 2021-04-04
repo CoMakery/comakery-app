@@ -1,8 +1,4 @@
 class Comakery::Eth::Tx::Erc20::SecurityToken::Pause < Comakery::Eth::Tx::Erc20
-  def method_id
-    '8456cb59'
-  end
-
   def method_name
     'pause'
   end
