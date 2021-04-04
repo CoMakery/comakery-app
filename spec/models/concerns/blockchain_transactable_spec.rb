@@ -4,10 +4,11 @@ shared_examples 'blockchain_transactable' do
 
   describe 'latest_blockchain_transaction' do
     it 'returns record which belong to correct type and id' do
-      transaction = create(:blockchain_transaction_transfer_rule)
-      account_token_record = create(:account_token_record, id: transaction.blockchain_transactable.id)
+      transaction1 = create(:blockchain_transaction_transfer_rule)
+      transaction2 = create(:blockchain_transaction_transfer_rule)
+      account_token_record = create(:account_token_record, id: transaction1.blockchain_transactable.id)
 
-      expect(transaction.blockchain_transactable.latest_blockchain_transaction).to eq(transaction)
+      expect(transaction2.blockchain_transactable.latest_blockchain_transaction).to eq(transaction2)
       expect(account_token_record.latest_blockchain_transaction).to be_nil
     end
   end

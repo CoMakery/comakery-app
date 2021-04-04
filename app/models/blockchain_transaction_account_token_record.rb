@@ -13,7 +13,7 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
   end
 
   def on_chain_eth
-    Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(token.blockchain.explorer_api_host, tx_hash)
+    Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(token.blockchain.explorer_api_host, tx_hash, self)
   end
 
   def on_chain_ast
@@ -24,16 +24,4 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
     super
     self.destination ||= blockchain_transactable.wallet.address
   end
-
-  private
-
-    def tx
-      @tx ||= contract.setAddressPermissions(
-        blockchain_transactable.account.address_for_blockchain(token._blockchain),
-        blockchain_transactable.reg_group.blockchain_id,
-        blockchain_transactable.lockup_until.to_i,
-        blockchain_transactable.max_balance,
-        blockchain_transactable.account_frozen
-      )
-    end
 end

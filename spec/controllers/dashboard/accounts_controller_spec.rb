@@ -55,9 +55,9 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
       end
 
       context 'with comakery security token' do
-        it 'returns created record' do
+        it 'redirects to ore_id' do
           subject
-          expect(response).to have_http_status(:created)
+          expect(response).to have_http_status(:found)
         end
       end
 

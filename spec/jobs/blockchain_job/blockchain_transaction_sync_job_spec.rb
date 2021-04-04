@@ -28,7 +28,7 @@ RSpec.describe BlockchainJob::BlockchainTransactionSyncJob, type: :job, vcr: tru
   end
 
   it 'reschedules itself on a record waiting sync' do
-    waiting_blockchain_transaction = create(:blockchain_transaction, status: :pending)
+    waiting_blockchain_transaction = create(:blockchain_transaction, status: :pending, tx_hash: '0')
     waiting_blockchain_transaction.update(synced_at: 1.year.from_now)
     ActiveJob::Base.queue_adapter = :test
     expect { described_class.perform_now(waiting_blockchain_transaction) }.to have_enqueued_job(BlockchainJob::BlockchainTransactionSyncJob)
