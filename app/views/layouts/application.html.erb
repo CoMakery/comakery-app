@@ -56,7 +56,7 @@
         'layouts/Flash',
         {
           messages: [:notice, :warning, :error].map do |severity|
-            flash[severity] ? { severity: severity, text: flash[severity] } : nil
+            flash[severity] ? { severity: severity, text: html_escape(flash[severity]) } : nil
           end.compact
         },
         {
