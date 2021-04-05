@@ -11,7 +11,8 @@ describe 'reset password' do
     expect(page).to have_content 'Could not found account with given email'
     fill_in 'email', with: 'test@test.st'
     click_on 'Reset my password!'
-    expect(page).to have_content 'please check your email for reset password instructions'
+    expect(page).to have_content 'Please check your email for reset password instructions'
+    expect(page.current_url).to have_content '/password_resets/new'
   end
 
   scenario 'update password' do

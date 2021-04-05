@@ -117,13 +117,13 @@ describe AccountTokenRecord do
     end
 
     it 'doesnt return account_token_records with latest blockchain_transaction Pending' do
-      create(:blockchain_transaction_account_token_record, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction_account_token_record, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable, tx_hash: '0')
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'doesnt return account_token_records with latest blockchain_transaction Succeed' do
-      create(:blockchain_transaction_account_token_record, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction_account_token_record, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable, tx_hash: '0')
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end

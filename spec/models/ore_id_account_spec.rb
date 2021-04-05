@@ -45,8 +45,8 @@ RSpec.describe OreIdAccount, type: :model, vcr: true do
     context 'for pending_manual state' do
       subject { described_class.new(account: create(:account), id: 99999, state: :pending_manual) }
 
-      it 'schedules a wallet sync' do
-        expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
+      it 'doesnt schedule a sync' do
+        expect(OreIdSyncJob).not_to receive(:perform_later).with(subject.id)
         subject.save
       end
     end
