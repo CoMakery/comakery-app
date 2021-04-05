@@ -172,4 +172,31 @@ describe AccountTokenRecord do
       end
     end
   end
+
+  describe '#balance' do
+    let(:account_token_record) { create(:account_token_record) }
+    subject { account_token_record.balance }
+
+    context 'with no balance created' do
+      it 'creates a balance' do
+        expect(SyncBalanceJob).to receive(:set).and_call_original
+        expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later).and_call_original
+
+        is_expected.to be_a Balance
+        balance = Balance.last
+        expect(balance.wallet).to eq account_token_record.wallet
+        expect(balance.token).to eq account_token_record.token
+      end
+    end
+
+    context 'with a balance created' do
+      it 'returns created balance' do
+        expect(SyncBalanceJob).to receive(:set).and_call_original
+        expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later).and_call_original
+
+        balance = create(:balance, wallet: account_token_record.wallet, token: account_token_record.token)
+        is_expected.to eq balance
+      end
+    end
+  end
 end
