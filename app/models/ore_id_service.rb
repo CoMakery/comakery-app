@@ -178,7 +178,7 @@ class OreIdService
         chain_account: transaction.source,
         broadcast: true,
         chain_network: transaction.token.blockchain.ore_id_name,
-        return_signed_transaction: true,
+        return_signed_transaction: false,
         transaction: Base64.encode64(transaction.tx_raw)
       }
     end

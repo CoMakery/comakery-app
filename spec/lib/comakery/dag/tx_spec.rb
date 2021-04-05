@@ -8,6 +8,12 @@ describe Comakery::Dag::Tx do
     stub_constellation_request(host, tx, field => value)
   end
 
+  describe '#to_object' do
+    subject { described_class.new(host, tx).to_object }
+
+    it { is_expected.to be_empty }
+  end
+
   describe '#data' do
     before do
       stub_field(0, 0)

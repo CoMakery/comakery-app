@@ -55,6 +55,40 @@ describe Award do
     end
   end
 
+  describe 'transfer cancelable or not' do
+    it 'should cancel when transaction status succeed' do
+      specialty = create(:specialty)
+      award = create(:award, specialty: specialty)
+      account = create(:account)
+      wallet = create(:wallet, account: account, _blockchain: award.project.token._blockchain)
+      award = build :award, account: account, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))
+      award.recipient_wallet_id = wallet.id
+      latest_blockchain_transaction = create(:blockchain_transaction, status: :succeed, tx_hash: '0')
+
+      expect(latest_blockchain_transaction.blockchain_transactable.cancelable?).to be_truthy
+    end
+
+    it 'should cancel when transaction status failed' do
+      failed_txn = create(:blockchain_transaction, status: :failed)
+      expect(failed_txn.blockchain_transactable.cancelable?).to be_truthy
+    end
+
+    it 'should cancel when transaction status created and not waiting in created' do
+      created_and_not_txn = create(:blockchain_transaction, status: :failed, created_at: Time.current - 8.hours)
+      expect(created_and_not_txn.blockchain_transactable.cancelable?).to be_truthy
+    end
+
+    it 'should not cancel when transaction status created and waiting in created' do
+      created_txn = create(:blockchain_transaction)
+      expect(created_txn.blockchain_transactable.cancelable?).to be_falsey
+    end
+
+    it 'should not cancel when transaction status pending' do
+      pending_txn = create(:blockchain_transaction, status: :pending, tx_hash: '0')
+      expect(pending_txn.blockchain_transactable.cancelable?).to be_falsey
+    end
+  end
+
   describe 'transfer_ready' do
     context 'when award is in accepted state' do
       let!(:award) { create(:award, status: :accepted) }
@@ -1122,13 +1156,13 @@ describe Award do
     end
 
     it 'doesnt return awards with latest blockchain_transaction Pending' do
-      create(:blockchain_transaction, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable, tx_hash: '0')
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'doesnt return awards with latest blockchain_transaction Succeed' do
-      create(:blockchain_transaction, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable, tx_hash: '0')
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end

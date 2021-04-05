@@ -56,6 +56,10 @@ module BlockchainTransactable
       end
     }
 
+    def latest_blockchain_transaction
+      blockchain_transactions.last
+    end
+
     def blockchain_transaction_class
       "BlockchainTransaction#{self.class}".constantize
     end
@@ -66,6 +70,17 @@ module BlockchainTransactable
           blockchain_transactable: self
         )
       )
+    end
+
+    def cancelable?
+      case latest_blockchain_transaction&.status
+      when 'created'
+        !latest_blockchain_transaction&.waiting_in_created?
+      when 'pending'
+        false
+      else
+        true
+      end
     end
   end
 end

@@ -9,7 +9,6 @@ class OreIdAccount < ApplicationRecord
 
   before_create :set_temp_password
   after_create :schedule_sync, unless: :pending_manual?
-  after_create :schedule_wallet_sync, if: :pending_manual?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 

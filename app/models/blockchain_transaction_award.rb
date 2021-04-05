@@ -26,14 +26,14 @@ class BlockchainTransactionAward < BlockchainTransaction
       if token._token_type_token?
         case blockchain_transactable.transfer_type.name
         when 'mint'
-          Comakery::Eth::Tx::Erc20::Mint.new(token.blockchain.explorer_api_host, tx_hash)
+          Comakery::Eth::Tx::Erc20::Mint.new(token.blockchain.explorer_api_host, tx_hash, self)
         when 'burn'
-          Comakery::Eth::Tx::Erc20::Burn.new(token.blockchain.explorer_api_host, tx_hash)
+          Comakery::Eth::Tx::Erc20::Burn.new(token.blockchain.explorer_api_host, tx_hash, self)
         else
-          Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash)
+          Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash, self)
         end
       else
-        Comakery::Eth::Tx.new(token.blockchain.explorer_api_host, tx_hash)
+        Comakery::Eth::Tx.new(token.blockchain.explorer_api_host, tx_hash, self)
       end
     end
 
@@ -76,16 +76,5 @@ class BlockchainTransactionAward < BlockchainTransaction
       super
       self.amount ||= token.to_base_unit(blockchain_transactable.total_amount)
       self.destination ||= blockchain_transactable.recipient_address
-    end
-
-    def tx
-      @tx ||= destination && case blockchain_transactable.source
-                             when 'mint'
-                               contract.mint(destination, amount)
-                             when 'burn'
-                               contract.burn(destination, amount)
-                             else
-                               contract.transfer(destination, amount)
-                             end
     end
 end
