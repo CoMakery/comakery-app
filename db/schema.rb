@@ -263,7 +263,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
   create_table "balances", force: :cascade do |t|
     t.bigint "wallet_id"
     t.bigint "token_id"
-    t.decimal "base_unit_value", precision: 40, default: "0", null: false
+    t.decimal "base_unit_value", precision: 78, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
