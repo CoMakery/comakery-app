@@ -56,6 +56,10 @@ module BlockchainTransactable
       end
     }
 
+    def latest_blockchain_transaction
+      blockchain_transactions.last
+    end
+
     def blockchain_transaction_class
       "BlockchainTransaction#{self.class}".constantize
     end

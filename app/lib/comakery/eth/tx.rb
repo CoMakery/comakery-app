@@ -1,10 +1,24 @@
 class Comakery::Eth::Tx
   attr_reader :eth
   attr_reader :hash
+  attr_reader :blockchain_transaction
 
-  def initialize(host, hash)
+  def initialize(host, hash, blockchain_transaction = nil)
     @eth = Comakery::Eth.new(host)
     @hash = hash
+    @blockchain_transaction = blockchain_transaction
+  end
+
+  def to_object(**_args)
+    {
+      from: blockchain_transaction.source,
+      to: blockchain_transaction.destination,
+      value: encode_value(blockchain_transaction.amount)
+    }
+  end
+
+  def encode_value(val)
+    '0x' + val.to_i.to_s(16)
   end
 
   def data

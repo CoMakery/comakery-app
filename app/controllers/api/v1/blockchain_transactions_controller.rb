@@ -4,8 +4,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   include Api::V1::Concerns::AuthorizableByProjectPolicy
   include Api::V1::Concerns::RequiresAnAuthorization
 
-  before_action :verify_hash, only: %i[update destroy]
-
   # POST /api/v1/projects/1/blockchain_transactions
   def create
     return head :no_content if creation_disabled?
@@ -118,15 +116,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
         :failed
       ).present?
-    end
-
-    def verify_hash
-      if transaction.tx_hash && transaction.tx_hash != transaction_update_params[:tx_hash]
-        transaction.errors[:hash] << 'mismatch'
-        @errors = transaction.errors
-
-        render 'api/v1/error.json', status: :bad_request
-      end
     end
 
     def hot_wallet_request?
