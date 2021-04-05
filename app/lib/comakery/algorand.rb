@@ -82,7 +82,7 @@ class Comakery::Algorand
   end
 
   def asset_balance(addr)
-    account_assets(addr).find { |asset| asset['asset-id'] == @asset_id }&.fetch('amount', 0)
+    account_assets(addr).find { |asset| asset['asset-id'] == @asset_id }&.fetch('amount', 0) || 0
   end
 
   def status
