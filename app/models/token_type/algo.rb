@@ -90,6 +90,8 @@ class TokenType::Algo < TokenType
     attrs[:blockchain]
   end
 
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
   def blockchain_balance(wallet_address)
     contract.account_balance(wallet_address)
   end

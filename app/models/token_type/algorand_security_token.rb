@@ -119,6 +119,8 @@ class TokenType::AlgorandSecurityToken < TokenType
     ::AlgorandSecurityToken::AccountTokenRecordsSyncJob
   end
 
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
   def blockchain_balance(wallet_address)
     contract.app_balance(wallet_address)
   end
