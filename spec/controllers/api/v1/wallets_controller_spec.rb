@@ -265,7 +265,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
       end
     end
 
-    context 'without ore id wallet' do
+    context 'without ore id account' do
       render_views
       let(:wallet) { create(:wallet, account: account) }
 
@@ -281,11 +281,11 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         post :password_reset, params: params
 
         expect(response).to have_http_status(:bad_request)
-        expect(JSON.parse(response.body)['errors']['ore_id_account']).to eq('can\'t be blank')
+        expect(JSON.parse(response.body)['errors']['wallet']).to eq('can\'t be claimed')
       end
     end
 
-    context 'when wallet has pending state' do
+    context 'with pending ore id account' do
       render_views
       let(:wallet) { create(:ore_id_wallet, account: account) }
 
@@ -303,7 +303,33 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         post :password_reset, params: params
 
         expect(response).to have_http_status(:bad_request)
-        expect(JSON.parse(response.body)['errors']['wallet']).to eq('must have unclaimed state')
+        expect(JSON.parse(response.body)['errors']['wallet']).to eq('can\'t be claimed')
+      end
+    end
+
+    context 'with ore id account having pending wallet provisions' do
+      render_views
+      let(:wallet) { create(:ore_id_wallet, account: account) }
+
+      before do
+        wallet.wallet_provisions.create(token: create(:algo_sec_token))
+      end
+
+      it 'returns bad request' do
+        expect(wallet.ore_id_account.state).to eq 'pending'
+
+        params = build(:api_signed_request,
+                       { redirect_url: 'https://localhost' },
+                       password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id,
+                                                                 id: wallet.id.to_s),
+                       'POST')
+        params[:account_id] = account.managed_account_id
+        params[:id] = wallet.id
+
+        post :password_reset, params: params
+
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)['errors']['wallet']).to eq('can\'t be claimed')
       end
     end
   end
