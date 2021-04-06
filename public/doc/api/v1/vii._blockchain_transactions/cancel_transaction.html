@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VII. Blockchain Transactions API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>VII. Blockchain Transactions API</h1>
+
+        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
+
+      <div class="article">
+        <h2>CANCEL TRANSACTION</h2>
+        <h3>DELETE /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
+          <p class="explanation">
+            Marks transaction as cancelled and releases transfer for a new transaction, see GENERATE TRANSACTION for response fields
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">project_id</span>
+                </td>
+                <td>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">transaction id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transaction[tx_hash]</span>
+                </td>
+                <td>
+                  <span class="description">transaction hash</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transaction[status_message]</span>
+                </td>
+                <td>
+                  <span class="description">transaction status message</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transaction[failed]</span>
+                </td>
+                <td>
+                  <span class="description">marks transaction as failed, to exclude the transactable from further transactions</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">DELETE /api/v1/projects/2/blockchain_transactions/2</pre>
+
+
+            <h4>Body</h4>
+            <pre class="request body">{:body=>{:data=>{:transaction=>{:tx_hash=>"0xebec2f7c55204e2f4aadebf9473e5f197d3842aa5faaa9a3708e6534b924935f", :status_message=>"hot wallet error: insufficient balance"}}, :url=>"http://example.org/api/v1/projects/2/blockchain_transactions/2", :method=>"DELETE", :nonce=>"b2a750c099e4ade6add7c044b7488d38", :timestamp=>"1617700090"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"kE9/Gh5PLrJNxp4oU16KZpMEaHfj3UEtS3yfFuTm6iKbUVh4PBridVHuaQpFwcuwVjxr/0av0wktKWSJcxBdBg=="}}</pre>
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;3eba2da3883d3661f3cdf6c56bbaab6b&quot;</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">{:id=&gt;2, :blockchainTransactableId=&gt;2, :destination=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :source=&gt;&quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;, :amount=&gt;1, :nonce=&gt;425616, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :txHash=&gt;&quot;0xebec2f7c55204e2f4aadebf9473e5f197d3842aa5faaa9a3708e6534b924935f&quot;, :txRaw=&gt;&quot;0xf86a83067e90822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080&quot;, :status=&gt;&quot;cancelled&quot;, :statusMessage=&gt;&quot;hot wallet error: insufficient balance&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:10.530Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:10.659Z&quot;, :syncedAt=&gt;nil}</pre>
+      </div>
+    </div>
+  </body>
+</html>

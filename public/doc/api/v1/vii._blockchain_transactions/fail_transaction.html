@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VII. Blockchain Transactions API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>VII. Blockchain Transactions API</h1>
+
+        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
+
+      <div class="article">
+        <h2>FAIL TRANSACTION</h2>
+        <h3>DELETE /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
+          <p class="explanation">
+            Marks transaction as failed and excludes transfer from further transactions, see GENERATE TRANSACTION for response fields
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">project_id</span>
+                </td>
+                <td>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">transaction id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transaction[tx_hash]</span>
+                </td>
+                <td>
+                  <span class="description">transaction hash</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transaction[status_message]</span>
+                </td>
+                <td>
+                  <span class="description">transaction status message</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transaction[failed]</span>
+                </td>
+                <td>
+                  <span class="description">marks transaction as failed, to exclude the transactable from further transactions</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO
+Api-Transaction-Key: F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">DELETE /api/v1/projects/1/blockchain_transactions/1</pre>
+
+
+            <h4>Body</h4>
+            <pre class="request body">{:body=>{:data=>{:transaction=>{:tx_hash=>"0x5cefaae9422fe2161b6a2428e1b4636f20b6d8bcb9e3987a5e28ffdb7743e218", :status_message=>"hot wallet error: unprocessable tx", :failed=>"true"}}, :url=>"http://example.org/api/v1/projects/1/blockchain_transactions/1", :method=>"DELETE", :nonce=>"442e0e3ab2fd5ee67486e7f080dff288", :timestamp=>"1617700089"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"dBVpHcITMOETygfhUX3XUNsJHOKwTVBqm22/lr9fIitA20KxoTZm0ZVuRIO43+UjCwKErRLo0ZaGi6NpjMg2CQ=="}}</pre>
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;6730b8d25cb57559c7d21e316f563f4e&quot;</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">{:id=&gt;1, :blockchainTransactableId=&gt;1, :destination=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :source=&gt;&quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;, :amount=&gt;1, :nonce=&gt;831669, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :txHash=&gt;&quot;0x5cefaae9422fe2161b6a2428e1b4636f20b6d8bcb9e3987a5e28ffdb7743e218&quot;, :txRaw=&gt;&quot;0xf86a830cb0b5822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080&quot;, :status=&gt;&quot;failed&quot;, :statusMessage=&gt;&quot;hot wallet error: unprocessable tx&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:09.043Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:09.207Z&quot;, :syncedAt=&gt;nil}</pre>
+      </div>
+    </div>
+  </body>
+</html>
