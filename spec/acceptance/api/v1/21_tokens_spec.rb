@@ -38,34 +38,35 @@ resource 'X. Tokens' do
 
         result = do_request(request)
         if status == 200
-          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=e145da0e6ac012c45feb9c0b5dcccaf9&body[timestamp]=1617700114&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=it%2BFfUUc8Pi4dGM17gXXyV8KKm2%2FNaJFYTAkEd0Tpnm4p5dHYE7%2BLgkiCNYmZt4N8jKb2oD%2B%2Bkn2%2F%2Bs86UwiAA%3D%3D'
-          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"e145da0e6ac012c45feb9c0b5dcccaf9", "timestamp"=>"1617700114"}, 
-                                                   proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"it+FfUUc8Pi4dGM17gXXyV8KKm2/NaJFYTAkEd0Tpnm4p5dHYE7+LgkiCNYmZt4N8jKb2oD++kn2/+s86UwiAA=="}
-                                                 }
-          result[0][:response_headers]['ETag'] = 'W/"3cbc54b2abd8984b10dedc6d341e5858"'
-          result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 09:08:34 GMT'
+          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=790c6adaeba78e7826b69dc217908ff2&body[timestamp]=1617706324&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=FyfuJ86Otl2xW73QzV4oc6eQQHIn7ON10x1QRjIqEtOQW4pHa8lSfEcicos%2BZzfM2c0Wx0R0cWIpY5k%2B0MzQCQ%3D%3D'
+
+          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"790c6adaeba78e7826b69dc217908ff2", "timestamp"=>"1617706324"},
+          proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"FyfuJ86Otl2xW73QzV4oc6eQQHIn7ON10x1QRjIqEtOQW4pHa8lSfEcicos+ZzfM2c0Wx0R0cWIpY5k+0MzQCQ=="}}
+
+          result[0][:response_headers]['ETag'] = 'W/"294c784ecfd71841bea5933ffa76de40"'
+          result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 10:52:04 GMT'
           result[0][:request_body] =  [
                                         {
-                                          "id": 38,
+                                          "id": 6,
                                           "name": "Cats",
-                                          "symbol": "TKN0d498577f882be573b056b117affd0caeb26776a",
+                                          "symbol": "TKN198efd8b622a87cbca6b54a912227e3a280095e8",
                                           "network": "bitcoin",
                                           "contractAddress": nil,
                                           "decimalPlaces": 8,
-                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWW89IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--f721919fb6432fb34b7a3badd1a8d577c3cf5c81/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
-                                          "createdAt": "2021-04-06T09:08:33.962Z",
-                                          "updatedAt": "2021-04-06T09:08:33.972Z"
+                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBFdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--4dc440b26409ea81bbbbb2908d063ce561ecb668/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
+                                          "createdAt": "2021-04-06T10:52:03.995Z",
+                                          "updatedAt": "2021-04-06T10:52:04.016Z"
                                         },
                                         {
-                                          "id": 39,
+                                          "id": 7,
                                           "name": "Dogs",
-                                          "symbol": "TKN4a051d8ca8d31d7d8b113e432e1c8bc4a1bdac68",
+                                          "symbol": "TKN676f3ac72f320bb17911868a001314e3533cd150",
                                           "network": "cardano",
                                           "contractAddress": nil,
                                           "decimalPlaces": 8,
-                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWXM9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--350226bf48046403d668a388d841d19bbedbd07c/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
-                                          "createdAt": "2021-04-06T09:08:34.059Z",
-                                          "updatedAt": "2021-04-06T09:08:34.070Z"
+                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBGQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--8df573f78e89997036793da9b094a6ce19487d2a/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
+                                          "createdAt": "2021-04-06T10:52:04.115Z",
+                                          "updatedAt": "2021-04-06T10:52:04.123Z"
                                         }
                                       ]
         end
@@ -80,24 +81,23 @@ resource 'X. Tokens' do
 
         result = do_request(request)
         if status == 200
-          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=d2d92a32acc7f5c8c672bb002739f2d4&body[timestamp]=1617700105&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=3pfLRcpSFXXXxFnnV0cGCRzw23F5sJhlFwEKRZSXogiSwCiIwPEsekPuYN9Ky5r8FyXM6En4qtSjqjA059YFCQ%3D%3D&q[name_or_symbol_cont]=Cats'
-          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"d2d92a32acc7f5c8c672bb002739f2d4", "timestamp"=>"1617700105"},
-                                                   proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"3pfLRcpSFXXXxFnnV0cGCRzw23F5sJhlFwEKRZSXogiSwCiIwPEsekPuYN9Ky5r8FyXM6En4qtSjqjA059YFCQ=="},
-                                                   q: {"name_or_symbol_cont"=>"Cats"}
-                                                 }
-          result[0][:response_headers]['ETag'] = 'W/"15cf8c4ba9893bc577c39f5e67e73a97"'
-          result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 09:08:25 GMT'
-          result[0][:request_body] =  [
+          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=120144664418ae4716a890ca099b5552&body[timestamp]=1617706313&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=cFep5MtjDnw%2FNh8L2m0g8yFsO5wBOekp8qZzl3gNID8lIulWcq9CMuiYL57yl1HlfcphCrtBOWmezvCKJsisCw%3D%3D&q[name_or_symbol_cont]=Cats'
+
+          result[0][:request_query_parameters] = {body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"120144664418ae4716a890ca099b5552", "timestamp"=>"1617706313"}, proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"cFep5MtjDnw/Nh8L2m0g8yFsO5wBOekp8qZzl3gNID8lIulWcq9CMuiYL57yl1HlfcphCrtBOWmezvCKJsisCw=="}, q: {"name_or_symbol_cont"=>"Cats"}}
+
+          result[0][:response_headers]['ETag'] = 'W/"295caf1489fb5ec5cc0ae211203e0b3d"'
+          result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 10:51:52 GMT'
+          result[0][:response_body] = [
                                         {
-                                          "id": 34,
+                                          "id": 2,
                                           "name": "Cats",
-                                          "symbol": "TKN2ddfb306fca76db1c47f3e5a24381ff6063d3991",
+                                          "symbol": "TKNc189f57daac654a1a0d26462bca955b533192bd5",
                                           "network": "bitcoin",
                                           "contractAddress": nil,
                                           "decimalPlaces": 8,
-                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWUk9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--925d494f3afe190c56d219c1e3bf92862561fa5f/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
-                                          "createdAt": "2021-04-06T09:08:25.023Z",
-                                          "updatedAt": "2021-04-06T09:08:25.034Z"
+                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--4f6ed62d6d0ad4f4d3a9b5450db15d37e9bf0d03/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
+                                          "createdAt": "2021-04-06T10:51:52.826Z",
+                                          "updatedAt": "2021-04-06T10:51:52.838Z"
                                         }
                                       ]
         end
@@ -112,24 +112,23 @@ resource 'X. Tokens' do
 
         result = do_request(request)
         if status == 200
-          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=bbb6b4bf6221e8d89abb5ada3f6334a1&body[timestamp]=1617700113&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=0Jzl1KJsKUNKy5V5s3NSrx5xYumOP942gZxzT6WUnyMaoLIZ23HIgRLC9UpoESSK9FsGJOADd5E3RrZsI9wvAA%3D%3D&q[name_cont]=Dogs&q[network_eq]=cardano'
-          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"bbb6b4bf6221e8d89abb5ada3f6334a1", "timestamp"=>"1617700113"}, 
-                                                   proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"0Jzl1KJsKUNKy5V5s3NSrx5xYumOP942gZxzT6WUnyMaoLIZ23HIgRLC9UpoESSK9FsGJOADd5E3RrZsI9wvAA=="},
-                                                   q: {"name_cont"=>"Dogs", "network_eq"=>"cardano"}
-                                                 }
+          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=1a3a4a0a24ee7e7e67ef45cb642f9db1&body[timestamp]=1617706323&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=%2F3%2FSxfIspuy46fRXp8TBcvMKEcEfgw2T%2BOIQHFRYF5AYptQfdkjnBmBHoIwEnlTzn9SOqMIDH4%2FV0zENbOwXAQ%3D%3D&q[name_cont]=Dogs&q[network_eq]=cardano'
+
+          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"1a3a4a0a24ee7e7e67ef45cb642f9db1", "timestamp"=>"1617706323"}, proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"/3/SxfIspuy46fRXp8TBcvMKEcEfgw2T+OIQHFRYF5AYptQfdkjnBmBHoIwEnlTzn9SOqMIDH4/V0zENbOwXAQ=="}, q: {"name_cont"=>"Dogs", "network_eq"=>"cardano"}}
+
           result[0][:response_headers]['ETag'] = 'W/"a94e98e98c6628d6add2e34b52b7daac"'
           result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 09:08:33 GMT'
           result[0][:request_body] =  [
                                         {
-                                          "id": 37,
+                                          "id": 5,
                                           "name": "Dogs",
-                                          "symbol": "TKN0317c692773bf030f6924201c1b16aa677d2ffad",
+                                          "symbol": "TKN8fcf275d20fbcc09fd3ef3d406e95efa68d7c3e9",
                                           "network": "cardano",
                                           "contractAddress": nil,
                                           "decimalPlaces": 8,
-                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWWM9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--84825de7c8c8a635719892029d55dc9cc64ae5e9/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
-                                          "createdAt": "2021-04-06T09:08:33.481Z",
-                                          "updatedAt": "2021-04-06T09:08:33.491Z"
+                                          "logoUrl": "/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBFQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--60eaf7f6794fa2f17153d250ac7aa3c463f51823/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png",
+                                          "createdAt": "2021-04-06T10:52:03.509Z",
+                                          "updatedAt": "2021-04-06T10:52:03.524Z"
                                         }
                                       ]
           
@@ -149,11 +148,9 @@ resource 'X. Tokens' do
 
         result = do_request(request)
         if status == 400
-          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=091ca0b007c3416f9585c8e577e08586&body[timestamp]=1617700114&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=Eez3sz1NGnabIQGUdMgNsU5CVImXlAyQIyE%2Bj6gnNTbf1kGeVc0SN610C2x5Ut0fC7NaCTCa1%2FhQMEbaE6OYBg%3D%3D&q[network_cont]=bitcoin'
-          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"091ca0b007c3416f9585c8e577e08586", "timestamp"=>"1617700114"},
-                                                   proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"Eez3sz1NGnabIQGUdMgNsU5CVImXlAyQIyE+j6gnNTbf1kGeVc0SN610C2x5Ut0fC7NaCTCa1/hQMEbaE6OYBg=="},
-                                                   q: {"network_cont"=>"bitcoin"}
-                                                 }
+          result[0][:request_path] = '/api/v1/tokens?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&body[method]=GET&body[nonce]=7becc225fec777f9e234e1e882f9e8d2&body[timestamp]=1617706312&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=q70OmhtugHZ0UpJ4MQZ4DkgTooaptvrMd2odC%2F2RdfDDhVs5G8YiZaclC5n5nGE7SN62mf9eShkRKl8IzfXjAA%3D%3D&q[network_cont]=bitcoin'
+
+          result[0][:request_query_parameters] = {body: {"data"=>"", "url"=>"http://example.org/api/v1/tokens", "method"=>"GET", "nonce"=>"7becc225fec777f9e234e1e882f9e8d2", "timestamp"=>"1617706312"}, proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"q70OmhtugHZ0UpJ4MQZ4DkgTooaptvrMd2odC/2RdfDDhVs5G8YiZaclC5n5nGE7SN62mf9eShkRKl8IzfXjAA=="}, q: {"network_cont"=>"bitcoin"}}
         end
         expect(status).to eq(400)
       end

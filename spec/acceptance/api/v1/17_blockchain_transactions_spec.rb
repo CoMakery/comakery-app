@@ -351,41 +351,41 @@ resource 'VII. Blockchain Transactions' do
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT', 'example.org')
         result = do_request(request)
         if status == 200
-          result[0][:request_path] = '/api/v1/projects/3/blockchain_transactions/3'
+          result[0][:request_path] = '/api/v1/projects/2/blockchain_transactions/2'
           result[0][:request_body] = {
-                                      "body": {
-                                        "data": {
-                                          "transaction": {
-                                            "tx_hash": "0x8e59a8787a691c2d3a35e63e6e7ae3a64e010411f512d633276d7a57decd68a9"
-                                          }
+                                        "body": {
+                                          "data": {
+                                            "transaction": {
+                                              "tx_hash": "0x54f6c3ddd3dfca7aa5a6b46c4e095a245f1d53424379517a8b64c50bd4768fb2"
+                                            }
+                                          },
+                                          "url": "http://example.org/api/v1/projects/2/blockchain_transactions/2",
+                                          "method": "PUT",
+                                          "nonce": "52614e543ab3ce9f8fd1e06f2083d801",
+                                          "timestamp": "1617705747"
                                         },
-                                        "url": "http://example.org/api/v1/projects/3/blockchain_transactions/3",
-                                        "method": "PUT",
-                                        "nonce": "1428f561ad2b6c3bbf5fd20799651c73",
-                                        "timestamp": "1617700091"
-                                      },
-                                      "proof": {
-                                        "type": "Ed25519Signature2018",
-                                        "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                        "signature": "QhZK0H1TagAS7vHV134zzTCnesD6iq2KbF8bYdR0g5QDxLt4pyttMcP/rJ916aKTIwihN4hDefzE3WcjYmdUDw=="
+                                        "proof": {
+                                          "type": "Ed25519Signature2018",
+                                          "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+                                          "signature": "B/AGqdewgTJmtJyydWgHEpnd1S5npZ5e6vKtra6NmXE7Kcg9rGXbJyKCzMYfRcUeO5WjOzwyE3yuGe0z8dU9Dw=="
+                                        }
                                       }
-                                    }
-          result[0][:response_headers]['ETag'] = 'W/"53771b75fb4ae1c9e940944d11b9d42b"'
+          result[0][:response_headers]['ETag'] = 'W/"6a7e7a2d84ced26ed7168958391a5b22"'
           result[0][:response_body] = {
-                                        "id": 3,
-                                        "blockchainTransactableId": 3,
+                                        "id": 2,
+                                        "blockchainTransactableId": 2,
                                         "destination": "0xB4252b39f8506A711205B0b1C4170f0034065b46",
                                         "source": "0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB",
                                         "amount": 1,
-                                        "nonce": 629878,
+                                        "nonce": 248739,
                                         "contractAddress": "0x1D1592c28FFF3d3E71b1d29E31147846026A0a37",
                                         "network": "ethereum_ropsten",
-                                        "txHash": "0x8e59a8787a691c2d3a35e63e6e7ae3a64e010411f512d633276d7a57decd68a9",
-                                        "txRaw": "0xf86a83099c76822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080",
+                                        "txHash": "0x54f6c3ddd3dfca7aa5a6b46c4e095a245f1d53424379517a8b64c50bd4768fb2",
+                                        "txRaw": "0xf86a8303cba3822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080",
                                         "status": "pending",
                                         "statusMessage": nil,
-                                        "createdAt": "2021-04-06T09:08:11.872Z",
-                                        "updatedAt": "2021-04-06T09:08:11.983Z",
+                                        "createdAt": "2021-04-06T10:42:27.563Z",
+                                        "updatedAt": "2021-04-06T10:42:27.701Z",
                                         "syncedAt": nil
                                       }
         end
@@ -409,7 +409,7 @@ resource 'VII. Blockchain Transactions' do
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT', 'example.org')
         result = do_request(request)
         if status == 400
-          result[0][:request_path] = '/api/v1/projects/4/blockchain_transactions/4'
+          result[0][:request_path] = '/api/v1/projects/1/blockchain_transactions/1'
           result[0][:request_body] = {
                                       "body": {
                                         "data": {
@@ -417,15 +417,15 @@ resource 'VII. Blockchain Transactions' do
                                             "tx_hash": "0x"
                                           }
                                         },
-                                        "url": "http://example.org/api/v1/projects/4/blockchain_transactions/4",
+                                        "url": "http://example.org/api/v1/projects/1/blockchain_transactions/1",
                                         "method": "PUT",
-                                        "nonce": "7c93a48d0059b3d8ac7f1668f4504ca0",
-                                        "timestamp": "1617700093"
+                                        "nonce": "85f72e53ea0e3dbd61bb9e90bfea9873",
+                                        "timestamp": "1617705746"
                                       },
                                       "proof": {
                                         "type": "Ed25519Signature2018",
                                         "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                        "signature": "TOo6M62myoVb9j2IIdvt/kOyV1fovwjxw602diJe6ZvFcJOoYji2xaDYGkLxXQ/YXbZryH/fsfdZR9pIEGL5DA=="
+                                        "signature": "bAUgi2hmbIzwH4zHuuUAkVWlvgrKY+w7dvePxnfyBO/mN76MMf4xlYNEl1ledMgeehmilVWQcrhBn0KRjdovBw=="
                                       }
                                     }
         end
