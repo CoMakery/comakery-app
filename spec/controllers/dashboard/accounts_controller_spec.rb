@@ -47,6 +47,21 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(assigns[:accounts]).to include(project.account)
       end
     end
+
+    context 'without token' do
+      let(:project) { create(:project, visibility: :public_listed) }
+
+      before do
+        project.update!(token: nil)
+      end
+
+      it { is_expected.to have_http_status(:success) }
+
+      it 'returns interested' do
+        subject
+        expect(assigns[:accounts]).to include(project.account)
+      end
+    end
   end
 
   describe 'POST #create' do
