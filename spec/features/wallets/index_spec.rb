@@ -49,4 +49,14 @@ describe 'wallets page' do
       expect(find('.full-address').text).to eq(wallet.address)
     end
   end
+
+  it 'default wallet name should be Wallet', js: true do
+    owner = create :account
+    login(owner)
+    visit wallets_path
+    execute_script("document.querySelector('#addWalletBtn').click()")
+    within('#walletForm') do
+      expect(find('.wallet-name').value).to have_content 'Wallet'
+    end
+  end
 end

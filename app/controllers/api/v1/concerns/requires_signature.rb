@@ -12,7 +12,7 @@ module Api::V1::Concerns::RequiresSignature
           request.base_url + request.path,
           request.method,
           ->(nonce) { nonce_unique?(nonce) }
-        ).verify(whitelabel_mission&.whitelabel_api_public_key)
+        ).verify(api_public_key)
 
       log_request(params.to_unsafe_h, request.ip) if signature_verification_result
       signature_verification_result
@@ -22,8 +22,16 @@ module Api::V1::Concerns::RequiresSignature
       render 'api/v1/error.json', status: :unauthorized, layout: false
     end
 
+    def api_public_key
+      whitelabel_mission&.whitelabel_api_public_key
+    end
+
+    def nonce_key_prefix
+      'api::v1::nonce_history'
+    end
+
     def nonce_unique?(nonce)
-      key = "api::v1::nonce_history:#{whitelabel_mission.id}:#{nonce}"
+      key = "#{nonce_key_prefix}:#{whitelabel_mission.id}:#{nonce}"
 
       if Rails.cache.exist?(key)
         false

@@ -46,6 +46,7 @@ RSpec.describe Auth::OreIdController, type: :controller do
 
       it 'updates ore_id account and redirects to redirect_back_to' do
         expect(current_ore_id_account).to receive(:update).and_return(true)
+        expect(current_ore_id_account).to receive(:schedule_wallet_sync)
 
         get :receive, params: { account: 'dummy_account_name' }
         expect(response).to redirect_to('/dummy_redir_url')

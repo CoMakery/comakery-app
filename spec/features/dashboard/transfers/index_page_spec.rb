@@ -61,6 +61,34 @@ describe 'transfers_index_page', js: true do
     end
   end
 
+  context 'When cancel link should appear' do
+    before do
+      @blockchain_transaction = create(:blockchain_transaction)
+      @award = @blockchain_transaction.blockchain_transactable
+      @project = @award.project
+      @project.update(account_id: @award.account_id)
+      @owner = @project.account
+    end
+
+    it 'Should not appear when the transfer is in process' do
+      login(@owner)
+      visit project_dashboard_transfers_path(@project)
+
+      expect(page).not_to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(@project, @award.award_type, @award)}']"
+
+      expect(page).to have_selector "a[href='#{project_dashboard_transfer_path(@award.project, @award)}']"
+    end
+
+    it 'Should appear when the transfer is not in process' do
+      @blockchain_transaction.update(status: :failed)
+
+      login(@owner)
+      visit project_dashboard_transfers_path(@project)
+
+      expect(page).to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(@project, @award.award_type, @award)}']"
+    end
+  end
+
   it 'redirect to Transfer Categories page' do
     login(owner)
     visit project_dashboard_transfers_path(project)

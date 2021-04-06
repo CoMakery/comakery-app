@@ -341,7 +341,7 @@ resource 'VII. Blockchain Transactions' do
 
       let!(:transaction) do
         {
-          tx_hash: blockchain_transaction.tx_hash
+          tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
         }
       end
 

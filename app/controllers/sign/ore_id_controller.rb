@@ -32,7 +32,7 @@ class Sign::OreIdController < ApplicationController
     # TODO: Add token admin role to policy token related tx
     authorize received_transaction.blockchain_transactable, :pay? if received_transaction_for_award?
 
-    if received_transaction.update(tx_hash: params.require(:transaction_id), tx_raw: Base64.decode64(params.require(:signed_transaction)))
+    if received_transaction.update(tx_hash: params.require(:transaction_id))
       received_transaction.update_status(:pending)
       BlockchainJob::BlockchainTransactionSyncJob.perform_later(received_transaction)
       flash[:notice] = 'Transaction Signed'

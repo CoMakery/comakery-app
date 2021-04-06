@@ -31,62 +31,13 @@ describe BlockchainTransactionAward, vcr: true do
       expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
       expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
     end
-
-    context 'with comakery token and nonce provided' do
-      it 'generates blockchain transaction data' do
-        tx = contract.transfer(
-          blockchain_transaction.destination,
-          blockchain_transaction.amount
-        )
-
-        expect(blockchain_transaction.tx_hash).to eq(tx.hash)
-        expect(blockchain_transaction.tx_raw).to eq(tx.hex)
-      end
-
-      it 'generates blockchain transaction data for mint' do
-        tx = contract.mint(
-          blockchain_transaction_mint.destination,
-          blockchain_transaction_mint.amount
-        )
-
-        expect(blockchain_transaction_mint.tx_hash).to eq(tx.hash)
-        expect(blockchain_transaction_mint.tx_raw).to eq(tx.hex)
-      end
-
-      it 'generates blockchain transaction data for burn' do
-        tx = contract.burn(
-          blockchain_transaction_burn.destination,
-          blockchain_transaction_burn.amount
-        )
-
-        expect(blockchain_transaction_burn.tx_hash).to eq(tx.hash)
-        expect(blockchain_transaction_burn.tx_raw).to eq(tx.hex)
-      end
-    end
-
-    context 'without comakery security token' do
-      let!(:blockchain_transaction) do
-        build(
-          :blockchain_transaction,
-          token: create(
-            :token,
-            _token_type: :eth,
-            _blockchain: :ethereum_ropsten
-          )
-        )
-      end
-
-      it 'doesnt generate transaction data' do
-        expect(blockchain_transaction_burn.tx_hash).to be_nil
-        expect(blockchain_transaction_burn.tx_raw).to be_nil
-      end
-    end
   end
 
   describe 'update_status' do
     let!(:blockchain_transaction) { create(:blockchain_transaction) }
 
     before do
+      blockchain_transaction.update(tx_hash: '0')
       blockchain_transaction.update_status(:pending, 'test')
     end
 
@@ -124,9 +75,11 @@ describe BlockchainTransactionAward, vcr: true do
     context 'with erc20 mint' do
       specify do
         blockchain_transaction = build(:blockchain_transaction)
+
         blockchain_transaction.blockchain_transactable.update(
           transfer_type: blockchain_transaction.blockchain_transactable.project.transfer_types.find_by(name: 'mint')
         )
+        blockchain_transaction.remove_instance_variable(:@on_chain)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Mint)
       end
@@ -135,9 +88,11 @@ describe BlockchainTransactionAward, vcr: true do
     context 'with erc20 burn' do
       specify do
         blockchain_transaction = build(:blockchain_transaction)
+
         blockchain_transaction.blockchain_transactable.update(
           transfer_type: blockchain_transaction.blockchain_transactable.project.transfer_types.find_by(name: 'burn')
         )
+        blockchain_transaction.remove_instance_variable(:@on_chain)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Burn)
       end
