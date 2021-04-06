@@ -44,27 +44,26 @@ resource 'IX. Wallets' do
         if status == 200
           result[0][:request_path] = '/api/v1/accounts/f538a7ed-d62c-4e1d-b88e-ff1812303535/wallets?page=1&body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Ff538a7ed-d62c-4e1d-b88e-ff1812303535%2Fwallets&body[method]=GET&body[nonce]=318f2ca7a82042471fd6087247363373&body[timestamp]=1617707671&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=74Hv%2FjNdrClVm9GMyxh3mr7bD3ELqcxft39rvSM%2B7FzLyu0%2FqcHug24VPBEEmlYxshPzsFmQ5995xlIpnkkYCQ%3D%3D'
           result[0][:request_query_parameters] = { page: 1,
-                                                   body: {"data"=>"", "url"=>"http://example.org/api/v1/accounts/f538a7ed-d62c-4e1d-b88e-ff1812303535/wallets", "method"=>"GET", "nonce"=>"318f2ca7a82042471fd6087247363373", "timestamp"=>"1617707671"},
-                                                   proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"74Hv/jNdrClVm9GMyxh3mr7bD3ELqcxft39rvSM+7FzLyu0/qcHug24VPBEEmlYxshPzsFmQ5995xlIpnkkYCQ=="}
-                                                  }
+                                                   body: { 'data' => '', 'url' => 'http://example.org/api/v1/accounts/f538a7ed-d62c-4e1d-b88e-ff1812303535/wallets', 'method' => 'GET', 'nonce' => '318f2ca7a82042471fd6087247363373', 'timestamp' => '1617707671' },
+                                                   proof: { 'type' => 'Ed25519Signature2018', 'verificationMethod' => 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=', 'signature' => '74Hv/jNdrClVm9GMyxh3mr7bD3ELqcxft39rvSM+7FzLyu0/qcHug24VPBEEmlYxshPzsFmQ5995xlIpnkkYCQ==' } }
 
           result[0][:response_headers]['ETag'] = 'W/"97f43e95fa090161fe55c2ac83451681"'
           result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 11:14:31 GMT'
           result[0][:response_body] = [
-                                        {
-                                          "id": 24,
-                                          "name": "Wallet",
-                                          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-                                          "primaryWallet": true,
-                                          "source": "user_provided",
-                                          "state": "ok",
-                                          "createdAt": "2021-04-06T11:14:31.564Z",
-                                          "updatedAt": "2021-04-06T11:14:31.564Z",
-                                          "blockchain": "bitcoin",
-                                          "provisionTokens": []
-                                        }
-                                      ]
-        end  
+            {
+              "id": 24,
+              "name": 'Wallet',
+              "address": '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt',
+              "primaryWallet": true,
+              "source": 'user_provided',
+              "state": 'ok',
+              "createdAt": '2021-04-06T11:14:31.564Z',
+              "updatedAt": '2021-04-06T11:14:31.564Z',
+              "blockchain": 'bitcoin',
+              "provisionTokens": []
+            }
+          ]
+        end
         expect(status).to eq(200)
       end
     end
@@ -95,45 +94,43 @@ resource 'IX. Wallets' do
         if status == 201
           result[0][:request_path] = '/api/v1/accounts/76bcd9d0-a041-44ce-aae2-8daa6ff08dcf/wallets'
           result[0][:request_body] = {
-                                        "body": {
-                                          "data": {
-                                            "wallets": [
-                                              {
-                                                "blockchain": "bitcoin",
-                                                "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-                                                "name": "Wallet"
-                                              }
-                                            ]
-                                          },
-                                          "url": "http://example.org/api/v1/accounts/76bcd9d0-a041-44ce-aae2-8daa6ff08dcf/wallets",
-                                          "method": "POST",
-                                          "nonce": "eaa10347537e8e3506364d5ddbb89ded",
-                                          "timestamp": "1617707669"
-                                        },
-                                        "proof": {
-                                          "type": "Ed25519Signature2018",
-                                          "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                          "signature": "H+GSIW5GQTG7HvHfHrG+SbgzBBl5spaq4dxoAoodjqOTMhmMwQm0pMG6ziuYJNRfYSGNLOJVf12TAQAzFyv2Cw=="
-                                        }
-                                      }
+            "body": {
+              "data": {
+                "wallets": [
+                  {
+                    "blockchain": 'bitcoin',
+                    "address": '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt',
+                    "name": 'Wallet'
+                  }
+                ]
+              },
+              "url": 'http://example.org/api/v1/accounts/76bcd9d0-a041-44ce-aae2-8daa6ff08dcf/wallets',
+              "method": 'POST',
+              "nonce": 'eaa10347537e8e3506364d5ddbb89ded',
+              "timestamp": '1617707669'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": 'H+GSIW5GQTG7HvHfHrG+SbgzBBl5spaq4dxoAoodjqOTMhmMwQm0pMG6ziuYJNRfYSGNLOJVf12TAQAzFyv2Cw=='
+            }
+          }
 
           result[0][:response_headers]['ETag'] = 'W/"80c0aab9bd4ceeafdd4cd027433233ed"'
           result[0][:response_body] = [
-                                        {
-                                          "id": 21,
-                                          "name": "Wallet",
-                                          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-                                          "primaryWallet": true,
-                                          "source": "user_provided",
-                                          "state": "ok",
-                                          "createdAt": "2021-04-06T11:14:30.200Z",
-                                          "updatedAt": "2021-04-06T11:14:30.200Z",
-                                          "blockchain": "bitcoin",
-                                          "provisionTokens": [
-
-                                          ]
-                                        }
-                                      ]
+            {
+              "id": 21,
+              "name": 'Wallet',
+              "address": '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt',
+              "primaryWallet": true,
+              "source": 'user_provided',
+              "state": 'ok',
+              "createdAt": '2021-04-06T11:14:30.200Z',
+              "updatedAt": '2021-04-06T11:14:30.200Z',
+              "blockchain": 'bitcoin',
+              "provisionTokens": []
+            }
+          ]
         end
         expect(status).to eq(201)
       end
@@ -151,42 +148,42 @@ resource 'IX. Wallets' do
         if status == 201
           result[0][:request_path] = '/api/v1/accounts/37ec01ee-6c21-49b8-80c5-92f184db4632/wallets'
           result[0][:request_body] = {
-                                        "body": {
-                                          "data": {
-                                            "wallets": [
-                                              {
-                                                "blockchain": "algorand_test",
-                                                "source": "ore_id",
-                                                "name": "Wallet"
-                                              }
-                                            ]
-                                          },
-                                          "url": "http://example.org/api/v1/accounts/37ec01ee-6c21-49b8-80c5-92f184db4632/wallets",
-                                          "method": "POST",
-                                          "nonce": "9077d6f5299ff3930d168af94bcc7a78",
-                                          "timestamp": "1617707668"
-                                        },
-                                        "proof": {
-                                          "type": "Ed25519Signature2018",
-                                          "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                          "signature": "mlxybyFSROStKmubTudTVuzEAEnTfJrb2vOE0o9Vvuq8WyC81rmP0p8Euo7DDlrd7CUp+2kOUC4GiTcm468JBg=="
-                                        }
-                                      }
+            "body": {
+              "data": {
+                "wallets": [
+                  {
+                    "blockchain": 'algorand_test',
+                    "source": 'ore_id',
+                    "name": 'Wallet'
+                  }
+                ]
+              },
+              "url": 'http://example.org/api/v1/accounts/37ec01ee-6c21-49b8-80c5-92f184db4632/wallets',
+              "method": 'POST',
+              "nonce": '9077d6f5299ff3930d168af94bcc7a78',
+              "timestamp": '1617707668'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": 'mlxybyFSROStKmubTudTVuzEAEnTfJrb2vOE0o9Vvuq8WyC81rmP0p8Euo7DDlrd7CUp+2kOUC4GiTcm468JBg=='
+            }
+          }
           result[0][:response_headers]['ETag'] = 'W/"f28e5a96c256de35fb5ebf9ad6da86f8"'
           result[0][:response_body] = [
-                                        {
-                                          "id": 20,
-                                          "name": "Wallet",
-                                          "address": nil,
-                                          "primaryWallet": true,
-                                          "source": "ore_id",
-                                          "state": "pending",
-                                          "createdAt": "2021-04-06T11:14:29.062Z",
-                                          "updatedAt": "2021-04-06T11:14:29.062Z",
-                                          "blockchain": "algorand_test",
-                                          "provisionTokens": []
-                                        }
-                                      ]
+            {
+              "id": 20,
+              "name": 'Wallet',
+              "address": nil,
+              "primaryWallet": true,
+              "source": 'ore_id',
+              "state": 'pending',
+              "createdAt": '2021-04-06T11:14:29.062Z',
+              "updatedAt": '2021-04-06T11:14:29.062Z',
+              "blockchain": 'algorand_test',
+              "provisionTokens": []
+            }
+          ]
         end
         expect(status).to eq(201)
       end
@@ -213,75 +210,75 @@ resource 'IX. Wallets' do
         if status == 201
           result[0][:request_path] = '/api/v1/accounts/c6f272bb-f644-4539-9880-b15c449b9c57/wallets'
           result[0][:request_body] = {
-                                      "tokens_to_provision": [
-                                        {
-                                          "token_id": "91"
-                                        },
-                                        {
-                                          "token_id": "92",
-                                          "max_balance": "100",
-                                          "lockup_until": "1",
-                                          "reg_group_id": "37",
-                                          "account_frozen": "false"
-                                        }
-                                      ],
-                                      "body": {
-                                        "data": {
-                                          "wallets": [
-                                            {
-                                              "blockchain": "algorand_test",
-                                              "source": "ore_id",
-                                              "tokens_to_provision": [
-                                                {
-                                                  "token_id": "91"
-                                                },
-                                                {
-                                                  "token_id": "92",
-                                                  "max_balance": "100",
-                                                  "lockup_until": "1",
-                                                  "reg_group_id": "37",
-                                                  "account_frozen": "false"
-                                                }
-                                              ],
-                                              "name": "Wallet name"
-                                            }
-                                          ]
-                                        },
-                                        "url": "http://example.org/api/v1/accounts/c6f272bb-f644-4539-9880-b15c449b9c57/wallets",
-                                        "method": "POST",
-                                        "nonce": "cfce46450dccd10f9e7d6187b941d18a",
-                                        "timestamp": "1617707668"
-                                      },
-                                      "proof": {
-                                        "type": "Ed25519Signature2018",
-                                        "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                        "signature": "4fN1F+jATkNe+sVwIG8PyEir1TdXT70F1iCInS2pYakvVBuXCiBeX4ogvCkEhVb+CNkOzBTkDQSrV++Fk6x2AA=="
-                                      }
-                                    }
+            "tokens_to_provision": [
+              {
+                "token_id": '91'
+              },
+              {
+                "token_id": '92',
+                "max_balance": '100',
+                "lockup_until": '1',
+                "reg_group_id": '37',
+                "account_frozen": 'false'
+              }
+            ],
+            "body": {
+              "data": {
+                "wallets": [
+                  {
+                    "blockchain": 'algorand_test',
+                    "source": 'ore_id',
+                    "tokens_to_provision": [
+                      {
+                        "token_id": '91'
+                      },
+                      {
+                        "token_id": '92',
+                        "max_balance": '100',
+                        "lockup_until": '1',
+                        "reg_group_id": '37',
+                        "account_frozen": 'false'
+                      }
+                    ],
+                    "name": 'Wallet name'
+                  }
+                ]
+              },
+              "url": 'http://example.org/api/v1/accounts/c6f272bb-f644-4539-9880-b15c449b9c57/wallets',
+              "method": 'POST',
+              "nonce": 'cfce46450dccd10f9e7d6187b941d18a',
+              "timestamp": '1617707668'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": '4fN1F+jATkNe+sVwIG8PyEir1TdXT70F1iCInS2pYakvVBuXCiBeX4ogvCkEhVb+CNkOzBTkDQSrV++Fk6x2AA=='
+            }
+          }
           result[0][:response_headers]['ETag'] = 'W/"eebfff3973e24799edebf13f3965f43c"'
           result[0][:response_body] = [
-                                        {
-                                          "id": 19,
-                                          "name": "Wallet name",
-                                          "address": nil,
-                                          "primaryWallet": true,
-                                          "source": "ore_id",
-                                          "state": "pending",
-                                          "createdAt": "2021-04-06T11:14:28.222Z",
-                                          "updatedAt": "2021-04-06T11:14:28.222Z",
-                                          "blockchain": "algorand_test",
-                                          "provisionTokens": [
-                                            {
-                                              "tokenId": 91,
-                                              "state": "pending"
-                                            },
-                                            {
-                                              "tokenId": 92,
-                                              "state": "pending"
-                                            }
-                                          ]
-                                        }
-                                      ]
+            {
+              "id": 19,
+              "name": 'Wallet name',
+              "address": nil,
+              "primaryWallet": true,
+              "source": 'ore_id',
+              "state": 'pending',
+              "createdAt": '2021-04-06T11:14:28.222Z',
+              "updatedAt": '2021-04-06T11:14:28.222Z',
+              "blockchain": 'algorand_test',
+              "provisionTokens": [
+                {
+                  "tokenId": 91,
+                  "state": 'pending'
+                },
+                {
+                  "tokenId": 92,
+                  "state": 'pending'
+                }
+              ]
+            }
+          ]
         end
         expect(status).to eq(201)
       end
@@ -299,26 +296,26 @@ resource 'IX. Wallets' do
         if status == 400
           result[0][:request_path] = '/api/v1/accounts/215fbc88-07e7-46f9-828a-a0347ec1503c/wallets'
           result[0][:request_body] = {
-                                        "body": {
-                                          "data": {
-                                            "wallets": [
-                                              {
-                                                "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-                                                "name": "Wallet"
-                                              }
-                                            ]
-                                          },
-                                          "url": "http://example.org/api/v1/accounts/215fbc88-07e7-46f9-828a-a0347ec1503c/wallets",
-                                          "method": "POST",
-                                          "nonce": "6121198620e6e2ea36b8cc13322b1f63",
-                                          "timestamp": "1617707668"
-                                        },
-                                        "proof": {
-                                          "type": "Ed25519Signature2018",
-                                          "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                          "signature": "2jQnVtGSK7ujKWSi8K5H8ax2Xn00TU6sffST8qECUVX7SanUndlsIh6Vd0OOeqXnAQF8QeKp7GtN8e8bM9f2Bw=="
-                                        }
-                                      }
+            "body": {
+              "data": {
+                "wallets": [
+                  {
+                    "address": '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt',
+                    "name": 'Wallet'
+                  }
+                ]
+              },
+              "url": 'http://example.org/api/v1/accounts/215fbc88-07e7-46f9-828a-a0347ec1503c/wallets',
+              "method": 'POST',
+              "nonce": '6121198620e6e2ea36b8cc13322b1f63',
+              "timestamp": '1617707668'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": '2jQnVtGSK7ujKWSi8K5H8ax2Xn00TU6sffST8qECUVX7SanUndlsIh6Vd0OOeqXnAQF8QeKp7GtN8e8bM9f2Bw=='
+            }
+          }
         end
         expect(status).to eq(400)
         expect(response_body).to eq '{"errors":{"0":{"blockchain":["unknown blockchain value"]}}}'
@@ -349,36 +346,36 @@ resource 'IX. Wallets' do
         if status == 200
           result[0][:request_path] = '/api/v1/accounts/99905689-2789-4916-822b-6935829d89be/wallets/26'
           result[0][:request_body] = {
-                                        "body": {
-                                          "data": {
-                                            "wallet": {
-                                              "primary_wallet": true
-                                            }
-                                          },
-                                          "url": "http://example.org/api/v1/accounts/99905689-2789-4916-822b-6935829d89be/wallets/26",
-                                          "method": "PUT",
-                                          "nonce": "ac5abe2f13fa3deb543462cf0d3a5767",
-                                          "timestamp": "1617707672"
-                                        },
-                                        "proof": {
-                                          "type": "Ed25519Signature2018",
-                                          "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                          "signature": "BTZTkFckvtiv6vb2W5qrZHG8hts/Mwr0AkEHTbE/V55NoDDhQVPhuAVYCLsuh1AnBW+CzxDeSJ8MqY4hjFPvCQ=="
-                                        }
-                                      }
+            "body": {
+              "data": {
+                "wallet": {
+                  "primary_wallet": true
+                }
+              },
+              "url": 'http://example.org/api/v1/accounts/99905689-2789-4916-822b-6935829d89be/wallets/26',
+              "method": 'PUT',
+              "nonce": 'ac5abe2f13fa3deb543462cf0d3a5767',
+              "timestamp": '1617707672'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": 'BTZTkFckvtiv6vb2W5qrZHG8hts/Mwr0AkEHTbE/V55NoDDhQVPhuAVYCLsuh1AnBW+CzxDeSJ8MqY4hjFPvCQ=='
+            }
+          }
           result[0][:response_headers]['ETag'] = 'W/"00a7de496cda43cf8d65ae75abbe3ce7"'
           result[0][:response_body] = {
-                                        "id": 26,
-                                        "name": "Wallet",
-                                        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-                                        "primaryWallet": true,
-                                        "source": "user_provided",
-                                        "state": "ok",
-                                        "createdAt": "2021-04-06T11:14:32.514Z",
-                                        "updatedAt": "2021-04-06T11:14:32.514Z",
-                                        "blockchain": "bitcoin",
-                                        "provisionTokens": []
-                                      }
+            "id": 26,
+            "name": 'Wallet',
+            "address": '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt',
+            "primaryWallet": true,
+            "source": 'user_provided',
+            "state": 'ok',
+            "createdAt": '2021-04-06T11:14:32.514Z',
+            "updatedAt": '2021-04-06T11:14:32.514Z',
+            "blockchain": 'bitcoin',
+            "provisionTokens": []
+          }
         end
         expect(status).to eq(200)
       end
@@ -415,23 +412,22 @@ resource 'IX. Wallets' do
         result = do_request(request)
         if status == 200
           result[0][:request_path] = '/api/v1/accounts/a2a4d648-f184-4a14-90e5-f3eda18abfb5/wallets/22?body[data]=&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fa2a4d648-f184-4a14-90e5-f3eda18abfb5%2Fwallets%2F22&body[method]=GET&body[nonce]=eb20591fd286f1ccb1ebd240e53591f9&body[timestamp]=1617707670&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=t%2ByTuo494IgD%2F7E%2Bh3OoKTrqrOT%2FDJy5aHbtMWPROHqsdN0o9KFDe445GXRB%2BwynuwyDXIsNaN3vzoz6nU9dDA%3D%3D'
-          result[0][:request_query_parameters] = { body: {"data"=>"", "url"=>"http://example.org/api/v1/accounts/a2a4d648-f184-4a14-90e5-f3eda18abfb5/wallets/22", "method"=>"GET", "nonce"=>"eb20591fd286f1ccb1ebd240e53591f9", "timestamp"=>"1617707670"}, 
-                                                   proof: {"type"=>"Ed25519Signature2018", "verificationMethod"=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", "signature"=>"t+yTuo494IgD/7E+h3OoKTrqrOT/DJy5aHbtMWPROHqsdN0o9KFDe445GXRB+wynuwyDXIsNaN3vzoz6nU9dDA=="}
-                                                  }
+          result[0][:request_query_parameters] = { body: { 'data' => '', 'url' => 'http://example.org/api/v1/accounts/a2a4d648-f184-4a14-90e5-f3eda18abfb5/wallets/22', 'method' => 'GET', 'nonce' => 'eb20591fd286f1ccb1ebd240e53591f9', 'timestamp' => '1617707670' },
+                                                   proof: { 'type' => 'Ed25519Signature2018', 'verificationMethod' => 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=', 'signature' => 't+yTuo494IgD/7E+h3OoKTrqrOT/DJy5aHbtMWPROHqsdN0o9KFDe445GXRB+wynuwyDXIsNaN3vzoz6nU9dDA==' } }
           result[0][:response_headers]['ETag'] = 'W/"858c0b3eba44ad8a2e5e38329ad310b5"'
           result[0][:response_headers]['Last-Modified'] = 'Tue, 06 Apr 2021 11:14:30 GMT'
           result[0][:response_body] = {
-                                        "id": 22,
-                                        "name": "Wallet",
-                                        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
-                                        "primaryWallet": true,
-                                        "source": "user_provided",
-                                        "state": "ok",
-                                        "createdAt": "2021-04-06T11:14:30.633Z",
-                                        "updatedAt": "2021-04-06T11:14:30.633Z",
-                                        "blockchain": "bitcoin",
-                                        "provisionTokens": []
-                                      }
+            "id": 22,
+            "name": 'Wallet',
+            "address": '3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt',
+            "primaryWallet": true,
+            "source": 'user_provided',
+            "state": 'ok',
+            "createdAt": '2021-04-06T11:14:30.633Z',
+            "updatedAt": '2021-04-06T11:14:30.633Z',
+            "blockchain": 'bitcoin',
+            "provisionTokens": []
+          }
         end
         expect(status).to eq(200)
       end
@@ -456,19 +452,19 @@ resource 'IX. Wallets' do
         if status == 200
           result[0][:request_path] = '/api/v1/accounts/ae277852-b899-49c0-983a-3c9fc3cfb2f5/wallets/23'
           result[0][:request_body] = {
-                                      "body": {
-                                        "data": "",
-                                        "url": "http://example.org/api/v1/accounts/ae277852-b899-49c0-983a-3c9fc3cfb2f5/wallets/23",
-                                        "method": "DELETE",
-                                        "nonce": "e39deea5b41d927fab893ff67859bd8f",
-                                        "timestamp": "1617707671"
-                                      },
-                                      "proof": {
-                                        "type": "Ed25519Signature2018",
-                                        "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                        "signature": "V+VLVJBe31B0c0TDnfuN/KNyslfgQOMBTIZUcsMPN6xB1i4Mx9O52vkkZ/bj7pDABpYRgxs6x4Qi86FrEWNqBA=="
-                                      }
-                                    }
+            "body": {
+              "data": '',
+              "url": 'http://example.org/api/v1/accounts/ae277852-b899-49c0-983a-3c9fc3cfb2f5/wallets/23',
+              "method": 'DELETE',
+              "nonce": 'e39deea5b41d927fab893ff67859bd8f',
+              "timestamp": '1617707671'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": 'V+VLVJBe31B0c0TDnfuN/KNyslfgQOMBTIZUcsMPN6xB1i4Mx9O52vkkZ/bj7pDABpYRgxs6x4Qi86FrEWNqBA=='
+            }
+          }
           result[0][:response_headers]['ETag'] = 'ETag: W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"'
         end
         expect(status).to eq(200)
@@ -503,25 +499,25 @@ resource 'IX. Wallets' do
         if status == 200
           result[0][:request_path] = '/api/v1/accounts/526426da-f154-4cb2-a62b-b7272edf4522/wallets/25/password_reset'
           result[0][:request_body] = {
-                                        "redirect_url": "localhost",
-                                        "body": {
-                                          "data": {
-                                            "redirect_url": "localhost"
-                                          },
-                                          "url": "http://example.org/api/v1/accounts/526426da-f154-4cb2-a62b-b7272edf4522/wallets/25/password_reset",
-                                          "method": "POST",
-                                          "nonce": "294fc1198629f41922451f153b3094c0",
-                                          "timestamp": "1617707671"
-                                        },
-                                        "proof": {
-                                          "type": "Ed25519Signature2018",
-                                          "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-                                          "signature": "+VItidF1V6F1O4/THri0HlXczRThTB0KGYHeUUqauBw6UrGKdNbLha958eRWjblPqIpbVz0jF/6fwMKsCMUhDg=="
-                                        }
-                                      }
+            "redirect_url": 'localhost',
+            "body": {
+              "data": {
+                "redirect_url": 'localhost'
+              },
+              "url": 'http://example.org/api/v1/accounts/526426da-f154-4cb2-a62b-b7272edf4522/wallets/25/password_reset',
+              "method": 'POST',
+              "nonce": '294fc1198629f41922451f153b3094c0',
+              "timestamp": '1617707671'
+            },
+            "proof": {
+              "type": 'Ed25519Signature2018',
+              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
+              "signature": '+VItidF1V6F1O4/THri0HlXczRThTB0KGYHeUUqauBw6UrGKdNbLha958eRWjblPqIpbVz0jF/6fwMKsCMUhDg=='
+            }
+          }
 
           result[0][:response_headers]['ETag'] = 'W/"98478faf3abecd5323605bf65c68c306"'
-          result[0][:response_body] = { "resetUrl": "https://service.oreid.io/recover-account?account=&app_access_token=dummy_token&background_color=FFFFFF&callback_url=localhost&email=me%2B8e34c3b89ce220648a3a371617b005c518d3d97a%40example.com&provider=email&recover_action=republic&state=&hmac=FHcIdy4r%2Fb6NGoEKZy18G0CkzI7Y2JksskpX8JVNp9w%3D" }
+          result[0][:response_body] = { "resetUrl": 'https://service.oreid.io/recover-account?account=&app_access_token=dummy_token&background_color=FFFFFF&callback_url=localhost&email=me%2B8e34c3b89ce220648a3a371617b005c518d3d97a%40example.com&provider=email&recover_action=republic&state=&hmac=FHcIdy4r%2Fb6NGoEKZy18G0CkzI7Y2JksskpX8JVNp9w%3D' }
         end
         expect(status).to eq(200)
       end
