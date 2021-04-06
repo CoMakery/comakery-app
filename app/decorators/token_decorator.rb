@@ -23,11 +23,7 @@ class TokenDecorator < Draper::Decorator
     _blockchain
   end
 
-  def logo_url(size = 100)
-    GetImageVariantPath.call(
-      attachment: logo_image,
-      resize_to_fill: [size, size],
-      fallback: helpers.image_url('default_project.jpg')
-    ).path
+  def logo_url
+    Rails.application.routes.url_helpers.url_for(logo_image)
   end
 end
