@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>III. Projects API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>III. Projects API</h1>
+
+        <p class="explanation">Retrieve projects data.</p>
+
+      <div class="article">
+        <h2>INDEX</h2>
+        <h3>GET /api/v1/projects</h3>
+          <p class="explanation">
+            Returns an array of projects. See GET for response fields description.
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/projects?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=e81ccdafaefa493265d4709cc8aacd83&amp;body[timestamp]=1617689302&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=%2FKr5QHejXV3wLdczoq8vOUWvnE8uyE%2B8awwBZOyYMTYOQbOUlvCmbf0NjuTbgDmNAtD0F2UlhF%2FIzm2OFiwRDQ%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;e81ccdafaefa493265d4709cc8aacd83&quot;, &quot;timestamp&quot;=&gt;&quot;1617689302&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;/Kr5QHejXV3wLdczoq8vOUWvnE8uyE+8awwBZOyYMTYOQbOUlvCmbf0NjuTbgDmNAtD0F2UlhF/Izm2OFiwRDQ==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;cef7296a00bd29c580bd5cf81899f61d&quot;
+Last-Modified: Tue, 06 Apr 2021 06:08:11 GMT</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[{:id=&gt;4, :title=&gt;&quot;Uber for Cats&quot;, :description=&gt;&quot;We are going to build amazing&quot;, :imageUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBJQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--df3a9f3afe84f453cc66e5f5a8aef3d6c346a8ed/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmtDNkFOcEF1Z0QiLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--6c318e046d2ad6689dcbf9dd2a432c640a9ef2df/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:22.053Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:22.096Z&quot;, :accountId=&gt;&quot;401d4e16-1256-49d8-8bcf-39418553482f&quot;, :adminIds=&gt;[], :transferTypes=&gt;[{:id=&gt;13, :name=&gt;&quot;earned&quot;}, {:id=&gt;14, :name=&gt;&quot;bought&quot;}, {:id=&gt;15, :name=&gt;&quot;mint&quot;}, {:id=&gt;16, :name=&gt;&quot;burn&quot;}], :token=&gt;{:id=&gt;7, :name=&gt;&quot;ComakeryDummyToken-fdd767d005159611fc5454e8791be25c992bab04&quot;, :symbol=&gt;&quot;DUMde72b801245eb02c2292cd1c287bb07948f28d9e&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBIQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9c6af66ecda0f3d7c92f9bb248a5d292dc852a85/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:21.563Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:22.104Z&quot;}}, {:id=&gt;3, :title=&gt;&quot;Uber for Cats&quot;, :description=&gt;&quot;We are going to build amazing&quot;, :imageUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBHZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--c94e1a2dd146fa19d2319a5d58146306016dfd8d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmtDNkFOcEF1Z0QiLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--6c318e046d2ad6689dcbf9dd2a432c640a9ef2df/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:21.444Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:21.490Z&quot;, :accountId=&gt;&quot;6d27a763-6ce0-4756-8db8-521f39881f45&quot;, :adminIds=&gt;[&quot;a11534f1-5271-4d04-9b47-09dc663e999d&quot;, &quot;f7e1a648-4d16-46fc-9725-4335a6ba0344&quot;, &quot;29570159-7fcd-4581-91ff-b83e3912ce75&quot;], :transferTypes=&gt;[{:id=&gt;9, :name=&gt;&quot;earned&quot;}, {:id=&gt;10, :name=&gt;&quot;bought&quot;}, {:id=&gt;11, :name=&gt;&quot;mint&quot;}, {:id=&gt;12, :name=&gt;&quot;burn&quot;}], :token=&gt;{:id=&gt;5, :name=&gt;&quot;ComakeryDummyToken-c802dcba6b6fe809422f7b317891a00cf8fcbfe5&quot;, :symbol=&gt;&quot;DUM2a139e233536444727aacb0363ef90a235842948&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBGZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9ec5d2c8cf25187ff99e831991db4720339037de/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:20.965Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:21.497Z&quot;}}]</pre>
+              <h4>Body</h4>
+              <pre class="response body">[{:id=&gt;4, :title=&gt;&quot;Uber for Cats&quot;, :description=&gt;&quot;We are going to build amazing&quot;, :imageUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBJQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--df3a9f3afe84f453cc66e5f5a8aef3d6c346a8ed/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmtDNkFOcEF1Z0QiLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--6c318e046d2ad6689dcbf9dd2a432c640a9ef2df/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:22.053Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:22.096Z&quot;, :accountId=&gt;&quot;401d4e16-1256-49d8-8bcf-39418553482f&quot;, :adminIds=&gt;[], :transferTypes=&gt;[{:id=&gt;13, :name=&gt;&quot;earned&quot;}, {:id=&gt;14, :name=&gt;&quot;bought&quot;}, {:id=&gt;15, :name=&gt;&quot;mint&quot;}, {:id=&gt;16, :name=&gt;&quot;burn&quot;}], :token=&gt;{:id=&gt;7, :name=&gt;&quot;ComakeryDummyToken-fdd767d005159611fc5454e8791be25c992bab04&quot;, :symbol=&gt;&quot;DUMde72b801245eb02c2292cd1c287bb07948f28d9e&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBIQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9c6af66ecda0f3d7c92f9bb248a5d292dc852a85/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:21.563Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:22.104Z&quot;}}, {:id=&gt;3, :title=&gt;&quot;Uber for Cats&quot;, :description=&gt;&quot;We are going to build amazing&quot;, :imageUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBHZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--c94e1a2dd146fa19d2319a5d58146306016dfd8d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmtDNkFOcEF1Z0QiLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--6c318e046d2ad6689dcbf9dd2a432c640a9ef2df/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:21.444Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:21.490Z&quot;, :accountId=&gt;&quot;6d27a763-6ce0-4756-8db8-521f39881f45&quot;, :adminIds=&gt;[&quot;a11534f1-5271-4d04-9b47-09dc663e999d&quot;, &quot;f7e1a648-4d16-46fc-9725-4335a6ba0344&quot;, &quot;29570159-7fcd-4581-91ff-b83e3912ce75&quot;], :transferTypes=&gt;[{:id=&gt;9, :name=&gt;&quot;earned&quot;}, {:id=&gt;10, :name=&gt;&quot;bought&quot;}, {:id=&gt;11, :name=&gt;&quot;mint&quot;}, {:id=&gt;12, :name=&gt;&quot;burn&quot;}], :token=&gt;{:id=&gt;5, :name=&gt;&quot;ComakeryDummyToken-c802dcba6b6fe809422f7b317891a00cf8fcbfe5&quot;, :symbol=&gt;&quot;DUM2a139e233536444727aacb0363ef90a235842948&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBGZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9ec5d2c8cf25187ff99e831991db4720339037de/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T06:08:20.965Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:08:21.497Z&quot;}}]</pre>
+      </div>
+    </div>
+  </body>
+</html>
