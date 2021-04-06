@@ -18,7 +18,8 @@ async function alertIfUnsupportedTrezorFwVersion() {
     }
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(e)
+    // added by oleg
+    console.log(e)
     // this is a hotfix, so we don't want to break the app if anything goes wrong
   }
 }

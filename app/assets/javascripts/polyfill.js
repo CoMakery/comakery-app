@@ -4323,7 +4323,8 @@ var onUnhandled = function (promise) {
         } else if (handler = global.onunhandledrejection) {
           handler({ promise: promise, reason: value });
         } else if ((console = global.console) && console.error) {
-          console.error('Unhandled promise rejection', value);
+          // added by oleg
+          console.log('Unhandled promise rejection', value);
         }
       });
       // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
