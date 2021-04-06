@@ -84,20 +84,20 @@ class Dashboard::AccountsController < ApplicationController
     end
 
     def accounts_query
-      @accounts_query = @project.interested
-                                .joins('inner join projects on projects.id = interests.project_id')
+      @q = @project.interested
+                   .joins('inner join projects on projects.id = interests.project_id')
 
       if @project.token&.token_type&.operates_with_account_records?
-        @accounts_query = @accounts_query.joins('inner join account_token_records on account_token_records.token_id = projects.token_id and account_token_records.account_id = accounts.id')
-                                         .includes(
-                                           :verifications,
-                                           :awards,
-                                           :latest_verification,
-                                           account_token_records: [:reg_group]
-                                         )
+        @q = @q.joins('inner join account_token_records on account_token_records.token_id = projects.token_id and account_token_records.account_id = accounts.id')
+               .includes(
+                 :verifications,
+                 :awards,
+                 :latest_verification,
+                 account_token_records: [:reg_group]
+               )
       end
 
-      @accounts_query = @accounts_query.ransack(params[:q])
+      @q = @q.ransack(params[:q])
     end
 
     def authorize_project
