@@ -54,13 +54,17 @@ class Api::V1::WalletsController < Api::V1::ApiController
 
   # POST /api/v1/accounts/1/wallets/1/password_reset
   def password_reset
-    if (ore_id_account = wallet.ore_id_account)
+    @errors = {}
+    ore_id_account = wallet.ore_id_account
+
+    @errors[:wallet] = 'must have unclaimed state' unless wallet.state == 'unclaimed'
+    @errors[:ore_id_account] = 'can\'t be blank' unless ore_id_account
+
+    if @errors.empty?
       @auth_url = ore_id_account.service.reset_url(redirect_url, nil, params.dig(:proof, :signature))
 
       render 'password_reset.json', status: :ok
     else
-      @errors = { ore_id_account: 'can\'t be blank' }
-
       render 'api/v1/error.json', status: :bad_request
     end
   end
