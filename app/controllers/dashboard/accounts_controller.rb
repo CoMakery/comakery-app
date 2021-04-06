@@ -77,13 +77,18 @@ class Dashboard::AccountsController < ApplicationController
       @page = (params[:page] || 1).to_i
       @q = @project.interested
                    .joins('inner join projects on projects.id = interests.project_id')
-                   .joins('inner join account_token_records on account_token_records.token_id = projects.token_id and account_token_records.account_id = accounts.id')
-                   .includes(
-                     :verifications,
-                     :awards,
-                     :latest_verification,
-                     account_token_records: [:reg_group]
-                   ).ransack(params[:q])
+
+      if @project.token.token_type.operates_with_account_records?
+        @q = @q.joins('inner join account_token_records on account_token_records.token_id = projects.token_id and account_token_records.account_id = accounts.id')
+               .includes(
+                 :verifications,
+                 :awards,
+                 :latest_verification,
+                 account_token_records: [:reg_group]
+               )
+      end
+
+      @q = @q.ransack(params[:q])
 
       @accounts_all = @q.result
       @accounts_all.size

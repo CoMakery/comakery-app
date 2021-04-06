@@ -7,10 +7,44 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
   let(:new_account) { create(:account) }
 
   describe 'GET #index' do
-    context 'with comakery token' do
-      it 'returns a success response' do
-        get :index, params: { project_id: project.to_param }
-        expect(response).to be_successful
+    subject { get :index, params: { project_id: project.to_param } }
+
+    before do
+      project.safe_add_interested(account)
+    end
+
+    context 'with eth security token' do
+      it { is_expected.to have_http_status(:success) }
+
+      before do
+        project.safe_add_interested(account)
+      end
+
+      it 'returns interested' do
+        subject
+        expect(assigns[:accounts]).to include(account)
+      end
+    end
+
+    context 'with algorand security token' do
+      let(:account_token_record) { build(:algo_sec_dummy_restrictions) }
+      let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
+
+      it { is_expected.to have_http_status(:success) }
+
+      it 'returns interested' do
+        subject
+        expect(assigns[:accounts]).to include(account)
+      end
+    end
+
+    context 'with a non-security token' do
+      let(:project) { create(:project, visibility: :public_listed) }
+      it { is_expected.to have_http_status(:success) }
+
+      it 'returns interested' do
+        subject
+        expect(assigns[:accounts]).to include(project.account)
       end
     end
   end
