@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>XI. Wallet Recovery API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>XI. Wallet Recovery API</h1>
+
+        <p class="explanation">Recover data, which was ECIES-encrypted with provided secp256k1 public key. Please use wallet recovery private key to sign requests.</p>
+
+      <div class="article">
+        <h2>RECOVER DATA ENCRYPTED WITH PUBLIC WRAPPING KEY</h2>
+        <h3>POST /api/v1/wallet_recovery/recover</h3>
+          <p class="explanation">
+            Returns decrypted with private wrapping key payload, re-encrypted with provided transport key
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">recovery_token</span>
+                </td>
+                <td>
+                  <span class="description">proof[&quot;signature&quot;] of request used to initiate password reset (/api/v1/accounts/:id/wallets/:wallet_id/password_reset)</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">payload</span>
+                </td>
+                <td>
+                  <span class="description">payload, ECIES-encrypted with secp256k1 public wrapping key (See GET PUBLIC WRAPPING KEY)</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transport_public_key</span>
+                </td>
+                <td>
+                  <span class="description">secp256k1 public transport key in hex</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">data</span>
+                </td>
+                <td>
+                  <span class="description">payload, ECIES-decrypted with secp256k1 private wrapping key, re-encrypted with provided secp256k1 public transport key</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">POST /api/v1/wallet_recovery/recover</pre>
+
+
+            <h4>Body</h4>
+            <pre class="request body">{:recovery_token=>"test_signature", :payload=>"034cd8a93f5de5faf91fdaa2fc676b6fca8000730a32a1543e9ef362c8652dafefbf82252e39fcba16788c95470e66410980f91dbf3f52ad66", :transport_public_key=>"048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917", :body=>{:data=>{:recovery_token=>"test_signature", :payload=>"034cd8a93f5de5faf91fdaa2fc676b6fca8000730a32a1543e9ef362c8652dafefbf82252e39fcba16788c95470e66410980f91dbf3f52ad66", :transport_public_key=>"048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917"}, :url=>"http://example.org/api/v1/wallet_recovery/recover", :method=>"POST", :nonce=>"b7e0afd4ae50a950f8ad2630fe29c4e9", :timestamp=>"1617707688"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"KqVOw/z5HvNWx4GeFHFIA4erT4rV7oMyuSGDHkeQ9xBm8ybs4ZLuWjma/CXKYJ4CiLZuXYSqL3wng+jNcuT0Bw=="}}</pre>
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;c69412922fec0b6b3bc0ff9e1c207199&quot;</pre>
+            <h4>Status</h4>
+            <pre class="response status">201 Created</pre>
+              <h4>Body</h4>
+              <pre class="response body">{:data=&gt;&quot;024d1e934848f67268ca90a0f5fc0ca70d969a998bcf66adfefacf398720f0f1e04f0ea677fec6e5de9f13c723f001a94e1b33b8ae845f7de1&quot;}</pre>
+      </div>
+    </div>
+  </body>
+</html>

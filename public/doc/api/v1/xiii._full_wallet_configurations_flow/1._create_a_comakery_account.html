@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>XIII. Full Wallet configurations flow API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>XIII. Full Wallet configurations flow API</h1>
+
+        <p class="explanation">1. Create a comakery account
+2. Create ORE ID wallets
+3. Get password reset link for ETH ORE ID wallet created
+4. Redirect the user to ORE ID reset URL get from step 3
+</p>
+
+      <div class="article">
+        <h2>1. Create a comakery account</h2>
+        <h3>POST /api/v1/accounts</h3>
+          <p class="explanation">
+            Returns created account data
+          </p>
+
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">POST /api/v1/accounts</pre>
+
+
+            <h4>Body</h4>
+            <pre class="request body">{:body=>{:data=>{:account=>{:managed_account_id=>"bfca35b9-6c9b-449f-93b6-16f2d064de7d", :email=>"me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com", :first_name=>"Eva", :last_name=>"Smith", :nickname=>"hunter-462b87f9e0d6e2149911a619a76116f1f0c820de", :date_of_birth=>"1990-01-31", :country=>"United States of America"}}, :url=>"http://example.org/api/v1/accounts", :method=>"POST", :nonce=>"cee363fdf70e7739e7f5fe9ef9048767", :timestamp=>"1617607755"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"N7NbGXFoV2D5afgW9ylUCKZT7EAHhLtBSW/ylWl4Z0/Gm39Hp5ljzagrxxVjj8uGLuBUVhzJUu31EAMk1naSAA=="}}</pre>
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;95ef9c4dc49ce85d83f168bdb02e069e&quot;</pre>
+            <h4>Status</h4>
+            <pre class="response status">201 Created</pre>
+              <h4>Body</h4>
+              <pre class="response body">{:email=&gt;&quot;me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com&quot;, :managedAccountId=&gt;&quot;bfca35b9-6c9b-449f-93b6-16f2d064de7d&quot;, :firstName=&gt;&quot;Eva&quot;, :lastName=&gt;&quot;Smith&quot;, :nickname=&gt;&quot;hunter-462b87f9e0d6e2149911a619a76116f1f0c820de&quot;, :imageUrl=&gt;&quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;, :country=&gt;&quot;United States of America&quot;, :dateOfBirth=&gt;&quot;1990-01-31&quot;, :verificationState=&gt;&quot;unknown&quot;, :verificationDate=&gt;nil, :verificationMaxInvestmentUsd=&gt;nil, :createdAt=&gt;&quot;2021-04-05T07:29:15.363Z&quot;, :updatedAt=&gt;&quot;2021-04-05T07:29:15.363Z&quot;}</pre>
+      </div>
+    </div>
+  </body>
+</html>
