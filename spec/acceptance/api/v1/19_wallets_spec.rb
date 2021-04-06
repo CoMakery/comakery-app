@@ -214,7 +214,7 @@ resource 'IX. Wallets' do
     context '200' do
       let!(:id) { account.managed_account_id }
       let!(:wallet) { create(:ore_id_wallet, account: account) }
-      let(:wallet_id) { wallet.id.to_s}
+      let(:wallet_id) { wallet.id.to_s }
       let!(:redirect_url) { 'localhost' }
 
       example 'GET RESET PASSWORD URL (ONLY ORE_ID WALLETS)' do
