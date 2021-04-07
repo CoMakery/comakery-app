@@ -28,6 +28,16 @@ class Mom
     Wallet.new(defaults.merge(attrs))
   end
 
+  def eth_wallet(**attrs)
+    defaults = {
+      name: 'Wallet',
+      _blockchain: :ethereum_ropsten,
+      account: create(:account),
+      address: ethereum_address_1
+    }
+    Wallet.new(defaults.merge(attrs))
+  end
+
   def ore_id_wallet(**attrs)
     defaults = {
       source: :ore_id,
@@ -452,6 +462,26 @@ class Mom
       token_frozen: false
     }
 
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
+  end
+
+  def erc20_token(**attrs)
+    defaults = {
+      name: "erc20-#{SecureRandom.hex(20)}",
+      symbol: "XYZ#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      _token_type: :erc20,
+      decimal_places: 18,
+      _blockchain: :ethereum_ropsten,
+      contract_address: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+      token_frozen: false
+    }
     t = Token.new(defaults.merge(attrs))
 
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
