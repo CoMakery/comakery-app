@@ -116,8 +116,8 @@ describe Comakery::Slack do
 
     context 'when only SLACK_API_SECRET defined and SLACK_API_KEY is blank' do
       before do
-        allow(ENV).to receive(:[]).with('SLACK_API_KEY').and_return('')
-        allow(ENV).to receive(:[]).with('SLACK_API_SECRET').and_return('SLACK_API_SECRET')
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => nil))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => 'SLACK_API_SECRET'))
       end
 
       it { is_expected.to be_falsey }
