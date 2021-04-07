@@ -22,7 +22,7 @@ describe 'token upgrade from dummy erc20 to security token', type: :feature do
         it 'lists interested accounts' do
           subject
 
-          expect(page).to have_css('.account-preview__info__name')
+          expect(page).to have_css('.account-preview__info__name', count: 2)
         end
       end
 
@@ -37,14 +37,14 @@ describe 'token upgrade from dummy erc20 to security token', type: :feature do
         context 'on Accounts dashboard' do
           subject { visit project_dashboard_accounts_path(project) }
 
-          it 'syncs account token records and lists interested accounts' do
+          it 'syncs account token records and lists interested accounts which have eth wallet' do
             subject
 
             VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/accounts") do
               click_button 'refresh accounts'
             end
 
-            expect(page).to have_css('.account-preview__info__name')
+            expect(page).to have_css('.account-preview__info__name', count: 1)
           end
         end
 
@@ -73,7 +73,7 @@ describe 'token upgrade from dummy erc20 to security token', type: :feature do
           it 'lists transfers' do
             subject
 
-            expect(page).to have_css('.transfers-table__transfer__name')
+            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1)
           end
         end
       end
