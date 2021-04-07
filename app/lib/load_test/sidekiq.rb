@@ -1,5 +1,6 @@
 module LoadTest
   module Sidekiq
+    # rubocop:todo Rails/Output
     def self.perform(numder_of_jobs, sleep_for_each_job)
       p 'Start to schedule jobs...'
       numder_of_jobs.times do
