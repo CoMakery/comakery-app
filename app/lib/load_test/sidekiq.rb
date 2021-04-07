@@ -11,8 +11,11 @@ module LoadTest
   end
 
   class LoadTestJob < ApplicationJob
+    retry_on StandardError, wait: :exponentially_longer, attempts: 3
+
     def perform(sleep_time)
       sleep sleep_time
+      raise StandardError if rand(25).zero?
     end
   end
 end
