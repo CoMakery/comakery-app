@@ -392,46 +392,6 @@ resource 'VII. Blockchain Transactions' do
         expect(status).to eq(200)
       end
     end
-
-    context '400' do
-      let!(:project_id) { project.id }
-      let!(:id) { blockchain_transaction.id }
-
-      let!(:transaction) do
-        {
-          tx_hash: '0x'
-        }
-      end
-
-      example 'SUBMIT TRANSACTION – HASH MISMATCH' do
-        explanation 'Returns an error if submitted transaction hash differs from generated on backend'
-
-        request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT', 'example.org')
-        result = do_request(request)
-        if status == 400
-          result[0][:request_path] = '/api/v1/projects/1/blockchain_transactions/1'
-          result[0][:request_body] = {
-            "body": {
-              "data": {
-                "transaction": {
-                  "tx_hash": '0x'
-                }
-              },
-              "url": 'http://example.org/api/v1/projects/1/blockchain_transactions/1',
-              "method": 'PUT',
-              "nonce": '85f72e53ea0e3dbd61bb9e90bfea9873',
-              "timestamp": '1617705746'
-            },
-            "proof": {
-              "type": 'Ed25519Signature2018',
-              "verificationMethod": 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=',
-              "signature": 'bAUgi2hmbIzwH4zHuuUAkVWlvgrKY+w7dvePxnfyBO/mN76MMf4xlYNEl1ledMgeehmilVWQcrhBn0KRjdovBw=='
-            }
-          }
-        end
-        expect(status).to eq(400)
-      end
-    end
   end
 
   delete '/api/v1/projects/:project_id/blockchain_transactions/:id' do
