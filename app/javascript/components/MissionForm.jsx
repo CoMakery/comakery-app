@@ -26,6 +26,7 @@ export default class MissionForm extends React.Component {
     this.verifyWhitelableLogoRes = this.verifyWhitelableLogoRes.bind(this)
     this.verifyWhitelableLogoDarkRes = this.verifyWhitelableLogoDarkRes.bind(this)
     this.verifyWhitelabelFaviconRes = this.verifyWhitelabelFaviconRes.bind(this)
+    this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.imageInputRef = React.createRef()
     this.logoInputRef = React.createRef()
@@ -88,11 +89,14 @@ export default class MissionForm extends React.Component {
       [name]: value
     })
 
+    this.verifyImgSize(e)
+
+    const errorMessage = 'invalid value'
     if (!e.target.checkValidity()) {
-      this.errorAdd(e.target.name, 'invalid value')
+      this.errorAdd(e.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(e.target.name)
+      this.errorRemove(e.target.name, errorMessage)
     }
   }
 
@@ -189,61 +193,101 @@ export default class MissionForm extends React.Component {
   }
 
   verifyImageRes(img) {
+    const errorMessage = 'invalid resolution'
     if ((img.naturalWidth < 1200) || (img.naturalHeight < 800) || (img.naturalWidth / img.naturalHeight !== 1.5)) {
       this.imageInputRef.current.value = ''
-      this.errorAdd('image', 'invalid resolution')
+      this.errorAdd('image', errorMessage)
     } else {
-      this.errorRemove('image')
+      this.errorRemove('image', errorMessage)
     }
   }
 
   verifyLogoRes(img) {
+    const errorMessage = 'invalid resolution'
+
     if ((img.naturalWidth < 800) || (img.naturalHeight < 800) || (img.naturalWidth / img.naturalHeight !== 1)) {
       this.logoInputRef.current.value = ''
-      this.errorAdd('logo', 'invalid resolution')
+      this.errorAdd('logo', errorMessage)
     } else {
-      this.errorRemove('logo')
+      this.errorRemove('logo', errorMessage)
     }
   }
 
   verifyWhitelableLogoRes(img) {
+    const errorMessage = 'invalid resolution'
+
     if ((img.naturalWidth < 1000) || (img.naturalHeight < 200) || (img.naturalWidth / img.naturalHeight !== 5)) {
       this.logoInputRef.current.value = ''
-      this.errorAdd('whitelabelLogo', 'invalid resolution')
+      this.errorAdd('whitelabelLogo', errorMessage)
     } else {
-      this.errorRemove('whitelabelLogo')
+      this.errorRemove('whitelabelLogo', errorMessage)
     }
   }
 
   verifyWhitelableLogoDarkRes(img) {
+    const errorMessage = 'invalid resolution'
+
     if ((img.naturalWidth < 1000) || (img.naturalHeight < 200) || (img.naturalWidth / img.naturalHeight !== 5)) {
       this.logoInputRef.current.value = ''
-      this.errorAdd('whitelabelLogoDark', 'invalid resolution')
+      this.errorAdd('whitelabelLogoDark', errorMessage)
     } else {
-      this.errorRemove('whitelabelLogoDark')
+      this.errorRemove('whitelabelLogoDark', errorMessage)
     }
   }
 
   verifyWhitelabelFaviconRes(img) {
+    const errorMessage = 'invalid resolution'
+
     if ((img.naturalWidth < 64) || (img.naturalHeight < 64) || (img.naturalWidth / img.naturalHeight !== 1)) {
       this.logoInputRef.current.value = ''
-      this.errorAdd('whitelabelFavicon', 'invalid resolution')
+      this.errorAdd('whitelabelFavicon', errorMessage)
     } else {
-      this.errorRemove('whitelabelFavicon')
+      this.errorRemove('whitelabelFavicon', errorMessage)
     }
   }
 
-  errorAdd(n, e) {
-    this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
-    })
+  verifyImgSize(event) {
+    let file = event.target.files[0]
+
+    if (file && file.size) {
+      const errorMessage = 'Image size must me less then 2 megabytes'
+      const fileSizeMb = file.size / Math.pow(1024, 2)
+      const maxSize = 2
+
+      if (fileSizeMb > maxSize) {
+        this.errorAdd(event.target.name, errorMessage)
+      } else {
+        this.errorRemove(event.target.name, errorMessage)
+      }
+    }
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+})
+    }
+  }
+
+  errorRemove(key, e) {
+    let errors = this.state.errors
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
     this.setState({
-      errors: e
+      errors: errors
     })
   }
 
@@ -323,19 +367,19 @@ export default class MissionForm extends React.Component {
             name='name' title='Name' symbolLimit={100} required value={name}
             placeholder='Unicoin'
             eventHandler={this.handleChangeFormData}
-            errorText={errors.name} />
+            errors={errors.name} />
 
           <InputFieldWhiteDark
             name='subtitle' title='Subtitle' symbolLimit={140} required value={subtitle}
             placeholder='Unicoin is the future of tokenizing fantastical beast networks'
             eventHandler={this.handleChangeFormData}
-            errorText={errors.subtitle} />
+            errors={errors.subtitle} />
 
           <InputFieldDescription
             name='description' title='Description' symbolLimit={500} required value={description}
             placeholder='Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity.'
             eventHandler={this.handleChangeFormData}
-            errorText={errors.description}
+            errors={errors.description}
           />
 
           <InputFieldUploadFile
@@ -347,7 +391,7 @@ export default class MissionForm extends React.Component {
             imgVerifier={this.verifyLogoRes}
             imgInputRef={this.logoInputRef}
             eventHandler={this.handleChangeFormData}
-            errorText={errors.logo}
+            errors={errors.logo}
           />
 
           <InputFieldUploadFile
@@ -359,7 +403,7 @@ export default class MissionForm extends React.Component {
             imgVerifier={this.verifyImageRes}
             imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}
-            errorText={errors.image}
+            errors={errors.image}
           />
 
           <InputFieldDropdown
@@ -415,7 +459,7 @@ export default class MissionForm extends React.Component {
             imgVerifier={this.verifyWhitelableLogoRes}
             imgInputRef={this.whitelabelLogoInputRef}
             eventHandler={this.handleChangeFormData}
-            errorText={errors.whitelabelLogo}
+            errors={errors.whitelabelLogo}
           />
 
           <InputFieldUploadFile
@@ -427,7 +471,7 @@ export default class MissionForm extends React.Component {
             imgVerifier={this.verifyWhitelableLogoDarkRes}
             imgInputRef={this.whitelabelLogoDarkInputRef}
             eventHandler={this.handleChangeFormData}
-            errorText={errors.whitelabelLogoDark}
+            errors={errors.whitelabelLogoDark}
           />
 
           <InputFieldUploadFile
@@ -439,7 +483,7 @@ export default class MissionForm extends React.Component {
             imgVerifier={this.verifyWhitelabelFaviconRes}
             imgInputRef={this.whitelabelFaviconInputRef}
             eventHandler={this.handleChangeFormData}
-            errorText={errors.whitelabelFavicon}
+            errors={errors.whitelabelFavicon}
           />
         </form>
       </Layout>

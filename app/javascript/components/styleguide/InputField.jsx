@@ -71,7 +71,7 @@ class InputField extends React.Component {
       max,
       step,
       readOnly,
-      errorText,
+      errors,
       imgPreviewUrl,
       imgPreviewDimensions,
       imgRequirements,
@@ -85,7 +85,7 @@ class InputField extends React.Component {
 
     let classnames = classNames(
       'input-field',
-      (errorText ? 'input-field__error' : ''),
+      (errors.length > 0 ? 'input-field__error' : ''),
       className
     )
 
@@ -234,10 +234,11 @@ class InputField extends React.Component {
             }
 
           </div>
-          { errorText !== '' &&
+          { errors.length > 0 && errors.map(error =>
             <div className="input-field--error">
-              {errorText}
+              {error}
             </div>
+            )
           }
         </div>
       </React.Fragment>
@@ -266,7 +267,7 @@ InputField.propTypes = {
   max                 : PropTypes.string,
   step                : PropTypes.string,
   readOnly            : PropTypes.bool,
-  errorText           : PropTypes.string,
+  errors              : PropTypes.array,
   imgPreviewUrl       : PropTypes.string,
   imgPreviewDimensions: PropTypes.string,
   imgRequirements     : PropTypes.string,
@@ -294,7 +295,7 @@ InputField.defaultProps = {
   max                 : '',
   step                : '',
   readOnly            : false,
-  errorText           : '',
+  errors              : [],
   imgPreviewUrl       : '',
   imgPreviewDimensions: '40x40',
   imgRequirements     : '',

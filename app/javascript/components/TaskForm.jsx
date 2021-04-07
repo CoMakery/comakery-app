@@ -21,6 +21,7 @@ class TaskForm extends React.Component {
     this.enable = this.enable.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.state = {
       flashMessages                         : [],
@@ -48,17 +49,32 @@ class TaskForm extends React.Component {
     typeof window === 'undefined' ? null : window.history.back()
   }
 
-  errorAdd(n, e) {
-    this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
-    })
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+})
+    }
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
+  errorRemove(key, e) {
+    let errors = this.state.errors
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
     this.setState({
-      errors: e
+      errors: errors
     })
   }
 
@@ -78,7 +94,25 @@ class TaskForm extends React.Component {
     })
   }
 
+  verifyImgSize(event) {
+    let file = event.target.files[0]
+
+    if (file && file.size) {
+      const errorMessage = 'Image size must me less then 2 megabytes'
+      const fileSizeMb = file.size / Math.pow(1024, 2)
+      const maxSize = 2
+
+      if (fileSizeMb > maxSize) {
+        this.errorAdd(event.target.name, errorMessage)
+      } else {
+        this.errorRemove(event.target.name, errorMessage)
+      }
+    }
+  }
+
   handleFieldChange(event) {
+    const errorMessage = 'invalid value'
+
     this.setState({ [event.target.name]: event.target.value })
 
     if (event.target.name === 'task[number_of_assignments]' && event.target.value === '1') {
@@ -86,10 +120,10 @@ class TaskForm extends React.Component {
     }
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'invalid value')
+      this.errorAdd(event.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(event.target.name)
+      this.errorRemove(event.target.name, errorMessage)
     }
 
     if (event.target.value === '') {
@@ -210,7 +244,7 @@ class TaskForm extends React.Component {
               required
               name='task[name]'
               value={this.state['task[name]']}
-              errorText={this.state.errors['task[name]']}
+              errors={this.state.errors['task[name]']}
               eventHandler={this.handleFieldChange}
               placeholder='Provide a clear title for the Task'
               symbolLimit={100}
@@ -221,7 +255,7 @@ class TaskForm extends React.Component {
               required
               name='task[amount]'
               value={this.state['task[amount]']}
-              errorText={this.state.errors['task[amount]']}
+              errors={this.state.errors['task[amount]']}
               eventHandler={this.handleFieldChange}
               type='number'
               min='0'
@@ -234,7 +268,7 @@ class TaskForm extends React.Component {
               title='URL where to submit completed work'
               name='task[proof_link]'
               value={this.state['task[proof_link]']}
-              errorText={this.state.errors['task[proofLink]']}
+              errors={this.state.errors['task[proofLink]']}
               eventHandler={this.handleFieldChange}
               placeholder='URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)'
               symbolLimit={150}
@@ -244,7 +278,7 @@ class TaskForm extends React.Component {
               title='WHAT IS THE EXPECTED BENEFIT'
               name='task[why]'
               value={this.state['task[why]']}
-              errorText={this.state.errors['task[why]']}
+              errors={this.state.errors['task[why]']}
               eventHandler={this.handleFieldChange}
               placeholder='Example: As a new user, I want to be able to sign up, so I can claim my 10% discount.'
               symbolLimit={500}
@@ -254,7 +288,7 @@ class TaskForm extends React.Component {
               title='acceptance requirements'
               name='task[requirements]'
               value={this.state['task[requirements]']}
-              errorText={this.state.errors['task[requirements]']}
+              errors={this.state.errors['task[requirements]']}
               eventHandler={this.handleFieldChange}
               placeholder='Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work.'
               symbolLimit={1000}
@@ -264,7 +298,7 @@ class TaskForm extends React.Component {
               title='description'
               name='task[description]'
               value={this.state['task[description]']}
-              errorText={this.state.errors['task[description]']}
+              errors={this.state.errors['task[description]']}
               eventHandler={this.handleFieldChange}
               placeholder='Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch'
               symbolLimit={500}
@@ -273,7 +307,8 @@ class TaskForm extends React.Component {
             <InputFieldUploadFile
               title='image asset to help guide the task'
               name='task[image]'
-              errorText={this.state.errors['task[image]']}
+              eventHandler={this.verifyImgSize}
+              errors={this.state.errors['task[image]']}
               imgPreviewUrl={this.props.task.imageUrl}
               imgPreviewDimensions='100x100'
             />
@@ -294,7 +329,7 @@ class TaskForm extends React.Component {
               required
               name='task[specialty_id]'
               value={this.state['task[specialty_id]']}
-              errorText={this.state.errors['task[specialtyId]']}
+              errors={this.state.errors['task[specialtyId]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.specialties)}
               symbolLimit={0}
@@ -305,7 +340,7 @@ class TaskForm extends React.Component {
               required
               name='task[experience_level]'
               value={this.state['task[experience_level]']}
-              errorText={this.state.errors['task[experienceLevel]']}
+              errors={this.state.errors['task[experienceLevel]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.experienceLevels)}
               symbolLimit={0}
@@ -316,7 +351,7 @@ class TaskForm extends React.Component {
               required
               name='task[transfer_type_id]'
               value={this.state['task[transfer_type_id]']}
-              errorText={this.state.errors['task[transferTypeId]']}
+              errors={this.state.errors['task[transferTypeId]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.types)}
               symbolLimit={0}
@@ -327,7 +362,7 @@ class TaskForm extends React.Component {
               required
               name='task[number_of_assignments]'
               value={this.state['task[number_of_assignments]']}
-              errorText={this.state.errors['task[numberOfAssignments]']}
+              errors={this.state.errors['task[numberOfAssignments]']}
               eventHandler={this.handleFieldChange}
               type='number'
               min='1'
@@ -341,7 +376,7 @@ class TaskForm extends React.Component {
               required
               name='task[number_of_assignments_per_user]'
               value={this.state['task[number_of_assignments_per_user]']}
-              errorText={this.state.errors['task[numberOfAssignmentsPerUser]']}
+              errors={this.state.errors['task[numberOfAssignmentsPerUser]']}
               eventHandler={this.handleFieldChange}
               type='number'
               readOnly={this.state['task[number_of_assignments]'] === '1'}
@@ -356,7 +391,7 @@ class TaskForm extends React.Component {
               required
               name='task[expires_in_days]'
               value={this.state['task[expires_in_days]']}
-              errorText={this.state.errors['task[expiresInDays]']}
+              errors={this.state.errors['task[expiresInDays]']}
               eventHandler={this.handleFieldChange}
               type='number'
               min='1'

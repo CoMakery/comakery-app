@@ -22,6 +22,7 @@ class BatchForm extends React.Component {
     this.enable = this.enable.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.verifyDiagramSize = this.verifyDiagramSize.bind(this)
 
     this.state = {
       flashMessages       : [],
@@ -41,17 +42,32 @@ class BatchForm extends React.Component {
     typeof window === 'undefined' ? null : window.history.back()
   }
 
-  errorAdd(n, e) {
-    this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
-    })
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+})
+    }
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
+  errorRemove(key, e) {
+    let errors = this.state.errors
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
     this.setState({
-      errors: e
+      errors: errors
     })
   }
 
@@ -71,14 +87,32 @@ class BatchForm extends React.Component {
     })
   }
 
+  verifyDiagramSize(event) {
+    let file = event.target.files[0]
+
+    if (file && file.size) {
+      const errorMessage = 'Image size must me less then 2 megabytes'
+      const fileSizeMb = file.size / Math.pow(1024, 2)
+      const maxSize = 2
+
+      if (fileSizeMb > maxSize) {
+        this.errorAdd(event.target.name, errorMessage)
+      } else {
+        this.errorRemove(event.target.name, errorMessage)
+      }
+    }
+  }
+
   handleFieldChange(event) {
+    const errorMessage = 'invalid value'
+
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'invalid value')
+      this.errorAdd(event.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(event.target.name)
+      this.errorRemove(event.target.name, errorMessage)
     }
 
     if (event.target.value === '') {
@@ -199,7 +233,7 @@ class BatchForm extends React.Component {
               required
               name='batch[state]'
               value={this.state['batch[state]']}
-              errorText={this.state.errors['batch[state]']}
+              errors={this.state.errors['batch[state]']}
               disabled={this.state.disabled['batch[state]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.states)}
@@ -211,7 +245,7 @@ class BatchForm extends React.Component {
               required
               name='batch[name]'
               value={this.state['batch[name]']}
-              errorText={this.state.errors['batch[name]']}
+              errors={this.state.errors['batch[name]']}
               eventHandler={this.handleFieldChange}
               placeholder='Provide a clear title for the batch'
               symbolLimit={100}
@@ -221,7 +255,7 @@ class BatchForm extends React.Component {
               title='the goal of the batch'
               name='batch[goal]'
               value={this.state['batch[goal]']}
-              errorText={this.state.errors['batch[goal]']}
+              errors={this.state.errors['batch[goal]']}
               eventHandler={this.handleFieldChange}
               placeholder='Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)'
               symbolLimit={250}
@@ -231,7 +265,7 @@ class BatchForm extends React.Component {
               title='description'
               name='batch[description]'
               value={this.state['batch[description]']}
-              errorText={this.state.errors['batch[description]']}
+              errors={this.state.errors['batch[description]']}
               eventHandler={this.handleFieldChange}
               placeholder='Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project'
               symbolLimit={750}
@@ -240,7 +274,8 @@ class BatchForm extends React.Component {
             <InputFieldUploadFile
               title='diagram or screenshot'
               name='batch[diagram]'
-              errorText={this.state.errors['batch[diagram]']}
+              eventHandler={this.verifyDiagramSize}
+              errors={this.state.errors['batch[diagram]']}
               imgPreviewUrl={this.props.batch.diagramUrl}
               imgPreviewDimensions='100x100'
             />

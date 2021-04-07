@@ -43,17 +43,32 @@ class TokenForm extends React.Component {
     }
   }
 
-  errorAdd(n, e) {
-    this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
-    })
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+})
+    }
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
+  errorRemove(key, e) {
+    let errors = this.state.errors
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
     this.setState({
-      errors: e
+      errors: errors
     })
   }
 
@@ -90,22 +105,42 @@ class TokenForm extends React.Component {
   }
 
   verifyImgRes(img) {
+    const errorMessage = 'invalid resolution'
+
     if ((img.naturalWidth < 500) || (img.naturalHeight < 500) || (img.naturalWidth / img.naturalHeight !== 1)) {
       this.lofoInputRef.current.value = ''
-      this.errorAdd('token[logo_image]', 'invalid resolution')
+      this.errorAdd('token[logo_image]', errorMessage)
     } else {
-      this.errorRemove('token[logo_image]')
+      this.errorRemove('token[logo_image]', errorMessage)
+    }
+  }
+
+  verifyImgSize(event) {
+    let file = event.target.files[0]
+
+    if (file && file.size) {
+      const errorMessage = 'Image size must me less then 2 megabytes'
+      const fileSizeMb = file.size / Math.pow(1024, 2)
+      const maxSize = 2
+
+      if (fileSizeMb > maxSize) {
+        this.errorAdd(event.target.name, errorMessage)
+      } else {
+        this.errorRemove(event.target.name, errorMessage)
+      }
     }
   }
 
   handleFieldChange(event) {
+    const errorMessage = 'invalid value'
+
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'invalid value')
+      this.errorAdd(event.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(event.target.name)
+      this.errorRemove(event.target.name, errorMessage)
     }
 
     if (event.target.value === '') {
@@ -273,7 +308,7 @@ class TokenForm extends React.Component {
               required
               name='token[_blockchain]'
               value={this.state['token[_blockchain]']}
-              errorText={this.state.errors['token[_blockchain]']}
+              errors={this.state.errors['token[_blockchain]']}
               disabled={this.state.disabled['token[_blockchain]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.blockchains)}
@@ -284,7 +319,7 @@ class TokenForm extends React.Component {
               required
               name='token[_token_type]'
               value={this.state['token[_token_type]']}
-              errorText={this.state.errors['token[_token_type]']}
+              errors={this.state.errors['token[_token_type]']}
               disabled={this.state.disabled['token[_token_type]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.tokenTypes)}
@@ -296,7 +331,7 @@ class TokenForm extends React.Component {
               required
               name='token[unlisted]'
               value={this.state['token[unlisted]']}
-              errorText={this.state.errors['token[unlisted]']}
+              errors={this.state.errors['token[unlisted]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries({
                 'Listed'  : 'false',
@@ -308,7 +343,7 @@ class TokenForm extends React.Component {
               title='token name'
               name='token[name]'
               value={this.state['token[name]']}
-              errorText={this.state.errors['token[name]']}
+              errors={this.state.errors['token[name]']}
               placeholder='Bitcoin'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -320,7 +355,7 @@ class TokenForm extends React.Component {
                 required
                 name='token[contract_address]'
                 value={this.state['token[contract_address]']}
-                errorText={this.state.errors['token[contract_address]']}
+                errors={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
                 pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})'
@@ -335,7 +370,7 @@ class TokenForm extends React.Component {
                 required
                 name='token[contract_address]'
                 value={this.state['token[contract_address]']}
-                errorText={this.state.errors['token[contract_address]']}
+                errors={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='10000000'
                 pattern='([0-9]{8,})'
@@ -350,7 +385,7 @@ class TokenForm extends React.Component {
                 required
                 name='token[contract_address]'
                 value={this.state['token[contract_address]']}
-                errorText={this.state.errors['token[contract_address]']}
+                errors={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='10000000'
                 pattern='([0-9]{8,})'
@@ -365,7 +400,7 @@ class TokenForm extends React.Component {
                 required
                 name='token[symbol]'
                 value={this.state['token[symbol]']}
-                errorText={this.state.errors['token[symbol]']}
+                errors={this.state.errors['token[symbol]']}
                 placeholder='...'
                 readOnly
                 eventHandler={this.handleFieldChange}
@@ -379,7 +414,7 @@ class TokenForm extends React.Component {
                 required
                 name='token[decimal_places]'
                 value={this.state['token[decimal_places]']}
-                errorText={this.state.errors['token[decimal_places]']}
+                errors={this.state.errors['token[decimal_places]']}
                 placeholder='...'
                 pattern='\d{1-2}'
                 readOnly
@@ -392,7 +427,8 @@ class TokenForm extends React.Component {
               title='token logo'
               required
               name='token[logo_image]'
-              errorText={this.state.errors['token[logo_image]']}
+              eventHandler={this.verifyImgSize}
+              errors={this.state.errors['token[logo_image]']}
               imgPreviewUrl={this.props.token.logoUrl}
               imgRequirements='Image should be at least 500px x 500px'
               imgVerifier={this.verifyImgRes}
