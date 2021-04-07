@@ -71,7 +71,7 @@ describe Comakery::Slack do
 
   describe '#fetch_channels' do
     it 'returns the list of channels in the slack instance' do
-      stub_request(:post, 'https://slack.com/api/channels.list')
+      stub_request(:post, 'https://slack.com/api/conversations.list')
         .with(body: { 'token' => 'token' })
         # rubocop:todo Rails/FilePath
         .to_return(body: File.read(Rails.root.join('spec', 'fixtures', 'channel_list_response.json')))

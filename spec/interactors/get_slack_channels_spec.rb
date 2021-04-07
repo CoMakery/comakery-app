@@ -12,7 +12,7 @@ describe GetSlackChannels do
   context 'on successful api call' do
     before do
       # rubocop:todo Rails/FilePath
-      stub_request(:post, 'https://slack.com/api/channels.list').to_return(body: File.read(Rails.root.join('spec', 'fixtures', 'channel_list_response.json')))
+      stub_request(:post, 'https://slack.com/api/conversations.list').to_return(body: File.read(Rails.root.join('spec', 'fixtures', 'channel_list_response.json')))
       # rubocop:enable Rails/FilePath
     end
 
@@ -26,7 +26,7 @@ describe GetSlackChannels do
 
   context 'on failed api call' do
     before do
-      stub_request(:post, 'https://slack.com/api/channels.list').to_return(body: { ok: false, channels: [] }.to_json)
+      stub_request(:post, 'https://slack.com/api/conversations.list').to_return(body: { ok: false, channels: [] }.to_json)
     end
     describe '#call' do
       it 'fails the interactor' do
