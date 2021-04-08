@@ -45,6 +45,10 @@ describe TokenDecorator do
     it 'returns default image' do
       expect(token.reload.decorate.logo_url).to include('image.png')
     end
+
+    it 'includes url' do
+      expect(token.decorate.logo_url).to start_with('http')
+    end
   end
 
   describe 'network' do
