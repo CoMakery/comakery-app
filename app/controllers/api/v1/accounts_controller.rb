@@ -19,6 +19,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
     account = whitelabel_mission.managed_accounts.build(account_params)
     account.name_required = true
     account.specialty = Specialty.default
+    account.projects_interested << whitelabel_mission.projects.where(id: project_interests_params)
 
     if account.save
       @account = account
@@ -59,5 +60,9 @@ class Api::V1::AccountsController < Api::V1::ApiController
         :country,
         :date_of_birth
       )
+    end
+
+    def project_interests_params
+      params.dig(:body, :data, :account, :project_interests)
     end
 end
