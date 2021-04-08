@@ -144,8 +144,8 @@ def wait_for_turbolinks
   has_no_css?('.turbo-progress-bar')
 end
 
-include SlackStubs # rubocop:todo Style/MixinUsage
-include ConstellationStubs # rubocop:todo Style/MixinUsage
+include SlackStubs
+include ConstellationStubs
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

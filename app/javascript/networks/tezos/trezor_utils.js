@@ -17,7 +17,8 @@ const transferXtzCoins = async function(award) { // award in JSON
       await submitTransaction(award, network, recipientAddress, amount)
     }
   } catch (err) {
-    console.error(err)
+    // added by oleg
+    console.log(err)
     alert(err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
@@ -71,7 +72,8 @@ const submitTransaction = async function(award, network, to, amount) {
       updateTransactionAddress(award, txHash)
     },
     error => {
-      console.error('transaction failed', error)
+      // added by oleg
+      console.log('transaction failed', error)
       utils.showMessageWhenTransactionFailed(award)
       alert(error.message || 'The transaction failed')
     }

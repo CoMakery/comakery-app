@@ -18,7 +18,8 @@ const transferEosCoins = async function(award) { // award in JSON
   try {
     txHash = await submitTransaction(network, recipientAddress, amount)
   } catch (err) {
-    console.error(err)
+    // added by oleg
+    console.log(err)
     alert(err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }

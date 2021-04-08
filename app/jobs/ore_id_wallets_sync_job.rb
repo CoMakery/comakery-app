@@ -16,7 +16,7 @@ class OreIdWalletsSyncJob < ApplicationJob
     rescue StandardError => e
       sync.failed!
       reschedule(ore_id)
-      raise e
+      Sentry.capture_exception(e)
     else
       sync.ok!
     end

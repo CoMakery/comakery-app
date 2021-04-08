@@ -78,15 +78,18 @@ class ComakeryApi {
   }
 
   logError(functionName, error) {
-    console.error(`${functionName} API call failed with:\n`)
+    // added by oleg
+    console.log(`${functionName} API call failed with:\n`)
 
     if (error.response) {
-      console.error(
+      // added by oleg
+      console.log(
         `${error.response.status} (${error.response.statusText}) data:\n`,
         error.response.data
       )
     } else {
-      console.error(`${functionName} produced an unknown error on API call`)
+      // added by oleg
+      console.log(`${functionName} produced an unknown error on API call`)
     }
   }
 }

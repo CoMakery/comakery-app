@@ -228,7 +228,7 @@ export default class extends Controller {
           .style('opacity', 1)
           .html(`
             <div class="stacked-chart-tooltip__timeframe">${d.data.timeframe}</div>
-            <div class="stacked-chart-tooltip__type">${d.key}</div>
+            <div class="stacked-chart-tooltip__type">${escape(d.key)}</div>
             <div class="stacked-chart-tooltip__amount">${Decimal.sub(d[1], d[0]).toFixed(this.decimals, Decimal.ROUND_DOWN)} ${this.data.get('tokenSymbol')}</div>
           `)
       }.bind(this))
