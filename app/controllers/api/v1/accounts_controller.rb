@@ -20,10 +20,6 @@ class Api::V1::AccountsController < Api::V1::ApiController
     account.name_required = true
     account.specialty = Specialty.default
     account.projects_interested << whitelabel_mission.projects.where(id: project_interests_params)
-    pp project_interests_params
-    pp whitelabel_mission.projects.where(id: project_interests_params).pluck(:id)
-    pp account.projects_interested
-    pp whitelabel_mission
 
     if account.save
       @account = account
