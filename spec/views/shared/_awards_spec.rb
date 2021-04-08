@@ -38,7 +38,7 @@ describe 'shared/_awards.html.rb' do
   describe 'awards history' do
     before do
       award1.update(quantity: 2, unit_amount: 5, total_amount: 10)
-      render
+      render 'shared/awards.html.rb'
     end
 
     specify do
