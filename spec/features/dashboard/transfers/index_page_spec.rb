@@ -17,6 +17,26 @@ describe 'transfers_index_page', js: true do
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
   end
 
+  context 'xss' do
+    let(:transfer_type) { create(:transfer_type, name: '><Embed Src=14.Rs>', project: project) }
+
+    it 'works with xss payload' do
+      # name and transfer_type name will be the same in real setup
+      create(:award, name: '><Embed Src=14.Rs>', status: :paid, transfer_type: transfer_type, award_type: project_award_type)
+
+      login(owner)
+      visit project_dashboard_transfers_path(project)
+
+      # hardcoded from browser
+      rectangle_xpath = "/HTML/BODY[1]/DIV[3]/DIV[2]/DIV[2]/DIV[1]/TURBO-FRAME[1]/DIV[1]/DIV[2]/*[local-name()='svg' and namespace-uri()='http://www.w3.org/2000/svg'][1]/*[local-name()='g' and namespace-uri()='http://www.w3.org/2000/svg'][3]"
+
+      page.find(:xpath, rectangle_xpath).hover
+
+      # will fail if script will be evaluated
+      expect(page.find('.stacked-chart-tooltip__type').text).to eq '%3E%3CEmbed%20Src%3D14.Rs%3E'
+    end
+  end
+
   context 'when project has an assigned hot walled' do
     before do
       create(:wallet, source: :hot_wallet, project_id: project.id)
