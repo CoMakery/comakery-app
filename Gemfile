@@ -135,8 +135,6 @@ gem 'barnes', '~> 0.0.7'
 
 gem 'bootsnap', '~> 1.4'
 
-gem 'sentry-raven', '~> 2.12'
-
 gem 'jbuilder', '~> 2.9'
 
 gem 'rspec_api_documentation', '~> 6.1'
@@ -167,3 +165,7 @@ gem 'csv-safe'
 
 gem 'aasm', '~> 5.1'
 gem 'after_commit_everywhere', '~> 1.0'
+
+gem 'sentry-rails', '~> 4.3'
+gem 'sentry-ruby', '~> 4.3'
+gem 'sentry-sidekiq', '~> 4.3'

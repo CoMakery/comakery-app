@@ -459,10 +459,11 @@ describe Award do
     end
 
     it 'cannot be destroyed unless in ready or invite_ready status' do
+      statuses = %w[ready invite_ready]
       described_class.statuses.keys.each do |status|
         a = create(:award)
         a.update(status: status)
-        if %w[ready invite_ready].include? status
+        if statuses.include? status
           expect { a.destroy }.to(change { described_class.count }.by(-1))
         else
           expect { a.destroy }.not_to(change { described_class.count })
