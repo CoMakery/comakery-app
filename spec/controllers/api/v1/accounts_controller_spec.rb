@@ -108,12 +108,11 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         ignored_project = create(:project)
 
         valid_attributes[:project_interests] = [project1.id.to_s, project2.id.to_s, ignored_project.id.to_s]
-        valid_attributes[:project_interests] = [project1.id.to_s, project2.id.to_s]
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
         post :create, params: params
 
         account = Account.last
-        expect(account.projects_interested.pluck(:id)).to eq [project1.id, project2.id]
+        expect(account.projects_interested.reload.pluck(:id)).to eq [project1.id, project2.id]
       end
 
       it 'with empty array provided' do
