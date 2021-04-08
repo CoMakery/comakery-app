@@ -23,7 +23,7 @@ class TokenDecorator < Draper::Decorator
     _blockchain
   end
 
-  def logo_url
-    Rails.application.routes.url_helpers.url_for(logo_image)
+  def logo_url(host: Rails.application.routes.default_url_options[:host])
+    Rails.application.routes.url_helpers.polymorphic_url(logo_image, host: host)
   end
 end

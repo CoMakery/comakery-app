@@ -47,7 +47,11 @@ describe TokenDecorator do
     end
 
     it 'includes url' do
-      expect(token.decorate.logo_url).to start_with('http')
+      expect(token.decorate.logo_url).to start_with('https://')
+    end
+
+    it 'includes custom host' do
+      expect(token.decorate.logo_url(host: 'host')).to start_with('https://host')
     end
   end
 
