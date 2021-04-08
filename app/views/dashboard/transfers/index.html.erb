@@ -1,7 +1,7 @@
 <%= render layout: 'projects/project_settings' do %>
   <div data-controller="transfer-form" data-transfer-form-decimal-places="<%= @project.token ? @project.token.decimal_places : 0 %>">
     <%= render partial: "filters" %>
-    <turbo-frame id="chart-data" target="_top" src="<%= fetch_chart_data_project_dashboard_transfers_path(@project, duration: (params[:duration] || 'Year'), q: params[:q]&.permit!, page: params[:page]) %>">
+    <turbo-frame id="chart-data" target="_top" src="<%= fetch_chart_data_project_dashboard_transfers_path(@project, duration: (params[:duration] || 'Year'), q: @filter_params, page: params[:page]) %>">
       <div class="centered"><%= image_tag 'spinner.gif' %></div>
     </turbo-frame>
     <div class="row">
