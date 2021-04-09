@@ -24,6 +24,6 @@ class TokenDecorator < Draper::Decorator
   end
 
   def logo_url(host: Rails.application.routes.default_url_options[:host])
-    Rails.application.routes.url_helpers.polymorphic_url(logo_image, host: host)
+    Rails.application.routes.url_helpers.polymorphic_url(logo_image, host: host) if logo_image
   end
 end
