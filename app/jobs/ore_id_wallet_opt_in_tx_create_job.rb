@@ -14,7 +14,7 @@ class OreIdWalletOptInTxCreateJob < ApplicationJob
     rescue StandardError => e
       sync.failed!
       reschedule(wallet_provision)
-      raise e
+      Sentry.capture_exception(e)
     else
       sync.ok!
     end

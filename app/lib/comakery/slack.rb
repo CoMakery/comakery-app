@@ -46,6 +46,6 @@ class Comakery::Slack
   end
 
   def fetch_channels
-    @client.channels_list
+    @client.conversations_list
   end
 end

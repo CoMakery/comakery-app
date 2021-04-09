@@ -100,6 +100,39 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         expect { post :create, params: params }.to change(Account, :count).by(0)
       end
     end
+
+    context 'with project_interests param' do
+      it 'add interested projects' do
+        project1 = create(:project, mission: active_whitelabel_mission)
+        project2 = create(:project, mission: active_whitelabel_mission)
+        ignored_project = create(:project)
+
+        valid_attributes[:project_interests] = [project1.id.to_s, project2.id.to_s, ignored_project.id.to_s]
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
+
+        post :create, params: params
+        account = Account.last
+        expect(account.projects_interested.order(:id).pluck(:id)).to eq [project1.id, project2.id]
+      end
+
+      it 'with empty array provided' do
+        valid_attributes[:project_interests] = []
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
+        post :create, params: params
+
+        account = Account.last
+        expect(account.projects_interested.pluck(:id)).to eq []
+      end
+
+      it 'with invalid param provided' do
+        valid_attributes[:project_interests] = 'invalid_value'
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
+        post :create, params: params
+
+        account = Account.last
+        expect(account.projects_interested.pluck(:id)).to eq []
+      end
+    end
   end
 
   describe 'PUT #update' do
