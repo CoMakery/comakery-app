@@ -144,11 +144,8 @@ jobs:
     - name: Run tests
       run: env bundle exec rake knapsack_pro:queue:rspec
 
-  simplecov:
-    name: Upload a SimpleCov report
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
+    - name: Upload a Build Artifact
+      if: always()
       uses: actions/upload-artifact@v2.2.1
       with:
         name: SimpleCov Report
