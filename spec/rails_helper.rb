@@ -5,7 +5,7 @@ enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || false
 if enable_simplecov
   require 'simplecov'
   SimpleCov.start :rails do
-    SimpleCov.minimum_coverage 5 # lowering this for debugging
+    # SimpleCov.minimum_coverage 5 # removing code coverage requirement until it is configured properly
     #     SimpleCov.minimum_coverage_by_file 38
     #     SimpleCov.refuse_coverage_drop
 
