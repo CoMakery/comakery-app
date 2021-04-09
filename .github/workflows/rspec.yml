@@ -141,13 +141,6 @@ jobs:
     - name: Run migrations
       run: env bundle exec rails db:migrate
 
-    - name: Download a Build Artifact
-      if: always()
-      uses: actions/download-artifact@v2
-      with:
-        name: SimpleCov Report
-        path: coverage/
-
     - name: Run tests
       run: env bundle exec rake knapsack_pro:queue:rspec
 
