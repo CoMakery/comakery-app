@@ -148,5 +148,5 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: SimpleCov Report
+        name: SimpleCov Report ${{ matrix.ci_node_index }}
         path: coverage/
