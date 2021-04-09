@@ -36,6 +36,7 @@ class SessionsController < ApplicationController
                                                            password: params[:password])
 
     if verify_recaptcha(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success?
+      reset_session
       session[:account_id] = authenticate_user_result.account.id
 
       redirect_to redirect_path
@@ -45,7 +46,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:account_id] = nil
+    reset_session
     redirect_to root_path
   end
 
