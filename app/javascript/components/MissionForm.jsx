@@ -105,7 +105,7 @@ export default class MissionForm extends React.Component {
 
     this.disable(['submit', 'submit_and_close'])
 
-    if (!e.target.checkValidity()) {
+    if (!e.target.checkValidity() || !_.isEmpty(this.state.errors)) {
       this.enable(['submit', 'submit_and_close'])
       return
     }
@@ -276,15 +276,24 @@ export default class MissionForm extends React.Component {
     } else {
       this.setState({
         errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
-})
+      })
     }
   }
 
   errorRemove(key, e) {
     let errors = this.state.errors
+
+    if (errors[key] === undefined) {
+      return
+    }
+
     let index = errors[key].indexOf(e)
 
     errors[key].splice(index, 1)
+
+    if (errors[key].length === 0) {
+      delete errors[key]
+    }
 
     this.setState({
       errors: errors

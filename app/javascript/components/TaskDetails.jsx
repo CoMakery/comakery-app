@@ -258,15 +258,24 @@ class TaskDetails extends React.Component {
     } else {
       this.setState({
         errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
-})
+      })
     }
   }
 
   errorRemove(key, e) {
     let errors = this.state.errors
+
+    if (errors[key] === undefined) {
+      return
+    }
+
     let index = errors[key].indexOf(e)
 
     errors[key].splice(index, 1)
+
+    if (errors[key].length === 0) {
+      delete errors[key]
+    }
 
     this.setState({
       errors: errors
@@ -308,6 +317,7 @@ class TaskDetails extends React.Component {
 
   render() {
     let task = this.props.task
+    let submitDisabled = Object.keys(this.state.errors).length > 0;
 
     return (
       <React.Fragment>
@@ -330,7 +340,7 @@ class TaskDetails extends React.Component {
                     title='Image attachement'
                     name='task[submission_image]'
                     eventHandler={this.verifyImgSize}
-                    errors={this.state.errors['task[submissionImage]']}
+                    errors={this.state.errors['task[submission_image]']}
                     imgPreviewUrl={this.props.task.submissionImageUrl}
                     imgPreviewDimensions='100x100'
                   />
@@ -365,6 +375,7 @@ class TaskDetails extends React.Component {
                   <Button
                     type='submit'
                     value='submit task'
+                    disabled={submitDisabled}
                   />
 
                   <CancelButton
