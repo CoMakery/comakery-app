@@ -574,8 +574,6 @@ GEM
       rspec-expectations (~> 3.10)
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
-    rspec-retry (0.6.2)
-      rspec-core (> 3.3)
     rspec-support (3.10.2)
     rspec_api_documentation (6.1.0)
       activesupport (>= 3.0.0)
@@ -851,7 +849,6 @@ DEPENDENCIES
   responders
   rest-client
   rspec-rails (~> 4.0.0.beta3)
-  rspec-retry
   rspec_api_documentation (~> 6.1)
   rubocop (~> 0.89.1)
   rubocop-performance
