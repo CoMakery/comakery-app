@@ -10,7 +10,12 @@ if enable_simplecov
     #     SimpleCov.refuse_coverage_drop
 
     # add_filter == do not track coverage
-    # add_filter %r{^/lib/generators/}
+    add_filter %r{^/db/migrate/}
+    add_filter %r{^/db//schema.rb/}
+    add_filter %r{^/bin/}
+    add_filter %r{^/doc/}
+    add_filter %r{^/config/}
+    add_filter %r{^/hotwallet/} # has it's own tests
 
     add_group 'Decorators', 'app/decorators'
     add_group 'Interactors', 'app/interactors'
