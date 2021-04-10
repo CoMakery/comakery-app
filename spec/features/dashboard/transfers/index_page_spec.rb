@@ -54,7 +54,7 @@ describe 'transfers_index_page', js: true do
       expect(page).to have_select('project_hot_wallet_mode', selected: 'Disabled')
 
       project.update(hot_wallet_mode: 'auto_sending')
-      expect(page).to have_select('project_hot_wallet_mode', selected: 'Auto sending'), wait: 20
+      expect(page).to have_select('project_hot_wallet_mode', selected: 'Auto sending'), wait: 30
 
       project.update(hot_wallet_mode: 'manual_sending')
       expect(page).to have_select('project_hot_wallet_mode', selected: 'Manual sending')
