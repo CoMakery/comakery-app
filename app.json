@@ -125,6 +125,10 @@
       "description": "Recaptcha secret key",
       "required": false
     },
+    "REDIS_SSL_NONE": {
+      "description": "Disable SSL for Redis (required by Redis Premium add-on)",
+      "required": false
+    },
     "SIDEKIQ_PASSWORD": {
       "description": "Password for Sidekiq admin panel",
       "generator": "secret"
