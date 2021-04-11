@@ -742,7 +742,7 @@ class Mom
       'data' => data.is_a?(Hash) ? data.deep_stringify_keys : data,
       'url' => "http://#{host}#{path}",
       'method' => method
-    }).sign(build(:api_private_key))
+    }).sign(build(:api_private_key), host == 'example.org')
   end
 
   def ethereum_address_1
@@ -1153,6 +1153,10 @@ class Mom
         tx_hash: 'DPPKH4IUFEGGV44TVQPVOOMP2BCGHBDELGBBCC7HBSFMWO2HSS6A'
       )
     )
+  end
+
+  def static_timestamp
+    'Tue, 16 Mar 2021 10:46:09 UTC +00:00'
   end
 
   def bitcoin_address_1

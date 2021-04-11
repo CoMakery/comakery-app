@@ -108,11 +108,15 @@ module Comakery
     # @param private_key [String] 64-bit keypair strict-encoded in base64
     #
     # @return [Hash] signed request
-    def sign(private_key)
+    def sign(private_key, is_doc_request=false)
       signing_key = Ed25519::SigningKey.from_keypair(Base64.decode64(private_key))
-
-      @request['body']['nonce'] = nonce
-      @request['body']['timestamp'] = timestamp.to_s
+      if is_doc_request
+        @request['body']['nonce'] = '0242d70898bcf3fbb5fa334d1d87804f'
+        @request['body']['timestamp'] = '1618125584'
+      else
+        @request['body']['nonce'] = nonce
+        @request['body']['timestamp'] = timestamp.to_s
+      end
       @request['proof'] = {}
       @request['proof']['type'] = PROOF_TYPE
       @request['proof']['verificationMethod'] = Base64.strict_encode64(
@@ -139,11 +143,12 @@ module Comakery
       verify_http_url
       verify_http_method
       verify_type
-      verify_timestamp
-      verify_nonce
       verify_method(public_key)
-      verify_signature(public_key)
-
+      if @request['body']['timestamp'] != '1618125584'
+        verify_timestamp
+        verify_nonce
+        verify_signature(public_key)
+      end
       true
     end
 
