@@ -17,7 +17,8 @@ RSpec.describe OreIdWalletsSyncJob, type: :job do
 
       it 'reschedules itself and sets synchronisation status to failed' do
         expect_any_instance_of(described_class).to receive(:reschedule)
-        expect { described_class.perform_now(subject.id) }.to raise_error(RuntimeError)
+        expect(Sentry).to receive(:capture_exception).with(RuntimeError)
+        described_class.perform_now(subject.id)
         expect(subject.synchronisations.last).to be_failed
       end
     end

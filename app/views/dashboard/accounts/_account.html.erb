@@ -7,7 +7,7 @@
   <%= form_with(last_record&.decorate&.form_attrs(@project) || { class: 'account-form' } ) do |f| %>
     <%= f.hidden_field :account_id, value: account.id %>
 
-    <% if policy(@project).edit_accounts? && account.address_for_blockchain(@project.token._blockchain) %>
+    <% if policy(@project).edit_accounts? && @project.supports_transfer_rules? && account.address_for_blockchain(@project.token._blockchain) %>
       <%= image_tag 'pencil.svg', data: { action: 'click->account-form-controls#showForm', target: 'account-form-controls.outputs' }, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
       <%= image_tag 'iconCloseDark.svg', data: { action: 'click->account-form-controls#hideForm', target: 'account-form-controls.inputs' }, class: 'transfers-table--edit-icon hidden' %>
     <% end %>
@@ -153,7 +153,7 @@
       <% end %>
     </div>
 
-    <% if policy(@project).edit_accounts? && last_record && account.address_for_blockchain(@project.token._blockchain) %>
+    <% if policy(@project).edit_accounts? && @project.supports_transfer_rules? && last_record && account.address_for_blockchain(@project.token._blockchain) %>
       <div class="transfers-table--edit-save hidden" data-target="account-form-controls.inputs">
         <div class='transfer-button'>
           <% if @project.token.token_frozen? %>

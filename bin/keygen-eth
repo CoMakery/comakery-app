@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+# generates an Ethereum public private keypair
+# outputs the public key and Ethereum address
+# copies the private key to the paste buffer without printing it in the console
+# keeps the private key from being displayed or recorded in console history
+# however this should not be considered a highly secure key generation method for production servers
+
+require 'rubygems'
+require 'bundler/setup'
+
+require 'eth'
+
+key = Eth::Key.new
+puts "private key in paste buffer for public key:"
+puts key.public_key.key
+
+puts "address:"
+puts key.address
+
+
+IO.popen('pbcopy', 'w') { |pipe| pipe.print key.private_key.key }

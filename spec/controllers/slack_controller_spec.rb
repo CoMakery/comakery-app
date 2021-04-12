@@ -3,7 +3,7 @@ require 'rails_helper'
 describe SlackController do
   describe 'GET command' do
     before do
-      expect(ENV).to receive(:[]).with('APP_HOST').and_return('comakery.museum')
+      stub_const('ENV', ENV.to_hash.merge('APP_HOST' => 'comakery.museum'))
     end
     it 'responds with welcome text' do
       post :command

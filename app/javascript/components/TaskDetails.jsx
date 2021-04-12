@@ -317,7 +317,7 @@ class TaskDetails extends React.Component {
 
   render() {
     let task = this.props.task
-    let submitDisabled = Object.keys(this.state.errors).length > 0;
+    let submitDisabled = Object.keys(this.state.errors).length > 0
 
     return (
       <React.Fragment>
