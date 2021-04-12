@@ -108,7 +108,6 @@ group(:test) do
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 4.0.0.beta3'
-  gem 'rspec-retry'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
