@@ -105,7 +105,7 @@ export default class MissionForm extends React.Component {
 
     this.disable(['submit', 'submit_and_close'])
 
-    if (!e.target.checkValidity() || !_.isEmpty(this.state.errors)) {
+    if (!e.target.checkValidity() || Object.keys(this.state.errors).length > 0) {
       this.enable(['submit', 'submit_and_close'])
       return
     }

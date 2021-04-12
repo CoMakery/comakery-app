@@ -257,7 +257,7 @@ class ProjectForm extends React.Component {
 
     this.disable(['project[submit]', 'project[submit_and_close]'])
 
-    if (!event.target.checkValidity() || !_.isEmpty(this.state.errors)) {
+    if (!event.target.checkValidity() || Object.keys(this.state.errors).length > 0) {
       this.enable(['project[submit]', 'project[submit_and_close]'])
       return
     }

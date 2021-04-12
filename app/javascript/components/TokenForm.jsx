@@ -224,7 +224,7 @@ class TokenForm extends React.Component {
 
     this.disable(['token[submit]', 'token[submit_and_close]'])
 
-    if (!event.target.checkValidity() || !_.isEmpty(this.state.errors)) {
+    if (!event.target.checkValidity() || Object.keys(this.state.errors).length > 0) {
       this.enable(['token[submit]', 'token[submit_and_close]'])
       return
     }

@@ -134,7 +134,7 @@ class BatchForm extends React.Component {
 
     this.disable(['batch[submit]', 'batch[submit_and_close]'])
 
-    if (!event.target.checkValidity() || !_.isEmpty(this.state.errors)) {
+    if (!event.target.checkValidity() || Object.keys(this.state.errors).length > 0) {
       this.enable(['batch[submit]', 'batch[submit_and_close]'])
       return
     }
