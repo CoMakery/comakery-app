@@ -6,13 +6,11 @@ class CreateAward
 
     award.issuer = context.account
 
-    attach_image_from_source(award) unless award.image.present?
+    attach_image_from_source(award) if award.image.blank?
 
     context.award = award
 
-    unless ImagePixelValidator.new(award, context.award_params).valid? && award.save
-      context.fail!(errors: award.errors)
-    end
+    context.fail!(errors: award.errors) unless ImagePixelValidator.new(award, context.award_params).valid? && award.save
   end
 
   private
