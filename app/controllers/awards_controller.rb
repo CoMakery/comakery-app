@@ -73,7 +73,9 @@ class AwardsController < ApplicationController
   end
 
   def update
-    if @award.update(award_params) && @award.update(issuer: current_account)
+    image_validator = ImagePixelValidator.new(@award, award_params)
+
+    if image_validator.valid? && @award.update(award_params) && @award.update(issuer: current_account)
       set_ok_response
       render json: @ok_response, status: :ok
     else
