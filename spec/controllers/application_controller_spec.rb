@@ -222,4 +222,31 @@ describe ApplicationController do
       expect(response).to redirect_to projects_path
     end
   end
+
+  describe '#redirect_to_default_whitelabel_domain' do
+    let(:wl_var) { 'true' }
+    let(:app_host_var) { 'wl.mission.test' }
+    let!(:wl_mission) { create(:whitelabel_mission, whitelabel_domain: app_host_var) }
+
+    before do
+      stub_const('ENV', ENV.to_hash.merge('WHITELABEL' => wl_var))
+      stub_const('ENV', ENV.to_hash.merge('APP_HOST' => app_host_var))
+    end
+
+    it 'redirects to default domain if the current does not match' do
+      get :index # "test.host" domain
+
+      expect(response).to redirect_to "http://#{app_host_var}/"
+    end
+
+    context 'domain matches' do
+      let(:app_host_var) { 'test.host' }
+      it 'does not redirect' do
+        get :index # "test.host" domain
+
+        expect(response).to redirect_to "http://#{app_host_var}/session/new"
+        expect(assigns[:whitelabel_mission]).to eq wl_mission
+      end
+    end
+  end
 end
