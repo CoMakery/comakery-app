@@ -228,17 +228,9 @@ describe ApplicationController do
     let(:app_host_var) { 'wl.mission.test' }
     let!(:wl_mission) { create(:whitelabel_mission, whitelabel_domain: app_host_var) }
 
-    around(:each) do |example|
-      prev_wl_env = ENV['WHITELABEL']
-      prev_app_host_env = ENV['APP_HOST']
-
-      ENV['WHITELABEL'] = wl_var
-      ENV['APP_HOST'] = app_host_var
-
-      example.run
-
-      ENV['WHITELABEL'] = prev_wl_env
-      ENV['APP_HOST'] = prev_app_host_env
+    before do
+      stub_const('ENV', ENV.to_hash.merge('WHITELABEL' => wl_var))
+      stub_const('ENV', ENV.to_hash.merge('APP_HOST' => app_host_var))
     end
 
     it 'redirects to default domain if the current does not match' do
