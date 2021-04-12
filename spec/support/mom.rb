@@ -458,8 +458,7 @@ class Mom
       maximum_tokens: 1_000_000_000_000_000_000,
       token: create(:token),
       mission: create(:mission),
-      id: 99,
-      created_at: build(:static_timestamp)
+      id: 99
     }
     Project.new(defaults.merge(attrs))
   end
@@ -510,8 +509,7 @@ class Mom
       _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
       token_frozen: false,
-      id: 99,
-      created_at: build(:static_timestamp)
+      id: 99
     }
     t = Token.new(defaults.merge(attrs))
 
@@ -783,7 +781,7 @@ class Mom
       'data' => data.is_a?(Hash) ? data.deep_stringify_keys : data,
       'url' => "http://#{host}#{path}",
       'method' => method
-    }).sign(build(:api_private_key), ['example.org', 'example1.org'].include?(host))
+    }).sign(build(:api_private_key))
   end
 
   def ethereum_address_1
@@ -1194,10 +1192,6 @@ class Mom
         tx_hash: 'DPPKH4IUFEGGV44TVQPVOOMP2BCGHBDELGBBCC7HBSFMWO2HSS6A'
       )
     )
-  end
-
-  def static_timestamp
-    'Tue, 16 Mar 2021 10:46:09 UTC +00:00'
   end
 
   def bitcoin_address_1

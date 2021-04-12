@@ -126,11 +126,11 @@ table th, table td {
 Key-Inflection: dash</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=ab7ad0b94b9b42e44ae18b35a5c01632&amp;body[timestamp]=1617624543&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=yJ5jiBUHEQCNdgczSR4CKkCtvAnuKITshK9hGC%2B%2BFsfgdoKigQwx05cVOxXp%2FgUkjoIOMTtL9D%2FV5U1dreX3Bw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1598934900&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=MoYwfy2gCTlbHxQszKwG%2FBQwTeNtmzDxL50lSdWmtL78CITLDUBc5PyV9HAJPugr14VfzH0wkswNxuqf8ruNAA%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;ab7ad0b94b9b42e44ae18b35a5c01632&quot;, &quot;timestamp&quot;=&gt;&quot;1617624543&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;yJ5jiBUHEQCNdgczSR4CKkCtvAnuKITshK9hGC++FsfgdoKigQwx05cVOxXp/gUkjoIOMTtL9D/V5U1dreX3Bw==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1598934900&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;MoYwfy2gCTlbHxQszKwG/BQwTeNtmzDxL50lSdWmtL78CITLDUBc5PyV9HAJPugr14VfzH0wkswNxuqf8ruNAA==&quot;}</pre>
 
 
 
@@ -143,7 +143,49 @@ Last-Modified: Mon, 05 Apr 2021 11:52:40 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;1, :title=&gt;&quot;Uber for Cats&quot;, :description=&gt;&quot;We are going to build amazing&quot;, :&quot;image-url&quot;=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBEQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--d711dc211d1fbdbb2d3713121acc83edb87d0dbc/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmtDNkFOcEF1Z0QiLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--6c318e046d2ad6689dcbf9dd2a432c640a9ef2df/dummy_image.png&quot;, :&quot;created-at&quot;=&gt;&quot;2021-04-05T12:09:03.020Z&quot;, :&quot;updated-at&quot;=&gt;&quot;2021-04-05T12:09:03.148Z&quot;, :&quot;account-id&quot;=&gt;nil, :&quot;admin-ids&quot;=&gt;[], :&quot;transfer-types&quot;=&gt;[{:id=&gt;1, :name=&gt;&quot;earned&quot;}, {:id=&gt;2, :name=&gt;&quot;bought&quot;}, {:id=&gt;3, :name=&gt;&quot;mint&quot;}, {:id=&gt;4, :name=&gt;&quot;burn&quot;}], :token=&gt;{:id=&gt;1, :name=&gt;&quot;ComakeryToken-11e371788e61103c7a8b758c32b8223905730fa8&quot;, :symbol=&gt;&quot;XYZ3abf36270b571f846de69409a0789d46336b7af9&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :&quot;contract-address&quot;=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :&quot;decimal-places&quot;=&gt;18, :&quot;logo-url&quot;=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3c9d34e0ca535f7d61aaa45c9814277bf0d85ceb/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :&quot;created-at&quot;=&gt;&quot;2021-04-05T12:09:02.060Z&quot;, :&quot;updated-at&quot;=&gt;&quot;2021-04-05T12:09:03.156Z&quot;}}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 99,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;image-url&quot;: &quot;http://example.org/assets/default_project-75719809b8b85fdf504ff17f997093cfebf84893ad60101c216daa901ee32122.jpg&quot;,
+    &quot;created-at&quot;: &quot;2020-09-01T04:35:00.000Z&quot;,
+    &quot;updated-at&quot;: &quot;2020-09-01T04:35:00.000Z&quot;,
+    &quot;account-id&quot;: null,
+    &quot;admin-ids&quot;: [
+
+    ],
+    &quot;transfer-types&quot;: [
+      {
+        &quot;id&quot;: 905,
+        &quot;name&quot;: &quot;earned&quot;
+      },
+      {
+        &quot;id&quot;: 906,
+        &quot;name&quot;: &quot;bought&quot;
+      },
+      {
+        &quot;id&quot;: 907,
+        &quot;name&quot;: &quot;mint&quot;
+      },
+      {
+        &quot;id&quot;: 908,
+        &quot;name&quot;: &quot;burn&quot;
+      }
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 99,
+      &quot;name&quot;: &quot;ComakeryToken-4d38e48b6c32993893db2b4a1f9e1162361762a6&quot;,
+      &quot;symbol&quot;: &quot;XYZ90a27bfa779972c98a07b6b67567de4bd4a32bb5&quot;,
+      &quot;network&quot;: &quot;ethereum_ropsten&quot;,
+      &quot;contract-address&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimal-places&quot;: 18,
+      &quot;logo-url&quot;: &quot;http://example.org/assets/default_project-75719809b8b85fdf504ff17f997093cfebf84893ad60101c216daa901ee32122.jpg&quot;,
+      &quot;created-at&quot;: &quot;2020-09-01T04:35:00.000Z&quot;,
+      &quot;updated-at&quot;: &quot;2020-09-01T04:35:00.000Z&quot;
+    }
+  }
+]</pre>
       </div>
     </div>
   </body>

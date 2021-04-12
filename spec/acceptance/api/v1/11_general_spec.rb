@@ -4,16 +4,23 @@ require 'rspec_api_documentation/dsl'
 resource 'I. General' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.local(2020, 9, 1, 10, 5, 0))
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
 
   let!(:project) { create(:static_project, mission: active_whitelabel_mission, token: create(:static_comakery_token)) }
 
   before do
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
     project.transfer_types.each_with_index do |t_type, i|
       t_type.update_column(:id, 905+i)
     end
-    project.update_column(:updated_at, build(:static_timestamp))
-    project.token.update_column(:updated_at, build(:static_timestamp))
   end
 
   explanation 'Details on authentication, caching, throttling, inflection and pagination.'
