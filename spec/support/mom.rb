@@ -444,6 +444,26 @@ class Mom
     Project.new(defaults.merge(attrs))
   end
 
+  def static_project(account = create(:account_with_auth), **attrs)
+    defaults = {
+      title: 'Uber for Cats',
+      description: 'We are going to build amazing',
+      tracker: 'https://github.com/example/uber_for_cats',
+      account: account,
+      legal_project_owner: 'UberCatz Inc',
+      require_confidentiality: false,
+      exclusive_contributions: false,
+      visibility: 'member',
+      long_id: SecureRandom.hex(20),
+      maximum_tokens: 1_000_000_000_000_000_000,
+      token: create(:token),
+      mission: create(:mission),
+      id: 99,
+      created_at: build(:static_timestamp)
+    }
+    Project.new(defaults.merge(attrs))
+  end
+
   def token(**attrs)
     defaults = {
       name: "Token-#{SecureRandom.hex(20)}",
@@ -471,6 +491,27 @@ class Mom
       _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
       token_frozen: false
+    }
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
+  end
+
+  def static_comakery_token(**attrs)
+    defaults = {
+      name: "ComakeryToken-4d38e48b6c32993893db2b4a1f9e1162361762a6",
+      symbol: "XYZ90a27bfa779972c98a07b6b67567de4bd4a32bb5",
+      _token_type: :comakery_security_token,
+      decimal_places: 18,
+      _blockchain: :ethereum_ropsten,
+      contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+      token_frozen: false,
+      id: 99,
+      created_at: build(:static_timestamp)
     }
     t = Token.new(defaults.merge(attrs))
 
@@ -742,7 +783,7 @@ class Mom
       'data' => data.is_a?(Hash) ? data.deep_stringify_keys : data,
       'url' => "http://#{host}#{path}",
       'method' => method
-    }).sign(build(:api_private_key), host == 'example.org')
+    }).sign(build(:api_private_key), ['example.org', 'example1.org'].include?(host))
   end
 
   def ethereum_address_1

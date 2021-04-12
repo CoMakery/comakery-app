@@ -4,19 +4,9 @@ require 'rspec_api_documentation/dsl'
 resource 'I. General' do
   include Rails.application.routes.url_helpers
 
-  let!(:active_whitelabel_mission) { create(:mission, id: 999, created_at: build(:static_timestamp), updated_at: build(:static_timestamp), whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:project) { create(:project,
-                          id: 999,
-                          created_at: build(:static_timestamp),
-                          mission: active_whitelabel_mission,
-                          token: create(:comakery_token,
-                                        id: 999,
-                                        name: 'ComakeryToken-4d38e48b6c32993893db2b4a1f9e1162361762a6',
-                                        symbol: 'XYZ90a27bfa779972c98a07b6b67567de4bd4a32bb5',
-                                        created_at: build(:static_timestamp)
-                                        )
-                          )
-                  }
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
+
+  let!(:project) { create(:static_project, mission: active_whitelabel_mission, token: create(:static_comakery_token)) }
 
   before do
     project.transfer_types.each_with_index do |t_type, i|
