@@ -1,0 +1,8 @@
+name: Simplecov results
+
+jobs:
+  simplecov:
+    needs: rspec
+    steps:
+      - name: Run Simplecov
+        run: echo "Run simplecov here"
