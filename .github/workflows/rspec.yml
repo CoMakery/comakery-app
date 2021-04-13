@@ -162,3 +162,10 @@ jobs:
       - name: Run Simplecov
         run: env bundle exec rake coverage:ci_report
 
+      - name: Upload a Build Artifact
+        if: always()
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Total Coverage
+          path: coverage/
+
