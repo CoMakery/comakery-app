@@ -1,0 +1,17 @@
+.signup-left{
+  padding: 58px 64px 68px;
+  width: 560px;
+  background: linear-gradient(173.46deg, #194ACB 0%, #244394 100%);
+}
+.signup .btn-social{
+  padding: 8px 14px;
+  border: 1px solid #ECEFF8;
+}
+
+.navbar-collapsed .profile > label{
+  display: none;
+}
+
+.navbar-collapsed .profile > a{
+  display: none;
+}
