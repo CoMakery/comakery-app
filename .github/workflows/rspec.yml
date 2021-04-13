@@ -148,7 +148,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: SimpleCov Report ${{ matrix.ci_node_index }}
+        name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
 
   simplecov:
@@ -157,13 +157,10 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v2
-        with:
-          path: all_coverages
 
       - name: Display structure of downloaded coverage
         run: ls -R
-        working-directory: all_coverages
 
       - name: Run Simplecov
-        run: echo "Run simplecov here"
+        run: env bundle exec rake coverage:ci_report
 
