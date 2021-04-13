@@ -154,6 +154,16 @@ jobs:
   simplecov:
     runs-on: ubuntu-latest
     needs: rspec
+
     steps:
+      - uses: actions/download-artifact@v2
+        with:
+          path: all_coverages
+
+      - name: Display structure of downloaded coverage
+        run: ls -R
+        working-directory: all_coverages
+
       - name: Run Simplecov
         run: echo "Run simplecov here"
+
