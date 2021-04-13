@@ -5,6 +5,7 @@ on:
 
 jobs:
   simplecov:
+    runs-on: ubuntu-latest
     needs: rspec
     steps:
       - name: Run Simplecov
