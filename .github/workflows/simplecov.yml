@@ -1,5 +1,8 @@
 name: Simplecov results
 
+on:
+  push:
+
 jobs:
   simplecov:
     needs: rspec
