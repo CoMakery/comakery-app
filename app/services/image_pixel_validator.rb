@@ -5,7 +5,7 @@ class ImagePixelValidator
   end
 
   def valid?
-    attachments.all? { |attr, attachment| valid_pixel_dimensions? attr, image_size(attachment) }
+    attachments.map { |attr, attachment| valid_pixel_dimensions? attr, image_size(attachment) }.all?(true)
   end
 
   private
@@ -14,7 +14,7 @@ class ImagePixelValidator
     attr_reader   :params
 
     def valid_pixel_dimensions?(attr, image_size)
-      return if image_size && image_size[0] <= max_pixel_dimensions[0] && image_size[1] <= max_pixel_dimensions[1]
+      return true if image_size && image_size[0] <= max_pixel_dimensions[0] && image_size[1] <= max_pixel_dimensions[1]
 
       record.errors.add(attr.to_sym, 'exceeds maximum pixel dimensions')
 
