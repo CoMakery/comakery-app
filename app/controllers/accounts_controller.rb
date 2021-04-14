@@ -80,7 +80,7 @@ class AccountsController < ApplicationController
 
     image_validator = ImagePixelValidator.new(@account, account_params)
 
-    if image_validator.valid? @account.update(account_params.merge(name_required: true))
+    if image_validator.valid? && @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
       if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
         session.delete(:account_id)
