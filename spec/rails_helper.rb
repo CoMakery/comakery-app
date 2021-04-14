@@ -5,7 +5,6 @@ enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || false
 if enable_simplecov
   require 'simplecov'
   SimpleCov.start :rails do
-
     # add_filter == do not track coverage
     add_filter %r{^/db/migrate/}
     add_filter %r{^/db//schema.rb/}
