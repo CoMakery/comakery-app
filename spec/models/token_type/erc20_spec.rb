@@ -37,5 +37,13 @@ describe TokenType::Erc20, vcr: true do
         expect { described_class.new(**attrs).contract }.to raise_error(TokenType::Contract::ValidationError)
       end
     end
+
+    describe '#blockchain_balance' do
+      subject { described_class.new(**attrs).blockchain_balance('dummy_wallet_address') }
+
+      it do
+        expect { subject }.to raise_error NotImplementedError
+      end
+    end
   end
 end
