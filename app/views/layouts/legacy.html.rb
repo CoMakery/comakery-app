@@ -97,7 +97,7 @@ class Views::Layouts::Legacy < Views::Base
             span('aria-hidden' => true) { text 'x' }
           end
           span(id: "flash-msg-#{name}") do
-            text ActiveSupport::SafeBuffer.new(msg)
+            text ActiveSupport::SafeBuffer.new(html_escape(msg))
           end
         end
       end

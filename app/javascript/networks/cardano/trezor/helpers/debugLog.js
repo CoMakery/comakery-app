@@ -11,7 +11,8 @@ function debugLog(item) {
       msgToLog = item
     }
     // eslint-disable-next-line no-console
-    console.error(msgToLog)
+    // added by oleg
+    console.log(msgToLog)
   }
 }
 

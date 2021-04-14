@@ -45,6 +45,24 @@ describe TokenDecorator do
     it 'returns default image' do
       expect(token.reload.decorate.logo_url).to include('image.png')
     end
+
+    it 'includes url' do
+      expect(token.decorate.logo_url).to start_with('https://')
+    end
+
+    it 'includes custom host' do
+      expect(token.decorate.logo_url(host: 'host')).to start_with('https://host')
+    end
+
+    context 'when image is not present' do
+      before do
+        allow(token).to receive(:logo_image).and_return(nil)
+      end
+
+      it 'returns nil' do
+        expect(token.decorate.logo_url).to be_nil
+      end
+    end
   end
 
   describe 'network' do

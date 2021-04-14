@@ -46,7 +46,8 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     if (rs && rs.txid) {
     }
   } catch (err) {
-    console.error(err)
+    // added by oleg
+    console.log(err)
     alert(customErrorMessage(err) || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }

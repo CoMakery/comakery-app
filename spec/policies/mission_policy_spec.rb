@@ -31,9 +31,20 @@ describe MissionPolicy do
     it { expect(policy.edit?).to be true }
     it { expect(policy.index?).to be true }
     it { expect(policy.create?).to be true }
-    it { expect(policy.show?).to be true }
     it { expect(policy.update?).to be true }
     it { expect(policy.destroy?).to be true }
+
+    context 'when mission is whitelabel' do
+      subject(:policy) { described_class.new(account, wl_mission) }
+
+      it { expect(policy.show?).to be false }
+    end
+
+    context 'when mission isn\'t whitelabel' do
+      subject(:policy) { described_class.new(account, mission) }
+
+      it { expect(policy.show?).to be true }
+    end
   end
 
   context 'for a non-admin account' do

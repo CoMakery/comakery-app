@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_02_100522) do
+ActiveRecord::Schema.define(version: 2021_04_09_134101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,12 +90,17 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.bigint "managed_mission_id"
     t.string "ethereum_auth_address", limit: 42
     t.string "constellation_wallet", limit: 40
+    t.index ["image_id"], name: "index_accounts_on_image_id"
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
+    t.index ["latest_verification_id"], name: "index_accounts_on_latest_verification_id"
+    t.index ["managed_account_id"], name: "index_accounts_on_managed_account_id"
     t.index ["managed_mission_id", "managed_account_id"], name: "index_accounts_on_managed_mission_id_and_managed_account_id", unique: true
     t.index ["managed_mission_id"], name: "index_accounts_on_managed_mission_id"
+    t.index ["network_id"], name: "index_accounts_on_network_id"
     t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
+    t.index ["specialty_id"], name: "index_accounts_on_specialty_id"
   end
 
   create_table "accounts_projects", id: false, force: :cascade do |t|
@@ -112,6 +117,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_id"], name: "index_active_storage_attachments_on_record_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
@@ -200,7 +206,9 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.string "diagram_content_type"
     t.boolean "published", default: false
     t.integer "state", default: 0
+    t.index ["diagram_id"], name: "index_award_types_on_diagram_id"
     t.index ["project_id"], name: "index_award_types_on_project_id"
+    t.index ["specialty_id"], name: "index_award_types_on_specialty_id"
   end
 
   create_table "awards", id: :serial, force: :cascade do |t|
@@ -255,15 +263,21 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.datetime "prioritized_at"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
+    t.index ["channel_id"], name: "index_awards_on_channel_id"
+    t.index ["cloned_on_assignment_from_id"], name: "index_awards_on_cloned_on_assignment_from_id"
+    t.index ["image_id"], name: "index_awards_on_image_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
+    t.index ["proof_id"], name: "index_awards_on_proof_id"
+    t.index ["recipient_wallet_id"], name: "index_awards_on_recipient_wallet_id"
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
+    t.index ["submission_image_id"], name: "index_awards_on_submission_image_id"
     t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
   end
 
   create_table "balances", force: :cascade do |t|
     t.bigint "wallet_id"
     t.bigint "token_id"
-    t.decimal "base_unit_value", precision: 78, default: "0", null: false
+    t.decimal "base_unit_value", precision: 40, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
@@ -315,6 +329,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.string "channel_id"
     t.string "discord_invite_code"
     t.datetime "discord_invite_created_at"
+    t.index ["channel_id"], name: "index_channels_on_channel_id"
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
@@ -341,6 +356,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.integer "specialty_id"
     t.index ["account_id"], name: "index_interests_on_account_id"
     t.index ["project_id"], name: "index_interests_on_project_id"
+    t.index ["specialty_id"], name: "index_interests_on_specialty_id"
   end
 
   create_table "missions", force: :cascade do |t|
@@ -378,7 +394,13 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.string "whitelabel_api_public_key"
     t.string "whitelabel_api_key"
     t.string "wallet_recovery_api_public_key"
+    t.index ["image_id"], name: "index_missions_on_image_id"
+    t.index ["logo_id"], name: "index_missions_on_logo_id"
     t.index ["token_id"], name: "index_missions_on_token_id"
+    t.index ["whitelabel_domain"], name: "index_missions_on_whitelabel_domain"
+    t.index ["whitelabel_favicon_id"], name: "index_missions_on_whitelabel_favicon_id"
+    t.index ["whitelabel_logo_dark_id"], name: "index_missions_on_whitelabel_logo_dark_id"
+    t.index ["whitelabel_logo_id"], name: "index_missions_on_whitelabel_logo_id"
   end
 
   create_table "ore_id_accounts", force: :cascade do |t|
@@ -476,8 +498,12 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["image_id"], name: "index_projects_on_image_id"
+    t.index ["long_id"], name: "index_projects_on_long_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
+    t.index ["panoramic_image_id"], name: "index_projects_on_panoramic_image_id"
     t.index ["public"], name: "index_projects_on_public"
+    t.index ["square_image_id"], name: "index_projects_on_square_image_id"
     t.index ["token_id"], name: "index_projects_on_token_id"
   end
 
@@ -504,6 +530,15 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
   create_table "specialties", force: :cascade do |t|
     t.string "name"
   end
@@ -525,6 +560,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_teams_on_team_id"
   end
 
   create_table "token_opt_ins", force: :cascade do |t|
@@ -560,6 +596,7 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.datetime "synced_at"
     t.integer "_blockchain", default: 0, null: false
     t.integer "_token_type", default: 0, null: false
+    t.index ["logo_image_id"], name: "index_tokens_on_logo_image_id"
   end
 
   create_table "transfer_rules", force: :cascade do |t|
@@ -571,6 +608,8 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
+    t.index ["receiving_group_id"], name: "index_transfer_rules_on_receiving_group_id"
+    t.index ["sending_group_id"], name: "index_transfer_rules_on_sending_group_id"
     t.index ["token_id"], name: "index_transfer_rules_on_token_id"
   end
 
@@ -620,8 +659,8 @@ ActiveRecord::Schema.define(version: 2021_04_02_100522) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ore_id_account_id"
-    t.boolean "primary_wallet", default: false
     t.string "name"
+    t.boolean "primary_wallet", default: false
     t.bigint "project_id"
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
     t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true

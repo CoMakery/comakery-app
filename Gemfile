@@ -107,7 +107,6 @@ group(:test) do
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 4.0.0.beta3'
-  gem 'rspec-retry'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
@@ -134,8 +133,6 @@ gem 'ransack', '~> 2.3'
 gem 'barnes', '~> 0.0.7'
 
 gem 'bootsnap', '~> 1.4'
-
-gem 'sentry-raven', '~> 2.12'
 
 gem 'jbuilder', '~> 2.9'
 
@@ -167,3 +164,7 @@ gem 'csv-safe'
 
 gem 'aasm', '~> 5.1'
 gem 'after_commit_everywhere', '~> 1.0'
+
+gem 'sentry-rails', '~> 4.3'
+gem 'sentry-ruby', '~> 4.3'
+gem 'sentry-sidekiq', '~> 4.3'

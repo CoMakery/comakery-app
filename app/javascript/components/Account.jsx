@@ -138,7 +138,8 @@ export default class Account extends React.Component {
       },
 
       error: (xhr, status, err) => {
-        console.error(status, err.toString())
+        // added by oleg
+        console.log(status, err.toString())
       }
     })
   }

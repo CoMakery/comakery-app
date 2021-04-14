@@ -63,7 +63,18 @@ module Comakery
     # Use Redis for Cache Store
     redis_provider = ENV.fetch("REDIS_PROVIDER") { "REDIS_URL" }
     redis_url = ENV.fetch(redis_provider) { "redis://localhost:6379/1" }
-    config.cache_store = :redis_cache_store, { url: redis_url, expires_in: 1.hour }
+
+    config.custom_redis_params = {}
+
+    # Disable SSL for Redis in Heroku env:
+    # https://help.heroku.com/HC0F8CUS/redis-connection-issues
+    if ENV["REDIS_SSL_NONE"]
+      config.custom_redis_params = {
+        ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
+      }
+    end
+
+    config.cache_store = :redis_cache_store, { url: redis_url, expires_in: 1.hour }.merge(config.custom_redis_params)
     config.action_controller.perform_caching = true
 
     # Output logs only to STDOUT
