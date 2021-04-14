@@ -25,11 +25,13 @@ resource 'III. Projects' do
     end
 
     project.transfer_types.each_with_index do |t_type, i|
-      t_type.update(id: 905 + i)
+      t_type.id = 905 + i
+      t_type.save(validate: false)
     end
 
     project2.transfer_types.each_with_index do |t_type, i|
-      t_type.update(id: 100 + i)
+      t_type.id = 100 + i
+      t_type.save(validate: false)
     end
   end
 
