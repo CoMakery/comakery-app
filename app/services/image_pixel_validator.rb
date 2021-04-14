@@ -14,7 +14,7 @@ class ImagePixelValidator
     attr_reader   :params
 
     def valid_pixel_dimensions?(attr, image_size)
-      return true if image_size && image_size[0] <= max_pixel_dimensions[0] && image_size[1] <= max_pixel_dimensions[1]
+      return if image_size && image_size[0] <= max_pixel_dimensions[0] && image_size[1] <= max_pixel_dimensions[1]
 
       record.errors.add(attr.to_sym, 'exceeds maximum pixel dimensions')
 
