@@ -211,11 +211,32 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/tokens/4/account_token_records</pre>
+          <pre class="request route highlight">POST /api/v1/tokens/90/account_token_records</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:account_token_record=>{:max_balance=>"100", :lockup_until=>"1", :reg_group_id=>"9", :managed_account_id=>"new_managed_account", :account_frozen=>"false"}}, :url=>"http://example.org/api/v1/tokens/4/account_token_records", :method=>"POST", :nonce=>"038f51a47e9abbb4d6377779d41c7211", :timestamp=>"1617700086"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"BgFJh1yswKlXdXs8lZB7Yytetj7VgCQPtMzNwSFdang7zV7PtLVKVZs6ak2q0bzvNexjJg5fd0mrvjWTHo51BQ=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account_token_record": {
+        "max_balance": "100",
+        "lockup_until": "1",
+        "reg_group_id": "60",
+        "managed_account_id": "new_managed_account",
+        "account_frozen": "false"
+      }
+    },
+    "url": "http://example.org/api/v1/tokens/90/account_token_records",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "KdWFFr2u28uRRw1EVQ4cn6kdCEVJQwfrsVjsR6ZPEx2ErwxeAf1LTd/MwhGELzlBjvycAyjIYDnlVcaLJbyeAA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -226,9 +247,34 @@ ETag: W/&quot;165d52225419e10726d656a35cf32164&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;4, :walletId=&gt;4, :tokenId=&gt;4, :maxBalance=&gt;100000, :lockupUntil=&gt;&quot;2021-04-05T09:08:06.000Z&quot;, :regGroupId=&gt;8, :accountFrozen=&gt;false, :status=&gt;&quot;created&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:06.366Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:06.366Z&quot;, :managedAccountId=&gt;nil}, {:id=&gt;5, :walletId=&gt;nil, :tokenId=&gt;4, :maxBalance=&gt;100, :lockupUntil=&gt;&quot;1970-01-01T00:00:01.000Z&quot;, :regGroupId=&gt;9, :accountFrozen=&gt;false, :status=&gt;&quot;created&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:06.463Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:06.463Z&quot;, :managedAccountId=&gt;&quot;new_managed_account&quot;}]</pre>
-              <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;4, :walletId=&gt;4, :tokenId=&gt;4, :maxBalance=&gt;100000, :lockupUntil=&gt;&quot;2021-04-05T09:08:06.000Z&quot;, :regGroupId=&gt;8, :accountFrozen=&gt;false, :status=&gt;&quot;created&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:06.366Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:06.366Z&quot;, :managedAccountId=&gt;nil}, {:id=&gt;5, :walletId=&gt;nil, :tokenId=&gt;4, :maxBalance=&gt;100, :lockupUntil=&gt;&quot;1970-01-01T00:00:01.000Z&quot;, :regGroupId=&gt;9, :accountFrozen=&gt;false, :status=&gt;&quot;created&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:06.463Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:06.463Z&quot;, :managedAccountId=&gt;&quot;new_managed_account&quot;}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 75,
+    &quot;walletId&quot;: 90,
+    &quot;tokenId&quot;: 90,
+    &quot;maxBalance&quot;: 100000,
+    &quot;lockupUntil&quot;: &quot;2021-04-05T04:35:00.000Z&quot;,
+    &quot;regGroupId&quot;: 100,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;managedAccountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;
+  },
+  {
+    &quot;id&quot;: 1,
+    &quot;walletId&quot;: null,
+    &quot;tokenId&quot;: 90,
+    &quot;maxBalance&quot;: 100,
+    &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
+    &quot;regGroupId&quot;: 60,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;managedAccountId&quot;: &quot;new_managed_account&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

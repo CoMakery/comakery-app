@@ -259,22 +259,36 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949&amp;body[method]=GET&amp;body[nonce]=32a3d4dd9e4dfc030700f455587a2df9&amp;body[timestamp]=1617683146&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=GJrHY52pTf2vUChqNDsOcGcYXkCx8p2IEDM9zAZ2axi4RlT3S%2F5Zm6y%2FWeyTbBk6%2Fk4Om5SVSyNSKz4ve%2FvBDw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=p663l7THTqVyJ7cOfmlPG4ujkABNngkStZvywM5d%2Fj1caf6s7xQuQ7kYqiOub42lf144VjK9BAMYbJFEj%2BU%2FDg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;32a3d4dd9e4dfc030700f455587a2df9&quot;, &quot;timestamp&quot;=&gt;&quot;1617683146&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;GJrHY52pTf2vUChqNDsOcGcYXkCx8p2IEDM9zAZ2axi4RlT3S/5Zm6y/WeyTbBk6/k4Om5SVSyNSKz4ve/vBDw==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;p663l7THTqVyJ7cOfmlPG4ujkABNngkStZvywM5d/j1caf6s7xQuQ7kYqiOub42lf144VjK9BAMYbJFEj+U/Dg==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
               <pre class="response headers">ETag: W/&quot;aecd4c102563a30e2b5681b9d901989d&quot;
-Last-Modified: Tue, 06 Apr 2021 04:25:45 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{:email=&gt;&quot;me+cc4b6d000417106d1cbbb357ebadd3a0560718bb@example.com&quot;, :managedAccountId=&gt;&quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;, :firstName=&gt;&quot;Eva&quot;, :lastName=&gt;&quot;Smith&quot;, :nickname=&gt;&quot;hunter-0cc45156d229f0a44c938ae649dedb8c1e0ca1de&quot;, :imageUrl=&gt;&quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;, :country=&gt;&quot;United States of America&quot;, :dateOfBirth=&gt;&quot;1990-01-01&quot;, :verificationState=&gt;&quot;passed&quot;, :verificationDate=&gt;&quot;2021-04-06T04:25:45.842Z&quot;, :verificationMaxInvestmentUsd=&gt;1000000, :createdAt=&gt;&quot;2021-04-06T04:25:45.808Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:45.854Z&quot;}</pre>
+              <pre class="response body">{
+  &quot;email&quot;: &quot;me+cc4b6d000417106d1cbbb357ebadd3a0560718bb@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;,
+  &quot;firstName&quot;: &quot;Eva&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;nickname&quot;: &quot;hunter-0cc45156d229f0a44c938ae649dedb8c1e0ca1de&quot;,
+  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
+  &quot;country&quot;: &quot;United States of America&quot;,
+  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
+  &quot;verificationState&quot;: &quot;passed&quot;,
+  &quot;verificationDate&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;verificationMaxInvestmentUsd&quot;: 1000000,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+}</pre>
       </div>
     </div>
   </body>

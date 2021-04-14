@@ -183,7 +183,27 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{:recovery_token=>"test_signature", :payload=>"02069206221e5129a9a37f6b51acce0a45cf624fdf0379e19cf11b030c46320705ef98ad503019dc904202d43c62179e08477db312d062ad07", :transport_public_key=>"", :body=>{:data=>{:recovery_token=>"test_signature", :payload=>"02069206221e5129a9a37f6b51acce0a45cf624fdf0379e19cf11b030c46320705ef98ad503019dc904202d43c62179e08477db312d062ad07", :transport_public_key=>""}, :url=>"http://example.org/api/v1/wallet_recovery/recover", :method=>"POST", :nonce=>"d08e1ffc5a85d4fdd7ac805b6a976a8b", :timestamp=>"1617707689"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"Q3GZyGwXvMxz0RDM2jORpWfQi4l8D6rXLfMsQrke8vyOkyH78WTdM12n98vmdSZBL9I57dqQCGbkd/843oM5CA=="}}</pre>
+            <pre class="request body">{
+  "recovery_token": "test_signature",
+  "payload": "02a308cf11cdbbd2116d3ab7b3471e55a95a515e324f48b1b713ddfedcbb65fc5db860c3c4d1e917b3cdabf10a7c5e9ce1567ba22ac8dfc14a",
+  "transport_public_key": "",
+  "body": {
+    "data": {
+      "recovery_token": "test_signature",
+      "payload": "02a308cf11cdbbd2116d3ab7b3471e55a95a515e324f48b1b713ddfedcbb65fc5db860c3c4d1e917b3cdabf10a7c5e9ce1567ba22ac8dfc14a",
+      "transport_public_key": ""
+    },
+    "url": "http://example.org/api/v1/wallet_recovery/recover",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "ZFzbcu7eeenI/mfFCDOn8aoUAFEAWWYwtPCuTUTTtO2aWGa6iunKDaIFnNmKbHJryWObGUaaQ4yFfmLcSU6wCw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

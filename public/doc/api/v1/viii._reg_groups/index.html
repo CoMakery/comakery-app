@@ -152,12 +152,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/11/reg_groups?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F11%2Freg_groups&amp;body[method]=GET&amp;body[nonce]=6cab74a83a5c496dace7c406fdad478c&amp;body[timestamp]=1617700101&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=CcNOIK6uQyl2ps4ZTI6SoVFPk0ARxJWXKcE%2B6itMNhwjZRZSL8ztLj7gyyXDHbGecVUNCLC1ev237dqlnZJqAA%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/50/reg_groups?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F50%2Freg_groups&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=s6Yz8%2BhgB3acpZx8v0bbzbrVtm6LMmqN5W%2FctckC7wpfxIP%2FJZEmhosHrTCzWZTcbmG3TZRhYCopxnWzIyyCCw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/11/reg_groups&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;6cab74a83a5c496dace7c406fdad478c&quot;, &quot;timestamp&quot;=&gt;&quot;1617700101&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;CcNOIK6uQyl2ps4ZTI6SoVFPk0ARxJWXKcE+6itMNhwjZRZSL8ztLj7gyyXDHbGecVUNCLC1ev237dqlnZJqAA==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/50/reg_groups&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;s6Yz8+hgB3acpZx8v0bbzbrVtm6LMmqN5W/ctckC7wpfxIP/JZEmhosHrTCzWZTcbmG3TZRhYCopxnWzIyyCCw==&quot;}</pre>
 
 
 
@@ -166,13 +166,28 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <pre class="response headers">Per-Page: 25
 Total: 2
 ETag: W/&quot;194440b6abad010a97cbd1803dfbda57&quot;
-Last-Modified: Tue, 06 Apr 2021 09:08:21 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;28, :name=&gt;&quot;0&quot;, :tokenId=&gt;26, :blockchainId=&gt;0, :createdAt=&gt;&quot;2021-04-06T09:08:20.978Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:20.978Z&quot;}, {:id=&gt;29, :name=&gt;&quot;RegGroup 575478f0848de4163979293f31d705dc78cba818&quot;, :tokenId=&gt;26, :blockchainId=&gt;1028, :createdAt=&gt;&quot;2021-04-06T09:08:21.010Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:21.010Z&quot;}]</pre>
-              <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;28, :name=&gt;&quot;0&quot;, :tokenId=&gt;26, :blockchainId=&gt;0, :createdAt=&gt;&quot;2021-04-06T09:08:20.978Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:20.978Z&quot;}, {:id=&gt;29, :name=&gt;&quot;RegGroup 575478f0848de4163979293f31d705dc78cba818&quot;, :tokenId=&gt;26, :blockchainId=&gt;1028, :createdAt=&gt;&quot;2021-04-06T09:08:21.010Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:21.010Z&quot;}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 30,
+    &quot;name&quot;: &quot;RegGroup 18ba883fac1e9b8e3f400bf3cf718c5ea33daf27&quot;,
+    &quot;tokenId&quot;: 25,
+    &quot;blockchainId&quot;: 1001,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  },
+  {
+    &quot;id&quot;: 31,
+    &quot;name&quot;: &quot;0&quot;,
+    &quot;tokenId&quot;: 25,
+    &quot;blockchainId&quot;: 0,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

@@ -133,7 +133,30 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:account=>{:managed_account_id=>"bfca35b9-6c9b-449f-93b6-16f2d064de7d", :email=>"me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com", :first_name=>"Eva", :last_name=>"Smith", :nickname=>"hunter-462b87f9e0d6e2149911a619a76116f1f0c820de", :date_of_birth=>"1990-01-31", :country=>"United States of America"}}, :url=>"http://example.org/api/v1/accounts", :method=>"POST", :nonce=>"cee363fdf70e7739e7f5fe9ef9048767", :timestamp=>"1617607755"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"N7NbGXFoV2D5afgW9ylUCKZT7EAHhLtBSW/ylWl4Z0/Gm39Hp5ljzagrxxVjj8uGLuBUVhzJUu31EAMk1naSAA=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account": {
+        "managed_account_id": "bfca35b9-6c9b-449f-93b6-16f2d064de7d",
+        "email": "me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com",
+        "first_name": "Eva",
+        "last_name": "Smith",
+        "nickname": "hunter-462b87f9e0d6e2149911a619a76116f1f0c820de",
+        "date_of_birth": "1990-01-31",
+        "country": "United States of America"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "TbIl7uuelmx4QZapyy6vAPK04isQnNmjXffWygkCokeZ5j7abAsT+ly8SnBS3MNAISpnf8yviovDnzRGoiNsDQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -142,7 +165,21 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{:email=&gt;&quot;me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com&quot;, :managedAccountId=&gt;&quot;bfca35b9-6c9b-449f-93b6-16f2d064de7d&quot;, :firstName=&gt;&quot;Eva&quot;, :lastName=&gt;&quot;Smith&quot;, :nickname=&gt;&quot;hunter-462b87f9e0d6e2149911a619a76116f1f0c820de&quot;, :imageUrl=&gt;&quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;, :country=&gt;&quot;United States of America&quot;, :dateOfBirth=&gt;&quot;1990-01-31&quot;, :verificationState=&gt;&quot;unknown&quot;, :verificationDate=&gt;nil, :verificationMaxInvestmentUsd=&gt;nil, :createdAt=&gt;&quot;2021-04-05T07:29:15.363Z&quot;, :updatedAt=&gt;&quot;2021-04-05T07:29:15.363Z&quot;}</pre>
+              <pre class="response body">{
+  &quot;email&quot;: &quot;me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;bfca35b9-6c9b-449f-93b6-16f2d064de7d&quot;,
+  &quot;firstName&quot;: &quot;Eva&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;nickname&quot;: &quot;hunter-462b87f9e0d6e2149911a619a76116f1f0c820de&quot;,
+  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
+  &quot;country&quot;: &quot;United States of America&quot;,
+  &quot;dateOfBirth&quot;: &quot;1990-01-31&quot;,
+  &quot;verificationState&quot;: &quot;unknown&quot;,
+  &quot;verificationDate&quot;: null,
+  &quot;verificationMaxInvestmentUsd&quot;: null,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+}</pre>
       </div>
     </div>
   </body>

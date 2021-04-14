@@ -5,7 +5,7 @@ resource 'I. General' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2020, 9, 1, 10, 5, 0))
+    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
   end
 
   after do
@@ -14,7 +14,7 @@ resource 'I. General' do
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
 
-  let!(:project) { create(:static_project, mission: active_whitelabel_mission, token: create(:static_comakery_token)) }
+  let!(:project) { create(:static_project, id: 20, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 80)) }
 
   before do
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
@@ -53,10 +53,8 @@ resource 'I. General' do
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['ETag'] = 'ETag: W/"65619e25d426a61fdaaea38f54f63b1f"'
-          result[0][:response_headers]['Last-Modified'] = 'Mon, 05 Apr 2021 11:08:13 GMT'
-        end
+        
+        result[0][:response_headers]['ETag'] = 'ETag: W/"65619e25d426a61fdaaea38f54f63b1f"' if status == 200
         expect(status).to eq(200)
       end
     end
@@ -99,11 +97,7 @@ resource 'I. General' do
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
         result = do_request(request)
-        if status == 304
-          result[0][:response_headers]['ETag'] = 'W/"e1ecbd938491cc1765caf2c0ea693a2c"'
-          result[0][:response_headers]['Last-Modified'] = 'Mon, 05 Apr 2021 11:52:40 GMT'
-          result[0][:request_headers]['If-Modified-Since'] = 'Mon, 05 Apr 2021 11:52:40 GMT'
-        end
+        result[0][:response_headers]['ETag'] = 'W/"e1ecbd938491cc1765caf2c0ea693a2c"' if status == 304
         expect(status).to eq(304)
       end
     end
@@ -140,10 +134,7 @@ resource 'I. General' do
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['Last-Modified'] = 'Mon, 05 Apr 2021 11:52:40 GMT'
-          result[0][:response_headers]['ETag'] = 'W/"e1ecbd938491cc1765caf2c0ea693a2c"'
-        end
+        result[0][:response_headers]['ETag'] = 'W/"e1ecbd938491cc1765caf2c0ea693a2c"' if status == 200
         expect(status).to eq(200)
       end
     end
@@ -162,10 +153,7 @@ resource 'I. General' do
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['Last-Modified'] = 'Mon, 05 Apr 2021 12:15:05 GMT'
-          result[0][:response_headers]['ETag'] = 'W/"5fa3c6359b49359241b800a7b6135cbe"'
-        end
+        result[0][:response_headers]['ETag'] = 'W/"5fa3c6359b49359241b800a7b6135cbe"' if status == 200
         expect(status).to eq(200)
       end
     end

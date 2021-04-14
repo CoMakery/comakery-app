@@ -300,11 +300,29 @@ table th, table td {
 Api-Transaction-Key: F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/9/blockchain_transactions</pre>
+          <pre class="request route highlight">POST /api/v1/projects/45/blockchain_transactions</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:transaction=>{:source=>"0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB", :nonce=>1}}, :url=>"http://example.org/api/v1/projects/9/blockchain_transactions", :method=>"POST", :nonce=>"77c3f8cc4ab40b940ddc35dd700b7f92", :timestamp=>"1617700099"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"fCldHM+eSSkXVmScC8aATomri9cMcSWDY+/0awPPc+9ZkqZtElgbed0ufm3GFBlmrrH4MvXGbiMRuskSmg0IAw=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transaction": {
+        "source": "0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB",
+        "nonce": 1
+      }
+    },
+    "url": "http://example.org/api/v1/projects/45/blockchain_transactions",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "C9j4mD/zfmqOkqx5hZPHrTq6aT8F4QpZN8TiHINej/WhOJNgaXt5OlTvbmpgkGNBxQy4IOXUYO27+j7B8cKKBw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

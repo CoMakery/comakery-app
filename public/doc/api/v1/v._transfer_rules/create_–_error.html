@@ -187,18 +187,44 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/2/transfer_rules</pre>
+          <pre class="request route highlight">POST /api/v1/projects/50/transfer_rules</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:transfer_rule=>{:sending_group_id=>"945677752"}}, :url=>"http://example.org/api/v1/projects/2/transfer_rules", :method=>"POST", :nonce=>"ffa2a86735ff38c117e146067d47144a", :timestamp=>"1617693633"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"YQQsgueEATcFm30KLveIK9eS3Y8vly+n8b/4kTXD41QoPL8iNnlnNdi2+oJVvmjsuzdN0uIKKRgL+aCqsMN+AA=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transfer_rule": {
+        "sending_group_id": "945677752"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/50/transfer_rules",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "zMX1tCAQLGSRmxRxhAwOE4YG5ok5lUvydC9wRqiErmwoQ65r8wFEGe9WvGvD8Pf1Wzg/ec1JR/yqkOJoxsZQBw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">{:errors=&gt;{:sendingGroup=&gt;[&quot;should belong to ComakeryDummyToken-51904dcc7d9b1a275e0aa99e75b1aad72301d7f7 token&quot;], :receivingGroup=&gt;[&quot;should belong to ComakeryDummyToken-51904dcc7d9b1a275e0aa99e75b1aad72301d7f7 token&quot;]}}</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;sendingGroup&quot;: [
+      &quot;should belong to ComakeryDummyToken-8a30a0c6b3276de0d81a9df6366e984765bbb582 token&quot;
+    ],
+    &quot;receivingGroup&quot;: [
+      &quot;should belong to ComakeryDummyToken-8a30a0c6b3276de0d81a9df6366e984765bbb582 token&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

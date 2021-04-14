@@ -152,11 +152,19 @@ table th, table td {
             <pre class="request headers">Api-Transaction-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/63/hot_wallet_addresses</pre>
+          <pre class="request route highlight">POST /api/v1/projects/45/hot_wallet_addresses</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:hot_wallet=>{:address=>"3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"}}}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "hot_wallet": {
+        "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+      }
+    }
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -165,7 +173,20 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;28, :name=&gt;&quot;Hot Wallet&quot;, :address=&gt;&quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;, :primaryWallet=&gt;true, :source=&gt;&quot;hot_wallet&quot;, :state=&gt;&quot;ok&quot;, :createdAt=&gt;&quot;2021-04-06T11:14:34.748Z&quot;, :updatedAt=&gt;&quot;2021-04-06T11:14:34.748Z&quot;, :blockchain=&gt;&quot;bitcoin&quot;, :provisionTokens=&gt;[]}</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 20,
+  &quot;name&quot;: &quot;Hot Wallet&quot;,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;primaryWallet&quot;: true,
+  &quot;source&quot;: &quot;hot_wallet&quot;,
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;provisionTokens&quot;: [
+
+  ]
+}</pre>
       </div>
     </div>
   </body>

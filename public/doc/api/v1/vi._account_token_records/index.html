@@ -259,12 +259,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tokens/3/account_token_records?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens%2F3%2Faccount_token_records&amp;body[method]=GET&amp;body[nonce]=ea414404add277f50c73d893da442a37&amp;body[timestamp]=1617700085&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=QB%2F%2FlHYBhsWTrikXatrKTHd3nNQxSTs7%2FjWhEzJBy9%2B%2BrSAN6DdUpqf1oTzl%2Fq83IBqgJMyxsbiyJcWgjpNxBw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/tokens/90/account_token_records?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens%2F90%2Faccount_token_records&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=DO59EYigu43HE%2Bv6oIVSl5OrA77fq%2FAQ1rXjfGmedRh%2FWvILARXgavvMnLUqE1XOlnjo1TZI%2BFlYliXUb9v5Dw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens/3/account_token_records&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;ea414404add277f50c73d893da442a37&quot;, &quot;timestamp&quot;=&gt;&quot;1617700085&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;QB//lHYBhsWTrikXatrKTHd3nNQxSTs7/jWhEzJBy9++rSAN6DdUpqf1oTzl/q83IBqgJMyxsbiyJcWgjpNxBw==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens/90/account_token_records&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;DO59EYigu43HE+v6oIVSl5OrA77fq/AQ1rXjfGmedRh/WvILARXgavvMnLUqE1XOlnjo1TZI+FlYliXUb9v5Dw==&quot;}</pre>
 
 
 
@@ -273,11 +273,25 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <pre class="response headers">Per-Page: 25
 Total: 1
 ETag: W/&quot;3cb591c9b891ba3883009cd97ef0f28b&quot;
-Last-Modified: Tue, 06 Apr 2021 09:08:05 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;3, :walletId=&gt;3, :tokenId=&gt;3, :maxBalance=&gt;100000, :lockupUntil=&gt;&quot;2021-04-05T09:08:05.000Z&quot;, :regGroupId=&gt;6, :accountFrozen=&gt;false, :status=&gt;&quot;created&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:05.502Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:05.502Z&quot;, :managedAccountId=&gt;nil}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 75,
+    &quot;walletId&quot;: 90,
+    &quot;tokenId&quot;: 90,
+    &quot;maxBalance&quot;: 100000,
+    &quot;lockupUntil&quot;: &quot;2021-04-05T04:35:00.000Z&quot;,
+    &quot;regGroupId&quot;: 100,
+    &quot;accountFrozen&quot;: false,
+    &quot;status&quot;: &quot;created&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;managedAccountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

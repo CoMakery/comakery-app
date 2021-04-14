@@ -283,11 +283,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/6ac9fa6b-53e7-487c-bdef-ddb16ad2ed92/token_balances?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F6ac9fa6b-53e7-487c-bdef-ddb16ad2ed92%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=32d170482829c5857795ebddb22b282f&amp;body[timestamp]=1617683164&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=7H6G1ufT2ozR8T%2FiHx%2BfTNyWIepexxAxhmRoTcAuTGSEIIPiHnOKhi0a9jFf9kTmqZLTa69XJfzI7HTdPgQ9AQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/token_balances?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=4XUhW%2BBL6lZ6QEFzOLYMJvpfMDN8BZtrUymEJjbtQ%2FGr15lEF%2B4o%2Fu965pxmoNHvENMG51pVfcftaOzggBLiCA%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/6ac9fa6b-53e7-487c-bdef-ddb16ad2ed92/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;32d170482829c5857795ebddb22b282f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683164&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;7H6G1ufT2ozR8T/iHx+fTNyWIepexxAxhmRoTcAuTGSEIIPiHnOKhi0a9jFf9kTmqZLTa69XJfzI7HTdPgQ9AQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;4XUhW+BL6lZ6QEFzOLYMJvpfMDN8BZtrUymEJjbtQ/Gr15lEF+4o/u965pxmoNHvENMG51pVfcftaOzggBLiCA==&quot;}</pre>
 
 
 
@@ -297,9 +297,52 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:token=&gt;{:id=&gt;24, :name=&gt;&quot;Token-1e7c322c102451dbfe57675d725bd4675f213a03&quot;, :symbol=&gt;&quot;TKNcd04b9ca324b33103940c88accb7faae986c51ab&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWW89IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--f721919fb6432fb34b7a3badd1a8d577c3cf5c81/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T04:26:03.495Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:26:04.886Z&quot;}, :blockchain=&gt;{:address=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :balance=&gt;200, :maxBalance=&gt;&quot;100000&quot;, :lockupUntil=&gt;&quot;2021-04-05T04:26:03.000Z&quot;, :accountFrozen=&gt;false}, :totalReceived=&gt;&quot;3.0&quot;, :totalReceivedAndAcceptedIn=&gt;&quot;3.0&quot;}, {:token=&gt;{:id=&gt;25, :name=&gt;&quot;Token-b1677736e2f9cf390bb77071f3080faa57f35d0f&quot;, :symbol=&gt;&quot;TKN572eed7bbbdc2e5f183b23cf6d5b0846bbaab9e1&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWXM9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--350226bf48046403d668a388d841d19bbedbd07c/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T04:26:03.620Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:26:04.958Z&quot;}, :blockchain=&gt;{:address=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :balance=&gt;200, :maxBalance=&gt;&quot;100000&quot;, :lockupUntil=&gt;&quot;2021-04-05T04:26:03.000Z&quot;, :accountFrozen=&gt;false}, :totalReceived=&gt;&quot;8.0&quot;, :totalReceivedAndAcceptedIn=&gt;&quot;8.0&quot;}]</pre>
-              <h4>Body</h4>
-              <pre class="response body">[{:token=&gt;{:id=&gt;24, :name=&gt;&quot;Token-1e7c322c102451dbfe57675d725bd4675f213a03&quot;, :symbol=&gt;&quot;TKNcd04b9ca324b33103940c88accb7faae986c51ab&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWW89IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--f721919fb6432fb34b7a3badd1a8d577c3cf5c81/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T04:26:03.495Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:26:04.886Z&quot;}, :blockchain=&gt;{:address=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :balance=&gt;200, :maxBalance=&gt;&quot;100000&quot;, :lockupUntil=&gt;&quot;2021-04-05T04:26:03.000Z&quot;, :accountFrozen=&gt;false}, :totalReceived=&gt;&quot;3.0&quot;, :totalReceivedAndAcceptedIn=&gt;&quot;3.0&quot;}, {:token=&gt;{:id=&gt;25, :name=&gt;&quot;Token-b1677736e2f9cf390bb77071f3080faa57f35d0f&quot;, :symbol=&gt;&quot;TKN572eed7bbbdc2e5f183b23cf6d5b0846bbaab9e1&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :decimalPlaces=&gt;0, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBWXM9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--350226bf48046403d668a388d841d19bbedbd07c/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T04:26:03.620Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:26:04.958Z&quot;}, :blockchain=&gt;{:address=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :balance=&gt;200, :maxBalance=&gt;&quot;100000&quot;, :lockupUntil=&gt;&quot;2021-04-05T04:26:03.000Z&quot;, :accountFrozen=&gt;false}, :totalReceived=&gt;&quot;8.0&quot;, :totalReceivedAndAcceptedIn=&gt;&quot;8.0&quot;}]</pre>
+              <pre class="response body">[
+  {
+    &quot;token&quot;: {
+      &quot;id&quot;: 98,
+      &quot;name&quot;: &quot;Token-479f48b87576885bc6c499e373d3a5094e1600bc&quot;,
+      &quot;symbol&quot;: &quot;TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd&quot;,
+      &quot;network&quot;: &quot;ethereum_ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 0,
+      &quot;logoUrl&quot;: &quot;http://example.org/assets/default_project-75719809b8b85fdf504ff17f997093cfebf84893ad60101c216daa901ee32122.jpg&quot;,
+      &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+      &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+    },
+    &quot;blockchain&quot;: {
+      &quot;address&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
+      &quot;balance&quot;: 200,
+      &quot;maxBalance&quot;: &quot;100000&quot;,
+      &quot;lockupUntil&quot;: &quot;2021-04-05T04:35:00.000Z&quot;,
+      &quot;accountFrozen&quot;: false
+    },
+    &quot;totalReceived&quot;: &quot;3.0&quot;,
+    &quot;totalReceivedAndAcceptedIn&quot;: &quot;3.0&quot;
+  },
+  {
+    &quot;token&quot;: {
+      &quot;id&quot;: 99,
+      &quot;name&quot;: &quot;Token-2817173cd164cef690577e85da2b449a31780872&quot;,
+      &quot;symbol&quot;: &quot;TKN86fff94cc4a4d2c0a0b4962ba855cb9eb0db2112&quot;,
+      &quot;network&quot;: &quot;ethereum_ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 0,
+      &quot;logoUrl&quot;: &quot;http://example.org/assets/default_project-75719809b8b85fdf504ff17f997093cfebf84893ad60101c216daa901ee32122.jpg&quot;,
+      &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+      &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+    },
+    &quot;blockchain&quot;: {
+      &quot;address&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
+      &quot;balance&quot;: 200,
+      &quot;maxBalance&quot;: &quot;100000&quot;,
+      &quot;lockupUntil&quot;: &quot;2021-04-05T04:35:00.000Z&quot;,
+      &quot;accountFrozen&quot;: false
+    },
+    &quot;totalReceived&quot;: &quot;8.0&quot;,
+    &quot;totalReceivedAndAcceptedIn&quot;: &quot;8.0&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

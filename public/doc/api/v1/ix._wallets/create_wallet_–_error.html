@@ -208,11 +208,31 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/215fbc88-07e7-46f9-828a-a0347ec1503c/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:wallets=>[{:address=>"3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt", :name=>"Wallet"}]}, :url=>"http://example.org/api/v1/accounts/215fbc88-07e7-46f9-828a-a0347ec1503c/wallets", :method=>"POST", :nonce=>"6121198620e6e2ea36b8cc13322b1f63", :timestamp=>"1617707668"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"2jQnVtGSK7ujKWSi8K5H8ax2Xn00TU6sffST8qECUVX7SanUndlsIh6Vd0OOeqXnAQF8QeKp7GtN8e8bM9f2Bw=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "wallets": [
+        {
+          "address": "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
+          "name": "Wallet"
+        }
+      ]
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "oWN1/+WYrnl+eVJQ79s0jBIuVtFg7r/ueLEQgGvDzDoY+rcwjZsh4kqHU/wg5FCBZ3v+Zur7uMkB7241HuNnDg=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

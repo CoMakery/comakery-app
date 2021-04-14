@@ -171,11 +171,27 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/b0b3946c-1581-4136-bada-edb5f937219b/interests</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/interests</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:project_id=>28, :body=>{:data=>{:project_id=>"28"}, :url=>"http://example.org/api/v1/accounts/b0b3946c-1581-4136-bada-edb5f937219b/interests", :method=>"POST", :nonce=>"d931cc2e547207a221136123dc3a0a3f", :timestamp=>"1617683167"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"oZbZmEdY3JZUITI6RFvr2CySjE6me7/3JspmYuDdHXUVz59Yz+YlMGe8+nntR9Nap86bzBoFuu5kO3L5N/K+Aw=="}}</pre>
+            <pre class="request body">{
+  "project_id": 98,
+  "body": {
+    "data": {
+      "project_id": "98"
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/interests",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "XOcjxzpRTOWKFncC4uxXKG3MmTfOYOY7/vv6gYnLZxF9GcYH5wUIMHn7pBvnX3E9J5Mb+5YBA8OJhEJaqAD2AQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

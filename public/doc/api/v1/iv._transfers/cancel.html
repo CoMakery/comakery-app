@@ -171,11 +171,24 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/1/transfers/1</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/30/transfers/50</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>"", :url=>"http://example.org/api/v1/projects/1/transfers/1", :method=>"DELETE", :nonce=>"5a43d9c20f91d44e069e3000f1061b8e", :timestamp=>"1617691454"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"u5aGleOl6D/vt+9BwLCGEMYDxDcxdEbJ0BImUtQBK0aFjFXNAcuDUjof/JPQrFLtdUgpzmmQDXYGfpOp+QB4BQ=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": "",
+    "url": "http://example.org/api/v1/projects/30/transfers/50",
+    "method": "DELETE",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "GOonhBJyQAVCP5a+IRC4ea/CU8aV1U3ho3i7kyRXZEY54NPelbmSqBTf56GQHsSQ/S/mm1KZU2XUUW24hujcBQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -184,7 +197,21 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;1, :transferTypeId=&gt;3, :recipientWalletId=&gt;nil, :amount=&gt;&quot;1000.0&quot;, :quantity=&gt;&quot;2.0&quot;, :totalAmount=&gt;&quot;2000.0&quot;, :description=&gt;&quot;Award to a team member&quot;, :transactionError=&gt;nil, :status=&gt;&quot;cancelled&quot;, :createdAt=&gt;&quot;2021-04-06T06:44:14.344Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:44:14.895Z&quot;, :accountId=&gt;&quot;f6b73fd1-c049-4ba3-8307-b538c13d7200&quot;, :projectId=&gt;1}</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 50,
+  &quot;transferTypeId&quot;: 10,
+  &quot;recipientWalletId&quot;: null,
+  &quot;amount&quot;: &quot;1000.0&quot;,
+  &quot;quantity&quot;: &quot;2.0&quot;,
+  &quot;totalAmount&quot;: &quot;2000.0&quot;,
+  &quot;description&quot;: &quot;Award to a team member&quot;,
+  &quot;transactionError&quot;: null,
+  &quot;status&quot;: &quot;cancelled&quot;,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;accountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;,
+  &quot;projectId&quot;: 30
+}</pre>
       </div>
     </div>
   </body>

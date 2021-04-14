@@ -195,11 +195,28 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/441dc8e1-2aaf-4eaa-9a5f-6cf9d1fa6daf/verifications</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:verification=>{:max_investment_usd=>"0"}}, :url=>"http://example.org/api/v1/accounts/441dc8e1-2aaf-4eaa-9a5f-6cf9d1fa6daf/verifications", :method=>"POST", :nonce=>"1c1ce6c87fa0afe53c799ff66fb62002", :timestamp=>"1617683141"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"6a2jlSwlJJpBZxyiAmme8x+80c8he8PVvJ3L0TU5niYpDmMM5D1t5RCuXf4jNqwZw+eawFBFAZxU7nAIg0A6AA=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "verification": {
+        "max_investment_usd": "0"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/verifications",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "DBGMWAh/el8C8xGxZBMuMdyV1eXL+LyiR9C1mS1Kqw/UWwnMFzmClxD2YHRJTnnzogCu2cVYHvSzXUKAKPPTCg=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

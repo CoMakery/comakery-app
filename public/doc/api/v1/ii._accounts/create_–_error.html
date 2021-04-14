@@ -223,14 +223,49 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:account=>{:managed_account_id=>"37edfd11-6554-4a0c-b104-1a123aa62de1"}}, :url=>"http://example.org/api/v1/accounts", :method=>"POST", :nonce=>"130b25e75d511ab5ce8ee4844d9fece6", :timestamp=>"1617683161"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"ZPMfn1YSra5JN2LrC4aKUFSUo1VfzeJFmYBP0XcOV7I8mz5PEwDmGHo4j57RPuPBlCMNlwNmagS1ePI8PAUXCA=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account": {
+        "managed_account_id": "37edfd11-6554-4a0c-b104-1a123aa62de1"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "9S98JGwJQ/42N53E4Bou8dfk5aLd6k/8U5EHsnG63vC6gtKK9eg4WDwl3JWOhzigQsrN+YPOTaB3OM3xFEssCA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">{:errors=&gt;{:email=&gt;[&quot;can&#39;t be blank&quot;], :firstName=&gt;[&quot;can&#39;t be blank&quot;], :lastName=&gt;[&quot;can&#39;t be blank&quot;], :country=&gt;[&quot;can&#39;t be blank&quot;], :dateOfBirth=&gt;[&quot;should be present in correct format&quot;]}}</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;email&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;firstName&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;lastName&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;country&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;dateOfBirth&quot;: [
+      &quot;should be present in correct format&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

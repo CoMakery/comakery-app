@@ -243,22 +243,35 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/a2a4d648-f184-4a14-90e5-f3eda18abfb5/wallets/22?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fa2a4d648-f184-4a14-90e5-f3eda18abfb5%2Fwallets%2F22&amp;body[method]=GET&amp;body[nonce]=eb20591fd286f1ccb1ebd240e53591f9&amp;body[timestamp]=1617707670&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=t%2ByTuo494IgD%2F7E%2Bh3OoKTrqrOT%2FDJy5aHbtMWPROHqsdN0o9KFDe445GXRB%2BwynuwyDXIsNaN3vzoz6nU9dDA%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets/59?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949%2Fwallets%2F59&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=vnPPL%2BIz3WK8PRIuvUiS9lLdPfFtk9e5nPO2q9LPfPPG8ZtZi1oA2MZPbK7ofVzzK8NgnWYUghZG10LXiYVUDg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/a2a4d648-f184-4a14-90e5-f3eda18abfb5/wallets/22&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;eb20591fd286f1ccb1ebd240e53591f9&quot;, &quot;timestamp&quot;=&gt;&quot;1617707670&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;t+yTuo494IgD/7E+h3OoKTrqrOT/DJy5aHbtMWPROHqsdN0o9KFDe445GXRB+wynuwyDXIsNaN3vzoz6nU9dDA==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets/59&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;vnPPL+Iz3WK8PRIuvUiS9lLdPfFtk9e5nPO2q9LPfPPG8ZtZi1oA2MZPbK7ofVzzK8NgnWYUghZG10LXiYVUDg==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
               <pre class="response headers">ETag: W/&quot;858c0b3eba44ad8a2e5e38329ad310b5&quot;
-Last-Modified: Tue, 06 Apr 2021 11:14:30 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;22, :name=&gt;&quot;Wallet&quot;, :address=&gt;&quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;, :primaryWallet=&gt;true, :source=&gt;&quot;user_provided&quot;, :state=&gt;&quot;ok&quot;, :createdAt=&gt;&quot;2021-04-06T11:14:30.633Z&quot;, :updatedAt=&gt;&quot;2021-04-06T11:14:30.633Z&quot;, :blockchain=&gt;&quot;bitcoin&quot;, :provisionTokens=&gt;[]}</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 59,
+  &quot;name&quot;: &quot;Wallet&quot;,
+  &quot;address&quot;: &quot;3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt&quot;,
+  &quot;primaryWallet&quot;: true,
+  &quot;source&quot;: &quot;user_provided&quot;,
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;blockchain&quot;: &quot;bitcoin&quot;,
+  &quot;provisionTokens&quot;: [
+
+  ]
+}</pre>
       </div>
     </div>
   </body>

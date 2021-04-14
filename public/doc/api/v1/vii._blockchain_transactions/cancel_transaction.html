@@ -173,14 +173,33 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO
+Api-Transaction-Key: u55DHrCcnJ41r6S71SyT4NjaZjxVlO3k</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/2/blockchain_transactions/2</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/45/blockchain_transactions/49</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:transaction=>{:tx_hash=>"0xebec2f7c55204e2f4aadebf9473e5f197d3842aa5faaa9a3708e6534b924935f", :status_message=>"hot wallet error: insufficient balance"}}, :url=>"http://example.org/api/v1/projects/2/blockchain_transactions/2", :method=>"DELETE", :nonce=>"b2a750c099e4ade6add7c044b7488d38", :timestamp=>"1617700090"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"kE9/Gh5PLrJNxp4oU16KZpMEaHfj3UEtS3yfFuTm6iKbUVh4PBridVHuaQpFwcuwVjxr/0av0wktKWSJcxBdBg=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transaction": {
+        "tx_hash": null,
+        "status_message": "hot wallet error: insufficient balance"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/45/blockchain_transactions/40",
+    "method": "DELETE",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "9XSKT9eb1dVBGfTEBQBdMA0E3aXW/U2EHwtRY3eBBeeGd1gHZ4rvmYjFQtNU/iGdqB5S5xMUUiPYf3ooQ8wkCg=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -189,7 +208,23 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;2, :blockchainTransactableId=&gt;2, :destination=&gt;&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;, :source=&gt;&quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;, :amount=&gt;1, :nonce=&gt;425616, :contractAddress=&gt;&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;, :network=&gt;&quot;ethereum_ropsten&quot;, :txHash=&gt;&quot;0xebec2f7c55204e2f4aadebf9473e5f197d3842aa5faaa9a3708e6534b924935f&quot;, :txRaw=&gt;&quot;0xf86a83067e90822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080&quot;, :status=&gt;&quot;cancelled&quot;, :statusMessage=&gt;&quot;hot wallet error: insufficient balance&quot;, :createdAt=&gt;&quot;2021-04-06T09:08:10.530Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:10.659Z&quot;, :syncedAt=&gt;nil}</pre>
+              <pre class="response body">{
+  &quot;id&quot;: &quot;40&quot;,
+  &quot;blockchainTransactableId&quot;: 50,
+  &quot;destination&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
+  &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
+  &quot;amount&quot;: 1,
+  &quot;nonce&quot;: 1,
+  &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+  &quot;network&quot;: &quot;ethereum_ropsten&quot;,
+  &quot;txHash&quot;: null,
+  &quot;txRaw&quot;: &quot;{\&quot;from\&quot;:\&quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB\&quot;,\&quot;to\&quot;:\&quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37\&quot;,\&quot;value\&quot;:\&quot;0x0\&quot;,\&quot;contract\&quot;:{\&quot;abi\&quot;:[{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[],\&quot;name\&quot;:\&quot;isPaused\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;bool\&quot;,\&quot;name\&quot;:\&quot;\&quot;,\&quot;type\&quot;:\&quot;bool\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;addr\&quot;,\&quot;type\&quot;:\&quot;address\&quot;}],\&quot;name\&quot;:\&quot;getLockUntil\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;timestamp\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;addr\&quot;,\&quot;type\&quot;:\&quot;address\&quot;}],\&quot;name\&quot;:\&quot;getMaxBalance\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;addr\&quot;,\&quot;type\&quot;:\&quot;address\&quot;}],\&quot;name\&quot;:\&quot;getTransferGroup\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;groupID\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;addr\&quot;,\&quot;type\&quot;:\&quot;address\&quot;}],\&quot;name\&quot;:\&quot;getFrozenStatus\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;bool\&quot;,\&quot;name\&quot;:\&quot;status\&quot;,\&quot;type\&quot;:\&quot;bool\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;account\&quot;,\&quot;type\&quot;:\&quot;address\&quot;}],\&quot;name\&quot;:\&quot;balanceOf\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[],\&quot;name\&quot;:\&quot;decimals\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;uint8\&quot;,\&quot;name\&quot;:\&quot;\&quot;,\&quot;type\&quot;:\&quot;uint8\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:true,\&quot;inputs\&quot;:[],\&quot;name\&quot;:\&quot;symbol\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;string\&quot;,\&quot;name\&quot;:\&quot;\&quot;,\&quot;type\&quot;:\&quot;string\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;view\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;addr\&quot;,\&quot;type\&quot;:\&quot;address\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;groupID\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;timeLockUntil\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;maxBalance\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;},{\&quot;internalType\&quot;:\&quot;bool\&quot;,\&quot;name\&quot;:\&quot;status\&quot;,\&quot;type\&quot;:\&quot;bool\&quot;}],\&quot;name\&quot;:\&quot;setAddressPermissions\&quot;,\&quot;outputs\&quot;:[],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;from\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;to\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;lockedUntil\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;name\&quot;:\&quot;setAllowGroupTransfer\&quot;,\&quot;outputs\&quot;:[],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;from\&quot;,\&quot;type\&quot;:\&quot;address\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;value\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;name\&quot;:\&quot;burn\&quot;,\&quot;outputs\&quot;:[],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;to\&quot;,\&quot;type\&quot;:\&quot;address\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;value\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;name\&quot;:\&quot;mint\&quot;,\&quot;outputs\&quot;:[],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[],\&quot;name\&quot;:\&quot;pause\&quot;,\&quot;outputs\&quot;:[],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[],\&quot;name\&quot;:\&quot;unpause\&quot;,\&quot;outputs\&quot;:[],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;},{\&quot;constant\&quot;:false,\&quot;inputs\&quot;:[{\&quot;internalType\&quot;:\&quot;address\&quot;,\&quot;name\&quot;:\&quot;to\&quot;,\&quot;type\&quot;:\&quot;address\&quot;},{\&quot;internalType\&quot;:\&quot;uint256\&quot;,\&quot;name\&quot;:\&quot;value\&quot;,\&quot;type\&quot;:\&quot;uint256\&quot;}],\&quot;name\&quot;:\&quot;transfer\&quot;,\&quot;outputs\&quot;:[{\&quot;internalType\&quot;:\&quot;bool\&quot;,\&quot;name\&quot;:\&quot;success\&quot;,\&quot;type\&quot;:\&quot;bool\&quot;}],\&quot;payable\&quot;:false,\&quot;stateMutability\&quot;:\&quot;nonpayable\&quot;,\&quot;type\&quot;:\&quot;function\&quot;}],\&quot;method\&quot;:\&quot;transfer\&quot;,\&quot;parameters\&quot;:[\&quot;0xB4252b39f8506A711205B0b1C4170f0034065b46\&quot;,\&quot;1\&quot;]}}&quot;,
+  &quot;status&quot;: &quot;cancelled&quot;,
+  &quot;statusMessage&quot;: &quot;hot wallet error: insufficient balance&quot;,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;syncedAt&quot;: null
+}</pre>
       </div>
     </div>
   </body>

@@ -219,11 +219,34 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/4/transfers</pre>
+          <pre class="request route highlight">POST /api/v1/projects/30/transfers</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:transfer=>{:amount=>"1000.00000000", :quantity=>"2.00", :total_amount=>"2000.00000000", :description=>"investor", :transfer_type_id=>"21", :account_id=>"1e0d0e31-ec5f-4aaa-afb7-59e93bd5c387", :recipient_wallet_id=>"2"}}, :url=>"http://example.org/api/v1/projects/4/transfers", :method=>"POST", :nonce=>"c15c604d79cc1f678adebf79166f9785", :timestamp=>"1617691458"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"ryoVuiFiYKVyupP1fXjvfQe5e5CL+h3BQCwtl833oyE35iN1E3JOn+NrsZFcdHF9b6gvRAuQd5raBFx9Xr/OBA=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transfer": {
+        "amount": "1000.00000000",
+        "quantity": "2.00",
+        "total_amount": "2000.00000000",
+        "description": "investor",
+        "transfer_type_id": "80",
+        "account_id": "1c182a7b-4f22-4636-9047-8bab32352949",
+        "recipient_wallet_id": "50"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/30/transfers",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "9NSlMDmZogCUWKUmrY5Zf/44yu3TIEYVTQObLWF+WIC7oZDNdfA9IIAsp8KA4QjwYnkBL6M/1jfrDDPWg2j5CQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -232,7 +255,21 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;13, :transferTypeId=&gt;21, :recipientWalletId=&gt;2, :amount=&gt;&quot;1000.0&quot;, :quantity=&gt;&quot;2.0&quot;, :totalAmount=&gt;&quot;2000.0&quot;, :description=&gt;&quot;investor&quot;, :transactionError=&gt;nil, :status=&gt;&quot;accepted&quot;, :createdAt=&gt;&quot;2021-04-06T06:44:18.916Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:44:18.916Z&quot;, :accountId=&gt;&quot;1e0d0e31-ec5f-4aaa-afb7-59e93bd5c387&quot;, :projectId=&gt;4}</pre>
+              <pre class="response body">{
+  &quot;id&quot;: &quot;10&quot;,
+  &quot;transferTypeId&quot;: 80,
+  &quot;recipientWalletId&quot;: 50,
+  &quot;amount&quot;: &quot;1000.0&quot;,
+  &quot;quantity&quot;: &quot;2.0&quot;,
+  &quot;totalAmount&quot;: &quot;2000.0&quot;,
+  &quot;description&quot;: &quot;investor&quot;,
+  &quot;transactionError&quot;: null,
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;accountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;,
+  &quot;projectId&quot;: 30
+}</pre>
       </div>
     </div>
   </body>

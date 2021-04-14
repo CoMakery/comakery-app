@@ -223,7 +223,25 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:transfer=>{:amount=>"-1.00", :account_id=>"e56c2edb-2864-413d-97ea-0e6578964b23"}}, :url=>"http://example.org/api/v1/projects/3/transfers", :method=>"POST", :nonce=>"37d0b42deb1e7a977e60948dc40059d4", :timestamp=>"1617691457"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"+I9g0PTijLeUuOJiQkDT1mIFdsBoJCM61afk7U0OaUkTDTrPejTgKmwTeobb4Tys0aTbG326Hs/cekL8cV/sCw=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "transfer": {
+        "amount": "-1.00",
+        "account_id": "1c182a7b-4f22-4636-9047-8bab99352949"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/30/transfers",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "gPcSlWINoPNLl014EXPRlDeFLKJP+rTU9h2G2Cb/IMrv7U0UNatvmARSJGQwu2Aho2IUV14XESORDVEOiHCSAw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>

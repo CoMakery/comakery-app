@@ -183,7 +183,27 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{:recovery_token=>"test_signature", :payload=>"034cd8a93f5de5faf91fdaa2fc676b6fca8000730a32a1543e9ef362c8652dafefbf82252e39fcba16788c95470e66410980f91dbf3f52ad66", :transport_public_key=>"048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917", :body=>{:data=>{:recovery_token=>"test_signature", :payload=>"034cd8a93f5de5faf91fdaa2fc676b6fca8000730a32a1543e9ef362c8652dafefbf82252e39fcba16788c95470e66410980f91dbf3f52ad66", :transport_public_key=>"048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917"}, :url=>"http://example.org/api/v1/wallet_recovery/recover", :method=>"POST", :nonce=>"b7e0afd4ae50a950f8ad2630fe29c4e9", :timestamp=>"1617707688"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"KqVOw/z5HvNWx4GeFHFIA4erT4rV7oMyuSGDHkeQ9xBm8ybs4ZLuWjma/CXKYJ4CiLZuXYSqL3wng+jNcuT0Bw=="}}</pre>
+            <pre class="request body">{
+  "recovery_token": "test_signature",
+  "payload": "02a308cf11cdbbd2116d3ab7b3471e55a95a515e324f48b1b713ddfedcbb65fc5db860c3c4d1e917b3cdabf10a7c5e9ce1567ba22ac8dfc14a",
+  "transport_public_key": "048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917",
+  "body": {
+    "data": {
+      "recovery_token": "test_signature",
+      "payload": "02a308cf11cdbbd2116d3ab7b3471e55a95a515e324f48b1b713ddfedcbb65fc5db860c3c4d1e917b3cdabf10a7c5e9ce1567ba22ac8dfc14a",
+      "transport_public_key": "048F5ED4C1BE651F6254F22FFD41CE963CCD7A0BA36CF57E8AB56C17D0CCBDD572BDB242E30FE01AE4040D6F8F76425D2C05EA82FE14804F08E266E017A6D3E917"
+    },
+    "url": "http://example.org/api/v1/wallet_recovery/recover",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "dlURvznltWw0jAUkVKOuYCDxewtJ/+zXuR2vkQrwCC9m6DiuwAWvC1z+qFXWbIeTH4sDsHY8xU7u4/KGq6GWDQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -192,7 +212,7 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{:data=&gt;&quot;024d1e934848f67268ca90a0f5fc0ca70d969a998bcf66adfefacf398720f0f1e04f0ea677fec6e5de9f13c723f001a94e1b33b8ae845f7de1&quot;}</pre>
+              <pre class="response body">{&quot;data&quot;:&quot;03d71a3bdc5b609f2845744904aa1fb5f4a62a742aa5d8d221cc9e2d21601f4c5447f85aa71d4a1c7b8a075cf3f7f529093be13531f6457e14&quot;}</pre>
       </div>
     </div>
   </body>

@@ -179,11 +179,28 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/12/reg_groups</pre>
+          <pre class="request route highlight">POST /api/v1/projects/50/reg_groups</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:reg_group=>{:name=>"Test"}}, :url=>"http://example.org/api/v1/projects/12/reg_groups", :method=>"POST", :nonce=>"0a82a7cdee630bd8ceeb56e533a02e16", :timestamp=>"1617700102"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"EHJo9jaFtqIPLwrbsQOzOEB8FCMqcJm4MD6WwCXyQN3Qeoskq8b2cnvxk62KP8w8kEMp64lH1jyvcLDRImoIAw=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "reg_group": {
+        "name": "Test"
+      }
+    },
+    "url": "http://example.org/api/v1/projects/50/reg_groups",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "v2bPNES/Rn895DHl+r1/uzu1k/DXWeN59XvBmOApANVT7PCMXlIHhZ1GpWDH/VlB/LQi+qzYjrTa7GCoEkPaDQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -192,7 +209,7 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;32, :name=&gt;&quot;Test&quot;, :tokenId=&gt;28, :blockchainId=&gt;1031, :createdAt=&gt;&quot;2021-04-06T09:08:22.674Z&quot;, :updatedAt=&gt;&quot;2021-04-06T09:08:22.674Z&quot;}</pre>
+              <pre class="response body">{&quot;id&quot;:45,&quot;name&quot;:&quot;Test&quot;,&quot;tokenId&quot;:25,&quot;blockchainId&quot;:1002,&quot;createdAt&quot;:&quot;2021-04-06T04:35:00.000Z&quot;,&quot;updatedAt&quot;:&quot;2021-04-06T04:35:00.000Z&quot;}</pre>
       </div>
     </div>
   </body>

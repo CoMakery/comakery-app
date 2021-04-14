@@ -195,11 +195,31 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/9f392236-2175-485b-b6f1-810a8cc7675c/verifications</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:verification=>{:passed=>"true", :max_investment_usd=>"10000", :verification_type=>"aml-kyc", :created_at=>"2021-04-03 04:25:42 UTC"}}, :url=>"http://example.org/api/v1/accounts/9f392236-2175-485b-b6f1-810a8cc7675c/verifications", :method=>"POST", :nonce=>"f95488b19858bd2a6ea7b9198c13d9a2", :timestamp=>"1617683143"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"cNdYy3M44Y7DVq0kuWbMbSefwR4osACE5K8f+5h7CffvO8iGeS326i4CBUzKyUReb5Ckj1gb8xosSZfZTcHyDg=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "verification": {
+        "passed": "true",
+        "max_investment_usd": "10000",
+        "verification_type": "aml-kyc",
+        "created_at": "2021-04-03 04:35:00 UTC"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/verifications",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "eAVhSC54Dupj1c8MWfitJ1jTx1/jds/n+g30phpB8l/4gYNgw3YD7yQGB52ASg3bzwdMf6b7Hi88qyZs2MJtBw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -210,7 +230,15 @@ ETag: W/&quot;f621f10df12d99b826fe62e9a64acc48&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;10000, :createdAt=&gt;&quot;2021-04-03T04:25:42.000Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:43.302Z&quot;}]</pre>
+              <pre class="response body">[
+  {
+    &quot;passed&quot;: true,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 10000,
+    &quot;createdAt&quot;: &quot;2021-04-03T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

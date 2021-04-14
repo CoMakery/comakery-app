@@ -208,11 +208,32 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/37ec01ee-6c21-49b8-80c5-92f184db4632/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:wallets=>[{:blockchain=>"algorand_test", :source=>"ore_id", :name=>"Wallet"}]}, :url=>"http://example.org/api/v1/accounts/37ec01ee-6c21-49b8-80c5-92f184db4632/wallets", :method=>"POST", :nonce=>"9077d6f5299ff3930d168af94bcc7a78", :timestamp=>"1617707668"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"mlxybyFSROStKmubTudTVuzEAEnTfJrb2vOE0o9Vvuq8WyC81rmP0p8Euo7DDlrd7CUp+2kOUC4GiTcm468JBg=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "wallets": [
+        {
+          "blockchain": "algorand_test",
+          "source": "ore_id",
+          "name": "Wallet"
+        }
+      ]
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "YFPK3VT5OKS5YylL8hXpCkrkeOamHKP1HbRXmfTWHztzwoB8a1oqmc5HRhdGnwHmmcIK5eYyW0bV4PHCSRjTBw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -221,7 +242,22 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;20, :name=&gt;&quot;Wallet&quot;, :address=&gt;nil, :primaryWallet=&gt;true, :source=&gt;&quot;ore_id&quot;, :state=&gt;&quot;pending&quot;, :createdAt=&gt;&quot;2021-04-06T11:14:29.062Z&quot;, :updatedAt=&gt;&quot;2021-04-06T11:14:29.062Z&quot;, :blockchain=&gt;&quot;algorand_test&quot;, :provisionTokens=&gt;[]}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 22,
+    &quot;name&quot;: &quot;Wallet&quot;,
+    &quot;address&quot;: null,
+    &quot;primaryWallet&quot;: true,
+    &quot;source&quot;: &quot;ore_id&quot;,
+    &quot;state&quot;: &quot;pending&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;blockchain&quot;: &quot;algorand_test&quot;,
+    &quot;provisionTokens&quot;: [
+
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>

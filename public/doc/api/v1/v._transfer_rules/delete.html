@@ -152,11 +152,24 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/1/transfer_rules/1</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/50/transfer_rules/40</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>"", :url=>"http://example.org/api/v1/projects/1/transfer_rules/1", :method=>"DELETE", :nonce=>"9c38efe6518707b5efc1b261a8553a64", :timestamp=>"1617693632"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"KsX6acQPUr/oo+GfC1DNZxRt+/tfXZv2DQCUteHGmbpm8jhs4wdDJRgiPZ0oX9dNOBhHNs8zdKi/rr88ZsVaBg=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": "",
+    "url": "http://example.org/api/v1/projects/50/transfer_rules/40",
+    "method": "DELETE",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "hMApkqCWA/FUTdnK9b0P/btD7BGi0Lh7Cm2sm9Zn+iXy3buvzmErT/Q/xGo/9ZteP77q3FTr072xHSBBvvxNCQ=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -164,6 +177,10 @@ table th, table td {
               <pre class="response headers">ETag: W/&quot;4f53cda18c2baa0c0354bb5f9a3ecbe5&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+
+]</pre>
       </div>
     </div>
   </body>

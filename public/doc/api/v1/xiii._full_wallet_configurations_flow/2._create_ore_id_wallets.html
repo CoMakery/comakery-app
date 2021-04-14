@@ -133,7 +133,28 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:wallets=>[{:blockchain=>"ethereum", :address=>"0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB", :name=>"ETH Wallet"}]}, :url=>"http://example.org/api/v1/accounts/43ff3e88-f722-4cc3-a438-56605f3e4580/wallets", :method=>"POST", :nonce=>"6f8765163d21648394d48ec70d388d07", :timestamp=>"1617607756"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"0H+YG9LZT9KLNlJnt1cf3F0TgI92WujHrLwq4UmR3fC01xy9/yKsTRyB1nT9cEhemWBc1XGFaX3aISnoboo0CQ=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "wallets": [
+        {
+          "blockchain": "ethereum",
+          "address": "0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB",
+          "name": "ETH Wallet"
+        }
+      ]
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "nr3TPGunOPiZFoRDV2iLXlWtXPPVPc+1Rs64kBu0ciTEJugAKShWlZiqeYj0K/CZN1UlRm2Nvb+hKv4igkGSBA=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -142,7 +163,22 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;19, :name=&gt;&quot;ETH Wallet&quot;, :address=&gt;&quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;, :primaryWallet=&gt;true, :source=&gt;&quot;user_provided&quot;, :state=&gt;&quot;ok&quot;, :createdAt=&gt;&quot;2021-04-05T07:29:16.339Z&quot;, :updatedAt=&gt;&quot;2021-04-05T07:29:16.339Z&quot;, :blockchain=&gt;&quot;ethereum&quot;, :provisionTokens=&gt;[]}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 25,
+    &quot;name&quot;: &quot;ETH Wallet&quot;,
+    &quot;address&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
+    &quot;primaryWallet&quot;: true,
+    &quot;source&quot;: &quot;user_provided&quot;,
+    &quot;state&quot;: &quot;ok&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;blockchain&quot;: &quot;ethereum&quot;,
+    &quot;provisionTokens&quot;: [
+
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>

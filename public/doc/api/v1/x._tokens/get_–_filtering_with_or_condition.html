@@ -209,11 +209,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=120144664418ae4716a890ca099b5552&amp;body[timestamp]=1617706313&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=cFep5MtjDnw%2FNh8L2m0g8yFsO5wBOekp8qZzl3gNID8lIulWcq9CMuiYL57yl1HlfcphCrtBOWmezvCKJsisCw%3D%3D&amp;q[name_or_symbol_cont]=Cats</pre>
+          <pre class="request route highlight">GET /api/v1/tokens?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Ftokens&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=fk7WrTAWiB8Bq%2BgoYF74IK5YMu6mf10d9Au%2FXPzYlYW8NQDrK%2F%2FN5Qx6K%2FcMjssbM6fzXpQ7fnCv6v%2FjEIvZBA%3D%3D&amp;q[name_or_symbol_cont]=Cats</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;120144664418ae4716a890ca099b5552&quot;, &quot;timestamp&quot;=&gt;&quot;1617706313&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;cFep5MtjDnw/Nh8L2m0g8yFsO5wBOekp8qZzl3gNID8lIulWcq9CMuiYL57yl1HlfcphCrtBOWmezvCKJsisCw==&quot;}
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/tokens&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;fk7WrTAWiB8Bq+goYF74IK5YMu6mf10d9Au/XPzYlYW8NQDrK//N5Qx6K/cMjssbM6fzXpQ7fnCv6v/jEIvZBA==&quot;}
 q: {&quot;name_or_symbol_cont&quot;=&gt;&quot;Cats&quot;}</pre>
 
 
@@ -221,11 +221,23 @@ q: {&quot;name_or_symbol_cont&quot;=&gt;&quot;Cats&quot;}</pre>
             <h3>Response</h3>
               <h4>Headers</h4>
               <pre class="response headers">ETag: W/&quot;295caf1489fb5ec5cc0ae211203e0b3d&quot;
-Last-Modified: Tue, 06 Apr 2021 10:51:52 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;2, :name=&gt;&quot;Cats&quot;, :symbol=&gt;&quot;TKNc189f57daac654a1a0d26462bca955b533192bd5&quot;, :network=&gt;&quot;bitcoin&quot;, :contractAddress=&gt;nil, :decimalPlaces=&gt;8, :logoUrl=&gt;&quot;/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--4f6ed62d6d0ad4f4d3a9b5450db15d37e9bf0d03/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9UY21WemFYcGxYM1J2WDJacGJHeGJCMmxwYVdrPSIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--4c450acf028fc76954d30c4ba0ae434ade109266/dummy_image.png&quot;, :createdAt=&gt;&quot;2021-04-06T10:51:52.826Z&quot;, :updatedAt=&gt;&quot;2021-04-06T10:51:52.838Z&quot;}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 20,
+    &quot;name&quot;: &quot;Cats&quot;,
+    &quot;symbol&quot;: &quot;TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd&quot;,
+    &quot;network&quot;: &quot;bitcoin&quot;,
+    &quot;contractAddress&quot;: null,
+    &quot;decimalPlaces&quot;: 8,
+    &quot;logoUrl&quot;: &quot;http://example.org/assets/default_project-75719809b8b85fdf504ff17f997093cfebf84893ad60101c216daa901ee32122.jpg&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

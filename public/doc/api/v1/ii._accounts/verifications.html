@@ -195,12 +195,12 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/defad8b1-2927-4f6d-b68c-7e6045092104/verifications?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fdefad8b1-2927-4f6d-b68c-7e6045092104%2Fverifications&amp;body[method]=GET&amp;body[nonce]=72dc9960cf2dd6a06cef33bd7a91bd0e&amp;body[timestamp]=1617683140&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=12JUbOLs%2BPzYxsJesQfIcaJRlvSNuxmcOcfwKQ%2Bz%2FZjUneLjkgXDQdQM8d0p2eZD4Fi%2B%2BYzC9LNH7X2Q9V%2BHAw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/verifications?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949%2Fverifications&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=H0hjNnxUnvArKG4tND6JTQlG1cZWpwv1xnRKnvM9Bfvk3h5bAxbJmtZSmSmQcI06hf8thjB5devtKIPlPJ3MCw%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/defad8b1-2927-4f6d-b68c-7e6045092104/verifications&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;72dc9960cf2dd6a06cef33bd7a91bd0e&quot;, &quot;timestamp&quot;=&gt;&quot;1617683140&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;12JUbOLs+PzYxsJesQfIcaJRlvSNuxmcOcfwKQ+z/ZjUneLjkgXDQdQM8d0p2eZD4Fi++YzC9LNH7X2Q9V+HAw==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/verifications&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;H0hjNnxUnvArKG4tND6JTQlG1cZWpwv1xnRKnvM9Bfvk3h5bAxbJmtZSmSmQcI06hf8thjB5devtKIPlPJ3MCw==&quot;}</pre>
 
 
 
@@ -209,15 +209,33 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <pre class="response headers">Per-Page: 25
 Total: 3
 ETag: W/&quot;2d6adcc10df36bd6dd2a03028f1401ec&quot;
-Last-Modified: Tue, 06 Apr 2021 04:25:40 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;1000000, :createdAt=&gt;&quot;2021-04-06T04:25:38.633Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:38.633Z&quot;}, {:passed=&gt;false, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;100000, :createdAt=&gt;&quot;2021-04-06T04:25:39.988Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:39.988Z&quot;}, {:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;10000, :createdAt=&gt;&quot;2021-04-06T04:25:40.004Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:40.004Z&quot;}]</pre>
-              <h4>Body</h4>
-              <pre class="response body">[{:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;1000000, :createdAt=&gt;&quot;2021-04-06T04:25:38.633Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:38.633Z&quot;}, {:passed=&gt;false, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;100000, :createdAt=&gt;&quot;2021-04-06T04:25:39.988Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:39.988Z&quot;}, {:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;10000, :createdAt=&gt;&quot;2021-04-06T04:25:40.004Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:40.004Z&quot;}]</pre>
-              <h4>Body</h4>
-              <pre class="response body">[{:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;1000000, :createdAt=&gt;&quot;2021-04-06T04:25:38.633Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:38.633Z&quot;}, {:passed=&gt;false, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;100000, :createdAt=&gt;&quot;2021-04-06T04:25:39.988Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:39.988Z&quot;}, {:passed=&gt;true, :verificationType=&gt;&quot;aml-kyc&quot;, :maxInvestmentUsd=&gt;10000, :createdAt=&gt;&quot;2021-04-06T04:25:40.004Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:40.004Z&quot;}]</pre>
+              <pre class="response body">[
+  {
+    &quot;passed&quot;: true,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 1000000,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  },
+  {
+    &quot;passed&quot;: false,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 100000,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  },
+  {
+    &quot;passed&quot;: true,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 10000,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

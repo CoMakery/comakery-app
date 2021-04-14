@@ -208,11 +208,56 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/c6f272bb-f644-4539-9880-b15c449b9c57/wallets</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:tokens_to_provision=>[{:token_id=>"91"}, {:token_id=>"92", :max_balance=>"100", :lockup_until=>"1", :reg_group_id=>"37", :account_frozen=>"false"}], :body=>{:data=>{:wallets=>[{:blockchain=>"algorand_test", :source=>"ore_id", :tokens_to_provision=>[{:token_id=>"91"}, {:token_id=>"92", :max_balance=>"100", :lockup_until=>"1", :reg_group_id=>"37", :account_frozen=>"false"}], :name=>"Wallet name"}]}, :url=>"http://example.org/api/v1/accounts/c6f272bb-f644-4539-9880-b15c449b9c57/wallets", :method=>"POST", :nonce=>"cfce46450dccd10f9e7d6187b941d18a", :timestamp=>"1617707668"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"4fN1F+jATkNe+sVwIG8PyEir1TdXT70F1iCInS2pYakvVBuXCiBeX4ogvCkEhVb+CNkOzBTkDQSrV++Fk6x2AA=="}}</pre>
+            <pre class="request body">{
+  "tokens_to_provision": [
+    {
+      "token_id": "50"
+    },
+    {
+      "token_id": "55",
+      "max_balance": "100",
+      "lockup_until": "1",
+      "reg_group_id": "45",
+      "account_frozen": "false"
+    }
+  ],
+  "body": {
+    "data": {
+      "wallets": [
+        {
+          "blockchain": "algorand_test",
+          "source": "ore_id",
+          "tokens_to_provision": [
+            {
+              "token_id": "50"
+            },
+            {
+              "token_id": "55",
+              "max_balance": "100",
+              "lockup_until": "1",
+              "reg_group_id": "45",
+              "account_frozen": "false"
+            }
+          ],
+          "name": "Wallet name"
+        }
+      ]
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/wallets",
+    "method": "POST",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "MM58FcmsO0qlhxTkdhepiPRhf9lZsvsoy/c+K97425z+bhqPabYoDIBX1hU5Yj6uoEQ890TPRrzABKvY6Ez5Dg=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -221,7 +266,29 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[{:id=&gt;19, :name=&gt;&quot;Wallet name&quot;, :address=&gt;nil, :primaryWallet=&gt;true, :source=&gt;&quot;ore_id&quot;, :state=&gt;&quot;pending&quot;, :createdAt=&gt;&quot;2021-04-06T11:14:28.222Z&quot;, :updatedAt=&gt;&quot;2021-04-06T11:14:28.222Z&quot;, :blockchain=&gt;&quot;algorand_test&quot;, :provisionTokens=&gt;[{:tokenId=&gt;91, :state=&gt;&quot;pending&quot;}, {:tokenId=&gt;92, :state=&gt;&quot;pending&quot;}]}]</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 23,
+    &quot;name&quot;: &quot;Wallet name&quot;,
+    &quot;address&quot;: null,
+    &quot;primaryWallet&quot;: true,
+    &quot;source&quot;: &quot;ore_id&quot;,
+    &quot;state&quot;: &quot;pending&quot;,
+    &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+    &quot;blockchain&quot;: &quot;algorand_test&quot;,
+    &quot;provisionTokens&quot;: [
+      {
+        &quot;tokenId&quot;: 50,
+        &quot;state&quot;: &quot;pending&quot;
+      },
+      {
+        &quot;tokenId&quot;: 55,
+        &quot;state&quot;: &quot;pending&quot;
+      }
+    ]
+  }
+]</pre>
       </div>
     </div>
   </body>

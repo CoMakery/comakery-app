@@ -18,6 +18,21 @@ class Mom
     Account.new(defaults.merge(attrs))
   end
 
+  def static_account(**attrs)
+    defaults = {
+      email: "me+cc4b6d000417106d1cbbb357ebadd3a0560718bb@example.com",
+      first_name: 'Eva',
+      last_name: 'Smith',
+      nickname: "hunter-0cc45156d229f0a44c938ae649dedb8c1e0ca1de",
+      date_of_birth: '1990/01/01',
+      country: 'United States of America',
+      specialty: Specialty.find_or_create_by(name: 'General'),
+      password: valid_password,
+      managed_account_id: '1c182a7b-4f22-4636-9047-8bab32352949'
+    }
+    Account.new(defaults.merge(attrs))
+  end
+
   def wallet(**attrs)
     defaults = {
       name: 'Wallet',
@@ -124,6 +139,18 @@ class Mom
     TransferRule.new(defaults.merge(attrs))
   end
 
+  def static_transfer_rule(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token, id: 60)
+
+    defaults = {
+      token: token,
+      sending_group: create(:reg_group, id: 50, token: token),
+      receiving_group: create(:reg_group, id: 51, token: token),
+      lockup_until: 1.day.ago
+    }
+    TransferRule.new(defaults.merge(attrs))
+  end
+
   def account_token_record(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
     token = attrs[:token] || build(:comakery_dummy_token)
     account = attrs[:account] || create(:account)
@@ -158,6 +185,33 @@ class Mom
     AccountTokenRecord.new(defaults.merge(attrs))
   end
 
+  def static_account_token_record(**attrs)
+    token = build(:comakery_dummy_token, id: 90)
+    account = create(:static_account, id: 70)
+    reg_group = attrs[:reg_group] || create(:reg_group, id: 100, token: token)
+    wallet =
+      if (account_wallet = account.wallets.find_by(_blockchain: token._blockchain))
+        account_wallet
+      else
+        create(:wallet, id: 90, account: account, _blockchain: token._blockchain, address: build(:ethereum_address_2))
+      end
+
+    attrs.except!(:address, :account, :reg_group, :wallet)
+
+    defaults = {
+      account: account,
+      token: token,
+      wallet: wallet,
+      reg_group: reg_group,
+      max_balance: 100000,
+      balance: 200,
+      account_frozen: false,
+      lockup_until: 1.day.ago
+    }
+
+    AccountTokenRecord.new(defaults.merge(attrs))
+  end
+
   def blockchain_transaction(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
     attrs.delete(:token)
@@ -170,6 +224,44 @@ class Mom
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def static_blockchain_transaction(**attrs)
+    token = create(:comakery_dummy_token)
+    project = create(:project, id: 45, token: token)
+    account = create(:account)
+
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: build(:ethereum_address_2)
+    )
+
+    award = create( :award, id: 50, amount: 1, 
+                    status: :accepted,
+                    account: account,
+                    award_type: create(
+                      :award_type,
+                      project: project
+                    ),
+                    transfer_type: create(
+                      :transfer_type,
+                      project: project
+                    )
+                  )
+    defaults = {
+      blockchain_transactable: award,
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: 1,
       status: :created,
       status_message: 'dummy'
     }
@@ -457,8 +549,7 @@ class Mom
       long_id: SecureRandom.hex(20),
       maximum_tokens: 1_000_000_000_000_000_000,
       token: create(:token),
-      mission: create(:mission),
-      id: 99
+      mission: create(:mission)
     }
     Project.new(defaults.merge(attrs))
   end
@@ -473,6 +564,21 @@ class Mom
 
     t = Token.new(defaults.merge(attrs))
 
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
+  end
+
+  def static_token(**attrs)
+    defaults = {
+      name: "Token-479f48b87576885bc6c499e373d3a5094e1600bc",
+      symbol: "TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd",
+      token_frozen: false
+    }
+
+    t = Token.new(defaults.merge(attrs))
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
       t.save!
     end
@@ -508,8 +614,7 @@ class Mom
       decimal_places: 18,
       _blockchain: :ethereum_ropsten,
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
-      token_frozen: false,
-      id: 99
+      token_frozen: false
     }
     t = Token.new(defaults.merge(attrs))
 

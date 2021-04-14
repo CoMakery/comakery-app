@@ -259,22 +259,36 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/5/transfers/15?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F5%2Ftransfers%2F15&amp;body[method]=GET&amp;body[nonce]=9bc9942b2232e055e35bbd9a9231a48b&amp;body[timestamp]=1617691460&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=zemiZzEyx2Wc7rHSUB4gIDuJ5mnpU%2BY%2FF1qfrB7gm6ibmeaWXpGxzaOQzn1FXOnfxKFh5be81X8yS2MSJUuJAw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/30/transfers/51?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F30%2Ftransfers%2F51&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617683700&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=glp6FAp7hrVzcYqVQE4Od6hl3D%2FXyPUAq3yev3C3ChLgn4gry%2Bnjk0%2FZib6KhAo6OOMb829%2FiQU4nItndXjSAQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/5/transfers/15&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;9bc9942b2232e055e35bbd9a9231a48b&quot;, &quot;timestamp&quot;=&gt;&quot;1617691460&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;zemiZzEyx2Wc7rHSUB4gIDuJ5mnpU+Y/F1qfrB7gm6ibmeaWXpGxzaOQzn1FXOnfxKFh5be81X8yS2MSJUuJAw==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/30/transfers/51&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617683700&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;glp6FAp7hrVzcYqVQE4Od6hl3D/XyPUAq3yev3C3ChLgn4gry+njk0/Zib6KhAo6OOMb829/iQU4nItndXjSAQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
               <pre class="response headers">ETag: W/&quot;5e24606865078a3ade08501003dc5ccf&quot;
-Last-Modified: Tue, 06 Apr 2021 06:44:19 GMT</pre>
+Last-Modified: Tue, 06 Apr 2021 04:35:00 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{:id=&gt;15, :transferTypeId=&gt;25, :recipientWalletId=&gt;nil, :amount=&gt;&quot;50.0&quot;, :quantity=&gt;&quot;1.0&quot;, :totalAmount=&gt;&quot;50.0&quot;, :description=&gt;&quot;Investment&quot;, :transactionError=&gt;nil, :status=&gt;&quot;paid&quot;, :createdAt=&gt;&quot;2021-04-06T06:44:19.967Z&quot;, :updatedAt=&gt;&quot;2021-04-06T06:44:19.959Z&quot;, :accountId=&gt;&quot;54249a31-2154-4427-80b9-3ecd617e0b8d&quot;, :projectId=&gt;5}</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 51,
+  &quot;transferTypeId&quot;: 11,
+  &quot;recipientWalletId&quot;: null,
+  &quot;amount&quot;: &quot;50.0&quot;,
+  &quot;quantity&quot;: &quot;1.0&quot;,
+  &quot;totalAmount&quot;: &quot;50.0&quot;,
+  &quot;description&quot;: &quot;Investment&quot;,
+  &quot;transactionError&quot;: null,
+  &quot;status&quot;: &quot;paid&quot;,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;accountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;,
+  &quot;projectId&quot;: 30
+}</pre>
       </div>
     </div>
   </body>

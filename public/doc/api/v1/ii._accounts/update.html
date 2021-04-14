@@ -227,11 +227,28 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/accounts/94d3762e-f0bd-4199-97f6-e1d74406d2bd</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{:body=>{:data=>{:account=>{:first_name=>"Alex"}}, :url=>"http://example.org/api/v1/accounts/94d3762e-f0bd-4199-97f6-e1d74406d2bd", :method=>"PUT", :nonce=>"947d2cdd0bf16037910798baeca6aad7", :timestamp=>"1617683157"}, :proof=>{:type=>"Ed25519Signature2018", :verificationMethod=>"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=", :signature=>"eykYt2SAKSZB9dFOUW3LrpcYxitq8gSMXNXkWzUW1bS3NjkZwh2+OeYg3TKLYD7LGu5dU9iTAo3W8Xe5oXBoAg=="}}</pre>
+            <pre class="request body">{
+  "body": {
+    "data": {
+      "account": {
+        "first_name": "Alex"
+      }
+    },
+    "url": "http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949",
+    "method": "PUT",
+    "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
+    "timestamp": "1617683700"
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
+    "signature": "Y68ufA0z157vahlAUHbUtTs+39RU5mpbntYCw7NmXmA5LJo/pRrvMXhL+GeRxPWcdVPiobIEc+2b2y24dnvBAw=="
+  }
+}</pre>
 
 
             <h3>Response</h3>
@@ -240,7 +257,21 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{:email=&gt;&quot;me+0a3bc6299610167ad0825c865e4c012b0864f6ec@example.com&quot;, :managedAccountId=&gt;&quot;94d3762e-f0bd-4199-97f6-e1d74406d2bd&quot;, :firstName=&gt;&quot;Alex&quot;, :lastName=&gt;&quot;Smith&quot;, :nickname=&gt;&quot;hunter-bd60fa8400789aad9fdb455ce8d40e5768797a79&quot;, :imageUrl=&gt;&quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;, :country=&gt;&quot;United States of America&quot;, :dateOfBirth=&gt;&quot;1990-01-01&quot;, :verificationState=&gt;&quot;unknown&quot;, :verificationDate=&gt;nil, :verificationMaxInvestmentUsd=&gt;nil, :createdAt=&gt;&quot;2021-04-06T04:25:56.689Z&quot;, :updatedAt=&gt;&quot;2021-04-06T04:25:57.856Z&quot;}</pre>
+              <pre class="response body">{
+  &quot;email&quot;: &quot;me+cc4b6d000417106d1cbbb357ebadd3a0560718bb@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;1c182a7b-4f22-4636-9047-8bab32352949&quot;,
+  &quot;firstName&quot;: &quot;Alex&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;nickname&quot;: &quot;hunter-0cc45156d229f0a44c938ae649dedb8c1e0ca1de&quot;,
+  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
+  &quot;country&quot;: &quot;United States of America&quot;,
+  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
+  &quot;verificationState&quot;: &quot;unknown&quot;,
+  &quot;verificationDate&quot;: null,
+  &quot;verificationMaxInvestmentUsd&quot;: null,
+  &quot;createdAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2021-04-06T04:35:00.000Z&quot;
+}</pre>
       </div>
     </div>
   </body>
