@@ -18,18 +18,18 @@ jobs:
   rspec:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         ruby: [2.7.1]
         node: [12.x]
-        ci_node_total: [15]
-        ci_node_index: [0, 1, 2, 3, 4,5,6,7,8,9,10,11,12,13,14]
+        ci_node_total: [10]
+        ci_node_index: [0, 1, 2, 3, 4,5,6,7,8,9]
 
     env:
       KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
       KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
       KNAPSACK_PRO_FIXED_QUEUE_SPLIT: "true"
-      RSPEC_RETRY_RETRY_COUNT: 4
       BUNDLER_VERSION: 2.2.3
       RACK_ENV: test
       RAILS_ENV: test
@@ -107,13 +107,7 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-
-    - name: Cache Ruby dependencies
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ matrix.ruby }}-gems1-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: ${{ matrix.ruby }}-gems1-
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
     - name: Install OS dependenices
       run: sudo apt-get install libpq-dev libssl-dev graphviz imagemagick
@@ -150,9 +144,9 @@ jobs:
     - name: Run tests
       run: env bundle exec rake knapsack_pro:queue:rspec
 
-    # - name: Upload a Build Artifact
-    #   if: always()
-    #   uses: actions/upload-artifact@v2.2.1
-    #   with:
-    #     name: SimpleCov Report
-    #     path: coverage/
+    - name: Upload a Build Artifact
+      if: always()
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: SimpleCov Report ${{ matrix.ci_node_index }}
+        path: coverage/

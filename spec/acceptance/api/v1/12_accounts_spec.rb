@@ -69,6 +69,7 @@ resource 'II. Accounts' do
       parameter :image, 'image', type: :string
       parameter :country, 'counry', type: :string, required: true
       parameter :date_of_birth, 'date of birth (YYYY-MM-DD)', type: :string, required: true
+      parameter :project_interests, 'list of interested project ids to subscribe', type: :array, required: false
     end
 
     with_options with_example: true do
@@ -84,7 +85,8 @@ resource 'II. Accounts' do
           last_name: 'Smith',
           nickname: "hunter-b1f157fc0d5ec93680d7b307d417bc5bd2c",
           date_of_birth: '1990-01-31',
-          country: 'United States of America'
+          country: 'United States of America',
+          project_interests: [project.id.to_s]
         }
       end
 

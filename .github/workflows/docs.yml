@@ -122,7 +122,7 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run Command
-      run: env bundle exec rake docs:generate
+      run: env bundle exec rake docs:generate:ordered
 
     - name: Upload a Build Artifact
       if: always()

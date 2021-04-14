@@ -5,12 +5,17 @@ enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || false
 if enable_simplecov
   require 'simplecov'
   SimpleCov.start :rails do
-    SimpleCov.minimum_coverage 5 # lowering this for debugging
+    # SimpleCov.minimum_coverage 5 # removing code coverage requirement until it is configured properly
     #     SimpleCov.minimum_coverage_by_file 38
     #     SimpleCov.refuse_coverage_drop
 
     # add_filter == do not track coverage
-    # add_filter %r{^/lib/generators/}
+    add_filter %r{^/db/migrate/}
+    add_filter %r{^/db//schema.rb/}
+    add_filter %r{^/bin/}
+    add_filter %r{^/doc/}
+    add_filter %r{^/config/}
+    add_filter %r{^/hotwallet/} # has it's own tests
 
     add_group 'Decorators', 'app/decorators'
     add_group 'Interactors', 'app/interactors'
@@ -144,8 +149,8 @@ def wait_for_turbolinks
   has_no_css?('.turbo-progress-bar')
 end
 
-include SlackStubs # rubocop:todo Style/MixinUsage
-include ConstellationStubs # rubocop:todo Style/MixinUsage
+include SlackStubs
+include ConstellationStubs
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
