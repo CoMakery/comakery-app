@@ -3,8 +3,8 @@ require 'rspec_api_documentation/dsl'
 
 resource 'VIII. Reg Groups' do
   include Rails.application.routes.url_helpers
-    before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -36,7 +36,7 @@ resource 'VIII. Reg Groups' do
         explanation 'Returns an array of reg groups. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_project_reg_groups_path(project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)          
+        result = do_request(request)
         result[0][:response_headers]['ETag'] = 'W/"194440b6abad010a97cbd1803dfbda57"' if status == 200
         expect(status).to eq(200)
       end

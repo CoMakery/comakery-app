@@ -20,10 +20,10 @@ class Mom
 
   def static_account(**attrs)
     defaults = {
-      email: "me+cc4b6d000417106d1cbbb357ebadd3a0560718bb@example.com",
+      email: 'me+cc4b6d000417106d1cbbb357ebadd3a0560718bb@example.com',
       first_name: 'Eva',
       last_name: 'Smith',
-      nickname: "hunter-0cc45156d229f0a44c938ae649dedb8c1e0ca1de",
+      nickname: 'hunter-0cc45156d229f0a44c938ae649dedb8c1e0ca1de',
       date_of_birth: '1990/01/01',
       country: 'United States of America',
       specialty: Specialty.find_or_create_by(name: 'General'),
@@ -255,18 +255,17 @@ class Mom
       address: build(:ethereum_address_2)
     )
 
-    award = create( :award, id: 50, amount: 1, 
-                    status: :accepted,
-                    account: account,
-                    award_type: create(
-                      :award_type,
-                      project: project
-                    ),
-                    transfer_type: create(
-                      :transfer_type,
-                      project: project
-                    )
-                  )
+    award = create(:award, id: 50, amount: 1,
+                           status: :accepted,
+                           account: account,
+                           award_type: create(
+                             :award_type,
+                             project: project
+                           ),
+                           transfer_type: create(
+                             :transfer_type,
+                             project: project
+                           ))
     defaults = {
       blockchain_transactable: award,
       amount: 1,
@@ -583,8 +582,8 @@ class Mom
 
   def static_token(**attrs)
     defaults = {
-      name: "Token-479f48b87576885bc6c499e373d3a5094e1600bc",
-      symbol: "TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd",
+      name: 'Token-479f48b87576885bc6c499e373d3a5094e1600bc',
+      symbol: 'TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd',
       token_frozen: false
     }
 
@@ -639,8 +638,8 @@ class Mom
 
   def static_comakery_token(**attrs)
     defaults = {
-      name: "ComakeryToken-4d38e48b6c32993893db2b4a1f9e1162361762a6",
-      symbol: "XYZ90a27bfa779972c98a07b6b67567de4bd4a32bb5",
+      name: 'ComakeryToken-4d38e48b6c32993893db2b4a1f9e1162361762a6',
+      symbol: 'XYZ90a27bfa779972c98a07b6b67567de4bd4a32bb5',
       _token_type: :comakery_security_token,
       decimal_places: 18,
       _blockchain: :ethereum_ropsten,

@@ -5,7 +5,7 @@ resource 'VII. Blockchain Transactions' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -101,7 +101,7 @@ resource 'VII. Blockchain Transactions' do
           if status == 201
             result[0][:request_headers]['Api-Transaction-Key'] = 'F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T'
             result[0][:response_headers]['ETag'] = 'W/"aabf24c719254ca116b09b4f27caff41"'
-          end  
+          end
         end
 
         expect(status).to eq(201)

@@ -5,7 +5,7 @@ resource 'V. Transfer Rules' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -144,7 +144,7 @@ resource 'V. Transfer Rules' do
         explanation 'Delete the tranfer rule and returns an array of present transfer rules (See GET for response details)'
 
         request = build(:api_signed_request, '', api_v1_project_transfer_rule_path(id: transfer_rule.id, project_id: project.id), 'DELETE', 'example.org')
-        result = do_request(request)
+        do_request(request)
         expect(status).to eq(200)
       end
     end

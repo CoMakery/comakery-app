@@ -5,7 +5,7 @@ resource 'XI. Wallet Recovery' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -123,7 +123,7 @@ resource 'XI. Wallet Recovery' do
           body = JSON.parse(result[0][:response_body])
           body['data'] = '03d71a3bdc5b609f2845744904aa1fb5f4a62a742aa5d8d221cc9e2d21601f4c5447f85aa71d4a1c7b8a075cf3f7f529093be13531f6457e14'
           result[0][:response_body] = body.to_json
-        end  
+        end
         expect(status).to eq(201)
       end
     end

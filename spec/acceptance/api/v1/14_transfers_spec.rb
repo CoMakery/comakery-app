@@ -5,7 +5,7 @@ resource 'IV. Transfers' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -15,15 +15,15 @@ resource 'IV. Transfers' do
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
 
-  let!(:account) { create(:static_account,id: 41, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 41, managed_mission: active_whitelabel_mission) }
 
   let!(:project) { create(:static_project, id: 30, mission: active_whitelabel_mission, token: create(:static_token, id: 80, decimal_places: 8, _blockchain: :ethereum)) }
 
-  let!(:transfer_accepted) { create(:transfer, id: 50, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, transfer_type:  create(:transfer_type, id: 10, project: project), account: account) }
+  let!(:transfer_accepted) { create(:transfer, id: 50, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 10, project: project), account: account) }
 
   let!(:transfer_paid) { create(:transfer, id: 51, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 11, project: project), account: account) }
 
-  let!(:transfer_cancelled) { create(:transfer, id: 52, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, transfer_type:  create(:transfer_type, id: 12, project: project), account: account) }
+  let!(:transfer_cancelled) { create(:transfer, id: 52, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 12, project: project), account: account) }
 
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
@@ -126,13 +126,11 @@ resource 'IV. Transfers' do
 
       example 'CREATE' do
         explanation 'Returns created transfer details (See GET for response details)'
-          allow_any_instance_of(Award).to receive(:id).and_return('10')
+        allow_any_instance_of(Award).to receive(:id).and_return('10')
 
         request = build(:api_signed_request, { transfer: transfer }, api_v1_project_transfers_path(project_id: project.id), 'POST', 'example.org')
         result = do_request(request)
-        if status == 201
-          result[0][:response_headers]['ETag'] = 'W/"076fd28b3a69c620a38916045a97c3e5"' 
-        end
+        result[0][:response_headers]['ETag'] = 'W/"076fd28b3a69c620a38916045a97c3e5"' if status == 201
         expect(status).to eq(201)
       end
     end

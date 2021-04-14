@@ -5,7 +5,7 @@ resource 'XIII. Full Wallet configurations flow' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -33,7 +33,7 @@ resource 'XIII. Full Wallet configurations flow' do
       explanation 'Returns created account data'
 
       # 1. Create a comakery account
-      account_params = { managed_account_id: 'bfca35b9-6c9b-449f-93b6-16f2d064de7d', email: "me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com", first_name: 'Eva', last_name: 'Smith', nickname: "hunter-462b87f9e0d6e2149911a619a76116f1f0c820de", date_of_birth: '1990-01-31', country: 'United States of America' }
+      account_params = { managed_account_id: 'bfca35b9-6c9b-449f-93b6-16f2d064de7d', email: 'me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com', first_name: 'Eva', last_name: 'Smith', nickname: 'hunter-462b87f9e0d6e2149911a619a76116f1f0c820de', date_of_birth: '1990-01-31', country: 'United States of America' }
       request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
       result = do_request(request)
       result[0][:response_headers]['ETag'] = 'W/"95ef9c4dc49ce85d83f168bdb02e069e"' if status == 201

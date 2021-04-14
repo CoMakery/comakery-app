@@ -5,7 +5,7 @@ resource 'IX. Wallets' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -158,9 +158,7 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'PUT', 'example.org')
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['ETag'] = 'W/"00a7de496cda43cf8d65ae75abbe3ce7"'
-        end
+        result[0][:response_headers]['ETag'] = 'W/"00a7de496cda43cf8d65ae75abbe3ce7"' if status == 200
         expect(status).to eq(200)
       end
     end
@@ -194,9 +192,7 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'GET', 'example.org')
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['ETag'] = 'W/"858c0b3eba44ad8a2e5e38329ad310b5"'
-        end
+        result[0][:response_headers]['ETag'] = 'W/"858c0b3eba44ad8a2e5e38329ad310b5"' if status == 200
         expect(status).to eq(200)
       end
     end
@@ -217,9 +213,7 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'DELETE', 'example.org')
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['ETag'] = 'ETag: W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"'
-        end
+        result[0][:response_headers]['ETag'] = 'ETag: W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"' if status == 200
         expect(status).to eq(200)
       end
     end
@@ -251,9 +245,7 @@ resource 'IX. Wallets' do
         allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
         allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => account.email })
         result = do_request(request)
-        if status == 200
-          result[0][:response_headers]['ETag'] = 'W/"98478faf3abecd5323605bf65c68c306"'
-        end
+        result[0][:response_headers]['ETag'] = 'W/"98478faf3abecd5323605bf65c68c306"' if status == 200
         expect(status).to eq(200)
       end
     end

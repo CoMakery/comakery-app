@@ -5,7 +5,7 @@ resource 'II. Accounts' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -80,10 +80,10 @@ resource 'II. Accounts' do
       let!(:account_params) do
         {
           managed_account_id: '1eeb143f-f0c3-4e85-b66e-92c39edcdef5',
-          email: "me+ca63bd484da019f1938825ffcba6da@example.com",
+          email: 'me+ca63bd484da019f1938825ffcba6da@example.com',
           first_name: 'Eva',
           last_name: 'Smith',
-          nickname: "hunter-b1f157fc0d5ec93680d7b307d417bc5bd2c",
+          nickname: 'hunter-b1f157fc0d5ec93680d7b307d417bc5bd2c',
           date_of_birth: '1990-01-31',
           country: 'United States of America',
           project_interests: [project.id.to_s]
@@ -385,7 +385,7 @@ resource 'II. Accounts' do
     context '200' do
       let!(:id) { account.managed_account_id }
       let!(:token) { create(:static_token, id: 98, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
-      let!(:token2) { create(:static_token, id: 99, name: "Token-2817173cd164cef690577e85da2b449a31780872", symbol: "TKN86fff94cc4a4d2c0a0b4962ba855cb9eb0db2112", _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
+      let!(:token2) { create(:static_token, id: 99, name: 'Token-2817173cd164cef690577e85da2b449a31780872', symbol: 'TKN86fff94cc4a4d2c0a0b4962ba855cb9eb0db2112', _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
       let!(:account_token_record) { create(:account_token_record, account: account, token: token) }
       let!(:account_token_record2) { create(:account_token_record, account: account, token: token2) }
       let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
@@ -420,7 +420,7 @@ resource 'II. Accounts' do
       let!(:award_type) { create(:award_type, project: project) }
 
       before do
-        create(:award, id: 90, account: account, status: :paid, amount: 1, transfer_type:  create(:transfer_type, id: 99, project: award_type.project))
+        create(:award, id: 90, account: account, status: :paid, amount: 1, transfer_type: create(:transfer_type, id: 99, project: award_type.project))
       end
 
       example 'TRANSFERS' do

@@ -5,7 +5,7 @@ resource 'I. General' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
   end
 
   after do
@@ -19,7 +19,7 @@ resource 'I. General' do
   before do
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
     project.transfer_types.each_with_index do |t_type, i|
-      t_type.update_column(:id, 905+i)
+      t_type.update(id: 905 + i)
     end
   end
 
@@ -53,7 +53,7 @@ resource 'I. General' do
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
         result = do_request(request)
-        
+
         result[0][:response_headers]['ETag'] = 'ETag: W/"65619e25d426a61fdaaea38f54f63b1f"' if status == 200
         expect(status).to eq(200)
       end

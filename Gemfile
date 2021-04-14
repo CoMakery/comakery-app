@@ -110,8 +110,8 @@ group(:test) do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem 'webmock'
   gem 'timecop'
+  gem 'webmock'
 end
 
 group(:production) do

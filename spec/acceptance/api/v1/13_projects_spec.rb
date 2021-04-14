@@ -5,7 +5,7 @@ resource 'III. Projects' do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.freeze(Time.local(2021, 4, 6, 10, 5, 0))
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
@@ -17,7 +17,7 @@ resource 'III. Projects' do
 
   let!(:project) { create(:static_project, id: 98, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 84), account: create(:static_account, id: 70, managed_mission: active_whitelabel_mission)) }
 
-  let!(:project2) { create(:static_project, id: 25, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 85, name: "ComakeryToken-6565af0266e546fb62111bbcece711a5b6034b3f", symbol: 'XYZe744a975bde638d8a1a3df7fc39f5afcf4be0358', id: 100), account: create(:account, email: 'me+b884e29cbea5f547cc6d2f4e632642d153afbb37@example.com', nickname: 'hunter-ec09c6af6ea2846f4d0e09690dc00c3f7878167b', managed_account_id: 'e0510e56-b036-43bf-9e8c-e691a3dc4800', id: 99, managed_mission: active_whitelabel_mission)) }
+  let!(:project2) { create(:static_project, id: 25, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 85, name: 'ComakeryToken-6565af0266e546fb62111bbcece711a5b6034a2f', symbol: 'XYZe744a975bde638d8a1a3df7fc39f5afcf4be0358'), account: create(:account, email: 'me+b884e29cbea5f547cc6d2f4e632642d153afbb45@example.com', nickname: 'hunter-ec09c6af6ea2846f4d0e09690dc00c3f7878165g', managed_account_id: 'e0510e56-b036-43bf-9e8c-e691a3dc4100', id: 99, managed_mission: active_whitelabel_mission)) }
 
   before do
     3.times do |n|
@@ -25,12 +25,12 @@ resource 'III. Projects' do
     end
 
     project.transfer_types.each_with_index do |t_type, i|
-      t_type.update_column(:id, 905+i)
+      t_type.update(id: 905 + i)
     end
 
     project2.transfer_types.each_with_index do |t_type, i|
-      t_type.update_column(:id, 100+i)
-    end 
+      t_type.update(id: 100 + i)
+    end
   end
 
   explanation 'Retrieve projects data.'
@@ -98,4 +98,3 @@ resource 'III. Projects' do
     end
   end
 end
-
