@@ -3,6 +3,10 @@ namespace :coverage do
   task ci_report: :environment do
     require 'simplecov'
 
-    SimpleCov.collate Dir['coverage_*/.resultset.json']
+    SimpleCov.collate Dir['coverage_*/.resultset.json'], 'rails' do
+      SimpleCov.minimum_coverage 99
+      # SimpleCov.minimum_coverage_by_file 38
+      SimpleCov.refuse_coverage_drop
+    end
   end
 end
