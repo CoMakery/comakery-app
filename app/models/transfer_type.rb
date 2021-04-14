@@ -14,7 +14,7 @@ class TransferType < ApplicationRecord
     defaults.concat(%i[mint burn]) if project.token&.token_type&.supports_token_mint?
 
     defaults.each do |name|
-      TransferType.create!(default: true, project: project, name: name)
+      TransferType.create(default: true, project: project, name: name)
     end
   end
 

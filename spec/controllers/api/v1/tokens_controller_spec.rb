@@ -22,6 +22,19 @@ RSpec.describe Api::V1::TokensController, type: :controller do
   end
 
   describe 'GET #index' do
+    context 'with rendered views' do
+      render_views
+
+      it 'uses whitelabel domain for token logo_url' do
+        params = build(:api_signed_request, '', api_v1_tokens_path, 'GET')
+        params[:format] = :json
+
+        get :index, params: params
+        expect(response).to be_successful
+        expect(JSON.parse(response.body).first.dig('logo_url')).to include(active_whitelabel_mission.whitelabel_domain)
+      end
+    end
+
     context 'fetch tokens without filtering' do
       it 'returns tokens' do
         params = build(:api_signed_request, '', api_v1_tokens_path, 'GET')
