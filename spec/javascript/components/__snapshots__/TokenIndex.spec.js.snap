@@ -150,7 +150,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "eDrlXv",
                         "rules": Array [
                           "
@@ -160,7 +160,6 @@ exports[`TokenIndex renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-bdVaJa",

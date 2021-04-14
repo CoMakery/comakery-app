@@ -156,7 +156,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-bdVaJa",
@@ -179,7 +178,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
@@ -194,7 +193,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-bwzfXH",
@@ -219,7 +217,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
@@ -263,7 +261,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-EHOje",
@@ -379,7 +376,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         "attrs": Array [],
                         "componentStyle": ComponentStyle {
                           "componentId": "sc-kjoXOD",
-                          "isStatic": true,
+                          "isStatic": false,
                           "lastClassName": "fOppPq",
                           "rules": Array [
                             "
@@ -388,7 +385,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                           ],
                         },
-                        "displayName": "styled.div",
                         "foldedComponentIds": Array [],
                         "render": [Function],
                         "styledComponentId": "sc-kjoXOD",
@@ -411,7 +407,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-cHGsZl",
-                                "isStatic": true,
+                                "isStatic": false,
                                 "lastClassName": "keqKYA",
                                 "rules": Array [
                                   "
@@ -426,7 +422,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-cHGsZl",
@@ -457,7 +452,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                       "attrs": Array [],
                                       "componentStyle": ComponentStyle {
                                         "componentId": "sc-dnqmqq",
-                                        "isStatic": true,
+                                        "isStatic": false,
                                         "lastClassName": "eXyKsn",
                                         "rules": Array [
                                           "
@@ -471,7 +466,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                                         ],
                                       },
-                                      "displayName": "styled.div",
                                       "foldedComponentIds": Array [],
                                       "render": [Function],
                                       "styledComponentId": "sc-dnqmqq",
@@ -494,7 +488,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
                                               "componentId": "sc-iwsKbI",
-                                              "isStatic": true,
+                                              "isStatic": false,
                                               "lastClassName": "jnZZpz",
                                               "rules": Array [
                                                 "
@@ -502,7 +496,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                                               ],
                                             },
-                                            "displayName": "styled.div",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
                                             "styledComponentId": "sc-iwsKbI",
@@ -542,7 +535,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-jhAzac",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "jgHruR",
                         "rules": Array [
                           "
@@ -570,7 +563,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-jhAzac",

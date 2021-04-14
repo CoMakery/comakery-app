@@ -206,7 +206,6 @@ exports[`TaskShow renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-bdVaJa",
@@ -229,7 +228,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
@@ -244,7 +243,6 @@ exports[`TaskShow renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-bwzfXH",
@@ -269,7 +267,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
@@ -313,7 +311,6 @@ exports[`TaskShow renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-EHOje",
