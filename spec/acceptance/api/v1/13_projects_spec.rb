@@ -25,13 +25,11 @@ resource 'III. Projects' do
     end
 
     project.transfer_types.each_with_index do |t_type, i|
-      t_type.id = 905 + i
-      t_type.save(validate: false)
+      t_type.update_column(:id, 905 + i) # rubocop:disable Rails/SkipsModelValidations
     end
 
     project2.transfer_types.each_with_index do |t_type, i|
-      t_type.id = 100 + i
-      t_type.save(validate: false)
+      t_type.update_column(:id, 100 + i) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
