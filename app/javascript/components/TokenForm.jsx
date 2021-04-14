@@ -23,6 +23,7 @@ class TokenForm extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.fetchSymbolAndDecimals = this.fetchSymbolAndDecimals.bind(this)
     this.verifyImgRes = this.verifyImgRes.bind(this)
+    this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.lofoInputRef = React.createRef()
 
@@ -266,7 +267,7 @@ class TokenForm extends React.Component {
       } else {
         response.json().then(data => {
           this.setState(state => ({
-            errors       : data.errors,
+            errors       : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['token[submit]', 'token[submit_and_close]'])

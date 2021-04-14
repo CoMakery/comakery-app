@@ -300,9 +300,10 @@ class ProjectForm extends React.Component {
           }
         } else {
           this.setState(state => ({
-            errors       : data.errors,
+            errors: Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
+
           this.enable(['project[submit]', 'project[submit_and_close]'])
         }
       })

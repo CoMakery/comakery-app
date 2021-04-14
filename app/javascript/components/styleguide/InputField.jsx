@@ -234,12 +234,11 @@ class InputField extends React.Component {
             }
 
           </div>
-          { errors.length > 0 && errors.map(error =>
-            <div className="input-field--error">
+          { errors.length > 0 && errors.map((error, index) =>
+            <div key={index} className="input-field--error">
               {error}
             </div>
-            )
-          }
+          )}
         </div>
       </React.Fragment>
     )
