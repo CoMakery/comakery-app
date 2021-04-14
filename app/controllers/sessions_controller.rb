@@ -35,12 +35,17 @@ class SessionsController < ApplicationController
                                                            email: params[:email],
                                                            password: params[:password])
 
-    if verify_recaptcha(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success?
+    recaptcha_valid = verify_recaptcha(model: authenticate_user_result.account, minimum_score: 0.5, action: 'login') || verify_recaptcha(model: authenticate_user_result.account, secret_key: ENV['RECAPTCHA_SECRET_KEY_V2'])
+
+    if recaptcha_valid && authenticate_user_result.success?
       session[:account_id] = authenticate_user_result.account.id
 
       redirect_to redirect_path
     else
-      redirect_to new_session_path, flash: { error: 'Invalid email or password' }
+      flash.now[:error] = 'Invalid email or password'
+      @fallback_to_recaptcha_v2 = true unless recaptcha_valid
+
+      render :new, status: :unprocessable_entity
     end
   end
 

@@ -45,7 +45,9 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    if verify_recaptcha(model: @account, action: 'registration') && @account.save
+    recaptcha_valid = verify_recaptcha(model: @account, minimum_score: 0.5, action: 'registration') || verify_recaptcha(model: @account, secret_key: ENV['RECAPTCHA_SECRET_KEY_V2'])
+
+    if recaptcha_valid && @account.save
       session[:account_id] = @account.id
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -57,6 +59,7 @@ class AccountsController < ApplicationController
       redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = account_params[:agreed_to_user_agreement]
+      @fallback_to_recaptcha_v2 = true unless recaptcha_valid
 
       render :new, status: :unprocessable_entity
     end
