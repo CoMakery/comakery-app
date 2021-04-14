@@ -6,6 +6,18 @@ namespace :coverage do
     SimpleCov.collate Dir['coverage_*/.resultset.json'], 'rails' do
       SimpleCov.minimum_coverage 97.5
       SimpleCov.refuse_coverage_drop
+
+      # add_filter == do not track coverage
+      add_filter %r{^/db/migrate/}
+      add_filter %r{^/db//schema.rb/}
+      add_filter %r{^/bin/}
+      add_filter %r{^/doc/}
+      add_filter %r{^/config/}
+      add_filter %r{^/hotwallet/} # has it's own tests
+
+      add_group 'Decorators', 'app/decorators'
+      add_group 'Interactors', 'app/interactors'
+      add_group 'Policies', 'app/policies'
     end
   end
 end
