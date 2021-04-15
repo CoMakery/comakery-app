@@ -124,6 +124,7 @@ resource 'V. Transfer Rules' do
         explanation 'Returns an array of errors'
 
         request = build(:api_signed_request, { transfer_rule: invalid_attributes }, api_v1_project_transfer_rules_path(project_id: project.id), 'POST', 'example.org')
+        allow_any_instance_of(Token).to receive(:name).and_return('ComakeryDummyToken-40352e924687531267df55370ccac97c9995f24b')
         do_request(request)
         expect(status).to eq(400)
       end
