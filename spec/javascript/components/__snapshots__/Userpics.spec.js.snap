@@ -13,7 +13,7 @@ exports[`Userpics renders component correctly 1`] = `
           "attrs": Array [],
           "componentStyle": ComponentStyle {
             "componentId": "sc-bdVaJa",
-            "isStatic": true,
+            "isStatic": false,
             "lastClassName": "jixqaJ",
             "rules": Array [
               "
@@ -23,7 +23,6 @@ exports[`Userpics renders component correctly 1`] = `
 ",
             ],
           },
-          "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
           "styledComponentId": "sc-bdVaJa",
@@ -46,7 +45,7 @@ exports[`Userpics renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bwzfXH",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "mNJvu",
                   "rules": Array [
                     "
@@ -55,7 +54,6 @@ exports[`Userpics renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-bwzfXH",

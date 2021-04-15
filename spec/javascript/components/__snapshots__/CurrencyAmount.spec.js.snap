@@ -14,7 +14,7 @@ exports[`CurrencyAmount renders component correctly 1`] = `
           "attrs": Array [],
           "componentStyle": ComponentStyle {
             "componentId": "sc-bdVaJa",
-            "isStatic": true,
+            "isStatic": false,
             "lastClassName": "cpIcWx",
             "rules": Array [
               "
@@ -28,7 +28,6 @@ exports[`CurrencyAmount renders component correctly 1`] = `
 ",
             ],
           },
-          "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
           "styledComponentId": "sc-bdVaJa",
@@ -51,7 +50,7 @@ exports[`CurrencyAmount renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bwzfXH",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "eNKWhX",
                   "rules": Array [
                     "
@@ -59,7 +58,6 @@ exports[`CurrencyAmount renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-bwzfXH",
