@@ -6,6 +6,8 @@ class Balance < ApplicationRecord
   validates :wallet_id, uniqueness: { scope: :token_id }
   validates :token_id, inclusion: { in: ->(b) { Array(b.wallet&.tokens_of_the_blockchain&.pluck(:id)) } }
 
+  scope :ready_for_balance_update, -> { where('updated_at < ?', 10.seconds.ago) }
+
   def value
     token.from_base_unit(base_unit_value)
   end
