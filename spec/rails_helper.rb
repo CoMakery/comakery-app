@@ -60,6 +60,7 @@ RSpec.configure do |config|
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec', 'fixtures') # rubocop:todo Rails/FilePath
+  config.example_status_persistence_file_path = 'tmp/rspec_examples.txt'
 
   config.before do
     Sidekiq::Worker.clear_all

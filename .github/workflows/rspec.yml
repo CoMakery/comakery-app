@@ -136,7 +136,7 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run tests
-      run: env bundle exec rake knapsack_pro:queue:rspec
+      run: env bundle exec rake knapsack_pro:queue:rspec || env bundle exec rspec --only-failures --format documentation
 
     - name: Upload a Build Artifact
       if: always()
