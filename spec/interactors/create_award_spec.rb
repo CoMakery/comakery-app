@@ -29,20 +29,35 @@ describe CreateAward do
     it { expect { result }.to change(Award, :count).by(1) }
   end
 
-  context 'when passed image from id' do
-    subject(:result) do
-      described_class.call(
-        award_type: award_type,
-        award_params: award_params,
-        account: account,
-        image_from_id: source_award.id
-      )
+  context 'when passed image from source award' do
+    context 'and action is authorized' do
+      subject(:result) do
+        described_class.call(award_type: award_type, award_params: award_params, account: account,
+                             image_from_id: source_award.id)
+      end
+
+      it 'attaches image to award from source' do
+        expect(result.success?).to be(true)
+
+        expect(result.award.image.attached?).to be(true)
+      end
     end
 
-    it 'attaches image from source award' do
-      expect(result.success?).to be(true)
+    context 'and action is unauthorized' do
+      let!(:source_award) do
+        create(:award, image: fixture_file_upload('helmet_cat.png', 'image/png', :binary))
+      end
 
-      expect(result.award.image.attached?).to be(true)
+      subject(:result) do
+        described_class.call(award_type: award_type, award_params: award_params, account: account,
+                             image_from_id: source_award.id)
+      end
+
+      it 'doesn\'t attach an image to the award' do
+        expect(result.success?).to be(true)
+
+        expect(result.award.image.attached?).to be(false)
+      end
     end
   end
 
