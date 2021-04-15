@@ -355,3 +355,10 @@ body.no-transitions * {
   flex: 1;
   padding: 12px 16px;
 }
+.navbar-collapsed .profile > label{
+  display: none;
+}
+
+.navbar-collapsed .profile > a{
+  display: none;
+}
