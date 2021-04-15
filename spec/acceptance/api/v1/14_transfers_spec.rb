@@ -19,11 +19,11 @@ resource 'IV. Transfers' do
 
   let!(:project) { create(:static_project, id: 30, mission: active_whitelabel_mission, token: create(:static_token, id: 80, decimal_places: 8, _blockchain: :ethereum)) }
 
-  let!(:transfer_accepted) { create(:transfer, id: 50, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 10, project: project), account: account) }
+  let!(:transfer_accepted) { create(:transfer, id: 50, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 43, project: project), account: account) }
 
-  let!(:transfer_paid) { create(:transfer, id: 51, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 11, project: project), account: account) }
+  let!(:transfer_paid) { create(:transfer, id: 51, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 47, project: project), account: account) }
 
-  let!(:transfer_cancelled) { create(:transfer, id: 52, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 12, project: project), account: account) }
+  let!(:transfer_cancelled) { create(:transfer, id: 52, status: :cancelled, transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 49, project: project), account: account) }
 
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
