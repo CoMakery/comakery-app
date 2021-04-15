@@ -138,15 +138,16 @@ jobs:
     - name: Run tests
       run: env bundle exec rake knapsack_pro:queue:rspec
 
-    - name: Retry failed tests
-      run: env bundle exec rspec --only-failures
-
     - name: Upload a Build Artifact
       if: always()
       uses: actions/upload-artifact@v2.2.1
       with:
         name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
+
+    - name: Retry failed tests
+      run: env bundle exec rspec --only-failures
+
 
   simplecov:
     runs-on: ubuntu-latest

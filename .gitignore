@@ -54,5 +54,3 @@ yarn-debug.log*
 
 # Ignore encrypted secrets key file.
 config/secrets.yml.key
-
-failed_specs.txt
