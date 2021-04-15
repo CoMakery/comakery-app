@@ -146,8 +146,8 @@ jobs:
         path: coverage/
 
     - name: Retry failed tests
+      if: failed()
       run: env bundle exec rspec --only-failures
-
 
   simplecov:
     runs-on: ubuntu-latest
