@@ -136,7 +136,7 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run tests
-      run: env bundle exec rake knapsack_pro:queue:rspec
+      run: env bundle exec rake knapsack_pro:queue:rspec || env bundle exec rspec --only-failures
 
     - name: Upload a Build Artifact
       if: always()
@@ -144,10 +144,6 @@ jobs:
       with:
         name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
-
-    - name: Retry failed tests
-      if: failure()
-      run: env bundle exec rspec --only-failures
 
   simplecov:
     runs-on: ubuntu-latest
