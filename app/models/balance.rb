@@ -17,4 +17,9 @@ class Balance < ApplicationRecord
   def sync_with_blockchain!
     update(base_unit_value: blockchain_balance_base_unit_value)
   end
+
+  # Do not update the balance if it was updated recently but should be updated for just created balance
+  def ready_for_balance_update?
+    updated_at < 10.seconds.ago || updated_at == created_at
+  end
 end
