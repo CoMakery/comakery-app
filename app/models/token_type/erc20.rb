@@ -106,7 +106,7 @@ class TokenType::Erc20 < TokenType
 
   # Return balance of symbol for provided addr
   # @return [Integer] balance
-  def blockchain_balance(_wallet_address)
-    raise NotImplementedError
+  def blockchain_balance(wallet_address)
+    contract.contract.call.balance_of(wallet_address)
   end
 end

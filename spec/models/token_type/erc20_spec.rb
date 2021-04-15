@@ -39,10 +39,12 @@ describe TokenType::Erc20, vcr: true do
     end
 
     describe '#blockchain_balance' do
-      subject { described_class.new(**attrs).blockchain_balance('dummy_wallet_address') }
+      let(:token_type) { described_class.new(**attrs) }
+      subject { token_type.blockchain_balance(build(:ethereum_address_1)) }
 
-      it do
-        expect { subject }.to raise_error NotImplementedError
+      it 'gets balance from a contract' do
+        # Get it using VCR from blockchain
+        is_expected.to eq 0
       end
     end
   end

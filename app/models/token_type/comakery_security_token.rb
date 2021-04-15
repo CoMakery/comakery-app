@@ -69,10 +69,4 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
   def accounts_sync_job
     ::BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob
   end
-
-  # Return balance of symbol for provided addr
-  # @return [Integer] balance
-  def blockchain_balance(wallet_address)
-    contract.contract.call.balance_of(wallet_address)
-  end
 end
