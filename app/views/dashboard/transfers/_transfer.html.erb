@@ -1,7 +1,7 @@
 <% transfer = transfer.decorate %>
 <% t_type = transfer_type(transfer.transfer_type_id) %>
 
-<div class="transfers-table__transfer" style="border-left-color: <%= @transfers_chart_colors_objects[t_type] %>">
+<div class="transfers-table__transfer transfers-table-for-spec" style="border-left-color: <%= @transfers_chart_colors_objects[t_type] %>">
   <div class="transfers-table__transfer__name">
     <h3>
       <%= link_to transfer.name, project_award_type_award_path(transfer.project, transfer.award_type, transfer) %>
