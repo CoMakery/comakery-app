@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  include ProtectedWithRecaptcha
+
   skip_before_action :require_login, :check_age
   skip_before_action :require_email_confirmation, only: %i[destroy]
   skip_after_action :verify_authorized, :verify_policy_scoped
@@ -35,15 +37,12 @@ class SessionsController < ApplicationController
                                                            email: params[:email],
                                                            password: params[:password])
 
-    recaptcha_valid = verify_recaptcha(model: authenticate_user_result.account, minimum_score: 0.5, action: 'login') || verify_recaptcha(model: authenticate_user_result.account, secret_key: ENV['RECAPTCHA_SECRET_KEY_V2'])
-
-    if recaptcha_valid && authenticate_user_result.success?
+    if recaptcha_valid?(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success?
       session[:account_id] = authenticate_user_result.account.id
 
       redirect_to redirect_path
     else
       flash.now[:error] = 'Invalid email or password'
-      @fallback_to_recaptcha_v2 = true unless recaptcha_valid
 
       render :new, status: :unprocessable_entity
     end

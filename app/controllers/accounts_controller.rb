@@ -1,5 +1,8 @@
 require 'zip'
+
 class AccountsController < ApplicationController
+  include ProtectedWithRecaptcha
+
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
@@ -45,9 +48,7 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    recaptcha_valid = verify_recaptcha(model: @account, minimum_score: 0.5, action: 'registration') || verify_recaptcha(model: @account, secret_key: ENV['RECAPTCHA_SECRET_KEY_V2'])
-
-    if recaptcha_valid && @account.save
+    if recaptcha_valid?(model: @account, action: 'registration') && @account.save
       session[:account_id] = @account.id
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -59,7 +60,6 @@ class AccountsController < ApplicationController
       redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = account_params[:agreed_to_user_agreement]
-      @fallback_to_recaptcha_v2 = true unless recaptcha_valid
 
       render :new, status: :unprocessable_entity
     end
