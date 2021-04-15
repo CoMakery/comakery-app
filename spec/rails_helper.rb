@@ -61,6 +61,9 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec', 'fixtures') # rubocop:todo Rails/FilePath
 
+  # Need to run --only-failures
+  config.example_status_persistence_file_path = 'failed_specs.txt'
+
   config.before do
     Sidekiq::Worker.clear_all
   end
