@@ -91,7 +91,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
                 ],
               },
-              "displayName": "styled.div",
               "foldedComponentIds": Array [],
               "render": [Function],
               "styledComponentId": "sc-htoDjs",
@@ -114,7 +113,7 @@ exports[`Project renders correctly without props 1`] = `
                     "attrs": Array [],
                     "componentStyle": ComponentStyle {
                       "componentId": "sc-dnqmqq",
-                      "isStatic": true,
+                      "isStatic": false,
                       "lastClassName": "hzJpwN",
                       "rules": Array [
                         "
@@ -129,7 +128,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
                       ],
                     },
-                    "displayName": "styled.div",
                     "foldedComponentIds": Array [],
                     "render": [Function],
                     "styledComponentId": "sc-dnqmqq",
@@ -154,7 +152,7 @@ exports[`Project renders correctly without props 1`] = `
                     "attrs": Array [],
                     "componentStyle": ComponentStyle {
                       "componentId": "sc-VigVT",
-                      "isStatic": true,
+                      "isStatic": false,
                       "lastClassName": "epdllf",
                       "rules": Array [
                         "
@@ -198,7 +196,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
                       ],
                     },
-                    "displayName": "styled.div",
                     "foldedComponentIds": Array [],
                     "render": [Function],
                     "styledComponentId": "sc-VigVT",
@@ -277,7 +274,7 @@ exports[`Project renders correctly without props 1`] = `
             "attrs": Array [],
             "componentStyle": ComponentStyle {
               "componentId": "sc-jDwBTQ",
-              "isStatic": true,
+              "isStatic": false,
               "lastClassName": "fvqpoU",
               "rules": Array [
                 "
@@ -287,7 +284,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
               ],
             },
-            "displayName": "styled.div",
             "foldedComponentIds": Array [],
             "render": [Function],
             "styledComponentId": "sc-jDwBTQ",
@@ -310,7 +306,7 @@ exports[`Project renders correctly without props 1`] = `
                   "attrs": Array [],
                   "componentStyle": ComponentStyle {
                     "componentId": "sc-gPEVay",
-                    "isStatic": true,
+                    "isStatic": false,
                     "lastClassName": "glPcoY",
                     "rules": Array [
                       "
@@ -343,7 +339,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
                     ],
                   },
-                  "displayName": "styled.div",
                   "foldedComponentIds": Array [],
                   "render": [Function],
                   "styledComponentId": "sc-gPEVay",
@@ -377,7 +372,7 @@ exports[`Project renders correctly without props 1`] = `
                   "attrs": Array [],
                   "componentStyle": ComponentStyle {
                     "componentId": "sc-iRbamj",
-                    "isStatic": true,
+                    "isStatic": false,
                     "lastClassName": "gibNVz",
                     "rules": Array [
                       "
@@ -407,7 +402,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
                     ],
                   },
-                  "displayName": "styled.div",
                   "foldedComponentIds": Array [],
                   "render": [Function],
                   "styledComponentId": "sc-iRbamj",
@@ -436,7 +430,7 @@ exports[`Project renders correctly without props 1`] = `
                   "attrs": Array [],
                   "componentStyle": ComponentStyle {
                     "componentId": "sc-jlyJG",
-                    "isStatic": true,
+                    "isStatic": false,
                     "lastClassName": "Rhqti",
                     "rules": Array [
                       "
@@ -461,7 +455,6 @@ exports[`Project renders correctly without props 1`] = `
 ",
                     ],
                   },
-                  "displayName": "styled.a",
                   "foldedComponentIds": Array [],
                   "render": [Function],
                   "styledComponentId": "sc-jlyJG",
