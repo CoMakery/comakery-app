@@ -28,7 +28,6 @@ describe 'test_ready_filter' do
 
         # verify number of transfers after applying filter
         expect(page).to have_css('.transfers-table-for-spec', count: number_of_transfers)
-
       end
     end
   end
