@@ -141,8 +141,7 @@ def click_remove(award_type_row)
 end
 
 def wait_for_turbolinks
-  has_css?('.turbo-progress-bar', visible: true)
-  has_no_css?('.turbo-progress-bar')
+  has_no_css?('.turbo-progress-bar', wait: 5.seconds) if has_css?('.turbo-progress-bar', visible: true, wait: 1.second)
 end
 
 include SlackStubs
