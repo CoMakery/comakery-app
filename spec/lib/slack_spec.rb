@@ -71,7 +71,7 @@ describe Comakery::Slack do
 
   describe '#fetch_channels' do
     it 'returns the list of channels in the slack instance' do
-      stub_request(:post, 'https://slack.com/api/channels.list')
+      stub_request(:post, 'https://slack.com/api/conversations.list')
         .with(body: { 'token' => 'token' })
         # rubocop:todo Rails/FilePath
         .to_return(body: File.read(Rails.root.join('spec', 'fixtures', 'channel_list_response.json')))
@@ -116,8 +116,8 @@ describe Comakery::Slack do
 
     context 'when only SLACK_API_SECRET defined and SLACK_API_KEY is blank' do
       before do
-        allow(ENV).to receive(:[]).with('SLACK_API_KEY').and_return('')
-        allow(ENV).to receive(:[]).with('SLACK_API_SECRET').and_return('SLACK_API_SECRET')
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_KEY' => nil))
+        stub_const('ENV', ENV.to_hash.merge('SLACK_API_SECRET' => 'SLACK_API_SECRET'))
       end
 
       it { is_expected.to be_falsey }

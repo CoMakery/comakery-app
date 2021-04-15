@@ -75,7 +75,7 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
       @page = (params[:page] || 1).to_i
       @transfers_totals = query.result(distinct: true).reorder('')
-      @transfers_all = @transfers_totals.includes(:issuer, :project, :transfer_type, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
+      @transfers_all = @transfers_totals.includes(:issuer, :project, :transfer_type, :token, :blockchain_transactions, :latest_blockchain_transaction, award_type: [:project], account: %i[verifications latest_verification wallets ore_id_account])
       @filter_params = params[:q]&.to_unsafe_h
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)

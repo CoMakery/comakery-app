@@ -18,7 +18,7 @@ FileUtils.chdir APP_ROOT do
 
   puts '== Installing git hooks =='
   system! 'bundle exec overcommit --install'
-  
+
   puts '== Installing Javascript dependencies =='
   system! 'yarn install'
 
@@ -37,5 +37,5 @@ FileUtils.chdir APP_ROOT do
   system! 'touch tmp/caching-dev.txt'
 
   puts "\n== Generate docs =="
-  system! 'RAILS_ENV=test bundle exec rake docs:generate'
+  system! 'RAILS_ENV=test bundle exec rake docs:generate:ordered'
 end
