@@ -121,7 +121,7 @@ end
 
 gem 'scout_apm', '~> 2.4'
 
-gem 'mini_racer', '~> 0.4.0'
+gem 'mini_racer', '~> 0.3.0'
 
 gem 'possessive', '~> 1.0'
 
