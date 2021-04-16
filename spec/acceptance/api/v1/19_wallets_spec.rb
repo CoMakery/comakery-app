@@ -213,15 +213,18 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:ore_id_wallet, account: account).id.to_s }
+      let!(:wallet) { create(:ore_id_wallet, account: account) }
+      let(:wallet_id) { wallet.id.to_s }
       let!(:redirect_url) { 'localhost' }
 
       example 'GET RESET PASSWORD URL (ONLY ORE_ID WALLETS)' do
         explanation 'Returns reset password url for wallet'
+        wallet.ore_id_account.update(account_name: 'ore_id_account_dummy', state: 'unclaimed')
 
         request = build(:api_signed_request, { redirect_url: redirect_url }, password_reset_api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'POST', 'example.org')
 
         allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
+        allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => account.email })
         do_request(request)
 
         expect(status).to eq(200)

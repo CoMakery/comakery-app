@@ -12,6 +12,7 @@ gem 'coffee-rails'
 gem 'countries', require: 'countries/global'
 gem 'd3-rails', '~>3.5'
 gem 'draper'
+gem 'fastimage'
 gem 'font_assets'
 gem 'font-awesome-rails'
 gem 'fortitude'
@@ -43,6 +44,7 @@ gem 'rails_autoscale_agent', '>= 0.9.1'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
 gem 'react-rails'
+gem 'recaptcha'
 gem 'redcarpet'
 gem 'redis', '~> 4.0'
 gem 'refile', require: 'refile/rails', github: 'refile/refile', ref: 'e690bf5c2d83b3dfd805764d54e8f5daf14993b0' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
@@ -133,8 +135,6 @@ gem 'barnes', '~> 0.0.7'
 
 gem 'bootsnap', '~> 1.4'
 
-gem 'sentry-raven', '~> 2.12'
-
 gem 'jbuilder', '~> 2.9'
 
 gem 'rspec_api_documentation', '~> 6.1'
@@ -161,5 +161,11 @@ gem 'overcommit', '~> 0.53.0'
 
 gem 'fuubar', '~> 2.5'
 
+gem 'csv-safe'
+
 gem 'aasm', '~> 5.1'
 gem 'after_commit_everywhere', '~> 1.0'
+
+gem 'sentry-rails', '~> 4.3'
+gem 'sentry-ruby', '~> 4.3'
+gem 'sentry-sidekiq', '~> 4.3'

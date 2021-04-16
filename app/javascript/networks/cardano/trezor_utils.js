@@ -24,7 +24,8 @@ const transferAdaCoins = async function(award) { // award in JSON
       txHash = await submitTransaction(network, recipientAddress, coins)
     }
   } catch (err) {
-    console.error(err)
+    // added by oleg
+    console.log(err)
     alert(err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }

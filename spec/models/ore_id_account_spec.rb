@@ -45,8 +45,8 @@ RSpec.describe OreIdAccount, type: :model, vcr: true do
     context 'for pending_manual state' do
       subject { described_class.new(account: create(:account), id: 99999, state: :pending_manual) }
 
-      it 'schedules a wallet sync' do
-        expect(OreIdWalletsSyncJob).to receive(:perform_later).with(subject.id)
+      it 'doesnt schedule a sync' do
+        expect(OreIdSyncJob).not_to receive(:perform_later).with(subject.id)
         subject.save
       end
     end
@@ -108,14 +108,55 @@ RSpec.describe OreIdAccount, type: :model, vcr: true do
   end
 
   describe '#claim!' do
-    before do
-      subject.unclaimed!
+    context 'when not unclaimed' do
+      before do
+        subject.pending!
+      end
+
+      specify do
+        expect(subject).to receive(:sync_password_update)
+        expect { subject.claim! }.to raise_error AASM::InvalidTransition
+        expect(subject).to be_pending
+      end
     end
 
-    specify do
-      expect(subject).to receive(:sync_password_update)
-      subject.claim!
-      expect(subject).to be_ok
+    context 'when unclaimed' do
+      before do
+        subject.unclaimed!
+      end
+
+      context 'and having pending wallet provisions' do
+        before do
+          create(:wallet, ore_id_account: subject)
+          subject.wallets.last.wallet_provisions.create(token: create(:algo_sec_token))
+        end
+
+        specify do
+          expect { subject.claim! }.to raise_error AASM::InvalidTransition
+          expect(subject).to be_unclaimed
+        end
+      end
+
+      context 'and having no pending wallet provisions' do
+        before do
+          create(:wallet, ore_id_account: subject)
+          subject.wallets.last.wallet_provisions.create(token: create(:algo_sec_token), state: :provisioned)
+        end
+
+        specify do
+          expect(subject).to receive(:sync_password_update)
+          subject.claim!
+          expect(subject).to be_ok
+        end
+      end
+
+      context 'and having no wallet provisions' do
+        specify do
+          expect(subject).to receive(:sync_password_update)
+          subject.claim!
+          expect(subject).to be_ok
+        end
+      end
     end
   end
 

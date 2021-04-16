@@ -44,7 +44,8 @@ class AlgorandBlockchain {
       case 'algorand':
         return this.mainnetEndpoints()
       default:
-        console.error("Unknown or unsupported network")
+        // added by oleg
+        console.log("Unknown or unsupported network")
     }
   }
 
@@ -167,7 +168,8 @@ class AlgorandBlockchain {
       console.log(`Opt-in was successfully sent to blockchain, tx hash: ${tx_result.transactionId}`)
       return tx_result
     } catch (err) {
-      console.error(err)
+      // added by oleg
+      console.log(err)
       return {}
     }
   }

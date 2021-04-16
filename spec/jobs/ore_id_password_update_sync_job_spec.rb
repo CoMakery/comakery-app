@@ -12,12 +12,23 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
       expect(subject.synchronisations.last).to be_ok
     end
 
-    context 'and service raises an error' do
+    context 'and service raises an unknown error' do
       before { subject.class.any_instance.stub(:service) { raise } }
 
       it 'reschedules itself and sets synchronisation status to failed' do
         expect_any_instance_of(described_class).to receive(:reschedule)
-        expect { described_class.perform_now(subject.id) }.to raise_error(RuntimeError)
+        expect(Sentry).to receive(:capture_exception).with(RuntimeError)
+        described_class.perform_now(subject.id)
+        expect(subject.synchronisations.last).to be_failed
+      end
+    end
+
+    context 'and service raises the OreIdAccount::ProvisioningError error' do
+      before { subject.class.any_instance.stub(:service) { raise OreIdAccount::ProvisioningError } }
+
+      it 'reschedules itself and sets synchronisation status to failed' do
+        expect_any_instance_of(described_class).to receive(:reschedule)
+        expect { described_class.perform_now(subject.id) }.not_to raise_error
         expect(subject.synchronisations.last).to be_failed
       end
     end

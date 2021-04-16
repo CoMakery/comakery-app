@@ -1,0 +1,76 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Assets Precompilation
+
+on:
+  push:
+#   pull_request:
+#     branches: [ acceptance, master ]
+#   schedule:
+#     - cron: "0 2 * * 1-5"
+
+jobs:
+  ruby:
+    strategy:
+      matrix:
+        ruby: [2.7.1]
+        node: [12.x]
+    env:
+      BUNDLER_VERSION: 2.2.3
+      RACK_ENV: test
+      RAILS_ENV: test
+
+    name: Assets Precompilation
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Use a specific Yarn version
+      run: yarn policies set-version 1.12.3
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Cache Node dependencies
+      uses: actions/cache@v1.1.2
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ matrix.node }}-yarn-
+
+    - name: Install Node dependencies
+      run: yarn install
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+
+    - name: Cache Ruby dependencies
+      uses: actions/cache@v1.1.2
+      with:
+        path: vendor/bundle
+        key: ${{ matrix.ruby }}-gems1-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ matrix.ruby }}-gems1-
+
+    - name: Set up Bundler to use cache
+      run: bundle config path 'vendor/bundle'
+
+    - name: Install Ruby dependencies
+      run: bundle install --jobs 4 --retry 3
+
+    - name: Test assets precompilation
+      run: bundle exec rails assets:precompile

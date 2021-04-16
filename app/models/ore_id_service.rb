@@ -82,28 +82,43 @@ class OreIdService
     @password_updated ||= remote['passwordUpdatedOn'].present?
   end
 
-  def create_token
+  def create_token(recovery_token = nil)
     response = handle_response(
       self.class.post(
         '/app-token',
-        headers: request_headers
+        headers: request_headers,
+        body: recovery_token ? create_token_params(recovery_token).to_json : nil
       )
     )
 
     response['appAccessToken']
   end
 
-  def authorization_url(callback_url, state = nil, recovery_token = nil)
+  def authorization_url(callback_url, state = nil)
     params = {
       app_access_token: create_token,
       provider: :email,
       callback_url: callback_url,
       background_color: 'FFFFFF',
-      state: state,
-      recovery_token: recovery_token
+      state: state
     }
 
     append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"
+  end
+
+  def reset_url(callback_url, state = nil, recovery_token = nil)
+    params = {
+      app_access_token: create_token(recovery_token),
+      provider: :email,
+      callback_url: callback_url,
+      background_color: 'FFFFFF',
+      state: state,
+      recover_action: :republic,
+      email: remote['email'],
+      account: ore_id.account_name
+    }
+
+    append_hmac_to_url "https://service.oreid.io/recover-account?#{params.to_query}"
   end
 
   def sign_url(transaction:, callback_url:, state:)
@@ -113,7 +128,7 @@ class OreIdService
       chain_account: transaction.source,
       broadcast: true,
       chain_network: transaction.token.blockchain.ore_id_name,
-      return_signed_transaction: true,
+      return_signed_transaction: false,
       transaction: Base64.encode64(transaction.tx_raw),
       callback_url: callback_url,
       state: state
@@ -145,6 +160,17 @@ class OreIdService
       }
     end
 
+    def create_token_params(recovery_token = nil)
+      if recovery_token
+        {
+          secrets: [{
+            type: 'RepublicAccountRecoveryToken',
+            value: recovery_token
+          }]
+        }
+      end
+    end
+
     def create_tx_params(transaction)
       {
         account: ore_id.account_name,
@@ -152,7 +178,7 @@ class OreIdService
         chain_account: transaction.source,
         broadcast: true,
         chain_network: transaction.token.blockchain.ore_id_name,
-        return_signed_transaction: true,
+        return_signed_transaction: false,
         transaction: Base64.encode64(transaction.tx_raw)
       }
     end

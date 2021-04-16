@@ -72,7 +72,7 @@ class ProjectsController < ApplicationController
 
     authorize @project
 
-    if @project.save
+    if ImagePixelValidator.new(@project, project_params).valid? && @project.save
       set_generic_props
       camelize_props
       render json: { id: @project.id, props: @props }, status: :ok
@@ -108,7 +108,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
-    if @project.update project_params
+    if ImagePixelValidator.new(@project, project_params).valid? && @project.update(project_params)
       set_generic_props
       camelize_props
       render json: { message: 'Project updated', id: @project.id, props: @props }, status: :ok

@@ -9,7 +9,6 @@ class OreIdAccount < ApplicationRecord
 
   before_create :set_temp_password
   after_create :schedule_sync, unless: :pending_manual?
-  after_create :schedule_wallet_sync, if: :pending_manual?
 
   validates :account_name, uniqueness: { allow_nil: true, allow_blank: false }
 
@@ -60,10 +59,10 @@ class OreIdAccount < ApplicationRecord
 
     event :claim do
       before do
-        sync_password_update
+        sync_password_update if no_pending_provisions?
       end
 
-      transitions from: :unclaimed, to: :ok
+      transitions from: :unclaimed, to: :ok, if: :no_pending_provisions?
     end
 
     event :unlink do
@@ -73,6 +72,10 @@ class OreIdAccount < ApplicationRecord
 
       transitions to: :unlinking
     end
+  end
+
+  def no_pending_provisions?
+    wallet_provisions.empty? || wallet_provisions.all?(&:provisioned?)
   end
 
   def service

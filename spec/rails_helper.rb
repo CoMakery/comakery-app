@@ -1,20 +1,25 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
-enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || true
+enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || false
 
 if enable_simplecov
   require 'simplecov'
   SimpleCov.start :rails do
-    # SimpleCov.minimum_coverage 98
-    # SimpleCov.minimum_coverage_by_file 50
-    SimpleCov.refuse_coverage_drop
-
     # add_filter == do not track coverage
-    # add_filter %r{^/lib/generators/}
+    add_filter %r{^/db/migrate/}
+    add_filter %r{^/db//schema.rb/}
+    add_filter %r{^/bin/}
+    add_filter %r{^/doc/}
+    add_filter %r{^/config/}
+    add_filter %r{^/hotwallet/} # has it's own tests
 
     add_group 'Decorators', 'app/decorators'
     add_group 'Interactors', 'app/interactors'
     add_group 'Policies', 'app/policies'
+  end
+
+  KnapsackPro::Hooks::Queue.before_queue do |_queue_id|
+    SimpleCov.command_name("rspec_ci_node_#{KnapsackPro::Config::Env.ci_node_index}")
   end
 end
 
@@ -55,6 +60,7 @@ RSpec.configure do |config|
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec', 'fixtures') # rubocop:todo Rails/FilePath
+  config.example_status_persistence_file_path = 'tmp/rspec_examples.txt'
 
   config.before do
     Sidekiq::Worker.clear_all
@@ -136,12 +142,11 @@ def click_remove(award_type_row)
 end
 
 def wait_for_turbolinks
-  has_css?('.turbo-progress-bar', visible: true)
-  has_no_css?('.turbo-progress-bar')
+  has_no_css?('.turbo-progress-bar', wait: 5.seconds) if has_css?('.turbo-progress-bar', visible: true, wait: 1.second)
 end
 
-include SlackStubs # rubocop:todo Style/MixinUsage
-include ConstellationStubs # rubocop:todo Style/MixinUsage
+include SlackStubs
+include ConstellationStubs
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

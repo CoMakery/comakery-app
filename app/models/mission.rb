@@ -2,8 +2,6 @@ class Mission < ApplicationRecord
   include ActiveStorageValidator
   default_scope { order(display_order: :asc) }
 
-  attr_readonly :wallet_recovery_api_public_key
-
   # attachment :logo
   # attachment :image
   # attachment :whitelabel_logo
@@ -42,6 +40,8 @@ class Mission < ApplicationRecord
       .with_attached_whitelabel_favicon
   }
 
+  scope :without_whitelabel, -> { where(whitelabel: false) }
+
   after_create :assign_display_order
   after_save :set_whitelabel_for_projects
 
@@ -49,7 +49,7 @@ class Mission < ApplicationRecord
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
   validates :description, length: { maximum: 500 }
-  validate :whitelabel_api_public_key_cannot_be_overwritten, if: -> { whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present? }
+  validate :whitelabel_api_public_keys_cannot_be_overwritten
 
   validate_image_attached :logo, :image, :whitelabel_logo, :whitelabel_logo_dark, :whitelabel_favicon
   before_save :populate_api_key, if: -> { whitelabel }
@@ -83,8 +83,9 @@ class Mission < ApplicationRecord
       projects.update(whitelabel: whitelabel)
     end
 
-    def whitelabel_api_public_key_cannot_be_overwritten
-      errors.add(:whitelabel_api_public_key, 'cannot be overwritten')
+    def whitelabel_api_public_keys_cannot_be_overwritten
+      errors.add(:whitelabel_api_public_key, 'cannot be overwritten') if whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present?
+      errors.add(:wallet_recovery_api_public_key, 'cannot be overwritten') if wallet_recovery_api_public_key_changed? && wallet_recovery_api_public_key_was.present?
     end
 
     def populate_api_key

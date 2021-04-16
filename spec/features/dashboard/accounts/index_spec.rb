@@ -1,23 +1,101 @@
 require 'rails_helper'
 
-describe 'project accounts page', js: true do
-  let!(:project) { create(:project, visibility: :public_listed) }
+describe 'project accounts page' do
+  let(:account_token_record) { create(:account_token_record) }
+  let(:account) { account_token_record.account }
+  let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
+  subject { visit project_dashboard_accounts_path(project) }
 
-  context 'with a token assigned to project' do
-    it 'loads' do
-      visit project_dashboard_accounts_path(project)
-      expect(page).to have_css('.project_settings__content')
+  before do
+    project.safe_add_interested(account)
+  end
+
+  context 'with eth security token' do
+    context 'when not logged in' do
+      it 'lists interested accounts which have eth wallet' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 1)
+      end
+    end
+
+    context 'when logged in as a project admin' do
+      before do
+        login(project.account)
+      end
+
+      it 'lists interested accounts which have eth wallet' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 1)
+      end
     end
   end
 
-  context 'without a token assigned to project' do
+  context 'with algorand security token' do
+    let(:account_token_record) { build(:algo_sec_dummy_restrictions) }
+    let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
+
+    context 'when not logged in' do
+      it 'lists interested accounts which have eth wallet' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 1)
+      end
+    end
+
+    context 'when logged in as a project admin' do
+      before do
+        login(project.account)
+      end
+
+      it 'lists interested accounts which have eth wallet' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 1)
+      end
+    end
+  end
+
+  context 'without a non-security token' do
+    let(:project) { create(:project, visibility: :public_listed) }
+
+    context 'when not logged in' do
+      it 'lists interested accounts' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 2)
+      end
+    end
+
+    context 'when logged in as a project admin' do
+      before do
+        login(project.account)
+      end
+
+      it 'lists interested accounts' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 2)
+      end
+    end
+  end
+
+  context 'without a token' do
     before do
       project.update(token: nil)
     end
 
-    it 'loads' do
-      visit project_dashboard_accounts_path(project)
-      expect(page).to have_css('.project_settings__content')
+    context 'when not logged in' do
+      it 'lists interested accounts' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 2)
+      end
+    end
+
+    context 'when logged in as a project admin' do
+      before do
+        login(project.account)
+      end
+
+      it 'lists interested accounts' do
+        subject
+        expect(page).to have_css('.account-preview__info__name', count: 2)
+      end
     end
   end
 end

@@ -38,9 +38,14 @@ class Dashboard::TransfersController < ApplicationController
 
   def fetch_chart_data
     authorize @project, :transfers?
-    @transfers_all = query.result(distinct: true)
+    @page = (params[:page] || 1).to_i
+    @transfers_totals = query.result(distinct: true)
+    ordered_transfers = @transfers_totals.includes(:issuer, :transfer_type, :token).ransack_reorder(params.dig(:q, :s))
+    @transfers = ordered_transfers.page(@page).per(10)
+    @transfers = ordered_transfers.page(1).per(10) if (@page > 1) && @transfers.out_of_range?
     @project_token = @project.token
     @transfers_not_burned_total = @transfers_unfiltered.not_burned.sum(&:total_amount)
+    @filter_params = params[:q]&.to_unsafe_h
     render partial: 'chart'
   end
 
@@ -70,7 +75,8 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
       @page = (params[:page] || 1).to_i
       @transfers_totals = query.result(distinct: true).reorder('')
-      @transfers_all = @transfers_totals.includes(:issuer, :project, :award_type, :token, :blockchain_transactions, :latest_blockchain_transaction, account: %i[verifications latest_verification wallets ore_id_account])
+      @transfers_all = @transfers_totals.includes(:issuer, :project, :transfer_type, :token, :blockchain_transactions, :latest_blockchain_transaction, award_type: [:project], account: %i[verifications latest_verification wallets ore_id_account])
+      @filter_params = params[:q]&.to_unsafe_h
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)
       if (@page > 1) && @transfers.out_of_range?

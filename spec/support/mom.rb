@@ -1,5 +1,5 @@
 require 'webmock/rspec'
-include WebMock::API # rubocop:todo Style/MixinUsage
+include WebMock::API
 
 WebMock.enable!
 
@@ -24,6 +24,16 @@ class Mom
       _blockchain: :bitcoin,
       account: create(:account),
       address: bitcoin_address_1
+    }
+    Wallet.new(defaults.merge(attrs))
+  end
+
+  def eth_wallet(**attrs)
+    defaults = {
+      name: 'Wallet',
+      _blockchain: :ethereum_ropsten,
+      account: create(:account),
+      address: ethereum_address_1
     }
     Wallet.new(defaults.merge(attrs))
   end
@@ -194,6 +204,35 @@ class Mom
 
     VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
       BlockchainTransactionTransferRule.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_pause(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token)
+    attrs.delete(:token)
+
+    defaults = {
+      blockchain_transactable: token,
+      status: :created
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransactionTokenFreeze.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_unpause(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token)
+    attrs.delete(:token)
+    token.update(token_frozen: true)
+
+    defaults = {
+      blockchain_transactable: token,
+      status: :created
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransactionTokenUnfreeze.create!(defaults.merge(attrs))
     end
   end
 
@@ -423,6 +462,26 @@ class Mom
       token_frozen: false
     }
 
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
+  end
+
+  def erc20_token(**attrs)
+    defaults = {
+      name: "erc20-#{SecureRandom.hex(20)}",
+      symbol: "XYZ#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      _token_type: :erc20,
+      decimal_places: 18,
+      _blockchain: :ethereum_ropsten,
+      contract_address: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+      token_frozen: false
+    }
     t = Token.new(defaults.merge(attrs))
 
     VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
@@ -759,7 +818,8 @@ class Mom
 
     Comakery::Eth::Tx.new(
       host,
-      hash
+      hash,
+      attrs[:blockchain_transaction]
     )
   end
 
@@ -778,7 +838,8 @@ class Mom
 
     Comakery::Eth::Tx::Erc20::Transfer.new(
       host,
-      hash
+      hash,
+      attrs[:blockchain_transaction]
     )
   end
 
@@ -788,7 +849,8 @@ class Mom
 
     Comakery::Eth::Tx::Erc20::Mint.new(
       host,
-      hash
+      hash,
+      attrs[:blockchain_transaction]
     )
   end
 
@@ -798,7 +860,8 @@ class Mom
 
     Comakery::Eth::Tx::Erc20::Burn.new(
       host,
-      hash
+      hash,
+      attrs[:blockchain_transaction]
     )
   end
 
@@ -816,7 +879,36 @@ class Mom
 
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(
       host,
-      hash
+      hash,
+      attrs[:blockchain_transaction]
+    )
+  end
+
+  def security_token_pause(**attrs)
+    host = attrs[:host] || 'ropsten.infura.io'
+    hash = attrs[:hash] || '0x60d8591313b2c675722db449e35d71b1cb90e4b57048a112e9b77cd2fa280e07'
+
+    # From:
+    # 0x29ac40ef5544f738187880fc6a2270a3303b7b3b
+
+    Comakery::Eth::Tx::Erc20::SecurityToken::Pause.new(
+      host,
+      hash,
+      attrs[:blockchain_transaction]
+    )
+  end
+
+  def security_token_unpause(**attrs)
+    host = attrs[:host] || 'ropsten.infura.io'
+    hash = attrs[:hash] || '0x96ac6711987f7f7ee69bd46abcbca13531389c5bb302d76aa2602c926dfbff4c'
+
+    # From:
+    # 0x29ac40ef5544f738187880fc6a2270a3303b7b3b
+
+    Comakery::Eth::Tx::Erc20::SecurityToken::Unpause.new(
+      host,
+      hash,
+      attrs[:blockchain_transaction]
     )
   end
 
@@ -836,7 +928,8 @@ class Mom
 
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(
       host,
-      hash
+      hash,
+      attrs[:blockchain_transaction]
     )
   end
 

@@ -26,6 +26,7 @@ jobs:
       RAILS_ENV: test
       SECRET_KEY_BASE: dummy
       DATABASE_URL: postgres://rails@localhost:5432/rails
+      AWS_REGION: us-east-1
       AWS_API_KEY: dummy
       AWS_API_SECRET: dummy
       BLOCK_EXPLORER_URL_CONSTELLATION_MAINNET: none
@@ -39,7 +40,6 @@ jobs:
       SLACK_API_SECRET: none
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
-      SIMPLECOV_ENABLED: false
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 
@@ -122,7 +122,7 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run Command
-      run: env bundle exec rake docs:generate
+      run: env bundle exec rake docs:generate:ordered
 
     - name: Upload a Build Artifact
       if: always()

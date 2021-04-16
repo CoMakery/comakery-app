@@ -1,7 +1,6 @@
 class MissionsController < ApplicationController
   skip_before_action :require_login, only: %i[show]
 
-  before_action :unavailable_for_whitelabel
   before_action :find_mission_by_id, only: %i[show edit update]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_mission_props, only: %i[show]
@@ -29,8 +28,10 @@ class MissionsController < ApplicationController
 
   def create
     @mission = Mission.new(mission_params)
+
     authorize @mission
-    if @mission.save
+
+    if ImagePixelValidator.new(@mission, mission_params).valid? && @mission.save
       render json: { id: @mission.id, message: 'Successfully created.' }, status: :ok
     else
       errors = @mission.errors.as_json
@@ -48,7 +49,8 @@ class MissionsController < ApplicationController
 
   def update
     authorize @mission
-    if @mission.update(mission_update_params)
+
+    if ImagePixelValidator.new(@mission, mission_params).valid? && @mission.update(mission_params)
       render json: { message: 'Successfully updated.' }, status: :ok
     else
       errors = @mission.errors.as_json
@@ -93,10 +95,6 @@ class MissionsController < ApplicationController
         :whitelabel_api_public_key,
         :wallet_recovery_api_public_key
       )
-    end
-
-    def mission_update_params
-      mission_params.except(:wallet_recovery_api_public_key)
     end
 
     def find_mission_by_id

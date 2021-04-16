@@ -40,11 +40,12 @@ describe MissionsController do
       end
     end
 
-    it 'is unavailable_for_whitelabel' do
+    it 'is available for whitelabel' do
       create :active_whitelabel_mission
 
       get :index
-      expect(response).to redirect_to(projects_url)
+      expect(response.status).to eq(200)
+      expect(assigns[:missions].count).to eq(4)
     end
   end
 

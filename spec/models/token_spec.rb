@@ -90,7 +90,7 @@ describe Token, type: :model, vcr: true do
     let!(:token) { create(:token, _token_type: 'erc20', _blockchain: :ethereum_ropsten, contract_address: build(:ethereum_contract_address)) }
 
     it 'returns correct abi for Comakery Token' do
-      expect(comakery_token.abi.last['name']).to eq('safeApprove')
+      expect(comakery_token.abi.last['name']).to eq('transfer')
     end
 
     it 'returns default abi for other tokens' do

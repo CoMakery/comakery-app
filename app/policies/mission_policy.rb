@@ -24,7 +24,7 @@ class MissionPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    !mission&.whitelabel?
   end
 
   def new?

@@ -40,33 +40,26 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = if @whitelabel_mission
-      @whitelabel_mission.managed_accounts.new(account_params)
-    else
-      Account.new(account_params)
-    end
+    @account = Accounts::Initialize.call(
+      whitelabel_mission: @whitelabel_mission,
+      account_params: account_params
+    ).account
 
-    @account.email_confirm_token = SecureRandom.hex
-    @account.password_required = true
-    @account.name_required = false
-    @account.agreement_required = @whitelabel_mission ? false : true
+    recaptcha_valid = verify_recaptcha(model: @account, action: 'registration')
 
-    @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
-      nil
-    else
-      Date.current
-    end
-
-    if @account.save
+    if recaptcha_valid && ImagePixelValidator.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
+
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+
       Project.where(auto_add_interest: true).each do |auto_interest_project|
         auto_interest_project.safe_add_interested(@account)
       end
 
       redirect_to build_profile_accounts_path
     else
-      @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
+      @account.agreed_to_user_agreement = account_params[:agreed_to_user_agreement]
+
       render :new, status: :unprocessable_entity
     end
   end
@@ -80,10 +73,14 @@ class AccountsController < ApplicationController
 
   def update_profile
     @account = current_account
+
     authorize @account
+
     old_email = @account.email
 
-    if @account.update(account_params.merge(name_required: true))
+    image_validator = ImagePixelValidator.new(@account, account_params)
+
+    if image_validator.valid? && @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
       if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
         session.delete(:account_id)
@@ -187,6 +184,7 @@ class AccountsController < ApplicationController
 
     def account_params
       result = params.require(:account).permit(
+        :agreed_to_user_agreement,
         :email,
         :ethereum_auth_address,
         :first_name,
