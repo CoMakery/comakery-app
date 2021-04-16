@@ -16,7 +16,7 @@ const hwAddress = "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4"
 
 test("with succesfully response", async () => {
   jest.spyOn(hwAlgorand, "connect").mockImplementation(() => {return true});
-  jest.spyOn(hwAlgorand.algoChain, "fetchBalance").mockImplementation(() => { return { balance: "99.5" } });
+  jest.spyOn(hwAlgorand.chain, "fetchBalance").mockImplementation(() => { return { balance: "99.5" } });
 
   res = await hwAlgorand.getAlgoBalanceForHotWallet(hwAddress)
 

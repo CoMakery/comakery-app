@@ -76,7 +76,7 @@ class AlgorandBlockchain {
     await this.connect()
 
     try {
-      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+      const hwAccountDetails = await this.chain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
       return hwAccountDetails.account['apps-local-state'].filter(app => !app.deleted && app.id === appIndex)[0]
     } catch (err) {
       return {}
@@ -101,7 +101,7 @@ class AlgorandBlockchain {
 
   async getOptedInAppsFromBlockchain(hotWalletAddress) {
     try {
-      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+      const hwAccountDetails = await this.chain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
       return hwAccountDetails.account['apps-local-state'].filter(app => app.deleted == false).map(app => app.id)
     } catch (err) {
       return []
@@ -126,7 +126,7 @@ class AlgorandBlockchain {
     if (hotWalletAddress in this.algoBalances) { return this.algoBalances[hotWalletAddress] }
 
     await this.connect()
-    const blockchainBalance = await this.algoChain.fetchBalance(hotWalletAddress, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
+    const blockchainBalance = await this.chain.fetchBalance(hotWalletAddress, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
     this.algoBalances[hotWalletAddress] = new BigNumber(blockchainBalance.balance)
 
     return this.algoBalances[hotWalletAddress]
@@ -150,13 +150,13 @@ class AlgorandBlockchain {
   async optInToApp(hotWallet, appToOptIn) {
     await this.connect()
 
-    const transaction = await this.algoChain.new.Transaction()
+    const transaction = await this.chain.new.Transaction()
     const txn = {
       from: hotWallet.address,
       note: 'Opt-in from a HotWallet',
       appIndex: appToOptIn,
     }
-    const action = await this.algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
+    const action = await this.chain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
     transaction.actions = [action]
     await transaction.prepareToBeSigned()
     await transaction.validate()
