@@ -120,7 +120,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   className="input-field__dropdown--halfed"
                   copyOnClick={false}
                   disabled={false}
-                  errorText=""
+                  errors={Array []}
                   eventHandler={[Function]}
                   imgInputRef={null}
                   imgPreviewDimensions="40x40"
@@ -210,7 +210,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   className="input-field__dropdown--halfed"
                   copyOnClick={false}
                   disabled={false}
-                  errorText=""
+                  errors={Array []}
                   eventHandler={[Function]}
                   imgInputRef={null}
                   imgPreviewDimensions="40x40"
@@ -303,7 +303,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   className="input-field__dropdown--halfed"
                   copyOnClick={false}
                   disabled={false}
-                  errorText=""
+                  errors={Array []}
                   eventHandler={[Function]}
                   imgInputRef={null}
                   imgPreviewDimensions="40x40"
@@ -395,7 +395,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   className="input-field__halfed"
                   copyOnClick={false}
                   disabled={false}
-                  errorText=""
+                  errors={Array []}
                   eventHandler={[Function]}
                   imgInputRef={null}
                   imgPreviewDimensions="40x40"
@@ -454,6 +454,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                 </InputField>
               </InputFieldHalfed>
               <InputFieldUploadFile
+                eventHandler={[Function]}
                 imgInputRef={
                   Object {
                     "current": <input
@@ -477,7 +478,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   className="input-field__upload-file"
                   copyOnClick={false}
                   disabled={false}
-                  errorText=""
+                  errors={Array []}
                   eventHandler={[Function]}
                   imgInputRef={
                     Object {
