@@ -419,24 +419,25 @@ describe('ProjectForm', () => {
 
     wrapper.setState({
       errors: {
-        'project[title]'       : 'title error',
-        'project[mission_id]'  : 'mission_id error',
-        'project[square_image]': 'square_image error'
+        'project[title]'       : ['title error'],
+        'project[mission_id]'  : ['mission_id error'],
+        'project[square_image]': ['square_image error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldWhiteDark[errorText="title error"][title="title"][required][name="project[title]"]'
-    )).toBe(true)
 
-    expect(wrapper.exists(
-      'InputFieldDropdown[errorText="mission_id error"][title="mission"][name="project[mission_id]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldWhiteDark[title="title"][required][name="project[title]"] .input-field--error').html()
+    ).toContain('title error')
 
-    expect(wrapper.exists(
-      'InputFieldUploadFile[errorText="square_image error"][title="project image"][name="project[square_image]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDropdown[title="mission"][name="project[mission_id]"] .input-field--error').html()
+    ).toContain('mission_id error')
+
+    expect(
+      wrapper.find('InputFieldUploadFile[title="project image"][name="project[square_image]"] .input-field--error').html()
+    ).toContain('square_image error')
   })
 })

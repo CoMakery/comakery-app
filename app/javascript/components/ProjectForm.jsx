@@ -27,6 +27,7 @@ class ProjectForm extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.verifySquareImgRes = this.verifySquareImgRes.bind(this)
     this.verifyPanoramicImgRes = this.verifyPanoramicImgRes.bind(this)
+    this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.squareImgInputRef = React.createRef()
     this.panoramicImgInputRef = React.createRef()
@@ -93,17 +94,41 @@ class ProjectForm extends React.Component {
     }
   }
 
-  errorAdd(n, e) {
-    this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
-    })
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+      })
+    }
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
+  errorRemove(key, e) {
+    let errors = this.state.errors
+
+    if (errors[key] === undefined) {
+      return
+    }
+
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
+    if (errors[key].length === 0) {
+      delete errors[key]
+    }
+
     this.setState({
-      errors: e
+      errors: errors
     })
   }
 
@@ -173,31 +198,53 @@ class ProjectForm extends React.Component {
   }
 
   verifySquareImgRes(img) {
+    const errorMessage = 'Please attach the correct image'
+
     if ((img.naturalWidth >= 1200) && (img.naturalHeight >= 800) && (img.naturalWidth / img.naturalHeight === 1.5)) {
-      this.errorRemove('project[square_image]')
+      this.errorRemove('project[square_image]', errorMessage)
     } else {
       this.squareImgInputRef.current.value = ''
-      this.errorAdd('project[square_image]', 'Please attach the correct image')
+      this.errorAdd('project[square_image]', errorMessage)
     }
   }
 
   verifyPanoramicImgRes(img) {
+    const errorMessage = 'Please attach the correct image'
+
     if ((img.naturalWidth >= 1500) && (img.naturalHeight >= 300) && (img.naturalWidth / img.naturalHeight === 5)) {
-      this.errorRemove('project[panoramic_image]')
+      this.errorRemove('project[panoramic_image]', errorMessage)
     } else {
       this.panoramicImgInputRef.current.value = ''
-      this.errorAdd('project[panoramic_image]', 'Please attach the correct image')
+      this.errorAdd('project[panoramic_image]', errorMessage)
+    }
+  }
+
+  verifyImgSize(event) {
+    let file = event.target.files[0]
+
+    if (file && file.size) {
+      const errorMessage = 'Image size must me less then 2 megabytes'
+      const fileSizeMb = file.size / Math.pow(1024, 2)
+      const maxSize = 2
+
+      if (fileSizeMb > maxSize) {
+        this.errorAdd(event.target.name, errorMessage)
+      } else {
+        this.errorRemove(event.target.name, errorMessage)
+      }
     }
   }
 
   handleFieldChange(event) {
+    const errorMessage = 'Please provide the correct value'
+
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'Please provide the correct value')
+      this.errorAdd(event.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(event.target.name)
+      this.errorRemove(event.target.name, errorMessage)
     }
 
     if (event.target.value === '') {
@@ -210,7 +257,7 @@ class ProjectForm extends React.Component {
 
     this.disable(['project[submit]', 'project[submit_and_close]'])
 
-    if (!event.target.checkValidity()) {
+    if (!event.target.checkValidity() || Object.keys(this.state.errors).length > 0) {
       this.enable(['project[submit]', 'project[submit_and_close]'])
       return
     }
@@ -253,9 +300,10 @@ class ProjectForm extends React.Component {
           }
         } else {
           this.setState(state => ({
-            errors       : data.errors,
+            errors: Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
+
           this.enable(['project[submit]', 'project[submit_and_close]'])
         }
       })
@@ -306,7 +354,7 @@ class ProjectForm extends React.Component {
                 title='mission'
                 name='project[mission_id]'
                 value={this.state['project[mission_id]'] ? this.state['project[mission_id]'].toString() : null}
-                errorText={this.state.errors['project[mission_id]']}
+                errors={this.state.errors['project[mission_id]']}
                 disabled={this.state.disabled['project[mission_id]']}
                 eventHandler={this.handleFieldChange}
                 selectEntries={Object.entries(this.props.missions)}
@@ -319,7 +367,7 @@ class ProjectForm extends React.Component {
               required
               name='project[title]'
               value={this.state['project[title]']}
-              errorText={this.state.errors['project[title]']}
+              errors={this.state.errors['project[title]']}
               placeholder='Provide a name for the project'
               eventHandler={this.handleFieldChange}
               symbolLimit={100}
@@ -330,7 +378,7 @@ class ProjectForm extends React.Component {
               required
               name='project[description]'
               value={this.state['project[description]']}
-              errorText={this.state.errors['project[description]']}
+              errors={this.state.errors['project[description]']}
               placeholder='Explain the outline and goal of the project, and why people should be excited about helping to execute the vision'
               eventHandler={this.handleFieldChange}
               symbolLimit={20000}
@@ -339,7 +387,8 @@ class ProjectForm extends React.Component {
             <InputFieldUploadFile
               title='project image'
               name='project[square_image]'
-              errorText={this.state.errors['project[square_image]']}
+              eventHandler={this.verifyImgSize}
+              errors={this.state.errors['project[square_image]']}
               imgPreviewUrl={this.props.project.squareImageUrl}
               imgPreviewDimensions='150x100'
               imgRequirements='Image should be at least 1200px x 800px'
@@ -350,7 +399,8 @@ class ProjectForm extends React.Component {
             <InputFieldUploadFile
               title='project image – panoramic'
               name='project[panoramic_image]'
-              errorText={this.state.errors['project[panoramic_image]']}
+              eventHandler={this.verifyImgSize}
+              errors={this.state.errors['project[panoramic_image]']}
               imgPreviewUrl={this.props.project.panoramicImageUrl}
               imgPreviewDimensions='375x75'
               imgRequirements='Image should be at least 1500px x 300px'
@@ -378,7 +428,7 @@ class ProjectForm extends React.Component {
               recommended
               name='project[video_url]'
               value={this.state['project[video_url]']}
-              errorText={this.state.errors['project[video_url]']}
+              errors={this.state.errors['project[video_url]']}
               placeholder='Link to a YouTube or Vimeo video describing the project'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -388,7 +438,7 @@ class ProjectForm extends React.Component {
               recommended
               name='project[getting_started_url]'
               value={this.state['project[getting_started_url]']}
-              errorText={this.state.errors['project[getting_started_url]']}
+              errors={this.state.errors['project[getting_started_url]']}
               placeholder='Link to how to get started with your project'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -397,7 +447,7 @@ class ProjectForm extends React.Component {
               title='github project url'
               name='project[github_url]'
               value={this.state['project[github_url]']}
-              errorText={this.state.errors['project[github_url]']}
+              errors={this.state.errors['project[github_url]']}
               placeholder='Link to a GitHub repository'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -406,7 +456,7 @@ class ProjectForm extends React.Component {
               title='documentation url'
               name='project[documentation_url]'
               value={this.state['project[documentation_url]']}
-              errorText={this.state.errors['project[documentation_url]']}
+              errors={this.state.errors['project[documentation_url]']}
               placeholder='Link to your projects documentation'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -415,7 +465,7 @@ class ProjectForm extends React.Component {
               title='governance url'
               name='project[governance_url]'
               value={this.state['project[governance_url]']}
-              errorText={this.state.errors['project[governance_url]']}
+              errors={this.state.errors['project[governance_url]']}
               placeholder='Link to your project governance (e.g. Loomio.com or DAOstack.io)'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -424,7 +474,7 @@ class ProjectForm extends React.Component {
               title='funding url'
               name='project[funding_url]'
               value={this.state['project[funding_url]']}
-              errorText={this.state.errors['project[funding_url]']}
+              errors={this.state.errors['project[funding_url]']}
               placeholder='Link to your funding (e.g. Open Collective or a DAO funding url)'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -433,7 +483,7 @@ class ProjectForm extends React.Component {
               title='video conference url'
               name='project[video_conference_url]'
               value={this.state['project[video_conference_url]']}
-              errorText={this.state.errors['project[video_conference_url]']}
+              errors={this.state.errors['project[video_conference_url]']}
               placeholder='Link to your teams video conference url'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
@@ -444,7 +494,7 @@ class ProjectForm extends React.Component {
               title='token'
               name='project[token_id]'
               value={this.state['project[token_id]'] ? this.state['project[token_id]'].toString() : null}
-              errorText={this.state.errors['project[token_id]']}
+              errors={this.state.errors['project[token_id]']}
               disabled={this.state.disabled['project[token_id]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.tokens)}
@@ -455,7 +505,7 @@ class ProjectForm extends React.Component {
               title='total budget'
               name='project[maximum_tokens]'
               value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : ''}
-              errorText={this.state.errors['project[maximum_tokens]']}
+              errors={this.state.errors['project[maximum_tokens]']}
               placeholder='Provide the budget for completing the entire project'
               pattern='\d+'
               eventHandler={this.handleFieldChange}
@@ -565,7 +615,7 @@ class ProjectForm extends React.Component {
               required
               name='project[require_confidentiality]'
               value={this.state['project[require_confidentiality]']}
-              errorText={this.state.errors['project[require_confidentiality]']}
+              errors={this.state.errors['project[require_confidentiality]']}
               disabled={this.state.disabled['project[require_confidentiality]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.state.awardVisibilitiesPretty)}
@@ -577,7 +627,7 @@ class ProjectForm extends React.Component {
               required
               name='project[display_team]'
               value={this.state['project[display_team]']}
-              errorText={this.state.errors['project[displayTeam]']}
+              errors={this.state.errors['project[displayTeam]']}
               disabled={this.state.disabled['project[display_team]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries({'Yes': 'true', 'No': 'false'})}
@@ -589,7 +639,7 @@ class ProjectForm extends React.Component {
               required
               name='project[visibility]'
               value={this.state['project[visibility]']}
-              errorText={this.state.errors['project[visibility]']}
+              errors={this.state.errors['project[visibility]']}
               disabled={this.state.disabled['project[visibility]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.state.visibilitiesPretty)}
@@ -603,7 +653,7 @@ class ProjectForm extends React.Component {
               copyOnClick
               name='project[url]'
               value={this.state['project[url]']}
-              errorText={this.state.errors['project[url]']}
+              errors={this.state.errors['project[url]']}
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
@@ -618,7 +668,7 @@ class ProjectForm extends React.Component {
             {/*    readOnly={this.props.termsReadonly} */}
             {/*    name="project[legal_project_owner]" */}
             {/*    value={this.state['project[legal_project_owner]']} */}
-            {/*    errorText={this.state.errors['project[legalProjectOwner]']} */}
+            {/*    errors={this.state.errors['project[legalProjectOwner]']} */}
             {/*    placeholder="Provide a legal entity or individual owner's name" */}
             {/*    eventHandler={this.handleFieldChange} */}
             {/*  /> */}
@@ -633,7 +683,7 @@ class ProjectForm extends React.Component {
             {/*        disabled={this.props.termsReadonly} */}
             {/*        name="project[exclusive_contributions]" */}
             {/*        value={this.state['project[exclusive_contributions]']} */}
-            {/*        errorText={this.state.errors['project[exclusiveContributions]']} */}
+            {/*        errors={this.state.errors['project[exclusiveContributions]']} */}
             {/*        eventHandler={this.handleFieldChange} */}
             {/*        selectEntries={Object.entries({ */}
             {/*          'Exclusive'    : 'true', */}
@@ -647,7 +697,7 @@ class ProjectForm extends React.Component {
             {/*        disabled={this.props.termsReadonly} */}
             {/*        name="project[confidentiality]" */}
             {/*        value={this.state['project[confidentiality]']} */}
-            {/*        errorText={this.state.errors['project[confidentiality]']} */}
+            {/*        errors={this.state.errors['project[confidentiality]']} */}
             {/*        eventHandler={this.handleFieldChange} */}
             {/*        selectEntries={Object.entries({ */}
             {/*          'Required'    : 'true', */}

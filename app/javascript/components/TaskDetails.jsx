@@ -233,6 +233,7 @@ class TaskDetails extends React.Component {
     this.errorAdd = this.errorAdd.bind(this)
     this.errorRemove = this.errorRemove.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.state = {
       errors: {}
@@ -243,28 +244,70 @@ class TaskDetails extends React.Component {
     typeof window === 'undefined' ? null : window.history.back()
   }
 
-  errorAdd(n, e) {
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+      })
+    }
+  }
+
+  errorRemove(key, e) {
+    let errors = this.state.errors
+
+    if (errors[key] === undefined) {
+      return
+    }
+
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
+    if (errors[key].length === 0) {
+      delete errors[key]
+    }
+
     this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
+      errors: errors
     })
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
-    this.setState({
-      errors: e
-    })
+  verifyImgSize(event) {
+    let file = event.target.files[0]
+
+    if (file && file.size) {
+      const errorMessage = 'Image size must me less then 2 megabytes'
+      const fileSizeMb = file.size / Math.pow(1024, 2)
+      const maxSize = 2
+
+      if (fileSizeMb > maxSize) {
+        this.errorAdd(event.target.name, errorMessage)
+      } else {
+        this.errorRemove(event.target.name, errorMessage)
+      }
+    }
   }
 
   handleFieldChange(event) {
+    const errorMessage = 'invalid value'
+
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'invalid value')
+      this.errorAdd(event.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(event.target.name)
+      this.errorRemove(event.target.name, errorMessage)
     }
 
     if (event.target.value === '') {
@@ -274,6 +317,7 @@ class TaskDetails extends React.Component {
 
   render() {
     let task = this.props.task
+    let submitDisabled = Object.keys(this.state.errors).length > 0
 
     return (
       <React.Fragment>
@@ -295,7 +339,8 @@ class TaskDetails extends React.Component {
                   <InputFieldUploadFile
                     title='Image attachement'
                     name='task[submission_image]'
-                    errorText={this.state.errors['task[submissionImage]']}
+                    eventHandler={this.verifyImgSize}
+                    errors={this.state.errors['task[submission_image]']}
                     imgPreviewUrl={this.props.task.submissionImageUrl}
                     imgPreviewDimensions='100x100'
                   />
@@ -305,7 +350,7 @@ class TaskDetails extends React.Component {
                     name='task[submission_url]'
                     value={this.state['task[submission_url]']}
                     eventHandler={this.handleFieldChange}
-                    errorText={this.state.errors['task[submissionUrl]']}
+                    errors={this.state.errors['task[submissionUrl]']}
                     placeholder='Provide a URL'
                     symbolLimit={150}
                   />
@@ -315,7 +360,7 @@ class TaskDetails extends React.Component {
                     name='task[submission_comment]'
                     value={this.state['task[submission_comment]']}
                     eventHandler={this.handleFieldChange}
-                    errorText={this.state.errors['task[submissionComment]']}
+                    errors={this.state.errors['task[submissionComment]']}
                     placeholder='Provide any required comments'
                     symbolLimit={2000}
                   />
@@ -330,6 +375,7 @@ class TaskDetails extends React.Component {
                   <Button
                     type='submit'
                     value='submit task'
+                    disabled={submitDisabled}
                   />
 
                   <CancelButton
