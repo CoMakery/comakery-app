@@ -19,8 +19,7 @@ const redisClient = redis.createClient(envs.redisUrl)
 
 async function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) {
-    // added by oleg
-    console.log("Some ENV vars was not set")
+    console.error("Some ENV vars was not set")
     return false
   }
   return await hwUtils.hotWalletInitialization(envs, redisClient)
