@@ -49,6 +49,7 @@
     "eosjs": "^16.0.9",
     "ethereumjs-util": "^6.2.0",
     "formdata-polyfill": "^3.0.13",
+    "is-svg": "^4.3.1",
     "jquery": "^3.5.0",
     "js-cookie": "^2.2.0",
     "kind-of": "^6.0.3",
