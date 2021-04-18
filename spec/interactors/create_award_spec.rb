@@ -66,7 +66,8 @@ describe CreateAward do
       ActionController::Parameters.new(
         {
           name: 'award',
-          amount: 1
+          amount: 1,
+          image: fixture_file_upload('lottapixel.jpg', 'image/jpg', :binary)
         }
       ).permit!
     end
