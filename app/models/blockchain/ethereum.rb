@@ -92,10 +92,16 @@ class Blockchain::Ethereum < Blockchain
     raise Blockchain::Address::ValidationError, "should start with '0x', followed by 40 hex characters" unless /\A0x[0-9a-fA-F]{40}\z/.match?(addr)
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    true
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?
-    true
+    false
   end
 
   # Name of the blockchain on OreId service, if supported

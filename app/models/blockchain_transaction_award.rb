@@ -1,5 +1,6 @@
 class BlockchainTransactionAward < BlockchainTransaction
   validates :destination, presence: true
+  after_update :broadcast_updates
 
   def update_transactable_status
     blockchain_transactable.update!(status: :paid)
@@ -76,5 +77,31 @@ class BlockchainTransactionAward < BlockchainTransaction
       super
       self.amount ||= token.to_base_unit(blockchain_transactable.total_amount)
       self.destination ||= blockchain_transactable.recipient_address
+    end
+
+    def broadcast_updates
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_history_button_#{blockchain_transactable.id}",
+        partial: 'dashboard/transfers/transfer_history_button',
+        locals: { transfer: blockchain_transactable }
+      )
+
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_button_public_#{blockchain_transactable.id}",
+        partial: 'shared/transfer_button_public',
+        locals: { transfer: blockchain_transactable }
+      )
+
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_button_admin_#{blockchain_transactable.id}",
+        partial: 'shared/transfer_button_admin',
+        locals: { transfer: blockchain_transactable }
+      )
     end
 end

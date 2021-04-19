@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "transfer_history_button_#{transfer.id}" do %>
+  <% if transfer.blockchain_transactions.size > 0 %>
+    <%= link_to "#{transfer.blockchain_transactions.size} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
+  <% end %>
+<% end %>

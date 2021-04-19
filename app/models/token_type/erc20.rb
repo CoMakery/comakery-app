@@ -23,7 +23,7 @@ class TokenType::Erc20 < TokenType
   # Wallet logo filename for UI purposes (relative to `app/assets/images`)
   # @return [String] filename
   def wallet_logo
-    'OREID_Logo_Symbol.svg'
+    'wallet-connect-logo.svg'
   end
 
   # Contract instance if implemented
