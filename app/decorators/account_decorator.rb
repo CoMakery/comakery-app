@@ -75,6 +75,10 @@ class AccountDecorator < Draper::Decorator
     latest_verification&.max_investment_usd
   end
 
+  def project_interests
+    projects_interested.pluck(:id)
+  end
+
   def total_received_in(token)
     awards.paid.joins(:project).where('projects.token_id = :id', id: token.id).sum(:total_amount)
   end
