@@ -22,7 +22,7 @@ RSpec.describe ImagePixelValidator do
     let!(:params) do
       ActionController::Parameters.new(
         {
-          square_image: fixture_file_upload('lottapixel.jpg', 'image/jpg', :binary),
+          # square_image: fixture_file_upload('lottapixel.jpg', 'image/jpg', :binary),
           panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
         }
       ).permit!
