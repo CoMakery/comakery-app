@@ -61,7 +61,7 @@ exports.runServer = async function runServer(envs, redisClient) {
   while (true) {
     const hw = await hwRedis.hotWallet()
     const isReadyToSendTx = hw.isReadyToSendTx(envs)
-    console.log(isReadyToSendTx);
+
     if (isReadyToSendTx) {
       await exports.waitForNewTransaction(envs, hwRedis)
     }
@@ -85,7 +85,8 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     return false
   }
 
-  const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
+  // const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
+  const hasTokens = true // TODO: Remove me
   if (!hasTokens) {
     console.log(`The Hot Wallet does not have tokens. Please top up the ${hwAddress}`)
     return false
@@ -94,7 +95,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
   console.log(`Checking for a new transaction to send from ${hwAddress}`)
   const hwApi = new ComakeryApi(envs)
   const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
-  const txValidation = await hwAlgorand.isTransactionValid(transactionToSign.txRaw, hwAddress)
+  const txValidation = await blockchain.isTransactionValid(transactionToSign.txRaw, hwAddress)
 
   if (txValidation.valid) {
     console.log(`Found transaction to send, id=${transactionToSign.id}`)
