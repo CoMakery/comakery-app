@@ -18,8 +18,8 @@ class HotWallet {
     this.optedInApps = this.klass.optedInApps
   }
 
-  isOptedInToApp(appIndexToCheck) {
-    return this.klass.isOptedInToApp(appIndexToCheck)
+  isReadyToSendTx(envs) {
+    return this.klass.isReadyToSendTx(envs)
   }
 }
 exports.HotWallet = HotWallet

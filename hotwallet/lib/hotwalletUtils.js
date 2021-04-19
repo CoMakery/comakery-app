@@ -37,7 +37,7 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
   const hwCreated = await walletRedis.isHotWalletCreated()
 
   if (hwCreated) {
-    console.log("wallet already created, do nothing...")
+    console.log("wallet already created, using it...")
   } else {
     console.log("Key file does not exists, generating...")
     const blockchain = new Blockchain(envs)
@@ -60,14 +60,16 @@ exports.runServer = async function runServer(envs, redisClient) {
 
   while (true) {
     const hw = await hwRedis.hotWallet()
-    const optedIn = await hw.isOptedInToApp(envs.optInApp)
-
-    if (optedIn) {
+    const isReadyToSendTx = hw.isReadyToSendTx(envs)
+    console.log(isReadyToSendTx);
+    if (isReadyToSendTx) {
       await exports.waitForNewTransaction(envs, hwRedis)
-    } else {
-      console.log("The Hot Wallet doesn't opted-in to the App. Trying to opt-in")
-      await exports.autoOptIn(envs, hwRedis)
     }
+    // TODO: Fix autoOptIn for algorand wallets, now it skipped
+    // else {
+    //   console.log("The Hot Wallet doesn't opted-in to the App. Trying to opt-in")
+    //   await exports.autoOptIn(envs, hwRedis)
+    // }
 
     await exports.sleep(envs.checkForNewTransactionsDelay * 1000) // 30 seconds by default
   }
@@ -75,17 +77,17 @@ exports.runServer = async function runServer(envs, redisClient) {
 
 exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRedis) {
   const hwAddress = await hwRedis.hotWalletAddress()
-  const hwAlgorand = new AlgorandBlockchain(envs)
+  const blockchain = new Blockchain(envs)
 
-  const enoughAlgos = await hwAlgorand.enoughAlgoBalanceToSendTransaction(hwAddress)
-  if (!enoughAlgos) {
-    console.log(`The Hot Wallet does not have enough balance of ALGOs to send transactions. Please top up the ${hwAddress}`)
+  const enoughCoins = await blockchain.enoughCoinBalanceToSendTransaction(hwAddress)
+  if (!enoughCoins) {
+    console.log(`The Hot Wallet does not have enough balance to send transactions. Please top up the ${hwAddress}`)
     return false
   }
 
-  const hasTokens = await hwAlgorand.positiveTokenBalance(hwAddress)
+  const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
   if (!hasTokens) {
-    console.log(`The Hot Wallet does not have NOTE tokens. Please top up the ${hwAddress}`)
+    console.log(`The Hot Wallet does not have tokens. Please top up the ${hwAddress}`)
     return false
   }
 

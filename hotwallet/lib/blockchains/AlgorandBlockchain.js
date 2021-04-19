@@ -137,7 +137,7 @@ class AlgorandBlockchain {
     return optedInApps.includes(this.envs.optInApp)
   }
 
-  async enoughAlgoBalanceToSendTransaction(hotWalletAddress) {
+  async enoughCoinBalanceToSendTransaction(hotWalletAddress) {
     const algoBalance = await this.getAlgoBalanceForHotWallet(hotWalletAddress)
     return algoBalance.isGreaterThan(new BigNumber(0.001)) // 1000 microalgos
   }
