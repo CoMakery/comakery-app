@@ -21,13 +21,8 @@ module BlockchainJob
             synced_at: Time.current
           )
 
-          balance = Balance.find_or_initialize_by(
-            token: token,
-            wallet: wallet
-          )
-
-          balance.base_unit_value = contract.call.balance_of(wallet.address)
-          balance.save!
+          balance = Balance.find_or_initialize_by(token: token, wallet: wallet)
+          balance.sync_with_blockchain!
         end
       end
 

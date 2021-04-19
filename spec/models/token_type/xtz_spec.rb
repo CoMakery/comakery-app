@@ -18,4 +18,12 @@ describe TokenType::Xtz do
   specify { expect(described_class.new.supports_token_mint?).to be_falsey }
   specify { expect(described_class.new.supports_token_burn?).to be_falsey }
   specify { expect(described_class.new.supports_token_freeze?).to be_falsey }
+
+  describe '#blockchain_balance' do
+    subject { described_class.new.blockchain_balance('dummy_wallet_address') }
+
+    it do
+      expect { subject }.to raise_error NotImplementedError
+    end
+  end
 end
