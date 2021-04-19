@@ -12,7 +12,9 @@ const envs = {
   checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
   optInApp: parseInt(process.env.OPT_IN_APP),
   blockchainNetwork: process.env.BLOCKCHAIN_NETWORK,
-  maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER)
+  maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER),
+  ethereumTokenSymbol: process.env.ETHEREUM_TOKEN_SYMBOL,
+  ethereumContractAddress: process.env.ETHEREUM_CONTRACT_ADDRESS
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
