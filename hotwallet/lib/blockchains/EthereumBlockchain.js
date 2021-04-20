@@ -79,6 +79,7 @@ class EthereumBlockchain {
     return balance.isGreaterThan(new BigNumber(0.001))
   }
 
+  // TODO: fix getting token balance. For now it always returns 0
   async getTokenBalance(hotWalletAddress) {
     if (hotWalletAddress in this.tokenBalances) { return this.tokenBalances[hotWalletAddress] }
 
@@ -96,7 +97,7 @@ class EthereumBlockchain {
 
   async positiveTokenBalance(hotWalletAddress) {
     const tokenBalance = await this.getTokenBalance(hotWalletAddress)
-    return tokenBalance > 0
+    return tokenBalance.isPositive()
   }
 
   async isTransactionValid(transaction, hotWalletAddress) {
@@ -104,6 +105,29 @@ class EthereumBlockchain {
 
     // TODO: Implement me
     return { valid: true }
+  }
+
+  async signAndSendTransaction(transaction, hotWallet) {
+    await this.connect()
+
+    const chainTransaction = await this.chain.new.Transaction()
+    const txn = JSON.parse(transaction.txRaw || "{}")
+    console.log(txn);
+    // For now hardcoded to ERC20Transfer
+    const action = await this.chain.composeAction(chainjs.ModelsEthereum.EthereumChainActionType.ERC20Transfer, txn)
+    chainTransaction.actions = [action]
+    await chainTransaction.prepareToBeSigned()
+    await chainTransaction.validate()
+    await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
+
+    try {
+      const tx_result = await chainTransaction.send()
+      console.log(`Transaction has successfully signed and sent by ${addr} to blockchain tx hash: ${tx_result.transactionId}`)
+      return tx_result
+    } catch (err) {
+      console.error(err)
+      return {}
+    }
   }
 }
 exports.EthereumBlockchain = EthereumBlockchain
