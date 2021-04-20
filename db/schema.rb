@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_134101) do
   create_table "balances", force: :cascade do |t|
     t.bigint "wallet_id"
     t.bigint "token_id"
-    t.bigint "base_unit_value", default: 0, null: false
+    t.decimal "base_unit_value", precision: 40, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
@@ -659,8 +659,8 @@ ActiveRecord::Schema.define(version: 2021_04_09_134101) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ore_id_account_id"
-    t.boolean "primary_wallet", default: false
     t.string "name"
+    t.boolean "primary_wallet", default: false
     t.bigint "project_id"
     t.index ["account_id", "_blockchain"], name: "index_wallets_on_account_id_and__blockchain"
     t.index ["account_id", "address", "_blockchain"], name: "index_wallets_on_account_id_and_address_and__blockchain", unique: true

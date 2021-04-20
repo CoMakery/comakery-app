@@ -103,4 +103,10 @@ class TokenType::Erc20 < TokenType
   def blockchain
     attrs[:blockchain]
   end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(wallet_address)
+    contract.contract.call.balance_of(wallet_address)
+  end
 end

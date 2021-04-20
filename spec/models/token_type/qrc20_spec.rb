@@ -38,4 +38,12 @@ describe TokenType::Qrc20, vcr: true do
       end
     end
   end
+
+  describe '#blockchain_balance' do
+    subject { described_class.new.blockchain_balance('dummy_wallet_address') }
+
+    it do
+      expect { subject }.to raise_error NotImplementedError
+    end
+  end
 end

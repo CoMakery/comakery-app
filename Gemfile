@@ -13,6 +13,7 @@ gem 'coffee-rails'
 gem 'countries', require: 'countries/global'
 gem 'd3-rails', '~>3.5'
 gem 'draper'
+gem 'fastimage'
 gem 'font_assets'
 gem 'font-awesome-rails'
 gem 'fortitude'
@@ -121,7 +122,7 @@ end
 
 gem 'scout_apm', '~> 2.4'
 
-gem 'mini_racer', '~> 0.3.1'
+gem 'mini_racer', '~> 0.4.0'
 
 gem 'possessive', '~> 1.0'
 
