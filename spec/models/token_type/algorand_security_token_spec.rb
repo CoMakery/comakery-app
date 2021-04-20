@@ -40,4 +40,15 @@ describe TokenType::AlgorandSecurityToken, vcr: true do
       end
     end
   end
+
+  describe '#blockchain_balance' do
+    let(:token_type) { described_class.new(**attrs) }
+    subject { token_type.blockchain_balance('dummy_wallet_address') }
+
+    it 'gets balance from a contract' do
+      expect_any_instance_of(Comakery::Algorand).to receive(:app_balance).with('dummy_wallet_address').and_return(999)
+
+      is_expected.to eq 999
+    end
+  end
 end

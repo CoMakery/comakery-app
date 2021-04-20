@@ -1,7 +1,7 @@
 class TokenType::<%= class_name %> < TokenType
   # Generated template for implementing a new token type subclass
   # See: rails g token_type -h
-  
+
   # Name of the token type for UI purposes
   # @return [String] name
   def name
@@ -84,5 +84,11 @@ class TokenType::<%= class_name %> < TokenType
   # @return [Boolean] flag
   def supports_token_freeze?
     false
+  end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(_wallet_address)
+    raise NotImplementedError
   end
 end

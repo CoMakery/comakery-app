@@ -58,7 +58,7 @@ class Comakery::Algorand
   end
 
   def account_balance(addr)
-    account_details(addr).dig('account', 'amount')
+    account_details(addr).dig('account', 'amount') || 0
   end
 
   def account_assets(addr)
@@ -75,6 +75,14 @@ class Comakery::Algorand
 
   def account_local_state_decoded(addr)
     decode_storage(account_local_state(addr)['key-value'])
+  end
+
+  def app_balance(addr)
+    account_local_state_decoded(addr).fetch('balance', 0)
+  end
+
+  def asset_balance(addr)
+    account_assets(addr).find { |asset| asset['asset-id'] == @asset_id }&.fetch('amount', 0) || 0
   end
 
   def status
