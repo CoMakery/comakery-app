@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
-  before_action :assign_project, only: %i[edit show update awards]
+  before_action :assign_project, only: %i[edit show update]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
