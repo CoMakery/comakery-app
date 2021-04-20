@@ -31,18 +31,6 @@ class ProjectsController < ApplicationController
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
   end
 
-  def awards
-    authorize @project, :show_contributions?
-    @awards = @project.awards.completed.includes(
-      :token, :award_type, :issuer, :latest_blockchain_transaction,
-      account: [image_attachment: :blob], issuer: [image_attachment: :blob]
-    )
-    @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
-    @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
-
-    render 'awards/index.html.rb'
-  end
-
   def index
     @project_contributors = TopContributors.call(projects: @projects).contributors
     @meta_title = 'CoMakery Projects - Work at the Cutting Edge'
