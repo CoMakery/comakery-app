@@ -116,7 +116,6 @@ class Index extends React.Component {
             name="input[text2]"
             value={this.state['input[text2]']}
             eventHandler={this.handleInputChange}
-            errors="Here goes error text"
           />
           <InputFieldWhiteDark
             required
