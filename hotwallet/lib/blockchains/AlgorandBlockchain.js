@@ -207,5 +207,9 @@ class AlgorandBlockchain {
       return { valid: false, markAs: "failed", error: `Unknown error: ${err}` }
     }
   }
+
+  async sendTransaction(transaction, hotWallet) {
+    console.error("sendTransaction is not implemented for AlgorandBlockchain")
+  }
 }
 exports.AlgorandBlockchain = AlgorandBlockchain

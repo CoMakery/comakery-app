@@ -30,8 +30,8 @@ class Blockchain {
     return await this.klass.isTransactionValid(transaction, hotWalletAddress)
   }
 
-  async signAndSendTransaction(transaction, hotWallet) {
-    return await this.klass.signAndSendTransaction(transaction, hotWallet)
+  async sendTransaction(transaction, hotWallet) {
+    return await this.klass.sendTransaction(transaction, hotWallet)
   }
 }
 exports.Blockchain = Blockchain

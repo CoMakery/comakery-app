@@ -126,6 +126,7 @@ class EthereumBlockchain {
 
     if (tokenBalance.balance) {
       const balance = new BigNumber(tokenBalance.balance)
+      console.log(balance.toString());
       this.tokenBalances[hotWalletAddress] = balance
       return balance
     } else {
@@ -145,34 +146,25 @@ class EthereumBlockchain {
     return { valid: true }
   }
 
-  async signAndSendTransaction(transaction, hotWallet) {
+  async sendTransaction(transaction, hotWallet) {
     await this.connect()
 
-    const chainTransaction = await this.chain.new.Transaction()
     const txn = JSON.parse(transaction.txRaw || "{}")
-    console.log(txn);
-    // For now hardcoded to ERC20Transfer
-    const txToSend = {}
-    txToSend.contractAddress = txn.to
-    txToSend.from = txn.from
-    txToSend.precision = 0
-    txToSend.to = txn.to
-    txToSend.value = txn.value
+    txn.data = chainjs.HelpersEthereum.generateDataFromContractAction(txn.contract)
 
-    // const action = await this.chain.composeAction(chainjs.ModelsEthereum.EthereumChainActionType.ERC20Transfer, txToSend)
-
-    chainTransaction.actions = [txn]
-    await chainTransaction.prepareToBeSigned()
-    await chainTransaction.validate()
-    await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
+    const chainTransaction = await this.chain.new.Transaction()
 
     try {
+      await chainTransaction.setFromRaw(txn)
+      await chainTransaction.prepareToBeSigned()
+      await chainTransaction.validate()
+      await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
       const tx_result = await chainTransaction.send()
-      console.log(`Transaction has successfully signed and sent by ${addr} to blockchain tx hash: ${tx_result.transactionId}`)
+      console.log(`Transaction has successfully signed and sent by ${hotWallet.address} to blockchain tx hash: ${tx_result.transactionId}`)
       return tx_result
     } catch (err) {
       console.error(err)
-      return {}
+      return { valid: false, markAs: "cancelled", error: err.message }
     }
   }
 }
