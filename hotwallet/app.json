@@ -53,10 +53,6 @@
       "required": true,
       "value": "30"
     },
-    "OPT_IN_APP": {
-      "description": "Algorand App index. The hot wallet will automatically opt-in to that App",
-      "required": true
-    },
     "BLOCKCHAIN_NETWORK": {
       "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta",
       "required": true,
@@ -65,6 +61,14 @@
     "MAX_AMOUNT_FOR_TRANSFER": {
       "description": "Maximum amount of tokens to send. Value 100000000 is mean 1 NOTE token (1 x 10^-8), 0 for unlimited. Unlimited by default",
       "required": false
+    },
+    "ETHEREUM_TOKEN_SYMBOL": {
+      "description": "Ethereum Token symbol (CERE for example). It uses to get a balance of the token",
+      "required": true
+    },
+    "ETHEREUM_CONTRACT_ADDRESS": {
+      "description": "Ethereum contract address of the token. It uses to get a balance of the token",
+      "required": true
     }
   }
 }
