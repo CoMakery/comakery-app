@@ -102,6 +102,10 @@ class Index extends React.Component {
             </React.Fragment>
           }
         >
+          <Button
+            value="Tabler"
+            onClick={(_)=> window.open('/tabler/index.html', '_blank')}
+          />
           <InputFieldWhiteDark
             name="input[text1]"
             value={this.state['input[text1]']}
