@@ -14,25 +14,28 @@ const hwApi = new hwUtils.ComakeryApi(envs)
 
 jest.mock("axios")
 
-test("API returns a blockchain transaction", async () => {
-  expect.assertions(1)
-  axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: blockchainTransaction }))
-  res = await hwApi.updateTransactionHash(blockchainTransaction, envs)
+describe("Update transaction hash test suite", () => {
+  
+  test("API returns a blockchain transaction", async () => {
+    expect.assertions(1)
+    axios.put.mockImplementation(() => Promise.resolve({ status: 200, data: blockchainTransaction }))
+    res = await hwApi.updateTransactionHash(blockchainTransaction, envs)
 
-  expect(res).toEqual(blockchainTransaction)
-})
+    expect(res).toEqual(blockchainTransaction)
+  })
 
-test("API returns failed response", async () => {
-  const data = {
-    response: {
-      status: 500,
-      statusText: "Server error",
-      data: { errors: { any: "error" } }
+  test("API returns failed response", async () => {
+    const data = {
+      response: {
+        status: 500,
+        statusText: "Server error",
+        data: { errors: { any: "error" } }
+      }
     }
-  }
 
-  axios.put.mockReturnValue(Promise.reject(data));
-  res = await hwApi.updateTransactionHash(blockchainTransaction, envs)
+    axios.put.mockReturnValue(Promise.reject(data));
+    res = await hwApi.updateTransactionHash(blockchainTransaction, envs)
 
-  expect(res).toEqual({})
-})
+    expect(res).toEqual({})
+  })
+});
