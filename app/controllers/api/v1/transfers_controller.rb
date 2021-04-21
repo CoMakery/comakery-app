@@ -77,7 +77,8 @@ class Api::V1::TransfersController < Api::V1::ApiController
         :total_amount,
         :transfer_type_id,
         :recipient_wallet_id,
-        :description
+        :description,
+        :lockup_schedule_id
       )
     end
 
