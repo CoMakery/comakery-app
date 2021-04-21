@@ -1,6 +1,8 @@
 const hwUtils = require('../lib/hotwalletUtils')
 
-test('all ENVs are set', async () => {
+describe("Check that all variables are set test suite", () => {
+
+  test('all ENVs are set', async () => {
   const envs = {
     projectId: "1",
     projectApiKey: "project_api_key",
@@ -238,3 +240,5 @@ test('ethereumContractAddress is null', async () => {
   }
   expect(hwUtils.checkAllVariablesAreSet(envs)).toBe(false)
 })
+
+});

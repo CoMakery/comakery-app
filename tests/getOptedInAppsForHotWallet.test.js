@@ -10,28 +10,31 @@ const envs = {
   blockchainNetwork: "algorand_test"
 }
 
-const hwAddress = "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4"
+describe("Get OptedInapps for hot wallet suite", () => {
+  const hwAddress = "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4"
 
-afterEach(() => {
-  jest.restoreAllMocks()
-})
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
 
-test("when blockchain returns opted-in apps", async () => {
-  const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
-  jest.spyOn(hwAlgorand, "connect").mockReturnValue(true)
-  jest.spyOn(hwAlgorand, "getOptedInAppsFromBlockchain").mockReturnValue([13997710])
+  test("when blockchain returns opted-in apps", async () => {
+    const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
+    jest.spyOn(hwAlgorand, "connect").mockReturnValue(true)
+    jest.spyOn(hwAlgorand, "getOptedInAppsFromBlockchain").mockReturnValue([13997710])
 
-  res = await hwAlgorand.getOptedInAppsForHotWallet(hwAddress)
+    res = await hwAlgorand.getOptedInAppsForHotWallet(hwAddress)
 
-  expect(res).toEqual([13997710])
-})
+    expect(res).toEqual([13997710])
+  })
 
-test("when blockchain returns no apps", async () => {
-  const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
-  jest.spyOn(hwAlgorand, "connect").mockReturnValue(true)
-  jest.spyOn(hwAlgorand, "getOptedInAppsFromBlockchain").mockReturnValue([])
+  test("when blockchain returns no apps", async () => {
+    const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
+    jest.spyOn(hwAlgorand, "connect").mockReturnValue(true)
+    jest.spyOn(hwAlgorand, "getOptedInAppsFromBlockchain").mockReturnValue([])
 
-  res = await hwAlgorand.getOptedInAppsForHotWallet(hwAddress)
+    res = await hwAlgorand.getOptedInAppsForHotWallet(hwAddress)
 
-  expect(res).toEqual([])
-})
+    expect(res).toEqual([])
+  })
+});
+
