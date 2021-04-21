@@ -10,6 +10,10 @@ class Wallet < ApplicationRecord
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
 
+  scope :with_whitelabel_account, lambda {
+    left_outer_joins(account: :managed_mission).where(missions: { whitelabel: true })
+  }
+
   validates :source, presence: true
   validates :address, presence: true, unless: :empty_address_allowed?
   validates :address, blockchain_address: true
@@ -24,6 +28,10 @@ class Wallet < ApplicationRecord
 
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
+
+  after_create_commit { broadcast_append_later 'wallets' if account.managed_mission&.whitelabel? }
+  after_update_commit { broadcast_replace_to 'wallets' if account.managed_mission&.whitelabel? }
+  after_destroy_commit { broadcast_remove_to 'wallets' if account.managed_mission&.whitelabel? }
 
   enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 

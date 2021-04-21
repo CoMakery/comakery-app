@@ -3,11 +3,21 @@ class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
-  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
+  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
 
   before_action :redirect_if_signed_in, only: %i[new create]
 
   layout 'legacy'
+
+  def index
+    authorize(current_user, :index?)
+
+    @wallets = Wallet
+               .with_whitelabel_account
+               .includes(account: :latest_verification)
+               .page(params[:page])
+               .per(10)
+  end
 
   def new
     @account = Account.new(email: params[:account_email])
