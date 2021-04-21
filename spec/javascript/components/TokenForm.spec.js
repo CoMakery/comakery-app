@@ -256,19 +256,19 @@ describe('TokenForm', () => {
 
     wrapper.setState({
       errors: {
-        'token[_token_type]' : '_token_type error',
-        'token[logo_image]': 'logo_image error'
+        'token[_token_type]' : ['_token_type error'],
+        'token[logo_image]'  : ['logo_image error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldDropdownHalfed[errorText="_token_type error"][title="token type"][required][name="token[_token_type]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDropdownHalfed[title="token type"][required][name="token[_token_type]"] .input-field--error').html()
+    ).toContain('_token_type error')
 
-    expect(wrapper.exists(
-      'InputFieldUploadFile[errorText="logo_image error"][title="token logo"][required][name="token[logo_image]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"] .input-field--error').html()
+    ).toContain('logo_image error')
   })
 })

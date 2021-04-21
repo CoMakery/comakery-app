@@ -36,6 +36,7 @@ class SessionsController < ApplicationController
                                                            password: params[:password])
 
     if verify_recaptcha(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success?
+      mitigate_session_fixation
       session[:account_id] = authenticate_user_result.account.id
 
       redirect_to redirect_path
@@ -45,11 +46,17 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:account_id] = nil
+    mitigate_session_fixation
     redirect_to root_path
   end
 
   protected
+
+    def mitigate_session_fixation
+      old_values = session.to_hash.symbolize_keys
+      reset_session
+      session.update old_values.except(:session_id, :account_id)
+    end
 
     def auth_hash
       request.env['omniauth.auth']

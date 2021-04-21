@@ -103,20 +103,14 @@ jobs:
     - name: Install Node dependencies
       run: yarn install
 
+    - name: Install OS dependenices
+      run: sudo apt-get install libpq-dev libssl-dev graphviz imagemagick
+
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-    - name: Install OS dependenices
-      run: sudo apt-get install libpq-dev libssl-dev graphviz imagemagick
-
-    - name: Set up Bundler to use cache
-      run: bundle config path 'vendor/bundle'
-
-    - name: Install Ruby dependencies
-      run: bundle install --jobs 4 --retry 3
 
     - name: Assets Cache
       id: assets-cache
@@ -142,11 +136,36 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run tests
-      run: env bundle exec rake knapsack_pro:queue:rspec
+      run: env bundle exec rake knapsack_pro:queue:rspec || env bundle exec rspec --only-failures --format documentation
 
     - name: Upload a Build Artifact
       if: always()
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: SimpleCov Report ${{ matrix.ci_node_index }}
+        name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
+
+  simplecov:
+    runs-on: ubuntu-latest
+    needs: rspec
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.1
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Run Simplecov
+        run: env bundle exec rake coverage:ci_report
+
+      - name: Upload a Build Artifact
+        if: always()
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Total Coverage
+          path: coverage/
+

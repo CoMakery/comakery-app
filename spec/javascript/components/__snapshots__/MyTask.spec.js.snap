@@ -44,7 +44,7 @@ exports[`MyTask renders component correctly 1`] = `
           "attrs": Array [],
           "componentStyle": ComponentStyle {
             "componentId": "sc-htoDjs",
-            "isStatic": true,
+            "isStatic": false,
             "lastClassName": "eyjoEz",
             "rules": Array [
               "
@@ -62,7 +62,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
             ],
           },
-          "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
           "styledComponentId": "sc-htoDjs",
@@ -85,7 +84,7 @@ exports[`MyTask renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-dnqmqq",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "loaWQw",
                   "rules": Array [
                     "
@@ -105,7 +104,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-dnqmqq",
@@ -142,7 +140,7 @@ exports[`MyTask renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-iwsKbI",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "jhrtkw",
                   "rules": Array [
                     "
@@ -151,7 +149,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-iwsKbI",
@@ -174,7 +171,7 @@ exports[`MyTask renders component correctly 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-gZMcBi",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "dOdwlQ",
                         "rules": Array [
                           "
@@ -190,7 +187,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-gZMcBi",
@@ -213,7 +209,7 @@ exports[`MyTask renders component correctly 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-jTzLTM",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "kGTjxL",
                               "rules": Array [
                                 "
@@ -232,7 +228,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-jTzLTM",
@@ -262,7 +257,7 @@ exports[`MyTask renders component correctly 1`] = `
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-bdVaJa",
-                                "isStatic": true,
+                                "isStatic": false,
                                 "lastClassName": "cpIcWx",
                                 "rules": Array [
                                   "
@@ -276,7 +271,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-bdVaJa",
@@ -299,7 +293,7 @@ exports[`MyTask renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-bwzfXH",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "eNKWhX",
                                       "rules": Array [
                                         "
@@ -307,7 +301,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-bwzfXH",
@@ -332,7 +325,7 @@ exports[`MyTask renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-htpNat",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "eglqcF",
                                       "rules": Array [
                                         "
@@ -341,7 +334,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-htpNat",
@@ -372,7 +364,7 @@ exports[`MyTask renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-bxivhb",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "iJrLVE",
                                       "rules": Array [
                                         "
@@ -380,7 +372,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.img",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-bxivhb",
@@ -415,7 +406,7 @@ exports[`MyTask renders component correctly 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-gqjmRU",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "ezswdQ",
                         "rules": Array [
                           "
@@ -432,7 +423,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-gqjmRU",
@@ -455,7 +445,7 @@ exports[`MyTask renders component correctly 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-fjdhpX",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "cmpvpl",
                               "rules": Array [
                                 "
@@ -463,7 +453,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-fjdhpX",
@@ -486,7 +475,7 @@ exports[`MyTask renders component correctly 1`] = `
                                   "attrs": Array [],
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-cSHVUG",
-                                    "isStatic": true,
+                                    "isStatic": false,
                                     "lastClassName": "jvHjYo",
                                     "rules": Array [
                                       "
@@ -531,7 +520,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                     ],
                                   },
-                                  "displayName": "styled.div",
                                   "foldedComponentIds": Array [],
                                   "render": [Function],
                                   "styledComponentId": "sc-cSHVUG",
@@ -626,7 +614,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.a",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-kAzzGY",
@@ -655,7 +642,7 @@ exports[`MyTask renders component correctly 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-VigVT",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "hMoLQj",
                         "rules": Array [
                           "
@@ -668,7 +655,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-VigVT",
@@ -691,7 +677,7 @@ exports[`MyTask renders component correctly 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-kgoBCf",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "bYctZi",
                               "rules": Array [
                                 "
@@ -711,7 +697,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-kgoBCf",
@@ -741,7 +726,7 @@ exports[`MyTask renders component correctly 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-kGXeez",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "ciLkYX",
                               "rules": Array [
                                 "
@@ -761,7 +746,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-kGXeez",
@@ -834,7 +818,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.a",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-chPdSV",
@@ -932,7 +915,6 @@ exports[`MyTask renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.a",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-kAzzGY",

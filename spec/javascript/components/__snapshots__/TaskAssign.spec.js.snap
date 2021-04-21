@@ -173,7 +173,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-bdVaJa",
@@ -196,7 +195,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
@@ -211,7 +210,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-bwzfXH",
@@ -236,7 +234,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
@@ -280,7 +278,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-EHOje",
@@ -367,7 +364,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-jTzLTM",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "evXAyl",
                         "rules": Array [
                           "
@@ -383,7 +380,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-jTzLTM",
@@ -410,7 +406,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-fjdhpX",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "hCAyId",
                         "rules": Array [
                           "
@@ -427,7 +423,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-fjdhpX",
@@ -454,7 +449,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-jzJRlG",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "hUUpgZ",
                         "rules": Array [
                           "
@@ -471,7 +466,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-jzJRlG",
@@ -498,7 +492,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-cSHVUG",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "eZOJvS",
                         "rules": Array [
                           "
@@ -522,7 +516,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-cSHVUG",
@@ -550,7 +543,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                         className="input-field__white__dark"
                         copyOnClick={true}
                         disabled={false}
-                        errorText=""
+                        errors={Array []}
                         eventHandler={[Function]}
                         imgInputRef={null}
                         imgPreviewDimensions="40x40"

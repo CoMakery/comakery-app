@@ -18,4 +18,14 @@ describe TokenType::ComakerySecurityToken, vcr: true do
   specify { expect(described_class.new(**attrs).default_reg_group).to eq(0) }
   specify { expect(described_class.new(**attrs).transfer_rule_sync_job).to eq(BlockchainJob::ComakerySecurityTokenJob::TransferRulesSyncJob) }
   specify { expect(described_class.new(**attrs).accounts_sync_job).to eq(BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob) }
+
+  describe '#blockchain_balance' do
+    let(:token_type) { described_class.new(**attrs) }
+    subject { token_type.blockchain_balance(build(:ethereum_address_1)) }
+
+    it 'gets balance from a contract' do
+      # Get it using VCR from blockchain
+      is_expected.to eq 0
+    end
+  end
 end

@@ -167,7 +167,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-bdVaJa",
@@ -190,7 +189,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
@@ -205,7 +204,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-bwzfXH",
@@ -230,7 +228,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
@@ -274,7 +272,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-EHOje",
@@ -340,7 +337,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__dropdown"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -423,7 +420,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -503,7 +500,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__description"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -567,6 +564,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   </InputField>
                 </InputFieldDescription>
                 <InputFieldUploadFile
+                  eventHandler={[Function]}
                   imgInputRef={
                     Object {
                       "current": <input
@@ -589,7 +587,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__upload-file"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={
                       Object {
@@ -658,6 +656,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   </InputField>
                 </InputFieldUploadFile>
                 <InputFieldUploadFile
+                  eventHandler={[Function]}
                   imgInputRef={
                     Object {
                       "current": <input
@@ -680,7 +679,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__upload-file"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={
                       Object {
@@ -777,7 +776,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -850,7 +849,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -922,7 +921,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -994,7 +993,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1066,7 +1065,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1138,7 +1137,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1210,7 +1209,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1292,7 +1291,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__dropdown"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1378,7 +1377,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1476,7 +1475,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__dropdown"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1580,7 +1579,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__dropdown"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1672,7 +1671,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__dropdown"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -1742,7 +1741,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={true}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"

@@ -5,10 +5,6 @@ enable_simplecov = ENV['SIMPLECOV_ENABLED'] == 'true' || false
 if enable_simplecov
   require 'simplecov'
   SimpleCov.start :rails do
-    # SimpleCov.minimum_coverage 5 # removing code coverage requirement until it is configured properly
-    #     SimpleCov.minimum_coverage_by_file 38
-    #     SimpleCov.refuse_coverage_drop
-
     # add_filter == do not track coverage
     add_filter %r{^/db/migrate/}
     add_filter %r{^/db//schema.rb/}
@@ -64,6 +60,7 @@ RSpec.configure do |config|
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec', 'fixtures') # rubocop:todo Rails/FilePath
+  config.example_status_persistence_file_path = 'tmp/rspec_examples.txt'
 
   config.before do
     Sidekiq::Worker.clear_all
@@ -145,8 +142,7 @@ def click_remove(award_type_row)
 end
 
 def wait_for_turbolinks
-  has_css?('.turbo-progress-bar', visible: true)
-  has_no_css?('.turbo-progress-bar')
+  has_no_css?('.turbo-progress-bar', wait: 5.seconds) if has_css?('.turbo-progress-bar', visible: true, wait: 1.second)
 end
 
 include SlackStubs

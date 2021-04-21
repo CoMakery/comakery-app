@@ -47,17 +47,41 @@ class TaskShow extends React.Component {
     }
   }
 
-  errorAdd(n, e) {
-    this.setState({
-      errors: Object.assign({}, this.state.errors, {[n]: e})
-    })
+  errorAdd(key, e) {
+    let errors = this.state.errors
+
+    if (errors.hasOwnProperty(key)) {
+      if (errors[key].includes(e)) {
+        return
+      }
+
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: [...errors[key], e]})
+      })
+    } else {
+      this.setState({
+        errors: Object.assign({}, errors, {[key]: Object.assign([], errors[key], [e])})
+      })
+    }
   }
 
-  errorRemove(n) {
-    let e = this.state.errors
-    delete e[n]
+  errorRemove(key, e) {
+    let errors = this.state.errors
+
+    if (errors[key] === undefined) {
+      return
+    }
+
+    let index = errors[key].indexOf(e)
+
+    errors[key].splice(index, 1)
+
+    if (errors[key].length === 0) {
+      delete errors[key]
+    }
+
     this.setState({
-      errors: e
+      errors: errors
     })
   }
 
@@ -99,11 +123,11 @@ class TaskShow extends React.Component {
       if (response.status === 200) {
         return response.json()
       } else {
-        let errorText = response.text()
+        let errors = response.text()
         this.setState(state => ({
-          flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': errorText}])
+          flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': errors}])
         }))
-        throw Error(errorText)
+        throw Error(errors)
       }
     }).then(data => {
       this.setState({
@@ -114,13 +138,14 @@ class TaskShow extends React.Component {
   }
 
   handleFieldChange(event) {
+    const errorMessage = 'invalid value'
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'invalid value')
+      this.errorAdd(event.target.name, errorMessage)
       return
     } else {
-      this.errorRemove(event.target.name)
+      this.errorRemove(event.target.name, errorMessage)
     }
 
     if (event.target.value === '') {
@@ -173,7 +198,7 @@ class TaskShow extends React.Component {
         response.json().then(data => {
           this.setState(state => ({
             detailsFetched: false,
-            errors        : data.errors,
+            errors        : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
             flashMessages : state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['task[submit]'])
@@ -231,7 +256,7 @@ class TaskShow extends React.Component {
               title='communication channel'
               name='task[channel_id]'
               value={this.state['task[channel_id]']}
-              errorText={this.state.errors['task[channel_id]']}
+              errors={this.state.errors['task[channel_id]']}
               disabled={this.state.detailsFetched || this.state.disabled['task[channel_id]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.channels)}
@@ -243,7 +268,7 @@ class TaskShow extends React.Component {
                 title='username'
                 name='task[uid]'
                 value={this.state['task[uid]'] || Object.values(this.props.members[this.state['task[channel_id]']])[0]}
-                errorText={this.state.errors['task[uid]']}
+                errors={this.state.errors['task[uid]']}
                 disabled={this.state.detailsFetched || this.state.disabled['task[uid]']}
                 eventHandler={this.handleFieldChange}
                 selectEntries={Object.entries(this.props.members[this.state['task[channel_id]']])}
@@ -258,7 +283,7 @@ class TaskShow extends React.Component {
                 required
                 name='task[email]'
                 value={this.state['task[email]']}
-                errorText={this.state.errors['task[email]']}
+                errors={this.state.errors['task[email]']}
                 readOnly={this.state.detailsFetched || this.state.disabled['task[email]']}
                 eventHandler={this.handleFieldChange}
                 placeholder='Enter the recepient email address'
@@ -271,7 +296,7 @@ class TaskShow extends React.Component {
               recommended
               name='task[message]'
               value={this.state['task[message]']}
-              errorText={this.state.errors['task[message]']}
+              errors={this.state.errors['task[message]']}
               eventHandler={this.handleFieldChange}
               readOnly={this.state.detailsFetched || this.state.disabled['task[message]']}
               placeholder='Give a shoutout or offer some tips to the person who completed the task'
@@ -283,7 +308,7 @@ class TaskShow extends React.Component {
               required
               name='task[quantity]'
               value={this.state['task[quantity]']}
-              errorText={this.state.errors['task[quantity]']}
+              errors={this.state.errors['task[quantity]']}
               eventHandler={this.handleFieldChange}
               type='number'
               min='0'

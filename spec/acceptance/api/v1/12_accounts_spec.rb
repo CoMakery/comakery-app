@@ -43,6 +43,7 @@ resource 'II. Accounts' do
       response_field :verificationState, 'result of latest AML/KYC verification (passed | failed | unknown)', type: :string, enum: %w[passed failed unknown]
       response_field :verificationDate, 'date of latest AML/KYC verification', type: :string
       response_field :verificationMaxInvestmentUsd, 'max investment approved during latest AML/KYC verification', type: :integer
+      response_field :projectInterests, 'list of interested project ids', type: :array, items: { type: :string }
     end
 
     context '200' do

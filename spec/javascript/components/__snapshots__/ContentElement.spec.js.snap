@@ -12,7 +12,7 @@ exports[`ContentElement renders component correctly 1`] = `
           "attrs": Array [],
           "componentStyle": ComponentStyle {
             "componentId": "sc-bdVaJa",
-            "isStatic": true,
+            "isStatic": false,
             "lastClassName": "gPWqlF",
             "rules": Array [
               "
@@ -22,7 +22,6 @@ exports[`ContentElement renders component correctly 1`] = `
 ",
             ],
           },
-          "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
           "styledComponentId": "sc-bdVaJa",
@@ -45,7 +44,7 @@ exports[`ContentElement renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bwzfXH",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "ekDaoc",
                   "rules": Array [
                     "
@@ -62,7 +61,6 @@ exports[`ContentElement renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-bwzfXH",
@@ -87,7 +85,7 @@ exports[`ContentElement renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-htpNat",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "vZQMM",
                   "rules": Array [
                     "
@@ -102,7 +100,6 @@ exports[`ContentElement renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-htpNat",
