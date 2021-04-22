@@ -77,7 +77,6 @@ describe 'my tasks page', :js do
     expect(page).to have_content accepted_task.name.upcase
     expect(page).to have_content accepted_task.status.upcase
     expect(page).to have_content accepted_task.project.title.upcase
-    expect(page).to have_link(href: awards_project_path(accepted_task.project))
   end
 
   it 'expires expired tasks on render' do
