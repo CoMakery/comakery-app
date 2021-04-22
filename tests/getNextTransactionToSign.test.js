@@ -7,7 +7,7 @@ const envs = {
   comakeryServerUrl: null,
   purestakeApi: "purestake_api_key",
   redisUrl: "redis://localhost:6379/0",
-  checkForNewTransactionsDelay: 30
+  emptyQueueDelay: 30
 }
 jest.mock("axios")
 
