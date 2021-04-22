@@ -18,7 +18,7 @@ describe 'logging in and out', js: true do
 
     expect(page).to have_content 'SIGN IN'
 
-    page.set_rack_session(account_id: account.id)
+    page.set_rack_session(session_id: 'test', account_id: account.id)
 
     visit project_path(project)
 
@@ -31,6 +31,8 @@ describe 'logging in and out', js: true do
     visit '/logout'
 
     expect(page).to have_content 'SIGN IN'
+
+    expect(page.get_rack_session['session_id']).not_to eq 'test'
   end
 
   specify do

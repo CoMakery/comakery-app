@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'VI. Account Token Records' do
+resource 'VI. Wallet Transfer Rules' do
   include Rails.application.routes.url_helpers
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
@@ -15,7 +15,7 @@ resource 'VI. Account Token Records' do
   header 'API-Key', build(:api_key)
   header 'Content-Type', 'application/json'
 
-  get '/api/v1/tokens/:token_id/account_token_records' do
+  get '/api/v1/tokens/:token_id/wallet_transfer_rules' do
     with_options with_example: true do
       parameter :token_id, 'token id', required: true, type: :integer
       parameter :wallet_id, 'wallet id', required: false, type: :integer
@@ -43,7 +43,7 @@ resource 'VI. Account Token Records' do
       example 'INDEX' do
         explanation 'Returns an array of account token records. See GET for response fields description.'
 
-        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id), 'GET', 'example.org')
+        request = build(:api_signed_request, '', api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'GET', 'example.org')
         do_request(request)
         expect(status).to eq(200)
       end
@@ -57,7 +57,7 @@ resource 'VI. Account Token Records' do
       example 'INDEX - FILTERED BY WALLET' do
         explanation 'Returns an array of account token records for the wallet. See GET for response fields description.'
 
-        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id), 'GET', 'example.org')
+        request = build(:api_signed_request, '', api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'GET', 'example.org')
         request[:wallet_id] = wallet_id
 
         do_request(request)
@@ -66,7 +66,7 @@ resource 'VI. Account Token Records' do
     end
   end
 
-  post '/api/v1/tokens/:token_id/account_token_records' do
+  post '/api/v1/tokens/:token_id/wallet_transfer_rules' do
     with_options with_example: true do
       parameter :token_id, 'token id', required: true, type: :integer
     end
@@ -100,7 +100,7 @@ resource 'VI. Account Token Records' do
       example 'CREATE' do
         explanation 'Returns account token records details (See GET for response details)'
 
-        request = build(:api_signed_request, { account_token_record: valid_attributes }, api_v1_token_account_token_records_path(token_id: token.id), 'POST', 'example.org')
+        request = build(:api_signed_request, { account_token_record: valid_attributes }, api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(201)
       end
@@ -122,14 +122,14 @@ resource 'VI. Account Token Records' do
       example 'CREATE – ERROR' do
         explanation 'Returns an array of errors'
 
-        request = build(:api_signed_request, { account_token_record: invalid_attributes }, api_v1_token_account_token_records_path(token_id: token.id), 'POST', 'example.org')
+        request = build(:api_signed_request, { account_token_record: invalid_attributes }, api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(400)
       end
     end
   end
 
-  delete '/api/v1/tokens/:token_id/account_token_records/?wallet_id=:wallet_id' do
+  delete '/api/v1/tokens/:token_id/wallet_transfer_rules/?wallet_id=:wallet_id' do
     with_options with_example: true do
       parameter :id, 'account token record id', required: true, type: :integer
       parameter :token_id, 'token id', required: true, type: :integer
@@ -144,7 +144,7 @@ resource 'VI. Account Token Records' do
       example 'DELETE' do
         explanation 'Delete all account token records for the wallet and returns an array of present account token records (See GET for response details)'
 
-        request = build(:api_signed_request, '', api_v1_token_account_token_records_path(token_id: token.id, wallet_id: wallet_id), 'DELETE', 'example.org')
+        request = build(:api_signed_request, '', api_v1_token_wallet_transfer_rules_path(token_id: token.id, wallet_id: wallet_id), 'DELETE', 'example.org')
         do_request(request)
         expect(status).to eq(200)
       end

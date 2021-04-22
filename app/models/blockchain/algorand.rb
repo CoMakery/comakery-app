@@ -133,7 +133,7 @@ class Blockchain::Algorand < Blockchain
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?
-    true
+    self.class.ore_id_configured? && true
   end
 
   # Name of the blockchain on OreId service, if supported

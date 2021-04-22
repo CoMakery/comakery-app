@@ -22,13 +22,8 @@ module AlgorandSecurityToken
           synced_at: Time.current
         )
 
-        balance = Balance.find_or_initialize_by(
-          token: token,
-          wallet: opt_in.wallet
-        )
-
-        balance.base_unit_value = state['balance']
-        balance.save!
+        balance = Balance.find_or_initialize_by(token: token, wallet: opt_in.wallet)
+        balance.sync_with_blockchain!
       end
     end
 
@@ -40,12 +35,8 @@ module AlgorandSecurityToken
         )
       end
 
-      def app
-        @app ||= Comakery::Algorand.new(token.blockchain, nil, token.contract_address)
-      end
-
       def local_state(addr)
-        app.account_local_state_decoded(addr)
+        token.token_type.contract.account_local_state_decoded(addr)
       end
   end
 end

@@ -151,19 +151,19 @@ describe('TaskShow', () => {
 
     wrapper.setState({
       errors: {
-        'task[channel_id]': 'channel_id error',
-        'task[message]'   : 'message error'
+        'task[channel_id]': ['channel_id error'],
+        'task[message]'   : ['message error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldDropdown[errorText="channel_id error"][name="task[channel_id]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDropdown[name="task[channel_id]"] .input-field--error').html()
+    ).toContain('channel_id error')
 
-    expect(wrapper.exists(
-      'InputFieldDescriptionMiddle[errorText="message error"][name="task[message]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDescriptionMiddle[name="task[message]"] .input-field--error').html()
+    ).toContain('message error')
   })
 })

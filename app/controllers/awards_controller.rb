@@ -53,17 +53,16 @@ class AwardsController < ApplicationController
   end
 
   def create
-    @award = @award_type.awards.new(award_params)
-    @award.issuer = current_account
+    result = CreateAward.call(
+      award_type: @award_type,
+      award_params: award_params,
+      account: current_account,
+      image_from_id: params[:task][:image_from_id]
+    )
 
-    if !@award.image && params[:task][:image_from_id]
-      source_award = Award.find(params[:task][:image_from_id].to_i)
-      if policy(source_award.project).edit?
-        @award.image.attach(source_award.image.blob) if source_award.image.attached?
-      end
-    end
+    @award = result.award
 
-    if @award.save
+    if result.success?
       set_ok_response
       render json: @ok_response, status: :ok
     else
@@ -73,7 +72,9 @@ class AwardsController < ApplicationController
   end
 
   def update
-    if @award.update(award_params) && @award.update(issuer: current_account)
+    image_validator = ImagePixelValidator.new(@award, award_params)
+
+    if image_validator.valid? && @award.update(award_params) && @award.update(issuer: current_account)
       set_ok_response
       render json: @ok_response, status: :ok
     else

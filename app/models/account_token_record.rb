@@ -20,7 +20,6 @@ class AccountTokenRecord < ApplicationRecord
   attr_readonly :account_id, :token_id, :reg_group_id, :max_balance, :account_frozen, :lockup_until, :balance
   validates_with SecurityTokenValidator
   validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
-  validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }
 
   enum status: { created: 0, pending: 1, synced: 2, failed: 3 }
@@ -34,6 +33,12 @@ class AccountTokenRecord < ApplicationRecord
 
   def lockup_until=(time)
     super(time.to_i.to_d)
+  end
+
+  def balance
+    balance = Balance.find_or_create_by(wallet_id: wallet_id, token_id: token_id)
+    SyncBalanceJob.set(queue: :critical).perform_later(balance)
+    balance
   end
 
   private

@@ -3,6 +3,7 @@ require 'bigdecimal'
 class Award < ApplicationRecord
   paginates_per 50
 
+  include ActiveStorageValidator
   include BlockchainTransactable
   include RansackReorder
 
@@ -67,6 +68,8 @@ class Award < ApplicationRecord
   validate :cancellation, if: -> { status_changed? && status_was.in?(%w[rejected paid cancelled]) && status == 'cancelled' }
   validate :recipient_wallet_belongs_to_account, if: -> { recipient_wallet_id.present? }
   validate :recipient_wallet_and_token_in_same_network, if: -> { recipient_wallet_id.present? }
+
+  validate_image_attached :image, :submission_image
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount

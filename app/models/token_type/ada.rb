@@ -85,4 +85,10 @@ class TokenType::Ada < TokenType
   def supports_token_freeze?
     false
   end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(_wallet_address)
+    raise NotImplementedError
+  end
 end

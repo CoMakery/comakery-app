@@ -4,11 +4,12 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
+
+  include ActiveStorageValidator
+  include EthereumAddressable
+
   # attachment :image, type: :image
   has_one_attached :image
-
-  include EthereumAddressable
-  include ActiveStorageValidator
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
