@@ -763,4 +763,15 @@ describe Account do
       end
     end
   end
+
+  describe '#sync_balances_later' do
+    let!(:account) { create(:balance).wallet.account }
+    subject { account.sync_balances_later }
+
+    it 'schedules balances sync' do
+      expect(SyncBalanceJob).to receive(:set).and_call_original
+      expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later)
+      subject
+    end
+  end
 end

@@ -332,6 +332,12 @@ class Account < ApplicationRecord
     wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
+  def sync_balances_later
+    balances.find_each do |balance|
+      SyncBalanceJob.set(queue: :critical).perform_later(balance)
+    end
+  end
+
   private
 
     def validate_age
