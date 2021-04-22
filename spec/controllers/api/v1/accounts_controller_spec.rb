@@ -173,6 +173,8 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       params[:account_id] = account.managed_account_id
       params[:format] = :json
 
+      expect_any_instance_of(Account).to receive(:sync_balances_later)
+
       get :token_balances, params: params
       expect(response).to be_successful
     end

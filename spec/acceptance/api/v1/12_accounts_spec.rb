@@ -376,16 +376,12 @@ resource 'II. Accounts' do
     context '200' do
       let!(:id) { account.managed_account_id }
       let!(:token) { create(:static_token, id: 98, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
-      let!(:token2) { create(:static_token, id: 99, name: 'Token-2817173cd164cef690577e85da2b449a31780872', symbol: 'TKN86fff94cc4a4d2c0a0b4962ba855cb9eb0db2112', _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
-      let!(:account_token_record) { create(:account_token_record, account: account, token: token) }
-      let!(:account_token_record2) { create(:account_token_record, account: account, token: token2) }
+      let!(:balance) { create(:balance, base_unit_value: 200, token: token, wallet: create(:eth_wallet, account: account)) }
       let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
-      let!(:award_type2) { create(:award_type, project: create(:project, token: token2)) }
 
       before do
         create(:award, account: account, status: :paid, amount: 1, award_type: award_type)
         create(:award, account: account, status: :paid, amount: 2, award_type: award_type)
-        create(:award, account: account, status: :paid, amount: 8, award_type: award_type2)
       end
 
       example 'TOKEN BALANCES' do
