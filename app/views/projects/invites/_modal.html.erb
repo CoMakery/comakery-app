@@ -1,0 +1,25 @@
+<div class="modal modal-blur fade" id="invite-person" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Permissions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with(model: @project.interests.new, url: project_invites_path) do |f| %>
+        <div class="modal-body">
+          <label class="h11 font-weight-medium n10-color mt-2">Permissions</label>
+          <div class="input-icon mb-3 mt-1">
+            <input type="text" class="form-control" placeholder="Placeholder" value="Admin">
+            <span class="input-icon-addon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary h12" data-bs-dismiss="modal">Cancel</button>
+          <a href="#" class="btn btn-primary" data-bs-dismiss="modal">Save</a>
+        </div>
+        </div>
+      <% end %>
+      </div>
+</div>
