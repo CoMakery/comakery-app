@@ -1,17 +1,17 @@
-const redis = require("redis")
-const hwUtils = require("../lib/hotwalletUtils")
-const envs = {
-  projectId: "1",
-  projectApiKey: "project_api_key",
-  comakeryServerUrl: null,
-  purestakeApi: "purestake_api_key",
-  redisUrl: "redis://localhost:6379/0",
-  checkForNewTransactionsDelay: 30,
-  optInApp: 13997710,
-  blockchainNetwork: "algorand_test"
-}
-
 describe.skip("AutoOptIn test suite", () => {
+  const redis = require("redis")
+  const hwUtils = require("../lib/hotwalletUtils")
+  const envs = {
+    projectId: "1",
+    projectApiKey: "project_api_key",
+    comakeryServerUrl: null,
+    purestakeApi: "purestake_api_key",
+    redisUrl: "redis://localhost:6379/0",
+    checkForNewTransactionsDelay: 30,
+    optInApp: 13997710,
+    blockchainNetwork: "algorand_test"
+  }
+
   const redisClient = redis.createClient()
   const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
 
@@ -24,6 +24,7 @@ describe.skip("AutoOptIn test suite", () => {
   afterAll(() => {
     redisClient.quit()
     jest.restoreAllMocks()
+    done()
   });
 
   test("with stored opt-in apps in Redis", async () => {
