@@ -401,7 +401,7 @@ describe Award do
   describe 'validations' do
     context 'lockup schedule id' do
       it 'raises error when present' do
-        p1 = create(:project, token: create(:token, _token_type: :token_release_schedule, _blockchain: :bitcoin_test))
+        p1 = create(:project, token: create(:token, _token_type: :token_release_schedule, _blockchain: :ethereum_ropsten, contract_address: '0xc778417E063141139Fce010982780140Aa0cD5Ab'))
         p2 = create(:project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_test))
         a1 = build(:award_ready, award_type: create(:award_type, project: p1))
         a2 = build(:award_ready, award_type: create(:award_type, project: p2))
