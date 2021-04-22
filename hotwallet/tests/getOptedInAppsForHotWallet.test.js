@@ -5,7 +5,7 @@ const envs = {
   comakeryServerUrl: null,
   purestakeApi: "eE7U9NAUNh1VlvDyZARGP4F2CIZgBDDB5nhxAS3G",
   redisUrl: "redis://localhost:6379/0",
-  checkForNewTransactionsDelay: 30,
+  emptyQueueDelay: 30,
   optInApp: 13997710,
   blockchainNetwork: "algorand_test"
 }
