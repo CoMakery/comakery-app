@@ -1,7 +1,7 @@
 <%= content_tag :tr, id: dom_id(wallet) do %>
   <td class="h12 font-weight-medium n10-color"><%= "#{wallet.account.first_name} #{wallet.account.last_name}" %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.account.email %></td>
-  <td class="h12 font-weight-medium n10-color"><%= wallet.name %></td>
+  <td class="h12 font-weight-medium n10-color"><%= wallet._blockchain %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.address %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.primary_wallet? %></td>
   <td class="h12 font-weight-medium n10-color">
