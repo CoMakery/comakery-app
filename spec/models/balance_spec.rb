@@ -41,4 +41,14 @@ describe Balance, type: :model do
       expect(balance.reload.base_unit_value).to eq 999
     end
   end
+
+  describe '#sync_with_blockchain_later' do
+    subject { balance.sync_with_blockchain_later }
+
+    it 'schedules balances sync' do
+      expect(SyncBalanceJob).to receive(:set).and_call_original
+      expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later)
+      subject
+    end
+  end
 end

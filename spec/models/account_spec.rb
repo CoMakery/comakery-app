@@ -765,13 +765,21 @@ describe Account do
   end
 
   describe '#sync_balances_later' do
-    let!(:account) { create(:balance).wallet.account }
+    let!(:wallet) { create(:wallet) }
+    let!(:account) { wallet.account }
     subject { account.sync_balances_later }
 
-    it 'schedules balances sync' do
-      expect(SyncBalanceJob).to receive(:set).and_call_original
-      expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later)
-      subject
+    context 'when there are tokens on the same blockchain as wallet' do
+      let!(:token) { create(:token, _blockchain: wallet._blockchain) }
+
+      it 'creates a balance record for each token' do
+        expect { subject }.to change(account.balances, :count).by(1)
+      end
+
+      it 'schedules balances sync' do
+        expect_any_instance_of(Balance).to receive(:sync_with_blockchain_later)
+        subject
+      end
     end
   end
 end
