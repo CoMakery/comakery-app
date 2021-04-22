@@ -334,7 +334,7 @@ ActiveRecord::Schema.define(version: 2021_04_22_221526) do
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
-
+  
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 

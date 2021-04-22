@@ -52,7 +52,7 @@ class AccountDecorator < Draper::Decorator
     GetImageVariantPath.call(
       attachment: image,
       resize_to_fill: [size, size],
-      fallback: helpers.image_url('default_account_image.jpg')
+      fallback: helpers.image_url('user-icon.svg')
     ).path
   end
 
