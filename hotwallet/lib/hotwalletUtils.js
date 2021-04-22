@@ -15,7 +15,7 @@ exports.ComakeryApi = ComakeryApi
 
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
   return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
-    Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay) &&
+    Boolean(envs.infuraProjectId) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay) &&
     Boolean(envs.blockchainNetwork) && Boolean(envs.maxAmountForTransfer) && Boolean(envs.ethereumTokenSymbol) &&
     Boolean(envs.ethereumContractAddress)
 }
