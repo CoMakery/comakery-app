@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'controllers/concerns/protected_with_recaptcha_spec'
 
 describe AccountsController do
+  it_behaves_like 'protected with recaptcha'
+
   let(:authentication) { create(:sb_authentication) }
   let(:account) { authentication.account }
 
