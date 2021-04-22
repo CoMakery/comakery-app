@@ -28,7 +28,7 @@ describe ProjectsController do
     team.build_authentication_team authentication1
     login(account)
     stub_slack_channel_list
-  ends
+  end
 
   describe '#unlisted' do
     let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
