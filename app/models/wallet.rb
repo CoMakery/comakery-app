@@ -29,9 +29,9 @@ class Wallet < ApplicationRecord
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
 
-  after_create_commit { broadcast_append_later 'wallets' if account.managed_mission&.whitelabel? }
-  after_update_commit { broadcast_replace_to 'wallets' if account.managed_mission&.whitelabel? }
-  after_destroy_commit { broadcast_remove_to 'wallets' if account.managed_mission&.whitelabel? }
+  after_create_commit { broadcast_append_later 'wallets' if account&.managed_mission&.whitelabel? }
+  after_update_commit { broadcast_replace_to 'wallets' if account&.managed_mission&.whitelabel? }
+  after_destroy_commit { broadcast_remove_to 'wallets' if account&.managed_mission&.whitelabel? }
 
   enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 
