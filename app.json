@@ -125,6 +125,14 @@
       "description": "Recaptcha secret key",
       "required": false
     },
+    "RECAPTCHA_SITE_KEY_V2": {
+      "description": "Recaptcha site key for v2 fallback",
+      "required": false
+    },
+    "RECAPTCHA_SECRET_KEY_V2": {
+      "description": "Recaptcha secret key for v2 fallback",
+      "required": false
+    },
     "REDIS_SSL_NONE": {
       "description": "Disable SSL for Redis (required by Redis Premium add-on)",
       "required": false
