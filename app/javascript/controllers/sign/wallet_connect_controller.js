@@ -90,8 +90,16 @@ export default class extends Controller {
     const button = e.target.closest("a")
     button.classList.remove('transfer-tokens-btn__enabled')
     
-    const txNewUrl = button.dataset.txNewUrl
-    const txReceiveUrl = button.dataset.txReceiveUrl
+    let dataset
+    
+    if (button.dataset.txNewUrl && button.dataset.txReceiveUrl) {
+      dataset = button.dataset
+    } else {
+      dataset = await this.saveTransactable(e)
+    }
+
+    const txNewUrl = dataset.txNewUrl
+    const txReceiveUrl = dataset.txReceiveUrl
     const response = await fetch(`${txNewUrl}&source=${this.accounts[0]}`)
     const responseJSON = await response.json()
     const tx = JSON.parse(responseJSON.tx)
@@ -110,5 +118,22 @@ export default class extends Controller {
         PubSub.publish(FLASH_ADD_MESSAGE, { severity: "error", text: error })
         await fetch(`${txReceiveUrl}?state=${state}&error_message=${error}`)
       })
+  }
+
+  async saveTransactable(e) {
+    const form = e.target.closest("form")
+
+    const response = await fetch(
+      form.action,
+      {
+        body: new FormData(form),
+        method: form.method,
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        }
+      }
+    )
+
+    return await response.json()
   }
 }

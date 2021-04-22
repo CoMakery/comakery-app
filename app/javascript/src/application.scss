@@ -1233,16 +1233,8 @@ form.form-with-submit-button {
     border: 1px solid #fe2d6c;
     min-width: 10em;
 
-    a {
-      color: #fe2d6c;
-    }
-
     &:hover {
       background-color: #fe2d6c;
-
-      a {
-        color: white;
-      }
     }
   }
 }

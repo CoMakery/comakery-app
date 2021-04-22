@@ -4,7 +4,7 @@ class TransferRuleDecorator < Draper::Decorator
   include Rails.application.routes.url_helpers
 
   def form_attrs(project)
-    if project.token.blockchain.supported_by_ore_id?
+    if project.token.blockchain.supported_by_ore_id? || project.token.blockchain.supported_by_wallet_connect?
       form_attrs_ore_id(project)
     else
       form_attrs_eth(project)
@@ -37,7 +37,7 @@ class TransferRuleDecorator < Draper::Decorator
   end
 
   def form_attrs_del(project)
-    if project.token.blockchain.supported_by_ore_id?
+    if project.token.blockchain.supported_by_ore_id? || project.token.blockchain.supported_by_wallet_connect?
       form_attrs_del_ore_id(project)
     else
       form_attrs_del_eth(project)

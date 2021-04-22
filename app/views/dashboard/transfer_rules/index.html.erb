@@ -1,5 +1,11 @@
 <%= render layout: 'projects/project_settings' do %>
-  <%= render partial: "reg_groups" %>
-  <%= render partial: "transfer_rules" %>
-  <%= render partial: "frozen_status" %>
+  <div data-controller="sign--wallet-connect">
+    <% if policy(@project).edit_transfer_rules? %>
+      <%= render partial: "shared/wallet_connect" %>
+    <% end %>
+
+    <%= render partial: "reg_groups" %>
+    <%= render partial: "transfer_rules" %>
+    <%= render partial: "frozen_status" %>
+  </div>
 <% end %>

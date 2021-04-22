@@ -4,7 +4,7 @@ class AccountTokenRecordDecorator < Draper::Decorator
   include Rails.application.routes.url_helpers
 
   def form_attrs(project)
-    if project.token.blockchain.supported_by_ore_id?
+    if project.token.blockchain.supported_by_ore_id? || project.token.blockchain.supported_by_wallet_connect?
       form_attrs_ore_id(project)
     else
       form_attrs_eth(project)
