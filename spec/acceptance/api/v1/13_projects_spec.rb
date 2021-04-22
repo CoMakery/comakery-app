@@ -49,8 +49,7 @@ resource 'III. Projects' do
         explanation 'Returns an array of projects. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"cef7296a00bd29c580bd5cf81899f61d"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -91,8 +90,7 @@ resource 'III. Projects' do
         explanation 'Returns data for a single project.'
 
         request = build(:api_signed_request, '', api_v1_project_path(id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"cef7296a00bd29c580bd5cf81899f61d"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

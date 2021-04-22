@@ -36,8 +36,7 @@ resource 'V. Transfer Rules' do
         explanation 'Returns an array of transfer rules. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_project_transfer_rules_path(project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"a7673597d3cd94cb1b0e67920c82eade"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -68,8 +67,7 @@ resource 'V. Transfer Rules' do
         explanation 'Returns data for a single transfer rule.'
 
         request = build(:api_signed_request, '', api_v1_project_transfer_rule_path(id: transfer_rule.id, project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"3714dd72254ad4de133cc55d71f8c333"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -105,8 +103,7 @@ resource 'V. Transfer Rules' do
         explanation 'Returns created transfer rule details (See GET for response details)'
 
         request = build(:api_signed_request, { transfer_rule: valid_attributes }, api_v1_project_transfer_rules_path(project_id: project.id), 'POST', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"62cb1f4f9bf31164e2309cceeec71a3b"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end

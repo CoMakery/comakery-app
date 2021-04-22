@@ -53,8 +53,7 @@ resource 'VI. Wallet Transfer Rules' do
         explanation 'Returns an array of account token records. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"3cb591c9b891ba3883009cd97ef0f28b"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -70,8 +69,7 @@ resource 'VI. Wallet Transfer Rules' do
         request = build(:api_signed_request, '', api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'GET', 'example.org')
         request[:wallet_id] = wallet_id
 
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"6c75622518f30478962f3a23fb4d9471"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -112,8 +110,7 @@ resource 'VI. Wallet Transfer Rules' do
         explanation 'Returns account token records details (See GET for response details)'
 
         request = build(:api_signed_request, { account_token_record: valid_attributes }, api_v1_token_wallet_transfer_rules_path(token_id: token.id), 'POST', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"165d52225419e10726d656a35cf32164"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end

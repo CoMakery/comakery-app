@@ -49,8 +49,7 @@ resource 'IX. Wallets' do
         explanation 'Returns an array of wallet objects'
 
         request = build(:api_signed_request, '', api_v1_account_wallets_path(account_id: account.managed_account_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"97f43e95fa090161fe55c2ac83451681"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -78,8 +77,7 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         allow_any_instance_of(Wallet).to receive(:id).and_return(21)
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"80c0aab9bd4ceeafdd4cd027433233ed"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end
@@ -93,8 +91,7 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         allow_any_instance_of(Wallet).to receive(:id).and_return(22)
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"f28e5a96c256de35fb5ebf9ad6da86f8"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end
@@ -117,8 +114,7 @@ resource 'IX. Wallets' do
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
         allow_any_instance_of(Wallet).to receive(:id).and_return(23)
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"eebfff3973e24799edebf13f3965f43c"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end
@@ -157,8 +153,7 @@ resource 'IX. Wallets' do
         explanation 'Returns updated wallet (See INDEX for response details)'
 
         request = build(:api_signed_request, update_params, api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'PUT', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"00a7de496cda43cf8d65ae75abbe3ce7"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -191,8 +186,7 @@ resource 'IX. Wallets' do
         explanation 'Returns specified wallet (See INDEX for response details)'
 
         request = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"858c0b3eba44ad8a2e5e38329ad310b5"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -212,8 +206,7 @@ resource 'IX. Wallets' do
         explanation 'Returns account wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, '', api_v1_account_wallet_path(account_id: account.managed_account_id, id: wallet_id), 'DELETE', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'ETag: W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -244,8 +237,7 @@ resource 'IX. Wallets' do
 
         allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
         allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => account.email })
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"98478faf3abecd5323605bf65c68c306"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

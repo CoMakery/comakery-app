@@ -47,8 +47,7 @@ resource 'XI. Wallet Recovery' do
     context '200' do
       example 'GET PUBLIC WRAPPING KEY' do
         explanation 'Returns a public wrapping key.'
-        result = subject
-        result[0][:response_headers]['ETag'] = 'W/"4e8d0fe4422ce938bb88f3f3a5be2c81"' if status == 200
+        subject
         expect(status).to eq(200)
       end
     end
@@ -119,7 +118,6 @@ resource 'XI. Wallet Recovery' do
         explanation 'Returns decrypted with private wrapping key payload, re-encrypted with provided transport key'
         result = subject
         if status == 201
-          result[0][:response_headers]['ETag'] = 'W/"c69412922fec0b6b3bc0ff9e1c207199"'
           body = JSON.parse(result[0][:response_body])
           body['data'] = '03d71a3bdc5b609f2845744904aa1fb5f4a62a742aa5d8d221cc9e2d21601f4c5447f85aa71d4a1c7b8a075cf3f7f529093be13531f6457e14'
           result[0][:response_body] = body.to_json

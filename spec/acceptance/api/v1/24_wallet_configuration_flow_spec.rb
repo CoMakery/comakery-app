@@ -35,8 +35,7 @@ resource 'XIII. Full Wallet configurations flow' do
       # 1. Create a comakery account
       account_params = { managed_account_id: 'bfca35b9-6c9b-449f-93b6-16f2d064de7d', email: 'me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com', first_name: 'Eva', last_name: 'Smith', nickname: 'hunter-462b87f9e0d6e2149911a619a76116f1f0c820de', date_of_birth: '1990-01-31', country: 'United States of America' }
       request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
-      result = do_request(request)
-      result[0][:response_headers]['ETag'] = 'W/"95ef9c4dc49ce85d83f168bdb02e069e"' if status == 201
+      do_request(request)
       expect(status).to eq(201)
     end
   end
@@ -50,11 +49,10 @@ resource 'XIII. Full Wallet configurations flow' do
 
       request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
       allow_any_instance_of(Wallet).to receive(:id).and_return(25)
-      result = do_request(request)
-      if status == 201
-        result[0][:request_path] = '/api/v1/accounts/43ff3e88-f722-4cc3-a438-56605f3e4580/wallets'
-        result[0][:response_headers]['ETag'] = 'W/"97e5d587f425581b396c77a4343ee5b9"'
-      end
+      do_request(request)
+      # if status == 201
+      #   result[0][:request_path] = '/api/v1/accounts/43ff3e88-f722-4cc3-a438-56605f3e4580/wallets'
+      # end
       expect(status).to eq(201)
     end
   end
@@ -74,8 +72,7 @@ resource 'XIII. Full Wallet configurations flow' do
 
       allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
       allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => account.email })
-      result = do_request(request)
-      result[0][:response_headers]['ETag'] = 'W/"518f5242330553c6b7e88c28c2a2bc42"' if status == 200
+      do_request(request)
       expect(status).to eq(200)
     end
   end

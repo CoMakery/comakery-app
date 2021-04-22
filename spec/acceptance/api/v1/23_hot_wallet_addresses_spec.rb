@@ -7,6 +7,7 @@ resource 'XII. Hot Wallet Addresses' do
   before do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    allow_any_instance_of(ApiKey).to receive(:key).and_return('28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO')
   end
 
   after do
@@ -38,11 +39,7 @@ resource 'XII. Hot Wallet Addresses' do
 
         params = { body: { data: create_params } }
         allow_any_instance_of(Wallet).to receive(:id).and_return(20)
-        result = do_request(params)
-        if status == 201
-          result[0][:request_headers]['Api-Transaction-Key'] = '28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO'
-          result[0][:response_headers]['ETag'] = 'W/"358c175d70eb36a20062399b82387311"'
-        end
+        do_request(params)
         expect(status).to eq(201)
       end
     end
@@ -59,8 +56,7 @@ resource 'XII. Hot Wallet Addresses' do
         explanation 'Returns an array of errors'
 
         params = { body: { data: create_params } }
-        result = do_request(params)
-        result[0][:request_headers]['Api-Transaction-Key'] = '28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO' if status == 422
+        do_request(params)
         expect(status).to eq(422)
       end
     end

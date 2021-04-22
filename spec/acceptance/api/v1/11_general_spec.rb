@@ -52,9 +52,7 @@ resource 'I. General' do
         ].join(' ')
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
-        result = do_request(request)
-
-        result[0][:response_headers]['ETag'] = 'ETag: W/"65619e25d426a61fdaaea38f54f63b1f"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -96,8 +94,7 @@ resource 'I. General' do
         explanation 'Responses include weak `ETag` and `Last-Modified` headers. Server will return HTTP 304 when applicable if request includes valid `If-Modified-Since` header.'
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"e1ecbd938491cc1765caf2c0ea693a2c"' if status == 304
+        do_request(request)
         expect(status).to eq(304)
       end
     end
@@ -133,8 +130,7 @@ resource 'I. General' do
         explanation 'Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`. By default requests use snake case, responses use camel case.'
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"e1ecbd938491cc1765caf2c0ea693a2c"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -152,8 +148,7 @@ resource 'I. General' do
         explanation 'Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` response headers).'
 
         request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"5fa3c6359b49359241b800a7b6135cbe"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

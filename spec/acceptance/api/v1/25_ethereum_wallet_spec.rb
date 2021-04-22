@@ -4,6 +4,15 @@ require 'rspec_api_documentation/dsl'
 resource 'XIV. Ethereum wallet flow' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
@@ -22,7 +31,7 @@ resource 'XIV. Ethereum wallet flow' do
     example '1. Create a comakery account' do
       explanation 'Returns created account data'
 
-      account_params = { managed_account_id: SecureRandom.uuid, email: "me+#{SecureRandom.hex(20)}@example.com", first_name: 'Eva', last_name: 'Smith', nickname: "hunter-#{SecureRandom.hex(20)}", date_of_birth: '1990-01-31', country: 'United States of America' }
+      account_params = { managed_account_id: 'ab7e7aeb-b81b-41b5-ad04-d88b590f8a17', email: 'me+c9886e4882840fa336f693ea5e336b8eea1088ae@example.com', first_name: 'Eva', last_name: 'Smith', nickname: 'hunter-4de261185679290002ab411f535fc64e581f7928', date_of_birth: '1990-01-31', country: 'United States of America' }
       request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
       do_request(request)
       expect(status).to eq(201)

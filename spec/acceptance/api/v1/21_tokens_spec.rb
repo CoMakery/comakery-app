@@ -45,8 +45,7 @@ resource 'X. Tokens' do
 
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
 
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"294c784ecfd71841bea5933ffa76de40"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
 
@@ -56,8 +55,7 @@ resource 'X. Tokens' do
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
         request[:q] = { name_or_symbol_cont: 'Cats' }
 
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"295caf1489fb5ec5cc0ae211203e0b3d"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
 
@@ -67,8 +65,7 @@ resource 'X. Tokens' do
         request = build(:api_signed_request, '', api_v1_tokens_path, 'GET', 'example.org')
         request[:q] = { name_cont: 'Dogs', network_eq: 'cardano' }
 
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"a94e98e98c6628d6add2e34b52b7daac"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

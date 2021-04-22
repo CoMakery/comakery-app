@@ -79,8 +79,7 @@ resource 'VII. Blockchain Transactions' do
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
 
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
-          result = do_request(request)
-          result[0][:response_headers]['ETag'] = 'W/"da6007a83bbd78f85125daef93352ae6"' if status == 201
+          do_request(request)
         end
 
         expect(status).to eq(201)
@@ -98,8 +97,7 @@ resource 'VII. Blockchain Transactions' do
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
         VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
           allow_any_instance_of(Award).to receive(:id).and_return('5')
-          result = do_request(request)
-          result[0][:response_headers]['ETag'] = 'W/"aabf24c719254ca116b09b4f27caff41"' if status == 201
+          do_request(request)
         end
 
         expect(status).to eq(201)
@@ -114,8 +112,7 @@ resource 'VII. Blockchain Transactions' do
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
         allow_any_instance_of(RegGroup).to receive(:blockchain_id).and_return(1001)
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
-          result = do_request(request)
-          result[0][:response_headers]['ETag'] = 'W/"1500bb84198cd5cabd992a13a2d691fe"' if status == 201
+          do_request(request)
         end
         expect(status).to eq(201)
       end
@@ -130,8 +127,7 @@ resource 'VII. Blockchain Transactions' do
         allow_any_instance_of(RegGroup).to receive(:blockchain_id).and_return(1001)
 
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
-          result = do_request(request)
-          result[0][:response_headers]['ETag'] = 'W/"c8a83d77600a5b20e70a4b594bb8723d"' if status == 201
+          do_request(request)
         end
 
         expect(status).to eq(201)
@@ -182,8 +178,7 @@ resource 'VII. Blockchain Transactions' do
         explanation 'Marks transaction as pending and returns transaction details, see GENERATE TRANSACTION for response fields'
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'PUT', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"6a7e7a2d84ced26ed7168958391a5b22"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -217,8 +212,7 @@ resource 'VII. Blockchain Transactions' do
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"3eba2da3883d3661f3cdf6c56bbaab6b"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -241,8 +235,7 @@ resource 'VII. Blockchain Transactions' do
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"6730b8d25cb57559c7d21e316f563f4e"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

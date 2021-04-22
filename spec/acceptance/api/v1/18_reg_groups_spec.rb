@@ -36,8 +36,7 @@ resource 'VIII. Reg Groups' do
         explanation 'Returns an array of reg groups. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_project_reg_groups_path(project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"194440b6abad010a97cbd1803dfbda57"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -65,8 +64,7 @@ resource 'VIII. Reg Groups' do
       example 'GET' do
         explanation 'Returns data for a single reg group.'
         request = build(:api_signed_request, '', api_v1_project_reg_group_path(id: reg_group.id, project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"e33792454459bbb88af041dd5505e841"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -101,7 +99,6 @@ resource 'VIII. Reg Groups' do
           body = JSON.parse(result[0][:response_body])
           body['id'] = 45
           result[0][:response_body] = body.to_json
-          result[0][:response_headers]['ETag'] = 'W/"91c1cb4658d2313c0c5b589a9c86cace"'
         end
         expect(status).to eq(201)
       end
@@ -140,8 +137,7 @@ resource 'VIII. Reg Groups' do
         explanation 'Delete the reg group and returns an array of present reg groups (See GET for response details)'
 
         request = build(:api_signed_request, '', api_v1_project_reg_group_path(id: reg_group.id, project_id: project.id), 'DELETE', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

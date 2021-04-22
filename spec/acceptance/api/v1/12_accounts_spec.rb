@@ -53,8 +53,7 @@ resource 'II. Accounts' do
         explanation 'Returns account data'
 
         request = build(:api_signed_request, '', api_v1_account_path(id: account.managed_account_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"aecd4c102563a30e2b5681b9d901989d"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -95,8 +94,7 @@ resource 'II. Accounts' do
         explanation 'Returns created account data (See GET for response details)'
 
         request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'ETag: W/"05eed70390aba0239d05b63b1b6e3a53"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end
@@ -150,8 +148,7 @@ resource 'II. Accounts' do
         explanation 'Returns updated account data (See GET for response details)'
 
         request = build(:api_signed_request, { account: account_params }, api_v1_account_path(id: account.managed_account_id), 'PUT', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"d75df5569b8616604e8cd6733bcd9964"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -193,8 +190,7 @@ resource 'II. Accounts' do
         explanation 'Returns an array of project ids'
 
         request = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"72fab65dcba8eb739ffc2c358b3c2e8b"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -219,10 +215,7 @@ resource 'II. Accounts' do
 
         request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
         result = do_request(request)
-        if status == 201
-          result[0][:response_headers]['ETag'] = 'W/"5436cc4750cf070868dc8194674f290f"'
-          result[0][:response_body] = [30]
-        end
+        result[0][:response_body] = [30] if status == 201
         expect(status).to eq(201)
       end
     end
@@ -263,8 +256,7 @@ resource 'II. Accounts' do
         explanation 'Returns account interests (See INTERESTS for response details)'
 
         request = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -296,8 +288,7 @@ resource 'II. Accounts' do
         explanation 'Returns an array of verifications'
 
         request = build(:api_signed_request, '', api_v1_account_verifications_path(account_id: account.managed_account_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"2d6adcc10df36bd6dd2a03028f1401ec"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -334,8 +325,7 @@ resource 'II. Accounts' do
       example 'CREATE VERIFICATION' do
         explanation 'Returns account verifications (See VERIFICATIONS for response details)'
         request = build(:api_signed_request, { verification: verification }, api_v1_account_verifications_path(account_id: account.managed_account_id), 'POST', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"f621f10df12d99b826fe62e9a64acc48"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end
@@ -402,8 +392,7 @@ resource 'II. Accounts' do
         explanation 'Returns an array of token balances'
 
         request = build(:api_signed_request, '', api_v1_account_token_balances_path(account_id: account.managed_account_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"5ea9d4ad2331a15aa8203254304f5b6a"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -428,8 +417,7 @@ resource 'II. Accounts' do
         explanation 'Returns an array of transactions for the account'
 
         request = build(:api_signed_request, '', api_v1_account_transfers_path(account_id: account.managed_account_id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"992319ba356e52a114d5411e863388c9"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end

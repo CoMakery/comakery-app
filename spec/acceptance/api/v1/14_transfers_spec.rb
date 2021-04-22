@@ -44,8 +44,7 @@ resource 'IV. Transfers' do
         explanation 'Returns an array of transfers. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_project_transfers_path(project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"9126d4e814c305073ccd49080da2a3c8"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -80,8 +79,7 @@ resource 'IV. Transfers' do
         explanation 'Returns data for a single transfer.'
 
         request = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer_paid.id, project_id: project.id), 'GET', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"5e24606865078a3ade08501003dc5ccf"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -129,8 +127,7 @@ resource 'IV. Transfers' do
         allow_any_instance_of(Award).to receive(:id).and_return('10')
 
         request = build(:api_signed_request, { transfer: transfer }, api_v1_project_transfers_path(project_id: project.id), 'POST', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"076fd28b3a69c620a38916045a97c3e5"' if status == 201
+        do_request(request)
         expect(status).to eq(201)
       end
     end
@@ -149,8 +146,7 @@ resource 'IV. Transfers' do
         explanation 'Returns an array of errors'
 
         request = build(:api_signed_request, { transfer: transfer }, api_v1_project_transfers_path(project_id: project.id), 'POST', 'example.org')
-        result = do_request(request)
-        result[0][:request_path] = '/api/v1/projects/3/transfers' if status == 400
+        do_request(request)
         expect(status).to eq(400)
       end
     end
@@ -174,8 +170,7 @@ resource 'IV. Transfers' do
         explanation 'Returns cancelled transfer details (See GET for response details)'
 
         request = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer_accepted.id, project_id: project.id), 'DELETE', 'example.org')
-        result = do_request(request)
-        result[0][:response_headers]['ETag'] = 'W/"4678832305e19ebb7d254e64503c7b0c"' if status == 200
+        do_request(request)
         expect(status).to eq(200)
       end
     end
