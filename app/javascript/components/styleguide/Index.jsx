@@ -104,7 +104,7 @@ class Index extends React.Component {
         >
           <Button
             value="Tabler"
-            onClick={(_)=> window.open('/tabler/index.html', '_blank')}
+            onClick={(_)=> window.open('/dev/styleguide/index.html', '_blank')}
           />
           <InputFieldWhiteDark
             name="input[text1]"
