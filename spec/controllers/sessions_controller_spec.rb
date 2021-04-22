@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'controllers/concerns/protected_with_recaptcha_spec'
 
 describe SessionsController do
+  it_behaves_like 'protected with recaptcha'
+
   describe 'routes', type: :routing do
     it 'routes logout to destroy' do
       expect(get('/logout')).to route_to('sessions#destroy')
@@ -163,7 +166,7 @@ describe SessionsController do
 
       post :sign_in, params: { email: account.email, password: '12345678' }
       expect(flash[:error]).to eq 'Invalid email or password'
-      expect(response).to redirect_to new_session_path
+      expect(response).to have_http_status(422)
     end
 
     it 'doesnt allow to login with managed account on comakery' do
@@ -172,7 +175,7 @@ describe SessionsController do
 
       post :sign_in, params: { email: account.email, password: '12345678' }
       expect(flash[:error]).to eq 'Invalid email or password'
-      expect(response).to redirect_to new_session_path
+      expect(response).to have_http_status(422)
     end
 
     it 'doesnt allow to login with comakery account on a whitelabel instance' do
@@ -180,13 +183,13 @@ describe SessionsController do
 
       post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
       expect(flash[:error]).to eq 'Invalid email or password'
-      expect(response).to redirect_to new_session_path
+      expect(response).to have_http_status(422)
     end
 
     it 'prevent login with wrong password' do
       post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
       expect(flash[:error]).to eq 'Invalid email or password'
-      expect(response).to redirect_to new_session_path
+      expect(response).to have_http_status(422)
     end
 
     it 'allow valid user to login' do
@@ -197,7 +200,7 @@ describe SessionsController do
     it 'catch for error for account without password' do
       post :sign_in, params: { email: 'user2@example.com', password: '12345678' }
       expect(flash[:error]).to eq 'Invalid email or password'
-      expect(response).to redirect_to new_session_path
+      expect(response).to have_http_status(422)
     end
 
     it 'notice to redeem award' do
