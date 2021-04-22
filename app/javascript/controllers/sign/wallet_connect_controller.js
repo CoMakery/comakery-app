@@ -2,6 +2,8 @@ import { Controller } from 'stimulus'
 import { HelpersEthereum } from "@open-rights-exchange/chainjs"
 import WalletConnect from "@walletconnect/client"
 import QRCodeModal from "@walletconnect/qrcode-modal"
+import { FLASH_ADD_MESSAGE } from '../../src/javascripts/eventTypes'
+import PubSub from 'pubsub-js'
 
 export default class extends Controller {
   static targets = [ "walletAddress", "txButtons" ]
@@ -101,11 +103,12 @@ export default class extends Controller {
     this.connector
       .sendTransaction(tx)
       .then(async (txHash) => {
-        const response = await fetch(`${txReceiveUrl}?state=${state}&transaction_id=${txHash}`)
+        await fetch(`${txReceiveUrl}?state=${state}&transaction_id=${txHash}`)
       })
       .catch(async (error) => {
         console.error(error)
-        const response = await fetch(`${txReceiveUrl}?state=${state}&error_message=${error}`)
+        PubSub.publish(FLASH_ADD_MESSAGE, { severity: "error", text: error })
+        await fetch(`${txReceiveUrl}?state=${state}&error_message=${error}`)
       })
   }
 }

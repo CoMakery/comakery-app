@@ -21,6 +21,8 @@ class Sign::UserWalletController < ApplicationController
   def receive
     unless verify_errorless
       received_transaction.update_status(:cancelled, received_error&.truncate(100))
+      flash[:error] = nil
+      head 400
       return
     end
 
@@ -34,13 +36,11 @@ class Sign::UserWalletController < ApplicationController
 
     if received_transaction.update(tx_hash: params.require(:transaction_id))
       received_transaction.update_status(:pending)
-      BlockchainJob::BlockchainTransactionSyncJob.perform_later(received_transaction)
-      flash[:notice] = 'Transaction Signed'
+      BlockchainJob::BlockchainTransactionSyncJob.set(wait: 20).perform_later(received_transaction)
+      head 200
     else
-      flash[:error] = received_transaction.errors.full_messages.join(', ')
+      head 400
     end
-
-    head 200
   end
 
   private
