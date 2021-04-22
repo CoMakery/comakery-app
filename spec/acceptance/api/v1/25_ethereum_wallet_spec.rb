@@ -14,7 +14,7 @@ resource 'XIV. Ethereum wallet flow' do
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 111, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
@@ -53,6 +53,7 @@ resource 'XIV. Ethereum wallet flow' do
         explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        allow_any_instance_of(Wallet).to receive(:id).and_return(49)
         do_request(request)
         expect(status).to eq(201)
       end
@@ -80,7 +81,7 @@ resource 'XIV. Ethereum wallet flow' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 47, account: account).id.to_s }
 
       example '3. Get wallet' do
         explanation 'Returns specified wallet (See INDEX for response details)'
