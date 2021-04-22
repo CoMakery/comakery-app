@@ -27,7 +27,7 @@
               <body>
               <%= turbo_stream_from 'wallets' %>
               <%= turbo_frame_tag 'wallets' do %>
-                <%= render @wallets %>
+                <%= render partial: 'wallets/wallet', collection: @wallets, as: :wallet %>
               <% end %>
               </body>
             </table>
