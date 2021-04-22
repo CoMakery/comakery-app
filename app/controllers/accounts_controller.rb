@@ -1,5 +1,8 @@
 require 'zip'
+
 class AccountsController < ApplicationController
+  include ProtectedWithRecaptcha
+
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
@@ -45,9 +48,7 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    recaptcha_valid = verify_recaptcha(model: @account, action: 'registration')
-
-    if recaptcha_valid && ImagePixelValidator.new(@account, account_params).valid? && @account.save
+    if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
