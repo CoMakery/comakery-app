@@ -48,10 +48,15 @@
       "description": "Api key generated on Purestake to operate with Algorand blockchain. Required to use algorand blockchain.",
       "required": false
     },
-    "CHECK_FOR_NEW_TRANSACTIONS_DELAY": {
-      "description": "Timeout in second between checking for new transactions to send",
+    "EMPTY_QUEUE_DELAY": {
+      "description": "Timeout in second between checking for new transactions to send when previously we DO NOT have a transaction.",
       "required": true,
       "value": "30"
+    },
+    "BETWEEN_TRANSACTION_DELAY": {
+      "description": "Timeout in second between checking for new transactions to send when previously we had a transaction.",
+      "required": true,
+      "value": "5"
     },
     "BLOCKCHAIN_NETWORK": {
       "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta, ethereum, ethereum_ropsten",
