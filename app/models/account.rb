@@ -333,8 +333,10 @@ class Account < ApplicationRecord
   end
 
   def sync_balances_later
-    balances.find_each do |balance|
-      SyncBalanceJob.set(queue: :critical).perform_later(balance)
+    wallets.find_each do |wallet|
+      wallet.tokens_of_the_blockchain.find_each do |token|
+        Balance.find_or_create_by(token: token, wallet: wallet).sync_with_blockchain_later
+      end
     end
   end
 
