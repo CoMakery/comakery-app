@@ -1,3 +1,7 @@
+<%= content_for :head do %>
+  <%= stylesheet_link_tag 'upside', media: 'all', 'data-turbo-track': 'reload' %>
+<% end %>
+
 <div class="row row-cards">
   <div class="col-12">
     <div class="card n1-bg">
@@ -34,4 +38,3 @@
   </div>
   <%= paginate(@wallets, window: 3) %>
 </div>
-
