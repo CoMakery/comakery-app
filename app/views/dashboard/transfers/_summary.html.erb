@@ -20,32 +20,40 @@
     <%= pluralize(transfers_totals[:total_admins], 'admin', 'admins') %>
   </div>
 
+  <div class="transfers-table__transfer__amount">
+    <label>amount</label>
+
+    –
+  </div>
+
+  <div class="transfers-table__transfer__quantity">
+    <label>quantity</label>
+
+    <%= transfers_totals[:total_quantity] %>
+  </div>
+
   <div class="transfers-table__transfer__total_amount">
     <label>total amount</label>
 
     <%= transfers_totals[:total_amount] %>
   </div>
 
-  <div class="transfers-table__transfer__verification">
-    <label>verification</label>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__button">
+      <label>transfer</label>
 
-    –
-  </div>
+      –
+    </div>
+  <% end %>
 
-  <div class="transfers-table__transfer__status">
-    <label>status</label>
-
-    –
-  </div>
-
-  <div class="transfers-table__transfer__history">
-    <label>history</label>
+  <div class="transfers-table__transfer__transferred_at">
+    <label>transferred at</label>
 
     –
   </div>
 
   <div class="transfers-table__transfer__transferred_at">
-    <label>transferred at</label>
+    <label>created at</label>
 
     –
   </div>
