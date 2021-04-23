@@ -232,6 +232,7 @@ class ProjectsController < ApplicationController
 
     def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
+        whitelabel: ENV['WHITELABEL'] || false,
         tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
           [
             specialty&.name&.downcase || 'general',
