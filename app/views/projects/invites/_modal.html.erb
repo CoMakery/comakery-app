@@ -2,22 +2,29 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Change Permissions</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Invite Person</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
-      <%= form_with(model: @project.interests.new, url: project_invites_path) do |f| %>
+      <%= form_tag project_invites_path, remote: true do %>
         <div class="modal-body">
-          <label class="h11 font-weight-medium n10-color mt-2">Permissions</label>
+          <ul class="errors alert-danger"></ul>
+
+          <div class="input-with-label">
+            <%= label_tag :email, nil, class: 'h11 font-weight-medium n10-color mt-2' %>
+            <%= text_field_tag 'email', nil, class: 'form-control', placeholder: 'Email' %>
+          </div>
           <div class="input-icon mb-3 mt-1">
-            <input type="text" class="form-control" placeholder="Placeholder" value="Admin">
-            <span class="input-icon-addon">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </span>
+            <%= label_tag :role, 'Permissions', class: 'h11 font-weight-medium n10-color mt-2' %>
+            <div class="choices">
+              <%= select_tag :role,
+                             options_for_select(Interest.roles.keys.collect { |role| [role.titleize, role] }),
+                             class: 'form-select form-control' %>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary h12" data-bs-dismiss="modal">Cancel</button>
-          <a href="#" class="btn btn-primary" data-bs-dismiss="modal">Save</a>
+          <button class="btn btn-secondary h12" data-dismiss="modal">Cancel</button>
+          <%= submit_tag 'Save', data: { 'bs-dismiss': 'modal' }, class: 'btn btn-primary' %>
         </div>
         </div>
       <% end %>

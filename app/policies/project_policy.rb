@@ -91,4 +91,8 @@ class ProjectPolicy < ApplicationPolicy
   def update_status?
     account.comakery_admin?
   end
+
+  def add_person?
+    account.comakery_admin?
+  end
 end

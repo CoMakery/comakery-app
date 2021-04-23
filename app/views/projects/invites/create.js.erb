@@ -1,0 +1,8 @@
+$('ul.errors').html('')
+
+<% if @invite.errors.any? %>
+  <% @invite.errors.full_messages.each do |message| %>
+    $('#invite-person ul.errors').append($('<li style="list-style-type: none;"/>').html('<%= message.html_safe %>'));
+    $('#invite-person ul.errors').addClass('alert');
+  <% end %>
+<% end %>
