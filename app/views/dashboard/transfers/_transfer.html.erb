@@ -62,7 +62,7 @@
     <label>status</label>
 
     <% if @project.token %>
-      <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
+      <%= render partial: "shared/transfer_button_public", locals: {transfer: transfer} %>
 
       <% if current_account&.decorate&.can_send_awards?(@project) && transfer.accepted? && !@project.hot_wallet_disabled? && @project.hot_wallet %>
         <div class="transfers-table__transfer__button__history">
