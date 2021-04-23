@@ -7,6 +7,20 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %>
 // to the appropriate layout file
 
+import * as Sentry from '@sentry/browser'
+import { Integrations } from '@sentry/tracing'
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  release: process.env.npm_package_version,
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0
+})
+
 require('@rails/ujs').start()
 
 import '../src/application.js'
