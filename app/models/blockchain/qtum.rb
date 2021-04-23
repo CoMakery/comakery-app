@@ -92,6 +92,12 @@ class Blockchain::Qtum < Blockchain
     raise Blockchain::Address::ValidationError, "should start with 'Q', followed by 33 characters; or should have 40 hex characters" if (addr !~ /\A[qQ][a-km-zA-HJ-NP-Z0-9]{33}\z/) && (addr !~ /\A[0-9a-fA-F]{40}\z/)
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    false
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?

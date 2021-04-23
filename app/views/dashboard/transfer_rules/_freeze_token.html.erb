@@ -4,12 +4,16 @@
       <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
       <span><%= @project.token.token_frozen? ? 'Unfreeze' : 'Freeze' %></span>
     <% end %>
-  <% else %>
-    <%= form_with url: freeze_project_dashboard_transfer_rules_path(@project), data: {controller: "freeze-form", target: "freeze-form.form"}.merge(@project.token.decorate.eth_data('freeze-form')), class: 'freeze-token__form transfer-button' do |f| %>
-      <%= link_to 'javascript:void(0)', data: {action: 'click->freeze-form#unpause', target: 'freeze-form.button'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy transfer-tokens-btn-freeze' do %>
-        <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
-        <span><%= @project.token.token_frozen? ? 'Unfreeze' : 'Freeze' %></span>
-      <% end %>
-    <% end %>
+  <% elsif @project.token.blockchain.supported_by_wallet_connect? %>
+    <a
+      href='javascript:void(0)'
+      class="transfer-tokens-btn transfer-tokens-btn-freeze transfer-button transfer-tokens-btn-skip-legacy"
+      data-action="click->sign--wallet-connect#sendTx"
+      data-sign--wallet-connect-target='txButtons'
+      data-tx-new-url="<%= sign_user_wallet_new_path(token_id: @project.token.id) %>"
+      data-tx-receive-url="<%= sign_user_wallet_receive_path %>">
+      <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+      <span><%= @project.token.token_frozen? ? 'Unfreeze' : 'Freeze' %></span>
+    </a>
   <% end %>
 </div>

@@ -19,7 +19,7 @@ describe 'Wallet configuration flow', type: :request do
     expect(created_account['managedAccountId']).to be_present
 
     # 2. Create ORE ID wallets
-    wallet_params = { wallets: [{ blockchain: :ethereum_ropsten, source: :ore_id, name: 'ETH Wallet' }] }
+    wallet_params = { wallets: [{ blockchain: :algorand_test, source: :ore_id, name: 'Algo Wallet' }] }
     wallet_creation_path = api_v1_account_wallets_path(account_id: created_account['managedAccountId'])
     request = build(:api_signed_request, wallet_params, wallet_creation_path, 'POST', 'www.example.com')
 
@@ -45,7 +45,7 @@ describe 'Wallet configuration flow', type: :request do
     expect(ore_id_account.account_name).to eq 'ore1ro5f2slw' # get from ore id
     expect(ore_id_account.state).to eq 'unclaimed'
 
-    # 3. Get password reset link for ETH ORE ID wallet created
+    # 3. Get password reset link for ORE ID wallet created
     reset_password_params = { redirect_url: 'localhost' }
     password_reset_path = password_reset_api_v1_account_wallet_path(account_id: created_account['managedAccountId'], id: created_wallet['id'])
     request = build(:api_signed_request, reset_password_params, password_reset_path, 'POST', 'www.example.com')

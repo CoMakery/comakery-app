@@ -34,7 +34,7 @@ describe ContributorsController do
       expect(assigns[:chart_data]).to match_array([{ value: 133700000000, label: 'John Doe' }])
       expect(assigns[:table_data]).to match_array([
                                                     {
-                                                      image_url: 'http://test.host/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg',
+                                                      image_url: 'http://test.host/assets/user-icon-edacb718723b15a2af4f4c137d225a21ceb58398243e34c6ebbd66c08b1fbabf.svg',
                                                       name: 'John Doe',
                                                       awards: [
                                                         {
