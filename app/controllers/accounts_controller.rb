@@ -1,5 +1,8 @@
 require 'zip'
+
 class AccountsController < ApplicationController
+  include ProtectedWithRecaptcha
+
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
@@ -45,7 +48,7 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    if verify_recaptcha(model: @account, action: 'registration') && @account.save
+    if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -71,10 +74,14 @@ class AccountsController < ApplicationController
 
   def update_profile
     @account = current_account
+
     authorize @account
+
     old_email = @account.email
 
-    if @account.update(account_params.merge(name_required: true))
+    image_validator = ImagePixelValidator.new(@account, account_params)
+
+    if image_validator.valid? && @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
       if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
         session.delete(:account_id)

@@ -10,4 +10,8 @@ class Comakery::Eth
   def current_block
     client&.eth_block_number&.fetch('result', nil)&.to_i(16)
   end
+
+  def account_balance(addr)
+    client&.eth_get_balance(addr)&.fetch('result')&.to_i(16) || 0
+  end
 end

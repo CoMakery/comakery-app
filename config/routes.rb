@@ -192,6 +192,11 @@ Rails.application.routes.draw do
             delete :index, action: :destroy_all
           end
         end
+        resources :wallet_transfer_rules, controller: 'account_token_records', only: [:index, :create] do
+          collection do
+            delete :index, action: :destroy_all
+          end
+        end
       end
 
       namespace :wallet_recovery do

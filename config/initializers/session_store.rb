@@ -5,5 +5,5 @@ if Rails.env.production? && !ENV.key?('SECRET_KEY_BASE')
     "on production, or else session cookies will not be encrypted."
 end
 
-Rails.application.config.session_store :cookie_store,
+Rails.application.config.session_store :active_record_store,
   key: "_#{Rails.application.config.project_slug}_session"

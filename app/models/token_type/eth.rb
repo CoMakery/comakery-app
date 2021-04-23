@@ -29,7 +29,7 @@ class TokenType::Eth < TokenType
   # Contract instance if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20.new
+    Comakery::Eth.new(blockchain.explorer_api_host)
   end
 
   # ABI structure if present
@@ -84,5 +84,15 @@ class TokenType::Eth < TokenType
   # @return [Boolean] flag
   def supports_token_freeze?
     false
+  end
+
+  def blockchain
+    attrs[:blockchain]
+  end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(wallet_address)
+    contract.account_balance(wallet_address)
   end
 end

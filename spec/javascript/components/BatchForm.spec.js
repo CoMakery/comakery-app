@@ -119,19 +119,19 @@ describe('BatchForm', () => {
 
     wrapper.setState({
       errors: {
-        'batch[name]'       : 'name error',
-        'batch[description]': 'description error'
+        'batch[name]'       : ['name error'],
+        'batch[description]': ['description error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldWhiteDark[errorText="name error"][title="name"][required][name="batch[name]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldWhiteDark[title="name"][required][name="batch[name]"] .input-field--error').html()
+    ).toContain('name error')
 
-    expect(wrapper.exists(
-      'InputFieldDescription[errorText="description error"][title="description"][name="batch[description]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDescription[title="description"][name="batch[description]"] .input-field--error').html()
+    ).toContain('description error')
   })
 })

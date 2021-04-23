@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_09_134101) do
+ActiveRecord::Schema.define(version: 2021_04_22_221526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_134101) do
     t.bigint "transfer_type_id"
     t.bigint "recipient_wallet_id"
     t.datetime "prioritized_at"
+    t.decimal "lockup_schedule_id", precision: 78
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["channel_id"], name: "index_awards_on_channel_id"
@@ -277,7 +278,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_134101) do
   create_table "balances", force: :cascade do |t|
     t.bigint "wallet_id"
     t.bigint "token_id"
-    t.bigint "base_unit_value", default: 0, null: false
+    t.decimal "base_unit_value", precision: 78, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
@@ -333,7 +334,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_134101) do
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
-
+  
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
@@ -528,6 +529,15 @@ ActiveRecord::Schema.define(version: 2021_04_09_134101) do
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
   create_table "specialties", force: :cascade do |t|

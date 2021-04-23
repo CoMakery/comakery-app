@@ -1,6 +1,27 @@
 require 'rails_helper'
 
 describe 'wallets page' do
+  before { allow(ENV).to receive(:[]).and_call_original }
+
+  context 'when ORE ID not configured' do
+    before do
+      allow(ENV).to receive(:[]).with('ORE_ID_API_KEY').and_return(nil)
+    end
+
+    let(:wallet) do
+      create(:wallet)
+    end
+
+    before do
+      login(wallet.account)
+    end
+
+    it 'does not show oreid button' do
+      visit wallets_url
+      expect(page).not_to have_selector('.button_to')
+    end
+  end
+
   context 'when logged in' do
     let(:wallet) do
       create(:wallet)
@@ -13,6 +34,7 @@ describe 'wallets page' do
     it 'loads' do
       visit wallets_url
       within('h4') { expect(page.text).to eq('Wallets') }
+      expect(page).to have_selector('.button_to')
     end
   end
 

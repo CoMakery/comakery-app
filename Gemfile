@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.1'
 
+gem 'activerecord-session_store'
 gem 'active_storage-postgresql'
 gem 'active_storage_validations'
 gem 'awesome_print'
@@ -12,6 +13,7 @@ gem 'coffee-rails'
 gem 'countries', require: 'countries/global'
 gem 'd3-rails', '~>3.5'
 gem 'draper'
+gem 'fastimage'
 gem 'font_assets'
 gem 'font-awesome-rails'
 gem 'fortitude'
@@ -120,7 +122,7 @@ end
 
 gem 'scout_apm', '~> 2.4'
 
-gem 'mini_racer', '~> 0.3.1'
+gem 'mini_racer', '~> 0.4.0'
 
 gem 'possessive', '~> 1.0'
 

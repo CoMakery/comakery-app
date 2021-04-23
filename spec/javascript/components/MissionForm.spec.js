@@ -113,30 +113,34 @@ describe('MissionForm', () => {
 
     wrapper.setState({
       errors: {
-        'name'       : 'name error',
-        'subtitle'   : 'subtitle error',
-        'description': 'description error',
-        'logo'       : 'logo error',
-        'image'      : 'image error'
+        'name'       : ['name error'],
+        'subtitle'   : ['subtitle error'],
+        'description': ['description error'],
+        'logo'       : ['logo error'],
+        'image'      : ['image error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldWhiteDark[title="Name"][symbolLimit=100][required][name="name"][errorText="name error"]'
-    )).toBe(true)
-    expect(wrapper.exists(
-      'InputFieldWhiteDark[title="Subtitle"][required][name="subtitle"][errorText="subtitle error"]'
-    )).toBe(true)
-    expect(wrapper.exists(
-      'InputFieldDescription[title="Description"][required][name="description"][errorText="description error"]'
-    )).toBe(true)
-    expect(wrapper.exists(
-      'InputFieldUploadFile[title="Mission Logo"][required][name="logo"][errorText="logo error"]'
-    )).toBe(true)
-    expect(wrapper.exists(
-      'InputFieldUploadFile[title="Mission Image"][required][name="image"][errorText="image error"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldWhiteDark[title="Name"][symbolLimit=100][required][name="name"] .input-field--error').html()
+    ).toContain('name error')
+
+    expect(
+      wrapper.find('InputFieldWhiteDark[title="Subtitle"][required][name="subtitle"] .input-field--error').html()
+    ).toContain('subtitle error')
+
+    expect(
+      wrapper.find('InputFieldDescription[title="Description"][required][name="description"] .input-field--error').html()
+    ).toContain('description error')
+
+    expect(
+      wrapper.find('InputFieldUploadFile[title="Mission Logo"][required][name="logo"] .input-field--error').html()
+    ).toContain('logo error')
+
+    expect(
+      wrapper.find('InputFieldUploadFile[title="Mission Image"][required][name="image"] .input-field--error').html()
+    ).toContain('image error')
   })
 })

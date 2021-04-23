@@ -36,6 +36,13 @@ class Blockchain
     all.select(&:supported_by_ore_id?).find { |b| b.ore_id_name == name }
   end
 
+  def self.ore_id_configured?
+    #
+    # Should be empty in env file if not configured
+    #
+    ENV['ORE_ID_API_KEY'].present? && ENV['ORE_ID_SERVICE_KEY'].present?
+  end
+
   # 'Blockchain::BitcoinTest' => 'bitcoin_test'
   def key
     self.class.name.demodulize.underscore

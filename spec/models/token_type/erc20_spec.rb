@@ -37,5 +37,15 @@ describe TokenType::Erc20, vcr: true do
         expect { described_class.new(**attrs).contract }.to raise_error(TokenType::Contract::ValidationError)
       end
     end
+
+    describe '#blockchain_balance' do
+      let(:token_type) { described_class.new(**attrs) }
+      subject { token_type.blockchain_balance(build(:ethereum_address_1)) }
+
+      it 'gets balance from a contract' do
+        # Get it using VCR from blockchain
+        is_expected.to eq 0
+      end
+    end
   end
 end

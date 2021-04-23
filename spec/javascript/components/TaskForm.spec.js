@@ -170,19 +170,19 @@ describe('TaskForm', () => {
 
     wrapper.setState({
       errors: {
-        'task[name]'       : 'name error',
-        'task[description]': 'description error'
+        'task[name]'       : ['name error'],
+        'task[description]': ['description error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldWhiteDark[errorText="name error"][title="name"][required][name="task[name]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldWhiteDark[title="name"][required][name="task[name]"] .input-field--error').html()
+    ).toContain('name error')
 
-    expect(wrapper.exists(
-      'InputFieldDescriptionMiddle[errorText="description error"][title="description"][name="task[description]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDescriptionMiddle[title="description"][name="task[description]"] .input-field--error').html()
+    ).toContain('description error')
   })
 })

@@ -1,3 +1,7 @@
-<% if ENV['RECAPTCHA_SITE_KEY'].present? && ENV['RECAPTCHA_SECRET_KEY'].present? %>
-  <%= recaptcha_v3(action: action) %>
+<% unless Recaptcha.configuration.skip_verify_env.include? Rails.env %>
+  <% if @fallback_to_recaptcha_v2 %>
+    <%= recaptcha_tags(site_key: ENV['RECAPTCHA_SITE_KEY_V2'], ajax: true) %>
+  <% else %>
+    <%= recaptcha_v3(action: action, turbolinks: true) %>
+  <% end %>
 <% end %>

@@ -52,7 +52,7 @@ class AccountDecorator < Draper::Decorator
     GetImageVariantPath.call(
       attachment: image,
       resize_to_fill: [size, size],
-      fallback: helpers.image_url('default_account_image.jpg')
+      fallback: helpers.image_url('user-icon.svg')
     ).path
   end
 
@@ -73,6 +73,10 @@ class AccountDecorator < Draper::Decorator
 
   def verification_max_investment_usd
     latest_verification&.max_investment_usd
+  end
+
+  def project_interests
+    projects_interested.pluck(:id)
   end
 
   def total_received_in(token)
