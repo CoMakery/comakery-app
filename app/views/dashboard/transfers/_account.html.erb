@@ -14,7 +14,7 @@
       <%= account.name %>
     </div>
 
-    <% if wallet %>
+    <% if defined?(wallet) && wallet.present? %>
       <div class="account-preview__info__wallet">
         <%= link_to(wallet, wallet_url, target: '_blank') %>
       </div>
