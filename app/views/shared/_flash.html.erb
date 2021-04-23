@@ -1,0 +1,11 @@
+<div id="flash-container">
+  <%= react_component(
+    'layouts/Flash',
+    {
+      messages: flash_to_array
+    },
+    {
+      prerender: true
+    }
+  ) %>
+</div>

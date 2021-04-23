@@ -1,4 +1,5 @@
 <%= render layout: 'projects/project_settings' do %>
+  <div data-controller="sign--wallet-connect">
     <%= render partial: "filters" %>
 
     <div class="transfer-rules__buttons">
@@ -9,13 +10,18 @@
       </div>
     </div>
 
+    <% if policy(@project).edit_accounts? %>
+      <%= render partial: "shared/wallet_connect" %>
+    <% end %>
+
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
-      <%= render partial: "account", collection: @accounts, as: :account, cached: true %>
+      <%= render partial: "account", collection: @accounts, as: :account, cached: false %>
     </div>
 
     <div class="transfers-pages">
       <%= paginate(@accounts, window: 3) %>
     </div>
+  </div>
 <% end %>

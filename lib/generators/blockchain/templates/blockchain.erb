@@ -88,6 +88,12 @@ class Blockchain::<%= class_name %> < Blockchain
     raise Blockchain::Address::ValidationError.new("should be present") if addr.blank?
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    false
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?

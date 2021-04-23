@@ -232,4 +232,19 @@ describe BlockchainTransactionAward, vcr: true do
       end
     end
   end
+
+  describe '#broadcast_updates' do
+    let(:blockchain_transaction) { create(:blockchain_transaction) }
+    subject { blockchain_transaction.broadcast_updates }
+
+    it 'broadcasts templates' do
+      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(3).times
+      subject
+    end
+
+    it 'is triggered after update' do
+      expect(blockchain_transaction).to receive(:broadcast_updates)
+      blockchain_transaction.update(updated_at: Time.current)
+    end
+  end
 end

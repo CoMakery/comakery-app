@@ -100,6 +100,12 @@ class Blockchain::Constellation < Blockchain
     raise Blockchain::Address::ValidationError, 'should include valid checksum' if included_checksum.to_i != computed_checksum.to_i
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    false
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?

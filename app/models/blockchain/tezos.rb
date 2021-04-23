@@ -92,6 +92,12 @@ class Blockchain::Tezos < Blockchain
     raise Blockchain::Address::ValidationError, "should start with 'tz1', followed by 33 characters" unless /\A(tz1)[a-zA-Z0-9]{33}\z/.match?(addr)
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    false
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?

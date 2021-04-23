@@ -1,0 +1,16 @@
+<%= turbo_frame_tag "transfer_button_public_#{transfer.id}", target: "_top" do %>
+  <div class="transfer-button <%= transfer.decorate.transfer_button_state_class %>">
+    <% if transfer.paid? && transfer.decorate.ethereum_transaction_explorer_url %>
+      <%= link_to transfer.decorate.ethereum_transaction_address_short, transfer.decorate.ethereum_transaction_explorer_url, target: '_blank' %>
+
+    <% elsif transfer.project.token&.token_frozen? %>
+      frozen
+
+    <% elsif transfer.recipient_address.blank? %>
+      needs wallet
+
+    <% else %>
+      pending
+    <% end %>
+  </div>
+<% end %>
