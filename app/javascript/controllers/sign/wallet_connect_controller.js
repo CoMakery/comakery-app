@@ -73,6 +73,10 @@ export default class extends Controller {
     })
   }
 
+  disconnect() {
+    this.connector && this.connector.killSession()
+  }
+
   switch(e) {
     e.preventDefault()
 
