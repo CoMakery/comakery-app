@@ -102,6 +102,10 @@ class Index extends React.Component {
             </React.Fragment>
           }
         >
+          <Button
+            value="Tabler"
+            onClick={(_)=> window.open('/dev/styleguide/index.html', '_blank')}
+          />
           <InputFieldWhiteDark
             name="input[text1]"
             value={this.state['input[text1]']}
@@ -112,7 +116,6 @@ class Index extends React.Component {
             name="input[text2]"
             value={this.state['input[text2]']}
             eventHandler={this.handleInputChange}
-            errors="Here goes error text"
           />
           <InputFieldWhiteDark
             required
