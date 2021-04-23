@@ -6,7 +6,7 @@ module ApplicationHelper
     GetImageVariantPath.call(
       attachment: account&.image,
       resize_to_fill: [size, size],
-      fallback: asset_url('default_account_image.jpg')
+      fallback: asset_url('user-icon.svg')
     ).path
   end
 

@@ -87,7 +87,7 @@ describe AccountDecorator do
     end
 
     it 'returns default image' do
-      expect(account_wo_image.decorate.image_url).to include('default_account_image')
+      expect(account_wo_image.decorate.image_url).to include('user-icon')
     end
   end
 
