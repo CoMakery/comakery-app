@@ -14,14 +14,6 @@ class EthereumBlockchain {
     this.tokenBalances = {}
   }
 
-  ropstenEndpoints() {
-    return [
-      {
-        url: `https://ropsten.infura.io/v3/${this.envs.infuraProjectId}`
-      }
-    ]
-  }
-
   mainnetEndpoints() {
     return [
       {
@@ -30,27 +22,33 @@ class EthereumBlockchain {
     ]
   }
 
-  endpointsByNetwork(network) {
-    switch (network) {
-      case 'ethereum_ropsten':
-        return this.ropstenEndpoints()
-      case 'ethereum':
-        return this.mainnetEndpoints()
-      default:
-        console.error("Unknown or unsupported network")
-    }
+  ropstenEndpoints() {
+    return [
+      {
+        url: `https://ropsten.infura.io/v3/${this.envs.infuraProjectId}`
+      }
+    ]
   }
 
-  ropstenChainOptions() {
-    return {
-      chainForkType: {
-        chainName: 'ropsten',
-        hardFork: 'istanbul',
-      },
-      defaultTransactionSettings: {
-        maxFeeIncreasePercentage: 20,
-        executionPriority: chainjs.Models.TxExecutionPriority.Fast,
-      },
+  rinkebyEndpoints() {
+    return [
+      {
+        url: `https://rinkeby.infura.io/v3/${this.envs.infuraProjectId}`
+      }
+    ]
+  }
+
+  endpointsByNetwork(network) {
+    switch (network) {
+      case 'ethereum':
+        return this.mainnetEndpoints()
+      case 'ethereum_ropsten':
+        return this.ropstenEndpoints()
+      case 'ethereum_rinkeby':
+        return this.rinkebyEndpoints()
+
+      default:
+        console.error("Unknown or unsupported network")
     }
   }
 
@@ -67,12 +65,40 @@ class EthereumBlockchain {
     }
   }
 
+  ropstenChainOptions() {
+    return {
+      chainForkType: {
+        chainName: 'ropsten',
+        hardFork: 'istanbul',
+      },
+      defaultTransactionSettings: {
+        maxFeeIncreasePercentage: 20,
+        executionPriority: chainjs.Models.TxExecutionPriority.Fast,
+      },
+    }
+  }
+
+  rinkebyChainOptions() {
+    return {
+      chainForkType: {
+        chainName: 'rinkeby',
+        hardFork: 'istanbul',
+      },
+      defaultTransactionSettings: {
+        maxFeeIncreasePercentage: 20,
+        executionPriority: chainjs.Models.TxExecutionPriority.Fast,
+      },
+    }
+  }
+
   chainOptions(network) {
     switch (network) {
-      case 'ethereum_ropsten':
-        return this.ropstenChainOptions()
       case 'ethereum':
         return this.mainnetChainOptions()
+      case 'ethereum_ropsten':
+        return this.ropstenChainOptions()
+      case 'ethereum_rinkeby':
+        return this.rinkebyChainOptions()
       default:
         console.error("Unknown or unsupported network")
     }

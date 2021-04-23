@@ -59,7 +59,7 @@
       "value": "5"
     },
     "BLOCKCHAIN_NETWORK": {
-      "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta, ethereum, ethereum_ropsten",
+      "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta, ethereum, ethereum_ropsten, ethereum_rinkeby",
       "required": true,
       "value": "ethereum"
     },

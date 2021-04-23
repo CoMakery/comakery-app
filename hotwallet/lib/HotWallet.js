@@ -5,7 +5,7 @@ class HotWallet {
   constructor(network, address, keys, optedInApps = []) {
     if (["algorand", "algorand_test", "algorand_beta"].indexOf(network) > -1) {
       this.klass = new AlgorandHotWallet(network, address, keys, optedInApps)
-    } else if (["ethereum", "ethereum_ropsten"].indexOf(network) > -1) {
+    } else if (["ethereum", "ethereum_ropsten", "ethereum_rinkeby"].indexOf(network) > -1) {
       this.klass = new EthereumHotWallet(network, address, keys, optedInApps)
     } else {
       this.klass = undefined
