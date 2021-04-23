@@ -1,10 +1,21 @@
 <%= turbo_stream_from "project_hot_wallet_modes" %>
 <%= turbo_frame_tag "project_hot_wallet_modes" do %>
     <div id="project_<%= project.id %>_hot_wallet_mode" class="hot-wallet-switcher" data-controller="hot-wallet-mode-switcher" data-hot-wallet-mode-switcher-update-url="<%= project_path(project) %>">
-      <h4>Hot Wallet mode</h3>
+      <h4 style='color: #2647CE; width: -webkit-fill-available;'>Hot Wallet </h3>
+      <div style='align-self: center;border: solid 1px #e6e8ed;padding: 7px 5px;border-radius: 6px;border-right: none !important;'>
+        <%= link_to(
+                  middle_truncate(project.hot_wallet.address),
+                  project.hot_wallet.blockchain.url_for_address_human(project.hot_wallet.address),
+                  target: :_blank,
+                  style: 'align-self: center;padding-right: 5px;border-radius: 15px;padding-left: 12px;padding-right: 12px;font-weight: bold;text-decoration: underline;color: #212529;background-color: #EFF3FD;',
+                  data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "210" }
+                ) %>
+      </div>
       <%= select_tag "project[hot_wallet_mode]",
                      options_for_select(Project.hot_wallet_modes.keys.map{|name| [name.humanize, name]}, project.hot_wallet_mode),
                      id: "project_hot_wallet_mode",
+                     style: 'border-left: none !important',
                      data: {action: "hot-wallet-mode-switcher#toggle", target: "hot-wallet-mode-switcher.hotWalletMode"} %>
+      <svg xmlns="http://www.w3.org/2000/svg" style='width: 70px;margin-top: 7px;position: absolute;pointer-events: none;color: #4a4a4a;' class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
     </div>
 <% end %>
