@@ -338,16 +338,6 @@ class Account < ApplicationRecord
     wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
-  def with_wallet_data
-    account_data = { name: name, email: email }
-
-    account.wallets.each do |wallet|
-      result << { blockchain: wallet.blockchain.name, address: wallet.address, primary: wallet.primary_wallet?,
-                  vetting_status: wallet.account.latest_verification&.passed?,
-                  vetting_date: wallet.account.latest_verification&.created_at }.merge(account_data)
-    end
-  end
-
   def whitelabel?
     managed_mission&.whitelabel?
   end
