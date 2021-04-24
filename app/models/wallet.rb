@@ -25,9 +25,9 @@ class Wallet < ApplicationRecord
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
 
-  after_create_commit { broadcast_append_later_to 'wallets' if account_whitelabel? }
-  after_update_commit { broadcast_replace_to 'wallets' if account_whitelabel? }
-  after_destroy_commit { broadcast_remove_to 'wallets' if account_whitelabel? }
+  after_create_commit :broadcast_create_wl_account_wallet, if: -> { account&.whitelabel? }
+  after_update_commit :broadcast_update_wl_account_wallet, if: -> { account&.whitelabel? }
+  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { account&.whitelabel? }
 
   enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 
@@ -96,6 +96,23 @@ class Wallet < ApplicationRecord
     end
   end
 
+  def account_whitelabel?
+    account&.managed_mission&.whitelabel?
+  end
+
+  def wl_account_wallet_data
+    {
+      account_id: account.id,
+      wallet_id: id,
+      name: account.name,
+      email: account.email,
+      blockchain: blockchain.name,
+      address: address,
+      primary: primary_wallet?,
+      verification: account.latest_verification
+    }
+  end
+
   private
 
     def blockchain_supported_by_ore_id
@@ -106,7 +123,24 @@ class Wallet < ApplicationRecord
       ore_id? && (wallet_provisions.empty? || wallet_provisions.any?(&:pending?))
     end
 
-    def account_whitelabel?
-      account&.managed_mission&.whitelabel?
+    def broadcast_create_wl_account_wallet
+      broadcast_append_later_to 'wl_account_wallets',
+                                target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}",
+                                partial: 'accounts/partials/index/wl_account_wallet',
+                                locals: { mission: account.managed_mission, wl_account_wallet: wl_account_wallet_data }
+    end
+
+    def broadcast_update_wl_account_wallet
+      broadcast_replace_to 'wl_account_wallets',
+                           target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}",
+                           partial: 'accounts/partials/index/wl_account_wallet',
+                           locals: { mission: account.managed_mission, wl_account_wallet: wl_account_wallet_data }
+    end
+
+    def broadcast_destroy_wl_account_wallet
+      Turbo::StreamsChannel.broadcast_remove_to(
+        'wl_account_wallets',
+        target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}"
+      )
     end
 end
