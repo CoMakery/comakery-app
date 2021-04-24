@@ -229,7 +229,7 @@ class ProjectsController < ApplicationController
     def project_header
       @project ? @project.decorate.header_props : { image_url: helpers.image_url('default_project.jpg') }
     end
-    
+
     def project_tasks_by_specialty
       @project.ready_tasks_by_specialty.map do |specialty, awards|
         [
