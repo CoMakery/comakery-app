@@ -1,0 +1,18 @@
+<% wl_mission_id = @whitelabel_mission&.id || mission.id %>
+<%= content_tag :tr, id: "wl_#{wl_mission_id}_account_#{wl_account_wallet[:account_id]}_wallet_#{wl_account_wallet[:wallet_id]}" do %>
+  <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet[:name] %></td>
+  <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet[:email] %></td>
+  <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet[:blockchain] %></td>
+  <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet[:address] %></td>
+  <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet[:primary] %></td>
+  <td class="h12 font-weight-medium n10-color">
+    <% if (verification = wl_account_wallet[:verification]) %>
+      <label class="form-label-round form-label-round-large h11 font-weight-medium <%= verification.passed? ? 'g7-color g1-bg' : 'r5-color r1-bg' %>">
+        <% verification.passed? ? 'Accredited' : 'Failed' %>
+      </label>
+    <% end %>
+  </td>
+  <td class="h12 font-weight-medium n10-color">
+    <%= wl_account_wallet[:verification]&.created_at&.strftime('%b %e, %Y') %>
+  </td>
+<% end %>

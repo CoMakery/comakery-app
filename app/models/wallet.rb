@@ -10,10 +10,6 @@ class Wallet < ApplicationRecord
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
 
-  scope :with_whitelabel_account, lambda {
-    left_outer_joins(account: :managed_mission).where(missions: { whitelabel: true })
-  }
-
   validates :source, presence: true
   validates :address, presence: true, unless: :empty_address_allowed?
   validates :address, blockchain_address: true
