@@ -153,9 +153,7 @@ class EthereumBlockchain {
         await this.chain.connect()
       } catch (err) {
         console.error(err)
-        console.log("Trying to reconnect")
-        this.chain = new chainjs.ChainFactory().create(chainjs.ChainType.EthereumV1, endpoints, chainOptions)
-        await this.connect()
+        process.exit(1) // kill the process to make pm2 restart
       }
     }
   }
