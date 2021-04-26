@@ -149,7 +149,12 @@ class EthereumBlockchain {
 
   async connect() {
     if (!this.chain.isConnected) {
-      await this.chain.connect()
+      try {
+        await this.chain.connect()
+      } catch (err) {
+        console.error(err)
+        await this.connect() // try to connect once again
+      }
     }
   }
 
