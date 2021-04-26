@@ -1,4 +1,4 @@
-<% wl_mission_id = @whitelabel_mission&.id || mission.id %>
+<% wl_mission_id = @whitelabel_mission&.id || wl_account_wallet.account.managed_mission %>
 <%= content_tag :tr, id: "wl_#{wl_mission_id}_account_#{wl_account_wallet.account.id}_wallet_#{wl_account_wallet.id}" do %>
   <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet.account.name %></td>
   <td class="h12 font-weight-medium n10-color"><%= wl_account_wallet.account.email %></td>

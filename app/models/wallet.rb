@@ -110,14 +110,14 @@ class Wallet < ApplicationRecord
       broadcast_append_later_to 'wl_account_wallets',
                                 target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}",
                                 partial: 'accounts/partials/index/wl_account_wallet',
-                                locals: { mission: account.managed_mission, wl_account_wallet: self }
+                                locals: { wl_account_wallet: self }
     end
 
     def broadcast_update_wl_account_wallet
       broadcast_replace_to 'wl_account_wallets',
                            target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}",
                            partial: 'accounts/partials/index/wl_account_wallet',
-                           locals: { mission: account.managed_mission, wl_account_wallet: self }
+                           locals: { wl_account_wallet: self }
     end
 
     def broadcast_destroy_wl_account_wallet

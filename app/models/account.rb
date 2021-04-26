@@ -385,7 +385,7 @@ class Account < ApplicationRecord
         broadcast_replace_to 'wl_account_wallets',
                              target: "wl_#{managed_mission.id}_account_#{id}_wallet_#{wallet.id}",
                              partial: 'accounts/partials/index/wl_account_wallet',
-                             locals: { mission: managed_mission, wl_account_wallet: wallet }
+                             locals: { wl_account_wallet: wallet }
       end
     end
 
