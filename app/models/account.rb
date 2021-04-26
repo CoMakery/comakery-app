@@ -381,11 +381,11 @@ class Account < ApplicationRecord
     end
 
     def broadcast_update_wl_account_wallet
-      wallets.map(&:wl_account_wallet_data).each do |data|
+      wallets.each do |wallet|
         broadcast_replace_to 'wl_account_wallets',
-                             target: "wl_#{managed_mission.id}_account_#{id}_wallet_#{data[:wallet_id]}",
+                             target: "wl_#{managed_mission.id}_account_#{id}_wallet_#{wallet.id}",
                              partial: 'accounts/partials/index/wl_account_wallet',
-                             locals: { mission: managed_mission, wl_account_wallet: data }
+                             locals: { mission: managed_mission, wl_account_wallet: wallet }
       end
     end
 

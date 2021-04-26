@@ -96,23 +96,6 @@ class Wallet < ApplicationRecord
     end
   end
 
-  def account_whitelabel?
-    account&.managed_mission&.whitelabel?
-  end
-
-  def wl_account_wallet_data
-    {
-      account_id: account.id,
-      wallet_id: id,
-      name: account.name,
-      email: account.email,
-      blockchain: blockchain.name,
-      address: address,
-      primary: primary_wallet?,
-      verification: account.latest_verification
-    }
-  end
-
   private
 
     def blockchain_supported_by_ore_id
@@ -127,14 +110,14 @@ class Wallet < ApplicationRecord
       broadcast_append_later_to 'wl_account_wallets',
                                 target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}",
                                 partial: 'accounts/partials/index/wl_account_wallet',
-                                locals: { mission: account.managed_mission, wl_account_wallet: wl_account_wallet_data }
+                                locals: { mission: account.managed_mission, wl_account_wallet: self }
     end
 
     def broadcast_update_wl_account_wallet
       broadcast_replace_to 'wl_account_wallets',
                            target: "wl_#{account.managed_mission.id}_account_#{account.id}_wallet_#{id}",
                            partial: 'accounts/partials/index/wl_account_wallet',
-                           locals: { mission: account.managed_mission, wl_account_wallet: wl_account_wallet_data }
+                           locals: { mission: account.managed_mission, wl_account_wallet: self }
     end
 
     def broadcast_destroy_wl_account_wallet

@@ -16,9 +16,11 @@ class AccountsController < ApplicationController
   def index
     authorize(current_user, :index?)
 
-    @wl_account_wallets = @whitelabel_mission.managed_accounts.includes(:wallets).each_with_object([]) do |account, result|
-      account.wallets.each { |wallet| result << wallet.wl_account_wallet_data }
-    end
+    @wl_account_wallets = @whitelabel_mission
+                          .managed_accounts
+                          .includes(:latest_verification, :wallets)
+                          .map(&:wallets)
+                          .flatten
 
     @wl_account_wallets = paginate(@wl_account_wallets)
   end
