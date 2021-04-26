@@ -1,4 +1,4 @@
-<% if @project.token.blockchain.supported_by_wallet_connect? %>
+<% if @project.token&.blockchain&.supported_by_wallet_connect? %>
   <div class="row">
     <div class="col-8">
         <div class="transfers-filters">
