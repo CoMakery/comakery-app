@@ -159,7 +159,7 @@ describe 'transfer button on Transfers page' do
     end
   end
 
-  context 'with a token supported by WalletConnect' do
+  context 'with a token supported by WalletConnect and Metamask' do
     let!(:transfer) { build(:blockchain_transaction).blockchain_transactable }
     let!(:project) { transfer.project }
 
@@ -221,8 +221,13 @@ describe 'transfer button on Transfers page' do
             subject
           end
 
-          it 'links to WalletConnect controller' do
+          it 'links to WalletConnect and Metamask controllers' do
             expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'Pay')
+            expect(page).to have_css('.transfers-table__transfer__button .transfer-button a[data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx"]', count: 1)
+            expect(page).to have_css('.transfers-table__transfer__button .transfer-button a[data-sign--wallet-connect-target="txButtons"]', count: 1)
+            expect(page).to have_css('.transfers-table__transfer__button .transfer-button a[data-sign--metamask-target="txButtons"]', count: 1)
+            expect(page).to have_css('.transfers-table__transfer__button .transfer-button a[data-tx-new-url^=\/]', count: 1)
+            expect(page).to have_css('.transfers-table__transfer__button .transfer-button a[data-tx-receive-url^=\/]', count: 1)
           end
         end
       end
