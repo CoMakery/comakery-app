@@ -25,6 +25,11 @@ class Dashboard::AccountsController < ApplicationController
       # TODO: Add a blockchain flag whether a tx should by processed by OREID UI, regardless OREID blockchain support
       if account_token_record.token.blockchain.supported_by_ore_id?
         redirect_to sign_ore_id_new_path(account_token_record_id: account_token_record.id)
+      elsif account_token_record.token.blockchain.supported_by_wallet_connect?
+        render json: {
+          tx_new_url: sign_user_wallet_new_path(account_token_record_id: account_token_record.id),
+          tx_receive_url: sign_user_wallet_receive_path
+        }
       else
         @account_token_record = account_token_record
 

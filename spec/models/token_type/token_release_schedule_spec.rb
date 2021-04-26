@@ -9,7 +9,7 @@ describe TokenType::TokenReleaseSchedule, vcr: true do
   specify { expect(described_class.new(**attrs).name).to eq('Token Release Schedule') }
   specify { expect(described_class.new(**attrs).symbol).to eq('BOKKY') }
   specify { expect(described_class.new(**attrs).decimals).to eq(18) }
-  specify { expect(described_class.new(**attrs).wallet_logo).to eq('OREID_Logo_Symbol.svg') }
+  specify { expect(described_class.new(**attrs).wallet_logo).to eq('wallet-connect-logo.svg') }
   specify { expect(described_class.new(**attrs).contract).to be_a(Comakery::Eth::Contract::Erc20) }
   specify { expect(described_class.new(**attrs).abi).to be_an(Array) }
   specify { expect(described_class.new(**attrs).tx).to be_nil }
