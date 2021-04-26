@@ -64,25 +64,25 @@
     <label>status</label>
 
     <% if @project.token %>
-    <% if transfer.project.token&._token_type? %>
-    <% if current_account&.decorate&.can_send_awards?(transfer.project) %>
-      <% if transfer.token&.blockchain&.supported_by_ore_id? && current_account&.ore_id_account.nil? %>
-        <div class="transfer-button">
-          <%= link_to 'link OREID', wallets_path %>
-        </div>
-      <% else %>
-        <%= render partial: "shared/transfer_button_admin", locals: { transfer: transfer } %>
+      <% if transfer.project.token&._token_type? %>
+        <% if current_account&.decorate&.can_send_awards?(transfer.project) %>
+          <% if transfer.token&.blockchain&.supported_by_ore_id? && current_account&.ore_id_account.nil? %>
+            <div class="transfer-button">
+              <%= link_to 'link OREID', wallets_path %>
+            </div>
+          <% else %>
+            <%= render partial: "shared/transfer_button_admin", locals: { transfer: transfer } %>
+          <% end %>
+        <% else %>
+          <% if transfer.recipient_address.blank? && current_account == transfer.account %>
+            <div class="transfer-button">
+              <%= link_to 'set wallet', wallets_path %>
+            </div>
+          <% else %>
+            <%= render partial: "shared/transfer_button_public", locals: { transfer: transfer } %>
+          <% end %>
+        <% end %>
       <% end %>
-    <% else %>
-      <% if transfer.recipient_address.blank? && current_account == transfer.account %>
-        <div class="transfer-button">
-          <%= link_to 'set wallet', wallets_path %>
-        </div>
-      <% else %>
-        <%= render partial: "shared/transfer_button_public", locals: { transfer: transfer } %>
-      <% end %>
-    <% end %>
-  <% end %>
 
       <% if current_account&.decorate&.can_send_awards?(@project) && transfer.accepted? && !@project.hot_wallet_disabled? && @project.hot_wallet %>
         <div class="transfers-table__transfer__button__history">
