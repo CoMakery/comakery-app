@@ -153,7 +153,9 @@ class EthereumBlockchain {
         await this.chain.connect()
       } catch (err) {
         console.error(err)
-        await this.connect() // try to connect once again
+        console.log("Trying to reconnect")
+        this.chain = new chainjs.ChainFactory().create(chainjs.ChainType.EthereumV1, endpoints, chainOptions)
+        await this.connect()
       }
     }
   }
