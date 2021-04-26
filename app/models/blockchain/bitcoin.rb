@@ -94,6 +94,12 @@ class Blockchain::Bitcoin < Blockchain
     raise Blockchain::Address::ValidationError, 'should start with either 1 or 3 and have length between 26 and 35 characters' unless BitcoinAddressValidatorSchmoozer.new(__dir__).is_valid_bitcoin_address(addr)
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    false
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?

@@ -41,10 +41,24 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
         expect { subject }.to change(project.token.transfer_rules, :count).by(1)
       end
 
-      context 'with algorand security token', :vcr do
+      context 'with a token supported by ore id', :vcr do
         it 'redirects to ore_id' do
           subject
           expect(response).to have_http_status(:found)
+        end
+      end
+
+      context 'with a token supported by wallet connect' do
+        let!(:token) { create(:comakery_dummy_token) }
+        let!(:project) { create(:project, visibility: :public_listed, token: token) }
+
+        render_views
+
+        it 'renders json' do
+          subject
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)).to include('tx_new_url')
+          expect(JSON.parse(response.body)).to include('tx_receive_url')
         end
       end
     end

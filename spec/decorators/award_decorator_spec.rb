@@ -23,7 +23,6 @@ describe AwardDecorator do
   specify { expect(subject.recipient_display_name).to eq('Betty Ross') }
   specify { expect(subject.recipient_user_name).to eq('Betty Ross') }
   specify { expect(subject.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-  specify { expect(subject.json_for_sending_awards).to be_a(String) }
 
   it 'returns ethereum_transaction_address_short' do
     award = create :award, ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
@@ -102,68 +101,6 @@ describe AwardDecorator do
       expect(eth_award.decorate.transfer_button_text).to eq('Pay')
       expect(mint_award.decorate.transfer_button_text).to eq('Mint')
       expect(burn_award.decorate.transfer_button_text).to eq('Burn')
-    end
-  end
-
-  describe 'pay_data' do
-    let!(:project) { create(:project, token: create(:token, contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', _token_type: :comakery_security_token, _blockchain: :ethereum_ropsten)) }
-    let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
-    let!(:mint_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'mint'), award_type: create(:award_type, project: project)) }
-    let!(:burn_award) { create(:award, status: :accepted, transfer_type: project.transfer_types.find_by(name: 'burn'), award_type: create(:award_type, project: project)) }
-    let!(:other_award) { create(:award) }
-
-    it 'returns payment data for ethereum_controller.js' do
-      data = eth_award.decorate.pay_data
-      expect(data['controller']).to eq('ethereum')
-      expect(data['target']).to eq('ethereum.button')
-      expect(data['action']).to eq('click->ethereum#pay')
-      expect(data['ethereum-id']).to eq(eth_award.id)
-      expect(data['ethereum-payment-type']).to eq(eth_award.token._token_type)
-      expect(data['ethereum-address']).to eq(eth_award.recipient_address)
-      expect(data['ethereum-amount']).to eq(eth_award.decorate.total_amount_wei)
-      expect(data['ethereum-decimal-places']).to eq(eth_award.project.token&.decimal_places&.to_i)
-      expect(data['ethereum-contract-address']).to eq(eth_award.project.token&.contract_address)
-      expect(data['ethereum-contract-abi']).to eq(eth_award.project.token&.abi&.to_json)
-      expect(data['ethereum-transactions-path']).to include(eth_award.project.id.to_s)
-      expect(data['info']).not_to be_nil
-    end
-
-    it 'returns mint data for ethereum_controller.js' do
-      data = mint_award.decorate.pay_data
-      expect(data['controller']).to eq('ethereum')
-      expect(data['target']).to eq('ethereum.button')
-      expect(data['action']).to eq('click->ethereum#mint')
-      expect(data['ethereum-id']).to eq(mint_award.id)
-      expect(data['ethereum-payment-type']).to eq(mint_award.token._token_type)
-      expect(data['ethereum-address']).to eq(mint_award.recipient_address)
-      expect(data['ethereum-amount']).to eq(mint_award.decorate.total_amount_wei)
-      expect(data['ethereum-decimal-places']).to eq(mint_award.project.token&.decimal_places&.to_i)
-      expect(data['ethereum-contract-address']).to eq(mint_award.project.token&.contract_address)
-      expect(data['ethereum-contract-abi']).to eq(mint_award.project.token&.abi&.to_json)
-      expect(data['ethereum-transactions-path']).to include(mint_award.project.id.to_s)
-      expect(data['info']).not_to be_nil
-    end
-
-    it 'returns burn data for ethereum_controller.js' do
-      data = burn_award.decorate.pay_data
-      expect(data['controller']).to eq('ethereum')
-      expect(data['target']).to eq('ethereum.button')
-      expect(data['action']).to eq('click->ethereum#burn')
-      expect(data['ethereum-id']).to eq(burn_award.id)
-      expect(data['ethereum-payment-type']).to eq(burn_award.token._token_type)
-      expect(data['ethereum-address']).to eq(burn_award.recipient_address)
-      expect(data['ethereum-amount']).to eq(burn_award.decorate.total_amount_wei)
-      expect(data['ethereum-decimal-places']).to eq(burn_award.project.token&.decimal_places&.to_i)
-      expect(data['ethereum-contract-address']).to eq(burn_award.project.token&.contract_address)
-      expect(data['ethereum-contract-abi']).to eq(burn_award.project.token&.abi&.to_json)
-      expect(data['ethereum-transactions-path']).to include(burn_award.project.id.to_s)
-      expect(data['info']).not_to be_nil
-    end
-
-    it 'returns data for legacy payment logic' do
-      data = other_award.decorate.pay_data
-      expect(data[:id]).not_to be_nil
-      expect(data[:info]).not_to be_nil
     end
   end
 

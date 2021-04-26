@@ -11,7 +11,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
 
   # GET /api/v1/accounts/1/token_balances
   def token_balances
-    account
+    account.sync_balances_later
   end
 
   # POST /api/v1/accounts
