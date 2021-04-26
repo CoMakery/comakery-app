@@ -5952,7 +5952,7 @@ a:focus {
     color: white;
     cursor: pointer;
     font-weight: bold;
-    margin-bottom: 1.5em;
+    margin-right: 0.5em;
     border-radius: 6px !important;
     border: solid 1px #e6e8ed !important;
     height: 35px !important;
@@ -5960,6 +5960,28 @@ a:focus {
     font-family: Montserrat, sans-serif;
     font-size: 12px !important;
     background-color: #1560fa !important;
+    user-select: none;
+
+    .wallet-connect--button--dot {
+      display: none;
+    }
+
+    &.wallet-connect--button__connected {
+      .wallet-connect--button--dot {
+        display: inline;
+        color: greenyellow;
+        margin-left: 0.5em;
+      }
+    }
+
+    &:active,
+    &.wallet-connect--button__disabled {
+      opacity: 0.2;
+    }
+
+    &.wallet-connect--button__disabled {
+      cursor: not-allowed;
+    }
   }
 
   .wallet-connect--address {

@@ -1,23 +1,31 @@
-<% issuer = issuer.decorate %>
+<%= turbo_frame_tag "transfer_issuer_#{transfer.id}", target: "_top" do %>
+  <% if transfer.paid? %>
+    <% sender_wallet_address = transfer.blockchain_transactions.succeed.last&.source %>
+    <% sender_wallet_url = sender_wallet_address && transfer.token ? transfer.token.blockchain.url_for_address_human(sender_wallet_address) : nil %>
+    <% issuer = transfer.issuer.decorate %>
 
-<div class="account-preview">
-  <div class="account-preview__image">
-    <%= image_tag account_image_url(issuer, 100) %>
-  </div>
-
-  <div class="account-preview__info">
-    <div class="account-preview__info__nickname">
-      <%= issuer.nickname %>
-    </div>
-
-    <div class="account-preview__info__name">
-      <%= issuer.name %>
-    </div>
-
-    <% if wallet %>
-      <div class="account-preview__info__wallet">
-        <%= link_to(wallet, wallet_url, target: '_blank') %>
+    <div class="account-preview">
+      <div class="account-preview__image">
+        <%= image_tag account_image_url(issuer, 100) %>
       </div>
-    <% end %>
-  </div>
-</div>
+
+      <div class="account-preview__info">
+        <div class="account-preview__info__nickname">
+          <%= issuer.nickname %>
+        </div>
+
+        <div class="account-preview__info__name">
+          <%= issuer.name %>
+        </div>
+
+        <% if sender_wallet_address %>
+          <div class="account-preview__info__wallet">
+            <%= link_to(sender_wallet_address, sender_wallet_url, target: '_blank') %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    –
+  <% end %>
+<% end %>

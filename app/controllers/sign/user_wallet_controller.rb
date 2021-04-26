@@ -22,7 +22,7 @@ class Sign::UserWalletController < ApplicationController
     unless verify_errorless
       received_transaction.update_status(:cancelled, received_error&.truncate(100))
       flash[:error] = nil
-      head 400
+      head 200
       return
     end
 
