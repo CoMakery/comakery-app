@@ -16,6 +16,10 @@ class HotWalletRedis {
     return `wallet_for_project_${this.envs.projectId}`
   }
 
+  transactableKeyName(type, id) {
+    return `bt_${type}#${id}` // for example bt-Award#24
+  }
+
   async hotWallet() {
     const savedHW = await this.hgetall(this.walletKeyName())
 
@@ -71,6 +75,32 @@ class HotWalletRedis {
     return true
   }
 
+  async getSavedDataForTransaction(tx) {
+    const key = this.transactableKeyName(tx.blockchainTransactableType, tx.blockchainTransactableId)
+    const values = await this.hgetall(key)
+
+    if (values) {
+      return { key: key, values: values }
+    } else {
+      return null
+    }
+  }
+
+  async saveDavaForTransaction(txResult) {
+    const bt = txResult.blockchainTransaction
+    const tx = txResult.transaction
+    const key = this.transactableKeyName(bt.blockchainTransactableType, bt.blockchainTransactableId)
+    const monthInSeconds = 60*60*24*30
+
+    await this.hset(key,
+      "status", txResult.status,
+      "txHash", tx.transactionId,
+      "createdAt", Date.now(),
+    )
+    await this.expire(key, monthInSeconds)
+    console.log(`saved to ${key}`);
+  }
+
   async hset(...args) {
     return await (promisify(this.client.hset).bind(this.client))(...args)
   }
@@ -85,6 +115,10 @@ class HotWalletRedis {
 
   async del(...args) {
     return await (promisify(this.client.del).bind(this.client))(...args)
+  }
+
+  async expire(...args) {
+    return await (promisify(this.client.expire).bind(this.client))(...args)
   }
 }
 exports.HotWalletRedis = HotWalletRedis
