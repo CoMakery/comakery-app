@@ -8,6 +8,10 @@ describe AccountsController do
   let(:account) { authentication.account }
 
   describe '#index' do
+    let(:whitelabel_mission) { create(:active_whitelabel_mission) }
+
+    before { allow(controller).to receive(:whitelabel_mission).and_return(whitelabel_mission) }
+
     context 'when logged in as admin' do
       let!(:account) { create(:account, comakery_admin: true) }
 
