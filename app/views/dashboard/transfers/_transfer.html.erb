@@ -29,13 +29,7 @@
   <div class="transfers-table__transfer__issuer">
     <label>admin</label>
 
-    <% if transfer.paid? %>
-      <% sender_wallet_address = transfer.blockchain_transactions.succeed.last&.source %>
-      <% sender_wallet_url = sender_wallet_address && transfer.token ? transfer.token.blockchain.url_for_address_human(sender_wallet_address) : nil %>
-      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: sender_wallet_address, wallet_url: sender_wallet_url} %>
-    <% else %>
-      –
-    <% end %>
+    <%= render partial: "issuer", locals: { transfer: transfer } %>
   </div>
 
   <div class="transfers-table__transfer__amount">
