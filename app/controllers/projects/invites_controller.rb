@@ -1,19 +1,18 @@
 class Projects::InvitesController < ApplicationController
+  skip_after_action :verify_authorized, :verify_policy_scoped
+
   before_action :find_project
 
   def create
     authorize @project, :add_person?
 
-    @invite = @project.interests.new(
-      account: Account.find_by(email: params[:email]),
-      role: params[:role]
-    )
+    send_invite_result = SendInvite.call(project: @project, params: params)
 
     respond_to do |format|
-      if @invite.save
-        format.js { render status: :created }
+      if send_invite_result.success?
+        format.json { render json: { message: 'Invite successfully sent' }, status: :created }
       else
-        format.js { render status: :unprocessable_entity }
+        format.json { render json: { errors: send_invite_result.errors }, status: :unprocessable_entity }
       end
     end
   end
