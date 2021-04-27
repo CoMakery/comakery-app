@@ -17,7 +17,7 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
-  def blockchain_transactions?
+  def has_blockchain_transactions?
     blockchain_transactions.size.positive?
   end
 
