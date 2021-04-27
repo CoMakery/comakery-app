@@ -25,4 +25,8 @@ class TokenType
   def self.with_balance_support
     all.select(&:supports_balance?)
   end
+
+  def self.with_balance_support_list
+    with_balance_support.map { |t| t.class.to_s.demodulize.underscore }
+  end
 end

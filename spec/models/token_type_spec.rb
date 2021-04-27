@@ -8,6 +8,7 @@ describe TokenType, type: :model do
   specify { expect(subject.all).to be_an(Array) }
   specify { expect(subject.with_balance_support).to include(TokenType::Erc20) }
   specify { expect(subject.with_balance_support).not_to include(TokenType::Btc) }
+  specify { expect(subject.with_balance_support_list.first).to be_a(String) }
 end
 
 shared_examples 'a token type' do
