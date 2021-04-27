@@ -34,6 +34,16 @@ describe AccountDecorator do
     end
   end
 
+  describe '#can_receive_awards?' do
+    let!(:wallet) { create(:wallet, address: '0x' + '0' * 40, _blockchain: :ethereum_ropsten) }
+    let!(:project) { build :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
+
+    context 'when wallet for project token blockchain is present' do
+      it 'returns true' do
+        expect(wallet.account.decorate.can_receive_awards?(project)).to be true
+      end
+    end
+
     context 'when wallet for project token blockchain is not present' do
       it 'returns false' do
         expect(create(:wallet).account.decorate.can_receive_awards?(project)).to be_falsey

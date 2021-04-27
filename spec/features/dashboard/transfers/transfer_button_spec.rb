@@ -20,8 +20,8 @@ describe 'transfer button on Transfers page' do
       account.update!(password: 'password')
       visit new_session_path
 
-      fill_in "email", with: account.email
-      fill_in "password", with: 'password'
+      fill_in 'email', with: account.email
+      fill_in 'password', with: 'password'
 
       find("input[type='submit']").click
       subject
