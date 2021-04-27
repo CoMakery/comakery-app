@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "transfers_issuer_#{transfer.id}", target: "_top" do %>
+<%= turbo_frame_tag "transfers_issuer_#{transfers.id}", target: "_top" do %>
   <% if transfer.paid? %>
     <% sender_wallet_address = transfer.blockchain_transactions.succeed.last&.source %>
     <% sender_wallet_url = sender_wallet_address && transfer.token ? transfer.token.blockchain.url_for_address_human(sender_wallet_address) : nil %>
