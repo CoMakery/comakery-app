@@ -49,6 +49,7 @@ resource 'IV. Transfers' do
       response_field :description, 'transfer description', type: :string
       response_field :accountId, 'transfer account id', type: :string
       response_field :transferTypeId, 'category id', type: :string
+      response_field :lockupScheduleId, 'lockup schedule id', type: :string
       response_field :transactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
       response_field :status, 'transfer status (accepted paid cancelled)', type: :string
       response_field :recipientWalletId, 'recipient wallet id', type: :string
@@ -88,6 +89,7 @@ resource 'IV. Transfers' do
       parameter :total_amount, 'transfer total_amount (amount times quantity, same decimals as token)', required: true, type: :string
       parameter :account_id, 'transfer account id', required: true, type: :string
       parameter :transfer_type_id, 'custom transfer type id (default: earned)', required: false, type: :string
+      parameter :lockup_schedule_id, 'custom lockup schedule id (default: null)', required: false, type: :string
       parameter :recipient_wallet_id, 'custom recipient wallet id', required: false, type: :string
       parameter :description, 'transfer description', type: :string
     end
