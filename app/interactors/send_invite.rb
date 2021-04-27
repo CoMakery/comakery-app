@@ -2,7 +2,7 @@ class SendInvite
   include Interactor
 
   def call
-    context.fail!(errors: ['The user must have signed up to add them']) unless account.present?
+    context.fail!(errors: ['The user must have signed up to add them']) if account.blank?
 
     invite = context.project.interests.new(account: account, role: context.params[:role])
 
