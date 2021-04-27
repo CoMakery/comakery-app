@@ -1,77 +1,42 @@
 import { Controller } from 'stimulus'
 import { HelpersEthereum } from "@open-rights-exchange/chainjs"
-import WalletConnect from "@walletconnect/client"
-import QRCodeModal from "@walletconnect/qrcode-modal"
+import MetaMaskOnboarding from '@metamask/onboarding'
 import { FLASH_ADD_MESSAGE } from '../../src/javascripts/eventTypes'
 import PubSub from 'pubsub-js'
 
 export default class extends Controller {
   static targets = [ "walletAddress", "txButtons", "connectButton", "otherConnectButtons" ]
 
-  async walletConnectInit() {
-    const bridge = "https://bridge.walletconnect.org"
-    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
-    this.connector = connector
+  async metamaskInit() {
+    const onboarding = new MetaMaskOnboarding()
+    this.onboarding = onboarding
 
-    if (!connector.connected) {
-      await connector.createSession()
-    }
-
-    connector.on("connect", this.onWalletConnect.bind(this))
-    connector.on("session_update", this.onWalletUpdate.bind(this))
-    connector.on("disconnect", this.onWalletDisconnect.bind(this))
-
-    if (connector.connected) {
-      const { chainId, accounts } = connector
-      this.onSessionUpdate(accounts, chainId)
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      window.ethereum.on('accountsChanged', this.onAccountsUpdate.bind(this))
+      this.onAccountsUpdate(await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      }))
+    } else {
+      onboarding.startOnboarding()
     }
   }
 
-  onWalletConnect(error, payload) {
-    if (error) {
-      throw error;
-    }
-  
-    const { accounts, chainId } = payload.params[0]
-    this.onSessionUpdate(accounts, chainId)
-  }
-
-  onWalletUpdate(error, payload) {
-    if (error) {
-      throw error;
-    }
-  
-    const { accounts, chainId } = payload.params[0]
-    this.onSessionUpdate(accounts, chainId)
-  }
-
-  onWalletDisconnect(error, payload) {
-    if (error) {
-      throw error;
-    }
-  
-    const { accounts, chainId } = payload.params[0]
-    this.onSessionUpdate(accounts, chainId)
-    this._connector = null
-  }
-
-  onSessionUpdate(accounts, chainId) {
+  onAccountsUpdate(accounts) {
     this.accounts = accounts
-    this.chainId = chainId
     this.updateTargets()
   }
-  
-  updateTargets() {
-    this.walletAddressTarget.textContent = this.accounts ? this.accounts[0] : 'Disconnected'
 
-    if (this.connector && this.connector.connected) {
+  updateTargets() {
+    this.walletAddressTarget.textContent = this.accountsPresent() ? this.accounts[0] : 'Disconnected'
+    
+    if (this.accountsPresent()) {
       this.connectButtonTarget.classList.add('wallet-connect--button__connected')
     } else {
       this.connectButtonTarget.classList.remove('wallet-connect--button__connected')
     }
 
     this.otherConnectButtonsTargets.forEach(button => {
-      if (this.connector && this.connector.connected) {
+      if (this.accountsPresent()) {
         button.classList.add('wallet-connect--button__disabled')
       } else {
         button.classList.remove('wallet-connect--button__disabled')
@@ -79,7 +44,7 @@ export default class extends Controller {
     })
     
     this.txButtonsTargets.forEach(button => {
-      if (this.connector && this.connector.connected) {
+      if (this.accountsPresent()) {
         button.classList.add('transfer-tokens-btn__enabled')
       } else {
         button.classList.remove('transfer-tokens-btn__enabled')
@@ -87,18 +52,20 @@ export default class extends Controller {
     })
   }
 
-  disconnect() {
-    this.connector && this.connector.killSession()
+  accountsPresent() {
+    return this.accounts && this.accounts > 0
   }
 
   switch(e) {
     e.preventDefault()
 
-    if (this.connector && this.connector.connected && this.accounts) {
-      this.connector.killSession()
-      this.connector = null
+    if (this.accountsPresent()) {
+      this.onboarding.stopOnboarding()
+      this.onboarding = null
+      this.accounts = null
+      this.updateTargets()
     } else {
-      this.walletConnectInit()
+      this.metamaskInit()
     }
   }
 
@@ -132,15 +99,18 @@ export default class extends Controller {
       delete tx.contract
     }
 
-    this.connector
-      .sendTransaction(tx)
+    window.ethereum
+      .request({
+        method: 'eth_sendTransaction',
+        params: [tx],
+      })
       .then(async (txHash) => {
         await fetch(`${txReceiveUrl}?state=${state}&transaction_id=${txHash}`)
       })
       .catch(async (error) => {
-        console.error(error)
-        PubSub.publish(FLASH_ADD_MESSAGE, { severity: "error", text: error })
-        await fetch(`${txReceiveUrl}?state=${state}&error_message=${error}`)
+        console.error(error.message)
+        PubSub.publish(FLASH_ADD_MESSAGE, { severity: "error", text: error.message })
+        await fetch(`${txReceiveUrl}?state=${state}&error_message=${error.message}`)
       })
   }
 
