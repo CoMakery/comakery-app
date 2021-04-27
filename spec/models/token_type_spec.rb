@@ -1,3 +1,15 @@
+require 'rails_helper'
+
+describe TokenType, type: :model do
+  subject { described_class }
+
+  specify { expect(subject.list).to be_a(Hash) }
+  specify { expect(subject.append_to_list(nil)).to be_a(Hash) }
+  specify { expect(subject.all).to be_an(Array) }
+  specify { expect(subject.with_balance_support).to include(TokenType::Erc20) }
+  specify { expect(subject.with_balance_support).not_to include(TokenType::Btc) }
+end
+
 shared_examples 'a token type' do
   describe described_class.new do
     it { is_expected.to respond_to(:name) }
@@ -14,5 +26,7 @@ shared_examples 'a token type' do
     it { is_expected.to respond_to(:supports_token_mint?) }
     it { is_expected.to respond_to(:supports_token_burn?) }
     it { is_expected.to respond_to(:supports_token_freeze?) }
+    it { is_expected.to respond_to(:supports_balance?) }
+    it { is_expected.to respond_to(:blockchain_balance) }
   end
 end
