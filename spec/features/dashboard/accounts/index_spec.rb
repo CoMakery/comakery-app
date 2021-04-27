@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'features/dashboard/wallet_connect_spec'
 
 describe 'project accounts page' do
+  it_behaves_like 'having wallet connect button', { path_helper: :project_dashboard_transfers_path }
+
   let(:account_token_record) { create(:account_token_record) }
   let(:account) { account_token_record.account }
   let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
