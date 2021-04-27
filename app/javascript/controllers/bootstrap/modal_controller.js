@@ -39,6 +39,8 @@ export default class extends Controller {
 
   hide() { this.jmodal.modal('hide') }
 
+  reset() { this.jmodal.find('form').trigger('reset') }
+
   _createEvent(name, jevent) {
     const details = { relatedTarget: jevent.relatedTarget, controller: this.controller }
     return new CustomEvent(name, { detail: details });
