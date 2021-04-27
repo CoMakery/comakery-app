@@ -69,10 +69,6 @@ exports.runServer = async function runServer(envs, redisClient) {
       if (["cancelled_transaction", "successfull"].indexOf(resTx.status) > -1) {
         delay = envs.betweenTransactionDelay
       }
-
-      if (!exports.isEmptyObject(resTx.blockchainTransaction) && !exports.isEmptyObject(resTx.transaction)) {
-        await hwRedis.saveDavaForTransaction(resTx)
-      }
     }
 
     console.log(`waiting ${delay} seconds`)
@@ -115,17 +111,19 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     console.log(`Found transaction to send, id=${blockchainTransaction.id}`)
     const tx = await blockchain.sendTransaction(blockchainTransaction, hotWallet, blockchain)
 
-    if (typeof tx.valid !== 'undefined' && !tx.valid) {
+    if (typeof tx.valid == 'undefined' || tx.valid) {
+      // tx successfully sent
+      blockchainTransaction.txHash = tx.transactionId
+      await hwRedis.saveDavaForTransaction("successfull", blockchainTransaction)
+
+      await hwApi.updateTransactionHash(blockchainTransaction)
+      return { status: "successfull", blockchainTransaction: blockchainTransaction, transaction: tx }
+    } else {
       // tx failed during sending
       if (tx.markAs) {
         await hwApi.cancelTransaction(blockchainTransaction, tx.error, tx.markAs)
       }
       return { status: "cancelled_transaction", blockchainTransaction: blockchainTransaction, transaction: tx }
-    } else {
-      // tx successfully sent
-      blockchainTransaction.txHash = tx.transactionId
-      await hwApi.updateTransactionHash(blockchainTransaction)
-      return { status: "successfull", blockchainTransaction: blockchainTransaction, transaction: tx }
     }
   } else { // tx is invalid
     if (txValidation.markAs) {

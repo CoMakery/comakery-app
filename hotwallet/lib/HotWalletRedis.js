@@ -86,19 +86,16 @@ class HotWalletRedis {
     }
   }
 
-  async saveDavaForTransaction(txResult) {
-    const bt = txResult.blockchainTransaction
-    const tx = txResult.transaction
-    const key = this.transactableKeyName(bt.blockchainTransactableType, bt.blockchainTransactableId)
+  async saveDavaForTransaction(status, blockchainTransaction) {
+    const key = this.transactableKeyName(blockchainTransaction.blockchainTransactableType, blockchainTransaction.blockchainTransactableId)
     const monthInSeconds = 60*60*24*30
 
     await this.hset(key,
-      "status", txResult.status,
-      "txHash", tx.transactionId,
+      "status", status,
+      "txHash", blockchainTransaction.txHash,
       "createdAt", Date.now(),
     )
     await this.expire(key, monthInSeconds)
-    console.log(`saved to ${key}`);
   }
 
   async hset(...args) {
