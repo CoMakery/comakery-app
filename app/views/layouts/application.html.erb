@@ -54,21 +54,13 @@
     <%= render partial: 'layouts/project_search_form' unless @whitelabel_mission || @skip_search_box %>
 
     <div class="react-container">
-      <%= react_component(
-        'layouts/Flash',
-        {
-          messages: [:notice, :warning, :error].map do |severity|
-            flash[severity] ? { severity: severity, text: html_escape(flash[severity]) } : nil
-          end.compact
-        },
-        {
-          prerender: true
-        }
-      ) %>
+      <%= render partial: 'shared/flash' %>
 
       <%= yield %>
     </div>
+
     <%= react_component('IntercomButton') unless @whitelabel_mission %>
+
     <footer>
       <%= react_component(
         'layouts/Footer',

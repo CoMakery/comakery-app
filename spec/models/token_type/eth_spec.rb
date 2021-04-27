@@ -9,7 +9,7 @@ describe TokenType::Eth do
   specify { expect(described_class.new(**attrs).name).to eq('ETH') }
   specify { expect(described_class.new(**attrs).symbol).to eq('ETH') }
   specify { expect(described_class.new(**attrs).decimals).to eq(18) }
-  specify { expect(described_class.new(**attrs).wallet_logo).to eq('OREID_Logo_Symbol.svg') }
+  specify { expect(described_class.new(**attrs).wallet_logo).to eq('wallet-connect-logo.svg') }
   specify { expect(described_class.new(**attrs).contract).to be_a(Comakery::Eth) }
   specify { expect(described_class.new(**attrs).abi).to eq({}) }
   specify { expect(described_class.new(**attrs).tx).to eq(Comakery::Eth::Tx) }

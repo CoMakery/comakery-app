@@ -763,4 +763,23 @@ describe Account do
       end
     end
   end
+
+  describe '#sync_balances_later' do
+    let!(:wallet) { create(:wallet) }
+    let!(:account) { wallet.account }
+    subject { account.sync_balances_later }
+
+    context 'when there are tokens on the same blockchain as wallet' do
+      let!(:token) { create(:token, _blockchain: wallet._blockchain) }
+
+      it 'creates a balance record for each token' do
+        expect { subject }.to change(account.balances, :count).by(1)
+      end
+
+      it 'schedules balances sync' do
+        expect_any_instance_of(Balance).to receive(:sync_with_blockchain_later)
+        subject
+      end
+    end
+  end
 end

@@ -427,7 +427,6 @@ describe('ProjectForm', () => {
 
     wrapper.update()
 
-
     expect(
       wrapper.find('InputFieldWhiteDark[title="title"][required][name="project[title]"] .input-field--error').html()
     ).toContain('title error')

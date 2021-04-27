@@ -161,6 +161,9 @@ Rails.application.routes.draw do
   namespace :sign, defaults: { format: :json } do
     match 'ore_id/new', to: 'ore_id#new', via: [:get, :post]
     get 'ore_id/receive'
+
+    match 'user_wallet/new', to: 'user_wallet#new', via: [:get, :post]
+    get 'user_wallet/receive'
   end
 
   namespace :api, defaults: { format: :json } do

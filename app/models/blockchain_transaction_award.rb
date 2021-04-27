@@ -1,5 +1,6 @@
 class BlockchainTransactionAward < BlockchainTransaction
   validates :destination, presence: true
+  after_update :broadcast_updates
 
   def update_transactable_status
     blockchain_transactable.update!(status: :paid)
@@ -18,6 +19,40 @@ class BlockchainTransactionAward < BlockchainTransaction
     elsif token._token_type_algorand_security_token?
       on_chain_ast
     end
+  end
+
+  def broadcast_updates
+    broadcast_replace_later_to(
+      blockchain_transactable,
+      :updates,
+      target: "transfer_history_button_#{blockchain_transactable.id}",
+      partial: 'dashboard/transfers/transfer_history_button',
+      locals: { transfer: blockchain_transactable }
+    )
+
+    broadcast_replace_later_to(
+      blockchain_transactable,
+      :updates,
+      target: "transfer_issuer_#{blockchain_transactable.id}",
+      partial: 'dashboard/transfers/issuer',
+      locals: { transfer: blockchain_transactable }
+    )
+
+    broadcast_replace_later_to(
+      blockchain_transactable,
+      :updates,
+      target: "transfer_button_public_#{blockchain_transactable.id}",
+      partial: 'shared/transfer_button_public',
+      locals: { transfer: blockchain_transactable }
+    )
+
+    broadcast_replace_later_to(
+      blockchain_transactable,
+      :updates,
+      target: "transfer_button_admin_#{blockchain_transactable.id}",
+      partial: 'shared/transfer_button_admin',
+      locals: { transfer: blockchain_transactable }
+    )
   end
 
   private
