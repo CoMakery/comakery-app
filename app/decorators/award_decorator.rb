@@ -19,14 +19,14 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
-  def has_blockchain_transactions?
-    blockchain_transactions.size > 0
+  def blockchain_transactions?
+    blockchain_transactions.size.positive?
   end
 
   def payable_by_ore_id?(current_account)
     token&.blockchain&.supported_by_ore_id? && current_account&.ore_id_account.nil?
   end
-  
+
   def ethereum_transaction_address_short
     "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
   end
