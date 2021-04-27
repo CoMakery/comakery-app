@@ -4,12 +4,57 @@ describe 'transfer button on Transfers page' do
   let!(:transfer) { build(:algorand_app_transfer_tx).blockchain_transaction.blockchain_transactable }
   let!(:project) { transfer.project }
   let!(:ore_id) { create(:ore_id, account: project.account, skip_jobs: true) }
+  let!(:account) { project.account }
 
   before do
     project.update!(visibility: :public_listed)
   end
 
   subject { visit project_dashboard_transfers_path(project) }
+
+  context 'when project owner or admin' do
+    before do
+      transfer.ready!
+      project.create_hot_wallet!(address: build(:bitcoin_address_1), name: 'test name', account: project.account)
+
+      account.update!(password: 'password')
+      visit new_session_path
+
+      fill_in "email", with: account.email
+      fill_in "password", with: 'password'
+
+      find("input[type='submit']").click
+      subject
+    end
+
+    it 'shows only hot wallet link' do
+      expect(page).to have_css("#project_#{project.id}_hot_wallet_mode")
+    end
+  end
+
+  context 'when hot wallet present' do
+    before do
+      transfer.ready!
+      project.create_hot_wallet!(address: build(:bitcoin_address_1), name: 'test name', account: project.account)
+      subject
+    end
+
+    it 'shows how wallet link and edit mode' do
+      expect(page).to have_css('.hot-wallet-address')
+    end
+  end
+
+  context 'no hot wallet' do
+    before do
+      transfer.ready!
+      subject
+    end
+
+    it 'does not show hot wallet' do
+      expect(page).not_to have_css("#project_#{project.id}_hot_wallet_mode")
+      expect(page).not_to have_css('.hot-wallet-address')
+    end
+  end
 
   context 'without a token' do
     before do
@@ -121,7 +166,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'links to Wallets' do
-            expect(page).to have_css('.transfers-table__transfer__status .transfer-button a', count: 1, text: 'set wallet')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'needs wallet')
           end
         end
 
