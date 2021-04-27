@@ -44,10 +44,6 @@ class AccountDecorator < Draper::Decorator
     project.token&._blockchain && account.address_for_blockchain(project.token._blockchain).present?
   end
 
-  def can_send_awards?(project)
-    project&.account == self || project.admins.include?(self)
-  end
-
   def image_url(size = 100)
     GetImageVariantPath.call(
       attachment: image,
