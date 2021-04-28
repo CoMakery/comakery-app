@@ -591,6 +591,16 @@ form.form-with-submit-button {
       font-weight: bold;
       margin-bottom: 0.5em;
       margin-right: 0.5em;
+      color: #2647CE;
+      width: -webkit-fill-available;
+    }
+
+    .hot-wallet-switcher-child {
+      align-self: center;
+      border: solid 1px #e6e8ed;
+      padding: 7px 5px;
+      border-radius: 6px;
+      border-right: none !important;
     }
 
     select {
@@ -601,6 +611,7 @@ form.form-with-submit-button {
       font-family: Montserrat;
       font-size: 12px;
       max-width: 200px;
+      border-left: none !important;
     }
   }
 }
