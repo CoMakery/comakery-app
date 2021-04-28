@@ -252,6 +252,7 @@ describe AwardPolicy do
 
     before do
       project.admins << project_admin
+      create(:interest, project: project, account: project_admin, role: :admin)
     end
 
     specify { expect(described_class.new(project_admin, award).project_editable?).to be_truthy }

@@ -19,10 +19,10 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.with_all_attached_images.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :admins, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :admins, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :admins, :project_admins).archived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.with_all_attached_images.includes(:account, :admins, :project_admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
@@ -146,7 +146,7 @@ class ProjectsController < ApplicationController
       @q = policy_scope(@project_scope).ransack(params[:q])
       @q.sorts = 'interests_count DESC' if @q.sorts.empty?
 
-      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :admins, account: [image_attachment: :blob])
+      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :admins, :project_admins, account: [image_attachment: :blob])
       @projects = @projects_all.page(@page).per(9)
 
       redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?

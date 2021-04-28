@@ -5,7 +5,7 @@ describe SendInvite do
     context 'account registered' do
       let!(:project) { create(:project) }
       let!(:account) { create(:account, email: 'example@gmail.com') }
-      let!(:params) { { email: 'example@gmail.com', role: :member } }
+      let!(:params) { { email: 'example@gmail.com', role: :interested } }
 
       subject(:result) do
         described_class.call(project: project, params: params)
@@ -19,7 +19,7 @@ describe SendInvite do
     context 'account doesn\'t exist' do
       let!(:project) { create(:project) }
       let!(:account) { create(:account) }
-      let!(:params) { { email: 'unregistered@gmail.com', role: :member } }
+      let!(:params) { { email: 'unregistered@gmail.com', role: :interested } }
 
       subject(:result) do
         described_class.call(project: project, params: params)

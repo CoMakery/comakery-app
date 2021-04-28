@@ -21,6 +21,7 @@ describe AwardTypePolicy do
     context 'project admin' do
       before do
         project.admins << project_admin
+        create(:interest, project: project, account: project_admin, role: :admin)
       end
 
       it 'returns all award types' do
