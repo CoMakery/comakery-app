@@ -9,7 +9,7 @@ RSpec.describe Projects::InvitesController, type: :controller do
     {
       project_id: project.id,
       email: 'example@gmail.com',
-      role: :member
+      role: :interested
     }
   end
 
@@ -36,7 +36,7 @@ RSpec.describe Projects::InvitesController, type: :controller do
         {
           project_id: project.id,
           email: 'unregister@gmail.com',
-          role: :member
+          role: :interested
         }
       end
 

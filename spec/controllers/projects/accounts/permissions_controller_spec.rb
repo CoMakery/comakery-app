@@ -4,7 +4,7 @@ RSpec.describe Projects::Accounts::PermissionsController, type: :controller do
   let!(:admin) { create(:account, comakery_admin: true) }
   let!(:project) { create(:project, account: admin) }
   let!(:account) { create(:account, email: 'example@gmail.com') }
-  let!(:interest) { create(:interest, project: project, account: account, role: :member) }
+  let!(:interest) { create(:interest, project: project, account: account, role: :interested) }
 
   let!(:params) do
     {
