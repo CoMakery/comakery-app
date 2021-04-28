@@ -14,9 +14,9 @@ describe UpdateInterestsWithRole do
 
     expect(project.interested).to contain_exactly(owner, admin, interested)
     expect(project.admins).to contain_exactly(admin)
-    expect(owner.interests.first.role).to eq 'member'
-    expect(admin.interests.first.role).to eq 'member'
-    expect(interested.interests.first.role).to eq 'member'
+    expect(owner.interests.first.role).to eq 'interested'
+    expect(admin.interests.first.role).to eq 'interested'
+    expect(interested.interests.first.role).to eq 'interested'
 
     subject
     project.reload
@@ -27,7 +27,7 @@ describe UpdateInterestsWithRole do
     # didn't change
     expect(project.interested).to contain_exactly(owner, admin, interested)
     expect(project.admins).to contain_exactly(admin)
-    expect(interested.interests.first.role).to eq 'member'
+    expect(interested.interests.first.role).to eq 'interested'
 
     # changed role to admin
     expect(owner.interests.first.role).to eq 'admin'
