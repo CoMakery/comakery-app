@@ -22,7 +22,7 @@ class Project < ApplicationRecord
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_admins, -> { where(interests: { role: :admin }) }, through: :interests, source: :account
-  has_many :project_members, -> { where(interests: { role: :member }) }, through: :interests, source: :account
+  has_many :project_interested, -> { where(interests: { role: :interested }) }, through: :interests, source: :account
   has_many :project_observers, -> { where(interests: { role: :observer }) }, through: :interests, source: :account
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
   has_many :transfer_rules, through: :token

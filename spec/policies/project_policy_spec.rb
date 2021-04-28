@@ -33,9 +33,10 @@ describe ProjectPolicy do
     team1.build_authentication_team other_team_member_auth
 
     [my_public_project, my_public_unlisted_project, my_public_project_business_confidential, my_private_project, my_archived_project].each do |pr|
-      pr.admins << project_admin
+      pr.admins << project_admin # TODO: this should be removed when add_admin button will be removed
       create(:award, award_type: create(:award_type, project: pr), account: project_contributor)
       create(:interest, project: pr, account: project_interested)
+      create(:interest, project: pr, account: project_admin, role: :admin)
     end
   end
 

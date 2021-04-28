@@ -77,7 +77,15 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def project_admin?
-    account.present? && (project.admins.include? account)
+    account.present? && (project.project_admins.include? account)
+  end
+
+  def project_interested?
+    account.present? && (project.project_interested.include? account)
+  end
+
+  def project_observer?
+    account.present? && (project.project_observers.include? account)
   end
 
   def refresh_transfer_rules?

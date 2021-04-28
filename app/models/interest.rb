@@ -7,7 +7,7 @@ class Interest < ApplicationRecord
   validates :project_id, uniqueness: { scope: %i[account_id specialty_id protocol], message: 'has already been followed' }
   # rubocop:enable Rails/UniqueValidationWithoutIndex
 
-  enum role: { member: 0, admin: 1, read_only: 2 }
+  enum role: { interested: 0, admin: 1, observer: 2 }
 
   before_destroy do
     if project.admins.include?(account) || project.account == account
