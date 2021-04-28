@@ -12,7 +12,8 @@
     <span class="avatar avatar-xs avatar-rounded">
       <%= image_tag account_image_url(interest.account, 100) %>
     </span>
-      <div class="h12 font-weight-medium n10-color ms-1">Mark Novell</div>
+      <div class="h12 font-weight-medium n10-color ms-1"><%= interest.account.name %></div>
+      <div class="h12 font-weight-medium n10-color ms-1"><%= interest.account.email %></div>
     </div>
     <br>
     <div class="input-icon mb-3 mt-1">
