@@ -14,7 +14,7 @@ describe 'Add person', js: true do
     within('#invite-person form') do
       fill_in 'email', with: account.email
 
-      select 'Member', from: 'role'
+      select 'Interested', from: 'role'
 
       click_button 'Save'
     end
