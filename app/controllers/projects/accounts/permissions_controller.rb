@@ -24,7 +24,7 @@ module Projects
         authorize @project, :update_permissions?
 
         respond_to do |format|
-          if @interest.update(interest_params)
+          if @interest.update(role: params[:interest][:role])
             format.json { render json: { message: 'Permissions successfully updated' }, status: :ok }
           else
             format.json { render json: { errors: @interest.errors.full_messages }, status: :unprocessable_entity }
@@ -33,11 +33,6 @@ module Projects
       end
 
       private
-
-        def interest_params
-          params.require(:interest).permit(:role)
-        end
-
         def find_project
           @project = Project.find(params[:project_id])
         end
