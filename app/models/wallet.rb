@@ -10,7 +10,7 @@ class Wallet < ApplicationRecord
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
 
-  scope :with_whitelabel_mission, ->(whitelabel_mission_id) {
+  scope :with_whitelabel_mission, lambda { |whitelabel_mission_id|
     left_outer_joins(account: :managed_mission).where(missions: { id: whitelabel_mission_id })
   }
 
