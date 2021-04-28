@@ -107,11 +107,11 @@ RSpec.describe Sign::UserWalletController, type: :controller, vcr: true do
         allow_any_instance_of(described_class).to receive(:received_state).and_return({ 'transaction_id' => transaction.id, 'redirect_back_to' => '/dummy_redir_url' })
       end
 
-      it 'cancels received transaction and returns 400' do
+      it 'cancels received transaction and returns 200' do
         expect_any_instance_of(BlockchainTransaction).to receive(:update_status)
 
         get :receive, params: { transaction_id: 'dummy_tx_hash', signed_transaction: Base64.encode64('dummy_raw_tx') }
-        expect(response).to have_http_status(:bad_request)
+        expect(response).to have_http_status(:success)
       end
     end
 

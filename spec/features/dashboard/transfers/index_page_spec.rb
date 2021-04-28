@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'features/dashboard/wallet_connect_spec'
 
 describe 'transfers_index_page', js: true do
+  it_behaves_like 'having wallet connect button', { path_helper: :project_dashboard_transfers_path }
+
   let(:owner) { create :account }
   let!(:project) { create :project, token: nil, account: owner }
   let!(:project_award_type) { (create :award_type, project: project) }

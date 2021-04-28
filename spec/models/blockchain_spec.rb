@@ -51,6 +51,7 @@ shared_examples 'a blockchain' do
     it { is_expected.to respond_to(:validate_tx_hash).with(1).argument }
     it { is_expected.to respond_to(:validate_addr).with(1).argument }
     it { is_expected.to respond_to(:supported_by_ore_id?) }
+    it { is_expected.to respond_to(:supported_by_wallet_connect?) }
     it { is_expected.to respond_to(:ore_id_name) }
   end
 

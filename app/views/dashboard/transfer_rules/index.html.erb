@@ -1,5 +1,5 @@
 <%= render layout: 'projects/project_settings' do %>
-  <div data-controller="sign--wallet-connect">
+  <div data-controller="sign--wallet-connect sign--metamask">
     <% if policy(@project).edit_transfer_rules? %>
       <%= render partial: "shared/wallet_connect" %>
     <% end %>
