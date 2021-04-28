@@ -390,8 +390,8 @@ class Account < ApplicationRecord
 
     def broadcast_update_wl_account_wallet
       wallets.each do |wallet|
-        broadcast_replace_to 'wl_account_wallets',
-                             target: "wl_#{managed_mission.id}_account_#{id}_wallet_#{wallet.id}",
+        broadcast_replace_to "wl_#{managed_mission.id}_account_wallets",
+                             target: "wl_account_#{id}_wallet_#{wallet.id}",
                              partial: 'accounts/partials/index/wl_account_wallet',
                              locals: { wl_account_wallet: wallet }
       end
@@ -400,8 +400,8 @@ class Account < ApplicationRecord
     def broadcast_destroy_wl_account_wallet
       wallet_ids.each do |wallet_id|
         Turbo::StreamsChannel.broadcast_remove_to(
-          'wl_account_wallets',
-          target: "wl_#{managed_mission.id}_account_#{id}_wallet_#{wallet_id}"
+          "wl_#{managed_mission.id}_account_wallets",
+          target: "wl_account_#{id}_wallet_#{wallet_id}"
         )
       end
     end
