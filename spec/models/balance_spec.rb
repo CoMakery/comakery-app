@@ -10,6 +10,50 @@ describe Balance, type: :model do
   it { is_expected.to validate_inclusion_of(:token_id).in_array(subject.wallet.tokens_of_the_blockchain.pluck(:id)) }
   let(:balance) { create(:balance) }
 
+  describe '#ready_for_balance_update?' do
+    context 'when token has balance support' do
+      let(:token_with_balance_support) { create(:comakery_token) }
+      let(:wallet) { create(:wallet, address: build(:ethereum_address_1), _blockchain: token_with_balance_support._blockchain) }
+
+      context 'when balance has not been updated after creation' do
+        let(:balance) { create(:balance, wallet: wallet, token: token_with_balance_support) }
+        subject { balance.ready_for_balance_update? }
+
+        it { is_expected.to be_truthy }
+        specify { expect(described_class.ready_for_balance_update).to include(balance) }
+      end
+
+      context 'when balance has been updated long time ago' do
+        let(:balance) { create(:balance, wallet: wallet, token: token_with_balance_support, updated_at: 1.year.ago) }
+        subject { balance.ready_for_balance_update? }
+
+        it { is_expected.to be_truthy }
+        specify { expect(described_class.ready_for_balance_update).to include(balance) }
+      end
+
+      context 'when balance has been just updated' do
+        let(:balance) { create(:balance, wallet: wallet, token: token_with_balance_support, updated_at: 1.year.from_now) }
+        subject { balance.ready_for_balance_update? }
+
+        it { is_expected.to be_falsey }
+        specify { expect(described_class.ready_for_balance_update).not_to include(balance) }
+      end
+    end
+
+    context 'when token has no balance support' do
+      let(:token_without_balance_support) { create(:token, _token_type: :btc) }
+      let(:wallet) { create(:wallet, _blockchain: token_without_balance_support._blockchain) }
+
+      context 'when balance has not been updated after creation' do
+        let(:balance) { create(:balance, wallet: wallet, token: token_without_balance_support) }
+        subject { balance.ready_for_balance_update? }
+
+        it { is_expected.to be_falsey }
+        specify { expect(described_class.ready_for_balance_update).not_to include(balance) }
+      end
+    end
+  end
+
   describe '#value' do
     subject { balance.value }
 
