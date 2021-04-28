@@ -6,7 +6,7 @@ module ApplicationHelper
     GetImageVariantPath.call(
       attachment: account&.image,
       resize_to_fill: [size, size],
-      fallback: asset_url('default_account_image.jpg')
+      fallback: asset_url('user-icon.svg')
     ).path
   end
 
@@ -54,5 +54,11 @@ module ApplicationHelper
 
   def middle_truncate(str, length: 5)
     str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
+  end
+
+  def flash_to_array
+    %i[notice warning error].map do |severity|
+      flash[severity] ? { severity: severity, text: html_escape(flash[severity]) } : nil
+    end.compact
   end
 end

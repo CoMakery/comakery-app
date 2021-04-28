@@ -199,7 +199,6 @@ exports[`BatchForm renders correctly without props 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-bdVaJa",
@@ -222,7 +221,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
@@ -237,7 +236,6 @@ exports[`BatchForm renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-bwzfXH",
@@ -262,7 +260,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
@@ -306,7 +304,6 @@ exports[`BatchForm renders correctly without props 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-EHOje",
@@ -424,7 +421,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     className="input-field__dropdown"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -507,7 +504,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     className="input-field__white__dark"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -586,7 +583,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     className="input-field__description-middle"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -663,7 +660,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     className="input-field__description"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="40x40"
@@ -727,6 +724,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                   </InputField>
                 </InputFieldDescription>
                 <InputFieldUploadFile
+                  eventHandler={[Function]}
                   imgPreviewDimensions="100x100"
                   name="batch[diagram]"
                   title="diagram or screenshot"
@@ -737,7 +735,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     className="input-field__upload-file"
                     copyOnClick={false}
                     disabled={false}
-                    errorText=""
+                    errors={Array []}
                     eventHandler={[Function]}
                     imgInputRef={null}
                     imgPreviewDimensions="100x100"

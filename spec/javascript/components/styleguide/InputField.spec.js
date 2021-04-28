@@ -172,10 +172,10 @@ describe('InputField', () => {
     expect(wrapper.exists('.input-field--content__text__copyable')).toBe(true)
   })
 
-  it('renders correctly with errorText', () => {
-    const wrapper = shallow(<InputField errorText="test" />)
+  it('renders correctly with errors', () => {
+    const wrapper = shallow(<InputField errors={['errorText']} />)
 
-    expect(wrapper.find('.input-field--error').text()).toBe('test')
+    expect(wrapper.find('.input-field--error').text()).toBe('errorText')
     expect(wrapper.exists('.input-field__error')).toBe(true)
   })
 

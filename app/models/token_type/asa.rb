@@ -100,4 +100,16 @@ class TokenType::Asa < TokenType
   def blockchain
     attrs[:blockchain]
   end
+
+  # Does it have support for fetching balance?
+  # @return [Boolean] flag
+  def supports_balance?
+    true
+  end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(wallet_address)
+    contract.asset_balance(wallet_address)
+  end
 end

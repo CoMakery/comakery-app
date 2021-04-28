@@ -20,6 +20,7 @@ describe TokenType::Qrc20, vcr: true do
   specify { expect(described_class.new(**attrs).supports_token_mint?).to be_falsey }
   specify { expect(described_class.new(**attrs).supports_token_burn?).to be_falsey }
   specify { expect(described_class.new(**attrs).supports_token_freeze?).to be_falsey }
+  specify { expect(described_class.new(**attrs).supports_balance?).to be_falsey }
 
   describe 'contract' do
     context 'when contract_address is invalid' do
@@ -36,6 +37,14 @@ describe TokenType::Qrc20, vcr: true do
       it 'raises an error' do
         expect { described_class.new(**attrs).contract }.to raise_error(TokenType::Contract::ValidationError)
       end
+    end
+  end
+
+  describe '#blockchain_balance' do
+    subject { described_class.new.blockchain_balance('dummy_wallet_address') }
+
+    it do
+      expect { subject }.to raise_error NotImplementedError
     end
   end
 end

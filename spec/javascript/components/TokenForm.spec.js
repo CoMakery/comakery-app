@@ -94,7 +94,8 @@ describe('TokenForm', () => {
     const tokenTypes = {
       'ERC20': 'erc20',
       'QRC20': 'qrc20',
-      'ETH'  : 'eth'
+      'ETH'  : 'eth',
+      'Token Release Schedule': 'token_release_schedule'
     }
     const wrapper = mount(<TokenForm token={token} tokenTypes={tokenTypes} />)
 
@@ -127,6 +128,50 @@ describe('TokenForm', () => {
     ).props().value).toBe('test')
   })
 
+  it('renders correctly with token_release_schedule token', () => {
+    const token = {
+      'id'                     : 0,
+      'name'                   : 'Token Release Schedule',
+      'TokenType'              : 'token_release_schedule',
+      'Blockchain'             : 'ethereum',
+      'contractAddress'        : '0x00',
+      'symbol'                 : 'token_release_schedule',
+      'decimalPlaces'          : 2,
+      'logoUrl'                : '/ERCT.png'
+    }
+    const tokenTypes = {
+      'erc20': 'erc20',
+      'QRC20': 'qrc20',
+      'ETH'  : 'eth',
+      'Token Release Schedule': 'token_release_schedule'
+    }
+    const wrapper = mount(<TokenForm token={token} tokenTypes={tokenTypes} />)
+
+    expect(wrapper.find(
+        'InputFieldDropdownHalfed[title="token type"][required][name="token[_token_type]"]'
+    ).props().value).toBe('token_release_schedule')
+
+    expect(wrapper.find(
+        'InputFieldHalfed[title="token name"][name="token[name]"][placeholder="Bitcoin"]'
+    ).props().value).toBe('Token Release Schedule')
+
+    expect(wrapper.find(
+        'InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"]'
+    ).props().imgPreviewUrl).toBe('/ERCT.png')
+
+    expect(wrapper.find(
+        'InputFieldHalfed[title="token symbol"][required][readOnly][name="token[symbol]"][placeholder="..."]'
+    ).props().value).toBe('token_release_schedule')
+
+    expect(wrapper.find(
+        'InputFieldHalfed[title="decimal places"][required][readOnly][name="token[decimal_places]"][placeholder="..."]'
+    ).props().value).toBe('2')
+
+    expect(wrapper.find(
+        'InputFieldDropdownHalfed[title="blockchain network"][required][name="token[_blockchain]"]'
+    ).props().value).toBe('ethereum')
+  })
+
   it('renders correctly with eth token', () => {
     const token = {
       'id'                     : 1,
@@ -141,7 +186,8 @@ describe('TokenForm', () => {
     const tokenTypes = {
       'ERC20': 'erc20',
       'QRC20': 'qrc20',
-      'ETH'  : 'eth'
+      'ETH'  : 'eth',
+      'Token Release Schedule': 'token_release_schedule'
     }
     const wrapper = mount(<TokenForm token={token} tokenTypes={tokenTypes} />)
 
@@ -162,7 +208,8 @@ describe('TokenForm', () => {
     const tokenTypes = {
       'ERC20': 'erc20',
       'QRC20': 'qrc20',
-      'ETH'  : 'eth'
+      'ETH'  : 'eth',
+      'Token Release Schedule': 'token_release_schedule'
     }
     const wrapper = mount(<TokenForm tokenTypes={tokenTypes} />)
 
@@ -256,19 +303,19 @@ describe('TokenForm', () => {
 
     wrapper.setState({
       errors: {
-        'token[_token_type]' : '_token_type error',
-        'token[logo_image]': 'logo_image error'
+        'token[_token_type]' : ['_token_type error'],
+        'token[logo_image]'  : ['logo_image error']
       }
     })
 
     wrapper.update()
 
-    expect(wrapper.exists(
-      'InputFieldDropdownHalfed[errorText="_token_type error"][title="token type"][required][name="token[_token_type]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldDropdownHalfed[title="token type"][required][name="token[_token_type]"] .input-field--error').html()
+    ).toContain('_token_type error')
 
-    expect(wrapper.exists(
-      'InputFieldUploadFile[errorText="logo_image error"][title="token logo"][required][name="token[logo_image]"]'
-    )).toBe(true)
+    expect(
+      wrapper.find('InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"] .input-field--error').html()
+    ).toContain('logo_image error')
   })
 })

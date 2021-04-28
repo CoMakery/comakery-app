@@ -23,13 +23,13 @@ class TokenType::Eth < TokenType
   # Wallet logo filename for UI purposes (relative to `app/assets/images`)
   # @return [String] filename
   def wallet_logo
-    'OREID_Logo_Symbol.svg'
+    'wallet-connect-logo.svg'
   end
 
   # Contract instance if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20.new
+    Comakery::Eth.new(blockchain.explorer_api_host)
   end
 
   # ABI structure if present
@@ -84,5 +84,21 @@ class TokenType::Eth < TokenType
   # @return [Boolean] flag
   def supports_token_freeze?
     false
+  end
+
+  def blockchain
+    attrs[:blockchain]
+  end
+
+  # Does it have support for fetching balance?
+  # @return [Boolean] flag
+  def supports_balance?
+    true
+  end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(wallet_address)
+    contract.account_balance(wallet_address)
   end
 end

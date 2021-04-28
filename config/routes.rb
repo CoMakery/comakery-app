@@ -159,6 +159,9 @@ Rails.application.routes.draw do
   namespace :sign, defaults: { format: :json } do
     match 'ore_id/new', to: 'ore_id#new', via: [:get, :post]
     get 'ore_id/receive'
+
+    match 'user_wallet/new', to: 'user_wallet#new', via: [:get, :post]
+    get 'user_wallet/receive'
   end
 
   namespace :api, defaults: { format: :json } do
@@ -185,6 +188,11 @@ Rails.application.routes.draw do
 
       resources :tokens, only: :index do
         resources :account_token_records, only: [:index, :create] do
+          collection do
+            delete :index, action: :destroy_all
+          end
+        end
+        resources :wallet_transfer_rules, controller: 'account_token_records', only: [:index, :create] do
           collection do
             delete :index, action: :destroy_all
           end

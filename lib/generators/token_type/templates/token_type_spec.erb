@@ -18,4 +18,6 @@ describe TokenType::<%= class_name %> do
   specify { expect(described_class.new.supports_token_mint?).to be_falsey }
   specify { expect(described_class.new.supports_token_burn?).to be_falsey }
   specify { expect(described_class.new.supports_token_freeze?).to be_falsey }
+  specify { expect(described_class.new.supports_balance?).to be_falsey }
+  specify { expect(described_class.new.blockchain_balance('')).to raise_error(NotImplementedError) }
 end

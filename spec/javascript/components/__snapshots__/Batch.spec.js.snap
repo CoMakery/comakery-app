@@ -17,7 +17,7 @@ exports[`Batch renders component correctly 1`] = `
           "attrs": Array [],
           "componentStyle": ComponentStyle {
             "componentId": "sc-gZMcBi",
-            "isStatic": true,
+            "isStatic": false,
             "lastClassName": "dlGMur",
             "rules": Array [
               "
@@ -27,7 +27,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
             ],
           },
-          "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
           "styledComponentId": "sc-gZMcBi",
@@ -79,7 +78,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-gqjmRU",
@@ -104,7 +102,7 @@ exports[`Batch renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-jTzLTM",
-                  "isStatic": true,
+                  "isStatic": false,
                   "lastClassName": "cNhanF",
                   "rules": Array [
                     "
@@ -114,7 +112,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                   ],
                 },
-                "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
                 "styledComponentId": "sc-jTzLTM",
@@ -137,7 +134,7 @@ exports[`Batch renders component correctly 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-fjdhpX",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "fcVVVW",
                         "rules": Array [
                           "
@@ -157,7 +154,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-fjdhpX",
@@ -180,7 +176,7 @@ exports[`Batch renders component correctly 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-jzJRlG",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "jUkrDM",
                               "rules": Array [
                                 "
@@ -196,7 +192,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-jzJRlG",
@@ -226,7 +221,7 @@ exports[`Batch renders component correctly 1`] = `
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-bxivhb",
-                                "isStatic": true,
+                                "isStatic": false,
                                 "lastClassName": "ljVujs",
                                 "rules": Array [
                                   "
@@ -240,7 +235,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-bxivhb",
@@ -263,7 +257,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-ifAKCX",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "gATvmT",
                                       "rules": Array [
                                         "
@@ -271,7 +265,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-ifAKCX",
@@ -303,7 +296,7 @@ exports[`Batch renders component correctly 1`] = `
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-cSHVUG",
-                        "isStatic": true,
+                        "isStatic": false,
                         "lastClassName": "kvLtpp",
                         "rules": Array [
                           "
@@ -321,7 +314,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                         ],
                       },
-                      "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
                       "styledComponentId": "sc-cSHVUG",
@@ -347,7 +339,7 @@ exports[`Batch renders component correctly 1`] = `
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-bdVaJa",
-                                "isStatic": true,
+                                "isStatic": false,
                                 "lastClassName": "gPWqlF",
                                 "rules": Array [
                                   "
@@ -357,7 +349,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-bdVaJa",
@@ -380,7 +371,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-bwzfXH",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "ekDaoc",
                                       "rules": Array [
                                         "
@@ -397,7 +388,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-bwzfXH",
@@ -424,7 +414,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-htpNat",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "vZQMM",
                                       "rules": Array [
                                         "
@@ -439,7 +429,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-htpNat",
@@ -473,7 +462,7 @@ exports[`Batch renders component correctly 1`] = `
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-bdVaJa",
-                                "isStatic": true,
+                                "isStatic": false,
                                 "lastClassName": "gPWqlF",
                                 "rules": Array [
                                   "
@@ -483,7 +472,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-bdVaJa",
@@ -506,7 +494,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-bwzfXH",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "ekDaoc",
                                       "rules": Array [
                                         "
@@ -523,7 +511,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-bwzfXH",
@@ -550,7 +537,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-htpNat",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "vZQMM",
                                       "rules": Array [
                                         "
@@ -565,7 +552,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-htpNat",
@@ -592,7 +578,7 @@ exports[`Batch renders component correctly 1`] = `
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
                                               "componentId": "sc-gzVnrw",
-                                              "isStatic": true,
+                                              "isStatic": false,
                                               "lastClassName": "dDxFqh",
                                               "rules": Array [
                                                 "
@@ -602,7 +588,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                               ],
                                             },
-                                            "displayName": "styled.div",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
                                             "styledComponentId": "sc-gzVnrw",
@@ -625,7 +610,7 @@ exports[`Batch renders component correctly 1`] = `
                                                   "attrs": Array [],
                                                   "componentStyle": ComponentStyle {
                                                     "componentId": "sc-htoDjs",
-                                                    "isStatic": true,
+                                                    "isStatic": false,
                                                     "lastClassName": "hfeNrq",
                                                     "rules": Array [
                                                       "
@@ -634,7 +619,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                                     ],
                                                   },
-                                                  "displayName": "styled.div",
                                                   "foldedComponentIds": Array [],
                                                   "render": [Function],
                                                   "styledComponentId": "sc-htoDjs",
@@ -673,7 +657,7 @@ exports[`Batch renders component correctly 1`] = `
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-bdVaJa",
-                                "isStatic": true,
+                                "isStatic": false,
                                 "lastClassName": "gPWqlF",
                                 "rules": Array [
                                   "
@@ -683,7 +667,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                 ],
                               },
-                              "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
                               "styledComponentId": "sc-bdVaJa",
@@ -706,7 +689,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-bwzfXH",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "ekDaoc",
                                       "rules": Array [
                                         "
@@ -723,7 +706,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-bwzfXH",
@@ -750,7 +732,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-htpNat",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "vZQMM",
                                       "rules": Array [
                                         "
@@ -765,7 +747,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "styled.div",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-htpNat",
@@ -792,7 +773,7 @@ exports[`Batch renders component correctly 1`] = `
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
                                               "componentId": "sc-gzVnrw",
-                                              "isStatic": true,
+                                              "isStatic": false,
                                               "lastClassName": "dDxFqh",
                                               "rules": Array [
                                                 "
@@ -802,7 +783,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                               ],
                                             },
-                                            "displayName": "styled.div",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
                                             "styledComponentId": "sc-gzVnrw",
@@ -825,7 +805,7 @@ exports[`Batch renders component correctly 1`] = `
                                                   "attrs": Array [],
                                                   "componentStyle": ComponentStyle {
                                                     "componentId": "sc-htoDjs",
-                                                    "isStatic": true,
+                                                    "isStatic": false,
                                                     "lastClassName": "hfeNrq",
                                                     "rules": Array [
                                                       "
@@ -834,7 +814,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                                     ],
                                                   },
-                                                  "displayName": "styled.div",
                                                   "foldedComponentIds": Array [],
                                                   "render": [Function],
                                                   "styledComponentId": "sc-htoDjs",
@@ -870,7 +849,7 @@ exports[`Batch renders component correctly 1`] = `
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-kAzzGY",
-                              "isStatic": true,
+                              "isStatic": false,
                               "lastClassName": "cYhmyz",
                               "rules": Array [
                                 "
@@ -887,7 +866,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                               ],
                             },
-                            "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
                             "styledComponentId": "sc-kAzzGY",
@@ -913,7 +891,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-chPdSV",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "DlMfj",
                                       "rules": Array [
                                         "
@@ -921,7 +899,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "Styled(Icon)",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-chPdSV",
@@ -961,7 +938,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-chPdSV",
-                                      "isStatic": true,
+                                      "isStatic": false,
                                       "lastClassName": "DlMfj",
                                       "rules": Array [
                                         "
@@ -969,7 +946,6 @@ exports[`Batch renders component correctly 1`] = `
 ",
                                       ],
                                     },
-                                    "displayName": "Styled(Icon)",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
                                     "styledComponentId": "sc-chPdSV",

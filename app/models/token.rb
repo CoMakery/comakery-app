@@ -25,6 +25,7 @@ class Token < ApplicationRecord
   scope :listed, -> { where unlisted: false }
   scope :available_for_algorand_opt_in, -> { where(_token_type: %w[asa algorand_security_token]) }
   scope :available_for_provision, -> { where(_token_type: %w[asa algorand_security_token]) }
+  scope :support_balance, -> { where(_token_type: TokenType.with_balance_support_list) }
 
   enum denomination: {
     USD: 0,
@@ -68,7 +69,7 @@ class Token < ApplicationRecord
   } # Deprecated
 
   enum _token_type: TokenType.list, _prefix: :_token_type
-  delegate :contract, :abi, to: :token_type
+  delegate :contract, :abi, :supports_balance?, :blockchain_balance, to: :token_type
 
   ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
     parent.table[:_blockchain]

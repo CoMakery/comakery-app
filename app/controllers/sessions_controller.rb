@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  include ProtectedWithRecaptcha
+
   skip_before_action :require_login, :check_age
   skip_before_action :require_email_confirmation, only: %i[destroy]
   skip_after_action :verify_authorized, :verify_policy_scoped
@@ -35,21 +37,29 @@ class SessionsController < ApplicationController
                                                            email: params[:email],
                                                            password: params[:password])
 
-    if verify_recaptcha(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success?
+    if recaptcha_valid?(model: authenticate_user_result.account, action: 'login') && authenticate_user_result.success? && mitigate_session_fixation
       session[:account_id] = authenticate_user_result.account.id
 
       redirect_to redirect_path
     else
-      redirect_to new_session_path, flash: { error: 'Invalid email or password' }
+      flash.now[:error] = 'Invalid email or password'
+
+      render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
-    session[:account_id] = nil
+    mitigate_session_fixation
     redirect_to root_path
   end
 
   protected
+
+    def mitigate_session_fixation
+      old_values = session.to_hash.symbolize_keys
+      reset_session
+      session.update old_values.except(:session_id, :account_id)
+    end
 
     def auth_hash
       request.env['omniauth.auth']

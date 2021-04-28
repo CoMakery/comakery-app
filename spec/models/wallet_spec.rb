@@ -109,8 +109,31 @@ describe Wallet, type: :model do
   end
 
   describe '#coin_balance', vcr: true do
-    subject { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
-    specify { expect(subject.coin_balance).to be_a(Balance) }
+    let!(:token) { create(:algorand_token) }
+    let(:wallet) { create(:wallet, _blockchain: :algorand_test, address: build(:algorand_address_1)) }
+    subject { wallet.coin_balance }
+
+    context 'with no balance created' do
+      it 'creates a balance' do
+        expect(SyncBalanceJob).to receive(:set).and_call_original
+        expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later).and_call_original
+
+        is_expected.to be_a Balance
+        balance = Balance.last
+        expect(balance.wallet).to eq wallet
+        expect(balance.token).to eq token
+      end
+    end
+
+    context 'with a balance created' do
+      it 'returns created balance' do
+        expect(SyncBalanceJob).to receive(:set).and_call_original
+        expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later).and_call_original
+
+        balance = create(:balance, wallet: wallet, token: token)
+        is_expected.to eq balance
+      end
+    end
   end
 
   describe '#set_primary_flag' do

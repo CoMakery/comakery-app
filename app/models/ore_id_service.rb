@@ -69,11 +69,14 @@ class OreIdService
 
   def permissions
     filtered_permissions.map do |params|
+      blockchain = Blockchain.find_with_ore_id_name(params['chainNetwork'])
+      next unless blockchain
+
       {
-        _blockchain: Blockchain.find_with_ore_id_name(params['chainNetwork']).name.underscore,
+        _blockchain: blockchain.name.underscore,
         address: params['chainAccount']
       }
-    end
+    end.compact
   rescue NoMethodError
     raise OreIdService::RemoteInvalidError
   end

@@ -4,11 +4,12 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
+
+  include ActiveStorageValidator
+  include EthereumAddressable
+
   # attachment :image, type: :image
   has_one_attached :image
-
-  include EthereumAddressable
-  include ActiveStorageValidator
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_and_belongs_to_many :admin_projects, class_name: 'Project'
@@ -329,6 +330,14 @@ class Account < ApplicationRecord
 
   def address_for_blockchain(blockchain)
     wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
+  end
+
+  def sync_balances_later
+    wallets.find_each do |wallet|
+      wallet.tokens_of_the_blockchain.find_each do |token|
+        Balance.find_or_create_by(token: token, wallet: wallet).sync_with_blockchain_later
+      end
+    end
   end
 
   private

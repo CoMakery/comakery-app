@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Projects - Upside</title>
+    <!-- CSS files -->
+    <link href="./dist/css/upside.css" rel="stylesheet"/>
+    <link href="./dist/css/upside-vendors.min.css" rel="stylesheet"/>
+    <link href="./dist/css/admin.css" rel="stylesheet"/>
+  </head>
+  <body class="antialiased">
+    <div class="page">
+      <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+        <span id="main-side-handbar" class="handbar"></span>
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="navbar-brand navbar-brand-autodark">
+            <img alt="Upside" class="navbar-brand-image">              
+          </h1>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="navbar-nav pt-lg-3">
+              <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.89543 0 2V3V6C0 7.10457 0.895431 8 2 8H6C7.10457 8 8 7.10457 8 6V2C8 0.895431 7.10457 0 6 0H2ZM2 2H6V6H2V3V2ZM12 0C10.8954 0 10 0.89543 10 2V3V6C10 7.10457 10.8954 8 12 8H16C17.1046 8 18 7.10457 18 6V2C18 0.895431 17.1046 0 16 0H12ZM12 2H16V6H12V3V2ZM10 12C10 10.8954 10.8954 10 12 10H16C17.1046 10 18 10.8954 18 12V16C18 17.1046 17.1046 18 16 18H12C10.8954 18 10 17.1046 10 16V13V12ZM16 12H12V13V16H16V12ZM2 10C0.895431 10 0 10.8954 0 12V13V16C0 17.1046 0.895431 18 2 18H6C7.10457 18 8 17.1046 8 16V12C8 10.8954 7.10457 10 6 10H2ZM2 12H6V16H2V13V12Z" fill="currentColor"></path>
+                    </svg>
+                  </span>
+                  <span class="nav-link-title">
+                    Projects
+                  </span>
+                </a>
+              </li>     
+              <li class="nav-item ">
+                <a class="nav-link" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg width="16.67" height="15" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M19 6.55773C19 5.0609 17.7943 3.83259 16.2584 3.70763L15.6224 1.93532C15.0695 0.394627 13.2812 -0.395792 11.6908 0.197587L2.13569 3.76269C2.04025 3.7983 1.95378 3.84635 1.87753 3.90413C0.776754 4.32788 0 5.35631 0 6.55773V15.1394C0 16.7193 1.34315 18 3 18L16 18C17.6569 18 19 16.7193 19 15.1394V12.9773C19.5978 12.6475 20 12.0312 20 11.3253V9.4183C20 8.71242 19.5978 8.09612 19 7.76638V6.55773ZM17 7.51125V6.55773C17 6.03112 16.5523 5.60421 16 5.60421L3 5.60421C2.44772 5.60421 2 6.03112 2 6.55773L2 15.1394C2 15.666 2.44772 16.093 3 16.093L16 16.093C16.5523 16.093 17 15.666 17 15.1394V13.2324H16C14.3431 13.2324 13 11.9517 13 10.3718C13 8.79198 14.3431 7.51126 16 7.51125H17ZM13.7301 2.55276L14.1408 3.69716L7.7999 3.69717L12.4196 1.97351C12.9497 1.77572 13.5458 2.03919 13.7301 2.55276ZM15 10.3718C15 9.84521 15.4477 9.4183 16 9.4183H18V11.3253H16C15.4477 11.3253 15 10.8984 15 10.3718Z" fill="currentColor"></path>
+                    </svg>
+                  </span>
+                  <span class="nav-link-title">
+                    Wallets
+                  </span>
+                </a>         
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg width="15" height="16.67" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.0545 8.95455C18.1328 8.70418 18.1757 8.44407 18.1818 8.18182V4.54545C18.1818 1.95455 14.2727 0 9.09091 0C3.90909 0 0 1.95455 0 4.54545V8.18182C0.0501129 8.78746 0.255456 9.36997 0.596221 9.87316C0.936985 10.3763 1.40167 10.7832 1.94545 11.0545C1.86198 11.3005 1.819 11.5584 1.81818 11.8182V15.4545C1.81818 18.0455 5.72727 20 10.9091 20C16.0909 20 20 18.0455 20 15.4545V11.8182C19.951 11.2134 19.746 10.6317 19.405 10.1298C19.064 9.62785 18.5987 9.22294 18.0545 8.95455ZM9.09091 12.7273C12.5909 12.7273 15.5091 11.8182 17.0364 10.4545C17.7636 10.8909 18.1818 11.3636 18.1818 11.8182C18.1818 12.9273 15.3455 14.5455 10.9091 14.5455C6.47273 14.5455 3.71818 12.9727 3.63636 11.8636C5.39141 12.4628 7.23661 12.755 9.09091 12.7273ZM9.09091 1.81818C13.5273 1.81818 16.3636 3.43636 16.3636 4.54545C16.3636 5.65455 13.5273 7.27273 9.09091 7.27273C4.65455 7.27273 1.81818 5.65455 1.81818 4.54545C1.81818 3.43636 4.65455 1.81818 9.09091 1.81818ZM1.81818 7.32727C4.02926 8.58506 6.5493 9.19617 9.09091 9.09091C11.6325 9.19617 14.1526 8.58506 16.3636 7.32727V8.18182C16.3636 9.29091 13.5273 10.9091 9.09091 10.9091C4.65455 10.9091 1.81818 9.29091 1.81818 8.18182V7.32727ZM10.9091 18.1818C6.47273 18.1818 3.63636 16.5636 3.63636 15.4545V14.6C5.84744 15.8578 8.36748 16.4689 10.9091 16.3636C13.4507 16.4689 15.9707 15.8578 18.1818 14.6V15.4545C18.1818 16.5636 15.3455 18.1818 10.9091 18.1818Z" fill="currentColor"/>
+                    </svg> 
+                  </span>
+                  <span class="nav-link-title">
+                    Token Admin
+                  </span>
+                </a>         
+              </li>
+            </ul>
+          </div>
+          <div class="profile d-flex flex-row align-items-center">
+            <img class="rounded-circle" width="30" height="30" src="./static/avatars/000m.jpg">
+            <label class="ms-2 flex-fill h14 font-weight-medium n2-color ">Noah Thorp</label>
+            <a href="#">
+              <svg class="n2-color" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </aside>       
+      <div class="content">                
+        <div class="container-xl">
+          <!-- Page title -->
+          <div class="page-header page-header-border">
+            <div class="row row-cards align-items-center">
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex align-items-center">
+                  <span class="d-inline-block page-title h18 n13-color">
+                    Projects
+                  </span>
+                  <div class="d-inline-block input-icon">
+                    <span class="input-icon-addon">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Search Product">
+                  </div>
+                </div>  
+              </div>
+              <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex justify-content-end">
+                  <div class="d-flex align-items-center">
+                    <span class="h12 font-weight-medium n11-color">Sort by:</span>
+                    <span class="ms-1 h12 p5-color">Alphabetical</span>
+                    <svg class="ms-1 p5-color" width="5" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <div class="d-flex align-items-center ms-3">
+                    <span class="h12 font-weight-medium n11-color">Filter by:</span>
+                    <span class="ms-1 h12 p5-color">An Admin of</span>
+                    <svg class="ms-1 p5-color" width="5" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <div class="d-flex align-items-center ms-3">
+                    <span class="h12 font-weight-medium n11-color">Visibility:</span>
+                    <span class="ms-1 h12 p5-color">All</span>
+                    <svg class="ms-1 p5-color" width="5" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <a href="#" class="btn btn-primary h12 ms-3">
+                    Create New Project
+                  </a>
+                </div>    
+              </div>
+            </div>
+          </div>
+          <div class="row row-cards">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <a class="card card-link border-0 rounded-3" href="#">
+                <div class="card-cover" style="background-image: url(./static/project.jpg)">
+                  <svg class="n10-color float-end" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+                  </svg>
+                </div>
+                <div class="card-body text-center bg-white">
+                  <div class="d-flex flex-row align-items-center">
+                    <div class="h14 n12-color">Project Name</div>
+                    <label class="form-label-round form-label-round-small h11 font-weight-medium g7-color g1-bg ms-2">Public</label>
+                  </div>
+                  <div class="d-flex flex-row align-items-center mt-1">
+                    <div class="h12 font-weight-medium n9-color">Total Authorize:</div>
+                    <div class="h12 n10-color ms-1">800,000 TKN</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./dist/js/upside.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $("#main-side-handbar").click(function(){
+        console.log("main side bar")
+        if($("#main-side").hasClass("navbar-collapsed")){
+          $("#main-side").removeClass("navbar-collapsed")
+          $(".content").removeClass("navbar-ms-0")
+        }else{
+          $("#main-side").addClass("navbar-collapsed")
+          $(".content").addClass("navbar-ms-0")
+        }
+      })
+    </script>
+  </body>
+</html>

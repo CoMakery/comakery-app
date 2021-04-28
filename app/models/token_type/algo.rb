@@ -29,7 +29,7 @@ class TokenType::Algo < TokenType
   # Contract instance if implemented
   # @return [nil]
   def contract
-    # Comakery::Eth::Contract::Erc20.new.new
+    @contract ||= Comakery::Algorand.new(blockchain)
   end
 
   # ABI structure if present
@@ -84,5 +84,21 @@ class TokenType::Algo < TokenType
   # @return [Boolean] flag
   def supports_token_freeze?
     false
+  end
+
+  def blockchain
+    attrs[:blockchain]
+  end
+
+  # Does it have support for fetching balance?
+  # @return [Boolean] flag
+  def supports_balance?
+    true
+  end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(wallet_address)
+    contract.account_balance(wallet_address)
   end
 end

@@ -118,4 +118,16 @@ class TokenType::AlgorandSecurityToken < TokenType
   def accounts_sync_job
     ::AlgorandSecurityToken::AccountTokenRecordsSyncJob
   end
+
+  # Does it have support for fetching balance?
+  # @return [Boolean] flag
+  def supports_balance?
+    true
+  end
+
+  # Return balance of symbol for provided addr
+  # @return [Integer] balance
+  def blockchain_balance(wallet_address)
+    contract.app_balance(wallet_address)
+  end
 end

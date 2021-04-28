@@ -19,6 +19,7 @@ describe TokenType::AlgorandSecurityToken, vcr: true do
   specify { expect(described_class.new(**attrs).supports_token_mint?).to be_truthy }
   specify { expect(described_class.new(**attrs).supports_token_burn?).to be_truthy }
   specify { expect(described_class.new(**attrs).supports_token_freeze?).to be_truthy }
+  specify { expect(described_class.new(**attrs).supports_balance?).to be_truthy }
   specify { expect(described_class.new(**attrs).default_reg_group).to eq(1) }
   specify { expect(described_class.new(**attrs).transfer_rule_sync_job).to eq(AlgorandSecurityToken::TransferRulesSyncJob) }
   specify { expect(described_class.new(**attrs).accounts_sync_job).to eq(AlgorandSecurityToken::AccountTokenRecordsSyncJob) }
@@ -38,6 +39,17 @@ describe TokenType::AlgorandSecurityToken, vcr: true do
       it 'raises an error' do
         expect { described_class.new(**attrs).contract }.to raise_error(TokenType::Contract::ValidationError)
       end
+    end
+  end
+
+  describe '#blockchain_balance' do
+    let(:token_type) { described_class.new(**attrs) }
+    subject { token_type.blockchain_balance('dummy_wallet_address') }
+
+    it 'gets balance from a contract' do
+      expect_any_instance_of(Comakery::Algorand).to receive(:app_balance).with('dummy_wallet_address').and_return(999)
+
+      is_expected.to eq 999
     end
   end
 end
