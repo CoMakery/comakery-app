@@ -103,4 +103,6 @@ class ProjectPolicy < ApplicationPolicy
   def add_person?
     account.comakery_admin?
   end
+
+  alias update_permissions? add_person?
 end

@@ -101,4 +101,30 @@ describe 'project accounts page' do
       end
     end
   end
+
+  context 'with settings', js: true do
+    let(:admin) { create(:account, comakery_admin: true) }
+    let(:project) { create(:project, account: admin) }
+    let(:account) { create(:account) }
+
+    before { login(admin) }
+
+    context 'change permissions' do
+      it 'updates account role' do
+        subject
+
+        execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #changePermissionsBtn').click()")
+
+        within('#accountPermissionModal') do
+          select 'Admin', from: 'interest[role]'
+
+          execute_script("document.querySelector('#accountPermissionModal input[type=submit]').click()")
+        end
+
+        expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
+
+        expect(account.interests.last.reload.role).to eq('admin')
+      end
+    end
+  end
 end
