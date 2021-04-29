@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     end
   end
   resources :algorand_opt_ins, only: %i[index create]
-  resources :accounts, only: [:new, :create, :show] do
+  resources :accounts, only: [:index, :new, :create, :show] do
     collection do
       get :download_data
       get :build_profile

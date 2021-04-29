@@ -104,6 +104,12 @@ class Account < ApplicationRecord
 
   after_create :populate_awards
 
+  after_update_commit :broadcast_update_wl_account_wallet, if: lambda {
+    whitelabel? && (saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?)
+  }
+
+  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { whitelabel? }
+
   class << self
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
@@ -340,6 +346,10 @@ class Account < ApplicationRecord
     end
   end
 
+  def whitelabel?
+    managed_mission&.whitelabel?
+  end
+
   private
 
     def validate_age
@@ -375,6 +385,24 @@ class Account < ApplicationRecord
     def populate_awards
       Award.accepted.where(email: email, account_id: nil).find_each do |a|
         a.update(account: self, email: nil)
+      end
+    end
+
+    def broadcast_update_wl_account_wallet
+      wallets.each do |wallet|
+        broadcast_replace_to "wl_#{managed_mission.id}_account_wallets",
+                             target: "wl_account_#{id}_wallet_#{wallet.id}",
+                             partial: 'accounts/partials/index/wl_account_wallet',
+                             locals: { wl_account_wallet: wallet }
+      end
+    end
+
+    def broadcast_destroy_wl_account_wallet
+      wallet_ids.each do |wallet_id|
+        Turbo::StreamsChannel.broadcast_remove_to(
+          "wl_#{managed_mission.id}_account_wallets",
+          target: "wl_account_#{id}_wallet_#{wallet_id}"
+        )
       end
     end
 end

@@ -8567,10 +8567,8 @@ Navbar brand
   display: block;
   height: 24px;
   width: auto;
-  content: url("../../static/logo-white.svg");
 }
 .navbar-collapsed .navbar-brand-image{
-  content: url("../../static/logo-small.svg");
 }
 /**
 Navbar toggler
@@ -13947,4 +13945,51 @@ Secondary Sidebar
     position: initial;
     width: 100%;
   }
+}
+
+.pagination {
+  text-transform: uppercase;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: -8px;
+}
+
+.pagination .page,
+.pagination .first,
+.pagination .next,
+.pagination .prev,
+.pagination .gap,
+.pagination .last {
+  font-family: Montserrat, sans-serif;
+  box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #1560fa;
+  margin-right: 5px;
+  display: flex;
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 3px;
+  min-height: auto;
+}
+
+.pagination .current {
+  background-color: #1560fa;
+  color: #ffffff;
+}
+
+.pagination .gap {
+  border: none;
+}
+
+.pagination a {
+  color: #1560fa;
+  text-decoration: none;
 }

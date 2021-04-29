@@ -28,4 +28,20 @@ describe AccountPolicy do
       expect(described_class.new(nil, nil).new?).to be_truthy
     end
   end
+
+  describe 'index?' do
+    subject(:policy) { described_class.new(account, nil) }
+
+    context 'for an admin account' do
+      let(:account) { create :account, comakery_admin: true }
+
+      it { expect(policy.index?).to be true }
+    end
+
+    context 'for an admin account' do
+      let(:account) { create :account, comakery_admin: false }
+
+      it { expect(policy.index?).to be false }
+    end
+  end
 end
