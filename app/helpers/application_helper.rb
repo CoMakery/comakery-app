@@ -68,7 +68,7 @@ module ApplicationHelper
       env: {
         PROJECT_ID: project.id,
         COMAKERY_SERVER_URL: "#{request.protocol}#{request.host_with_port}",
-        BLOCKCHAIN_NETWORK: token._blockchain,
+        BLOCKCHAIN_NETWORK: token._blockchain
       }
     }
 
