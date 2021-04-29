@@ -19,7 +19,6 @@ describe ProjectPolicy do
   let!(:other_channel) { create :channel, team: team1, project: my_private_project, name: 'other_channel', channel_id: 'other_channel' }
   let!(:confidential_channel) { create :channel, team: team1, project: my_public_project_business_confidential, name: 'confidential_channel', channel_id: 'confidential_channel' }
 
-  let!(:admin) { create(:account, comakery_admin: true) }
   let!(:other_team_member) { create(:account) }
   let!(:other_team_member_auth) { create(:authentication, account: other_team_member) }
   let!(:others_public_project) { create(:project, title: 'public someone elses', account: other_team_member, visibility: 'public_listed') }
@@ -240,24 +239,6 @@ describe ProjectPolicy do
 
     specify 'other team member' do
       expect(described_class.new(other_team_member, my_public_project).refresh_transfer_rules?).to be false
-    end
-  end
-
-  describe '#update_permissions?' do
-    specify 'super admin' do
-      expect(described_class.new(admin, my_public_project).update_permissions?).to be true
-    end
-
-    specify 'project admin' do
-      expect(described_class.new(project_admin, my_public_project).update_permissions?).to be false
-    end
-
-    specify 'project owner' do
-      expect(described_class.new(project_account, my_public_project).update_permissions?).to be false
-    end
-
-    specify 'other team member' do
-      expect(described_class.new(other_team_member, my_public_project).update_permissions?).to be false
     end
   end
 

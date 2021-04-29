@@ -4,7 +4,7 @@ class Projects::InvitesController < ApplicationController
   before_action :find_project
 
   def create
-    authorize @project, :add_person?
+    authorize(@project, :project_admin?)
 
     send_invite_result = SendInvite.call(project: @project, params: params)
 

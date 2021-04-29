@@ -21,7 +21,7 @@ module Projects
       end
 
       def update
-        authorize @project, :update_permissions?
+        authorize(@project, :project_admin?)
 
         respond_to do |format|
           if @interest.update(role: params[:interest][:role])
