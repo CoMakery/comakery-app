@@ -18,13 +18,15 @@
     <br>
     <div class="input-icon mb-3 mt-1">
       <div class="choices">
-        <div class="h12 font-weight-medium n10-color ms-1">Permissions</div>
+        <div class="h12 font-weight-medium n10-color ms-1">PERMISSIONS</div>
+        <br>
         <%= f.select :role,
                      options_for_select(
                          Interest.roles.keys.collect { |role| [role.titleize, role] },
                          selected: interest.role
                      ),
-                     class: 'form-select form-control' %>
+                     {},
+                     { class: 'form-select form-control' } %>
       </div>
     </div>
   </div>
