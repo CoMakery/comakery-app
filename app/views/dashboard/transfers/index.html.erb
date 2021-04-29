@@ -38,6 +38,13 @@
                 data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
               ) %>
             </div>
+        <% elsif policy(@project).edit_hot_wallet_mode? %>
+          <div class="text-right hot-wallet">
+            <h3>Deploy a hot wallet:</h3>
+            <a href="<%= deploy_to_heroku_url(@project) %>">
+              <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+            </a>
+          </div>
         <% end %>
       </div>
     </div>
