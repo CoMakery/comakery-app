@@ -1,0 +1,42 @@
+<%= content_for :head do %>
+  <%= stylesheet_link_tag 'upside', media: 'all', 'data-turbo-track': 'reload' %>
+<% end %>
+
+<div class="row row-cards">
+  <div class="col-12">
+    <div class="card n1-bg">
+      <div class="card-header">
+        <h3 class="card-title">All accounts</h3>
+      </div>
+      <div class="card-body">
+        <div id="table-scroll" class="table-responsive table-scroll">
+          <div class="table-wrap">
+            <table id="main-table" class="table table-vcenter card-table">
+              <thead>
+              <tr>
+                <th class="h10 n8-color">Name</th>
+                <th class="h10 n8-color">Email</th>
+                <th class="h10 n8-color">Blockchain</th>
+                <th class="h10 n8-color">Address</th>
+                <th class="h10 n8-color">Primary</th>
+                <th class="h10 n8-color">Vetting Status</th>
+                <th class="h10 n8-color">Vetting Date</th>
+                <th class="fixed-side"></th>
+              </tr>
+              </thead>
+              <body>
+              <%= turbo_stream_from "wl_#{@whitelabel_mission.id}_account_wallets" %>
+              <%= turbo_frame_tag "wl_#{@whitelabel_mission.id}_account_wallets" do %>
+                <%= render partial: 'accounts/partials/index/wl_account_wallet',
+                           collection: @wl_account_wallets,
+                           as: :wl_account_wallet %>
+              <% end %>
+              </body>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= paginate(@wl_account_wallets, window: 3) %>
+</div>

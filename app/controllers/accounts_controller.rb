@@ -2,15 +2,24 @@ require 'zip'
 
 class AccountsController < ApplicationController
   include ProtectedWithRecaptcha
+  include Rails::Pagination
 
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
-  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
+  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
 
   before_action :redirect_if_signed_in, only: %i[new create]
 
   layout 'legacy'
+
+  def index
+    authorize(current_user, :index?)
+
+    @wl_account_wallets = Wallet.with_whitelabel_mission(@whitelabel_mission.id).includes(account: :latest_verification)
+
+    @wl_account_wallets = paginate(@wl_account_wallets)
+  end
 
   def new
     @account = Account.new(email: params[:account_email])
