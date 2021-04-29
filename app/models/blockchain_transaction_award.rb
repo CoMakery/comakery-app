@@ -53,6 +53,14 @@ class BlockchainTransactionAward < BlockchainTransaction
       partial: 'shared/transfer_button_admin',
       locals: { transfer: blockchain_transactable }
     )
+
+    broadcast_replace_later_to(
+      blockchain_transactable,
+      :updates,
+      target: "transfer_prioritize_button_#{blockchain_transactable.id}",
+      partial: 'shared/transfer_prioritize_button',
+      locals: { transfer: blockchain_transactable }
+    )
   end
 
   private
