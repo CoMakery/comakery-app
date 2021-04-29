@@ -13,7 +13,7 @@ describe 'project page', :js do
 
     expect(page).to have_link('Tasks')
     visit(project_award_types_path(ready_task.project))
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(project_award_types_path(ready_task.project))
   end
 
   it 'shows tasks link if env whitelabel is set to true' do
@@ -22,7 +22,7 @@ describe 'project page', :js do
 
     expect(page).not_to have_link('Tasks')
     visit(project_award_types_path(ready_task.project))
-    expect(page).to have_current_path(project_award_types_path(ready_task.project))
+    expect(page).to have_current_path(root_path)
   end
 
   it 'shows ready tasks to a contributor' do
