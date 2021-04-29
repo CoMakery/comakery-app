@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     end
   end
   resources :algorand_opt_ins, only: %i[index create]
-  resources :accounts, only: [:new, :create, :show] do
+  resources :accounts, only: [:index, :new, :create, :show] do
     collection do
       get :download_data
       get :build_profile
@@ -159,6 +159,9 @@ Rails.application.routes.draw do
   namespace :sign, defaults: { format: :json } do
     match 'ore_id/new', to: 'ore_id#new', via: [:get, :post]
     get 'ore_id/receive'
+
+    match 'user_wallet/new', to: 'user_wallet#new', via: [:get, :post]
+    get 'user_wallet/receive'
   end
 
   namespace :api, defaults: { format: :json } do

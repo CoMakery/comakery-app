@@ -5,6 +5,5 @@ class SyncBalancesJob < ApplicationJob
     Balance.ready_for_balance_update.select(:id).find_each do |balance|
       SyncBalanceJob.perform_later(balance)
     end
-    true
   end
 end

@@ -18,7 +18,7 @@ module RansackReorder
       direction = direction == 'desc' ? 'desc' : 'asc'
       order_param =
         if order_column.in?(column_names)
-          "#{order_column} #{direction}"
+          "#{table_name}.#{order_column} #{direction}"
         elsif order_column.in?(special_orders)
           scope = send("prepare_ordering_by_#{order_column}", scope)
           send("#{order_column}_order_string", direction)

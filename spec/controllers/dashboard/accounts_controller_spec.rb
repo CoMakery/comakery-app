@@ -103,14 +103,18 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(account_token_record.wallet).to eq new_account.wallets.first
       end
 
-      context 'with comakery security token' do
-        it 'redirects to ore_id' do
+      context 'with a token supported by wallet connect' do
+        render_views
+
+        it 'renders json' do
           subject
-          expect(response).to have_http_status(:found)
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)).to include('tx_new_url')
+          expect(JSON.parse(response.body)).to include('tx_receive_url')
         end
       end
 
-      context 'with algorand security token', :vcr do
+      context 'with a token supported by ore id', :vcr do
         let(:account_token_record) { create(:blockchain_transaction_account_token_record_algo).blockchain_transactable }
 
         it 'redirects to ore_id' do

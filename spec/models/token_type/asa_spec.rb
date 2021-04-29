@@ -28,6 +28,7 @@ describe TokenType::Asa do
     specify { expect(subject.supports_token_mint?).to be_falsey }
     specify { expect(subject.supports_token_burn?).to be_falsey }
     specify { expect(subject.supports_token_freeze?).to be_falsey }
+    specify { expect(subject.supports_balance?).to be_truthy }
   end
 
   describe '#blockchain_balance' do

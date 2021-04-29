@@ -9,7 +9,7 @@ describe TokenType::Eth do
   specify { expect(described_class.new(**attrs).name).to eq('ETH') }
   specify { expect(described_class.new(**attrs).symbol).to eq('ETH') }
   specify { expect(described_class.new(**attrs).decimals).to eq(18) }
-  specify { expect(described_class.new(**attrs).wallet_logo).to eq('OREID_Logo_Symbol.svg') }
+  specify { expect(described_class.new(**attrs).wallet_logo).to eq('wallet-connect-logo.svg') }
   specify { expect(described_class.new(**attrs).contract).to be_a(Comakery::Eth) }
   specify { expect(described_class.new(**attrs).abi).to eq({}) }
   specify { expect(described_class.new(**attrs).tx).to eq(Comakery::Eth::Tx) }
@@ -20,6 +20,7 @@ describe TokenType::Eth do
   specify { expect(described_class.new(**attrs).supports_token_mint?).to be_falsey }
   specify { expect(described_class.new(**attrs).supports_token_burn?).to be_falsey }
   specify { expect(described_class.new(**attrs).supports_token_freeze?).to be_falsey }
+  specify { expect(described_class.new(**attrs).supports_balance?).to be_truthy }
 
   describe '#blockchain_balance' do
     let(:token_type) { described_class.new(**attrs) }

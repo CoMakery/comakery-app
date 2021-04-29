@@ -1,0 +1,6 @@
+<% bt_count = transfer.blockchain_transactions.count %>
+<%= turbo_frame_tag "transfer_history_button_#{transfer.id}", target: "_top" do %>
+  <% if bt_count > 0 %>
+    <%= link_to "#{bt_count} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
+  <% end %>
+<% end %>

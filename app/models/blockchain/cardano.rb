@@ -94,6 +94,12 @@ class Blockchain::Cardano < Blockchain
     raise Blockchain::Address::ValidationError, "should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters" unless CardanoAddressValidatorSchmoozer.new(__dir__).is_valid_address(addr)
   end
 
+  # Is it supported by WalletConnect service
+  # @return [Boolean] flag
+  def supported_by_wallet_connect?
+    false
+  end
+
   # Is it supported by OreId service
   # @return [Boolean] flag
   def supported_by_ore_id?

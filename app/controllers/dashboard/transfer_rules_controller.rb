@@ -21,7 +21,14 @@ class Dashboard::TransferRulesController < ApplicationController
     transfer_rule.lockup_until = Time.zone.parse(transfer_rule_params[:lockup_until])
 
     if transfer_rule.save
-      redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
+      if transfer_rule.token.blockchain.supported_by_ore_id?
+        redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
+      elsif transfer_rule.token.blockchain.supported_by_wallet_connect?
+        render json: {
+          tx_new_url: sign_user_wallet_new_path(transfer_rule_id: transfer_rule.id),
+          tx_receive_url: sign_user_wallet_receive_path
+        }
+      end
     else
       redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: transfer_rule.errors.full_messages.join(', ') }
     end
@@ -34,7 +41,14 @@ class Dashboard::TransferRulesController < ApplicationController
     transfer_rule.status = nil
     transfer_rule.save!
 
-    redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
+    if transfer_rule.token.blockchain.supported_by_ore_id?
+      redirect_to sign_ore_id_new_path(transfer_rule_id: transfer_rule.id)
+    elsif transfer_rule.token.blockchain.supported_by_wallet_connect?
+      render json: {
+        tx_new_url: sign_user_wallet_new_path(transfer_rule_id: transfer_rule.id),
+        tx_receive_url: sign_user_wallet_receive_path
+      }
+    end
   end
 
   def freeze

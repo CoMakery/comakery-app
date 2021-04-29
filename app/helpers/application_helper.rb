@@ -55,4 +55,29 @@ module ApplicationHelper
   def middle_truncate(str, length: 5)
     str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
   end
+
+  def flash_to_array
+    %i[notice warning error].map do |severity|
+      flash[severity] ? { severity: severity, text: html_escape(flash[severity]) } : nil
+    end.compact
+  end
+
+  def deploy_to_heroku_url(project)
+    token = project.token
+    params = {
+      env: {
+        PROJECT_ID: project.id,
+        COMAKERY_SERVER_URL: "#{request.protocol}#{request.host_with_port}",
+        BLOCKCHAIN_NETWORK: token._blockchain
+      }
+    }
+
+    if token._token_type_on_ethereum?
+      params[:env][:INFURA_PROJECT_ID] = ENV['INFURA_PROJECT_ID']
+      params[:env][:ETHEREUM_CONTRACT_ADDRESS] = token.contract_address
+      params[:env][:ETHEREUM_TOKEN_SYMBOL] = token.symbol
+    end
+
+    "https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&#{params.to_param}"
+  end
 end
