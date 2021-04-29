@@ -166,7 +166,7 @@ class ProjectSetupHeader extends React.Component {
                 GitHub
               </NavLink>
               }
-              {(owner || project.showBatches) &&
+              {(owner || project.showBatches) && this.props.whitelabel != true &&
               <NavLink current={current === 'batches'} href={project.batchesUrl}>
                 tasks
               </NavLink>
