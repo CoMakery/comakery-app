@@ -86,6 +86,12 @@ class TokenType::TokenReleaseSchedule < TokenType::Erc20
     super
   end
 
+  # Does it have support for fetching balance?
+  # @return [Boolean] flag
+  def supports_balance?
+    super
+  end
+
   # Return balance of symbol for provided addr
   # @return [Integer] balance
   def blockchain_balance(_wallet_address)

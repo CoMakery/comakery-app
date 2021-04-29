@@ -14,6 +14,10 @@ class AccountPolicy < ApplicationPolicy
     end
   end
 
+  def index?
+    account.comakery_admin?
+  end
+
   def new?
     Rails.application.config.allow_signup
   end

@@ -23,7 +23,7 @@ class TokenType::Erc20 < TokenType
   # Wallet logo filename for UI purposes (relative to `app/assets/images`)
   # @return [String] filename
   def wallet_logo
-    'OREID_Logo_Symbol.svg'
+    'wallet-connect-logo.svg'
   end
 
   # Contract instance if implemented
@@ -102,6 +102,12 @@ class TokenType::Erc20 < TokenType
 
   def blockchain
     attrs[:blockchain]
+  end
+
+  # Does it have support for fetching balance?
+  # @return [Boolean] flag
+  def supports_balance?
+    true
   end
 
   # Return balance of symbol for provided addr

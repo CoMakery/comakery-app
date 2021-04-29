@@ -515,8 +515,6 @@ form.form-with-submit-button {
   align-items: center;
   width: intrinsic;
   border-radius: 3px;
-  height: 14px;
-  margin-left: 0.15em;
 
   .transfer-tokens-btn,
   .transfer-algo-btn {
@@ -525,11 +523,21 @@ form.form-with-submit-button {
     text-decoration: none;
     font-weight: 600;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     color: #1560fa;
+    text-transform: uppercase;
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.25;
 
     .wallet-logo {
       margin: 0.25em 0.5em 0 0;
+    }
+
+    &.transfer-tokens-btn__enabled {
+      pointer-events: all;
+      cursor: pointer;
+      opacity: 1;
     }
   }
 
@@ -1257,16 +1265,8 @@ form.form-with-submit-button {
     border: 1px solid #fe2d6c;
     min-width: 10em;
 
-    a {
-      color: #fe2d6c;
-    }
-
     &:hover {
       background-color: #fe2d6c;
-
-      a {
-        color: white;
-      }
     }
   }
 }
@@ -5977,6 +5977,49 @@ a:focus {
 
 .pagination a:hover {
   text-decoration: underline;
+}
+
+.wallet-connect {
+  .wallet-connect--button {
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 0.5em;
+    border-radius: 6px !important;
+    border: solid 1px #e6e8ed !important;
+    height: 35px !important;
+    padding: 9px 16px 8px 15px !important;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px !important;
+    background-color: #1560fa !important;
+    user-select: none;
+
+    .wallet-connect--button--dot {
+      display: none;
+    }
+
+    &.wallet-connect--button__connected {
+      .wallet-connect--button--dot {
+        display: inline;
+        color: greenyellow;
+        margin-left: 0.5em;
+      }
+    }
+
+    &:active,
+    &.wallet-connect--button__disabled {
+      opacity: 0.2;
+    }
+
+    &.wallet-connect--button__disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .wallet-connect--address {
+    opacity: 0.5;
+    border: none !important;
+  }
 }
 
 @import 'bootstrap_custom';

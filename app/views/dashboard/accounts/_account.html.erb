@@ -163,12 +163,17 @@
               <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
               <span>Save</span>
             <% end %>
-          <% else %>
-            <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form-controls.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
-              <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+          <% elsif @project.token.blockchain.supported_by_wallet_connect? %>
+            <a
+              href='javascript:void(0)'
+              class="transfer-tokens-btn transfer-tokens-btn-skip-legacy"
+              data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx"
+              data-sign--wallet-connect-target='txButtons'
+              data-sign--metamask-target='txButtons'
+              data-tx-new-url=""
+              data-tx-receive-url="">
               <span>Save</span>
-            <% end %>
-
+            </a>
           <% end %>
         </div>
       </div>
