@@ -3,7 +3,7 @@ module Projects
     class PermissionsController < ApplicationController
       skip_after_action :verify_authorized, :verify_policy_scoped
       before_action :find_project
-      before_action :find_interest
+      before_action :find_project_role
 
       def show
         respond_to do |format|
@@ -13,7 +13,7 @@ module Projects
               partial: 'projects/accounts/permissions/form',
               formats: :html,
               layout: false,
-              locals: { interest: @interest }
+              locals: { project_role: @project_role }
             )
             render json: { content: content }, status: :ok
           end
@@ -24,10 +24,10 @@ module Projects
         authorize(@project, :project_admin?)
 
         respond_to do |format|
-          if @interest.update(role: params[:interest][:role])
+          if @project_role.update(role: params[:project_role][:role])
             format.json { render json: { message: 'Permissions successfully updated' }, status: :ok }
           else
-            format.json { render json: { errors: @interest.errors.full_messages }, status: :unprocessable_entity }
+            format.json { render json: { errors: @project_role.errors.full_messages }, status: :unprocessable_entity }
           end
         end
       end
@@ -38,8 +38,8 @@ module Projects
           @project = Project.find(params[:project_id])
         end
 
-        def find_interest
-          @interest = Interest.find(params[:id])
+        def find_project_role
+          @project_role = ProjectRole.find(params[:id])
         end
     end
   end

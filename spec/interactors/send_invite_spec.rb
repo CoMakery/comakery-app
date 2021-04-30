@@ -13,7 +13,7 @@ describe SendInvite do
 
       it { expect(result.success?).to be(true) }
 
-      it { expect { result }.to change(Interest, :count).by(1) }
+      it { expect { result }.to change(ProjectRole, :count).by(1) }
     end
 
     context 'account doesn\'t exist' do
@@ -29,7 +29,7 @@ describe SendInvite do
 
       it { expect(result.errors).to eq(['The user must have signed up to add them']) }
 
-      it { expect { result }.not_to change(Interest, :count) }
+      it { expect { result }.not_to change(ProjectRole, :count) }
     end
   end
 end

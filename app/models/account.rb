@@ -38,6 +38,8 @@ class Account < ApplicationRecord
   # rubocop:enable Rails/InverseOf
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
+  has_many :project_roles, dependent: :destroy
+  has_many :projects_involved, through: :project_roles, source: :project
   has_many :experiences # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :verifications # rubocop:todo Rails/HasManyOrHasOneDependent
   # rubocop:todo Rails/InverseOf
@@ -279,6 +281,10 @@ class Account < ApplicationRecord
 
   def interested?(project_id)
     projects_interested.exists? project_id
+  end
+
+  def involved?(project_id)
+    projects_involved.exists? project_id
   end
 
   def specialty_interested?(project_id, specialty_id)

@@ -19,10 +19,10 @@ RSpec.describe Projects::InvitesController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid params' do
-      it 'creates a new interest' do
+      it 'creates a new project_role' do
         expect do
           post :create, params: params, format: :json
-        end.to change(Interest, :count).by(1)
+        end.to change(ProjectRole, :count).by(1)
       end
 
       it 'returns a success response' do

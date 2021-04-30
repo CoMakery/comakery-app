@@ -2,18 +2,18 @@
   <h5 class="modal-title">Change Permissions</h5>
   <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 </div>
-<%= form_with(model: interest,
-              url: project_account_permission_path(id: interest.id, account_id: interest.account.id),
+<%= form_with(model: project_role,
+              url: project_account_permission_path(id: project_role.id, account_id: project_role.account.id),
               data: { controller: 'permissions--form',
                       action: 'permissions--form#onSubmit permissions:updated->permissions--modal#closeModal' }) do |f| %>
   <div class="modal-body">
     <ul class="errors alert-danger"></ul>
     <div class="d-flex flex-row">
     <span class="avatar avatar-xs avatar-rounded">
-      <%= image_tag account_image_url(interest.account, 100) %>
+      <%= image_tag account_image_url(project_role.account, 100) %>
     </span>
-      <div class="h12 font-weight-medium n10-color ms-1"><%= interest.account.name %></div>
-      <div class="h12 font-weight-medium n10-color ms-1"><%= interest.account.email %></div>
+      <div class="h12 font-weight-medium n10-color ms-1"><%= project_role.account.name %></div>
+      <div class="h12 font-weight-medium n10-color ms-1"><%= project_role.account.email %></div>
     </div>
     <br>
     <div class="input-icon mb-3 mt-1">
@@ -22,8 +22,8 @@
         <br>
         <%= f.select :role,
                      options_for_select(
-                         Interest.roles.keys.collect { |role| [role.titleize, role] },
-                         selected: interest.role
+                         ProjectRole.roles.keys.collect { |role| [role.titleize, role] },
+                         selected: project_role.role
                      ),
                      {},
                      { class: 'form-select form-control' } %>

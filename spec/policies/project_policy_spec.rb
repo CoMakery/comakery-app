@@ -35,8 +35,8 @@ describe ProjectPolicy do
     [my_public_project, my_public_unlisted_project, my_public_project_business_confidential, my_private_project, my_archived_project].each do |pr|
       pr.admins << project_admin # TODO: this should be removed when add_admin button will be removed
       create(:award, award_type: create(:award_type, project: pr), account: project_contributor)
-      create(:interest, project: pr, account: project_interested)
-      create(:interest, project: pr, account: project_admin, role: :admin)
+      create(:project_role, project: pr, account: project_interested)
+      create(:project_role, project: pr, account: project_admin, role: :admin)
     end
   end
 

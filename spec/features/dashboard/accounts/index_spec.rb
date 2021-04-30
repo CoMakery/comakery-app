@@ -116,14 +116,14 @@ describe 'project accounts page' do
         execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #changePermissionsBtn').click()")
 
         within('#accountPermissionModal') do
-          select 'Admin', from: 'interest[role]'
+          select 'Admin', from: 'project_role[role]'
 
           execute_script("document.querySelector('#accountPermissionModal input[type=submit]').click()")
         end
 
         expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
 
-        expect(account.interests.last.reload.role).to eq('admin')
+        expect(account.project_roles.last.reload.role).to eq('admin')
       end
     end
   end
