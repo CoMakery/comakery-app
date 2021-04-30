@@ -230,19 +230,24 @@ class ProjectsController < ApplicationController
       @project ? @project.decorate.header_props : { image_url: helpers.image_url('default_project.jpg') }
     end
 
+    def project_tasks_by_specialty
+      @project.ready_tasks_by_specialty.map do |specialty, awards|
+        [
+          specialty&.name&.downcase || 'general',
+          awards.map do |task|
+            task_to_props(task).merge(
+              allowed_to_start: policy(task).start?,
+              reached_maximum_assignments: task.reached_maximum_assignments_for?(current_account)
+            )
+          end
+        ]
+      end
+    end
+
     def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
-        tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
-          [
-            specialty&.name&.downcase || 'general',
-            awards.map do |task|
-              task_to_props(task).merge(
-                allowed_to_start: policy(task).start?,
-                reached_maximum_assignments: task.reached_maximum_assignments_for?(current_account)
-              )
-            end
-          ]
-        end,
+        whitelabel: ENV['WHITELABEL'] || false,
+        tasks_by_specialty: project_tasks_by_specialty,
         interested: current_account&.interested?(@project.id),
         specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
         project_data: project_props(@project),

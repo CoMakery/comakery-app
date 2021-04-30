@@ -247,6 +247,7 @@ export default class Project extends React.Component {
       <ProjectSetupHeader
         projectForHeader={this.props.projectForHeader}
         missionForHeader={this.props.missionForHeader}
+        whitelabel={this.props.whitelabel}
         owner={this.props.editable}
         current='overview'
         expanded
@@ -451,6 +452,7 @@ Project.propTypes = {
   interested      : PropTypes.bool,
   csrfToken       : PropTypes.string,
   editable        : PropTypes.bool,
+  whitelabel      : PropTypes.bool,
   myTasksPath     : PropTypes.string,
   editPath        : PropTypes.string,
   missionForHeader: PropTypes.object,
