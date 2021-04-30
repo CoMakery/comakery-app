@@ -48,7 +48,9 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_award_types?
-    show? || unlisted?
+    return false if ENV['WHITELABEL'] == true
+
+    (show? || unlisted?)
   end
 
   def show_transfer_rules?
