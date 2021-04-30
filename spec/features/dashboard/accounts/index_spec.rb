@@ -9,9 +9,7 @@ describe 'project accounts page' do
   let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
   subject { visit project_dashboard_accounts_path(project) }
 
-  before do
-    project.safe_add_interested(account)
-  end
+  before { project.safe_add_project_interested(account) }
 
   context 'with eth security token' do
     context 'when not logged in' do

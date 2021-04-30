@@ -115,8 +115,13 @@ class Project < ApplicationRecord
     admins << new_admin unless admins.exists?(new_admin.id)
   end
 
+  # TODO: Remove interests
   def safe_add_interested(interested_account)
     interested << interested_account unless interested_account.interested?(id)
+  end
+
+  def safe_add_project_interested(interested_account)
+    project_interested << interested_account
   end
 
   def total_awards_earned(all_accounts)
