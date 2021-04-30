@@ -7,11 +7,7 @@
                   method: :patch,
                   id: 'prioritizeBtn',
                   data: { turbo: 'false' } do %>
-        <% if transfer.project.hot_wallet_auto_sending? %>
-          <span>PRIORITIZE</span>
-        <% elsif transfer.project.hot_wallet_manual_sending? %>
-          <span>PAY BY HOT WALLET</span>
-        <% end %>
+        <%= render partial: 'shared/transfer_prioritize_button/mode', locals: { project: transfer.project } %>
       <% end %>
     </div>
   <% end %>
