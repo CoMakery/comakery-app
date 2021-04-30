@@ -55,6 +55,8 @@ describe 'transfer prioritize button on transfers page', js: true do
         it { expect(page).to have_css('.transfers-table__transfer__button__history #prioritizeBtn', count: 1) }
 
         it 'has link to pay by hot wallet' do
+          wait_for_turbolinks
+
           expect(find('.transfers-table__transfer__button__history #prioritizeBtn').text).to eq('PAY BY HOT WALLET')
         end
       end
