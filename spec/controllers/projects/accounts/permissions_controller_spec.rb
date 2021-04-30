@@ -5,7 +5,6 @@ RSpec.describe Projects::Accounts::PermissionsController, type: :controller do
   let!(:project) { create(:project, account: admin) }
   let!(:account) { create(:account, email: 'example@gmail.com') }
   let!(:project_role) { create(:project_role, project: project, account: account, role: :interested) }
-  let!(:project_admin_role) { create(:project_role, project: project, account: admin, role: :admin) }
 
   let!(:params) do
     {

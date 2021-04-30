@@ -12,17 +12,16 @@ describe FillRolesWithInterests do
     create(:interest, account: create(:account), project: project, protocol: nil, specialty: nil)
 
     expect(project.interests.count).to eq 4
+    # owner become admin after create
+    # so it's equivalent to no project roles present(after migrate) and inserting
+    # owner role from interest
+    #
+    expect(project.project_roles.count).to eq 1
 
     subject
     project.reload
 
-    # didn't change
     expect(project.interests.count).to eq 4
-    expect(project.project_roles.count).to eq 3
-    # expect(interested.interests.first.role).to eq 'interested'
-
-    # changed role to admin
-    # expect(owner.interests.first.role).to eq 'admin'
-    # expect(admin.interests.first.role).to eq 'admin'
+    expect(project.project_roles.count).to eq 4
   end
 end
