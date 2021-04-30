@@ -107,8 +107,6 @@ describe 'project accounts page' do
 
     let!(:account) { create(:account) }
 
-    before { create(:project_role, project: project, account: account) }
-
     before { login(admin) }
 
     before { subject }
