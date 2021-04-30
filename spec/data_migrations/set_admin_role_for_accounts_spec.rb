@@ -5,6 +5,5 @@ describe SetAdminRoleForAccounts do
   subject { described_class.new.up }
 
   it 'update admins and owner role to admin' do
-
   end
 end
