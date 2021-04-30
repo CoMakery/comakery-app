@@ -125,6 +125,18 @@ RSpec.describe WalletProvision, type: :model do
         expect(subject.sync_opt_in_tx).to be nil
       end
     end
+
+    context 'when OptIn tx is not ready' do
+      let(:provision_state) { :opt_in_created }
+      let(:wallet) { create(:wallet) }
+      let!(:opt_in) { create(:token_opt_in, wallet: wallet, status: :pending) }
+      
+      subject { build(:wallet_provision, wallet: wallet, state: provision_state) }
+
+      specify do
+        expect { subject.sync_opt_in_tx }.to raise_error(WalletProvision::ProvisioningError)
+      end
+    end
   end
 
   describe 'provisioning step-by-step', vcr: true do

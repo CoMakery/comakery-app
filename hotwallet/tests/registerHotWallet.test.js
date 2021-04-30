@@ -17,7 +17,7 @@ const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
 const hwApi = new hwUtils.ComakeryApi(envs)
 
 beforeEach(async () => {
-  await hwRedis.deleteCurrentKey()
+  hwRedis.deleteCurrentKey()
 })
 
 afterAll(() => {
