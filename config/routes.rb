@@ -64,7 +64,7 @@ Rails.application.routes.draw do
   get '/projects/mine' => "projects#landing", as: :my_project
 
   resources :projects do
-    resources :invites, only: %i[new create], controller: 'projects/invites'
+    resources :invites, only: [:create], controller: 'projects/invites'
     resources :accounts do
       resources :permissions, only: %i[show update], controller: 'projects/accounts/permissions'
     end
