@@ -1,7 +1,7 @@
 import { Controller } from 'stimulus';
 import Rails from '@rails/ujs';
 import PubSub from 'pubsub-js'
-import {FLASH_ADD_MESSAGE} from "../../src/javascripts/eventTypes";
+import { FLASH_ADD_MESSAGE } from "../../src/javascripts/eventTypes";
 
 export default class extends Controller {
   static targets = ['submit'];
