@@ -103,16 +103,22 @@ describe 'project accounts page' do
   end
 
   context 'with settings', js: true do
-    let(:admin) { create(:account, comakery_admin: true) }
-    let(:project) { create(:project, account: admin) }
-    let(:account) { create(:account) }
+    let!(:admin) { create(:account) }
+
+    let!(:project) { create(:project, account: admin) }
+
+    let!(:account) { create(:account) }
+
+    before { create(:project_role, project: project, account: account) }
 
     before { login(admin) }
 
-    context 'change permissions' do
-      it 'updates account role' do
-        subject
+    before { subject }
 
+    context 'change follower permissions' do
+      let!(:project_role) { project.project_roles.find_by(account: account) }
+
+      it 'updates project role' do
         execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #changePermissionsBtn').click()")
 
         within('#accountPermissionModal') do
@@ -123,7 +129,25 @@ describe 'project accounts page' do
 
         expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
 
-        expect(account.project_roles.last.reload.role).to eq('admin')
+        expect(project_role.reload.role).to eq('admin')
+      end
+    end
+
+    context 'change own permissions' do
+      let!(:project_role) { project.project_roles.find_by(account: admin) }
+
+      it 'deny action with flash message' do
+        execute_script("document.querySelector('#project_#{project.id}_account_#{admin.id} #changePermissionsBtn').click()")
+
+        within('#accountPermissionModal') do
+          select 'Observer', from: 'project_role[role]'
+
+          execute_script("document.querySelector('#accountPermissionModal input[type=submit]').click()")
+        end
+
+        expect(find('.flash-message-container')).to have_content('You are not authorized to perform this action')
+
+        expect(project_role.reload.role).to eq('admin')
       end
     end
   end
