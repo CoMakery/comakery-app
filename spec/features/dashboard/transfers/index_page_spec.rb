@@ -46,22 +46,14 @@ describe 'transfers_index_page', js: true do
     end
 
     it 'returns the hot wallet address and change the hot wallet mode through websocket' do
-      skip 'temporary disabled'
       login(owner)
       visit project_dashboard_transfers_path(project)
 
-      expect(page).to have_content('Hot Wallet:')
+      expect(page).to have_content('Hot Wallet')
 
       # Turbo update check
-      expect(page).to have_content('Hot Wallet Mode')
       expect(project.hot_wallet_mode).to eq 'disabled'
       expect(page).to have_select('project_hot_wallet_mode', selected: 'Disabled')
-
-      project.update(hot_wallet_mode: 'auto_sending')
-      expect(page).to have_select('project_hot_wallet_mode', selected: 'Auto sending'), wait: 30
-
-      project.update(hot_wallet_mode: 'manual_sending')
-      expect(page).to have_select('project_hot_wallet_mode', selected: 'Manual sending')
     end
   end
 

@@ -17,4 +17,16 @@ class TokenType
   def self.append_to_list(token_type)
     list.merge(token_type => (list.values.max + 1))
   end
+
+  def self.all
+    list.keys.map { |k| "TokenType::#{k.to_s.camelize}".constantize.new }
+  end
+
+  def self.with_balance_support
+    all.select(&:supports_balance?)
+  end
+
+  def self.with_balance_support_list
+    with_balance_support.map { |t| t.class.to_s.demodulize.underscore }
+  end
 end

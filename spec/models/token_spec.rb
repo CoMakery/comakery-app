@@ -22,6 +22,16 @@ describe Token, type: :model, vcr: true do
   describe described_class.new do
     it { is_expected.to respond_to(:contract) }
     it { is_expected.to respond_to(:abi) }
+    it { is_expected.to respond_to(:supports_balance?) }
+    it { is_expected.to respond_to(:blockchain_balance) }
+  end
+
+  describe described_class.support_balance do
+    let!(:token_with_balance_support) { create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten) }
+    let!(:token_without_balance_support) { create(:token, _token_type: :btc) }
+
+    it { is_expected.to include(token_with_balance_support) }
+    it { is_expected.not_to include(token_without_balance_support) }
   end
 
   describe 'scopes' do
