@@ -1,0 +1,14 @@
+<%= turbo_frame_tag "transfer_prioritize_button_#{transfer.id}", target: '_top' do %>
+  <% unless transfer.latest_blockchain_transaction&.pending? %>
+    <div class="transfers-table__transfer__button__history">
+      <%= link_to prioritize_project_dashboard_transfer_path(project_id: transfer.project.id, id: transfer.id),
+                  class: 'transfer-algo-btn',
+                  rel: 'nofollow',
+                  method: :patch,
+                  id: 'prioritizeBtn',
+                  data: { turbo: 'false' } do %>
+        <%= render partial: 'shared/transfer_prioritize_button/mode', locals: { project: transfer.project } %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
