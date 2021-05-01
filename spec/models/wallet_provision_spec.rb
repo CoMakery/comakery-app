@@ -130,7 +130,7 @@ RSpec.describe WalletProvision, type: :model do
       let(:provision_state) { :opt_in_created }
       let(:wallet) { create(:wallet) }
       let!(:opt_in) { create(:token_opt_in, wallet: wallet, status: :pending) }
-      
+
       subject { build(:wallet_provision, wallet: wallet, state: provision_state) }
 
       specify do
