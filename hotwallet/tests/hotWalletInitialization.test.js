@@ -11,13 +11,13 @@ const envs = {
 }
 jest.mock("axios")
 
-describe.skip("Hot Wallet initialization suite", () => {
+describe("Hot Wallet initialization suite", () => {
   const algoEnvs = envs
   algoEnvs.blockchainNetwork = "algorand_test"
   const ethEnvs = envs
   ethEnvs.blockchainNetwork = "ethereum_ropsten"
 
-  const redisClient = redis.createClient();
+  const redisClient = redis.createClient()
   const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
   const algorandWalletKeys = {
     publicKey: "057bac3f6921e98a89a3bfe2b2ec138577da66ee58329b741e44de93431f8bde",
@@ -41,7 +41,7 @@ describe.skip("Hot Wallet initialization suite", () => {
   })
 
   test("algorand wallet: successfully writed keys to redis", async () => {
-    jest.spyOn(hwUtils.AlgorandBlockchain.prototype, "generateNewWallet").mockReturnValue(algorandHW)
+    jest.spyOn(hwUtils.Blockchain.prototype, "generateNewWallet").mockReturnValue(algorandHW)
     axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: {} }))
 
     res = await hwUtils.hotWalletInitialization(algoEnvs, redisClient)
@@ -54,6 +54,8 @@ describe.skip("Hot Wallet initialization suite", () => {
     expect(keys.publicKey).toEqual(algorandHW.publicKey)
     expect(keys.privateKey).toEqual(algorandHW.privateKey)
     expect(keys.privateKeyEncrypted).toEqual(algorandHW.privateKeyEncrypted)
+
+    await hwRedis.deleteCurrentKey()
   })
 
   test("algorand wallet: don't overwrite existing keys", async () => {
@@ -73,7 +75,7 @@ describe.skip("Hot Wallet initialization suite", () => {
   })
 
   test("ethereum wallet: successfully writed keys to redis", async () => {
-    jest.spyOn(hwUtils.EthereumBlockchain.prototype, "generateNewWallet").mockReturnValue(ethHW)
+    jest.spyOn(hwUtils.Blockchain.prototype, "generateNewWallet").mockReturnValue(ethHW)
     axios.post.mockImplementation(() => Promise.resolve({ status: 201, data: {} }))
 
     res = await hwUtils.hotWalletInitialization(ethEnvs, redisClient)
