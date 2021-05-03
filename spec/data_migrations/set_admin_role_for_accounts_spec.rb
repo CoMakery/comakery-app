@@ -23,11 +23,11 @@ describe SetAdminRoleForAccounts do
     admin_user.reload
     regular_user.reload
 
-    #did not change
+    # did not change
     expect(project.project_roles.count).to eq 3
     expect(regular_user.project_roles.first.role).to eq 'interested'
 
-    #changed
+    # changed
     expect(admin_user.project_roles.first.role).to eq 'admin'
   end
 end
