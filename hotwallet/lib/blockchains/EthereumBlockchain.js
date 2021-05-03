@@ -167,7 +167,7 @@ class EthereumBlockchain {
 
     await this.connect()
     const blockchainBalance = await this.chain.fetchBalance(hotWalletAddress, chainjs.HelpersEthereum.toEthereumSymbol('eth'))
-    this.ethBalances[hotWalletAddress] = new BigNumber(blockchainBalance.balance)
+    this.ethBalances[hotWalletAddress] = new BigNumber(blockchainBalance.balance || 0)
 
     return this.ethBalances[hotWalletAddress]
   }
