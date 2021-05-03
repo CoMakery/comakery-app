@@ -1,0 +1,8 @@
+<%= turbo_stream_from "transfer_project_#{project.id}_hot_wallet_mode" %>
+<%= turbo_frame_tag "transfer_project_#{project.id}_hot_wallet_mode" do %>
+  <% if project.hot_wallet_auto_sending? %>
+    <span>PRIORITIZE</span>
+  <% elsif project.hot_wallet_manual_sending? %>
+    <span>PAY BY HOT WALLET</span>
+  <% end %>
+<% end %>
