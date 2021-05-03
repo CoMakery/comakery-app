@@ -1,20 +1,21 @@
 const axios = require("axios")
 const redis = require("redis")
 const hwUtils = require("../lib/hotwalletUtils")
-const envs = {
+jest.mock("axios")
+
+const algoEnvs = {
   projectId: "1",
   projectApiKey: "project_api_key",
   comakeryServerUrl: null,
   purestakeApi: "purestake_api_key",
   redisUrl: "redis://localhost:6379/0"
 }
-jest.mock("axios")
 
-describe.skip("Register Hot Wallet suite", async () => {
-  const wallet = new hwUtils.HotWallet("algorand_test", "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", "mnemonic phrase")
+describe("Register a Hot Wallet", async () => {
+  const wallet = new hwUtils.HotWallet("algorand_test", "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", {})
   const redisClient = redis.createClient()
-  const hwRedis = new hwUtils.HotWalletRedis(envs, redisClient)
-  const hwApi = new hwUtils.ComakeryApi(envs)
+  const hwRedis = new hwUtils.HotWalletRedis(algoEnvs, redisClient)
+  const hwApi = new hwUtils.ComakeryApi(algoEnvs)
 
   beforeEach(async () => {
     await hwRedis.deleteCurrentKey()
@@ -22,7 +23,7 @@ describe.skip("Register Hot Wallet suite", async () => {
 
   afterAll(() => {
     redisClient.quit()
-  });
+  })
 
   test("API returns successfull response", async () => {
     expect.assertions(1);
@@ -46,4 +47,4 @@ describe.skip("Register Hot Wallet suite", async () => {
 
     expect(res).toEqual({})
   })
-});
+})
