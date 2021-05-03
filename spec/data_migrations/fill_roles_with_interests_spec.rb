@@ -4,7 +4,7 @@ require Rails.root.join('db/data_migrations/20210426121452_fill_roles_with_inter
 describe FillRolesWithInterests do
   subject { described_class.new.up }
 
-  it 'update admins and owner role to admin' do
+  it 'sets project roles from interests' do
     project = create(:project, account: create(:account))
     admin_user = create(:account)
     create(:interest, account: admin_user, project: project, protocol: nil, specialty: nil)
