@@ -2,6 +2,8 @@
   <%= stylesheet_link_tag 'upside', media: 'all', 'data-turbo-track': 'reload' %>
 <% end %>
 
+<%= tag.div nil, id: :account_permissions_modal %>
+
 <%= render layout: 'projects/project_settings' do %>
   <div data-controller="sign--wallet-connect sign--metamask">
     <%= render partial: "filters" %>
@@ -22,7 +24,6 @@
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
       <%= render partial: "account", collection: @accounts, as: :account, cached: false %>
-      <%= render partial: 'projects/accounts/permissions/modal' %>
     </div>
 
     <div class="transfers-pages">

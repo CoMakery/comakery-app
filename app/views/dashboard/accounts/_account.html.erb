@@ -161,12 +161,8 @@
         </a>
         <div class="dropdown-menu dropdown-menu-end">
           <%= link_to 'Change Permissions',
-                      '',
-                      class: 'dropdown-item',
-                      id: 'changePermissionsBtn',
-                      data: { toggle: :modal,
-                              target: '#accountPermissionModal',
-                              src: project_account_permission_path(id: account_project_role.id, account_id: account.id) } %>
+                      project_account_permission_path(id: account_project_role.id, account_id: account.id),
+                      class: 'dropdown-item' %>
         </div>
       </div>
     </div>

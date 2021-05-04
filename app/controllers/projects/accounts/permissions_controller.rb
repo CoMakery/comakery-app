@@ -4,18 +4,10 @@ class Projects::Accounts::PermissionsController < ApplicationController
   before_action :find_project_role
 
   def show
-    respond_to do |format|
-      format.html { redirect_to wallets_path }
-      format.json do
-        content = render_to_string(
-          partial: 'projects/accounts/permissions/form',
-          formats: :html,
-          layout: false,
-          locals: { project_role: @project_role }
-        )
-        render json: { content: content }, status: :ok
-      end
-    end
+    render turbo_stream: turbo_stream.replace(
+      :account_permissions_modal,
+      partial: 'projects/accounts/permissions/modal',
+      locals: { project_role: @project_role })
   end
 
   def update
