@@ -2,10 +2,13 @@ module BlockchainTransactable
   extend ActiveSupport::Concern
 
   included do
-    has_many :blockchain_transactions, as: :blockchain_transactable, dependent: :destroy
-    # rubocop:todo Rails/InverseOf
-    has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', as: :blockchain_transactable, foreign_key: :blockchain_transactable_id
-    # rubocop:enable Rails/InverseOf
+    has_many :batch_transactables, dependent: :destroy, as: :blockchain_transactable
+    has_many :transaction_batches, through: :batch_transactables
+    has_many :blockchain_transactions, through: :transaction_batches
+
+    has_one :latest_batch_transactable, -> { order created_at: :desc }, class_name: 'BatchTransactable', as: :blockchain_transactable, foreign_key: :blockchain_transactable_id, inverse_of: :blockchain_transactable
+    has_one :latest_transaction_batch, through: :latest_batch_transactable, source: :transaction_batch
+    has_one :latest_blockchain_transaction, through: :latest_transaction_batch, source: :blockchain_transaction
 
     # Return transactables matching at least one of the following conditions:
     # – Doesn't have any blockchain transactions yet
@@ -44,6 +47,13 @@ module BlockchainTransactable
       q
     }
 
+    scope :ready_for_batch_blockchain_transaction, lambda {
+      return [] unless table_name == 'awards'
+
+      ready_for_blockchain_transaction(false)
+        .join(:transfer_type).where.not('transfer_types.name': %w[mint burn])
+    }
+
     scope :ready_for_manual_blockchain_transaction, lambda {
       ready_for_blockchain_transaction(true)
     }
@@ -55,10 +65,6 @@ module BlockchainTransactable
         self.class.none
       end
     }
-
-    def latest_blockchain_transaction
-      blockchain_transactions.last
-    end
 
     def blockchain_transaction_class
       "BlockchainTransaction#{self.class}".constantize

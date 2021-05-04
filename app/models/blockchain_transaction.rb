@@ -1,5 +1,44 @@
 class BlockchainTransaction < ApplicationRecord
-  belongs_to :blockchain_transactable, polymorphic: true
+  # Migration
+  # BlockchainTransaction.each do |t|
+  # t.transaction_batch = TransactionBatch.create
+
+  # BatchTransactable.create(
+  #   transaction_batch: t.transaction_batch,
+  #   blockchain_transactable: t.blockchain_transactable,
+  # )
+  # t.save
+  # end
+
+  # Transaction
+  # +batch_id
+  # belongs_to :transaction_batch
+  # has_many :transactables, through: :transaction_batch
+
+  # TransactionBatch
+  # has_one :transaction
+  # has_many :batch_transactables
+  # has_many :transactables, through: :batch_transactables
+
+  # BatchTransactable
+  # +transaction_batch_id
+  # +blockchain_transactable_id
+  # +blockchain_transactable_type
+  #
+  # belongs_to :transaction_batch
+  # belongs_to :blockchain_transactable, polymorphic: true
+
+  # Transactable
+  # has_many :batch_transactables
+  # has_many :transaction_batches, through: :batch_transactables
+  # has_many :transactions, through: :transaction_batches
+
+  # 1) Transactable
+  # 2) Batch
+  # 3) BatchTransactable
+  # 4) Transaction
+
+  belongs_to :transaction_batch
   belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate', dependent: :destroy
 
@@ -18,6 +57,25 @@ class BlockchainTransaction < ApplicationRecord
   enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
 
   validates :network, inclusion: { in: networks.keys.map(&:to_s), message: 'unknown network value' }
+
+  # @abstract Subclass is expected to implement #blockchain_transactables
+  # @!method blockchain_transactables
+  #    Return blockchain transactables
+
+  def blockchain_transactable
+    blockchain_transactables.first
+  end
+
+  def create_batch(transactables)
+    self.transaction_batch = TransactionBatch.create!
+
+    transactables.each do |transactable|
+      BatchTransactable.create!(
+        transaction_batch: transaction_batch,
+        blockchain_transactable: transactable
+      )
+    end
+  end
 
   def self.number_of_confirmations
     ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i

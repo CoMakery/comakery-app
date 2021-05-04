@@ -1,4 +1,7 @@
 class BlockchainTransactionTransferRule < BlockchainTransaction
+  has_many :blockchain_transactables_transfer_rules, through: :transaction_batch, dependent: :nullify
+  alias blockchain_transactables blockchain_transactables_transfer_rules
+
   def update_transactable_status
     blockchain_transactable.update!(status: :synced)
   end

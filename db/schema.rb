@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_221526) do
+ActiveRecord::Schema.define(version: 2021_05_04_042411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -286,6 +286,14 @@ ActiveRecord::Schema.define(version: 2021_04_22_221526) do
     t.index ["wallet_id"], name: "index_balances_on_wallet_id"
   end
 
+  create_table "batch_transactables", force: :cascade do |t|
+    t.bigint "transaction_batch_id"
+    t.string "blockchain_transactable_type"
+    t.bigint "blockchain_transactable_id"
+    t.index ["blockchain_transactable_type", "blockchain_transactable_id"], name: "idx_bt_on_btt_and_bti"
+    t.index ["transaction_batch_id"], name: "idx_bt_on_tb"
+  end
+
   create_table "blockchain_transaction_updates", force: :cascade do |t|
     t.bigint "blockchain_transaction_id"
     t.integer "status", default: 0
@@ -316,9 +324,13 @@ ActiveRecord::Schema.define(version: 2021_04_22_221526) do
     t.bigint "blockchain_transactable_id"
     t.string "type", default: "BlockchainTransactionAward", null: false
     t.bigint "token_id"
+    t.text "amounts", default: [], array: true
+    t.text "destinations", default: [], array: true
+    t.bigint "transaction_batch_id"
     t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
     t.index ["blockchain_transactable_type", "blockchain_transactable_id"], name: "index_bc_txs_on_bc_txble_type_and_bc_txble_id"
     t.index ["token_id"], name: "index_blockchain_transactions_on_token_id"
+    t.index ["transaction_batch_id"], name: "index_blockchain_transactions_on_transaction_batch_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -334,7 +346,7 @@ ActiveRecord::Schema.define(version: 2021_04_22_221526) do
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
-  
+
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
@@ -597,7 +609,13 @@ ActiveRecord::Schema.define(version: 2021_04_22_221526) do
     t.datetime "synced_at"
     t.integer "_blockchain", default: 0, null: false
     t.integer "_token_type", default: 0, null: false
+    t.string "batch_contract_address"
     t.index ["logo_image_id"], name: "index_tokens_on_logo_image_id"
+  end
+
+  create_table "transaction_batches", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "transfer_rules", force: :cascade do |t|
@@ -683,9 +701,11 @@ ActiveRecord::Schema.define(version: 2021_04_22_221526) do
   add_foreign_key "awards", "wallets", column: "recipient_wallet_id"
   add_foreign_key "balances", "tokens"
   add_foreign_key "balances", "wallets"
+  add_foreign_key "batch_transactables", "transaction_batches"
   add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
   add_foreign_key "blockchain_transactions", "awards"
   add_foreign_key "blockchain_transactions", "tokens"
+  add_foreign_key "blockchain_transactions", "transaction_batches"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"

@@ -19,10 +19,16 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
     []
   end
 
+  def abi
+    JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/comakery.json')))
+  end
+
+  def method
+    @method ||= Ethereum::Abi.parse_abi(abi).second.find { |f| f.name == method_name }
+  end
+
   def method_id
-    @method_id ||= Ethereum::Abi.parse_abi(
-      JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/comakery.json')))
-    ).second.find { |f| f.name == method_name }.signature
+    method.signature
   end
 
   def encode_method_params
@@ -34,6 +40,10 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
         pr.to_s
       end
     end
+  end
+
+  def encode_method_params_hex
+    Ethereum::Encoder.new.encode_arguments(method.inputs, method_params).downcase
   end
 
   def valid_method_id?

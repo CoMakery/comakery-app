@@ -1,4 +1,7 @@
 class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
+  has_many :blockchain_transactables_account_token_records, through: :transaction_batch, dependent: :nullify
+  alias blockchain_transactables blockchain_transactables_account_token_records
+
   def update_transactable_status
     blockchain_transactable.update!(status: :synced)
   end
