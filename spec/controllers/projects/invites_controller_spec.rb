@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Projects::InvitesController, type: :controller do
-  let!(:admin) { create(:account, comakery_admin: true) }
+  let!(:admin) { create(:account) }
   let!(:project) { create(:project, account: admin) }
   let!(:account) { create(:account, email: 'example@gmail.com') }
 
