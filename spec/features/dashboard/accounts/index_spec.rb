@@ -115,12 +115,12 @@ describe 'project accounts page' do
       let!(:project_role) { project.project_roles.find_by(account: account) }
 
       it 'updates project role' do
-        execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #changePermissionsBtn').click()")
+        execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #change_permissions_btn').click()")
 
-        within('#accountPermissionModal') do
+        within('#account_permissions_modal') do
           select 'Admin', from: 'project_role[role]'
 
-          execute_script("document.querySelector('#accountPermissionModal input[type=submit]').click()")
+          execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
         end
 
         expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
@@ -133,12 +133,12 @@ describe 'project accounts page' do
       let!(:project_role) { project.project_roles.find_by(account: admin) }
 
       it 'deny action with flash message' do
-        execute_script("document.querySelector('#project_#{project.id}_account_#{admin.id} #changePermissionsBtn').click()")
+        execute_script("document.querySelector('#project_#{project.id}_account_#{admin.id} #change_permissions_btn').click()")
 
-        within('#accountPermissionModal') do
+        within('#account_permissions_modal') do
           select 'Observer', from: 'project_role[role]'
 
-          execute_script("document.querySelector('#accountPermissionModal input[type=submit]').click()")
+          execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
         end
 
         expect(find('.flash-message-container')).to have_content('You are not authorized to perform this action')
