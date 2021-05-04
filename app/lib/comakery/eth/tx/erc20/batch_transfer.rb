@@ -17,7 +17,7 @@ class Comakery::Eth::Tx::Erc20::BatchTransfer < Comakery::Eth::Tx::Erc20
   def method_params
     [
       blockchain_transaction.contract_address,
-      blockchain_transaction.recipient_addresses,
+      blockchain_transaction.destinations,
       blockchain_transaction.amounts
     ]
   end
