@@ -1,12 +1,10 @@
 class Projects::InvitesController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped
 
-  before_action :find_project
-
   def create
-    authorize(@project, :project_admin?)
+    authorize(project, :project_admin?)
 
-    send_invite_result = SendInvite.call(project: @project, params: params)
+    send_invite_result = SendInvite.call(project: project, params: params)
 
     respond_to do |format|
       if send_invite_result.success?
@@ -19,7 +17,7 @@ class Projects::InvitesController < ApplicationController
 
   private
 
-    def find_project
-      @project = Project.find(params[:project_id])
+    def project
+      @project ||= @project_scope.find(params[:project_id])
     end
 end
