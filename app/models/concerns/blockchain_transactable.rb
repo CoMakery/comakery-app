@@ -51,7 +51,7 @@ module BlockchainTransactable
       return [] unless table_name == 'awards'
 
       ready_for_blockchain_transaction(false)
-        .join(:transfer_type).where.not('transfer_types.name': %w[mint burn])
+        .joins(:transfer_type).where.not('transfer_types.name': %w[mint burn])
     }
 
     scope :ready_for_manual_blockchain_transaction, lambda {
