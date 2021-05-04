@@ -1,43 +1,4 @@
 class BlockchainTransaction < ApplicationRecord
-  # Migration
-  # BlockchainTransaction.each do |t|
-  # t.transaction_batch = TransactionBatch.create
-
-  # BatchTransactable.create(
-  #   transaction_batch: t.transaction_batch,
-  #   blockchain_transactable: t.blockchain_transactable,
-  # )
-  # t.save
-  # end
-
-  # Transaction
-  # +batch_id
-  # belongs_to :transaction_batch
-  # has_many :transactables, through: :transaction_batch
-
-  # TransactionBatch
-  # has_one :transaction
-  # has_many :batch_transactables
-  # has_many :transactables, through: :batch_transactables
-
-  # BatchTransactable
-  # +transaction_batch_id
-  # +blockchain_transactable_id
-  # +blockchain_transactable_type
-  #
-  # belongs_to :transaction_batch
-  # belongs_to :blockchain_transactable, polymorphic: true
-
-  # Transactable
-  # has_many :batch_transactables
-  # has_many :transaction_batches, through: :batch_transactables
-  # has_many :transactions, through: :transaction_batches
-
-  # 1) Transactable
-  # 2) Batch
-  # 3) BatchTransactable
-  # 4) Transaction
-
   belongs_to :transaction_batch
   belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate', dependent: :destroy
