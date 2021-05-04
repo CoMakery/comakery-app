@@ -36,6 +36,8 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
       case pr
       when TrueClass, FalseClass
         pr
+      when Array
+        pr.map(&:to_s)
       else
         pr.to_s
       end
