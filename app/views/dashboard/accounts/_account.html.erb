@@ -162,6 +162,8 @@
         <div class="dropdown-menu dropdown-menu-end">
           <%= link_to 'Change Permissions',
                       project_account_permission_path(id: account_project_role.id, account_id: account.id),
+                      method: :get,
+                      data: { controller: 'accept-turbo-stream' },
                       class: 'dropdown-item' %>
         </div>
       </div>

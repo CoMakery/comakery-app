@@ -3,11 +3,15 @@ class Projects::Accounts::PermissionsController < ApplicationController
   before_action :find_project_role
 
   def show
-    render turbo_stream: turbo_stream.replace(
-      :account_permissions_modal,
-      partial: 'projects/accounts/permissions/modal',
-      locals: { project_role: @project_role }
-    )
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          :account_permissions_modal,
+          partial: 'projects/accounts/permissions/modal',
+          locals: { project_role: @project_role }
+        )
+      end
+    end
   end
 
   def update
