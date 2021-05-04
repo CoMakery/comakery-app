@@ -12,6 +12,10 @@ class SendInvite
   private
 
     def account
-      Account.find_by(email: context.params[:email])
+      if context.whitelabel_mission
+        context.whitelabel_mission.managed_accounts.find_by(email: context.email)
+      else
+        Account.find_by(email: context.email, managed_mission_id: nil)
+      end
     end
 end
