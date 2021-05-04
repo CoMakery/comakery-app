@@ -6,7 +6,8 @@ class Projects::Accounts::PermissionsController < ApplicationController
     render turbo_stream: turbo_stream.replace(
       :account_permissions_modal,
       partial: 'projects/accounts/permissions/modal',
-      locals: { project_role: @project_role })
+      locals: { project_role: @project_role }
+    )
   end
 
   def update
