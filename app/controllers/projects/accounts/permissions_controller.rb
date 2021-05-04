@@ -1,6 +1,5 @@
 class Projects::Accounts::PermissionsController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped
-  before_action :find_project
   before_action :find_project_role
 
   def show
@@ -23,10 +22,6 @@ class Projects::Accounts::PermissionsController < ApplicationController
   end
 
   private
-
-    def find_project
-      @project = Project.find(params[:project_id])
-    end
 
     def find_project_role
       @project_role = ProjectRole.find(params[:id])
