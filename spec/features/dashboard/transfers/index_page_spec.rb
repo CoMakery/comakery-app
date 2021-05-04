@@ -16,7 +16,7 @@ describe 'transfers_index_page', js: true do
     visit project_dashboard_transfers_path(project)
     page.find :css, '#select_transfers', wait: 20 # wait for page to load
 
-    expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(2)
+    expect(page).to have_css('.transfers-table-for-spec', count: 2)
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
   end
 
