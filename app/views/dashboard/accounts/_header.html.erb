@@ -23,6 +23,10 @@
     </div>
   <% end %>
 
+  <div class="transfers-table__transfer__address">
+    role
+  </div>
+
   <% if @project.supports_transfer_rules? %>
     <div class="transfers-table__transfer__max_balance">
       <%= @project.token&.symbol ? "max balance (#{@project.token&.symbol})" : 'max balance' %>
@@ -44,4 +48,7 @@
       status
     </div>
   <% end %>
+
+  <div class="transfers-table__transfer__settings">
+  </div>
 </div>
