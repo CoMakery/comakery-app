@@ -4,8 +4,17 @@ require 'rspec_api_documentation/dsl'
 resource 'IX. Wallets' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 60, managed_mission: active_whitelabel_mission) }
 
   explanation 'Create, update, delete and retrieve account wallets.'
 
@@ -33,7 +42,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet) { create(:wallet, account: account) }
+      let!(:wallet) { create(:wallet, id: 35, account: account) }
       let!(:page) { 1 }
 
       example 'INDEX' do
@@ -67,6 +76,7 @@ resource 'IX. Wallets' do
         explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        allow_any_instance_of(Wallet).to receive(:id).and_return(21)
         do_request(request)
         expect(status).to eq(201)
       end
@@ -80,6 +90,7 @@ resource 'IX. Wallets' do
         explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        allow_any_instance_of(Wallet).to receive(:id).and_return(22)
         do_request(request)
         expect(status).to eq(201)
       end
@@ -87,9 +98,9 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let(:asa_token) { create(:asa_token) }
-      let(:ast_token) { create(:algo_sec_token) }
-      let(:reg_group) { create(:reg_group, token: ast_token) }
+      let(:asa_token) { create(:asa_token, id: 50) }
+      let(:ast_token) { create(:algo_sec_token, id: 55) }
+      let(:reg_group) { create(:reg_group, id: 45, token: ast_token) }
       let(:tokens_to_provision) do
         [
           { token_id: asa_token.id.to_s },
@@ -102,6 +113,7 @@ resource 'IX. Wallets' do
         explanation 'Returns created wallets (See INDEX for response details)'
 
         request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        allow_any_instance_of(Wallet).to receive(:id).and_return(23)
         do_request(request)
         expect(status).to eq(201)
       end
@@ -134,7 +146,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 60, account: account).id.to_s }
       let(:update_params) { { wallet: { primary_wallet: true } } }
 
       example 'UPDATE WALLET' do
@@ -168,7 +180,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 59, account: account).id.to_s }
 
       example 'GET WALLET' do
         explanation 'Returns specified wallet (See INDEX for response details)'
@@ -188,7 +200,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 31, account: account).id.to_s }
 
       example 'REMOVE WALLET' do
         explanation 'Returns account wallets (See INDEX for response details)'
@@ -213,7 +225,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet) { create(:ore_id_wallet, account: account) }
+      let!(:wallet) { create(:ore_id_wallet, id: 35, account: account) }
       let(:wallet_id) { wallet.id.to_s }
       let!(:redirect_url) { 'localhost' }
 
@@ -226,7 +238,6 @@ resource 'IX. Wallets' do
         allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
         allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => account.email })
         do_request(request)
-
         expect(status).to eq(200)
       end
     end

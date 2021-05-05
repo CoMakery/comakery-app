@@ -4,6 +4,15 @@ require 'rspec_api_documentation/dsl'
 resource 'X. Tokens' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
 
@@ -28,8 +37,8 @@ resource 'X. Tokens' do
     end
 
     context '200' do
-      let!(:cat_token) { create(:token, name: 'Cats') }
-      let!(:dog_token) { create(:token, name: 'Dogs', _blockchain: 'cardano') }
+      let!(:cat_token) { create(:static_token, id: 20, name: 'Cats') }
+      let!(:dog_token) { create(:static_token, id: 25, name: 'Dogs', _blockchain: 'cardano', symbol: 'TKN676f3ac72f320bb17911868a001314e3533cd150') }
 
       example 'GET' do
         explanation 'Returns tokens.'
@@ -62,7 +71,7 @@ resource 'X. Tokens' do
     end
 
     context '400' do
-      let!(:cat_token) { create(:token, name: 'Cats') }
+      let!(:cat_token) { create(:token, id: 40, name: 'Cats') }
 
       example 'INDEX – ERROR' do
         explanation 'Returns an array of errors'
