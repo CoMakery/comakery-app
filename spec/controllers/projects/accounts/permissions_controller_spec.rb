@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Projects::Accounts::PermissionsController, type: :controller do
-  let!(:admin) { create(:account, comakery_admin: true) }
+  let!(:admin) { create(:account) }
   let!(:project) { create(:project, account: admin) }
   let!(:account) { create(:account, email: 'example@gmail.com') }
   let!(:project_role) { create(:project_role, project: project, account: account, role: :interested) }
@@ -21,8 +21,7 @@ RSpec.describe Projects::Accounts::PermissionsController, type: :controller do
 
   describe 'GET #show' do
     it 'renders a successful response' do
-      get :show, params: params, format: :json
-      expect(JSON.parse(response.body)).to have_key('content')
+      get :show, params: params, as: :turbo_stream
       expect(response).to have_http_status(:success)
     end
   end
