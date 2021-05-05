@@ -2,6 +2,7 @@ json.call(
   transaction,
   :id,
   :blockchain_transactable_id,
+  :blockchain_transactable_type,
   :destination,
   :source,
   :amount,
@@ -15,4 +16,8 @@ json.call(
   :created_at,
   :updated_at,
   :synced_at
+)
+
+json.blockchain_transactables(
+  transaction.blockchain_transactables.select(:id).map { |bt| { id: bt.id, type: bt.class.name } }
 )

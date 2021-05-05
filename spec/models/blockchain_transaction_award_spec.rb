@@ -238,7 +238,7 @@ describe BlockchainTransactionAward, vcr: true do
     subject { blockchain_transaction.broadcast_updates }
 
     it 'broadcasts templates' do
-      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(4).times
+      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(5).times
       subject
     end
 
