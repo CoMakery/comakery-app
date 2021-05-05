@@ -4,8 +4,18 @@ require 'rspec_api_documentation/dsl'
 resource 'XII. Hot Wallet Addresses' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    allow_any_instance_of(ApiKey).to receive(:key).and_return('28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission, api_key: ApiKey.new(key: build(:api_key))) }
+  let!(:project) { create(:project, id: 45, mission: active_whitelabel_mission, api_key: ApiKey.new(key: build(:api_key))) }
 
   let(:valid_attributes) { { address: build(:wallet).address } }
 
@@ -28,6 +38,7 @@ resource 'XII. Hot Wallet Addresses' do
         explanation 'Returns created hot wallet'
 
         params = { body: { data: create_params } }
+        allow_any_instance_of(Wallet).to receive(:id).and_return(20)
         do_request(params)
         expect(status).to eq(201)
       end

@@ -2,6 +2,7 @@ json.call(
   transaction,
   :id,
   :blockchain_transactable_id,
+  :blockchain_transactable_type,
   :destination,
   :source,
   :amount,

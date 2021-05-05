@@ -4,11 +4,20 @@ require 'rspec_api_documentation/dsl'
 resource 'II. Accounts' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
-  let!(:verification) { create(:verification, account: account) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission) }
-  let!(:project2) { create(:project, mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 80, managed_mission: active_whitelabel_mission) }
+  let!(:verification) { create(:verification, id: 99, account: account) }
+  let!(:project) { create(:static_project, id: 98, mission: active_whitelabel_mission) }
+  let!(:project2) { create(:static_project, id: 99, mission: active_whitelabel_mission) }
 
   explanation 'Retrieve and manage account data, balances, interests.'
 
@@ -70,11 +79,11 @@ resource 'II. Accounts' do
     context '201' do
       let!(:account_params) do
         {
-          managed_account_id: SecureRandom.uuid,
-          email: "me+#{SecureRandom.hex(20)}@example.com",
+          managed_account_id: '1eeb143f-f0c3-4e85-b66e-92c39edcdef5',
+          email: 'me+ca63bd484da019f1938825ffcba6da@example.com',
           first_name: 'Eva',
           last_name: 'Smith',
-          nickname: "hunter-#{SecureRandom.hex(20)}",
+          nickname: 'hunter-b1f157fc0d5ec93680d7b307d417bc5bd2c',
           date_of_birth: '1990-01-31',
           country: 'United States of America',
           project_interests: [project.id.to_s]
@@ -93,7 +102,7 @@ resource 'II. Accounts' do
     context '400' do
       let!(:account_params) do
         {
-          managed_account_id: SecureRandom.uuid
+          managed_account_id: '37edfd11-6554-4a0c-b104-1a123aa62de1'
         }
       end
 
@@ -173,8 +182,8 @@ resource 'II. Accounts' do
       let!(:page) { 1 }
 
       before do
-        project.interests.create(account: account, specialty: account.specialty)
-        project2.interests.create(account: account, specialty: account.specialty)
+        project.interests.create(id: 98, account: account, specialty: account.specialty)
+        project2.interests.create(id: 99, account: account, specialty: account.specialty)
       end
 
       example 'INTERESTS' do
@@ -205,7 +214,8 @@ resource 'II. Accounts' do
         explanation 'Returns account interests (See INTERESTS for response details)'
 
         request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
-        do_request(request)
+        result = do_request(request)
+        result[0][:response_body] = [30] if status == 201
         expect(status).to eq(201)
       end
     end
@@ -239,7 +249,7 @@ resource 'II. Accounts' do
       let!(:project_id) { project.id }
 
       before do
-        project.interests.create(account: account, specialty: account.specialty)
+        project.interests.create(id: 97, account: account, specialty: account.specialty)
       end
 
       example 'REMOVE INTEREST' do
@@ -314,7 +324,6 @@ resource 'II. Accounts' do
 
       example 'CREATE VERIFICATION' do
         explanation 'Returns account verifications (See VERIFICATIONS for response details)'
-
         request = build(:api_signed_request, { verification: verification }, api_v1_account_verifications_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(201)
@@ -366,7 +375,7 @@ resource 'II. Accounts' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:token) { create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
+      let!(:token) { create(:static_token, id: 98, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
       let!(:balance) { create(:balance, base_unit_value: 200, token: token, wallet: create(:eth_wallet, account: account)) }
       let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
 
@@ -394,9 +403,10 @@ resource 'II. Accounts' do
     context '200' do
       let!(:id) { account.managed_account_id }
       let!(:page) { 1 }
+      let!(:award_type) { create(:award_type, project: project) }
 
       before do
-        create(:award, account: account, status: :paid, amount: 1)
+        create(:award, id: 90, account: account, status: :paid, amount: 1, transfer_type: create(:transfer_type, id: 99, project: award_type.project))
       end
 
       example 'TRANSFERS' do

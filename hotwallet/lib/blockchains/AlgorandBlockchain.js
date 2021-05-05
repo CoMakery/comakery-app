@@ -1,4 +1,3 @@
-const algosdk = require("algosdk")
 const chainjs = require("@open-rights-exchange/chainjs")
 const BigNumber = require('bignumber.js')
 const HotWallet = require("../HotWallet").HotWallet
@@ -8,28 +7,28 @@ class AlgorandBlockchain {
     this.envs = envs
     this.blockchainNetwork = envs.blockchainNetwork
     const endpoints = this.endpointsByNetwork(this.blockchainNetwork)
-    this.algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
+    this.chain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
     // It is necessary to cache values gotten from blockchain
     this.optedInApps = {}
     this.algoBalances = {}
     this.tokenBalances = {}
   }
 
-  algoMainnetEndpoints() {
+  mainnetEndpoints() {
     return [{
       url: 'https://mainnet-algorand.api.purestake.io/ps2',
       options: { indexerUrl: 'https://mainnet-algorand.api.purestake.io/idx2', headers: [{ 'x-api-key': this.envs.purestakeApi }] },
     }]
   }
 
-  algoTestnetEndpoints() {
+  testnetEndpoints() {
     return [{
       url: 'https://testnet-algorand.api.purestake.io/ps2',
       options: { indexerUrl: 'https://testnet-algorand.api.purestake.io/idx2', headers: [{ 'x-api-key': this.envs.purestakeApi }] },
     }]
   }
 
-  algoBetanetEndpoints() {
+  betanetEndpoints() {
     return [{
       url: 'https://betanet-algorand.api.purestake.io/ps2',
       options: { indexerUrl: 'https://betanet-algorand.api.purestake.io/idx2', headers: [{ 'x-api-key': this.envs.purestakeApi }] },
@@ -39,35 +38,45 @@ class AlgorandBlockchain {
   endpointsByNetwork(network) {
     switch (network) {
       case 'algorand_test':
-        return this.algoTestnetEndpoints()
+        return this.testnetEndpoints()
       case 'algorand_beta':
-        return this.algoBetanetEndpoints()
+        return this.betanetEndpoints()
       case 'algorand':
-        return this.algoMainnetEndpoints()
+        return this.mainnetEndpoints()
       default:
-        // added by oleg
-        console.log("Unknown or unsupported network")
+        console.error("Unknown or unsupported network")
     }
   }
 
-  generateAlgorandKeyPair() {
-    const account = algosdk.generateAccount()
-    const mnemonic = algosdk.secretKeyToMnemonic(account.sk);
-
-    return new HotWallet(account.addr, mnemonic)
+  createAccountOptions() {
+    return {
+      newKeysOptions: {
+        password: 'hot_wallet_algorand_pwd',
+        salt: 'hot_wallet_algorand_salt'
+      }
+    }
   }
 
   async connect() {
-    if (!this.algoChain.isConnected) {
-      await this.algoChain.connect()
+    if (!this.chain.isConnected) {
+      await this.chain.connect()
     }
+  }
+
+  async generateNewWallet() {
+    await this.connect()
+
+    const createAccount = this.chain.new.CreateAccount(this.createAccountOptions())
+    await createAccount.generateKeysIfNeeded()
+
+    return new HotWallet(this.blockchainNetwork, createAccount.accountName, createAccount.generatedKeys)
   }
 
   async getAppLocalState(hotWalletAddress, appIndex) {
     await this.connect()
 
     try {
-      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+      const hwAccountDetails = await this.chain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
       return hwAccountDetails.account['apps-local-state'].filter(app => !app.deleted && app.id === appIndex)[0]
     } catch (err) {
       return {}
@@ -92,7 +101,7 @@ class AlgorandBlockchain {
 
   async getOptedInAppsFromBlockchain(hotWalletAddress) {
     try {
-      const hwAccountDetails = await this.algoChain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
+      const hwAccountDetails = await this.chain.algoClientIndexer.lookupAccountByID(hotWalletAddress).do()
       return hwAccountDetails.account['apps-local-state'].filter(app => app.deleted == false).map(app => app.id)
     } catch (err) {
       return []
@@ -117,7 +126,7 @@ class AlgorandBlockchain {
     if (hotWalletAddress in this.algoBalances) { return this.algoBalances[hotWalletAddress] }
 
     await this.connect()
-    const blockchainBalance = await this.algoChain.fetchBalance(hotWalletAddress, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
+    const blockchainBalance = await this.chain.fetchBalance(hotWalletAddress, chainjs.HelpersAlgorand.toAlgorandSymbol('algo'))
     this.algoBalances[hotWalletAddress] = new BigNumber(blockchainBalance.balance)
 
     return this.algoBalances[hotWalletAddress]
@@ -128,7 +137,7 @@ class AlgorandBlockchain {
     return optedInApps.includes(this.envs.optInApp)
   }
 
-  async enoughAlgoBalanceToSendTransaction(hotWalletAddress) {
+  async enoughCoinBalanceToSendTransaction(hotWalletAddress) {
     const algoBalance = await this.getAlgoBalanceForHotWallet(hotWalletAddress)
     return algoBalance.isGreaterThan(new BigNumber(0.001)) // 1000 microalgos
   }
@@ -141,13 +150,13 @@ class AlgorandBlockchain {
   async optInToApp(hotWallet, appToOptIn) {
     await this.connect()
 
-    const transaction = await this.algoChain.new.Transaction()
+    const transaction = await this.chain.new.Transaction()
     const txn = {
       from: hotWallet.address,
       note: 'Opt-in from a HotWallet',
       appIndex: appToOptIn,
     }
-    const action = await this.algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
+    const action = await this.chain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppOptIn, txn)
     transaction.actions = [action]
     await transaction.prepareToBeSigned()
     await transaction.validate()
@@ -158,8 +167,7 @@ class AlgorandBlockchain {
       console.log(`Opt-in was successfully sent to blockchain, tx hash: ${tx_result.transactionId}`)
       return tx_result
     } catch (err) {
-      // added by oleg
-      console.log(err)
+      console.error(err)
       return {}
     }
   }
@@ -198,6 +206,10 @@ class AlgorandBlockchain {
     } catch (err) {
       return { valid: false, markAs: "failed", error: `Unknown error: ${err}` }
     }
+  }
+
+  async sendTransaction(transaction, hotWallet) {
+    console.error("sendTransaction is not implemented for AlgorandBlockchain")
   }
 }
 exports.AlgorandBlockchain = AlgorandBlockchain

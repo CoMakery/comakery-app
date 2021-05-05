@@ -110,7 +110,6 @@ module Comakery
     # @return [Hash] signed request
     def sign(private_key)
       signing_key = Ed25519::SigningKey.from_keypair(Base64.decode64(private_key))
-
       @request['body']['nonce'] = nonce
       @request['body']['timestamp'] = timestamp.to_s
       @request['proof'] = {}
@@ -139,9 +138,9 @@ module Comakery
       verify_http_url
       verify_http_method
       verify_type
+      verify_method(public_key)
       verify_timestamp
       verify_nonce
-      verify_method(public_key)
       verify_signature(public_key)
 
       true
