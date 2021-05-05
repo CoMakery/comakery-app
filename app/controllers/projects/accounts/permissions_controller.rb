@@ -1,5 +1,8 @@
 class Projects::Accounts::PermissionsController < ApplicationController
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+
   skip_after_action :verify_authorized, :verify_policy_scoped
+
   before_action :find_project_role
 
   def show

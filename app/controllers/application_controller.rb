@@ -246,6 +246,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_url(host: ENV['APP_HOST'])
   end
 
+  def not_authorized
+    respond_to do |format|
+      format.json { head :unauthorized }
+    end
+  end
+
   private
 
     def compare_all(*pairs)

@@ -20,16 +20,17 @@ export default class extends Controller {
       url: this.element.attributes.action.value,
       data: new FormData(this.element),
       success: (response) => {
-        if (response.message) {
-          this._addFlashMessage('notice', response.message)
-        } else {
+        this._addFlashMessage('notice', response.message)
+        this.element.dispatchEvent(this.updatedEvent);
+      },
+      error: (response, status) => {
+        if (status === 'Unauthorized') {
           this._addFlashMessage('error', 'You are not authorized to perform this action')
         }
 
-        this.element.dispatchEvent(this.updatedEvent);
-      },
-      error: (response) => {
-        this._addErrors(response.errors)
+        if (response.errors) {
+          this._addErrors(response.errors)
+        }
       }
     });
   }
