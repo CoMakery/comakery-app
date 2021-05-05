@@ -8,7 +8,7 @@ const envs = {
   comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
   purestakeApi: process.env.PURESTAKE_API,
   redisUrl: process.env.REDIS_URL,
-  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY)
+  emptyQueueDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY)
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
