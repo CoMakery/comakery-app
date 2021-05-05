@@ -6,10 +6,4 @@ class Comakery::Eth::Tx::Erc20::SecurityToken::Unpause < Comakery::Eth::Tx::Erc2
   def method_params
     []
   end
-
-  def valid?(blockchain_transaction)
-    return false unless super
-
-    true
-  end
 end

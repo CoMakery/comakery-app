@@ -67,30 +67,31 @@ class Comakery::Eth::Tx
     eth.current_block - block_number >= number_of_confirmations
   end
 
-  def valid_data?(source, destination, amount)
-    return false if status != 1
-    return false if from != source.downcase
-    return false if to != destination.downcase
-    return false if value != amount
-
-    true
+  def valid_block?
+    block_number > blockchain_transaction.current_block
   end
 
-  def valid_block?(n) # rubocop:todo Naming/MethodParameterName
-    return false if block_number <= n
-
-    true
+  def valid_status?
+    status == 1
   end
 
-  def valid?(blockchain_transaction)
-    return false unless valid_block?(blockchain_transaction.current_block)
+  def valid_from?
+    from == blockchain_transaction.source.downcase
+  end
 
-    if blockchain_transaction.contract_address.present?
-      return false unless valid_data?(blockchain_transaction.source, blockchain_transaction.contract_address, 0)
-    else
-      return false unless valid_data?(blockchain_transaction.source, blockchain_transaction.destination, blockchain_transaction.amount)
-    end
+  def valid_to?
+    to == blockchain_transaction.destination.downcase
+  end
 
-    true
+  def valid_amount?
+    value == blockchain_transaction.amount
+  end
+
+  def valid?(_)
+    valid_block? \
+    && valid_status? \
+    && valid_from? \
+    && valid_to? \
+    && valid_amount?
   end
 end

@@ -26,13 +26,7 @@ class Comakery::Eth::Tx::Erc20::BatchTransfer < Comakery::Eth::Tx::Erc20
     JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/batch_transfer.json')))
   end
 
-  def valid_params?
-    input[8..] == encode_method_params_hex
-  end
-
-  def valid?(_)
-    super \
-    && valid_method_id? \
-    && valid_params?
+  def valid_to?
+    to == blockchain_transaction.token.batch_contract_address.downcase
   end
 end

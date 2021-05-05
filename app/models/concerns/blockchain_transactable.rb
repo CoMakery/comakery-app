@@ -88,5 +88,9 @@ module BlockchainTransactable
         true
       end
     end
+
+    def same_batch_transactables
+      latest_blockchain_transaction.blockchain_transactables.where.not(id: id)
+    end
   end
 end

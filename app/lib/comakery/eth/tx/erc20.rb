@@ -48,11 +48,25 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
     Ethereum::Encoder.new.encode_arguments(method.inputs, method_params).downcase
   end
 
+  def valid_to?
+    to == blockchain_transaction.contract_address.downcase
+  end
+
+  def valid_amount?
+    value&.zero?
+  end
+
   def valid_method_id?
     input && input[0...8] == method_id
   end
 
-  def lookup_method_arg(n, length = 32, offset = 8) # rubocop:todo Naming/MethodParameterName
-    valid_method_id? && input[(offset + n * (2 * length))...(offset + (n + 1) * (2 * length))]&.to_i(16)
+  def valid_method_params?
+    input[8..] == encode_method_params_hex
+  end
+
+  def valid?(_)
+    super \
+    && valid_method_id? \
+    && valid_method_params?
   end
 end

@@ -62,6 +62,10 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
   end
 
+  def amounts
+    self[:amounts].map(&:to_i)
+  end
+
   private
 
     def on_chain_eth
