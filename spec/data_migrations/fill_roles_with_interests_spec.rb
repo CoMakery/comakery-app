@@ -11,6 +11,9 @@ describe FillRolesWithInterests do
     create(:interest, account: admin_user, project: project, protocol: 'test', specialty: nil)
     create(:interest, account: create(:account), project: project, protocol: nil, specialty: nil)
 
+    # interests will have owner, 2 admins and interested
+    #
+    #
     expect(project.interests.count).to eq 4
     # owner become admin after create
     # so it's equivalent to no project roles present(after migrate) and inserting
@@ -21,7 +24,10 @@ describe FillRolesWithInterests do
     subject
     project.reload
 
+    # interests won't change
     expect(project.interests.count).to eq 4
-    expect(project.project_roles.count).to eq 4
+
+    # because interests have duplicates
+    expect(project.project_roles.count).to eq 3
   end
 end
