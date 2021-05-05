@@ -248,7 +248,7 @@ class ProjectsController < ApplicationController
       @props = {
         whitelabel: ENV['WHITELABEL'] || false,
         tasks_by_specialty: project_tasks_by_specialty,
-        interested: current_account&.interested?(@project.id),
+        interested: current_account&.involved?(@project.id),
         specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
         project_data: project_props(@project),
         token_data: token_props(@project&.token&.decorate),

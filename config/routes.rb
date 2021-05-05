@@ -86,7 +86,7 @@ Rails.application.routes.draw do
       end
     end
     resources :contributors, only: [:index]
-    resources :interests, only: [:create, :destroy], defaults: { format: :json }
+    resources :project_roles, only: %i[create destroy], defaults: { format: :json }
 
     namespace :dashboard do
       resources :transfers, only: %i[index show create] do
