@@ -32,7 +32,6 @@ resource 'VIII. Reg Groups' do
       let!(:page) { 1 }
 
       example 'INDEX' do
-        project.token.reg_groups.where.not(id: 1800).last.update(id: 31)
         explanation 'Returns an array of reg groups. See GET for response fields description.'
 
         request = build(:api_signed_request, '', api_v1_project_reg_groups_path(project_id: project.id), 'GET', 'example.org')

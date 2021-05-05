@@ -23,14 +23,6 @@ resource 'III. Projects' do
     3.times do |n|
       project.admins << create(:account, managed_account_id: "1c182a7b-4f22-4636-9047-8bab3235294#{n}", managed_mission: active_whitelabel_mission)
     end
-
-    project.transfer_types.each_with_index do |t_type, i|
-      t_type.update_column(:id, 905 + i) # rubocop:disable Rails/SkipsModelValidations
-    end
-
-    project2.transfer_types.each_with_index do |t_type, i|
-      t_type.update_column(:id, 1300 + i) # rubocop:disable Rails/SkipsModelValidations
-    end
   end
 
   explanation 'Retrieve projects data.'
