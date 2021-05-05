@@ -121,7 +121,7 @@ class Project < ApplicationRecord
   end
 
   def safe_add_project_interested(interested_account)
-    project_interested << interested_account
+    project_interested << interested_account unless interested_account.involved?(id)
   end
 
   def total_awards_earned(all_accounts)
