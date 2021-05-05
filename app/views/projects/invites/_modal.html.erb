@@ -1,4 +1,10 @@
-<div data-controller="bootstrap--modal invites--modal" class="modal modal-blur fade" id="invite-person" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade"
+     id="invite-person"
+     tabindex="-1"
+     role="dialog"
+     aria-hidden="true"
+     data-controller="bootstrap--modal invites--modal"
+     data-action="modal:hidden->bootstrap--modal#reset">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -25,7 +31,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary h12" data-dismiss="modal">Cancel</button>
-          <%= submit_tag 'Save', data: { disable_with: false, target: 'invites--form.submit'}, class: 'btn btn-primary' %>
+          <%= submit_tag 'Save', data: { disable_with: false, target: 'invites--form.submit' }, class: 'btn btn-primary' %>
         </div>
         </div>
       <% end %>
