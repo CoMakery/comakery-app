@@ -9,5 +9,7 @@ export default class extends Controller {
 
   closeModal() {
     this.jmodal.hide()
+
+    this.jmodal.reset()
   }
 }

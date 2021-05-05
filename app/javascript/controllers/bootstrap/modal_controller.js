@@ -39,7 +39,12 @@ export default class extends Controller {
 
   hide() { this.jmodal.modal('hide') }
 
-  reset() { this.jmodal.find('form').trigger('reset') }
+  reset() {
+    this.jmodal.find('form').trigger('reset');
+
+    this.jmodal.find('ul.errors').removeClass('alert');
+    this.jmodal.find('ul.errors').html('');
+  }
 
   _createEvent(name, jevent) {
     const details = { relatedTarget: jevent.relatedTarget, controller: this.controller }

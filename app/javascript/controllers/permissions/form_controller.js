@@ -36,7 +36,7 @@ export default class extends Controller {
   }
 
   _addErrors(errors) {
-    let $errorsContainer = $('#accountPermissionModal ul.errors');
+    let $errorsContainer = $('#account_permissions_modal ul.errors');
 
     $errorsContainer.html('');
 
