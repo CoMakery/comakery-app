@@ -21,6 +21,7 @@ resource 'X. Tokens' do
       response_field :symbol, 'symbol', type: :string
       response_field :network, 'network', type: :string
       response_field :contractAddress, 'contact address', type: :string
+      response_field :batchContractAddress, 'batch contact address', type: :string
       response_field :decimalPlaces, 'decimal places', type: :string
       response_field :imageUrl, 'image url', type: :string
       response_field :createdAt, 'token creation timestamp', type: :string

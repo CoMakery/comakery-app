@@ -39,6 +39,7 @@ class TokenForm extends React.Component {
       'token[name]'                     : this.props.token.name || '',
       'token[symbol]'                   : this.props.token.symbol || '',
       'token[contract_address]'         : this.props.token.contractAddress || '',
+      'token[batch_contract_address]'   : this.props.token.batchContractAddress || '',
       'token[decimal_places]'           : (!this.props.token.decimalPlaces && this.props.token.decimalPlaces !== 0 ? '' : this.props.token.decimalPlaces.toString()),
       'token[_blockchain]'              : this.props.token.Blockchain || Object.keys(this.props.blockchains)[0]
     }
@@ -102,7 +103,8 @@ class TokenForm extends React.Component {
     this.disable([
       'token[_token_type]',
       'token[_blockchain]',
-      'token[contract_address]'
+      'token[contract_address]',
+      'token[batch_contract_address]'
     ])
   }
 
@@ -110,7 +112,8 @@ class TokenForm extends React.Component {
     this.enable([
       'token[_token_type]',
       'token[_blockchain]',
-      'token[contract_address]'
+      'token[contract_address]',
+      'token[batch_contract_address]'
     ])
   }
 
@@ -170,7 +173,8 @@ class TokenForm extends React.Component {
         this.setState({
           'token[symbol]'                   : '',
           'token[decimal_places]'           : '',
-          'token[contract_address]'         : ''
+          'token[contract_address]'         : '',
+          'token[batch_contract_address]'   : ''
         })
         this.enableContractFields()
         break
@@ -368,6 +372,20 @@ class TokenForm extends React.Component {
                 errors={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
                 placeholder='2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
+                pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})'
+                eventHandler={this.handleFieldChange}
+                symbolLimit={0}
+              />
+            }
+
+            {this.state['token[_token_type]'].match(/erc20|qrc20|comakery_security_token|token_release_schedule/) &&
+              <InputFieldHalfed
+                title='batch contract address'
+                name='token[batch_contract_address]'
+                value={this.state['token[batch_contract_address]']}
+                errors={this.state.errors['token[batch_contract_address]']}
+                readOnly={this.state.disabled['token[batch_contract_address]']}
+                placeholder='0x68ac9a329c688afbf1fc2e5d3e8cb6e88989e2cc'
                 pattern='([a-fA-F0-9]{40})|(0x[0-9a-fA-F]{40})'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}

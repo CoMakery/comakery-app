@@ -5,6 +5,7 @@ json.call(
   :symbol,
   :network,
   :contract_address,
+  :batch_contract_address,
   :decimal_places,
   :created_at,
   :updated_at
