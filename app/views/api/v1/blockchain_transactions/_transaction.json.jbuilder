@@ -19,5 +19,9 @@ json.call(
 )
 
 json.blockchain_transactables(
-  transaction.blockchain_transactables.select(:id).map { |bt| { id: bt.id, type: bt.class.name } }
+  transaction
+    .transaction_batch
+    .batch_transactables
+    .select(:blockchain_transactable_id, :blockchain_transactable_type)
+    .as_json
 )
