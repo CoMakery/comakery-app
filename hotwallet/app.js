@@ -7,19 +7,22 @@ const envs = {
   projectApiKey: process.env.PROJECT_API_KEY,
   comakeryServerUrl: process.env.COMAKERY_SERVER_URL,
   purestakeApi: process.env.PURESTAKE_API,
+  infuraProjectId: process.env.INFURA_PROJECT_ID,
   redisUrl: process.env.REDIS_URL,
-  checkForNewTransactionsDelay: parseInt(process.env.CHECK_FOR_NEW_TRANSACTIONS_DELAY),
+  emptyQueueDelay: parseInt(process.env.EMPTY_QUEUE_DELAY),
+  betweenTransactionDelay: parseInt(process.env.BETWEEN_TRANSACTION_DELAY),
   optInApp: parseInt(process.env.OPT_IN_APP),
   blockchainNetwork: process.env.BLOCKCHAIN_NETWORK,
-  maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER)
+  maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER),
+  ethereumTokenSymbol: process.env.ETHEREUM_TOKEN_SYMBOL,
+  ethereumContractAddress: process.env.ETHEREUM_CONTRACT_ADDRESS
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
 
 async function initialize() {
   if (!hwUtils.checkAllVariablesAreSet(envs)) {
-    // added by oleg
-    console.log("Some ENV vars was not set")
+    console.error("Some ENV vars was not set")
     return false
   }
   return await hwUtils.hotWalletInitialization(envs, redisClient)
