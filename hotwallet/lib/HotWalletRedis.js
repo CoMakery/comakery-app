@@ -76,26 +76,45 @@ class HotWalletRedis {
   }
 
   async getSavedDataForTransaction(tx) {
-    const key = this.transactableKeyName(tx.blockchainTransactableType, tx.blockchainTransactableId)
-    const values = await this.hgetall(key)
+    const keys = []
+    let key = null
+    let values = null
 
-    if (values) {
+    if (tx.blockchainTransactableType && tx.blockchainTransactableId) {
+      this.transactableKeyName(tx.blockchainTransactableType, tx.blockchainTransactableId)
+      keys.push(this.transactableKeyName(tx.blockchainTransactableType, tx.blockchainTransactableId))
+    } else if (Array.isArray(tx.blockchainTransactables) && tx.blockchainTransactables.length > 0) {
+      tx.blockchainTransactables.forEach((bt) => {
+        keys.push(this.transactableKeyName(bt.type, bt.id))
+      })
+    }
+
+    for (var i = 0; i < keys.length; i++) {
+      values = await this.hgetall(keys[i])
+      if (values) {
+        key = keys[i]
+        break
+      }
+    }
+
+    if (values && key) {
       return { key: key, values: values }
     } else {
       return null
     }
   }
 
-  async saveDavaForTransaction(status, blockchainTransaction) {
-    const key = this.transactableKeyName(blockchainTransaction.blockchainTransactableType, blockchainTransaction.blockchainTransactableId)
+  async saveDavaForTransaction(status, type, id, txHash) {
+    const key = this.transactableKeyName(type, id)
     const monthInSeconds = 60*60*24*30
 
     await this.hset(key,
       "status", status,
-      "txHash", blockchainTransaction.txHash,
+      "txHash", txHash,
       "createdAt", Date.now(),
     )
     await this.expire(key, monthInSeconds)
+    return true
   }
 
   async hset(...args) {
