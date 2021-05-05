@@ -442,8 +442,8 @@ ActiveRecord::Schema.define(version: 2021_05_04_182623) do
     t.integer "role", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id", "project_id"], name: "index_project_roles_on_account_id_and_project_id", unique: true
     t.index ["account_id"], name: "index_project_roles_on_account_id"
-    t.index ["project_id", "account_id"], name: "index_project_roles_on_project_id_and_account_id", unique: true
     t.index ["project_id"], name: "index_project_roles_on_project_id"
     t.index ["role"], name: "index_project_roles_on_role"
   end
