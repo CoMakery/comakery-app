@@ -118,8 +118,8 @@ jobs:
     - name: Setup database
       run: env bundle exec rails db:create
 
-    - name: Run migrations
-      run: env bundle exec rails db:migrate
+    - name: Load the db schema
+      run: env bundle exec rails db:schema:load
 
     - name: Run Command
       run: env bundle exec rake docs:generate:ordered
