@@ -46,7 +46,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     context 'for eth blockchain with batch contract' do
-      let(:token) { build(:erc20_token, contract_address: build(:ethereum_contract_address), symbol: 'XYZ', batch_contract_address: "0x68ac9A329c688AfBf1FC2e5d3e8Cb6E88989E2cC") }
+      let(:token) { build(:erc20_token, contract_address: build(:ethereum_contract_address), symbol: 'XYZ', batch_contract_address: '0x68ac9A329c688AfBf1FC2e5d3e8Cb6E88989E2cC') }
       it 'contain INFURA_PROJECT_ID, ETHEREUM_CONTRACT_ADDRESS, ETHEREUM_BATCH_CONTRACT_ADDRESS and ETHEREUM_TOKEN_SYMBOL' do
         is_expected.to eq 'https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&env%5BBLOCKCHAIN_NETWORK%5D=ethereum_ropsten&env%5BCOMAKERY_SERVER_URL%5D=https%3A%2F%2Fcomakery.com&env%5BETHEREUM_BATCH_CONTRACT_ADDRESS%5D=0x68ac9A329c688AfBf1FC2e5d3e8Cb6E88989E2cC&env%5BETHEREUM_CONTRACT_ADDRESS%5D=0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&env%5BETHEREUM_TOKEN_SYMBOL%5D=XYZ&env%5BINFURA_PROJECT_ID%5D=39f6ad316c5a4b87a0f90956333c3666&env%5BPROJECT_ID%5D=123'
       end
