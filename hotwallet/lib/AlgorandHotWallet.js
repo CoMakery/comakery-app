@@ -1,11 +1,11 @@
 class AlgorandHotWallet {
-  constructor(network, address, keys, optedInApps = []) {
+  constructor(network, address, keys, options = {}) {
     this.network = network
     this.address = address
     this.privateKey = keys.privateKey
     this.publicKey = keys.publicKey
     this.privateKeyEncrypted = keys.privateKeyEncrypted
-    this.optedInApps = optedInApps
+    this.optedInApps = options.optedInApps || []
   }
 
   isReadyToSendTx(envs) {

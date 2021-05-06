@@ -15,7 +15,8 @@ const envs = {
   blockchainNetwork: process.env.BLOCKCHAIN_NETWORK,
   maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER),
   ethereumTokenSymbol: process.env.ETHEREUM_TOKEN_SYMBOL,
-  ethereumContractAddress: process.env.ETHEREUM_CONTRACT_ADDRESS
+  ethereumContractAddress: process.env.ETHEREUM_CONTRACT_ADDRESS,
+  ethereumBatchContractAddress: process.env.ETHEREUM_BATCH_CONTRACT_ADDRESS
 }
 
 const redisClient = redis.createClient(envs.redisUrl)
