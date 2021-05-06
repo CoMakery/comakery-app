@@ -78,6 +78,10 @@
     "ETHEREUM_CONTRACT_ADDRESS": {
       "description": "Ethereum contract address of the token. It uses to get a balance of the token",
       "required": true
+    },
+    "ETHEREUM_BATCH_CONTRACT_ADDRESS": {
+      "description": "Ethereum batch contract address. It uses to send batch transfers of the main contract's tokens",
+      "required": false
     }
   }
 }

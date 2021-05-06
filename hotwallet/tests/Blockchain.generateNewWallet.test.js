@@ -1,7 +1,6 @@
 const hwUtils = require('../lib/hotwalletUtils')
 
-describe("Blockchai generate new wallet test suite", () => {
-
+describe("Blockchain generate new wallet test suite", () => {
   test('return correct generated keys for algorand ', async () => {
     const algoBlockchain = new hwUtils.Blockchain({
       purestakeApi: "eE7U9NAUNh1VlvDyZARGP4F2CIZgBDDB5nhxAS3G",
@@ -10,14 +9,13 @@ describe("Blockchai generate new wallet test suite", () => {
 
     const keys = await algoBlockchain.generateNewWallet()
     expect(keys).toBeInstanceOf(hwUtils.HotWallet)
-    expect(Object.keys(keys)).toEqual(["klass", "address", "publicKey", "privateKey", "privateKeyEncrypted", "optedInApps"])
+    expect(Object.keys(keys)).toEqual(["klass", "address", "publicKey", "privateKey", "privateKeyEncrypted"])
     expect(keys.address).toBeDefined()
     expect(keys.address.length).toBe(58)
     expect(keys.publicKey).toBeDefined()
     expect(keys.privateKey).toBeDefined()
     expect(keys.privateKeyEncrypted).toBeDefined()
     expect(keys.privateKeyEncrypted).toBeDefined()
-    expect(keys.optedInApps).toEqual([])
   })
 
   test('return correct generated keys for ethereum ', async () => {
@@ -28,13 +26,12 @@ describe("Blockchai generate new wallet test suite", () => {
 
     const keys = await ethBlockchain.generateNewWallet()
     expect(keys).toBeInstanceOf(hwUtils.HotWallet)
-    expect(Object.keys(keys)).toEqual(["klass", "address", "publicKey", "privateKey", "privateKeyEncrypted", "optedInApps"])
+    expect(Object.keys(keys)).toEqual(["klass", "address", "publicKey", "privateKey", "privateKeyEncrypted"])
     expect(keys.address).toBeDefined()
     expect(keys.address.length).toBe(42)
     expect(keys.publicKey).toBeDefined()
     expect(keys.privateKey).toBeDefined()
     expect(keys.privateKeyEncrypted).toBeDefined()
     expect(keys.privateKeyEncrypted).toBeDefined()
-    expect(keys.optedInApps).toEqual([])
   })
 });

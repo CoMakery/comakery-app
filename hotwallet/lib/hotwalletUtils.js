@@ -60,16 +60,12 @@ exports.runServer = async function runServer(envs, redisClient) {
 
   try {
     while (true) {
-      const hw = await hwRedis.hotWallet()
-      const isReadyToSendTx = hw.isReadyToSendTx(envs)
       let delay = envs.emptyQueueDelay
 
-      if (isReadyToSendTx) {
-        const resTx = await exports.waitForNewTransaction(envs, hwRedis)
+      const resTx = await exports.waitForNewTransaction(envs, hwRedis)
 
-        if (["cancelled_transaction", "successfull"].indexOf(resTx.status) > -1) {
-          delay = envs.betweenTransactionDelay
-        }
+      if (["cancelled_transaction", "successfull"].indexOf(resTx.status) > -1) {
+        delay = envs.betweenTransactionDelay
       }
 
       console.log(`waiting ${delay} seconds`)
@@ -91,6 +87,16 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
   if (!enoughCoins) {
     console.log(`The Hot Wallet does not have enough balance to send transactions. Please top up the ${hwAddress}`)
     return { status: "failed_before_getting_tx", blockchainTransaction: {}, transaction: {} }
+  }
+
+  const isReadyToSendTx = hotWallet.isReadyToSendTx(envs)
+  if (!isReadyToSendTx) {
+    if (hotWallet.isEthereum() && envs.ethereumContractAddress && envs.ethereumBatchContractAddress) {
+      const approveTx = await blockchain.klass.approveBatchContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumBatchContractAddress)
+      if (approveTx.transactionId) {
+        hwRedis.saveApprovedBatchContract(envs.ethereumBatchContractAddress)
+      }
+    }
   }
 
   const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
