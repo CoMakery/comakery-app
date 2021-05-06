@@ -76,7 +76,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         when 'burn'
           Comakery::Eth::Tx::Erc20::Burn.new(token.blockchain.explorer_api_host, tx_hash, self)
         else
-          if blockchain_transactables.size > 1
+          if blockchain_transactables.size > 1 && token.batch_contract_address
             Comakery::Eth::Tx::Erc20::BatchTransfer.new(token.blockchain.explorer_api_host, tx_hash, self)
           else
             Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash, self)
