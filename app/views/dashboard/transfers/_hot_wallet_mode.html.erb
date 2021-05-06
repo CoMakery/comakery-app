@@ -4,17 +4,18 @@
       <h4>Hot Wallet </h4>
       <div class="hot-wallet-switcher-child">
         <%= link_to(
-                  middle_truncate(project.hot_wallet.address),
-                  project.hot_wallet.blockchain.url_for_address_human(project.hot_wallet.address),
-                  target: :_blank,
-                  class: 'hot_wallet_address_link',
-                  data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "210" }
-                ) %>
+          middle_truncate(project.hot_wallet.address),
+          project.hot_wallet.blockchain.url_for_address_human(project.hot_wallet.address),
+          target: :_blank,
+          class: 'hot_wallet_address_link',
+          data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "210" }
+        ) %>
       </div>
       <%= select_tag "project[hot_wallet_mode]",
-                     options_for_select(Project.hot_wallet_modes.keys.map{|name| [name.humanize, name]}, project.hot_wallet_mode),
-                     id: "project_hot_wallet_mode",
-                     data: {action: "hot-wallet-mode-switcher#toggle", target: "hot-wallet-mode-switcher.hotWalletMode"} %>
+        options_for_select(Project.hot_wallet_modes.keys.map{|name| [name.humanize, name]}, project.hot_wallet_mode),
+        id: "project_hot_wallet_mode",
+        data: {action: "hot-wallet-mode-switcher#toggle", target: "hot-wallet-mode-switcher.hotWalletMode"}
+      %>
       <svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-arrow" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
     </div>
 <% end %>

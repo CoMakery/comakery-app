@@ -4,55 +4,6 @@
     <turbo-frame id="chart-data" target="_top" src="<%= fetch_chart_data_project_dashboard_transfers_path(@project, duration: (params[:duration] || 'Year'), q: @filter_params, page: params[:page]) %>">
       <div class="centered"><%= image_tag 'spinner.gif' %></div>
     </turbo-frame>
-    <div class="row">
-      <div class="col-6">
-        <% if policy(@project).create_transfer? %>
-          <div class="transfers-filters">
-            <div class="transfers-filters--filter">
-              <div class="transfers-filters--filter--options">
-                <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
-                  <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
-                  <% if policy(@project).transfer_types? %>
-                    <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transfer_categories_path(@project) } %>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="col-6">
-        <% hot_wallet = @project.hot_wallet %>
-        <% if hot_wallet.present? %>
-          <div class="text-right hot-wallet">
-            <% if policy(@project).edit_hot_wallet_mode? %>
-              <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
-            <% else %>
-              <div class="hot-wallet-address">
-                Hot Wallet:&emsp; <%= link_to(
-                  middle_truncate(hot_wallet.address),
-                  hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
-                  target: :_blank,
-                  class: 'mr-2',
-                  data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
-                ) %>
-              </div>
-            <% end %>
-        <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
-          <div class="text-right hot-wallet">
-            <h3>Deploy a hot wallet:</h3>
-            <a href="<%= deploy_to_heroku_url(@project) %>">
-              <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-            </a>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <% if policy(@project).create_transfer? %>
-      <%= render partial: "shared/wallet_connect" %>
-    <% end %>
 
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>

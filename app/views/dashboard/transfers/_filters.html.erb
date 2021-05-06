@@ -41,37 +41,41 @@
         <%= react_component('TransfersCalendar') %>
       </div>
     </div>
-
-    <div class="transfers-filters--filter">
-      <%= render partial: "filter_status" %>
-    </div>
-
-    <div class="transfers-filters--filter">
-      <h3>account</h3>
-
-      <%= search_form_for @q, url: project_dashboard_transfers_path(request.params.merge(q: (request.params[:q] || {}).except(:account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont))), method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
-        <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Type name or email', autofocus: false %>
-        <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
+    <% end %>
+  <% if policy(@project).create_transfer? %>
+    <div class='transfers-filters--filter'>
+      <% hot_wallet = @project.hot_wallet %>
+      <% if hot_wallet.present? %>
+        <div class="text-right hot-wallet">
+          <% if policy(@project).edit_hot_wallet_mode? %>
+            <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+          <% else %>
+            <div class="hot-wallet-address">
+              Hot Wallet:&emsp; <%= link_to(
+                middle_truncate(hot_wallet.address),
+                hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
+                target: :_blank,
+                class: 'mr-2',
+                data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+              ) %>
+            </div>
+          <% end %>
+        </div>
       <% end %>
     </div>
 
-    <div class="transfers-filters--filter">
-      <h3>Category</h3>
-
-      <div class="stacked-chart-legend">
-        <% @transfers_chart_colors_objects.each do |type, color| %>
-          <div class="stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
-            <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
-
-            <%= link_to(
-              type.name,
-              request.params.merge(q: (request.params[:q] || {}).except(:transfer_type_id_eq).merge(transfer_type_id_eq: type.id)),
-              class: "stacked-chart-legend__type__name"
-            ) %>
-          </div>
-        <% end %>
+    <div class="transfers-filters">
+      <div class="transfers-filters--filter">
+        <div class="transfers-filters--filter--options">
+          <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { style: 'color: white; background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%); padding-right: 35px;line-height: normal;', data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
+            <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
+            <% if policy(@project).transfer_types? %>
+              <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transfer_categories_path(@project) } %>
+            <% end %>
+          <% end %>
+          <svg xmlns="http://www.w3.org/2000/svg" style='width: 70px;margin-top: 7px;position: absolute;pointer-events: none;color: white;margin-left: 125px;' class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
       </div>
     </div>
-
   <% end %>
 </div>

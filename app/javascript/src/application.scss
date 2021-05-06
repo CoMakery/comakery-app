@@ -821,6 +821,7 @@ form.form-with-submit-button {
     .stacked-chart-legend__type__name {
       text-transform: capitalize;
       font-weight: 500;
+      word-break: keep-all;
     }
   }
 
@@ -1668,15 +1669,15 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__account {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__issuer {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__amount {
-      min-width: 60px;
+      min-width: 150px;
       display: block;
       white-space: nowrap;
       overflow: hidden;

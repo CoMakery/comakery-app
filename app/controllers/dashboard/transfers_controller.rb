@@ -1,7 +1,7 @@
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
-  before_action :set_transfers, only: %i[index]
+  before_action :set_transfers, only: %i[index fetch_chart_data]
   before_action :set_transfer, only: [:show]
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
   skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
