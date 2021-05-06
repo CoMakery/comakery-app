@@ -20,11 +20,11 @@ class ProjectRolesController < ApplicationController
 
   private
 
-  def project
-    @project ||= @project_scope.find(params[:project_id])
-  end
+    def project
+      @project ||= @project_scope.find(params[:project_id])
+    end
 
-  def authorize_project
-    authorize project, :show?
-  end
+    def authorize_project
+      authorize project, :show?
+    end
 end
