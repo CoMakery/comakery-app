@@ -47,7 +47,7 @@ class PagesController < ApplicationController
         image_url: mission_image_path(mission, 312),
         projects: mission.projects.public_listed.active.map do |project|
           project.as_json(only: %i[id title]).merge(
-            interested: current_account&.involved?(project.id)
+            interested: current_account&.interested?(project.id)
           )
         end
       )

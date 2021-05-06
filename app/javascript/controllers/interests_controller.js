@@ -6,6 +6,9 @@ export default class extends Controller {
     return fetch(this._followPath(projectId), {
       credentials: 'same-origin',
       method     : 'POST',
+      body       : JSON.stringify({
+        'specialty_id': specialtyId
+      }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -23,10 +26,10 @@ export default class extends Controller {
   }
 
   _followPath(projectId) {
-    return `/projects/${projectId}/project_roles`
+    return `/projects/${projectId}/interests`
   }
 
   _unfollowPath(projectId) {
-    return `/projects/${projectId}/project_roles/0`
+    return `/projects/${projectId}/interests/0`
   }
 }
