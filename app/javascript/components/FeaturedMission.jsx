@@ -18,12 +18,12 @@ export default class FeaturedMission extends React.Component {
 
   addInterest(projectId) {
     new InterestsController().follow(projectId).then(response => {
-      if (response.status === 200) {
+      if (response.status === 201) {
         let newProjects = Array.from(this.state.projects)
         const index = newProjects.findIndex(project => project.id === projectId)
         newProjects[index].interested = true
         this.setState({projects: newProjects})
-      } if (response.status === 401) {
+      } if (response.status === 422) {
         window.location = '/accounts/new'
       } else {
         throw Error(response.text())
@@ -38,7 +38,7 @@ export default class FeaturedMission extends React.Component {
         const index = newProjects.findIndex(project => project.id === projectId)
         newProjects[index].interested = false
         this.setState({projects: newProjects})
-      } else if (response.status === 401) {
+      } else if (response.status === 400) {
         window.location = '/accounts/new'
       } else {
         throw Error(response.text())

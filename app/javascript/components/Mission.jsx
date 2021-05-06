@@ -22,9 +22,9 @@ export default class Mission extends React.Component {
 
   addInterest(projectId, specialtyId = null) {
     new InterestsController().follow(projectId, specialtyId).then(response => {
-      if (response.status === 200) {
+      if (response.status === 201) {
         this.setState({ interests: {...this.state.interests, [projectId]: true} })
-      } else if (response.status === 401) {
+      } else if (response.status === 422) {
         window.location = '/accounts/new'
       } else {
         throw Error(response.text())
