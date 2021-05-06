@@ -22,22 +22,27 @@ module BlockchainTransactable
     scope :ready_for_blockchain_transaction, lambda { |include_failed = false|
       q = joins(sanitize_sql_array([
                                      ''"
+        LEFT JOIN batch_transactables
+          ON batch_transactables.id = (
+            SELECT MAX(id) FROM batch_transactables
+            WHERE batch_transactables.blockchain_transactable_id = #{table_name}.id
+            AND batch_transactables.blockchain_transactable_type = '#{table_name.camelize.singularize}'
+          )
         LEFT JOIN blockchain_transactions
-        ON blockchain_transactions.blockchain_transactable_id = #{table_name}.id
-        AND blockchain_transactions.blockchain_transactable_type = '#{table_name.camelize.singularize}'
-        AND blockchain_transactions.id = (
-          SELECT MAX(id) FROM blockchain_transactions
-          WHERE blockchain_transactions.blockchain_transactable_id = #{table_name}.id
-          AND blockchain_transactions.blockchain_transactable_type = '#{table_name.camelize.singularize}'
-        )
+          ON blockchain_transactions.transaction_batch_id = batch_transactables.transaction_batch_id
         "''
                                    ]))
           .distinct
           .where(
             ''"
             (blockchain_transactions.id IS NULL)
-            OR (blockchain_transactions.status IN (2 #{include_failed ? ', 4' : nil}))
-            OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)
+              OR (
+                blockchain_transactions.status IN (2 #{include_failed ? ', 4' : nil})
+              )
+              OR (
+                blockchain_transactions.status = 0
+                  AND blockchain_transactions.created_at < :timestamp
+              )
             "'',
             timestamp: 10.minutes.ago
           )
