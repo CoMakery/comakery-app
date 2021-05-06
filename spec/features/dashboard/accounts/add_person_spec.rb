@@ -7,7 +7,7 @@ describe 'Add person', js: true do
 
   scenario 'grants access to registered account' do
     login(owner)
-    visit project_dashboard_accesses_path(project)
+    visit project_dashboard_accounts_path(project)
 
     find('[data-target="#invite-person"]').click
 
@@ -24,7 +24,7 @@ describe 'Add person', js: true do
 
   scenario 'fails with unregistered account' do
     login(owner)
-    visit project_dashboard_accesses_path(project)
+    visit project_dashboard_accounts_path(project)
 
     find('a[data-target="#invite-person"]').click
 
