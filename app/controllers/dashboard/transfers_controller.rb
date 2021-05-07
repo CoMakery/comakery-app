@@ -1,5 +1,5 @@
 class Dashboard::TransfersController < ApplicationController
-  before_action :assign_project
+  before_action :find_project
   before_action :set_award_type, only: [:create]
   before_action :set_transfers, only: %i[index]
   before_action :set_transfer, only: [:show]
@@ -59,6 +59,12 @@ class Dashboard::TransfersController < ApplicationController
 
   private
 
+    def find_project
+      @project = @project_scope.includes(:transfer_types).find_by(id: params[:project_id])&.decorate
+
+      redirect_to '/404.html' unless @project
+    end
+
     def query
       @transfers_unfiltered =
         @project
@@ -74,7 +80,9 @@ class Dashboard::TransfersController < ApplicationController
       @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
       @page = (params[:page] || 1).to_i
       @transfers_totals = query.result(distinct: true).reorder('')
-      @transfers_all = @transfers_totals.includes(:token, :transfer_type, :project, award_type: [:project], issuer: [image_attachment: :blob], account: [:ore_id_account, :latest_verification, image_attachment: :blob])
+      @transfers_all = @transfers_totals.includes(:blockchain_transactions, :token, :transfer_type, :project,
+                                                  award_type: [:project], issuer: [image_attachment: :blob],
+                                                  account: [:ore_id_account, :latest_verification, image_attachment: :blob])
       @filter_params = params[:q]&.to_unsafe_h
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)
