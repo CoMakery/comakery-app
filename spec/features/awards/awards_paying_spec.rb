@@ -63,6 +63,5 @@ describe 'awarding users' do
     login(account)
     visit awards_project_path(project)
     expect(page).to have_content '1,000'
-    expect(page).to have_content 'Send'
   end
 end
