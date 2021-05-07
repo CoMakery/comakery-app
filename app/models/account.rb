@@ -339,8 +339,8 @@ class Account < ApplicationRecord
   end
 
   def sync_balances_later
-    wallets.pluck(:id, :_blockchain).each do |wallet_id, _blockchain|
-      Token.where(_blockchain: _blockchain).pluck(:id).each do |token_id|
+    wallets.pluck(:id, :_blockchain).each do |wallet_id, blockchain|
+      Token.where(_blockchain: blockchain).pluck(:id).each do |token_id|
         Balance.find_or_create_by(token_id: token_id, wallet_id: wallet_id).sync_with_blockchain_later
       end
     end
