@@ -5,6 +5,10 @@
       <div class="centered"><%= image_tag 'spinner.gif' %></div>
     </turbo-frame>
 
+    <% if policy(@project).create_transfer? %>
+      <%= render partial: "shared/wallet_connect" %>
+    <% end %>
+
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
