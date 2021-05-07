@@ -6,7 +6,7 @@ class AwardDecorator < Draper::Decorator
   def ethereum_transaction_address
     token && (object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash)
   end
-  
+
   def sender_wallet_address
     paid? ? blockchain_transactions.succeed.last&.source : nil
   end
