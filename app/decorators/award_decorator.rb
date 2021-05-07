@@ -6,6 +6,24 @@ class AwardDecorator < Draper::Decorator
   def ethereum_transaction_address
     token && (object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash)
   end
+  
+  def sender_wallet_address
+    paid? ? blockchain_transactions.succeed.last&.source : nil
+  end
+
+  def sender_wallet_url
+    if paid?
+      sender_wallet_address && token ? token.blockchain.url_for_address_human(sender_wallet_address) : nil
+    end
+  end
+
+  def blockchain_transactions?
+    blockchain_transactions.size.positive?
+  end
+
+  def payable_by_ore_id?(current_account)
+    token&.blockchain&.supported_by_ore_id? && current_account&.ore_id_account.nil?
+  end
 
   def ethereum_transaction_address_short
     "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
