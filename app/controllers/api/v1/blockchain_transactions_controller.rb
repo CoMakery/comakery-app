@@ -10,7 +10,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
     if transactable
       @transaction = BlockchainTransaction.new(transaction_create_params)
-      @transaction.create_batch([transactable].flatten)
+      @transaction.blockchain_transactables = transactable
       @transaction.save
     end
 

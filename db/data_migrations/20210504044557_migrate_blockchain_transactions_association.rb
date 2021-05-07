@@ -3,7 +3,7 @@ class MigrateBlockchainTransactionsAssociation < ActiveRecord::DataMigration
     BlockchainTransaction.find_each do |t|
       if t.blockchain_transactable_type
         transactable = t.blockchain_transactable_type.constantize.find(t.blockchain_transactable_id)
-        t.create_batch([transactable])
+        t.blockchain_transactables = transactable
         t.save
       end
     end

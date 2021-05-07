@@ -124,13 +124,22 @@ class BlockchainTransactionAward < BlockchainTransaction
 
     def populate_data
       super
+      populate_amounts
+      populate_destinations
+    end
 
-      self.amounts = blockchain_transactables.map do |t|
-        token.to_base_unit(t.total_amount)
+    def populate_amounts
+      if amounts.empty?
+        self.amounts = blockchain_transactables.map do |t|
+          token.to_base_unit(t.total_amount)
+        end
       end
-      self.amount ||= amounts.first
 
-      self.destinations = blockchain_transactables.map(&:recipient_address)
+      self.amount ||= amounts.first
+    end
+
+    def populate_destinations
+      self.destinations = blockchain_transactables.map(&:recipient_address) if destinations.empty?
       self.destination ||= destinations.first
     end
 end

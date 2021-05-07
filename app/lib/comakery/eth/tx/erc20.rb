@@ -6,7 +6,7 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
       contract: {
         abi: blockchain_transaction.token.abi,
         method: method_name,
-        parameters: encode_method_params
+        parameters: encode_method_params_json
       }
     })
   end
@@ -31,15 +31,19 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
     method.signature
   end
 
-  def encode_method_params
-    method_params.map do |pr|
-      case pr
+  def encode_method_params_json
+    encode_method_params_json_recursive(method_params)
+  end
+
+  def encode_method_params_json_recursive(params)
+    params.map do |param|
+      case param
       when TrueClass, FalseClass
-        pr
+        param
       when Array
-        pr.map(&:to_s)
+        encode_method_params_json_recursive(param)
       else
-        pr.to_s
+        param.to_s
       end
     end
   end
@@ -64,7 +68,7 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
     input[8..] == encode_method_params_hex
   end
 
-  def valid?(_)
+  def valid?(_ = nil)
     super \
     && valid_method_id? \
     && valid_method_params?

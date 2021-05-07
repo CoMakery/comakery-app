@@ -8,7 +8,7 @@ class Sign::OreIdController < ApplicationController
     # TODO: Add token admin role to policy token related tx
     authorize new_transaction_transactable, :pay? if new_transaction_for_award?
 
-    new_transaction.create_batch([new_transaction_transactable])
+    new_transaction.blockchain_transactables = new_transaction_transactable
     new_transaction.source = current_account.address_for_blockchain(new_transaction.blockchain_transactable.token._blockchain)
     new_transaction.save!
 

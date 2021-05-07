@@ -87,7 +87,7 @@ class Comakery::Eth::Tx
     value == blockchain_transaction.amount
   end
 
-  def valid?(_)
+  def valid?(_ = nil)
     valid_block? \
     && valid_status? \
     && valid_from? \

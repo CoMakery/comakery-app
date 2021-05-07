@@ -78,7 +78,7 @@ module BlockchainTransactable
     def new_blockchain_transaction(params)
       blockchain_transaction_class.new(
         params.merge(
-          blockchain_transactable: self
+          blockchain_transactables: self
         )
       )
     end

@@ -5,7 +5,7 @@ class Comakery::Eth::Tx::Erc20::BatchTransfer < Comakery::Eth::Tx::Erc20
       contract: {
         abi: blockchain_transaction.token.batch_abi,
         method: method_name,
-        parameters: encode_method_params
+        parameters: encode_method_params_json
       }
     })
   end
