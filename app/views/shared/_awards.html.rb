@@ -64,7 +64,7 @@ class Views::Shared::Awards < Views::Base
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?
                   text '(no account)'
-                elsif current_account&.decorate&.can_send_awards?(project)
+                elsif current_account&.decorate?(project)
                   link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': award.id do
                     span 'Send'
                     wallet_logo
