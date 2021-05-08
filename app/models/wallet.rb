@@ -10,6 +10,10 @@ class Wallet < ApplicationRecord
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
 
+  scope :with_whitelabel_mission, lambda { |whitelabel_mission_id|
+    left_outer_joins(account: :managed_mission).where(missions: { id: whitelabel_mission_id })
+  }
+
   validates :source, presence: true
   validates :address, presence: true, unless: :empty_address_allowed?
   validates :address, blockchain_address: true
@@ -24,6 +28,10 @@ class Wallet < ApplicationRecord
 
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
+
+  after_create_commit :broadcast_create_wl_account_wallet, if: -> { account&.whitelabel? }
+  after_update_commit :broadcast_update_wl_account_wallet, if: -> { account&.whitelabel? }
+  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { account&.whitelabel? }
 
   enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 
@@ -100,5 +108,26 @@ class Wallet < ApplicationRecord
 
     def empty_address_allowed?
       ore_id? && (wallet_provisions.empty? || wallet_provisions.any?(&:pending?))
+    end
+
+    def broadcast_create_wl_account_wallet
+      broadcast_append_later_to "wl_#{account.managed_mission.id}_account_wallets",
+                                target: "wl_account_#{account.id}_wallet_#{id}",
+                                partial: 'accounts/partials/index/wl_account_wallet',
+                                locals: { wl_account_wallet: self }
+    end
+
+    def broadcast_update_wl_account_wallet
+      broadcast_replace_to "wl_#{account.managed_mission.id}_account_wallets",
+                           target: "wl_account_#{account.id}_wallet_#{id}",
+                           partial: 'accounts/partials/index/wl_account_wallet',
+                           locals: { wl_account_wallet: self }
+    end
+
+    def broadcast_destroy_wl_account_wallet
+      Turbo::StreamsChannel.broadcast_remove_to(
+        "wl_#{account.managed_mission.id}_account_wallets",
+        target: "wl_account_#{account.id}_wallet_#{id}"
+      )
     end
 end

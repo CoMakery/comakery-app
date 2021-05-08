@@ -3,6 +3,7 @@ json.call(
   :id,
   :transfer_type_id,
   :recipient_wallet_id,
+  :lockup_schedule_id,
   :amount,
   :quantity,
   :total_amount,

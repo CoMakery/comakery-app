@@ -8,8 +8,7 @@ class HotWalletRedis {
 
     // Set error handler
     this.client.on("error", function (err) {
-      // added by oleg
-      console.log(`Redis client error: ${err}`);
+      console.error(`Redis client error: ${err}`);
     })
   }
 
@@ -17,13 +16,23 @@ class HotWalletRedis {
     return `wallet_for_project_${this.envs.projectId}`
   }
 
+  transactableKeyName(type, id) {
+    return `bt_${type}#${id}` // for example bt-Award#24
+  }
+
   async hotWallet() {
     const savedHW = await this.hgetall(this.walletKeyName())
 
     if (savedHW) {
+      const network = savedHW.network || this.envs.blockchainNetwork
       const optedInApps = JSON.parse(savedHW.optedInApps || "[]")
+      const keys = {
+        publicKey: savedHW.publicKey,
+        privateKey: savedHW.privateKey,
+        privateKeyEncrypted: savedHW.privateKeyEncrypted
+      }
 
-      return new HotWallet(savedHW.address, savedHW.mnemonic, optedInApps)
+      return new HotWallet(network, savedHW.address, keys, optedInApps)
     } else {
       return undefined
     }
@@ -42,7 +51,13 @@ class HotWalletRedis {
   }
 
   async saveNewHotWallet(wallet) {
-    await this.hset(this.walletKeyName(), "address", wallet.address, "mnemonic", wallet.mnemonic)
+    await this.hset(
+      this.walletKeyName(),
+      "address", wallet.address,
+      "privateKey", wallet.privateKey,
+      "publicKey", wallet.publicKey,
+      "privateKeyEncrypted", wallet.privateKeyEncrypted
+      )
     console.log(`Keys for a new hot wallet has been saved into ${this.walletKeyName()}`)
     return true
   }
@@ -60,6 +75,29 @@ class HotWalletRedis {
     return true
   }
 
+  async getSavedDataForTransaction(tx) {
+    const key = this.transactableKeyName(tx.blockchainTransactableType, tx.blockchainTransactableId)
+    const values = await this.hgetall(key)
+
+    if (values) {
+      return { key: key, values: values }
+    } else {
+      return null
+    }
+  }
+
+  async saveDavaForTransaction(status, blockchainTransaction) {
+    const key = this.transactableKeyName(blockchainTransaction.blockchainTransactableType, blockchainTransaction.blockchainTransactableId)
+    const monthInSeconds = 60*60*24*30
+
+    await this.hset(key,
+      "status", status,
+      "txHash", blockchainTransaction.txHash,
+      "createdAt", Date.now(),
+    )
+    await this.expire(key, monthInSeconds)
+  }
+
   async hset(...args) {
     return await (promisify(this.client.hset).bind(this.client))(...args)
   }
@@ -74,6 +112,10 @@ class HotWalletRedis {
 
   async del(...args) {
     return await (promisify(this.client.del).bind(this.client))(...args)
+  }
+
+  async expire(...args) {
+    return await (promisify(this.client.expire).bind(this.client))(...args)
   }
 }
 exports.HotWalletRedis = HotWalletRedis

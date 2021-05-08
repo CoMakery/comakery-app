@@ -4,8 +4,18 @@ require 'rspec_api_documentation/dsl'
 resource 'VII. Blockchain Transactions' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    allow_any_instance_of(ApiKey).to receive(:key).and_return('F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:blockchain_transaction) { create(:blockchain_transaction) }
+  let!(:blockchain_transaction) { create(:static_blockchain_transaction, id: 49) }
   let!(:project) { blockchain_transaction.blockchain_transactable.project }
 
   before do
@@ -66,6 +76,8 @@ resource 'VII. Blockchain Transactions' do
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
+        allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
+
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
         end
@@ -82,7 +94,9 @@ resource 'VII. Blockchain Transactions' do
         header 'API-Key', nil
         header 'API-Transaction-Key', project.api_key.key
 
+        allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
         VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
+          allow_any_instance_of(Award).to receive(:id).and_return('5')
           do_request(request)
         end
 
@@ -91,22 +105,26 @@ resource 'VII. Blockchain Transactions' do
 
       example 'GENERATE TRANSACTION – TRANSACTABLE TYPE' do
         explanation 'Generates a new blockchain transaction for transactable with supplied type and locks the transactable for 10 minutes'
-        create(:transfer_rule, token: project.token)
+        create(:static_transfer_rule, id: 35, token: project.token)
 
         request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: 'transfer_rules' }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
+        allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
+        allow_any_instance_of(RegGroup).to receive(:blockchain_id).and_return(1001)
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
         end
-
         expect(status).to eq(201)
       end
 
       example 'GENERATE TRANSACTION – TRANSACTABLE TYPE AND TRANSACTABLE ID' do
         explanation 'Generates a new blockchain transaction for transactable with supplied type and id and locks the transactable for 10 minutes'
-        t = create(:transfer_rule, token: project.token)
+        t = create(:static_transfer_rule, id: 20, token: project.token)
 
         request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: 'transfer_rules', blockchain_transactable_id: t.id }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+
+        allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
+        allow_any_instance_of(RegGroup).to receive(:blockchain_id).and_return(1001)
 
         VCR.use_cassette("infura/#{project.token._blockchain}/#{project.token.contract_address}/contract_init") do
           do_request(request)
@@ -191,6 +209,7 @@ resource 'VII. Blockchain Transactions' do
 
       example 'CANCEL TRANSACTION' do
         explanation 'Marks transaction as cancelled and releases transfer for a new transaction, see GENERATE TRANSACTION for response fields'
+        allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE', 'example.org')
         do_request(request)
@@ -212,6 +231,8 @@ resource 'VII. Blockchain Transactions' do
 
       example 'FAIL TRANSACTION' do
         explanation 'Marks transaction as failed and excludes transfer from further transactions, see GENERATE TRANSACTION for response fields'
+
+        allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE', 'example.org')
         do_request(request)

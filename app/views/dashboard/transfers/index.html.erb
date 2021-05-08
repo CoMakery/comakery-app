@@ -28,17 +28,26 @@
           <div class="text-right hot-wallet">
             <% if policy(@project).edit_hot_wallet_mode? %>
               <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+            <% else %>
+              <div class="hot-wallet-address">
+                Hot Wallet:&emsp; <%= link_to(
+                  middle_truncate(hot_wallet.address),
+                  hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
+                  target: :_blank,
+                  class: 'mr-2',
+                  id: 'hot_wallet_admin_only',
+                  data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
+                ) %>
+              </div>
             <% end %>
-            <div class="hot-wallet-address">
-              Hot Wallet:&emsp; <%= link_to(
-                middle_truncate(hot_wallet.address),
-                hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
-                target: :_blank,
-                class: 'mr-2',
-                id: 'hot_wallet_admin_only',
-                data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
-              ) %>
-            </div>
+           </div>
+        <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
+          <div class="text-right hot-wallet">
+            <h3>Deploy a hot wallet:</h3>
+            <a href="<%= deploy_to_heroku_url(@project) %>">
+              <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+            </a>
+          </div>
         <% end %>
       </div>
     </div>

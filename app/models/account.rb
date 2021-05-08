@@ -104,6 +104,12 @@ class Account < ApplicationRecord
 
   after_create :populate_awards
 
+  after_update_commit :broadcast_update_wl_account_wallet, if: lambda {
+    whitelabel? && (saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?)
+  }
+
+  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { whitelabel? }
+
   class << self
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
@@ -333,11 +339,15 @@ class Account < ApplicationRecord
   end
 
   def sync_balances_later
-    wallets.find_each do |wallet|
-      wallet.tokens_of_the_blockchain.find_each do |token|
-        Balance.find_or_create_by(token: token, wallet: wallet).sync_with_blockchain_later
+    wallets.pluck(:id, :_blockchain).each do |wallet_id, blockchain|
+      Token.where(_blockchain: blockchain).pluck(:id).each do |token_id|
+        Balance.find_or_create_by(token_id: token_id, wallet_id: wallet_id).sync_with_blockchain_later
       end
     end
+  end
+
+  def whitelabel?
+    managed_mission&.whitelabel?
   end
 
   private
@@ -375,6 +385,24 @@ class Account < ApplicationRecord
     def populate_awards
       Award.accepted.where(email: email, account_id: nil).find_each do |a|
         a.update(account: self, email: nil)
+      end
+    end
+
+    def broadcast_update_wl_account_wallet
+      wallets.each do |wallet|
+        broadcast_replace_to "wl_#{managed_mission.id}_account_wallets",
+                             target: "wl_account_#{id}_wallet_#{wallet.id}",
+                             partial: 'accounts/partials/index/wl_account_wallet',
+                             locals: { wl_account_wallet: wallet }
+      end
+    end
+
+    def broadcast_destroy_wl_account_wallet
+      wallet_ids.each do |wallet_id|
+        Turbo::StreamsChannel.broadcast_remove_to(
+          "wl_#{managed_mission.id}_account_wallets",
+          target: "wl_account_#{id}_wallet_#{wallet_id}"
+        )
       end
     end
 end

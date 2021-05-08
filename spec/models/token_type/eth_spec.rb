@@ -20,6 +20,7 @@ describe TokenType::Eth do
   specify { expect(described_class.new(**attrs).supports_token_mint?).to be_falsey }
   specify { expect(described_class.new(**attrs).supports_token_burn?).to be_falsey }
   specify { expect(described_class.new(**attrs).supports_token_freeze?).to be_falsey }
+  specify { expect(described_class.new(**attrs).supports_balance?).to be_truthy }
 
   describe '#blockchain_balance' do
     let(:token_type) { described_class.new(**attrs) }
