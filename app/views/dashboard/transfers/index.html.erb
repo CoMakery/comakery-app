@@ -40,6 +40,7 @@
                 ) %>
               </div>
             <% end %>
+          </div>
         <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
           <div class="text-right hot-wallet">
             <h3>Deploy a hot wallet:</h3>
