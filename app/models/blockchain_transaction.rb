@@ -29,13 +29,7 @@ class BlockchainTransaction < ApplicationRecord
 
   def blockchain_transactables=(transactables)
     self.transaction_batch = TransactionBatch.create!
-
-    [transactables].flatten.each do |transactable|
-      BatchTransactable.create!(
-        transaction_batch: transaction_batch,
-        blockchain_transactable: transactable
-      )
-    end
+    transaction_batch.blockchain_transactables = transactables
   end
 
   def self.number_of_confirmations

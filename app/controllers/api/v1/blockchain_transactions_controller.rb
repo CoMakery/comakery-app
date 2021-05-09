@@ -9,7 +9,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     return head :no_content if creation_disabled?
 
     if transactable
-      @transaction = BlockchainTransaction.new(transaction_create_params)
+      @transaction = transaction_class.new(transaction_create_params)
       @transaction.blockchain_transactables = transactable
       @transaction.save
     end
@@ -81,20 +81,28 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       end
     end
 
+    def transaction_class
+      t = transactable.respond_to?(:first) ? transactable.first : transactable
+      t.blockchain_transaction_class
+    end
+
     def default_next_award_blockchain_transactable
-      default_next_award_blockchain_transactable_hw_manual \
-      || default_next_award_blockchain_transactable_batch \
-      || default_next_award_blockchain_transactable_single
+      if hot_wallet_manual_sending?
+        default_next_award_blockchain_transactable_hw_manual
+      else
+        default_next_award_blockchain_transactable_batch \
+        || default_next_award_blockchain_transactable_single
+      end
     end
 
     def default_next_award_blockchain_transactable_hw_manual
-      project.awards.ready_for_hw_manual_blockchain_transaction.first if project.hot_wallet_manual_sending? && hot_wallet_request?
+      project.awards.ready_for_hw_manual_blockchain_transaction.first
     end
 
     def default_next_award_blockchain_transactable_batch
       batch_size = ENV['ERC20_TRANSFER_BATCH_SIZE'].to_i
 
-      project.awards.ready_for_batch_blockchain_transaction.first(batch_size) if batch_size > 1 && project.awards.ready_for_batch_blockchain_transaction.any?
+      project.awards.ready_for_batch_blockchain_transaction.limit(batch_size) if batch_size > 1 && project.awards.ready_for_batch_blockchain_transaction.any?
     end
 
     def default_next_award_blockchain_transactable_single
@@ -102,7 +110,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def default_next_account_token_record_blockchain_transactable
-      if project.hot_wallet_manual_sending? && hot_wallet_request?
+      if hot_wallet_manual_sending?
         project.account_token_records.ready_for_hw_manual_blockchain_transaction.first
       else
         project.account_token_records.ready_for_blockchain_transaction.first
@@ -139,6 +147,10 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
     def hot_wallet_disabled?
       project.hot_wallet_disabled? && hot_wallet_request?
+    end
+
+    def hot_wallet_manual_sending?
+      project.hot_wallet_manual_sending? && hot_wallet_request?
     end
 
     def creation_disabled?

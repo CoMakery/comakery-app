@@ -7,6 +7,7 @@ class Sign::UserWalletController < ApplicationController
   def new
     # TODO: Add token admin role to policy token related tx
     authorize new_transaction_transactable, :pay? if new_transaction_for_award?
+    authorize project_for_batch_awards, :create_transfer? if project_for_batch_awards
 
     new_transaction.blockchain_transactables = new_transaction_transactable
     new_transaction.source = params[:source]
@@ -74,13 +75,12 @@ class Sign::UserWalletController < ApplicationController
       elsif params[:token_id]
         Token.find(params.require(:token_id))
       elsif project_for_batch_awards
-        project_for_batch_awards.awards.ready_for_batch_blockchain_transaction if project_for_batch_awards.awards.ready_for_batch_blockchain_transaction.any?
+        project_for_batch_awards.awards.ready_for_batch_blockchain_transaction.limit(250) if project_for_batch_awards.awards.ready_for_batch_blockchain_transaction.any?
       end
     end
 
     def new_transaction_for_award?
-      new_transaction.is_a?(BlockchainTransactionAward) \
-      && new_transaction_transactable.is_a?(Award)
+      new_transaction_transactable.is_a?(Award)
     end
 
     def received_transaction_for_award?
@@ -92,6 +92,6 @@ class Sign::UserWalletController < ApplicationController
     end
 
     def project_for_batch_awards
-      Project.find(params[:project_id])
+      @project_for_batch_awards ||= Project.find_by(id: params[:project_id])
     end
 end
