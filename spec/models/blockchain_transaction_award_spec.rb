@@ -13,10 +13,7 @@ describe BlockchainTransactionAward, vcr: true do
       a.update(source: :burn)
       a
     end
-    let!(:blockchain_transaction_mint) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_mint) }
-    let!(:blockchain_transaction_burn) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
-    let!(:blockchain_transaction_rule) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
-    let!(:blockchain_transaction_account) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
+
     let!(:contract) do
       build(
         :erc20_contract,
@@ -238,7 +235,7 @@ describe BlockchainTransactionAward, vcr: true do
     subject { blockchain_transaction.broadcast_updates }
 
     it 'broadcasts templates' do
-      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(5).times
+      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(4).times
       subject
     end
 
