@@ -1,5 +1,5 @@
 <% account = account&.decorate || project_role&.account&.decorate %>
-<% project = @project || project_role&.project %>
+<% project = @project || project_role&.project&.decorate %>
 <% account_project_role = project.project_roles.find_by(account: account) || project_role %>
 <% synced_record = account.account_token_records.where(token: project.token, status: :synced).last %>
 <% last_record = account.account_token_records.where(token: project.token).last %>
