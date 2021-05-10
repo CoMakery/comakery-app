@@ -189,6 +189,28 @@ class Mom
     end
   end
 
+  def blockchain_transaction_award_batch(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token)
+    attrs.delete(:token)
+
+    award1 = blockchain_transaction__award(attrs.merge(token: token))
+    award2 = award1.clone_on_assignment
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactables: Award.where(id: [award1.id, award2.id]),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
   def blockchain_transaction_transfer_rule(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token)
     attrs.delete(:token)

@@ -83,6 +83,13 @@ module BlockchainTransactable
       )
     end
 
+    def same_batch_transactables
+      latest_blockchain_transaction.blockchain_transactables.where.not(id: id)
+    end
+
+    # TODO: Handle all transaction statuses and cover with specs
+    #
+    # Logic below doesn't handle all possible cases properly
     def cancelable?
       case latest_blockchain_transaction&.status
       when 'created'
@@ -92,10 +99,6 @@ module BlockchainTransactable
       else
         true
       end
-    end
-
-    def same_batch_transactables
-      latest_blockchain_transaction.blockchain_transactables.where.not(id: id)
     end
   end
 end
