@@ -6,7 +6,7 @@ module BlockchainTransactable
     has_many :transaction_batches, through: :batch_transactables
     has_many :blockchain_transactions, through: :transaction_batches
 
-    has_one :latest_batch_transactable, class_name: 'BatchTransactable', as: :blockchain_transactable, inverse_of: :blockchain_transactable
+    has_one :latest_batch_transactable, class_name: 'BatchTransactable', as: :blockchain_transactable, inverse_of: :blockchain_transactable, dependent: :destroy
     has_one :latest_transaction_batch, through: :latest_batch_transactable, source: :transaction_batch
     has_one :latest_blockchain_transaction, -> { order(created_at: :desc) }, through: :latest_transaction_batch, source: :blockchain_transaction
 
