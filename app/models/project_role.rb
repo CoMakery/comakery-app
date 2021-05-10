@@ -33,4 +33,3 @@ class ProjectRole < ApplicationRecord
       )
     end
 end
-
