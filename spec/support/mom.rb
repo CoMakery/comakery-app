@@ -289,7 +289,7 @@ class Mom
                              project: project
                            ))
     defaults = {
-      blockchain_transactable: award,
+      blockchain_transactables: award,
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: 1,

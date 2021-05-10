@@ -328,13 +328,14 @@ Api-Transaction-Key: F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T</pre>
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;767c637101e92d77cdc898c17aea80b5&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;d58f9d09be1b46179ed8d60ac768c410&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: &quot;40&quot;,
-  &quot;blockchainTransactableId&quot;: 35,
+  &quot;blockchainTransactableId&quot;: null,
+  &quot;blockchainTransactableType&quot;: null,
   &quot;destination&quot;: null,
   &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
   &quot;amount&quot;: null,
@@ -347,7 +348,14 @@ Api-Transaction-Key: F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T</pre>
   &quot;statusMessage&quot;: null,
   &quot;createdAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
   &quot;updatedAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
-  &quot;syncedAt&quot;: null
+  &quot;syncedAt&quot;: null,
+  &quot;blockchainTransactables&quot;: [
+    {
+      &quot;id&quot;: null,
+      &quot;blockchainTransactableType&quot;: &quot;TransferRule&quot;,
+      &quot;blockchainTransactableId&quot;: 35
+    }
+  ]
 }</pre>
       </div>
     </div>
