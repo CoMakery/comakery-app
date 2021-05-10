@@ -29,9 +29,9 @@ class Wallet < ApplicationRecord
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
 
-  after_create_commit :broadcast_create
-  after_update_commit :broadcast_update
-  after_destroy_commit :broadcast_destroy
+  after_create_commit :broadcast_create, if: -> { account.present? }
+  after_update_commit :broadcast_update, if: -> { account.present? }
+  after_destroy_commit :broadcast_destroy, if: -> { account.present? }
 
   enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 
