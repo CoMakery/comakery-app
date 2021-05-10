@@ -7,6 +7,24 @@ describe 'project page', :js do
     ready_task.project.update(visibility: :public_listed)
   end
 
+  it 'shows tasks link if env whitelabel is not true' do
+    login(ready_task.account)
+    visit(project_path(ready_task.project))
+
+    expect(page).to have_link('Tasks')
+    visit(project_award_types_path(ready_task.project))
+    expect(page).to have_current_path(project_award_types_path(ready_task.project))
+  end
+
+  it 'shows tasks link if env whitelabel is set to true' do
+    login(ready_task.account)
+    visit(project_path(ready_task.project))
+
+    expect(page).not_to have_link('Tasks')
+    visit(project_award_types_path(ready_task.project))
+    expect(page).to have_current_path(root_path)
+  end
+
   it 'shows ready tasks to a contributor' do
     login(ready_task.account)
     visit(project_path(ready_task.project))

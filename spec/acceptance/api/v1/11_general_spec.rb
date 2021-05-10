@@ -4,8 +4,24 @@ require 'rspec_api_documentation/dsl'
 resource 'I. General' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }
+
+  let!(:project) { create(:static_project, id: 20, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 80)) }
+
+  before do
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    project.transfer_types.each_with_index do |t_type, i|
+      t_type.update_column(:id, 905 + i) # rubocop:disable Rails/SkipsModelValidations
+    end
+  end
 
   explanation 'Details on authentication, caching, throttling, inflection and pagination.'
 

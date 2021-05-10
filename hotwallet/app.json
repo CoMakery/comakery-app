@@ -45,26 +45,39 @@
       "value": "https://comakery.com"
     },
     "PURESTAKE_API": {
-      "description": "Api key generated on Purestake to operate with Algorand blockchain",
-      "required": true
+      "description": "Api key generated on Purestake to operate with Algorand blockchain. Required to use algorand blockchain.",
+      "required": false
     },
-    "CHECK_FOR_NEW_TRANSACTIONS_DELAY": {
-      "description": "Timeout in second between checking for new transactions to send",
+    "EMPTY_QUEUE_DELAY": {
+      "description": "Timeout in second between checking for new transactions to send when previously we DO NOT have a transaction.",
       "required": true,
       "value": "30"
     },
-    "OPT_IN_APP": {
-      "description": "Algorand App index. The hot wallet will automatically opt-in to that App",
-      "required": true
+    "BETWEEN_TRANSACTION_DELAY": {
+      "description": "Timeout in second between checking for new transactions to send when previously we had a transaction.",
+      "required": true,
+      "value": "5"
     },
     "BLOCKCHAIN_NETWORK": {
-      "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta",
+      "description": "Which network should we use for the hot wallet: algorand, algorand_test, algorand_beta, ethereum, ethereum_ropsten, ethereum_rinkeby",
       "required": true,
-      "value": "algorand"
+      "value": "ethereum"
     },
     "MAX_AMOUNT_FOR_TRANSFER": {
-      "description": "Maximum amount of tokens to send. Value 100000000 is mean 1 NOTE token (1 x 10^-8), 0 for unlimited. Unlimited by default",
+      "description": "Maximum amount of tokens to send in base units. Unlimited by default",
       "required": false
+    },
+    "INFURA_PROJECT_ID": {
+      "description": "Project id generated on Infura. Required to use ethereum blockchain.",
+      "required": true
+    },
+    "ETHEREUM_TOKEN_SYMBOL": {
+      "description": "Ethereum Token symbol (CERE for example). It uses to get a balance of the token",
+      "required": true
+    },
+    "ETHEREUM_CONTRACT_ADDRESS": {
+      "description": "Ethereum contract address of the token. It uses to get a balance of the token",
+      "required": true
     }
   }
 }

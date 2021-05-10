@@ -701,6 +701,7 @@ GEM
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    timecop (0.9.4)
     tracker_api (1.12.0)
       addressable
       equalizer
@@ -882,6 +883,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets (= 3.7.2)
+  timecop
   trollop
   truncato (~> 0.7.11)
   turbo-rails

@@ -4,8 +4,17 @@ require 'rspec_api_documentation/dsl'
 resource 'XIII. Full Wallet configurations flow' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 65, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
@@ -24,7 +33,7 @@ resource 'XIII. Full Wallet configurations flow' do
       explanation 'Returns created account data'
 
       # 1. Create a comakery account
-      account_params = { managed_account_id: SecureRandom.uuid, email: "me+#{SecureRandom.hex(20)}@example.com", first_name: 'Eva', last_name: 'Smith', nickname: "hunter-#{SecureRandom.hex(20)}", date_of_birth: '1990-01-31', country: 'United States of America' }
+      account_params = { managed_account_id: 'bfca35b9-6c9b-449f-93b6-16f2d064de7d', email: 'me+e83af0061f6e2a3345ea55c516c9cef3bb788ba7@example.com', first_name: 'Eva', last_name: 'Smith', nickname: 'hunter-462b87f9e0d6e2149911a619a76116f1f0c820de', date_of_birth: '1990-01-31', country: 'United States of America' }
       request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
       do_request(request)
       expect(status).to eq(201)
@@ -39,14 +48,18 @@ resource 'XIII. Full Wallet configurations flow' do
       explanation 'Returns created wallets'
 
       request = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+      allow_any_instance_of(Wallet).to receive(:id).and_return(25)
       do_request(request)
+      # if status == 201
+      #   result[0][:request_path] = '/api/v1/accounts/43ff3e88-f722-4cc3-a438-56605f3e4580/wallets'
+      # end
       expect(status).to eq(201)
     end
   end
 
   post '/api/v1/accounts/:id/wallets/:wallet_id/password_reset' do
     let!(:id) { account.managed_account_id }
-    let!(:wallet) { create(:ore_id_wallet, account: account) }
+    let!(:wallet) { create(:ore_id_wallet, id: 50, account: account) }
     let(:wallet_id) { wallet.id.to_s }
     let!(:redirect_url) { 'localhost' }
 
@@ -60,7 +73,6 @@ resource 'XIII. Full Wallet configurations flow' do
       allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
       allow_any_instance_of(OreIdService).to receive(:remote).and_return({ 'email' => account.email })
       do_request(request)
-
       expect(status).to eq(200)
     end
   end
