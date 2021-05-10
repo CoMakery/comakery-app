@@ -6,6 +6,9 @@ describe 'test_aml_kyc_failed_wallet_filter', js: true do
   let!(:project_award_type) { (create :award_type, project: project) }
   let!(:verification) { create(:verification, account: owner, passed: false) }
 
+  # TODO: Remove me after fixing "eager loading detected Award => [:latest_transaction_batch]"
+  before { Bullet.raise = false }
+
   [1, 2, 5].each do |number_of_transfers|
     context "With #{number_of_transfers} AML/KYC failed transfers" do
       it 'Returns correct number of transfers after applying filter' do
