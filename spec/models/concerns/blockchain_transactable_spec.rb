@@ -1,10 +1,10 @@
 shared_examples 'blockchain_transactable' do
   it { is_expected.to have_many(:batch_transactables).dependent(:destroy) }
-  it { is_expected.to have_many(:transaction_batches).dependent(:destroy) }
-  it { is_expected.to have_many(:blockchain_transactions).dependent(:destroy) }
-  it { is_expected.to have_one(:latest_batch_transactable).order('created_at: :desc').class_name('BatchTransactable').with_foreign_key(:blockchain_transactable_id) }
+  it { is_expected.to have_many(:transaction_batches) }
+  it { is_expected.to have_many(:blockchain_transactions) }
+  it { is_expected.to have_one(:latest_batch_transactable).class_name('BatchTransactable').dependent(:destroy) }
   it { is_expected.to have_one(:latest_transaction_batch).source(:transaction_batch) }
-  it { is_expected.to have_one(:latest_blockchain_transaction).source(:blockchain_transaction) }
+  it { is_expected.to have_one(:latest_blockchain_transaction).order(created_at: :desc).source(:blockchain_transaction) }
 
   describe '#latest_blockchain_transaction' do
     it 'returns record which belong to correct type and id' do
