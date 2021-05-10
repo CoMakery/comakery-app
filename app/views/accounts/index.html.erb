@@ -25,11 +25,11 @@
               </tr>
               </thead>
               <body>
-              <%= turbo_stream_from "wl_#{@whitelabel_mission.id}_account_wallets" %>
-              <%= turbo_frame_tag "wl_#{@whitelabel_mission.id}_account_wallets" do %>
-                <%= render partial: 'accounts/partials/index/wl_account_wallet',
-                           collection: @wl_account_wallets,
-                           as: :wl_account_wallet %>
+              <%= turbo_stream_from "mission_#{@whitelabel_mission&.id}_account_wallets" %>
+              <%= turbo_frame_tag "mission_#{@whitelabel_mission&.id}_account_wallets" do %>
+                <%= render partial: 'accounts/partials/index/wallet',
+                           collection: @wallets,
+                           as: :wallet %>
               <% end %>
               </body>
             </table>
@@ -38,5 +38,5 @@
       </div>
     </div>
   </div>
-  <%= paginate(@wl_account_wallets, window: 3) %>
+  <%= paginate(@wallets, window: 3) %>
 </div>
