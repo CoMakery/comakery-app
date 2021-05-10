@@ -40,7 +40,7 @@ describe 'transfer button on Transfers page' do
         transfer.paid!
         create(
           :blockchain_transaction,
-          blockchain_transactable: transfer,
+          blockchain_transactables: transfer,
           token: transfer.token,
           amount: 1,
           tx_hash: 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A',
@@ -168,7 +168,7 @@ describe 'transfer button on Transfers page' do
         transfer.paid!
         create(
           :blockchain_transaction,
-          blockchain_transactable: transfer,
+          blockchain_transactables: transfer,
           token: transfer.token,
           amount: 100,
           tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d',
