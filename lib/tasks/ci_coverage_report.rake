@@ -4,7 +4,7 @@ namespace :coverage do
     require 'simplecov'
 
     SimpleCov.collate Dir['coverage_*/.resultset.json'], 'rails' do
-      SimpleCov.minimum_coverage 97.3
+      SimpleCov.minimum_coverage 95
       SimpleCov.refuse_coverage_drop
 
       # add_filter == do not track coverage

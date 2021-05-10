@@ -4,8 +4,17 @@ require 'rspec_api_documentation/dsl'
 resource 'XI. Wallet Recovery' do
   include Rails.application.routes.url_helpers
 
-  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: nil, wallet_recovery_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
+  let!(:account) { create(:static_account, id: 62, managed_mission: active_whitelabel_mission) }
   let(:private_wrapping_key) { '18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725' }
   let(:public_wrapping_key) { '0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6' }
 
@@ -71,6 +80,8 @@ resource 'XI. Wallet Recovery' do
       ).unpack1('H*')
     end
 
+    let(:payload) { '02a308cf11cdbbd2116d3ab7b3471e55a95a515e324f48b1b713ddfedcbb65fc5db860c3c4d1e917b3cdabf10a7c5e9ce1567ba22ac8dfc14a' }
+
     with_options with_example: true do
       response_field :data, 'payload, ECIES-decrypted with secp256k1 private wrapping key, re-encrypted with provided secp256k1 public transport key', type: :string
     end
@@ -105,7 +116,13 @@ resource 'XI. Wallet Recovery' do
     context '201' do
       example 'RECOVER DATA ENCRYPTED WITH PUBLIC WRAPPING KEY' do
         explanation 'Returns decrypted with private wrapping key payload, re-encrypted with provided transport key'
-        subject
+        result = subject
+        if status == 201
+          body = JSON.parse(result[0][:response_body])
+          result[0][:response_headers]['ETag'] = 'W/"88dbd36c4ead90fe3c7f462bc8b1bfe0"'
+          body['data'] = '03d71a3bdc5b609f2845744904aa1fb5f4a62a742aa5d8d221cc9e2d21601f4c5447f85aa71d4a1c7b8a075cf3f7f529093be13531f6457e14'
+          result[0][:response_body] = body.to_json
+        end
         expect(status).to eq(201)
       end
     end

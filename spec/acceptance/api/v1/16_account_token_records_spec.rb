@@ -4,8 +4,17 @@ require 'rspec_api_documentation/dsl'
 resource 'VI. Wallet Transfer Rules' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account_token_record) { create(:account_token_record) }
+  let!(:account_token_record) { create(:static_account_token_record, id: 75) }
   let!(:account) { account_token_record.account }
   let!(:token) { account_token_record.token }
   let!(:wallet) { account_token_record.wallet }
@@ -91,7 +100,7 @@ resource 'VI. Wallet Transfer Rules' do
         {
           max_balance: '100',
           lockup_until: '1',
-          reg_group_id: create(:reg_group, token: account_token_record.token).id.to_s,
+          reg_group_id: create(:reg_group, id: 60, token: account_token_record.token).id.to_s,
           managed_account_id: create(:account, managed_account_id: 'new_managed_account').managed_account_id,
           account_frozen: 'false'
         }
@@ -113,7 +122,7 @@ resource 'VI. Wallet Transfer Rules' do
         {
           max_balance: '-100',
           lockup_until: '1',
-          reg_group_id: create(:reg_group, token: account_token_record.token).id.to_s,
+          reg_group_id: create(:reg_group, id: 30, token: account_token_record.token).id.to_s,
           managed_account_id: create(:account, managed_account_id: 'new_managed_account').managed_account_id,
           account_frozen: 'false'
         }

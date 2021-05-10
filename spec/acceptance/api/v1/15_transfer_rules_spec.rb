@@ -4,9 +4,18 @@ require 'rspec_api_documentation/dsl'
 resource 'V. Transfer Rules' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
+    allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+  end
+
+  after do
+    Timecop.return
+  end
+
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:transfer_rule) { create(:transfer_rule) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission, token: transfer_rule.token) }
+  let!(:transfer_rule) { create(:static_transfer_rule, id: 40) }
+  let!(:project) { create(:project, id: 50, mission: active_whitelabel_mission, token: transfer_rule.token) }
 
   explanation 'Create and delete transfer rules, retrieve transfer rules data.'
 
@@ -84,8 +93,8 @@ resource 'V. Transfer Rules' do
 
       let!(:valid_attributes) do
         {
-          sending_group_id: create(:reg_group, token: transfer_rule.token).id.to_s,
-          receiving_group_id: create(:reg_group, token: transfer_rule.token).id.to_s,
+          sending_group_id: create(:reg_group, id: 70, token: transfer_rule.token).id.to_s,
+          receiving_group_id: create(:reg_group, id: 71, token: transfer_rule.token).id.to_s,
           lockup_until: '1'
         }
       end
@@ -112,6 +121,7 @@ resource 'V. Transfer Rules' do
         explanation 'Returns an array of errors'
 
         request = build(:api_signed_request, { transfer_rule: invalid_attributes }, api_v1_project_transfer_rules_path(project_id: project.id), 'POST', 'example.org')
+        allow_any_instance_of(Token).to receive(:name).and_return('ComakeryDummyToken-40352e924687531267df55370ccac97c9995f24b')
         do_request(request)
         expect(status).to eq(400)
       end
