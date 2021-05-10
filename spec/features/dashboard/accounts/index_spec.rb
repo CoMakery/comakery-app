@@ -115,6 +115,10 @@ describe 'project accounts page' do
       let!(:project_role) { project.project_roles.find_by(account: account) }
 
       it 'updates project role' do
+        expect(
+          find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
+        ).to have_text('Interested')
+
         execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #change_permissions_btn').click()")
 
         within('#account_permissions_modal') do
@@ -125,7 +129,9 @@ describe 'project accounts page' do
 
         expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
 
-        expect(project_role.reload.role).to eq('admin')
+        expect(
+          find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
+        ).to have_text('Admin')
       end
     end
 

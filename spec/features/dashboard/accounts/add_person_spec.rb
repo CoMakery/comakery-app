@@ -20,6 +20,8 @@ describe 'Add person', js: true do
     end
 
     expect(find('.flash-message-container')).to have_content('Invite successfully sent')
+
+    expect(page).to have_css("#project_#{project.id}_account_#{account.id}", count: 1)
   end
 
   scenario 'fails with unregistered account' do
