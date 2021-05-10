@@ -6,6 +6,14 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
     blockchain_transactable.update!(status: :synced)
   end
 
+  def update_transactable_prioritized_at(new_value = nil)
+    return true unless transaction_batch
+
+    blockchain_transactables.each do |bt|
+      bt.update!(prioritized_at: new_value)
+    end
+  end
+
   # TODO: Refactor on_chain condition into TokenType
   def on_chain
     @on_chain ||= if token._token_type_on_ethereum?

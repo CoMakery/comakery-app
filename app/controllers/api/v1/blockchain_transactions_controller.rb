@@ -25,7 +25,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   def update
     if transaction.update(transaction_update_params)
       transaction.update_status(:pending)
-      transaction.update_transactable_prioritized_at
       BlockchainJob::BlockchainTransactionSyncJob.perform_later(transaction)
     end
 
@@ -36,7 +35,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   def destroy
     status = transaction_failed? ? :failed : :cancelled
     transaction.update_status(status, transaction_update_params[:status_message])
-    transaction.update_transactable_prioritized_at
 
     render 'show.json', status: :ok
   end
