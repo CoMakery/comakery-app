@@ -1,32 +1,25 @@
 require 'rails_helper'
 
 describe BlockchainTransactionAward, vcr: true do
+  it { is_expected.to have_many(:blockchain_transactables_awards).dependent(:nullify) }
+  it { is_expected.to respond_to(:blockchain_transactables) }
+
   describe 'callbacks' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:award_mint) do
-      a = blockchain_transaction.blockchain_transactable.dup
-      a.update(source: :mint)
-      a
-    end
-    let!(:award_burn) do
-      a = blockchain_transaction.blockchain_transactable.dup
-      a.update(source: :burn)
-      a
-    end
-
-    let!(:contract) do
-      build(
-        :erc20_contract,
-        contract_address: blockchain_transaction.contract_address,
-        abi: blockchain_transaction.token.abi,
-        network: blockchain_transaction.network,
-        nonce: blockchain_transaction.nonce
-      )
-    end
 
     it 'populates transaction data from award' do
+      expect(blockchain_transaction.amounts).not_to be_empty
+      expect(blockchain_transaction.destinations).not_to be_empty
       expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
       expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
+    end
+  end
+
+  describe '#amounts' do
+    subject { create(:blockchain_transaction).amounts }
+
+    it 'returns amounts as integers' do
+      expect(subject.first).to be_an(Integer)
     end
   end
 
@@ -66,6 +59,14 @@ describe BlockchainTransactionAward, vcr: true do
         blockchain_transaction = build(:blockchain_transaction)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Transfer)
+      end
+    end
+
+    context 'with erc20 transfer batch' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_award_batch)
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::BatchTransfer)
       end
     end
 

@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe BlockchainTransactionOptIn do
+  it { is_expected.to have_many(:blockchain_transactables_token_opt_ins).dependent(:nullify) }
+  it { is_expected.to respond_to(:blockchain_transactables) }
+
   describe 'update_status' do
     let(:blockchain_transaction) { create(:blockchain_transaction_opt_in) }
 

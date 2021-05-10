@@ -3,6 +3,7 @@ require 'rails_helper'
 describe BlockchainTransaction, vcr: true do
   subject { build(:blockchain_transaction) }
 
+  it { is_expected.to belong_to(:transaction_batch) }
   it { is_expected.to belong_to(:token) }
   it { is_expected.to have_many(:updates).class_name('BlockchainTransactionUpdate').dependent(:destroy) }
   it { is_expected.to have_readonly_attribute(:amount) }
@@ -15,6 +16,20 @@ describe BlockchainTransaction, vcr: true do
   it { is_expected.to validate_presence_of(:status) }
   it { is_expected.to define_enum_for(:network).with_values({ ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }) }
   it { is_expected.to define_enum_for(:status).with_values({ created: 0, pending: 1, cancelled: 2, succeed: 3, failed: 4 }) }
+
+  describe '#blockchain_transactable' do
+    it 'returns first blockchain transactable' do
+      expect(subject).to receive_message_chain(:blockchain_transactables, :first)
+      subject.blockchain_transactable
+    end
+  end
+
+  describe '#blockchain_transactables=' do
+    it 'creates TransactionBatch and passes transactables' do
+      expect(subject).to receive_message_chain(:transaction_batch, :blockchain_transactables=)
+      subject.blockchain_transactables = 'dummy'
+    end
+  end
 
   describe 'tx_raw' do
     before { allow(subject).to receive(:generate_transaction) }

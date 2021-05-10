@@ -190,7 +190,7 @@ class Mom
   end
 
   def blockchain_transaction_award_batch(**attrs)
-    token = attrs[:token] || create(:comakery_dummy_token)
+    token = attrs[:token] || create(:comakery_dummy_token, batch_contract_address: '0x0')
     attrs.delete(:token)
 
     award1 = blockchain_transaction__award(attrs.merge(token: token))
