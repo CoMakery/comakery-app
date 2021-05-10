@@ -703,6 +703,12 @@ form.form-with-submit-button {
       flex-wrap: wrap;
       display: flex;
 
+      .transfers-filters--filter--add-person {
+        display: flex;
+        padding: 55px 16px 8px 25px !important;
+        border: none !important;
+      }
+
       select {
         text-transform: capitalize;
         box-shadow: none;
