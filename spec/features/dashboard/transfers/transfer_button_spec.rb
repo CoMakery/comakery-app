@@ -217,7 +217,7 @@ describe 'transfer button on Transfers page' do
 
         context 'and admin has a wallet' do
           before do
-            transfer.blockchain_transactions.delete_all
+            BlockchainTransaction.delete_all
             subject
           end
 
