@@ -28,7 +28,11 @@
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
-      <%= render partial: "account", collection: @accounts, as: :account, cached: false %>
+
+      <%= turbo_stream_from 'accounts' %>
+      <%= turbo_frame_tag 'accounts' do %>
+        <%= render partial: 'account', collection: @accounts, as: :account, cached: false %>
+      <% end %>
     </div>
 
     <div class="transfers-pages">

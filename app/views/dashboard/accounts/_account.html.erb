@@ -1,14 +1,15 @@
-<% account = account.decorate %>
-<% account_project_role = @project.project_roles.find_by(account: account) %>
-<% synced_record = account.account_token_records.where(token: @project.token, status: :synced).last %>
-<% last_record = account.account_token_records.where(token: @project.token).last %>
+<% account = account&.decorate || project_role&.account&.decorate %>
+<% project = @project || project_role&.project %>
+<% account_project_role = project.project_roles.find_by(account: account) || project_role %>
+<% synced_record = account.account_token_records.where(token: project.token, status: :synced).last %>
+<% last_record = account.account_token_records.where(token: project.token).last %>
 <% last_record_is_not_synced = synced_record && last_record && synced_record.id != last_record.id %>
 
-<div id="project_<%= @project.id %>_account_<%= account.id %>">
-  <%= form_with(last_record&.decorate&.form_attrs(@project) || { class: 'account-form' } ) do |f| %>
+<div id="project_<%= project.id %>_account_<%= account.id %>">
+  <%= form_with(last_record&.decorate&.form_attrs(project) || { url: project_dashboard_accounts_path(project), class: 'account-form' } ) do |f| %>
     <%= f.hidden_field :account_id, value: account.id %>
 
-    <% if policy(@project).edit_accounts? && @project.supports_transfer_rules? && account.address_for_blockchain(@project.token._blockchain) %>
+    <% if policy(project).edit_accounts? && project.supports_transfer_rules? && account.address_for_blockchain(project.token._blockchain) %>
       <%= image_tag 'pencil.svg', data: { action: 'click->account-form-controls#showForm', target: 'account-form-controls.outputs' }, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
       <%= image_tag 'iconCloseDark.svg', data: { action: 'click->account-form-controls#hideForm', target: 'account-form-controls.inputs' }, class: 'transfers-table--edit-icon hidden' %>
     <% end %>
@@ -39,17 +40,17 @@
       </div>
 
       <div class="transfers-table__transfer__tokens">
-        <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+        <label>tokens <%= project.token&.symbol ? "(#{project.token&.symbol})" : '' %></label>
 
-        <%= account.total_awards_earned(@project) %>
+        <%= account.total_awards_earned(project) %>
       </div>
 
-      <% if @project.token %>
+      <% if project.token %>
         <div class="transfers-table__transfer__address">
           <label>Address</label>
 
           <span class="transfers-table__transfer__address__button">
-            <%= account.wallet_address_link_for(@project) %>
+            <%= account.wallet_address_link_for(project) %>
           </span>
         </div>
       <% end %>
@@ -60,7 +61,7 @@
         <span><%= account_project_role.role.capitalize %></span>
       </div>
 
-      <% if @project.supports_transfer_rules? %>
+      <% if project.supports_transfer_rules? %>
         <div class="transfers-table__transfer__max_balance">
           <label>max balance</label>
 
@@ -77,7 +78,7 @@
             <% end %>
           </div>
 
-          <%= f.number_field(:max_balance, required: true, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
+          <%= f.number_field(:max_balance, required: true, placeholder: '0', min: project.step_for_amount_input, step: project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__lockup_until">
@@ -107,7 +108,7 @@
             <%= last_record&.reg_group ? "#{last_record.reg_group.name} (#{last_record.reg_group.blockchain_id})" : "–" %>
           </div>
 
-          <%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: true }, { required: true, class: 'hidden', data: {target: "account-form.addressGroupId account-form-controls.inputs"} }) %>
+          <%= f.select(:reg_group_id, project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: true }, { required: true, class: 'hidden', data: {target: "account-form.addressGroupId account-form-controls.inputs"} }) %>
         </div>
 
         <div class="transfers-table__transfer__frozen">
@@ -168,7 +169,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-end">
             <%= link_to 'Change Permissions',
-                        project_account_permission_path(id: account_project_role.id, account_id: account.id),
+                        project_account_permission_path(id: account_project_role.id, project_id: project.id, account_id: account.id),
                         method: :get,
                         data: { controller: 'accept-turbo-stream' },
                         id: 'change_permissions_btn',
@@ -178,17 +179,17 @@
       </div>
     </div>
 
-    <% if policy(@project).edit_accounts? && @project.supports_transfer_rules? && last_record && account.address_for_blockchain(@project.token._blockchain) %>
+    <% if policy(project).edit_accounts? && project.supports_transfer_rules? && last_record && account.address_for_blockchain(project.token._blockchain) %>
       <div class="transfers-table--edit-save hidden" data-target="account-form-controls.inputs">
         <div class='transfer-button'>
-          <% if @project.token.token_frozen? %>
+          <% if project.token.token_frozen? %>
             frozen
-          <% elsif @project.token.blockchain.supported_by_ore_id? %>
+          <% elsif project.token.blockchain.supported_by_ore_id? %>
             <%= f.button type: :submit, class: 'transfer-algo-btn', data: { turbo: "false" } do %>
-              <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+              <%= render partial: "shared/wallet_logo", locals: { project: project, size: 12 } %>
               <span>Save</span>
             <% end %>
-          <% elsif @project.token.blockchain.supported_by_wallet_connect? %>
+          <% elsif project.token.blockchain.supported_by_wallet_connect? %>
             <a
               href='javascript:void(0)'
               class="transfer-tokens-btn transfer-tokens-btn-skip-legacy"
