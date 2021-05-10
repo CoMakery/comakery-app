@@ -10,7 +10,7 @@ describe Award do
     let(:specialty) { create(:specialty) }
     let(:award) { create(:award, specialty: specialty) }
     let!(:blockchain_transaction1) { create(:blockchain_transaction) }
-    let!(:blockchain_transaction2) { create(:blockchain_transaction, blockchain_transactable: blockchain_transaction1.blockchain_transactable) }
+    let!(:blockchain_transaction2) { create(:blockchain_transaction, blockchain_transactables: blockchain_transaction1.blockchain_transactable) }
 
     it 'has the expected associations' do
       described_class.create!(
@@ -1157,37 +1157,37 @@ describe Award do
     end
 
     it 'returns awards with latest blockchain_transaction Cancelled' do
-      create(:blockchain_transaction, status: :cancelled, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction, status: :cancelled, blockchain_transactables: blockchain_transaction.blockchain_transactable)
 
       expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'returns awards with latest blockchain_transaction Created more than 10 minutes ago' do
-      create(:blockchain_transaction, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 20.minutes.ago)
+      create(:blockchain_transaction, blockchain_transactables: blockchain_transaction.blockchain_transactable, created_at: 20.minutes.ago)
 
       expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'doesnt return awards with lates blockchain_transaction Created less than 10 minutes ago' do
-      create(:blockchain_transaction, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
+      create(:blockchain_transaction, blockchain_transactables: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'doesnt return awards with latest blockchain_transaction Pending' do
-      create(:blockchain_transaction, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable, tx_hash: '0')
+      create(:blockchain_transaction, status: :pending, blockchain_transactables: blockchain_transaction.blockchain_transactable, tx_hash: '0')
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'doesnt return awards with latest blockchain_transaction Succeed' do
-      create(:blockchain_transaction, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable, tx_hash: '0')
+      create(:blockchain_transaction, status: :succeed, blockchain_transactables: blockchain_transaction.blockchain_transactable, tx_hash: '0')
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end
 
     it 'doesnt return awards with latest blockchain_transaction Failed' do
-      create(:blockchain_transaction, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction, status: :failed, blockchain_transactables: blockchain_transaction.blockchain_transactable)
 
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
     end
@@ -1197,7 +1197,7 @@ describe Award do
     let!(:blockchain_transaction) { create(:blockchain_transaction) }
 
     it 'returns awards with latest blockchain_transaction Failed' do
-      create(:blockchain_transaction, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+      create(:blockchain_transaction, status: :failed, blockchain_transactables: blockchain_transaction.blockchain_transactable)
 
       expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
     end
