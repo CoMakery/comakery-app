@@ -1203,6 +1203,23 @@ describe Award do
     end
   end
 
+  describe 'ready_for_batch_blockchain_transaction scope' do
+    let(:transfer) { create(:transfer) }
+    let(:mint_transfer) { create(:transfer) }
+    let(:burn_transfer) { create(:transfer) }
+
+    before do
+      mint_transfer.update(transfer_type: mint_transfer.project.transfer_types.find_or_create_by(name: 'mint'))
+      burn_transfer.update(transfer_type: burn_transfer.project.transfer_types.find_or_create_by(name: 'burn'))
+    end
+
+    subject { described_class.ready_for_batch_blockchain_transaction }
+
+    it { is_expected.to include(transfer) }
+    it { is_expected.not_to include(mint_transfer) }
+    it { is_expected.not_to include(burn_transfer) }
+  end
+
   describe '.ransack_reorder' do
     let!(:awards) do
       issuer1 = create(:account, first_name: 'John', last_name: 'Snow')
