@@ -609,6 +609,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_182623) do
     t.datetime "synced_at"
     t.integer "_blockchain", default: 0, null: false
     t.integer "_token_type", default: 0, null: false
+    t.index ["_blockchain"], name: "index_tokens_on__blockchain"
     t.index ["logo_image_id"], name: "index_tokens_on_logo_image_id"
   end
 
