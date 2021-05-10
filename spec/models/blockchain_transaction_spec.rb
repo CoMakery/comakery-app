@@ -4,7 +4,6 @@ describe BlockchainTransaction, vcr: true do
   subject { build(:blockchain_transaction) }
 
   it { is_expected.to belong_to(:token) }
-  it { is_expected.to belong_to(:blockchain_transactable) }
   it { is_expected.to have_many(:updates).class_name('BlockchainTransactionUpdate').dependent(:destroy) }
   it { is_expected.to have_readonly_attribute(:amount) }
   it { is_expected.to have_readonly_attribute(:source) }
@@ -281,15 +280,6 @@ describe BlockchainTransaction, vcr: true do
         described_class.migrate_awards_to_blockchain_transactable
         expect(blockchain_transaction.reload.blockchain_transactable_id).to eq(blockchain_transaction.award_id)
         expect(blockchain_transaction.reload.blockchain_transactable_type).to eq('Award')
-      end
-    end
-
-    context 'when transaction doesnt belong to an award' do
-      let!(:blockchain_transaction) { create(:blockchain_transaction) }
-
-      it 'does nothing' do
-        described_class.migrate_awards_to_blockchain_transactable
-        expect(blockchain_transaction.reload.blockchain_transactable_id).not_to eq(blockchain_transaction.award_id)
       end
     end
   end
