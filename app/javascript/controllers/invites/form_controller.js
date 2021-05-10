@@ -23,8 +23,14 @@ export default class extends Controller {
         this.element.dispatchEvent(this.createdEvent);
         this._addFlashMessage('notice', response.message)
       },
-      error: (response) => {
-        this._addErrors(response.errors)
+      error: (response, status) => {
+        if (status === 'Unauthorized') {
+          this._addFlashMessage('error', 'You are not authorized to perform this action')
+        }
+
+        if (response.errors) {
+          this._addErrors(response.errors)
+        }
       }
     });
   }

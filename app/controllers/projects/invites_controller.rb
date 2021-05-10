@@ -1,4 +1,6 @@
 class Projects::InvitesController < ApplicationController
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+
   skip_after_action :verify_authorized, :verify_policy_scoped
 
   def create
