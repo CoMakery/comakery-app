@@ -38,6 +38,6 @@ describe 'Add person', js: true do
       click_button 'Save'
     end
 
-    expect(find('#invite-person ul.errors')).to have_content('The user must have signed up to add them')
+    expect(find('#invite-person ul.errors').text).to eq('The User Must Have Signed Up To Add Them')
   end
 end
