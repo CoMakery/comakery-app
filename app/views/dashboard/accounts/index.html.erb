@@ -29,8 +29,8 @@
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
 
-      <%= turbo_stream_from 'accounts' %>
-      <%= turbo_frame_tag 'accounts' do %>
+      <%= turbo_stream_from "project_#{@project.id}_accounts" %>
+      <%= turbo_frame_tag "project_#{@project.id}_accounts" do %>
         <%= render partial: 'account', collection: @accounts, as: :account, cached: false %>
       <% end %>
     </div>

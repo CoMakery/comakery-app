@@ -13,20 +13,24 @@ class ProjectRole < ApplicationRecord
   private
 
     def broadcast_update
-      broadcast_replace_to :accounts,
+      broadcast_replace_to "project_#{project.id}_accounts",
                            target: "project_#{project.id}_account_#{account.id}",
                            partial: 'dashboard/accounts/account',
                            locals: { project_role: self }
     end
 
     def broadcast_create
-      broadcast_append_to :accounts,
-                          target: :accounts,
+      broadcast_append_to "project_#{project.id}_accounts",
+                          target: "project_#{project.id}_accounts",
                           partial: 'dashboard/accounts/account',
                           locals: { project_role: self }
     end
 
     def broadcast_destroy
-      Turbo::StreamsChannel.broadcast_remove_to(:accounts, target: "project_#{project.id}_account_#{account.id}")
+      Turbo::StreamsChannel.broadcast_remove_to(
+        "project_#{project.id}_accounts",
+        target: "project_#{project.id}_account_#{account.id}"
+      )
     end
 end
+
