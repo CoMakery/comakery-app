@@ -2,7 +2,7 @@
   <td class="h12 font-weight-medium n10-color"><%= wallet.id %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.account.name %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.account.email %></td>
-  <td class="h12 font-weight-medium n10-color"><%= wallet.blockchain.name %></td>
+  <td class="h12 font-weight-medium n10-color"><%= wallet.blockchain&.name %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.address %></td>
   <td class="h12 font-weight-medium n10-color"><%= wallet.primary_wallet? %></td>
   <td class="h12 font-weight-medium n10-color">
