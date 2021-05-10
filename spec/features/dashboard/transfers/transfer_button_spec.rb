@@ -96,7 +96,7 @@ describe 'transfer button on Transfers page' do
       end
 
       it 'links to blockchain transaction' do
-        expect(page).to have_css('.transfers-table__transfer__status .transfer-button a', count: 1)
+        expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1)
       end
     end
 
@@ -166,7 +166,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'links to Wallets' do
-            expect(page).to have_css('.transfers-table__transfer__status .transfer-button a', count: 1, text: 'set wallet')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'needs wallet')
           end
         end
 
@@ -293,7 +293,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'links to Wallets' do
-            expect(page).to have_css('.transfers-table__transfer__status .transfer-button a', count: 1, text: 'set wallet')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'needs wallet')
           end
         end
 
