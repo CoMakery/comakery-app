@@ -451,6 +451,18 @@ ActiveRecord::Schema.define(version: 2021_05_11_101759) do
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
+  create_table "project_roles", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "project_id", null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id", "project_id"], name: "index_project_roles_on_account_id_and_project_id", unique: true
+    t.index ["account_id"], name: "index_project_roles_on_account_id"
+    t.index ["project_id"], name: "index_project_roles_on_project_id"
+    t.index ["role"], name: "index_project_roles_on_role"
+  end
+
   create_table "projects", id: :serial, force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
@@ -712,6 +724,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_101759) do
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
+  add_foreign_key "project_roles", "accounts"
+  add_foreign_key "project_roles", "projects"
   add_foreign_key "projects", "tokens"
   add_foreign_key "reg_groups", "tokens"
   add_foreign_key "token_opt_ins", "tokens"

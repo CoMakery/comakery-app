@@ -89,7 +89,7 @@ describe ProjectsController do
     let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
-    let!(:interest) { create(:interest, account: account) }
+    let!(:project_role) { create(:project_role, account: account) } # by default it will create project from mom.rb which will be Uber for Cats
 
     before do
       admin_project.admins << account

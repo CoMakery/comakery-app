@@ -9,19 +9,14 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
   describe 'GET #index' do
     subject { get :index, params: { project_id: project.to_param } }
 
-    before do
-      project.safe_add_interested(account)
-    end
+    before { project.safe_add_project_interested(account) }
 
     context 'with eth security token' do
       it { is_expected.to have_http_status(:success) }
 
-      before do
-        project.safe_add_interested(account)
-      end
-
       it 'returns interested' do
         subject
+
         expect(assigns[:accounts]).to include(account)
       end
     end
@@ -34,16 +29,19 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
       it 'returns interested' do
         subject
+
         expect(assigns[:accounts]).to include(account)
       end
     end
 
     context 'with a non-security token' do
       let(:project) { create(:project, visibility: :public_listed) }
+
       it { is_expected.to have_http_status(:success) }
 
       it 'returns interested' do
         subject
+
         expect(assigns[:accounts]).to include(project.account)
       end
     end
@@ -51,9 +49,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
     context 'without token' do
       let(:project) { create(:project, visibility: :public_listed) }
 
-      before do
-        project.update!(token: nil)
-      end
+      before { project.update!(token: nil) }
 
       it { is_expected.to have_http_status(:success) }
 
@@ -87,10 +83,9 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
     subject { post :create, params: { project_id: project.id, account_token_record: attributes } }
 
-    before do
-      login(project.account)
-      project.safe_add_interested(account_token_record.account)
-    end
+    before { login(project.account) }
+
+    before { project.safe_add_project_interested(account_token_record.account) }
 
     context 'with valid params' do
       let(:attributes) { valid_attributes }
@@ -137,19 +132,17 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
   describe 'GET #show' do
     before do
-      project.interested << account
+      project.safe_add_project_interested(account)
     end
 
     it 'returns a success response' do
-      get :show, params: { project_id: project.to_param, id: account.id }, as: :turbo_stream
+      get :show, params: { project_id: project.id, id: account.id }, as: :turbo_stream
       expect(response.status).to eq 200
     end
   end
 
   describe 'POST #refresh_from_blockchain' do
-    before do
-      login(project.account)
-    end
+    before { login(project.account) }
 
     context 'when accounts have been refreshed recently' do
       before do
@@ -158,7 +151,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
       it 'does not run refresh job' do
         expect(AlgorandSecurityToken::AccountTokenRecordsSyncJob).not_to receive(:perform_now)
-        post :refresh_from_blockchain, params: { project_id: project.to_param }
+        post :refresh_from_blockchain, params: { project_id: project.id }
 
         expect(response).to redirect_to(project_dashboard_accounts_path(project))
       end
@@ -170,7 +163,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
         it 'runs refresh job' do
           expect(AlgorandSecurityToken::AccountTokenRecordsSyncJob).to receive(:perform_now).and_return(true)
-          post :refresh_from_blockchain, params: { project_id: project.to_param }
+          post :refresh_from_blockchain, params: { project_id: project.id }
 
           expect(response).to redirect_to(project_dashboard_accounts_path(project))
         end
@@ -179,7 +172,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
       context 'with comakery security token', :vcr do
         it 'runs refresh job' do
           expect(BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob).to receive(:perform_now).and_return(true)
-          post :refresh_from_blockchain, params: { project_id: project.to_param }
+          post :refresh_from_blockchain, params: { project_id: project.id }
 
           expect(response).to redirect_to(project_dashboard_accounts_path(project))
         end

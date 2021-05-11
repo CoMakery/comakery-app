@@ -1,0 +1,39 @@
+<div class="modal modal-blur fade"
+     id="invite-person"
+     tabindex="-1"
+     role="dialog"
+     aria-hidden="true"
+     data-controller="bootstrap--modal invites--modal"
+     data-action="modal:hidden->bootstrap--modal#reset">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Invite Person</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_tag(project_invites_path,
+                   data: { controller: 'invites--form',
+                           action: 'invites--form#onSubmit invites:created->invites--modal#closeModal' }) do %>
+        <div class="modal-body">
+          <ul class="errors alert-danger"></ul>
+          <div class="input-with-label">
+            <%= label_tag :email, nil, class: 'h11 font-weight-medium n10-color mt-2' %>
+            <%= text_field_tag 'email', nil, class: 'form-control', placeholder: 'Email' %>
+          </div>
+          <div class="input-icon mb-3 mt-1">
+            <%= label_tag :role, 'Permissions', class: 'h11 font-weight-medium n10-color mt-2' %>
+            <div class="choices">
+              <%= select_tag :role,
+                             options_for_select(ProjectRole.roles.keys.collect { |role| [role.titleize, role] }),
+                             class: 'form-select form-control' %>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary h12" data-dismiss="modal">Cancel</button>
+          <%= submit_tag 'Save', data: { disable_with: false, target: 'invites--form.submit' }, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

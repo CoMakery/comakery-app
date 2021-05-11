@@ -9,9 +9,7 @@ describe 'project accounts page' do
   let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
   subject { visit project_dashboard_accounts_path(project) }
 
-  before do
-    project.safe_add_interested(account)
-  end
+  before { project.safe_add_project_interested(account) }
 
   context 'with eth security token' do
     context 'when not logged in' do
@@ -98,6 +96,60 @@ describe 'project accounts page' do
       it 'lists interested accounts' do
         subject
         expect(page).to have_css('.account-preview__info__name', count: 2)
+      end
+    end
+  end
+
+  context 'with settings', js: true do
+    let!(:admin) { create(:account) }
+
+    let!(:project) { create(:project, account: admin) }
+
+    let!(:account) { create(:account) }
+
+    before { login(admin) }
+
+    before { subject }
+
+    context 'change follower permissions' do
+      let!(:project_role) { project.project_roles.find_by(account: account) }
+
+      it 'updates project role' do
+        expect(
+          find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
+        ).to have_text('Interested')
+
+        execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #change_permissions_btn').click()")
+
+        within('#account_permissions_modal') do
+          select 'Admin', from: 'project_role[role]'
+
+          execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
+        end
+
+        expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
+
+        expect(
+          find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
+        ).to have_text('Admin')
+      end
+    end
+
+    context 'change own permissions' do
+      let!(:project_role) { project.project_roles.find_by(account: admin) }
+
+      it 'deny action with flash message' do
+        execute_script("document.querySelector('#project_#{project.id}_account_#{admin.id} #change_permissions_btn').click()")
+
+        within('#account_permissions_modal') do
+          select 'Observer', from: 'project_role[role]'
+
+          execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
+        end
+
+        expect(find('.flash-message-container')).to have_content('You are not authorized to perform this action')
+
+        expect(project_role.reload.role).to eq('admin')
       end
     end
   end

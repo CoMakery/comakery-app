@@ -773,6 +773,15 @@ class Mom
     Interest.new(params)
   end
 
+  def project_role(**attrs)
+    params = {
+      account: create(:account),
+      project: create(:project)
+    }.merge(attrs)
+
+    ProjectRole.new(params)
+  end
+
   def channel(**attrs)
     defaults = {
       team: create(:team),
