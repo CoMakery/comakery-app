@@ -11,6 +11,15 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
   end
 
+  def update_transactable_prioritized_at(new_value = nil)
+    return unless transaction_batch
+
+    blockchain_transactables.each do |bt|
+      bt.update!(prioritized_at: new_value)
+    end
+    true
+  end
+
   # TODO: Refactor on_chain condition into TokenType
   def on_chain # rubocop:todo Metrics/CyclomaticComplexity
     @on_chain ||= if token._token_type_on_ethereum?

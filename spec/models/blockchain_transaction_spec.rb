@@ -97,6 +97,8 @@ describe BlockchainTransaction, vcr: true do
     let!(:blockchain_transaction) { create(:blockchain_transaction, tx_hash: '0') }
 
     before do
+      expect(blockchain_transaction).to receive(:update_transactable_prioritized_at).once
+
       blockchain_transaction.update_status(:pending, 'test')
     end
 
@@ -297,5 +299,12 @@ describe BlockchainTransaction, vcr: true do
         expect(blockchain_transaction.reload.blockchain_transactable_type).to eq('Award')
       end
     end
+  end
+
+  describe '#update_transactable_prioritized_at' do
+    let(:blockchain_transaction) { BlockchainTransactionOptIn.new }
+    subject { blockchain_transaction.update_transactable_prioritized_at }
+
+    it { is_expected.to be true }
   end
 end
