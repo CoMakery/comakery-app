@@ -172,7 +172,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
-        resources :interests, only: [:index, :create, :destroy]
+        resources :project_roles, only: %i[index create destroy]
         resources :verifications, only: [:index, :create]
         resources :wallets, only: [:index, :show, :create, :update, :destroy] do
           member do

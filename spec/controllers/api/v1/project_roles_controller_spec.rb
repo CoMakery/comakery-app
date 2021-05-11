@@ -4,7 +4,7 @@ require 'controllers/api/v1/concerns/requires_signature_spec'
 require 'controllers/api/v1/concerns/requires_whitelabel_mission_spec'
 require 'controllers/api/v1/concerns/authorizable_by_mission_key_spec'
 
-RSpec.describe Api::V1::InterestsController, type: :controller do
+RSpec.describe Api::V1::ProjectRolesController, type: :controller do
   it_behaves_like 'requires_an_authorization'
   it_behaves_like 'requires_signature'
   it_behaves_like 'requires_whitelabel_mission'
@@ -19,8 +19,8 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
   end
 
   describe 'GET #index' do
-    it 'returns account interests' do
-      params = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET')
+    it 'returns project involved accounts' do
+      params = build(:api_signed_request, '', api_v1_account_project_roles_path(account_id: account.managed_account_id), 'GET')
       params[:account_id] = account.managed_account_id
       params[:format] = :json
 
@@ -29,28 +29,28 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
     end
 
     it 'applies pagination' do
-      params = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET')
+      params = build(:api_signed_request, '', api_v1_account_project_roles_path(account_id: account.managed_account_id), 'GET')
       params.merge!(account_id: account.managed_account_id, format: :json, page: 9999)
 
       get :index, params: params
       expect(response).to be_successful
-      expect(assigns[:interests]).to eq([])
+      expect(assigns[:project_involved_accounts]).to eq([])
     end
   end
 
   describe 'POST #create' do
     context 'with valid params' do
-      it 'interests the requested project' do
-        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
+      it 'involves the account in the project ' do
+        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_project_roles_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
         post :create, params: params
         project.reload
-        expect(project.interested).to include(account)
+        expect(project.project_interested).to include(account)
       end
 
-      it 'returns list of account interests' do
-        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
+      it 'returns list of project involved accounts' do
+        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_project_roles_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
         post :create, params: params
@@ -60,11 +60,11 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
 
     context 'with invalid params' do
       before do
-        project.interests.create(account: account, specialty: account.specialty)
+        project.project_roles.create(account: account)
       end
 
       it 'renders an error' do
-        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
+        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_project_roles_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
         post :create, params: params
@@ -77,21 +77,21 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
   describe 'DELETE #destroy' do
     context 'with valid params' do
       before do
-        project.interests.create(account: account, specialty: account.specialty)
+        project.project_roles.create(account: account)
       end
 
-      it 'uninterests the requested project' do
-        params = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
+      it 'is\'nt involved in the requested project ' do
+        params = build(:api_signed_request, '', api_v1_account_project_role_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
         params[:account_id] = account.managed_account_id
         params[:id] = project.id
 
         delete :destroy, params: params
         project.reload
-        expect(project.interested).not_to include(account)
+        expect(project.project_interested).not_to include(account)
       end
 
-      it 'returns list of account interests' do
-        params = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
+      it 'returns list of project involved accounts' do
+        params = build(:api_signed_request, '', api_v1_account_project_role_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
         params[:account_id] = account.managed_account_id
         params[:id] = project.id
 
