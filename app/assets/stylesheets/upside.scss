@@ -9280,19 +9280,6 @@ Navbar vertical
   margin-top: .25rem;
   color: #656d77; }
 
-.footer {
-  border-top: 1px solid #e6e8e9;
-  background-color: #ffffff;
-  padding: 2rem 0;
-  color: #656d77;
-  margin-bottom: -1.25rem;
-  margin-top: 1.25rem; }
-
-.footer-transparent {
-  margin-top: 0;
-  background-color: transparent;
-  border-top: 0; }
-
 .accordion-button:focus:not(:focus-visible) {
   outline: none;
   box-shadow: none; }
@@ -10793,15 +10780,6 @@ Card tabs
 
 .divide-x-5 > :not(template):not(:last-child) {
   padding-right: 2rem !important; }
-
-.icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  font-size: 1.25rem;
-  vertical-align: bottom;
-  stroke-width: 1.5; }
-  .icon:hover {
-    text-decoration: none; }
 
 .icon-inline {
   width: 1.25em;

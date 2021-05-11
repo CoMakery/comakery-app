@@ -104,11 +104,11 @@ class Account < ApplicationRecord
 
   after_create :populate_awards
 
-  after_update_commit :broadcast_update_wl_account_wallet, if: lambda {
-    whitelabel? && (saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?)
+  after_update_commit :broadcast_update, if: lambda {
+    saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?
   }
 
-  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { whitelabel? }
+  after_destroy_commit :broadcast_destroy
 
   class << self
     def order_by_award(project)
@@ -388,20 +388,20 @@ class Account < ApplicationRecord
       end
     end
 
-    def broadcast_update_wl_account_wallet
+    def broadcast_update
       wallets.each do |wallet|
-        broadcast_replace_to "wl_#{managed_mission.id}_account_wallets",
-                             target: "wl_account_#{id}_wallet_#{wallet.id}",
-                             partial: 'accounts/partials/index/wl_account_wallet',
-                             locals: { wl_account_wallet: wallet }
+        broadcast_replace_to "mission_#{managed_mission&.id}_account_wallets",
+                             target: "account_#{id}_wallet_#{wallet.id}",
+                             partial: 'accounts/partials/index/wallet',
+                             locals: { wallet: wallet }
       end
     end
 
-    def broadcast_destroy_wl_account_wallet
+    def broadcast_destroy
       wallet_ids.each do |wallet_id|
         Turbo::StreamsChannel.broadcast_remove_to(
-          "wl_#{managed_mission.id}_account_wallets",
-          target: "wl_account_#{id}_wallet_#{wallet_id}"
+          "mission_#{managed_mission&.id}_account_wallets",
+          target: "account_#{id}_wallet_#{wallet_id}"
         )
       end
     end
