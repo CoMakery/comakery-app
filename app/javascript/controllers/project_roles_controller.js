@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import { fetch } from 'whatwg-fetch'
 
 export default class extends Controller {
-  follow(projectId, specialtyId = null) {
+  follow(projectId) {
     return fetch(this._followPath(projectId), {
       credentials: 'same-origin',
       method     : 'POST',

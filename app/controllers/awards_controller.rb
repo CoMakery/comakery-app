@@ -428,14 +428,13 @@ class AwardsController < ApplicationController
         project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
           url: unlisted_project_url(@project.long_id)
         }),
-        interested: (@project.interested.includes(:specialty) + @project.contributors.includes(:specialty)).uniq.map do |a|
+        accounts: (@project.accounts + @project.contributors).uniq.map do |a|
           a.decorate.serializable_hash(
             only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
-            include: :specialty,
             methods: :image_url
           )
         end,
-        interested_select: (@project.interested + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
+        accounts_select: (@project.accounts + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,

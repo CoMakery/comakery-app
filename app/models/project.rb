@@ -19,15 +19,17 @@ class Project < ApplicationRecord
   has_and_belongs_to_many :admins, class_name: 'Account'
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
+
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_roles # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
   has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
+  has_many :accounts, through: :project_roles, source: :account
+
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
   has_many :transfer_rules, through: :token
-
   has_many :transfer_types, dependent: :destroy
   has_many :award_types, inverse_of: :project, dependent: :destroy
   # rubocop:todo Rails/InverseOf

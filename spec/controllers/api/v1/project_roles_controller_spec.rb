@@ -46,7 +46,7 @@ RSpec.describe Api::V1::ProjectRolesController, type: :controller do
 
         post :create, params: params
         project.reload
-        expect(project.project_interested).to include(account)
+        expect(project.accounts).to include(account)
       end
 
       it 'returns list of project involved accounts' do
@@ -87,7 +87,7 @@ RSpec.describe Api::V1::ProjectRolesController, type: :controller do
 
         delete :destroy, params: params
         project.reload
-        expect(project.project_interested).not_to include(account)
+        expect(project.accounts).not_to include(account)
       end
 
       it 'returns list of project involved accounts' do

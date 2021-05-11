@@ -5,7 +5,7 @@ import ProjectSetupHeader from './layouts/ProjectSetupHeader'
 import MyTask from './MyTask'
 import * as d3 from 'd3'
 import styled from 'styled-components'
-import InterestsController from '../controllers/interests_controller'
+import ProjectRolesController from '../controllers/project_roles_controller'
 
 const Tasks = styled.div`
   padding: 15px;
@@ -109,8 +109,7 @@ export default class Project extends React.Component {
     super(props)
 
     this.state = {
-      interested         : props.interested,
-      specialtyInterested: [ ...props.specialtyInterested ]
+      follower: props.follower,
     }
 
     this.arcTween = this.arcTween.bind(this)
@@ -195,17 +194,10 @@ export default class Project extends React.Component {
     }.bind(this)
   }
 
-  addInterest(projectId, specialtyId = null) {
-    const { specialtyInterested } = this.state
-    new InterestsController().follow(projectId, specialtyId).then(response => {
+  addProjectRole(projectId) {
+    new ProjectRolesController().follow(projectId).then(response => {
       if (response.status === 200) {
-        if (specialtyId) {
-          const newSpecialtyInterested = [...specialtyInterested]
-          newSpecialtyInterested[specialtyId - 1] = true
-          this.setState({ specialtyInterested: [...newSpecialtyInterested], interested: true })
-        } else {
-          this.setState({ interested: true })
-        }
+        this.setState({ follower: true })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
@@ -214,12 +206,10 @@ export default class Project extends React.Component {
     })
   }
 
-  removeInterest(projectId) {
-    const { specialtyInterested } = this.state
-    new InterestsController().unfollow(projectId).then(response => {
+  removeProjectRole(projectId) {
+    new ProjectRolesController().unfollow(projectId).then(response => {
       if (response.status === 200) {
-        let newSpecialtyInterested = [...specialtyInterested].map(_ => false)
-        this.setState({ specialtyInterested: [...newSpecialtyInterested], interested: false })
+        this.setState({ follower: false })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
@@ -230,18 +220,7 @@ export default class Project extends React.Component {
 
   render() {
     const { projectData, tokenData } = this.props
-    const { interested, specialtyInterested } = this.state
-    const skills = {
-      development: 'Software Development',
-      design     : 'UX / UI DESIGN',
-      research   : 'Research',
-      community  : 'COMMUNITY MANAGEMENT',
-      data       : 'DATA GATHERING',
-      audio      : 'AUDIO & VIDEO PRODUCTION',
-      writing    : 'WRITING',
-      marketing  : 'MARKETING & SOCIAL MEDIA'
-    }
-    const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
+    const { follower } = this.state
 
     return <div className='project-container animated fadeIn faster'>
       <ProjectSetupHeader
@@ -254,18 +233,18 @@ export default class Project extends React.Component {
       />
 
       <div className='project-award'>
-        {!interested &&
+        {!follower &&
           <button
             className='button project-interest__button'
-            onClick={() => this.addInterest(projectData.id)}
+            onClick={() => this.addProjectRole(projectData.id)}
           >
             Follow
           </button>
         }
-        {interested &&
+        {follower &&
           <button
             className='button project-interest__button'
-            onClick={() => this.removeInterest(projectData.id)}
+            onClick={() => this.removeProjectRole(projectData.id)}
           >
             Unfollow
           </button>
@@ -350,47 +329,6 @@ export default class Project extends React.Component {
         </Tasks>
       }
 
-      {this.props.tasksBySpecialty.length === 0 &&
-        <div className='project-skills'>
-          <div className='project-skills__title'>SKILLS NEEDED</div>
-          <div className='project-skills__subtitle'>Which of your skills are you interesed in contributing?</div>
-
-          {Object.keys(skills).map((skill, index) =>
-            <div key={skill} className='project-skill-container'>
-              <div className='project-skill__background'>
-                <img className='project-skill__background__img' src={require(`src/images/project/${skill}.jpg`)} />
-                <div className='project-skill__background__title'>
-                  {skills[skill]}
-                  <div className='project-skill__background__icon'>
-                    <img className='skill-icon--background' src={require(`src/images/project/background.svg`)} />
-                    <img className='skill-icon' src={require(`src/images/project/${skill}.svg`)} />
-                  </div>
-                </div>
-              </div>
-              <div className='project-skill__interest'>
-                {!specialtyInterested[skillIds[index] - 1] &&
-                  <div
-                    className='project-skill__interest__button'
-                    onClick={() => this.addInterest(projectData.id, skillIds[index])}
-                  >
-                    I'm Interested
-                  </div>
-                }
-
-                {specialtyInterested[skillIds[index] - 1] &&
-                  <div
-                    className='project-skill__interest__button'
-                    onClick={() => this.removeInterest(projectData.id)}
-                  >
-                    Following
-                  </div>
-                }
-              </div>
-            </div>
-          )}
-        </div>
-      }
-
       {projectData.displayTeam &&
         <div className='project-team'>
           <div className='project-team__container'>
@@ -424,18 +362,18 @@ export default class Project extends React.Component {
 
       <div className='project-interest'>
         <p className='project-interest__text'>Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
-        {!interested &&
+        {!follower &&
           <button
             className='button project-interest__button'
-            onClick={() => this.addInterest(projectData.id)}
+            onClick={() => this.addProjectRole(projectData.id)}
           >
             Follow
           </button>
         }
-        {interested &&
+        {follower &&
           <button
             className='button project-interest__button'
-            onClick={() => this.removeInterest(projectData.id)}
+            onClick={() => this.removeProjectRole(projectData.id)}
           >
             Unfollow
           </button>
@@ -449,7 +387,7 @@ Project.propTypes = {
   tasksBySpecialty: PropTypes.array,
   projectData     : PropTypes.shape({}),
   tokenData       : PropTypes.shape({}),
-  interested      : PropTypes.bool,
+  follower        : PropTypes.bool,
   csrfToken       : PropTypes.string,
   editable        : PropTypes.bool,
   whitelabel      : PropTypes.bool,
@@ -471,7 +409,7 @@ Project.defaultProps = {
   },
   missionData        : null,
   tokenData          : null,
-  interested         : false,
+  follower           : false,
   specialtyInterested: [],
   csrfToken          : '',
   editable           : true,

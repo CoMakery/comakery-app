@@ -45,7 +45,7 @@ class Dashboard::AccountsController < ApplicationController
   def show
     authorize @project, :accounts?
 
-    account = @project.project_interested.find(params[:id])
+    account = @project.accounts.find(params[:id])
 
     respond_to do |format|
       format.turbo_stream do
