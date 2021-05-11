@@ -298,4 +298,11 @@ describe BlockchainTransaction, vcr: true do
       end
     end
   end
+
+  describe '#update_transactable_prioritized_at' do
+    let(:blockchain_transaction) { BlockchainTransaction.new }
+    subject { blockchain_transaction.update_transactable_prioritized_at }
+
+    it { is_expected.to be true }
+  end
 end

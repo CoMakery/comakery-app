@@ -7,11 +7,12 @@ class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
   end
 
   def update_transactable_prioritized_at(new_value = nil)
-    return true unless transaction_batch
+    return unless transaction_batch
 
     blockchain_transactables.each do |bt|
       bt.update!(prioritized_at: new_value)
     end
+    true
   end
 
   # TODO: Refactor on_chain condition into TokenType

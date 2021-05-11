@@ -38,4 +38,31 @@ describe BlockchainTransactionAccountTokenRecord, vcr: true do
       specify { expect(subject).to be_an(Comakery::Algorand::Tx::App::SecurityToken::SetAddressPermissions) }
     end
   end
+
+  describe '#update_transactable_prioritized_at' do
+    let(:blockchain_transaction) { create(:blockchain_transaction_account_token_record) }
+    let(:value) { nil }
+    subject { blockchain_transaction.update_transactable_prioritized_at(value) }
+
+    before do
+      blockchain_transaction.blockchain_transactables.update_all(prioritized_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
+      expect(blockchain_transaction.blockchain_transactables.reload.all?(&:prioritized_at)).to be true
+    end
+
+    it 'resets every prioritized_at' do
+      is_expected.to be true
+
+      expect(blockchain_transaction.blockchain_transactables.reload.all? { |a| a.prioritized_at.nil? }).to be true
+    end
+
+    context 'set particular value' do
+      let(:value) { Time.zone.parse('2021-05-01 12:00') }
+
+      it do
+        is_expected.to be true
+
+        expect(blockchain_transaction.blockchain_transactables.reload.all? { |a| a.prioritized_at == value }).to be true
+      end
+    end
+  end
 end
