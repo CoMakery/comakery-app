@@ -97,6 +97,8 @@ describe BlockchainTransaction, vcr: true do
     let!(:blockchain_transaction) { create(:blockchain_transaction, tx_hash: '0') }
 
     before do
+      expect(blockchain_transaction).to receive(:update_transactable_prioritized_at).once
+
       blockchain_transaction.update_status(:pending, 'test')
     end
 
