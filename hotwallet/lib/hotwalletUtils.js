@@ -60,16 +60,12 @@ exports.runServer = async function runServer(envs, redisClient) {
 
   try {
     while (true) {
-      const hw = await hwRedis.hotWallet()
-      const isReadyToSendTx = hw.isReadyToSendTx(envs)
       let delay = envs.emptyQueueDelay
 
-      if (isReadyToSendTx) {
-        const resTx = await exports.waitForNewTransaction(envs, hwRedis)
+      const resTx = await exports.waitForNewTransaction(envs, hwRedis)
 
-        if (["cancelled_transaction", "successfull"].indexOf(resTx.status) > -1) {
-          delay = envs.betweenTransactionDelay
-        }
+      if (["cancelled_transaction", "successfull"].indexOf(resTx.status) > -1) {
+        delay = envs.betweenTransactionDelay
       }
 
       console.log(`waiting ${delay} seconds`)
@@ -93,6 +89,16 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     return { status: "failed_before_getting_tx", blockchainTransaction: {}, transaction: {} }
   }
 
+  const isReadyToSendTx = hotWallet.isReadyToSendTx(envs)
+  if (!isReadyToSendTx) {
+    if (hotWallet.isEthereum() && envs.ethereumContractAddress && envs.ethereumBatchContractAddress) {
+      const approveTx = await blockchain.klass.approveBatchContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumBatchContractAddress)
+      if (approveTx.transactionId) {
+        hwRedis.saveApprovedBatchContract(envs.ethereumBatchContractAddress)
+      }
+    }
+  }
+
   const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
   if (!hasTokens) {
     console.log(`The Hot Wallet does not have tokens. Please top up the ${hwAddress}`)
@@ -108,7 +114,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     const prevTx = await hwRedis.getSavedDataForTransaction(blockchainTransaction)
 
     if (prevTx) {
-      const errorMessage = `The Hot Wallet already sent transaction for ${prevTx.key}, details: ${JSON.stringify(prevTx.values)}`
+      const errorMessage = `The Hot Wallet already sent transaction at least for ${prevTx.key}, details: ${JSON.stringify(prevTx.values)}`
       console.log(errorMessage)
       await hwApi.cancelTransaction(blockchainTransaction, errorMessage, "failed")
       return { status: "tx_already_sent", blockchainTransaction: blockchainTransaction, transaction: {} }
@@ -120,7 +126,14 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     if (typeof tx.valid == 'undefined' || tx.valid) {
       // tx successfully sent
       blockchainTransaction.txHash = tx.transactionId
-      await hwRedis.saveDavaForTransaction("successfull", blockchainTransaction)
+
+      if (blockchainTransaction.blockchainTransactableId && blockchainTransaction.blockchainTransactableType) {
+        await hwRedis.saveDavaForTransaction("successfull", blockchainTransaction.blockchainTransactableType, blockchainTransaction.blockchainTransactableId, blockchainTransaction.txHash)
+      } else if (Array.isArray(blockchainTransaction.blockchainTransactables) && blockchainTransaction.blockchainTransactables.length > 0) {
+        blockchainTransaction.blockchainTransactables.forEach(async (bt) => {
+          await hwRedis.saveDavaForTransaction("successfull", bt.blockchainTransactableType, bt.blockchainTransactableId, blockchainTransaction.txHash)
+        })
+      }
 
       await hwApi.updateTransactionHash(blockchainTransaction)
       return { status: "successfull", blockchainTransaction: blockchainTransaction, transaction: tx }

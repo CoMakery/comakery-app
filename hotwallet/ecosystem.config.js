@@ -3,6 +3,7 @@ module.exports = {
     name: "HotWallet",
     script: './app.js',
     instances: 1,
+    log_file: './logs/pm2.log',
     env: {
       NODE_ENV: "development",
     },

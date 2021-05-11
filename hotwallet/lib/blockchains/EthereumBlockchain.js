@@ -147,6 +147,50 @@ class EthereumBlockchain {
     }]
   }
 
+  approveAbi() {
+    return [
+      {
+        constant: false,
+        inputs: [
+          {
+            name: '_spender',
+            type: 'address'
+          },
+          {
+            name: '_value',
+            type: 'uint256'
+          }
+        ],
+        name: 'approve',
+        outputs: [
+          {
+            name: '',
+            type: 'bool'
+          }
+        ],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function'
+      }
+    ]
+  }
+
+  maxPossibleAmount() {
+    return '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+  }
+
+  approveTxObject(hotWalletAddress, contractAddress, batchContractAddress) {
+    return {
+      from: hotWalletAddress,
+      to: contractAddress,
+      contract: {
+        abi: this.approveAbi(),
+        method: 'approve',
+        parameters: [batchContractAddress, this.maxPossibleAmount()]
+      }
+    }
+  }
+
   async connect() {
     if (!this.chain.isConnected) {
       await this.chain.connect()
@@ -160,6 +204,28 @@ class EthereumBlockchain {
     await createAccount.generateKeysIfNeeded()
 
     return new HotWallet(this.blockchainNetwork, createAccount.accountName, createAccount.generatedKeys)
+  }
+
+  async approveBatchContractTransactions(hotWallet, contractAddress, batchContractAddress) {
+    await this.connect()
+
+    const txn = this.approveTxObject(hotWallet.address, contractAddress, batchContractAddress)
+    txn.data = chainjs.HelpersEthereum.generateDataFromContractAction(txn.contract)
+
+    const chainTransaction = await this.chain.new.Transaction()
+
+    try {
+      await chainTransaction.setFromRaw(txn)
+      await chainTransaction.prepareToBeSigned()
+      await chainTransaction.validate()
+      await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
+      const tx_result = await chainTransaction.send(chainjs.Models.ConfirmType.After001)
+      console.log(`Approve batch contract transaction has successfully sent by ${hotWallet.address} to blockchain tx hash: ${tx_result.transactionId}`)
+      return tx_result
+    } catch (err) {
+      console.error(err)
+      return { valid: false, error: err.message }
+    }
   }
 
   async getEthBalance(hotWalletAddress) {
@@ -184,7 +250,7 @@ class EthereumBlockchain {
     // Chainjs version does not work for some reason so I implemented custom check using web3
     // const tokenBalance = await this.chain.fetchBalance(hotWalletAddress, chainjs.HelpersEthereum.toEthereumSymbol(this.envs.ethereumTokenSymbol), this.envs.ethereumContractAddress)
 
-    const contract = new this.chain._chainState._web3.eth.Contract(this.balanceAbi(), this.envs.ethereumContractAddress.toString())
+    const contract = new this.chain.web3.eth.Contract(this.balanceAbi(), this.envs.ethereumContractAddress.toString())
     const balanceRes = await contract.methods.balanceOf(hotWalletAddress).call()
     const decimals = await contract.methods.decimals().call()
     const divisor = new BigNumber(10).pow(decimals)
@@ -223,7 +289,7 @@ class EthereumBlockchain {
       await chainTransaction.prepareToBeSigned()
       await chainTransaction.validate()
       await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
-      const tx_result = await chainTransaction.send()
+      const tx_result = await chainTransaction.send(chainjs.Models.ConfirmType.After001)
       console.log(`Transaction has successfully signed and sent by ${hotWallet.address} to blockchain tx hash: ${tx_result.transactionId}`)
       return tx_result
     } catch (err) {

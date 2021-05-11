@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe BlockchainTransactionAccountTokenRecord, vcr: true do
+  it { is_expected.to have_many(:blockchain_transactables_account_token_records).dependent(:nullify) }
+  it { is_expected.to respond_to(:blockchain_transactables) }
+
   describe 'update_status' do
     let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record) }
 

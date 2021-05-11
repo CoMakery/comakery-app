@@ -12,6 +12,7 @@ describe TokenType::Erc20, vcr: true do
   specify { expect(described_class.new(**attrs).wallet_logo).to eq('wallet-connect-logo.svg') }
   specify { expect(described_class.new(**attrs).contract).to be_a(Comakery::Eth::Contract::Erc20) }
   specify { expect(described_class.new(**attrs).abi).to be_an(Array) }
+  specify { expect(described_class.new(**attrs).batch_abi).to be_an(Array) }
   specify { expect(described_class.new(**attrs).tx).to be_nil }
   specify { expect(described_class.new(**attrs).operates_with_smart_contracts?).to be_truthy }
   specify { expect(described_class.new(**attrs).operates_with_account_records?).to be_falsey }

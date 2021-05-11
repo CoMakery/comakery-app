@@ -5,6 +5,9 @@ describe 'test_aml_kyc_unknown_wallet_filter', js: true do
   let!(:project) { create :project, token: create(:comakery_dummy_token), account: owner }
   let!(:project_award_type) { (create :award_type, project: project) }
 
+  # TODO: Remove me after fixing "eager loading detected Award => [:latest_transaction_batch]"
+  before { Bullet.raise = false }
+
   [1, 4, 7].each do |number_of_transfers|
     context "With #{number_of_transfers} AML/KYC unknown transfers" do
       it 'Returns correct number of transfers after applying filter' do

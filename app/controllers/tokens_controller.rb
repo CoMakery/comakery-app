@@ -134,6 +134,7 @@ class TokensController < ApplicationController
         :_token_type,
         :_blockchain,
         :contract_address,
+        :batch_contract_address,
         :symbol,
         :decimal_places,
         :unlisted

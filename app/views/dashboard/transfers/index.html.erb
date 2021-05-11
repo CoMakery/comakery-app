@@ -42,7 +42,7 @@
         <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
           <div class="text-right hot-wallet">
             <h3>Deploy a hot wallet:</h3>
-            <a href="<%= deploy_to_heroku_url(@project) %>">
+            <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
               <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
             </a>
           </div>
@@ -52,6 +52,14 @@
 
     <% if policy(@project).create_transfer? %>
       <%= render partial: "shared/wallet_connect" %>
+    <% end %>
+
+    <% if policy(@project).create_transfer? && @project.token&.batch_contract_address && ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
+      <div class="row">
+        <div class="col-6">
+          <%= render partial: "shared/transfer_button_batch" %>
+        </div>
+      </div>
     <% end %>
 
     <div class="transfers-table animated fadeIn faster">
