@@ -6,6 +6,8 @@ describe Award do
   it_behaves_like 'blockchain_transactable'
   it_behaves_like 'ransack_reorder'
 
+  it { is_expected.to respond_to(:commencement_date) }
+
   describe 'associations' do
     let(:specialty) { create(:specialty) }
     let(:award) { create(:award, specialty: specialty) }
