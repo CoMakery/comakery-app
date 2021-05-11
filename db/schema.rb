@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_101759) do
+ActiveRecord::Schema.define(version: 2021_05_11_205020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,6 +328,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_101759) do
     t.bigint "transaction_batch_id"
     t.text "amounts", default: [], array: true
     t.text "destinations", default: [], array: true
+    t.text "commencement_dates", default: [], array: true
+    t.text "lockup_schedule_ids", default: [], array: true
     t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
     t.index ["blockchain_transactable_type", "blockchain_transactable_id"], name: "index_bc_txs_on_bc_txble_type_and_bc_txble_id"
     t.index ["token_id"], name: "index_blockchain_transactions_on_token_id"
