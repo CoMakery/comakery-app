@@ -1,5 +1,5 @@
 class BlockchainTransaction < ApplicationRecord
-  belongs_to :blockchain_transactable, polymorphic: true
+  belongs_to :blockchain_transactable, polymorphic: true, counter_cache: true
   belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate', dependent: :destroy
 
