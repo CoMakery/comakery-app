@@ -22,6 +22,7 @@ describe Token, type: :model, vcr: true do
   describe described_class.new do
     it { is_expected.to respond_to(:contract) }
     it { is_expected.to respond_to(:abi) }
+    it { is_expected.to respond_to(:batch_abi) }
     it { is_expected.to respond_to(:supports_balance?) }
     it { is_expected.to respond_to(:blockchain_balance) }
   end

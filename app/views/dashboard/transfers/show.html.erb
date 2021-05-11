@@ -3,7 +3,7 @@
     <h2>Transfer Transactions</h2>
 
     <div class="transfers-filters--filter">
-      <h3>transfer id</h3>
+      <h3>transfer</h3>
 
       <div class="transfers-filters--filter--options">
         <div class="transfers-filters--filter--options__active">
@@ -11,6 +11,20 @@
         </div>
       </div>
     </div>
+
+    <% if @transfer.same_batch_transactables.present? %>
+      <div class="transfers-filters--filter">
+        <h3>batch transfers</h3>
+
+        <div class="transfers-filters--filter--options">
+          <% @transfer.same_batch_transactables.each do |transfer| %>
+            <div>
+              <%= link_to "##{transfer.id}", project_dashboard_transfer_path(transfer.project, transfer) %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <%= render partial: "transfer_history", locals: {transfer: @transfer} %>

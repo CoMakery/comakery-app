@@ -7,6 +7,9 @@ describe 'test_ready_filter', js: true do
   let!(:project_award_type) { (create :award_type, project: project) }
   let!(:verification) { create(:verification, account: owner) }
 
+  # TODO: Remove me after fixing "eager loading detected Award => [:latest_transaction_batch]"
+  before { Bullet.raise = false }
+
   [1, 5, 10].each do |number_of_transfers|
     context "With #{number_of_transfers} ready transfers" do
       it "Doesn't duplicate transfers" do

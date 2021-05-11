@@ -1,15 +1,21 @@
 class EthereumHotWallet {
-  constructor(network, address, keys, optedInApps = []) {
+  constructor(network, address, keys, options = {}) {
     this.network = network
     this.address = address
     this.privateKey = keys.privateKey
     this.publicKey = keys.publicKey
     this.privateKeyEncrypted = keys.privateKeyEncrypted
-    this.optedInApps = optedInApps
+    this.approvedBatchContract = options.approvedBatchContract || null
   }
 
-  isReadyToSendTx() {
-    return true
+  isReadyToSendTx(envs) {
+    return this.isApprovedBatchContract(envs.ethereumBatchContractAddress)
+  }
+
+  isApprovedBatchContract(batchContractAddress) {
+    if (!this.approvedBatchContract) { return false }
+
+    return this.approvedBatchContract === batchContractAddress
   }
 }
 

@@ -1,0 +1,19 @@
+<%= turbo_frame_tag "transfer_button_batch_#{@project.id}", target: "_top" do %>
+    <% if @project.awards.ready_for_batch_blockchain_transaction.any? %>
+      <div class="transfer-button transfer-button__all">
+        <% if @project.token.blockchain.supported_by_wallet_connect? %>
+          <a
+            href='javascript:void(0)'
+            class="transfer-tokens-btn transfer-tokens-btn-skip-legacy"
+            data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx"
+            data-sign--wallet-connect-target='txButtons'
+            data-sign--metamask-target='txButtons'
+            data-tx-new-url="<%= sign_user_wallet_new_path(project_id: @project.id) %>"
+            data-tx-receive-url="<%= sign_user_wallet_receive_path %>">
+
+            Pay All
+          </a>
+        <% end %>
+      </div>
+    <% end %>
+<% end %>

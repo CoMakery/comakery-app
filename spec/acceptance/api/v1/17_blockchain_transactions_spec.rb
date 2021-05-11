@@ -95,8 +95,8 @@ resource 'VII. Blockchain Transactions' do
         header 'API-Transaction-Key', project.api_key.key
 
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
+
         VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
-          allow_any_instance_of(Award).to receive(:id).and_return('5')
           do_request(request)
         end
 

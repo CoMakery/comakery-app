@@ -1,5 +1,5 @@
 class BlockchainTransaction < ApplicationRecord
-  belongs_to :blockchain_transactable, polymorphic: true
+  belongs_to :transaction_batch
   belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate', dependent: :destroy
 
@@ -18,6 +18,19 @@ class BlockchainTransaction < ApplicationRecord
   enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
 
   validates :network, inclusion: { in: networks.keys.map(&:to_s), message: 'unknown network value' }
+
+  # @abstract Subclass is expected to implement #blockchain_transactables
+  # @!method blockchain_transactables
+  #    Return blockchain transactables
+
+  def blockchain_transactable
+    blockchain_transactables.first
+  end
+
+  def blockchain_transactables=(transactables)
+    self.transaction_batch = TransactionBatch.create!
+    transaction_batch.blockchain_transactables = transactables
+  end
 
   def self.number_of_confirmations
     ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i
