@@ -169,7 +169,7 @@ class BlockchainTransactionAward < BlockchainTransaction
     end
 
     def populate_lockup
-      self.commencement_dates = blockchain_transactable.map(&:commencement_date) if commencement_dates.empty?
-      self.lockup_schedule_ids = blockchain_transactable.map(&:lockup_schedule_id) if lockup_schedule_ids.empty?
+      self.commencement_dates = blockchain_transactables.map(&:commencement_date) if commencement_dates.empty?
+      self.lockup_schedule_ids = blockchain_transactables.map(&:lockup_schedule_id) if lockup_schedule_ids.empty?
     end
 end
