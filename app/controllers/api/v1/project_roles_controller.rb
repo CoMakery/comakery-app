@@ -38,15 +38,15 @@ class Api::V1::ProjectRolesController < Api::V1::ApiController
 
   private
 
-  def account
-    @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:account_id])
-  end
+    def account
+      @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:account_id])
+    end
 
-  def project_involved_accounts
-    @project_involved_accounts ||= paginate(account.projects_involved.where(mission: whitelabel_mission))
-  end
+    def project_involved_accounts
+      @project_involved_accounts ||= paginate(account.projects_involved.where(mission: whitelabel_mission))
+    end
 
-  def project_involved_account
-    @project_involved_account ||= account.projects_involved.where(mission: whitelabel_mission).find(params[:id])
-  end
+    def project_involved_account
+      @project_involved_account ||= account.projects_involved.where(mission: whitelabel_mission).find(params[:id])
+    end
 end
