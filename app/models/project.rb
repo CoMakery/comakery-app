@@ -21,7 +21,7 @@ class Project < ApplicationRecord
   belongs_to :token, optional: true, touch: true
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
-  has_many :project_roles, dependent: :destroy # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :project_roles, dependent: :destroy
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
   has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
