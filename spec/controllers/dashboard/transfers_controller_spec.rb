@@ -79,4 +79,14 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
       end
     end
   end
+
+  describe 'prioritize' do
+    subject { patch :prioritize, params: { project_id: project.to_param, id: transfer.to_param } }
+
+    it 'update' do
+      subject
+      expect(response).to redirect_to(project_dashboard_transfers_path(project))
+      expect(flash[:notice]).to match('Transfer will be sent soon')
+    end
+  end
 end
