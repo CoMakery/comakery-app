@@ -63,12 +63,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def create_interest_from_session
-    if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
-      current_account.interests.create(
-        project: Project.find(session[:interested_in_project].to_i),
-        specialty: current_account.specialty
-      )
+  def create_project_role_from_session
+    if current_account&.valid? && current_account&.confirmed? && session[:involved_in_project]
+      current_account.project_roles.create(project: Project.find(session[:involved_in_project].to_i))
 
       session.delete(:interested_in_project)
     end
