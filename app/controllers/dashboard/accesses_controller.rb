@@ -9,41 +9,41 @@ class Dashboard::AccessesController < ApplicationController
   def index
     authorize @project, :accesses?
 
-    @admins = @project.admins
+    @admins = @project.project_admins
   end
 
-  def add_admin
-    authorize @project
-    account =
-      if @whitelabel_mission
-        @whitelabel_mission.managed_accounts.find_by email: params[:email]
-      else
-        Account.find_by(email: params[:email], managed_mission_id: nil)
-      end
-
-    return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Account is not found on CoMakery' } unless account
-
-    return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Project owner cannot be added as a project admin' } if @project.account == account
-
-    return redirect_to project_dashboard_accesses_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" } if @project.admins.include?(account)
-
-    @project.admins << account
-    @project.interested << account unless account.interested?(@project.id)
-    redirect_to project_dashboard_accesses_path(@project), notice: "#{account.decorate.name} added as a project admin"
-  end
-
-  def remove_admin
-    authorize @project
-
-    account = Account.find_by(id: params[:account_id])
-
-    if account && @project.admins.include?(account)
-      @project.admins.delete(account)
-      redirect_to project_dashboard_accesses_path(@project), notice: "#{account.decorate.name} removed from project admins"
-    else
-      redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Project admin is not found' }
-    end
-  end
+  # def add_admin
+  #   authorize @project
+  #   account =
+  #     if @whitelabel_mission
+  #       @whitelabel_mission.managed_accounts.find_by email: params[:email]
+  #     else
+  #       Account.find_by(email: params[:email], managed_mission_id: nil)
+  #     end
+  #
+  #   return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Account is not found on CoMakery' } unless account
+  #
+  #   return redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Project owner cannot be added as a project admin' } if @project.account == account
+  #
+  #   return redirect_to project_dashboard_accesses_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" } if @project.admins.include?(account)
+  #
+  #   @project.admins << account
+  #   @project.interested << account unless account.interested?(@project.id)
+  #   redirect_to project_dashboard_accesses_path(@project), notice: "#{account.decorate.name} added as a project admin"
+  # end
+  #
+  # def remove_admin
+  #   authorize @project
+  #
+  #   account = Account.find_by(id: params[:account_id])
+  #
+  #   if account && @project.admins.include?(account)
+  #     @project.admins.delete(account)
+  #     redirect_to project_dashboard_accesses_path(@project), notice: "#{account.decorate.name} removed from project admins"
+  #   else
+  #     redirect_to project_dashboard_accesses_path(@project), flash: { error: 'Project admin is not found' }
+  #   end
+  # end
 
   def regenerate_api_key
     authorize @project

@@ -11,11 +11,11 @@ describe Project do
     let!(:account) { create :account }
 
     before do
-      project.admins << account
+      project.project_admins << account
     end
 
     it 'has and belongs to many admins' do
-      expect(project.admins).to match_array([account])
+      expect(project.project_admins).to match_array([account])
     end
   end
 
@@ -578,7 +578,7 @@ describe Project do
 
     it 'sets preconditions properly' do
       expect(project.account).to eq(previous_owner)
-      expect(project.admins).not_to include(previous_owner)
+      expect(project.project_admins).not_to include(previous_owner)
       expect(project.interested).to include(previous_owner)
     end
 
@@ -589,8 +589,8 @@ describe Project do
       end
 
       it { expect(project.account).to eq(next_owner) }
-      it { expect(project.admins).not_to include(next_owner) }
-      it { expect(project.admins).to include(previous_owner) }
+      it { expect(project.project_admins).not_to include(next_owner) }
+      it { expect(project.project_admins).to include(previous_owner) }
       it { expect(project.interested).to include(next_owner) }
       it { expect(project.interested).to include(previous_owner) }
     end
@@ -602,8 +602,8 @@ describe Project do
       end
 
       it { expect(project.account).to eq(next_owner) }
-      it { expect(project.admins).not_to include(next_owner) }
-      it { expect(project.admins).to include(previous_owner) }
+      it { expect(project.project_admins).not_to include(next_owner) }
+      it { expect(project.project_admins).to include(previous_owner) }
       it { expect(project.interested).to include(next_owner) }
       it { expect(project.interested).to include(previous_owner) }
     end
@@ -620,13 +620,13 @@ describe Project do
     end
 
     it 'does not double add admins' do
-      expect(project.admins.length).to eq(0)
+      expect(project.project_admins.length).to eq(0)
 
       described_class.assign_project_owner_from(project, next_owner.email)
-      expect(project.admins.length).to eq(1)
+      expect(project.project_admins.length).to eq(1)
 
       described_class.assign_project_owner_from(project, next_owner.email)
-      expect(project.admins.length).to eq(1)
+      expect(project.project_admins.length).to eq(1)
     end
 
     it 'raises an error if an account was not found by email' do
@@ -649,7 +649,7 @@ describe Project do
       end.to raise_error(ArgumentError, 'Project data is invalid')
 
       expect(project.account).to eq(previous_owner)
-      expect(project.admins).not_to include(previous_owner)
+      expect(project.project_admins).not_to include(previous_owner)
       expect(project.interested).to include(previous_owner)
     end
   end

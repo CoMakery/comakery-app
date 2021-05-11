@@ -233,15 +233,15 @@ class Account < ApplicationRecord
   end
 
   def my_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:project_admins).distinct.where('projects.account_id = :id OR project_roles.account_id = :id', id: id)
   end
 
   def accessable_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:project_admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR authentication_teams.account_id = :id OR project_roles.account_id = :id', id: id)
   end
 
   def related_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR ((authentication_teams.account_id = :id OR accounts_projects.account_id = :id) AND projects.visibility NOT in(4))', id: id)
+    (scope || Project).left_outer_joins(:project_admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR ((authentication_teams.account_id = :id OR project_roles.account_id = :id) AND projects.visibility NOT in(4))', id: id)
   end
 
   def accessable_award_types(project_scope = nil)

@@ -16,7 +16,7 @@ class Project < ApplicationRecord
 
   belongs_to :account, touch: true
   has_one :hot_wallet, class_name: 'Wallet', touch: true, dependent: :destroy
-  has_and_belongs_to_many :admins, class_name: 'Account'
+  # has_and_belongs_to_many :admins, class_name: 'Account'
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
@@ -102,7 +102,7 @@ class Project < ApplicationRecord
     previous_owner = project.account
     project.safe_add_admin(previous_owner)
     project.account_id = new_owner.id
-    project.admins.delete(new_owner)
+    project.admins.delete(new_owner)# what
     project.safe_add_interested(new_owner)
     project.save!
   end
@@ -112,7 +112,7 @@ class Project < ApplicationRecord
   end
 
   def safe_add_admin(new_admin)
-    admins << new_admin unless admins.exists?(new_admin.id)
+    project_admins << new_admin unless project_admins.exists?(new_admin.id)
   end
 
   # TODO: Remove interests
