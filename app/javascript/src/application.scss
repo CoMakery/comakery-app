@@ -498,6 +498,31 @@ form.form-with-submit-button {
   }
 }
 
+.transfer-dropdown-filter-style{
+  color: white !important;
+  background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%);
+  padding-right: 35px;
+  line-height: normal;
+
+  option {
+    color: #3a3a3a;
+  }
+}
+
+.status-filter-style{
+  line-height: normal;
+  color: #3a3a3a;
+  font-family: inherit !important;
+  max-width: fit-content !important;
+}
+
+.category-filter-style{
+  line-height: normal;
+  color: #3a3a3a;
+  font-family: inherit !important;
+  max-width: fit-content !important;
+}
+
 .transfer-button {
   font-family: Montserrat, sans-serif;
   font-size: 10px;
@@ -600,7 +625,7 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: -webkit-fill-available;
+      width: stretch;
     }
 
     .hot-wallet-switcher-child {

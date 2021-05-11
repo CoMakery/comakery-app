@@ -18,6 +18,20 @@ export default class extends Controller {
     )
   }
 
+  visitSelectedStatus(){
+    let selected = $('#status-selector').find('option:selected')
+    if (selected.val() !== 'All'){
+      Turbo.visit(selected.data('url'))
+    }
+  }
+
+  visitSelectedCategory(){
+    let selected = $('#category-selector').find('option:selected')
+    if (selected.val() !== 'All'){
+      Turbo.visit(selected.data('url'))
+    }
+  }
+
   showForm() {
     this.formChildTarget.style.display = 'flex'
 
