@@ -67,7 +67,11 @@
         </div>
         <div class="transfers-filters--filter">
           <%= search_form_for @q, url: project_dashboard_transfers_path(request.params.merge(q: (request.params[:q] || {}).except(:account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont))), method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
-            <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Search...', autofocus: false %>
+            <svg class="p5-color" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.16288 5.74054C8.70581 5.51565 9.28773 5.3999 9.87539 5.3999C10.4829 5.3999 10.9754 5.89239 10.9754 6.4999C10.9754 7.10742 10.4829 7.5999 9.87539 7.5999C9.57663 7.5999 9.2808 7.65875 9.00479 7.77308C8.72877 7.88741 8.47798 8.05498 8.26672 8.26623C8.05547 8.47749 7.88789 8.72828 7.77356 9.0043C7.65924 9.28031 7.60039 9.57615 7.60039 9.8749C7.60039 10.4824 7.1079 10.9749 6.50039 10.9749C5.89288 10.9749 5.40039 10.4824 5.40039 9.8749C5.40039 9.28724 5.51614 8.70533 5.74103 8.16239C5.96592 7.61946 6.29555 7.12614 6.71109 6.7106C7.12663 6.29506 7.61995 5.96543 8.16288 5.74054Z" fill="currentColor"></path>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0.900391 9.8749C0.900391 4.91815 4.91864 0.899902 9.87539 0.899902C14.8321 0.899902 18.8504 4.91815 18.8504 9.8749C18.8504 11.9568 18.1415 13.8732 16.9519 15.3958L20.2157 18.6596C20.6453 19.0892 20.6453 19.7856 20.2157 20.2152C19.7861 20.6448 19.0896 20.6448 18.6601 20.2152L15.3963 16.9514C13.8737 18.141 11.9573 18.8499 9.87539 18.8499C4.91864 18.8499 0.900391 14.8317 0.900391 9.8749ZM9.87539 3.0999C6.13366 3.0999 3.10039 6.13317 3.10039 9.8749C3.10039 13.6166 6.13366 16.6499 9.87539 16.6499C13.6171 16.6499 16.6504 13.6166 16.6504 9.8749C16.6504 6.13317 13.6171 3.0999 9.87539 3.0999Z" fill="currentColor"></path>
+            </svg>
+            <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Search...', autofocus: false, style: 'border-radius: 5px;' %>
           <% end %>
         </div>
       </div>
@@ -76,9 +80,7 @@
           <div style='padding-right: 5px; display: inline;'>
             Status:
           </div>
-          <div class="transfers-filters--filter">
-            <%= render partial: "filter_status" %>
-          </div>
+          <%= render partial: "filter_status" %>
         </div>
         <div class='display-contents'>
           <div style='padding-right: 5px; display: inline;'>
