@@ -1,5 +1,4 @@
 # Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
-# rubocop:disable Rails/HasAndBelongsToMany
 
 class Project < ApplicationRecord
   include ApiAuthorizable
@@ -102,7 +101,7 @@ class Project < ApplicationRecord
     previous_owner = project.account
     project.safe_add_admin(previous_owner)
     project.account_id = new_owner.id
-    project.admins.delete(new_owner)# what
+    project.admins.delete(new_owner) # what
     project.safe_add_interested(new_owner)
     project.save!
   end
