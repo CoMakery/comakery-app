@@ -19,7 +19,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
     account = whitelabel_mission.managed_accounts.build(account_params)
     account.name_required = true
     account.specialty = Specialty.default
-    account.projects_involved << whitelabel_mission.projects.where(id: params.dig(:body, :data, :account, :projects))
+    account.projects_involved << whitelabel_mission.projects.where(id: params.dig(:body, :data, :account, :project_ids))
 
     if account.save
       @account = account

@@ -107,7 +107,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         project2 = create(:project, mission: active_whitelabel_mission)
         ignored_project = create(:project)
 
-        valid_attributes[:projects_involved] = [project1.id.to_s, project2.id.to_s, ignored_project.id.to_s]
+        valid_attributes[:project_ids] = [project1.id.to_s, project2.id.to_s, ignored_project.id.to_s]
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
 
         post :create, params: params
@@ -116,7 +116,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       end
 
       it 'with empty array provided' do
-        valid_attributes[:projects_involved] = []
+        valid_attributes[:project_ids] = []
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
         post :create, params: params
 
@@ -125,7 +125,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       end
 
       it 'with invalid param provided' do
-        valid_attributes[:projects_involved] = 'invalid_value'
+        valid_attributes[:project_ids] = 'invalid_value'
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
         post :create, params: params
 
