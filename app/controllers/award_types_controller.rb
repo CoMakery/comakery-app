@@ -89,7 +89,7 @@ class AwardTypesController < ApplicationController
             total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: GetImageVariantPath.call(attachment: batch.project.token&.logo_image, resize_to_fill: [100, 100]).path,
             team_pics: batch.project.contributors_distinct.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
-            interested_pics: batch.project.interested.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
+            interested_pics: batch.project.accounts.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),

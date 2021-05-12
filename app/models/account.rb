@@ -163,7 +163,7 @@ class Account < ApplicationRecord
 
     def make_everyone_interested(project)
       find_each(batch_size: 500) do |account|
-        project.safe_add_project_interested(account)
+        project.add_account(account)
       end
     end
 
@@ -279,16 +279,8 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
-  def interested?(project_id)
-    projects_interested.exists? project_id
-  end
-
   def involved?(project_id)
     projects_involved.exists? project_id
-  end
-
-  def specialty_interested?(project_id, specialty_id)
-    interests.exists?(project_id: project_id, specialty_id: specialty_id)
   end
 
   def valid_and_underage?

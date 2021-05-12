@@ -105,7 +105,7 @@ class Project < ApplicationRecord
     project.safe_add_admin(previous_owner)
     project.account_id = new_owner.id
     project.admins.delete(new_owner)
-    project.safe_add_project_interested(new_owner)
+    project.add_account(new_owner)
     project.save!
   end
 
@@ -117,8 +117,8 @@ class Project < ApplicationRecord
     admins << new_admin unless admins.exists?(new_admin.id)
   end
 
-  def safe_add_project_interested(interested_account)
-    project_interested << interested_account unless interested_account.involved?(id)
+  def add_account(account)
+    accounts << account unless account.involved?(id)
   end
 
   def total_awards_earned(all_accounts)
@@ -220,7 +220,7 @@ class Project < ApplicationRecord
     {
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: interested.size
+      interests: project_interested.size
     }
   end
 
@@ -279,7 +279,7 @@ class Project < ApplicationRecord
     end
 
     def add_owner_as_interested
-      interested << account unless account.interested?(id)
+      project_interested << account unless account.involved?(id)
     end
 
     def add_owner_as_admin

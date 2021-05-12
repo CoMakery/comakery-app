@@ -158,7 +158,7 @@ describe AccountsController do
       }
 
       account = Account.where(email: 'user-yo@test.st').last
-      expect(account.projects_interested).to contain_exactly(project_auto_add1, project_auto_add2)
+      expect(account.projects_involved).to contain_exactly(project_auto_add1, project_auto_add2)
     end
 
     it 'adds nothing if there are no auto add interest projects' do
@@ -177,7 +177,7 @@ describe AccountsController do
       }
 
       account = Account.where(email: 'user-yo@test.st').last
-      expect(account.projects_interested).to eq([])
+      expect(account.projects_involved).to eq([])
     end
 
     it 'renders errors if email has already been taken' do

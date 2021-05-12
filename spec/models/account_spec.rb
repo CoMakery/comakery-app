@@ -699,9 +699,9 @@ describe Account do
     end
 
     it 'loops through all users in batch sizes of 500 and makes them all interested in a project' do
-      expect(project.interested).to contain_exactly(project.account)
+      expect(project.accounts).to contain_exactly(project.account)
       described_class.make_everyone_interested(project)
-      expect(project.interested.to_a).to contain_exactly(*users)
+      expect(project.accounts.to_a).to contain_exactly(*users)
     end
   end
 

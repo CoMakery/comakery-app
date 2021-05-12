@@ -14,7 +14,7 @@ feature 'pages' do
 
   scenario '#featured' do
     stub_airtable
-    account.interests.create(project_id: project_featured.id, protocol: 'Holo')
+    account.project_roles.create(project_id: project_featured.id, protocol: 'Holo')
     login account
 
     visit root_path

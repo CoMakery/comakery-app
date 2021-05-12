@@ -403,7 +403,7 @@ class Award < ApplicationRecord
     end
 
     def add_account_as_interested
-      project.interested << account unless account.interested?(project.id)
+      project.project_interested << account unless account.involved?(project.id)
     end
 
     def store_license_hash

@@ -30,7 +30,7 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
       expect(response).to redirect_to(project_dashboard_accesses_path(project))
       expect(flash[:notice]).not_to be_nil
       expect(project.admins).to match_array([project_admin])
-      expect(project.interested).to include(project_admin)
+      expect(project.accounts).to include(project_admin)
     end
 
     context 'with whitelabel mission' do
@@ -45,7 +45,7 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
         expect(response).to redirect_to(project_dashboard_accesses_path(project))
         expect(flash[:notice]).to be_present
         expect(project.admins).to match_array([project_admin])
-        expect(project.interested).to include(project_admin)
+        expect(project.accounts).to include(project_admin)
       end
     end
 

@@ -9,7 +9,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
   describe 'GET #index' do
     subject { get :index, params: { project_id: project.to_param } }
 
-    before { project.safe_add_project_interested(account) }
+    before { project.add_account(account) }
 
     context 'with eth security token' do
       it { is_expected.to have_http_status(:success) }
@@ -85,7 +85,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
     before { login(project.account) }
 
-    before { project.safe_add_project_interested(account_token_record.account) }
+    before { project.add_account(account_token_record.account) }
 
     context 'with valid params' do
       let(:attributes) { valid_attributes }
@@ -132,7 +132,7 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
   describe 'GET #show' do
     before do
-      project.safe_add_project_interested(account)
+      project.add_account(account)
     end
 
     it 'returns a success response' do

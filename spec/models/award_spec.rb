@@ -328,7 +328,7 @@ describe Award do
       end
 
       it 'adds account as interested in project after account is assigned' do
-        expect(project.interested).to include(award.account)
+        expect(project.accounts).to include(award.account)
       end
     end
 

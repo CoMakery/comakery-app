@@ -28,7 +28,9 @@ class Dashboard::AccessesController < ApplicationController
     return redirect_to project_dashboard_accesses_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" } if @project.admins.include?(account)
 
     @project.admins << account
-    @project.interested << account unless account.interested?(@project.id)
+
+    @project.add_account(account)
+
     redirect_to project_dashboard_accesses_path(@project), notice: "#{account.decorate.name} added as a project admin"
   end
 

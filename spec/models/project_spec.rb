@@ -357,7 +357,7 @@ describe Project do
       let(:project) { create(:project) }
 
       it 'adds project owner as interested' do
-        expect(project.interested).to include(project.account)
+        expect(project.accounts).to include(project.account)
       end
     end
   end
@@ -533,10 +533,8 @@ describe Project do
     it 'returns number of uniq accounts which have interest, started a task or created this project' do
       project = create(:project)
       create(:award, award_type: create(:award_type, project: project))
-      create(:interest, project: project, account: project.account)
-      create(:interest, project: project)
 
-      expect(project.reload.stats[:interests]).to eq(3)
+      expect(project.reload.stats[:interests]).to eq(2)
     end
   end
 
@@ -579,7 +577,7 @@ describe Project do
     it 'sets preconditions properly' do
       expect(project.account).to eq(previous_owner)
       expect(project.admins).not_to include(previous_owner)
-      expect(project.interested).to include(previous_owner)
+      expect(project.accounts).to include(previous_owner)
     end
 
     describe 'happy path with project object' do
@@ -591,8 +589,8 @@ describe Project do
       it { expect(project.account).to eq(next_owner) }
       it { expect(project.admins).not_to include(next_owner) }
       it { expect(project.admins).to include(previous_owner) }
-      it { expect(project.interested).to include(next_owner) }
-      it { expect(project.interested).to include(previous_owner) }
+      it { expect(project.accounts).to include(next_owner) }
+      it { expect(project.accounts).to include(previous_owner) }
     end
 
     describe 'happy path with just project id' do
@@ -604,19 +602,19 @@ describe Project do
       it { expect(project.account).to eq(next_owner) }
       it { expect(project.admins).not_to include(next_owner) }
       it { expect(project.admins).to include(previous_owner) }
-      it { expect(project.interested).to include(next_owner) }
-      it { expect(project.interested).to include(previous_owner) }
+      it { expect(project.accounts).to include(next_owner) }
+      it { expect(project.accounts).to include(previous_owner) }
     end
 
     it 'does not double add interested' do
-      project.interested << next_owner
+      project.accounts << next_owner
 
-      expect(project.interested.length).to eq(2)
+      expect(project.accounts.length).to eq(2)
 
       described_class.assign_project_owner_from(project, next_owner.email)
 
-      expect(project.interested.length).to eq(2)
-      expect(project.interested).to contain_exactly(next_owner, previous_owner)
+      expect(project.accounts.length).to eq(2)
+      expect(project.accounts).to contain_exactly(next_owner, previous_owner)
     end
 
     it 'does not double add admins' do
@@ -650,7 +648,7 @@ describe Project do
 
       expect(project.account).to eq(previous_owner)
       expect(project.admins).not_to include(previous_owner)
-      expect(project.interested).to include(previous_owner)
+      expect(project.accounts).to include(previous_owner)
     end
   end
 end
