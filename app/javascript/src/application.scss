@@ -498,6 +498,37 @@ form.form-with-submit-button {
   }
 }
 
+<<<<<<< HEAD
+=======
+.transfer-dropdown-filter-style{
+  color: white !important;
+  background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%);
+  padding-right: 35px;
+  line-height: normal;
+
+  option {
+    color: #3a3a3a;
+  }
+}
+
+.category-and-status-filters{
+  text-align: right;
+}
+
+.display-contents{
+  display: contents;
+}
+
+.status-category-filter-style{
+  line-height: normal;
+  color: #2647CE !important;
+  font-family: inherit !important;
+  max-width: fit-content !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+>>>>>>> 3ca34ec2... implemented all functionalities for reorganize transfer columns
 .transfer-button {
   font-family: Montserrat, sans-serif;
   font-size: 10px;
@@ -606,7 +637,7 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
-  padding: 10px;
+  padding: 0px;
 
   .hot-wallet-switcher {
     display: flex;

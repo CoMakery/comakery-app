@@ -1,13 +1,11 @@
 <div class="transfers-filters">
-  <h2>
-    filters
-
-    <% if request.params[:q] %>
+  <% if request.params[:q] %>
+    <h2>
       <div class="transfers-filters--clear">
         <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
       </div>
-    <% end %>
-  </h2>
+    </h2>
+  <% end %>
 
   <% if request.params[:q] && request.params[:q][:id_eq] %>
 
@@ -34,10 +32,9 @@
     </div>
 
   <% else %>
-    <div class="transfers-filters--filter">
-      <h3>Dates</h3>
-
-      <div class="calendar">
+    <div class="transfers-filters--filter" style='display: contents;'>
+      <h4 style='padding-right: 10px;'>Transfers</h4>
+      <div class="calendar" style='padding-right: 10px;'>
         <%= react_component('TransfersCalendar') %>
       </div>
     </div>
@@ -54,6 +51,7 @@
         <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
       <% end %>
     </div>
+<<<<<<< HEAD
 
     <div class="transfers-filters--filter">
       <h3>Category</h3>
@@ -70,6 +68,19 @@
             ) %>
           </div>
         <% end %>
+=======
+    <div class="transfers-filters">
+      <div class="transfers-filters--filter">
+        <div class="transfers-filters--filter--options">
+         <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { style: 'color: white; background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%); padding-right: 45px;line-height: normal;', data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
+            <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
+            <% if policy(@project).transfer_types? %>s
+              <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transfer_categories_path(@project) } %>
+            <% end %>
+          <% end %>
+          <svg xmlns="http://www.w3.org/2000/svg" style='width: 70px;margin-top: 7px;position: absolute;pointer-events: none;color: white;margin-left: 125px;' class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+>>>>>>> 3ca34ec2... implemented all functionalities for reorganize transfer columns
       </div>
     </div>
 
