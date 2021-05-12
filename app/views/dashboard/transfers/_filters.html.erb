@@ -1,13 +1,11 @@
 <div class="transfers-filters">
-  <h2>
-    filters
-
-    <% if request.params[:q] %>
+  <% if request.params[:q] %>
+    <h2>
       <div class="transfers-filters--clear">
         <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
       </div>
-    <% end %>
-  </h2>
+    </h2>
+  <% end %>
 
   <% if request.params[:q] && request.params[:q][:id_eq] %>
 
@@ -34,10 +32,9 @@
     </div>
 
   <% else %>
-    <div class="transfers-filters--filter">
-      <h3>Dates</h3>
-
-      <div class="calendar">
+    <div class="transfers-filters--filter" style='display: contents;'>
+      <h4 style='padding-right: 10px;'>Transfers</h4>
+      <div class="calendar" style='padding-right: 10px;'>
         <%= react_component('TransfersCalendar') %>
       </div>
     </div>
@@ -66,9 +63,9 @@
     <div class="transfers-filters">
       <div class="transfers-filters--filter">
         <div class="transfers-filters--filter--options">
-          <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { style: 'color: white; background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%); padding-right: 35px;line-height: normal;', data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
+         <%= select 'select', 'transfers', {}, { include_blank: 'Create New Transfer' }, { style: 'color: white; background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%); padding-right: 45px;line-height: normal;', data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
             <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
-            <% if policy(@project).transfer_types? %>
+            <% if policy(@project).transfer_types? %>s
               <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transfer_categories_path(@project) } %>
             <% end %>
           <% end %>

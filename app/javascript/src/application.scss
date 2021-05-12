@@ -509,18 +509,21 @@ form.form-with-submit-button {
   }
 }
 
-.status-filter-style{
-  line-height: normal;
-  color: #3a3a3a;
-  font-family: inherit !important;
-  max-width: fit-content !important;
+.category-and-status-filters{
+  text-align: right;
 }
 
-.category-filter-style{
+.display-contents{
+  display: contents;
+}
+
+.status-category-filter-style{
   line-height: normal;
-  color: #3a3a3a;
+  color: #2647CE !important;
   font-family: inherit !important;
   max-width: fit-content !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 .transfer-button {
@@ -610,7 +613,7 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
-  padding: 10px;
+  padding: 0px;
 
   .hot-wallet-switcher {
     display: flex;

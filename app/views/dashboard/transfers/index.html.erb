@@ -10,22 +10,36 @@
     <% end %>
 
     <div class='row transfers-filters-bar'>
-      <div class='col-6 transfers-search-bar'>
-        <%= form_with url: project_dashboard_transfers_path(@project, q: {}), method: :get do |f| %>
-          <%= f.text_field 'account', { placeholder: 'Search...' } %>
-        <% end %>
+      <div class='col-6 transfers-search-bar display-contents'>
+        <div style='padding-right: 20px;'>
+          Transfers List:
+        </div>
+        <div class="transfers-filters--filter">
+          <%= search_form_for @q, url: project_dashboard_transfers_path(request.params.merge(q: (request.params[:q] || {}).except(:account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont))), method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
+            <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Search...', autofocus: false %>
+          <% end %>
+        </div>
       </div>
       <div class='col-6 category-and-status-filters'>
-        <%= select 'select', 'statuses', {}, { include_blank: 'All' }, { id: 'status-selector', class: 'status-filter-style', data: { target: 'transfer-form.create', action: 'transfer-form#visitSelectedStatus' } } do %>
-          <% @statuses.each do |status| %>
-            <%= tag.option status.capitalize, { 'data-url': project_dashboard_transfers_path(@project, q: { status_eq: status }) } %>
+        <div class='display-contents'>
+          <div style='padding-right: 5px; display: inline;'>
+            Status:
+          </div>
+          <div class="transfers-filters--filter">
+            <%= render partial: "filter_status" %>
+          </div>
+        </div>
+        <div class='display-contents'>
+          <div style='padding-right: 5px; display: inline;'>
+            Category:
+          </div>
+          <%= select 'select', 'categories', {}, { include_blank: 'All' }, { id: 'category-selector', class: 'status-category-filter-style', data: { target: 'transfer-form.create', action: 'transfer-form#visitSelectedCategory' } } do %>
+            <% @transfers_chart_colors_objects.each do |type, color| %>
+              <%= tag.option type.name.capitalize, { 'data-url': project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } %>
+            <% end %>
           <% end %>
-        <% end %>
-        <%= select 'select', 'categories', {}, { include_blank: 'All' }, { id: 'category-selector',  class: 'category-filter-style', data: { target: 'transfer-form.create', action: 'transfer-form#visitSelectedCategory' } } do %>
-          <% @transfers_chart_colors_objects.each do |type, color| %>
-            <%= tag.option type.name, { 'data-url': project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } %>
-          <% end %>
-        <% end %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-arrow" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
       </div>
     </div>
 
