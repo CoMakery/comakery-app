@@ -35,9 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authenticated(msg = nil)
-    if "#{controller_name}##{action_name}" == 'project_roles#create' && params[:project_id]
-      session[:involved_in_project] = params[:project_id]
-    end
+    session[:involved_in_project] = params[:project_id] if "#{controller_name}##{action_name}" == 'project_roles#create' && params[:project_id]
 
     respond_to do |format|
       format.html do
