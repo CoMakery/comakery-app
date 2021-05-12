@@ -1023,6 +1023,84 @@ class Mom
     )
   end
 
+  def lockup_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0x662784478c471d87e724705bca422b5c600f9f47622f18ab05d202969b5d1000'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1',
+      destinations: %w[
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+      ],
+      amount: 100000000000,
+      amounts: [100000000000],
+      commencement_dates: [0],
+      lockup_schedule_ids: [0],
+      current_block: 1,
+      contract_address: '0x9608848fa0063063d2bb401e8b5effcb8152ec65'
+    )
+
+    # From:
+    # 0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1
+    # Contract:
+    # 0x9608848fa0063063d2bb401e8b5effcb8152ec65
+    # To:
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # Amount:
+    # 100000000000
+    # commencementTimestamps:
+    # 0
+    # scheduleIds
+    # 0
+
+    Comakery::Eth::Tx::Erc20::ScheduledToken::FundReleaseSchedule.new(
+      host,
+      hash,
+      tx
+    )
+  end
+
+  def lockup_batch_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0xf72a70bb1393bab0fba012d32e836d9250c01756a9685f2ef1355976962ec9d5'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1',
+      destinations: %w[
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+      ],
+      amounts: [100000000000, 100000000000],
+      commencement_dates: [0, 0],
+      lockup_schedule_ids: [0, 0],
+      current_block: 1,
+      contract_address: '0x9608848fa0063063d2bb401e8b5effcb8152ec65'
+    )
+
+    # From:
+    # 0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1
+    # Contract:
+    # 0x9608848fa0063063d2bb401e8b5effcb8152ec65
+    # To:
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # Amount:
+    # 100000000000
+    # 100000000000
+    # commencementTimestamps:
+    # 0
+    # 0
+    # scheduleIds
+    # 0
+    # 0
+
+    Comakery::Eth::Tx::Erc20::ScheduledToken::BatchFundReleaseSchedule.new(
+      host,
+      hash,
+      tx
+    )
+  end
+
   def erc20_batch_transfer(**attrs)
     host = attrs[:host] || 'rinkeby.infura.io'
     hash = attrs[:hash] || '0x0e566595a62c566a00b0ebdf80f8d812c0a8fd893dbd5198c8c139b223746b7d'
