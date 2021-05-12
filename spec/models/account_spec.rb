@@ -214,7 +214,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'has many projects' do
@@ -292,7 +292,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.proejct_admins << account
     end
 
     it 'returns own award types' do
@@ -342,7 +342,7 @@ describe Account do
         create(:award, account: account, specialty: account.specialty)
       end
 
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns started awards' do
@@ -464,7 +464,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns received awards' do
@@ -540,7 +540,7 @@ describe Account do
     before do
       team.build_authentication_team authentication
       team.build_authentication_team authentication1
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'applies scope' do

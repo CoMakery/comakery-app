@@ -110,7 +110,7 @@ class MissionsController < ApplicationController
 
       a['specialty'] ||= {}
 
-      if project.account == account || project.admins.include?(account)
+      if project.account == account || project.project_admins.include?(account)
         a['specialty']['name'] = 'Team Leader'
       elsif !project.contributors_distinct.include?(account)
         a['specialty']['name'] = 'Interested'
