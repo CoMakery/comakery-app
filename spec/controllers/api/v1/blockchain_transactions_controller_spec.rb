@@ -155,8 +155,9 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
 
     context 'with award batch available for transaction' do
-      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
-      let!(:award2) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+      let!(:award) { create(:award, lockup_schedule_id: 0, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:award2) { create(:award, lockup_schedule_id: 0, status: :accepted, award_type: create(:award_type, project: project)) }
       let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
       context 'and ERC20_TRANSFER_BATCH_SIZE is not present' do
