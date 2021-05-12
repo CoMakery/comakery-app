@@ -65,6 +65,7 @@ resource 'IV. Transfers' do
       response_field :accountId, 'transfer account id', type: :string
       response_field :transferTypeId, 'category id', type: :string
       response_field :lockupScheduleId, 'lockup schedule id', type: :string
+      response_field :commencementDate, 'date of commencement for a lockup period', type: :string
       response_field :transactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
       response_field :status, 'transfer status (accepted paid cancelled)', type: :string
       response_field :recipientWalletId, 'recipient wallet id', type: :string
