@@ -1206,20 +1206,27 @@ describe Award do
   end
 
   describe 'ready_for_batch_blockchain_transaction scope' do
-    let(:transfer) { create(:transfer) }
-    let(:mint_transfer) { create(:transfer) }
-    let(:burn_transfer) { create(:transfer) }
+    let(:token) { create(:token, batch_contract_address: '0x0') }
+    let(:project) { create(:project, token: token) }
+    let(:award_type) { create(:award_type, project: project) }
+    let(:lockup_transfer) { create(:transfer, award_type: award_type) }
+    let(:erc20_transfer) { create(:transfer, award_type: award_type) }
+    let(:erc20_mint_transfer) { create(:transfer, award_type: award_type) }
+    let(:erc20_burn_transfer) { create(:transfer, award_type: award_type) }
+    let(:erc20_transfer_without_batch_contract) { create(:transfer) }
 
     before do
-      mint_transfer.update(transfer_type: mint_transfer.project.transfer_types.find_or_create_by(name: 'mint'))
-      burn_transfer.update(transfer_type: burn_transfer.project.transfer_types.find_or_create_by(name: 'burn'))
+      erc20_mint_transfer.update(transfer_type: erc20_mint_transfer.project.transfer_types.find_or_create_by(name: 'mint'))
+      erc20_burn_transfer.update(transfer_type: erc20_burn_transfer.project.transfer_types.find_or_create_by(name: 'burn'))
     end
 
     subject { described_class.ready_for_batch_blockchain_transaction }
 
-    it { is_expected.to include(transfer) }
-    it { is_expected.not_to include(mint_transfer) }
-    it { is_expected.not_to include(burn_transfer) }
+    it { is_expected.to include(lockup_transfer) }
+    it { is_expected.to include(erc20_transfer) }
+    it { is_expected.not_to include(erc20_transfer_without_batch_contract) }
+    it { is_expected.not_to include(erc20_mint_transfer) }
+    it { is_expected.not_to include(erc20_burn_transfer) }
   end
 
   describe '.ransack_reorder' do
