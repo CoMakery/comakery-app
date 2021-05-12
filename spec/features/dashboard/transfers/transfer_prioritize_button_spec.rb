@@ -15,13 +15,11 @@ describe 'transfer prioritize button on transfers page', js: true do
 
   before { login(project.account) }
 
-  before { visit project_dashboard_transfers_path(project) }
-
   context 'when blockchain transaction' do
-    let!(:blockchain_transaction) do
+    let(:blockchain_transaction) do
       create(
         :blockchain_transaction,
-        blockchain_transactable: transfer,
+        blockchain_transactables: transfer,
         token: transfer.token,
         amount: 1,
         tx_hash: 'MNGGXTRI4XE6LQJQ3AW3PBBGD5QQFRXMRSXZFUMHTKJKFEQ6TZ2A',
@@ -34,6 +32,8 @@ describe 'transfer prioritize button on transfers page', js: true do
       before { blockchain_transaction.update(status: :pending) }
 
       it 'isn\'t present' do
+        visit project_dashboard_transfers_path(project)
+
         expect(page).not_to have_css('.transfers-table__transfer__button__history #prioritizeBtn')
       end
     end
@@ -42,9 +42,10 @@ describe 'transfer prioritize button on transfers page', js: true do
       before { blockchain_transaction.update(status: :succeed) }
 
       context 'when hot wallet mode is auto sending' do
-        it { expect(page).to have_css('.transfers-table__transfer__button__history #prioritizeBtn', count: 1) }
-
         it 'has link to prioritize' do
+          visit project_dashboard_transfers_path(project)
+
+          expect(page).to have_css('.transfers-table__transfer__button__history #prioritizeBtn', count: 1)
           expect(find('.transfers-table__transfer__button__history #prioritizeBtn').text).to eq('PRIORITIZE')
         end
       end
@@ -52,11 +53,10 @@ describe 'transfer prioritize button on transfers page', js: true do
       context 'when hot wallet mode is manual sending' do
         before { project.update(hot_wallet_mode: :manual_sending) }
 
-        it { expect(page).to have_css('.transfers-table__transfer__button__history #prioritizeBtn', count: 1) }
-
         it 'has link to pay by hot wallet' do
-          wait_for_turbolinks
+          visit project_dashboard_transfers_path(project)
 
+          expect(page).to have_css('.transfers-table__transfer__button__history #prioritizeBtn', count: 1)
           expect(find('.transfers-table__transfer__button__history #prioritizeBtn').text).to eq('PAY BY HOT WALLET')
         end
       end

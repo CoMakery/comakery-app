@@ -176,6 +176,14 @@ table th, table td {
               </tr>
               <tr>
                 <td>
+                    <span class="name">transfer[lockup_schedule_id]</span>
+                </td>
+                <td>
+                  <span class="description">custom lockup schedule id (default: null)</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
                     <span class="name">transfer[recipient_wallet_id]</span>
                 </td>
                 <td>
@@ -251,7 +259,7 @@ table th, table td {
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;2480c3a649d03f53a188657e48e90622&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;0b532c8ccf244faa5a144c68deb9e2c2&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
@@ -259,6 +267,8 @@ table th, table td {
   &quot;id&quot;: &quot;10&quot;,
   &quot;transferTypeId&quot;: 80,
   &quot;recipientWalletId&quot;: 50,
+  &quot;lockupScheduleId&quot;: null,
+  &quot;commencementDate&quot;: null,
   &quot;amount&quot;: &quot;1000.0&quot;,
   &quot;quantity&quot;: &quot;2.0&quot;,
   &quot;totalAmount&quot;: &quot;2000.0&quot;,

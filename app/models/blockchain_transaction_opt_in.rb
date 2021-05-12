@@ -1,4 +1,7 @@
 class BlockchainTransactionOptIn < BlockchainTransaction
+  has_many :blockchain_transactables_token_opt_ins, through: :transaction_batch, dependent: :nullify
+  alias blockchain_transactables blockchain_transactables_token_opt_ins
+
   def update_transactable_status
     blockchain_transactable.update!(status: :opted_in)
   end

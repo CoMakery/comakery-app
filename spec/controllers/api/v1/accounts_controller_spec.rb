@@ -112,7 +112,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
         post :create, params: params
         account = Account.last
-        expect(account.projects_interested.order(:id).pluck(:id)).to eq [project1.id, project2.id]
+        expect(account.projects_involved.order(:id).pluck(:id)).to eq [project1.id, project2.id]
       end
 
       it 'with empty array provided' do
@@ -121,7 +121,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         post :create, params: params
 
         account = Account.last
-        expect(account.projects_interested.pluck(:id)).to eq []
+        expect(account.projects_involved.pluck(:id)).to eq []
       end
 
       it 'with invalid param provided' do
@@ -130,7 +130,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         post :create, params: params
 
         account = Account.last
-        expect(account.projects_interested.pluck(:id)).to eq []
+        expect(account.projects_involved.pluck(:id)).to eq []
       end
     end
   end

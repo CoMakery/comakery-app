@@ -2,8 +2,22 @@ class BlockchainTransactionAward < BlockchainTransaction
   validates :destination, presence: true
   after_update :broadcast_updates
 
+  has_many :blockchain_transactables_awards, through: :transaction_batch, dependent: :nullify
+  alias blockchain_transactables blockchain_transactables_awards
+
   def update_transactable_status
-    blockchain_transactable.update!(status: :paid)
+    blockchain_transactables.each do |blockchain_transactable|
+      blockchain_transactable.update!(status: :paid)
+    end
+  end
+
+  def update_transactable_prioritized_at(new_value = nil)
+    return unless transaction_batch
+
+    blockchain_transactables.each do |bt|
+      bt.update!(prioritized_at: new_value)
+    end
+    true
   end
 
   # TODO: Refactor on_chain condition into TokenType
@@ -22,45 +36,43 @@ class BlockchainTransactionAward < BlockchainTransaction
   end
 
   def broadcast_updates
-    broadcast_replace_later_to(
-      blockchain_transactable,
-      :updates,
-      target: "transfer_history_button_#{blockchain_transactable.id}",
-      partial: 'dashboard/transfers/transfer_history_button',
-      locals: { transfer: blockchain_transactable }
-    )
+    blockchain_transactables.each do |blockchain_transactable|
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_history_button_#{blockchain_transactable.id}",
+        partial: 'dashboard/transfers/transfer_history_button',
+        locals: { transfer: blockchain_transactable }
+      )
 
-    broadcast_replace_later_to(
-      blockchain_transactable,
-      :updates,
-      target: "transfer_issuer_#{blockchain_transactable.id}",
-      partial: 'dashboard/transfers/issuer',
-      locals: { transfer: blockchain_transactable }
-    )
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_issuer_#{blockchain_transactable.id}",
+        partial: 'dashboard/transfers/issuer',
+        locals: { transfer: blockchain_transactable }
+      )
 
-    broadcast_replace_later_to(
-      blockchain_transactable,
-      :updates,
-      target: "transfer_button_public_#{blockchain_transactable.id}",
-      partial: 'shared/transfer_button_public',
-      locals: { transfer: blockchain_transactable }
-    )
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_button_public_#{blockchain_transactable.id}",
+        partial: 'shared/transfer_button_public',
+        locals: { transfer: blockchain_transactable }
+      )
 
-    broadcast_replace_later_to(
-      blockchain_transactable,
-      :updates,
-      target: "transfer_button_admin_#{blockchain_transactable.id}",
-      partial: 'shared/transfer_button_admin',
-      locals: { transfer: blockchain_transactable }
-    )
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
+        target: "transfer_button_admin_#{blockchain_transactable.id}",
+        partial: 'shared/transfer_button_admin',
+        locals: { transfer: blockchain_transactable }
+      )
+    end
+  end
 
-    broadcast_replace_later_to(
-      blockchain_transactable,
-      :updates,
-      target: "transfer_prioritize_button_#{blockchain_transactable.id}",
-      partial: 'shared/transfer_prioritize_button',
-      locals: { transfer: blockchain_transactable }
-    )
+  def amounts
+    self[:amounts].map(&:to_i)
   end
 
   private
@@ -73,7 +85,11 @@ class BlockchainTransactionAward < BlockchainTransaction
         when 'burn'
           Comakery::Eth::Tx::Erc20::Burn.new(token.blockchain.explorer_api_host, tx_hash, self)
         else
-          Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash, self)
+          if blockchain_transactables.size > 1 && token.batch_contract_address
+            Comakery::Eth::Tx::Erc20::BatchTransfer.new(token.blockchain.explorer_api_host, tx_hash, self)
+          else
+            Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash, self)
+          end
         end
       else
         Comakery::Eth::Tx.new(token.blockchain.explorer_api_host, tx_hash, self)
@@ -117,7 +133,22 @@ class BlockchainTransactionAward < BlockchainTransaction
 
     def populate_data
       super
-      self.amount ||= token.to_base_unit(blockchain_transactable.total_amount)
-      self.destination ||= blockchain_transactable.recipient_address
+      populate_amounts
+      populate_destinations
+    end
+
+    def populate_amounts
+      if amounts.empty?
+        self.amounts = blockchain_transactables.map do |t|
+          token.to_base_unit(t.total_amount)
+        end
+      end
+
+      self.amount ||= amounts.first
+    end
+
+    def populate_destinations
+      self.destinations = blockchain_transactables.map(&:recipient_address) if destinations.empty?
+      self.destination ||= destinations.first
     end
 end

@@ -128,6 +128,17 @@ class TokenIndex extends React.Component {
                   </div>
                 }
 
+                { this.state.selectedToken.batchContractAddress &&
+                  <div className='token-index--view--info--item'>
+                    <div className='token-index--view--info--item--name'>
+                      batch contract address
+                    </div>
+                    <div className='token-index--view--info--item--value'>
+                      {this.state.selectedToken.batchContractAddress}
+                    </div>
+                  </div>
+                }
+
                 { this.state.selectedToken._blockchain &&
                   <div className='token-index--view--info--item'>
                     <div className='token-index--view--info--item--name'>

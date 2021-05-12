@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe BlockchainTransactionTokenUnfreeze do
+  it { is_expected.to have_many(:blockchain_transactables_tokens).dependent(:nullify) }
+  it { is_expected.to respond_to(:blockchain_transactables) }
+
   subject { create(:blockchain_transaction_token_unfreeze) }
 
   specify { expect(subject.token).to eq(subject.blockchain_transactable) }

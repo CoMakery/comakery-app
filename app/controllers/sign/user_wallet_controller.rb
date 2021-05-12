@@ -6,8 +6,10 @@ class Sign::UserWalletController < ApplicationController
   # GET /sign/user_wallet/new
   def new
     # TODO: Add token admin role to policy token related tx
-    authorize new_transaction.blockchain_transactable, :pay? if new_transaction_for_award?
+    authorize new_transaction_transactable, :pay? if new_transaction_for_award?
+    authorize project_for_batch_awards, :create_transfer? if project_for_batch_awards
 
+    new_transaction.blockchain_transactables = new_transaction_transactable
     new_transaction.source = params[:source]
     new_transaction.save!
 
@@ -47,34 +49,38 @@ class Sign::UserWalletController < ApplicationController
 
     def new_transaction # rubocop:todo Metrics/CyclomaticComplexity
       @new_transaction ||= if params[:transfer_id]
-        BlockchainTransactionAward.new(
-          blockchain_transactable: policy_scope(Award).find(params.require(:transfer_id))
-        )
+        BlockchainTransactionAward.new
       elsif params[:account_token_record_id]
-        BlockchainTransactionAccountTokenRecord.new(
-          blockchain_transactable: AccountTokenRecord.find(params.require(:account_token_record_id))
-        )
+        BlockchainTransactionAccountTokenRecord.new
       elsif params[:transfer_rule_id]
-        BlockchainTransactionTransferRule.new(
-          blockchain_transactable: TransferRule.find(params.require(:transfer_rule_id))
-        )
+        BlockchainTransactionTransferRule.new
       elsif params[:token_id]
-        t = Token.find(params.require(:token_id))
-
-        if t.token_frozen?
-          BlockchainTransactionTokenUnfreeze.new(
-            blockchain_transactable: t
-          )
+        if Token.find(params.require(:token_id)).token_frozen?
+          BlockchainTransactionTokenUnfreeze.new
         else
-          BlockchainTransactionTokenFreeze.new(
-            blockchain_transactable: t
-          )
+          BlockchainTransactionTokenFreeze.new
         end
+      elsif project_for_batch_awards
+        BlockchainTransactionAward.new
+      end
+    end
+
+    def new_transaction_transactable # rubocop:todo Metrics/CyclomaticComplexity
+      @new_transaction_transactable ||= if params[:transfer_id]
+        policy_scope(Award).find(params.require(:transfer_id))
+      elsif params[:account_token_record_id]
+        AccountTokenRecord.find(params.require(:account_token_record_id))
+      elsif params[:transfer_rule_id]
+        TransferRule.find(params.require(:transfer_rule_id))
+      elsif params[:token_id]
+        Token.find(params.require(:token_id))
+      elsif project_for_batch_awards
+        project_for_batch_awards.awards.ready_for_batch_blockchain_transaction.limit(250) if project_for_batch_awards.awards.ready_for_batch_blockchain_transaction.any?
       end
     end
 
     def new_transaction_for_award?
-      new_transaction.is_a?(BlockchainTransactionAward)
+      new_transaction_transactable.is_a?(Award)
     end
 
     def received_transaction_for_award?
@@ -83,5 +89,9 @@ class Sign::UserWalletController < ApplicationController
 
     def received_transaction
       @received_transaction ||= BlockchainTransaction.find(received_state['transaction_id'])
+    end
+
+    def project_for_batch_awards
+      @project_for_batch_awards ||= Project.find_by(id: params[:project_id])
     end
 end

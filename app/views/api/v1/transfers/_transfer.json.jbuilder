@@ -4,6 +4,7 @@ json.call(
   :transfer_type_id,
   :recipient_wallet_id,
   :lockup_schedule_id,
+  :commencement_date,
   :amount,
   :quantity,
   :total_amount,

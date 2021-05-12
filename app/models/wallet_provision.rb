@@ -42,7 +42,7 @@ class WalletProvision < ApplicationRecord
       opt_in = TokenOptIn.find_or_create_by(wallet: wallet, token: token)
       opt_in.pending!
 
-      blockchain_transaction = BlockchainTransactionOptIn.create!(blockchain_transactable: opt_in)
+      blockchain_transaction = BlockchainTransactionOptIn.create!(blockchain_transactables: opt_in)
       ore_id_account.service.create_tx(blockchain_transaction)
 
       opt_in_created!

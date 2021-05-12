@@ -38,6 +38,8 @@ class Account < ApplicationRecord
   # rubocop:enable Rails/InverseOf
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
+  has_many :project_roles, dependent: :destroy
+  has_many :projects_involved, through: :project_roles, source: :project
   has_many :experiences # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :verifications # rubocop:todo Rails/HasManyOrHasOneDependent
   # rubocop:todo Rails/InverseOf
@@ -104,11 +106,11 @@ class Account < ApplicationRecord
 
   after_create :populate_awards
 
-  after_update_commit :broadcast_update_wl_account_wallet, if: lambda {
-    whitelabel? && (saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?)
+  after_update_commit :broadcast_update, if: lambda {
+    saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?
   }
 
-  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { whitelabel? }
+  after_destroy_commit :broadcast_destroy
 
   class << self
     def order_by_award(project)
@@ -281,6 +283,10 @@ class Account < ApplicationRecord
     projects_interested.exists? project_id
   end
 
+  def involved?(project_id)
+    projects_involved.exists? project_id
+  end
+
   def specialty_interested?(project_id, specialty_id)
     interests.exists?(project_id: project_id, specialty_id: specialty_id)
   end
@@ -339,9 +345,9 @@ class Account < ApplicationRecord
   end
 
   def sync_balances_later
-    wallets.find_each do |wallet|
-      wallet.tokens_of_the_blockchain.find_each do |token|
-        Balance.find_or_create_by(token: token, wallet: wallet).sync_with_blockchain_later
+    wallets.pluck(:id, :_blockchain).each do |wallet_id, blockchain|
+      Token.where(_blockchain: blockchain).pluck(:id).each do |token_id|
+        Balance.find_or_create_by(token_id: token_id, wallet_id: wallet_id).sync_with_blockchain_later
       end
     end
   end
@@ -388,20 +394,20 @@ class Account < ApplicationRecord
       end
     end
 
-    def broadcast_update_wl_account_wallet
+    def broadcast_update
       wallets.each do |wallet|
-        broadcast_replace_to "wl_#{managed_mission.id}_account_wallets",
-                             target: "wl_account_#{id}_wallet_#{wallet.id}",
-                             partial: 'accounts/partials/index/wl_account_wallet',
-                             locals: { wl_account_wallet: wallet }
+        broadcast_replace_to "mission_#{managed_mission&.id}_account_wallets",
+                             target: "account_#{id}_wallet_#{wallet.id}",
+                             partial: 'accounts/partials/index/wallet',
+                             locals: { wallet: wallet }
       end
     end
 
-    def broadcast_destroy_wl_account_wallet
+    def broadcast_destroy
       wallet_ids.each do |wallet_id|
         Turbo::StreamsChannel.broadcast_remove_to(
-          "wl_#{managed_mission.id}_account_wallets",
-          target: "wl_account_#{id}_wallet_#{wallet_id}"
+          "mission_#{managed_mission&.id}_account_wallets",
+          target: "account_#{id}_wallet_#{wallet_id}"
         )
       end
     end

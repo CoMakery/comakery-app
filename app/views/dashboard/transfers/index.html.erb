@@ -44,6 +44,13 @@
         </div>
       </div>
     </div>
+    <% if policy(@project).create_transfer? && @project.token&.batch_contract_address && ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
+      <div class="row">
+        <div class="col-6">
+          <%= render partial: "shared/transfer_button_batch" %>
+        </div>
+      </div>
+    <% end %>
 
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>

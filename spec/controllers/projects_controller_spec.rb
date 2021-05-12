@@ -30,80 +30,6 @@ describe ProjectsController do
     stub_slack_channel_list
   end
 
-  describe '#awards' do
-    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
-    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
-
-    context 'when logged in' do
-      before { login(issuer.account) }
-
-      it 'shows awards for current project' do
-        get :awards, params: { id: project.to_param }
-
-        expect(response.status).to eq(200)
-        expect(assigns[:project]).to eq(project)
-        expect(assigns[:awards]).to match_array([award])
-      end
-
-      it 'shows metamask awards' do
-        stub_token_symbol
-        project.token.update contract_address: '0x' + 'a' * 40
-        get :awards, params: { id: project.to_param }
-
-        expect(response.status).to eq(200)
-        expect(assigns[:project]).to eq(project)
-        expect(assigns[:awards]).to match_array([award])
-      end
-    end
-
-    context 'when logged out' do
-      context 'with a public project' do
-        let!(:public_project) { create(:project, account: issuer.account, visibility: 'public_listed') }
-        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
-
-        it 'shows awards for public projects' do
-          get :awards, params: { id: public_project.id }
-
-          expect(response.status).to eq(200)
-          expect(assigns[:project]).to eq(public_project)
-          expect(assigns[:awards]).to match_array([public_award])
-        end
-      end
-
-      context 'with a private project' do
-        let!(:private_project) { create(:project, account: issuer.account, public: false) }
-        let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
-
-        it 'sends you away' do
-          get :awards, params: { id: private_project.to_param }
-
-          expect(response.status).to eq(302)
-          expect(response).to redirect_to(root_path)
-        end
-      end
-    end
-
-    describe 'checks policy' do
-      before do
-        allow(controller).to receive(:policy_scope).and_call_original
-        allow(controller).to receive(:authorize).and_call_original
-      end
-
-      specify do
-        login issuer.account
-
-        get :awards, params: { id: project.id }
-        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
-      end
-
-      specify do
-        project.public_listed!
-        get :awards, params: { id: project.id }
-        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
-      end
-    end
-  end
-
   describe '#unlisted' do
     let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
     let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
@@ -163,7 +89,7 @@ describe ProjectsController do
     let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
-    let!(:interest) { create(:interest, account: account) }
+    let!(:project_role) { create(:project_role, account: account) } # by default it will create project from mom.rb which will be Uber for Cats
 
     before do
       admin_project.admins << account
