@@ -292,7 +292,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.proejct_admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns own award types' do
