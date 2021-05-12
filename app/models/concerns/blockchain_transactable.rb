@@ -57,6 +57,12 @@ module BlockchainTransactable
 
       ready_for_blockchain_transaction(false)
         .joins(:transfer_type).where.not('transfer_types.name': %w[mint burn])
+        .joins(:token).where(%{
+          (tokens.batch_contract_address IS NOT NULL)
+            OR (
+              tokens._token_type = 13
+            )
+        })
     }
 
     scope :ready_for_manual_blockchain_transaction, lambda {

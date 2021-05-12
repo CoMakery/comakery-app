@@ -62,7 +62,9 @@ class Award < ApplicationRecord
   validates :account, presence: true, if: -> { status == 'accepted' && email.blank? }
   validates :expires_in_days, presence: true, numericality: { greater_than: 0 }
   validates :lockup_schedule_id, presence: true, if: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
+  validates :commencement_date, presence: true, if: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
   validates :lockup_schedule_id, absence: true, unless: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
+  validates :commencement_date, absence: true, unless: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }

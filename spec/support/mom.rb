@@ -243,6 +243,49 @@ class Mom
     end
   end
 
+  def blockchain_transaction_lockup(**attrs)
+    token = attrs[:token] || create(:lockup_token)
+    attrs.delete(:token)
+
+    award = blockchain_transaction__lockup_award(attrs.merge(token: token))
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactables: award,
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_lockup_batch(**attrs)
+    token = attrs[:token] || create(:lockup_token)
+    attrs.delete(:token)
+
+    award1 = blockchain_transaction__lockup_award(attrs.merge(token: token))
+    award2 = award1.clone_on_assignment
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactables: Award.where(id: [award1.id, award2.id]),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
   def blockchain_transaction_award_batch(**attrs)
     token = attrs[:token] || create(:comakery_dummy_token, batch_contract_address: '0x0')
     attrs.delete(:token)
@@ -414,6 +457,41 @@ class Mom
     }
 
     BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
+  end
+
+  def blockchain_transaction__lockup_award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
+    project = attrs[:award]&.project || create(
+      :project,
+      token: attrs[:token]
+    )
+
+    account = attrs[:account] || create(
+      :account
+    )
+
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: attrs[:destination] || build(:ethereum_address_2)
+    )
+
+    attrs[:award] || create(
+      :award,
+      amount: attrs[:amount] || 1,
+      status: :accepted,
+      account: account,
+      commencement_date: Time.current,
+      lockup_schedule_id: 0,
+      award_type: create(
+        :award_type,
+        project: project
+      ),
+      transfer_type: create(
+        :transfer_type,
+        project: project
+      )
+    )
   end
 
   def blockchain_transaction__award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
@@ -686,6 +764,26 @@ class Mom
       contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
       _token_type: :comakery_security_token,
       decimal_places: 0,
+      token_frozen: false
+    }
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
+  end
+
+  def lockup_token(**attrs)
+    defaults = {
+      name: "LockupToken-#{SecureRandom.hex(20)}",
+      symbol: "DUM#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      _blockchain: :ethereum_rinkeby,
+      contract_address: '0x9608848FA0063063d2Bb401e8B5efFcb8152Ec65',
+      _token_type: :token_release_schedule,
+      decimal_places: 10,
       token_frozen: false
     }
     t = Token.new(defaults.merge(attrs))
@@ -1026,6 +1124,84 @@ class Mom
     # 100
 
     Comakery::Eth::Tx::Erc20::Transfer.new(
+      host,
+      hash,
+      tx
+    )
+  end
+
+  def lockup_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0x662784478c471d87e724705bca422b5c600f9f47622f18ab05d202969b5d1000'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1',
+      destinations: %w[
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+      ],
+      amount: 100000000000,
+      amounts: [100000000000],
+      commencement_dates: [0],
+      lockup_schedule_ids: [0],
+      current_block: 1,
+      contract_address: '0x9608848fa0063063d2bb401e8b5effcb8152ec65'
+    )
+
+    # From:
+    # 0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1
+    # Contract:
+    # 0x9608848fa0063063d2bb401e8b5effcb8152ec65
+    # To:
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # Amount:
+    # 100000000000
+    # commencementTimestamps:
+    # 0
+    # scheduleIds
+    # 0
+
+    Comakery::Eth::Tx::Erc20::ScheduledToken::FundReleaseSchedule.new(
+      host,
+      hash,
+      tx
+    )
+  end
+
+  def lockup_batch_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0xf72a70bb1393bab0fba012d32e836d9250c01756a9685f2ef1355976962ec9d5'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1',
+      destinations: %w[
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+      ],
+      amounts: [100000000000, 100000000000],
+      commencement_dates: [0, 0],
+      lockup_schedule_ids: [0, 0],
+      current_block: 1,
+      contract_address: '0x9608848fa0063063d2bb401e8b5effcb8152ec65'
+    )
+
+    # From:
+    # 0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1
+    # Contract:
+    # 0x9608848fa0063063d2bb401e8b5effcb8152ec65
+    # To:
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # Amount:
+    # 100000000000
+    # 100000000000
+    # commencementTimestamps:
+    # 0
+    # 0
+    # scheduleIds
+    # 0
+    # 0
+
+    Comakery::Eth::Tx::Erc20::ScheduledToken::BatchFundReleaseSchedule.new(
       host,
       hash,
       tx
