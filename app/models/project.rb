@@ -220,7 +220,7 @@ class Project < ApplicationRecord
     {
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: project_interested.size
+      accounts: accounts.size
     }
   end
 

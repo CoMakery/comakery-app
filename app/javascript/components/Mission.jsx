@@ -101,7 +101,7 @@ export default class Mission extends React.Component {
 
             <div className='mission-stats__kpi'>
               <div className='mission-stats__contributor' />
-              <Pluralize singular='person' plural='people' count={mission.stats.followers} />&nbsp;INTERESTED
+              <Pluralize singular='person' plural='people' count={mission.stats.projectRoles} />&nbsp;INTERESTED
             </div>
 
           </div>
@@ -156,7 +156,7 @@ export default class Mission extends React.Component {
                     <div className='mission-projects__single__card__info__stats'>
 
                       <div className='mission-projects__single__card__info__row'>
-                        <Pluralize singular='interested' plural='interested' count={project.stats.followers} />
+                        <Pluralize singular='interested' plural='interested' count={project.stats.accounts} />
                         <Icon name='circleGray.svg' />
                       </div>
 
