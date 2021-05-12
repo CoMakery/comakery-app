@@ -20,10 +20,10 @@ class ProjectRole < ApplicationRecord
     end
 
     def broadcast_create
-      broadcast_append_to "project_#{project.id}_accounts",
-                          target: "project_#{project.id}_accounts",
-                          partial: 'dashboard/accounts/account',
-                          locals: { project_role: self }
+      broadcast_append_later_to "project_#{project.id}_accounts",
+                                target: "project_#{project.id}_accounts",
+                                partial: 'dashboard/accounts/account',
+                                locals: { project_role: self }
     end
 
     def broadcast_destroy

@@ -140,7 +140,7 @@ jobs:
 
     - name: Upload a Build Artifact
       if: always()
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v2.2.3
       with:
         name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
@@ -164,7 +164,7 @@ jobs:
 
       - name: Upload a Build Artifact
         if: always()
-        uses: actions/upload-artifact@v2.2.1
+        uses: actions/upload-artifact@v2.2.3
         with:
           name: Total Coverage
           path: coverage/

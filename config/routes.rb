@@ -122,10 +122,6 @@ Rails.application.routes.draw do
       end
     end
 
-    member do
-      get :awards
-    end
-
     collection do
       get :landing
       patch :update_status

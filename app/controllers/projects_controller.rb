@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
-  before_action :assign_project, only: %i[edit show update awards]
+  before_action :assign_project, only: %i[edit show update]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
@@ -29,18 +29,6 @@ class ProjectsController < ApplicationController
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
     @involved_project_contributors = TopContributors.call(projects: @account_involved_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
-  end
-
-  def awards
-    authorize @project, :show_contributions?
-    @awards = @project.awards.completed.includes(
-      :token, :award_type, :issuer, :latest_blockchain_transaction,
-      account: [image_attachment: :blob], issuer: [image_attachment: :blob]
-    )
-    @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
-    @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
-
-    render 'awards/index.html.rb'
   end
 
   def index
