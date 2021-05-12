@@ -106,7 +106,9 @@ class Dashboard::TransfersController < ApplicationController
         :why,
         :description,
         :requirements,
-        :transfer_type_id
+        :transfer_type_id,
+        :lockup_schedule_id,
+        :commencement_date
       )
     end
 
