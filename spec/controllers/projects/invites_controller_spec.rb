@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Projects::InvitesController, type: :controller do
   let!(:admin) { create(:account) }
-  let!(:project) { create(:project, account: admin) }
+  let!(:project) { create(:project) }
   let!(:account) { create(:account, email: 'example@gmail.com') }
 
   let!(:params) do
@@ -14,7 +14,9 @@ RSpec.describe Projects::InvitesController, type: :controller do
   end
 
   before do
-    login(project.account)
+    project.project_admins << admin
+
+    login(admin)
   end
 
   describe 'POST #create' do
