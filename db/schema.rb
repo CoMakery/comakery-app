@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_175620) do
+ActiveRecord::Schema.define(version: 2021_05_12_163823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -514,6 +514,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_175620) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
+    t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
     t.boolean "auto_add_interest", default: false, null: false
     t.text "github_url"
