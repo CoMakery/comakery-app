@@ -8,7 +8,7 @@ class Interest < ApplicationRecord
   # rubocop:enable Rails/UniqueValidationWithoutIndex
 
   before_destroy do
-    if project.admins.include?(account) || project.account == account
+    if project.project_admins.include?(account) || project.account == account
       errors.add(:project, 'cannot be unfollowed by an admin')
       throw :abort
     end

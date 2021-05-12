@@ -292,7 +292,7 @@ class AwardsController < ApplicationController
     end
 
     def run_award_expiration
-      current_account.accessable_awards(projects_interested).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+      current_account.accessable_awards(projects_interested).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :project_admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
     def projects_interested
