@@ -11,6 +11,7 @@ describe BlockchainTransactionAward, vcr: true do
       expect(blockchain_transaction.amounts).not_to be_empty
       expect(blockchain_transaction.destinations).not_to be_empty
       expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
+      expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
     end
 
     context 'with lockup token' do
