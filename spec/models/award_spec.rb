@@ -401,19 +401,19 @@ describe Award do
   end
 
   describe 'validations' do
-    context 'lockup schedule id' do
+    context 'lockup schedule id and commencement_date' do
       it 'raises error when present' do
         p1 = create(:project, token: create(:token, _token_type: :token_release_schedule, _blockchain: :ethereum_ropsten, contract_address: '0xc778417E063141139Fce010982780140Aa0cD5Ab'))
         p2 = create(:project, token: create(:token, _token_type: :btc, _blockchain: :bitcoin_test))
         a1 = build(:award_ready, award_type: create(:award_type, project: p1))
         a2 = build(:award_ready, award_type: create(:award_type, project: p2))
 
-        a1.update(lockup_schedule_id: 1)
-        a2.update(lockup_schedule_id: 1)
+        a1.update(lockup_schedule_id: 1, commencement_date: Time.current)
+        a2.update(lockup_schedule_id: 1, commencement_date: Time.current)
         expect(a1).to be_valid
         expect(a2).not_to be_valid
-        a1.update(lockup_schedule_id: nil)
-        a2.update(lockup_schedule_id: nil)
+        a1.update(lockup_schedule_id: nil, commencement_date: nil)
+        a2.update(lockup_schedule_id: nil, commencement_date: nil)
         expect(a1).not_to be_valid
         expect(a2).to be_valid
       end
