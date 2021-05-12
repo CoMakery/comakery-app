@@ -67,7 +67,9 @@ class BlockchainTransactionAward < BlockchainTransaction
   end
 
   def commencement_dates
-    self[:commencement_dates].map(&:to_i)
+    self[:commencement_dates].map do |date|
+      (date && Time.zone.parse(date)).to_i
+    end
   end
 
   def lockup_schedule_ids
