@@ -1,5 +1,5 @@
 class Views::Projects::Landing < Views::Projects::Base
-  needs :my_projects, :archived_projects, :team_projects, :interested_projects, :my_project_contributors, :archived_project_contributors, :team_project_contributors, :interested_project_contributors
+  needs :my_projects, :archived_projects, :team_projects, :involved_projects, :my_project_contributors, :archived_project_contributors, :team_project_contributors, :involved_project_contributors
 
   def content
     projects_header('')
@@ -11,9 +11,9 @@ class Views::Projects::Landing < Views::Projects::Base
       full_row { h1 'team' }
       projects_block(team_projects, team_project_contributors)
     end
-    if interested_projects.any?
+    if involved_projects.any?
       full_row { h1 'interested' }
-      projects_block(interested_projects, interested_project_contributors)
+      projects_block(involved_projects, involved_project_contributors)
     end
     if archived_projects.any?
       full_row { h1 'archived' }
