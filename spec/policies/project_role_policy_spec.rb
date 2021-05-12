@@ -2,7 +2,10 @@ require 'rails_helper'
 
 describe ProjectRolePolicy do
   let!(:admin) { create(:account) }
-  let!(:project) { create(:project, account: admin) }
+
+  let!(:project) { create(:project) }
+
+  before { project.project_admins << admin }
 
   describe '#update?' do
     context 'updates project role' do

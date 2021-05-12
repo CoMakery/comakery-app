@@ -534,7 +534,7 @@ describe Project do
       project = create(:project)
       create(:award, award_type: create(:award_type, project: project))
 
-      expect(project.reload.stats[:interests]).to eq(2)
+      expect(project.reload.stats[:accounts]).to eq(2)
     end
   end
 
