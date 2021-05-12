@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_095620) do
+ActiveRecord::Schema.define(version: 2021_05_10_233724) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "account_token_records", force: :cascade do |t|
@@ -29,6 +30,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.integer "status", default: 0
     t.bigint "wallet_id"
     t.datetime "prioritized_at"
+    t.integer "blockchain_transactions_count"
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
@@ -155,9 +157,9 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
   end
 
   create_table "api_request_logs", force: :cascade do |t|
-    t.jsonb "body", null: false
     t.inet "ip", null: false
     t.string "signature", null: false
+    t.jsonb "body", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_api_request_logs_on_created_at"
     t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
@@ -262,6 +264,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.bigint "recipient_wallet_id"
     t.datetime "prioritized_at"
     t.decimal "lockup_schedule_id", precision: 78
+    t.integer "blockchain_transactions_count"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["channel_id"], name: "index_awards_on_channel_id"
@@ -334,7 +337,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
-  
+
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
@@ -498,6 +501,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.text "funding_url"
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
+    t.integer "blockchain_transactions_count"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["long_id"], name: "index_projects_on_long_id"
@@ -570,6 +574,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "blockchain_transactions_count"
     t.index ["token_id"], name: "index_token_opt_ins_on_token_id"
     t.index ["wallet_id", "token_id"], name: "index_token_opt_ins_on_wallet_id_and_token_id", unique: true
     t.index ["wallet_id"], name: "index_token_opt_ins_on_wallet_id"
@@ -597,6 +602,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.datetime "synced_at"
     t.integer "_blockchain", default: 0, null: false
     t.integer "_token_type", default: 0, null: false
+    t.integer "blockchain_transactions_count"
     t.index ["_blockchain"], name: "index_tokens_on__blockchain"
     t.index ["logo_image_id"], name: "index_tokens_on_logo_image_id"
   end
@@ -610,6 +616,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_095620) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
+    t.integer "blockchain_transactions_count"
     t.index ["receiving_group_id"], name: "index_transfer_rules_on_receiving_group_id"
     t.index ["sending_group_id"], name: "index_transfer_rules_on_sending_group_id"
     t.index ["token_id"], name: "index_transfer_rules_on_token_id"

@@ -35,10 +35,12 @@
                   hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
                   target: :_blank,
                   class: 'mr-2',
+                  id: 'hot_wallet_admin_only',
                   data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "300" }
                 ) %>
               </div>
             <% end %>
+          </div>
         <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
           <div class="text-right hot-wallet">
             <h3>Deploy a hot wallet:</h3>

@@ -18,7 +18,7 @@
     <label>account</label>
 
     <% if transfer.account %>
-      <%= render partial: "account", locals: {account: transfer.account} %>
+      <%= render partial: "account", locals: {account: transfer.account, wallet: transfer.sender_wallet_address, wallet_url: transfer.sender_wallet_url} %>
     <% elsif transfer.email %>
       <%= transfer.email %>
     <% else %>
@@ -29,19 +29,11 @@
   <div class="transfers-table__transfer__issuer">
     <label>admin</label>
 
-    <%= render partial: "issuer", locals: { transfer: transfer } %>
-  </div>
-
-  <div class="transfers-table__transfer__amount">
-    <label>amount</label>
-
-    <%= transfer.amount_pretty %>
-  </div>
-
-  <div class="transfers-table__transfer__quantity">
-    <label>quantity</label>
-
-    <%= transfer.quantity %>
+    <% if transfer.paid? %>
+      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.sender_wallet_address, wallet_url: transfer.sender_wallet_url, transfer: transfer} %>
+    <% else %>
+      –
+    <% end %>
   </div>
 
   <div class="transfers-table__transfer__total_amount">
@@ -50,13 +42,24 @@
     <%= transfer.total_amount_pretty %>
   </div>
 
-  <% if @project.token %>
-    <div class="transfers-table__transfer__button">
-      <label>transfer</label>
+  <div class="transfers-table__transfer__verification">
+    <label>verification</label>
+
+    <div class="account-preview__info__verification">
+      <% account = transfer.account.decorate %>
+      <%= image_pack_tag "media/src/images/styleguide/icons/verification-#{account.verification_state}.svg", size: "15x15" %>
+      <%= account.verification_state&.capitalize %>
+    </div>
+  </div>
+
+  <div class="transfers-table__transfer__status">
+    <label>status</label>
+
+    <% if @project.token %>
 
       <% if transfer.project.token&._token_type? %>
-        <% if current_account&.decorate&.can_send_awards?(transfer.project) %>
-          <% if transfer.token&.blockchain&.supported_by_ore_id? && current_account&.ore_id_account.nil? %>
+        <% if policy(transfer).can_transfer?(transfer.project) %>
+          <% if transfer.payable_by_ore_id?(current_account) %>
             <div class="transfer-button">
               <%= link_to 'link OREID', wallets_path %>
             </div>
@@ -64,28 +67,34 @@
             <%= render partial: "shared/transfer_button_admin", locals: { transfer: transfer } %>
           <% end %>
 
-        <% else %>
-          <% if transfer.recipient_address.blank? && current_account == transfer.account %>
-            <div class="transfer-button">
-              <%= link_to 'set wallet', wallets_path %>
-            </div>
-          <% else %>
-            <%= render partial: "shared/transfer_button_public", locals: { transfer: transfer } %>
-          <% end %>
+          <%= render partial: "shared/transfer_button_public", locals: { transfer: transfer } %>
         <% end %>
       <% end %>
 
-      <% if current_account&.decorate&.can_send_awards?(@project) && transfer.accepted? && !@project.hot_wallet_disabled? && @project.hot_wallet %>
-        <%= render partial: 'shared/transfer_prioritize_button', locals: { transfer: transfer } %>
+      <% if policy(transfer).can_transfer?(transfer.project) && transfer.accepted? && !@project.hot_wallet_disabled? && @project.hot_wallet %>
+        <div class="transfers-table__transfer__button__history">
+          <%= render partial: 'shared/transfer_prioritize_button', locals: { transfer: transfer } %>
+        </div>
       <% end %>
+    <% else %>
+      –
+    <% end %>
+  </div>
 
-      <%= render partial: "transfer_history_button", locals: { transfer: transfer } %>
+  <div class="transfers-table__transfer__history">
+    <label>history</label>
 
+    <% if @project.token %>
+      <% if transfer.blockchain_transactions? %>
+        <%= link_to "#{transfer.blockchain_transactions.size} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
+      <% end %>
       <% if policy(transfer).cancel? && transfer.cancelable? %>
         <%= link_to "Cancel", project_award_type_award_path(transfer.project, transfer.award_type, transfer), method: :delete, class: 'transfers-table__transfer__button__history' %>
       <% end %>
-    </div>
-  <% end %>
+    <% else %>
+      –
+    <% end %>
+  </div>
 
   <div class="transfers-table__transfer__transferred_at">
     <label>transferred at</label>
@@ -95,11 +104,5 @@
     <% else %>
       –
     <% end %>
-  </div>
-
-  <div class="transfers-table__transfer__transferred_at">
-    <label>created at</label>
-
-    <%= transfer.created_at.strftime("%b %e, %Y") %>
   </div>
 </div>
