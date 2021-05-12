@@ -163,7 +163,7 @@ class Account < ApplicationRecord
 
     def make_everyone_interested(project)
       find_each(batch_size: 500) do |account|
-        project.safe_add_interested(account)
+        project.safe_add_project_interested(account)
       end
     end
 
@@ -183,11 +183,11 @@ class Account < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def whitelabel_interested_projects(whitelabel_mission)
+  def whitelabel_involved_projects(whitelabel_mission)
     if whitelabel_mission.present?
-      projects_interested.where(mission: whitelabel_mission)
+      projects_involved.where(mission: whitelabel_mission)
     else
-      projects_interested.where(whitelabel: false)
+      projects_involved.where(whitelabel: false)
     end
   end
 

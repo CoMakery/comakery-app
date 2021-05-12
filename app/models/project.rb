@@ -105,7 +105,7 @@ class Project < ApplicationRecord
     project.safe_add_admin(previous_owner)
     project.account_id = new_owner.id
     project.admins.delete(new_owner)
-    project.safe_add_interested(new_owner)
+    project.safe_add_project_interested(new_owner)
     project.save!
   end
 
@@ -115,11 +115,6 @@ class Project < ApplicationRecord
 
   def safe_add_admin(new_admin)
     admins << new_admin unless admins.exists?(new_admin.id)
-  end
-
-  # TODO: Remove interests
-  def safe_add_interested(interested_account)
-    interested << interested_account unless interested_account.interested?(id)
   end
 
   def safe_add_project_interested(interested_account)

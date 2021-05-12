@@ -292,17 +292,17 @@ class AwardsController < ApplicationController
     end
 
     def run_award_expiration
-      current_account.accessable_awards(projects_interested).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+      current_account.accessable_awards(projects_involved).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
-    def projects_interested
-      current_user.whitelabel_interested_projects(@whitelabel_mission)
+    def projects_involved
+      current_user.whitelabel_involved_projects(@whitelabel_mission)
     end
 
     def set_awards
       @awards =
         current_account
-        .accessable_awards(projects_interested)
+        .accessable_awards(projects_involved)
         .includes(
           :specialty, :issuer, :award_type, :cloned_from,
           project: [:account, :mission, :token, :admins, channels: [:team]],
@@ -364,7 +364,7 @@ class AwardsController < ApplicationController
           {
             name: filter,
             current: filter == @filter,
-            count: current_account.accessable_awards(projects_interested).filtered_for_view(filter, current_account).size,
+            count: current_account.accessable_awards(projects_involved).filtered_for_view(filter, current_account).size,
             url: my_tasks_path(filter: filter)
           }
         end,
