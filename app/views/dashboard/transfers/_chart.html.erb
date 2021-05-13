@@ -48,5 +48,35 @@
       </div>
       <div id="stacked-chart-tooltip"></div>
     </div>
+
+    <div class="transfers-filters--filter">
+      <div class="stacked-chart-legend" style='width: 25%; display: inline-table;'>
+        <% @transfers_chart_colors_objects.each do |type, color| %>
+          <div class="stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
+            <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
+
+            <%= link_to(
+              type.name,
+              request.params.merge(q: (request.params[:q] || {}).except(:transfer_type_id_eq).merge(transfer_type_id_eq: type.id)),
+              class: "stacked-chart-legend__type__name"
+            ) %>
+
+            <div style='margin-left:2em; width: 65px;'>
+              <% type_count = @transfers_totals.where(transfer_type_id: type.id).count %>
+              <% type_percent =
+                if @transfers_totals.count.positive?
+                  (type_count.to_f/@transfers_totals.count * 100).to_i
+                else
+                  0
+                end %>
+              <%= type_count %>
+              <div style="color: <%= color %>; float: right;">
+                <%= "#{type_percent}%" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </turbo-frame>
