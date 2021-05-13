@@ -130,7 +130,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def team_top
-    team = (admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+    team = (project_admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
 
     team += accounts.with_attached_image.where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
 
@@ -138,7 +138,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def team_size
-    interested.size
+    accounts.size
   end
 
   def step_for_amount_input
