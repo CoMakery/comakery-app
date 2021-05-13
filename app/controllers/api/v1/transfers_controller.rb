@@ -78,7 +78,8 @@ class Api::V1::TransfersController < Api::V1::ApiController
         :transfer_type_id,
         :recipient_wallet_id,
         :description,
-        :lockup_schedule_id
+        :lockup_schedule_id,
+        :commencement_date
       )
     end
 

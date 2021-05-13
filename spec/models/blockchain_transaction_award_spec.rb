@@ -5,7 +5,7 @@ describe BlockchainTransactionAward, vcr: true do
   it { is_expected.to respond_to(:blockchain_transactables) }
 
   describe 'callbacks' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
+    let(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
 
     it 'populates transaction data from award' do
       expect(blockchain_transaction.amounts).not_to be_empty
@@ -13,12 +13,37 @@ describe BlockchainTransactionAward, vcr: true do
       expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
       expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
     end
+
+    context 'with lockup token' do
+      let(:blockchain_transaction) { create(:blockchain_transaction_lockup, nonce: 0) }
+
+      it 'populates lockup transaction data from award' do
+        expect(blockchain_transaction.commencement_dates).to eq([blockchain_transaction.blockchain_transactable.commencement_date.to_i])
+        expect(blockchain_transaction.lockup_schedule_ids).to eq([blockchain_transaction.blockchain_transactable.lockup_schedule_id])
+      end
+    end
   end
 
   describe '#amounts' do
     subject { create(:blockchain_transaction).amounts }
 
     it 'returns amounts as integers' do
+      expect(subject.first).to be_an(Integer)
+    end
+  end
+
+  describe '#commencement_dates' do
+    subject { create(:blockchain_transaction_lockup).commencement_dates }
+
+    it 'returns commencement_dates as integers' do
+      expect(subject.first).to be_an(Integer)
+    end
+  end
+
+  describe '#lockup_schedule_ids' do
+    subject { create(:blockchain_transaction_lockup).lockup_schedule_ids }
+
+    it 'returns lockup_schedule_ids as integers' do
       expect(subject.first).to be_an(Integer)
     end
   end
@@ -51,6 +76,22 @@ describe BlockchainTransactionAward, vcr: true do
         )
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx)
+      end
+    end
+
+    context 'with lockup transfer' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_lockup)
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::ScheduledToken::FundReleaseSchedule)
+      end
+    end
+
+    context 'with lockup transfer batch' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_lockup_batch)
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::ScheduledToken::BatchFundReleaseSchedule)
       end
     end
 

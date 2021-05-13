@@ -120,6 +120,11 @@ class Token < ApplicationRecord
     RegGroup.default_for(self)
   end
 
+  def supports_batch_transfers?
+    _token_type_token_release_schedule? \
+    || (_token_type_erc20? && batch_contract_address)
+  end
+
   private
 
     def set_values_from_token_type # rubocop:todo Metrics/CyclomaticComplexity

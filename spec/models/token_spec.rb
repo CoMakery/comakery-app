@@ -130,4 +130,28 @@ describe Token, type: :model, vcr: true do
       expect(create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten).default_reg_group).to be_a(RegGroup)
     end
   end
+
+  describe '#supports_batch_transfers?' do
+    let(:token) { create(:token) }
+    subject { token.supports_batch_transfers? }
+
+    it { is_expected.to be_falsey }
+
+    context 'with a lockup token' do
+      let(:token) { create(:lockup_token) }
+      it { is_expected.to be_truthy }
+    end
+
+    context 'with erc20 token' do
+      let(:token) { create(:erc20_token) }
+
+      it { is_expected.to be_falsey }
+
+      context 'and batch contract address present' do
+        let(:token) { create(:erc20_token, batch_contract_address: '0x0') }
+
+        it { is_expected.to be_truthy }
+      end
+    end
+  end
 end
