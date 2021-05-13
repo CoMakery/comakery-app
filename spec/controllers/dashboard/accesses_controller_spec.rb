@@ -10,7 +10,7 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
 
   describe 'GET #index' do
     before do
-      project.admins << project_admin
+      project.project_admins << project_admin
     end
 
     it 'shows admins for current project' do
