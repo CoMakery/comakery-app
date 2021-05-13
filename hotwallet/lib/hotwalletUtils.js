@@ -91,10 +91,10 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
 
   const isReadyToSendTx = hotWallet.isReadyToSendTx(envs)
   if (!isReadyToSendTx) {
-    if (hotWallet.isEthereum() && envs.ethereumContractAddress && envs.ethereumBatchContractAddress) {
-      const approveTx = await blockchain.klass.approveBatchContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumBatchContractAddress)
+    if (hotWallet.isEthereum() && envs.ethereumContractAddress && envs.ethereumApprovalContractAddress) {
+      const approveTx = await blockchain.klass.approveBatchContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumApprovalContractAddress)
       if (approveTx.transactionId) {
-        hwRedis.saveApprovedBatchContract(envs.ethereumBatchContractAddress)
+        hwRedis.saveApprovedBatchContract(envs.ethereumApprovalContractAddress)
       }
     }
   }

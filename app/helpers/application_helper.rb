@@ -73,10 +73,21 @@ module ApplicationHelper
     }
 
     if token._token_type_on_ethereum?
+      token_type = token._token_type
+      token_type = 'erc20_batch' if token_type == 'erc20' && token.batch_contract_address.present?
+      approval_address =
+        case token_type
+        when 'erc20_batch' then token.batch_contract_address
+        # when 'token_release_schedule' then ???
+        end
+
       params[:env][:INFURA_PROJECT_ID] = ENV['INFURA_PROJECT_ID']
+      params[:env][:ETHEREUM_TOKEN_TYPE] = token_type
       params[:env][:ETHEREUM_TOKEN_SYMBOL] = token.symbol
       params[:env][:ETHEREUM_CONTRACT_ADDRESS] = token.contract_address
-      params[:env][:ETHEREUM_BATCH_CONTRACT_ADDRESS] = token.batch_contract_address if token.batch_contract_address.present?
+      if token_type.in?(%w[erc20_batch token_release_schedule])
+        params[:env][:ETHEREUM_APPROVAL_CONTRACT_ADDRESS] = approval_address
+      end
     end
 
     "https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&#{params.to_param}"
