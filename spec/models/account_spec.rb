@@ -241,16 +241,16 @@ describe Account do
       expect(account.team_award_types).to match_array([teammate_award_type])
     end
 
-    it 'has and belongs to many admin_projects' do
-      expect(account.admin_projects).to match_array([admin_project])
+    it 'has many admin_projects' do
+      expect(account.admin_projects).to match_array([admin_project, project]) # owner as admin
     end
 
     it 'has many admin award_types' do
-      expect(account.admin_award_types).to match_array([admin_award_type])
+      expect(account.admin_award_types).to match_array([admin_award_type, award_type]) # same for owner
     end
 
     it 'has many admin awards' do
-      expect(account.admin_awards).to match_array([admin_award])
+      expect(account.admin_awards).to match_array([admin_award, award]) # same for owner
     end
 
     it 'has many verifications' do

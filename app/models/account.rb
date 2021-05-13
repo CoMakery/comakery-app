@@ -12,7 +12,7 @@ class Account < ApplicationRecord
   has_one_attached :image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
-  has_and_belongs_to_many :admin_projects, class_name: 'Project'
+  # has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy # rubocop:todo Rails/InverseOf
@@ -29,10 +29,6 @@ class Account < ApplicationRecord
   # rubocop:todo Rails/InverseOf
   has_many :issued_awards, class_name: 'Award', foreign_key: 'issuer_id' # rubocop:todo Rails/HasManyOrHasOneDependent
   # rubocop:enable Rails/InverseOf
-  has_many :admin_awards, through: :admin_projects, source: :awards
-  has_many :award_types, through: :projects
-  has_many :team_award_types, through: :team_projects, source: :award_types
-  has_many :admin_award_types, through: :admin_projects, source: :award_types
   # rubocop:todo Rails/InverseOf
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # rubocop:enable Rails/InverseOf
@@ -40,8 +36,13 @@ class Account < ApplicationRecord
   has_many :projects_interested, through: :interests, source: :project
   has_many :project_roles, dependent: :destroy
   has_many :projects_involved, through: :project_roles, source: :project
+  has_many :admin_projects, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :project
   has_many :experiences # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :verifications # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :admin_awards, through: :admin_projects, source: :awards
+  has_many :award_types, through: :projects
+  has_many :team_award_types, through: :team_projects, source: :award_types
+  has_many :admin_award_types, through: :admin_projects, source: :award_types
   # rubocop:todo Rails/InverseOf
   # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
