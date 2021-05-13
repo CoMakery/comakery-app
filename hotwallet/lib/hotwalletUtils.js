@@ -91,15 +91,24 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
 
   const isReadyToSendTx = hotWallet.isReadyToSendTx(envs)
   if (!isReadyToSendTx) {
-    if (hotWallet.isEthereum() && envs.ethereumContractAddress && envs.ethereumApprovalContractAddress) {
-      const approveTx = await blockchain.klass.approveBatchContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumApprovalContractAddress)
+    if (hotWallet.isEthereum() && envs.ethereumApprovalContractAddress) {
+      let approveTx
+      if (envs.ethereumTokenType == "token_release_schedule") {
+          // For Lockup contract + erc20 token we should send approve tx to erc20 token address to approve the Lockup contract
+          approveTx = await blockchain.klass.approveContractTransactions(hotWallet, envs.ethereumApprovalContractAddress, envs.ethereumContractAddress)
+      } else if (envs.ethereumTokenType == "erc20_batch") {
+        // For erc20 + Batch contract we should send approve tx to erc20 token address to approve the Batch contract
+        approveTx = await blockchain.klass.approveContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumApprovalContractAddress)
+      }
+
       if (approveTx.transactionId) {
-        hwRedis.saveApprovedBatchContract(envs.ethereumApprovalContractAddress)
+        hwRedis.saveApprovedContract(envs.ethereumApprovalContractAddress)
       }
     }
   }
 
-  const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
+  // const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
+  const hasTokens = true
   if (!hasTokens) {
     console.log(`The Hot Wallet does not have tokens. Please top up the ${hwAddress}`)
     return { status: "failed_before_getting_tx", blockchainTransaction: {}, transaction: {} }

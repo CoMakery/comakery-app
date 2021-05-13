@@ -14,7 +14,7 @@ const envs = {
   optInApp: parseInt(process.env.OPT_IN_APP),
   blockchainNetwork: process.env.BLOCKCHAIN_NETWORK,
   maxAmountForTransfer: parseInt(process.env.MAX_AMOUNT_FOR_TRANSFER),
-  ethereumTokenTypeå: process.env.ETHEREUM_TOKEN_TYPE,
+  ethereumTokenType: process.env.ETHEREUM_TOKEN_TYPE,
   ethereumTokenSymbol: process.env.ETHEREUM_TOKEN_SYMBOL,
   ethereumContractAddress: process.env.ETHEREUM_CONTRACT_ADDRESS,
   ethereumApprovalContractAddress: process.env.ETHEREUM_APPROVAL_CONTRACT_ADDRESS
