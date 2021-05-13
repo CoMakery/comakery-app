@@ -34,26 +34,6 @@ describe AccountDecorator do
     end
   end
 
-  describe '#can_send_awards?' do
-    let!(:project) { create :project }
-    let!(:project2) { create :project }
-
-    context 'when account is project owner or admin' do
-      it 'can send awards' do
-        project.admins << project2.account
-
-        expect(project.account.decorate.can_send_awards?(project)).to be true
-        expect(project2.account.decorate.can_send_awards?(project)).to be true
-      end
-    end
-
-    context 'when account is not project owner or admin' do
-      it 'cannot send awards' do
-        expect(project2.account.decorate.can_send_awards?(project)).to be false
-      end
-    end
-  end
-
   describe '#can_receive_awards?' do
     let!(:wallet) { create(:wallet, address: '0x' + '0' * 40, _blockchain: :ethereum_ropsten) }
     let!(:project) { build :project, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }

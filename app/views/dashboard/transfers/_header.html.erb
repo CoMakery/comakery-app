@@ -2,40 +2,34 @@
   <label>sort by</label>
 
   <div class="transfers-table__transfer__name">
-    <%= sort_link(@q, :name, 'transfer name') %>
+    <%= sort_link(@q, :name, 'transfer') %>
   </div>
 
   <div class="transfers-table__transfer__account">
-    account
+    to
   </div>
 
   <div class="transfers-table__transfer__issuer">
-    <%= sort_link(@q, :issuer_first_name, 'transferred by') %>
-  </div>
-
-  <div class="transfers-table__transfer__amount">
-    amount <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %>
-  </div>
-
-  <div class="transfers-table__transfer__quantity">
-    qty
+    <%= sort_link(@q, :issuer_first_name, 'from') %>
   </div>
 
   <div class="transfers-table__transfer__total_amount">
-    <%= sort_link(@q, :total_amount, @project.token&.symbol ? "total (#{@project.token&.symbol})" : 'total') %>
+    <%= sort_link(@q, :total_amount, @project.token&.symbol ? "total amount (#{@project.token&.symbol})" : 'total amount') %>
   </div>
 
-  <% if @project.token %>
-    <div class="transfers-table__transfer__button">
-      transaction
-    </div>
-  <% end %>
+  <div class="transfers-table__transfer__verification">
+    verification
+  </div>
+
+  <div class="transfers-table__transfer__status">
+    status
+  </div>
+
+  <div class="transfers-table__transfer__history">
+    history
+  </div>
 
   <div class="transfers-table__transfer__transferred_at">
     <%= sort_link(@q, :transferred_at, 'transferred') %>
-  </div>
-
-  <div class="transfers-table__transfer__transferred_at">
-    <%= sort_link(@q, :created_at, 'created') %>
   </div>
 </div>

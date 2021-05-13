@@ -1,5 +1,5 @@
 class BlockchainTransaction < ApplicationRecord
-  belongs_to :transaction_batch
+  belongs_to :transaction_batch, counter_cache: true
   belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate', dependent: :destroy
 
