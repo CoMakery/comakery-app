@@ -620,7 +620,7 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: -webkit-fill-available;
+      width: stretch;
     }
 
     .hot-wallet-switcher-child {
@@ -1700,11 +1700,11 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__account {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__issuer {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__amount {
@@ -1731,7 +1731,7 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__total_amount {
-      min-width: 60px;
+      min-width: 150px;
       font-weight: 600;
       display: block;
       white-space: nowrap;
