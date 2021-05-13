@@ -18,9 +18,9 @@ export default class extends Controller {
     )
   }
 
-  visitSelectedCategory(){
+  visitSelectedCategory() {
     let selected = $('#category-selector').find('option:selected')
-    if (selected.val() !== 'All'){
+    if (selected.val() !== 'All') {
       Turbo.visit(selected.data('url'))
     }
   }
