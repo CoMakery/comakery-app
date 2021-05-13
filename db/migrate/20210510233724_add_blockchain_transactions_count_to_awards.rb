@@ -21,3 +21,4 @@ class AddBlockchainTransactionsCountToAwards < ActiveRecord::Migration[6.0]
     remove_column :transfer_rules, :blockchain_transactions_count
   end
 end
+
