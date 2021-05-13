@@ -13,9 +13,7 @@ RSpec.describe Interest, type: :model do
 
   describe 'validations' do
     context 'when creating interest with the same project, account and specialty' do
-      before do
-        create(:interest, account: account, project: project, specialty: specialty)
-      end
+      before { create(:interest, account: account, project: project, specialty: specialty) }
 
       it 'adds an error' do
         i = build(:interest, account: account, project: project, specialty: specialty)
@@ -28,6 +26,8 @@ RSpec.describe Interest, type: :model do
 
   describe 'hooks' do
     context 'when account is project owner or admin' do
+      before { create(:interest, account: project.account, project: project, specialty: specialty) }
+
       it 'aborts destroy' do
         i = project.interests.where(account: project.account).first
         i.destroy
