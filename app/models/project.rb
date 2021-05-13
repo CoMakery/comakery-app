@@ -105,7 +105,7 @@ class Project < ApplicationRecord
     project.safe_add_admin(previous_owner)
     project.account_id = new_owner.id
     project.admins.delete(new_owner)
-    project.safe_add_admin(new_owner)
+    project.add_account(new_owner)
     project.save!
   end
 
