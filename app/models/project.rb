@@ -28,7 +28,7 @@ class Project < ApplicationRecord
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
   has_many :accounts, through: :project_roles, source: :account
 
-  has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
+  has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :accounts, source: :account_token_records
   has_many :transfer_rules, through: :token
   has_many :transfer_types, dependent: :destroy
   has_many :award_types, inverse_of: :project, dependent: :destroy
