@@ -18,7 +18,7 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
 
       expect(response.status).to eq(200)
       expect(assigns[:project]).to eq(project)
-      expect(assigns[:admins]).to match_array([project_admin])
+      expect(assigns[:admins]).to match_array([project_admin, project.account]) # owner is added as admin
     end
   end
 
@@ -127,7 +127,7 @@ RSpec.describe Dashboard::AccessesController, type: :controller do
 
   describe 'POST #regenerate_api_key' do
     it 'regenerates project api key' do
-      project.admins.delete(project_admin)
+      project.project_admins.delete(project_admin)
       post :regenerate_api_key, params: { project_id: project.to_param }
       project.reload
 

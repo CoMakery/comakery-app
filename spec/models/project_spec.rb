@@ -15,7 +15,7 @@ describe Project do
     end
 
     it 'has and belongs to many admins' do
-      expect(project.project_admins).to match_array([account])
+      expect(project.project_admins).to match_array([account, project.account]) # owner is added as admin
     end
   end
 
