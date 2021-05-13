@@ -47,10 +47,16 @@
             ) %>
 
             <div style='margin-left:2em; width: 65px;'>
-              <% type_count = (@transfers_totals.where(source: type.name)).count %>
+              <% type_count = @transfers_totals.where(transfer_type_id: type.id).count %>
+              <% type_percent =
+                if @transfers_totals.count.positive?
+                  (type_count.to_f/@transfers_totals.count * 100).to_i
+                else
+                  0
+                end %>
               <%= type_count %>
               <div style="color: <%= color %>; float: right;">
-                <%= " #{((type_count.to_f/@transfers_totals.length.to_f) * 100).to_i}%" %>
+                <%= "#{type_percent}%" %>
               </div>
             </div>
           </div>
