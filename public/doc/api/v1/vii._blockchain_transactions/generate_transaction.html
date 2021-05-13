@@ -326,13 +326,14 @@ table th, table td {
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;a13d20d7c51ad5d6b1e3c4b6f149cf6c&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;bcc770be5ceecc4f48bbcb51c2de0a17&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: &quot;40&quot;,
-  &quot;blockchainTransactableId&quot;: 5,
+  &quot;blockchainTransactableId&quot;: null,
+  &quot;blockchainTransactableType&quot;: null,
   &quot;destination&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
   &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
   &quot;amount&quot;: 50,
@@ -345,7 +346,14 @@ table th, table td {
   &quot;statusMessage&quot;: null,
   &quot;createdAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
   &quot;updatedAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
-  &quot;syncedAt&quot;: null
+  &quot;syncedAt&quot;: null,
+  &quot;blockchainTransactables&quot;: [
+    {
+      &quot;id&quot;: null,
+      &quot;blockchainTransactableType&quot;: &quot;Award&quot;,
+      &quot;blockchainTransactableId&quot;: 4
+    }
+  ]
 }</pre>
       </div>
     </div>

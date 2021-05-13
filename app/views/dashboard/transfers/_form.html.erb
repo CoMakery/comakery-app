@@ -15,6 +15,10 @@
     </div>
 
     <div class="transfers-table__transfer__issuer">
+      <label>lockup schedule id & commencement date</label>
+
+      <%= f.number_field(:lockup_schedule_id, required: true, placeholder: '0', min: 0, step: 1) %>
+      <%= f.datetime_field(:commencement_date, required: true, placeholder: '0', min: 0, step: 1) %>
     </div>
 
     <div class="transfers-table__transfer__amount">

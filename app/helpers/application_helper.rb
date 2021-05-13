@@ -74,8 +74,9 @@ module ApplicationHelper
 
     if token._token_type_on_ethereum?
       params[:env][:INFURA_PROJECT_ID] = ENV['INFURA_PROJECT_ID']
-      params[:env][:ETHEREUM_CONTRACT_ADDRESS] = token.contract_address
       params[:env][:ETHEREUM_TOKEN_SYMBOL] = token.symbol
+      params[:env][:ETHEREUM_CONTRACT_ADDRESS] = token.contract_address
+      params[:env][:ETHEREUM_BATCH_CONTRACT_ADDRESS] = token.batch_contract_address if token.batch_contract_address.present?
     end
 
     "https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&#{params.to_param}"

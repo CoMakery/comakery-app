@@ -230,7 +230,72 @@ class Mom
     attrs.delete(:award)
 
     defaults = {
-      blockchain_transactable: award,
+      blockchain_transactables: award,
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_lockup(**attrs)
+    token = attrs[:token] || create(:lockup_token)
+    attrs.delete(:token)
+
+    award = blockchain_transaction__lockup_award(attrs.merge(token: token))
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactables: award,
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_lockup_batch(**attrs)
+    token = attrs[:token] || create(:lockup_token)
+    attrs.delete(:token)
+
+    award1 = blockchain_transaction__lockup_award(attrs.merge(token: token))
+    award2 = award1.clone_on_assignment
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactables: Award.where(id: [award1.id, award2.id]),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token._token_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token._blockchain}/#{token.contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_award_batch(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token, batch_contract_address: '0x0')
+    attrs.delete(:token)
+
+    award1 = blockchain_transaction__award(attrs.merge(token: token))
+    award2 = award1.clone_on_assignment
+    attrs.delete(:award)
+
+    defaults = {
+      blockchain_transactables: Award.where(id: [award1.id, award2.id]),
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,
@@ -267,7 +332,7 @@ class Mom
                              project: project
                            ))
     defaults = {
-      blockchain_transactable: award,
+      blockchain_transactables: award,
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: 1,
@@ -285,7 +350,7 @@ class Mom
     attrs.delete(:token)
 
     defaults = {
-      blockchain_transactable: create(:transfer_rule),
+      blockchain_transactables: create(:transfer_rule),
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,
@@ -303,7 +368,7 @@ class Mom
     attrs.delete(:token)
 
     defaults = {
-      blockchain_transactable: token,
+      blockchain_transactables: token,
       status: :created
     }
 
@@ -318,7 +383,7 @@ class Mom
     token.update(token_frozen: true)
 
     defaults = {
-      blockchain_transactable: token,
+      blockchain_transactables: token,
       status: :created
     }
 
@@ -329,7 +394,7 @@ class Mom
 
   def blockchain_transaction_opt_in(**attrs)
     defaults = {
-      blockchain_transactable: create(:token_opt_in),
+      blockchain_transactables: create(:token_opt_in),
       status: :created
     }
 
@@ -340,7 +405,7 @@ class Mom
 
   def blockchain_transaction_token_freeze(**attrs)
     defaults = {
-      blockchain_transactable: create(:algo_sec_token),
+      blockchain_transactables: create(:algo_sec_token),
       status: :created
     }
 
@@ -351,7 +416,7 @@ class Mom
 
   def blockchain_transaction_token_unfreeze(**attrs)
     defaults = {
-      blockchain_transactable: create(:algo_sec_token),
+      blockchain_transactables: create(:algo_sec_token),
       status: :created
     }
 
@@ -365,7 +430,7 @@ class Mom
     attrs.delete(:token)
 
     defaults = {
-      blockchain_transactable: create(:account_token_record),
+      blockchain_transactables: create(:account_token_record),
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,
@@ -383,7 +448,7 @@ class Mom
     attrs.delete(:token)
 
     defaults = {
-      blockchain_transactable: create(:account_token_record, token: token, address: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'),
+      blockchain_transactables: create(:account_token_record, token: token, address: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU'),
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token._token_type_token? ? rand(1_000_000) : nil,
@@ -392,6 +457,41 @@ class Mom
     }
 
     BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
+  end
+
+  def blockchain_transaction__lockup_award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
+    project = attrs[:award]&.project || create(
+      :project,
+      token: attrs[:token]
+    )
+
+    account = attrs[:account] || create(
+      :account
+    )
+
+    account.wallets.find_by(_blockchain: project.token._blockchain) || create(
+      :wallet,
+      account: account,
+      _blockchain: project.token._blockchain,
+      address: attrs[:destination] || build(:ethereum_address_2)
+    )
+
+    attrs[:award] || create(
+      :award,
+      amount: attrs[:amount] || 1,
+      status: :accepted,
+      account: account,
+      commencement_date: Time.current,
+      lockup_schedule_id: 0,
+      award_type: create(
+        :award_type,
+        project: project
+      ),
+      transfer_type: create(
+        :transfer_type,
+        project: project
+      )
+    )
   end
 
   def blockchain_transaction__award(**attrs) # rubocop:todo Metrics/CyclomaticComplexity
@@ -435,7 +535,7 @@ class Mom
     attrs.delete(:award)
 
     defaults = {
-      blockchain_transactable: award,
+      blockchain_transactables: award,
       amount: 1,
       source: build(:constellation_address_1),
       nonce: nil,
@@ -675,6 +775,26 @@ class Mom
     t
   end
 
+  def lockup_token(**attrs)
+    defaults = {
+      name: "LockupToken-#{SecureRandom.hex(20)}",
+      symbol: "DUM#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      _blockchain: :ethereum_rinkeby,
+      contract_address: '0x9608848FA0063063d2Bb401e8B5efFcb8152Ec65',
+      _token_type: :token_release_schedule,
+      decimal_places: 10,
+      token_frozen: false
+    }
+    t = Token.new(defaults.merge(attrs))
+
+    VCR.use_cassette("#{t.blockchain.explorer_api_host}/contract/#{t.contract_address}/token_init") do
+      t.save!
+    end
+
+    t
+  end
+
   def dag_token(**attrs)
     defaults = {
       logo_image: dummy_image,
@@ -749,6 +869,15 @@ class Mom
     }.merge(attrs)
 
     Interest.new(params)
+  end
+
+  def project_role(**attrs)
+    params = {
+      account: create(:account),
+      project: create(:project)
+    }.merge(attrs)
+
+    ProjectRole.new(params)
   end
 
   def channel(**attrs)
@@ -950,6 +1079,13 @@ class Mom
   def eth_tx(**attrs)
     host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+      destination: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+      amount: 0,
+      current_block: 1
+    )
 
     # From:
     # 0x66ebd5cdf54743a6164b0138330f74dce436d842
@@ -963,13 +1099,20 @@ class Mom
     Comakery::Eth::Tx.new(
       host,
       hash,
-      attrs[:blockchain_transaction]
+      tx
     )
   end
 
   def erc20_transfer(**attrs)
     host = attrs[:host] || 'ropsten.infura.io'
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+      destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+      amount: 100,
+      current_block: 1
+    )
 
     # From:
     # 0x66ebd5cdf54743a6164b0138330f74dce436d842
@@ -983,7 +1126,122 @@ class Mom
     Comakery::Eth::Tx::Erc20::Transfer.new(
       host,
       hash,
-      attrs[:blockchain_transaction]
+      tx
+    )
+  end
+
+  def lockup_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0x662784478c471d87e724705bca422b5c600f9f47622f18ab05d202969b5d1000'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1',
+      destinations: %w[
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+      ],
+      amount: 100000000000,
+      amounts: [100000000000],
+      commencement_dates: [0],
+      lockup_schedule_ids: [0],
+      current_block: 1,
+      contract_address: '0x9608848fa0063063d2bb401e8b5effcb8152ec65'
+    )
+
+    # From:
+    # 0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1
+    # Contract:
+    # 0x9608848fa0063063d2bb401e8b5effcb8152ec65
+    # To:
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # Amount:
+    # 100000000000
+    # commencementTimestamps:
+    # 0
+    # scheduleIds
+    # 0
+
+    Comakery::Eth::Tx::Erc20::ScheduledToken::FundReleaseSchedule.new(
+      host,
+      hash,
+      tx
+    )
+  end
+
+  def lockup_batch_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0xf72a70bb1393bab0fba012d32e836d9250c01756a9685f2ef1355976962ec9d5'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1',
+      destinations: %w[
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+        0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+      ],
+      amounts: [100000000000, 100000000000],
+      commencement_dates: [0, 0],
+      lockup_schedule_ids: [0, 0],
+      current_block: 1,
+      contract_address: '0x9608848fa0063063d2bb401e8b5effcb8152ec65'
+    )
+
+    # From:
+    # 0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1
+    # Contract:
+    # 0x9608848fa0063063d2bb401e8b5effcb8152ec65
+    # To:
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # 0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1
+    # Amount:
+    # 100000000000
+    # 100000000000
+    # commencementTimestamps:
+    # 0
+    # 0
+    # scheduleIds
+    # 0
+    # 0
+
+    Comakery::Eth::Tx::Erc20::ScheduledToken::BatchFundReleaseSchedule.new(
+      host,
+      hash,
+      tx
+    )
+  end
+
+  def erc20_batch_transfer(**attrs)
+    host = attrs[:host] || 'rinkeby.infura.io'
+    hash = attrs[:hash] || '0x0e566595a62c566a00b0ebdf80f8d812c0a8fd893dbd5198c8c139b223746b7d'
+    tx = attrs[:blockchain_transaction] || create(
+      :blockchain_transaction,
+      source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+      destinations: %w[
+        0x4735581201F4cAD63CCa0716AB4ac7D6d9CFB0ed
+        0x4735581201F4cAD63CCa0716AB4ac7D6d9CFB0ed
+        0x4735581201F4cAD63CCa0716AB4ac7D6d9CFB0ed
+      ],
+      amounts: [1, 1, 1],
+      current_block: 1
+    )
+
+    # From:
+    # 0x15b4eda54e7aa56e4ca4fe6c19f7bf9d82eca2fc
+    # Batch Contract:
+    # 0x68ac9a329c688afbf1fc2e5d3e8cb6e88989e2cc
+    # Contract:
+    # 0xE322488096C36edccE397D179E7b1217353884BB
+    # To:
+    # 0x4735581201F4cAD63CCa0716AB4ac7D6d9CFB0ed
+    # 0x4735581201F4cAD63CCa0716AB4ac7D6d9CFB0ed
+    # 0x4735581201F4cAD63CCa0716AB4ac7D6d9CFB0ed
+    # Amount:
+    # 1
+    # 1
+    # 1
+
+    Comakery::Eth::Tx::Erc20::BatchTransfer.new(
+      host,
+      hash,
+      tx
     )
   end
 
@@ -1024,7 +1282,7 @@ class Mom
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(
       host,
       hash,
-      attrs[:blockchain_transaction]
+      create(:blockchain_transaction_transfer_rule)
     )
   end
 
@@ -1038,7 +1296,7 @@ class Mom
     Comakery::Eth::Tx::Erc20::SecurityToken::Pause.new(
       host,
       hash,
-      attrs[:blockchain_transaction]
+      create(:blockchain_transaction_pause)
     )
   end
 
@@ -1052,7 +1310,7 @@ class Mom
     Comakery::Eth::Tx::Erc20::SecurityToken::Unpause.new(
       host,
       hash,
-      attrs[:blockchain_transaction]
+      create(:blockchain_transaction_unpause)
     )
   end
 
@@ -1073,7 +1331,7 @@ class Mom
     Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(
       host,
       hash,
-      attrs[:blockchain_transaction]
+      build(:blockchain_transaction_account_token_record)
     )
   end
 
@@ -1226,7 +1484,7 @@ class Mom
       create(
         :blockchain_transaction,
         token: tr.token,
-        blockchain_transactable: tr,
+        blockchain_transactables: tr,
         amount: tr.total_amount,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
@@ -1242,7 +1500,7 @@ class Mom
       create(
         :blockchain_transaction_account_token_record,
         token: r.token,
-        blockchain_transactable: r,
+        blockchain_transactables: r,
         amount: 0,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU',
@@ -1258,7 +1516,7 @@ class Mom
       create(
         :blockchain_transaction,
         token: tr.token,
-        blockchain_transactable: tr,
+        blockchain_transactables: tr,
         amount: tr.total_amount,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
@@ -1274,7 +1532,7 @@ class Mom
       create(
         :blockchain_transaction_token_freeze,
         token: t,
-        blockchain_transactable: t,
+        blockchain_transactables: t,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         tx_hash: 'EGVNJAAQEUJPOKAPJZIZQBWVOPCIVUTAIDG7X7XCIMOBAY7TCUXQ'
@@ -1289,7 +1547,7 @@ class Mom
       create(
         :blockchain_transaction_transfer_rule,
         token: r.token,
-        blockchain_transactable: r,
+        blockchain_transactables: r,
         amount: 0,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
@@ -1305,7 +1563,7 @@ class Mom
       create(
         :blockchain_transaction,
         token: tr.token,
-        blockchain_transactable: tr,
+        blockchain_transactables: tr,
         amount: tr.total_amount,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: '6447K33DMECECFTWCWQ6SDJLY7EYM47G4RC5RCOKPTX5KA5RCJOTLAK7LU',
@@ -1321,7 +1579,7 @@ class Mom
       create(
         :blockchain_transaction_token_unfreeze,
         token: t,
-        blockchain_transactable: t,
+        blockchain_transactables: t,
         source: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         destination: 'IKSNMZFYNMXFBWB2JCPMEC4HT7UECC354UDCKNHQTNKF7WQG3UQW7YZHWA',
         tx_hash: 'DPPKH4IUFEGGV44TVQPVOOMP2BCGHBDELGBBCC7HBSFMWO2HSS6A'

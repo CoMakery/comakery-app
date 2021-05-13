@@ -17,8 +17,12 @@ describe 'landing page' do
 
   it 'when logged in shows some projects and the new button and ger buttons leading to edit respective projects' do
     login(account)
+
     project = create(:project, title: 'member Private Project', visibility: 'member', account: account1)
     project.channels.create(team: team, channel_id: 'channel')
+
+    create(:project_role, project: project, account: account, role: :interested)
+
     7.times { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
     7.times { |i| create(:project, title: "other Private Project #{i}", visibility: 'member') }
     7.times { |i| create(:project, account, title: "Private Project #{i}", visibility: 'member') }

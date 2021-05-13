@@ -561,6 +561,26 @@ form.form-with-submit-button {
   }
 }
 
+.transfer-button__all {
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 0.5em;
+  border-radius: 6px !important;
+  border: solid 1px #e6e8ed !important;
+  height: 35px !important;
+  padding: 9px 16px 8px 15px !important;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px !important;
+  background-color: #1560fa !important;
+  -webkit-user-select: none;
+  margin-bottom: 1em;
+
+  a {
+    color: white !important;
+  }
+}
+
 .hot_wallet_address_link {
   align-self: center;
   border-radius: 15px;
@@ -663,6 +683,12 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
     }
 
+    .add-person {
+      display: flex;
+      margin-top: -38px;
+      margin-left: 1650px;
+    }
+
     .transfers-filters--filter--form {
       display: flex;
 
@@ -696,6 +722,12 @@ form.form-with-submit-button {
     .transfers-filters--filter--options {
       flex-wrap: wrap;
       display: flex;
+
+      .transfers-filters--filter--add-person {
+        display: flex;
+        padding: 55px 16px 8px 25px !important;
+        border: none !important;
+      }
 
       select {
         text-transform: capitalize;
@@ -1735,6 +1767,8 @@ input.transfer-rules__refresh_from_blockchain_button {
       min-width: 60px;
     }
 
+    .transfers-table__transfer__settings
+    .transfers-table__transfer__role
     .transfers-table__transfer__aml-kyc {
       min-width: 60px;
     }

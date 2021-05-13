@@ -6,8 +6,9 @@ class Sign::OreIdController < ApplicationController
   # GET /sign/ore_id/new
   def new
     # TODO: Add token admin role to policy token related tx
-    authorize new_transaction.blockchain_transactable, :pay? if new_transaction_for_award?
+    authorize new_transaction_transactable, :pay? if new_transaction_for_award?
 
+    new_transaction.blockchain_transactables = new_transaction_transactable
     new_transaction.source = current_account.address_for_blockchain(new_transaction.blockchain_transactable.token._blockchain)
     new_transaction.save!
 
@@ -47,29 +48,29 @@ class Sign::OreIdController < ApplicationController
 
     def new_transaction # rubocop:todo Metrics/CyclomaticComplexity
       @new_transaction ||= if params[:transfer_id]
-        BlockchainTransactionAward.new(
-          blockchain_transactable: policy_scope(Award).find(params.require(:transfer_id))
-        )
+        BlockchainTransactionAward.new
       elsif params[:account_token_record_id]
-        BlockchainTransactionAccountTokenRecord.new(
-          blockchain_transactable: AccountTokenRecord.find(params.require(:account_token_record_id))
-        )
+        BlockchainTransactionAccountTokenRecord.new
       elsif params[:transfer_rule_id]
-        BlockchainTransactionTransferRule.new(
-          blockchain_transactable: TransferRule.find(params.require(:transfer_rule_id))
-        )
+        BlockchainTransactionTransferRule.new
       elsif params[:token_id]
-        t = Token.find(params.require(:token_id))
-
-        if t.token_frozen?
-          BlockchainTransactionTokenUnfreeze.new(
-            blockchain_transactable: t
-          )
+        if Token.find(params.require(:token_id)).token_frozen?
+          BlockchainTransactionTokenUnfreeze.new
         else
-          BlockchainTransactionTokenFreeze.new(
-            blockchain_transactable: t
-          )
+          BlockchainTransactionTokenFreeze.new
         end
+      end
+    end
+
+    def new_transaction_transactable
+      @new_transaction_transactable ||= if params[:transfer_id]
+        policy_scope(Award).find(params.require(:transfer_id))
+      elsif params[:account_token_record_id]
+        AccountTokenRecord.find(params.require(:account_token_record_id))
+      elsif params[:transfer_rule_id]
+        TransferRule.find(params.require(:transfer_rule_id))
+      elsif params[:token_id]
+        Token.find(params.require(:token_id))
       end
     end
 

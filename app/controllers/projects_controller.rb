@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
-  before_action :assign_project, only: %i[edit show update awards]
+  before_action :assign_project, only: %i[edit show update]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
@@ -19,28 +19,16 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.with_all_attached_images.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :admins, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :admins, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :admins, :project_admins).archived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = @whitelabel_mission ? [] : current_account.projects_involved.with_all_attached_images.includes(:account, :admins, :project_admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
     @interested_project_contributors = TopContributors.call(projects: @interested_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
-  end
-
-  def awards
-    authorize @project, :show_contributions?
-    @awards = @project.awards.completed.includes(
-      :token, :award_type, :issuer, :latest_blockchain_transaction,
-      account: [image_attachment: :blob], issuer: [image_attachment: :blob]
-    )
-    @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
-    @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
-
-    render 'awards/index.html.rb'
   end
 
   def index
@@ -146,7 +134,7 @@ class ProjectsController < ApplicationController
       @q = policy_scope(@project_scope).ransack(params[:q])
       @q.sorts = 'interests_count DESC' if @q.sorts.empty?
 
-      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :admins, account: [image_attachment: :blob])
+      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :admins, :project_admins, account: [image_attachment: :blob])
       @projects = @projects_all.page(@page).per(9)
 
       redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?
@@ -248,7 +236,7 @@ class ProjectsController < ApplicationController
       @props = {
         whitelabel: ENV['WHITELABEL'] || false,
         tasks_by_specialty: project_tasks_by_specialty,
-        interested: current_account&.interested?(@project.id),
+        interested: current_account&.involved?(@project.id),
         specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
         project_data: project_props(@project),
         token_data: token_props(@project&.token&.decorate),

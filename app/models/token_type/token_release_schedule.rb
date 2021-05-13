@@ -35,7 +35,7 @@ class TokenType::TokenReleaseSchedule < TokenType::Erc20
   # ABI structure if present
   # @return [Hash] abi
   def abi
-    super
+    @abi ||= JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/lockup.json')))
   end
 
   # Transaction instance if implemented

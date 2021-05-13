@@ -151,6 +151,10 @@
       "required": true,
       "value": "true"
     },
+    "ERC20_TRANSFER_BATCH_SIZE": {
+      "description": "Batch size to merge ERC20 transfers for hot wallet",
+      "required": false
+    },
     "NODE_MODULES_CACHE": "false",
     "AWS_REGION": "us-east-1",
     "AWS_API_KEY": "dummy_value_to_be_removed_when_refile_is_no_longer_required",

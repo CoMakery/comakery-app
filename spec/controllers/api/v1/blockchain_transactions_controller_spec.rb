@@ -154,6 +154,49 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       end
     end
 
+    context 'with award batch available for transaction' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+      let!(:award) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:award2) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
+
+      context 'and ERC20_TRANSFER_BATCH_SIZE is not present' do
+        before do
+          stub_const('ENV', ENV.to_hash.merge('ERC20_TRANSFER_BATCH_SIZE' => nil))
+        end
+
+        it 'creates a new single BlockchainTransaction' do
+          params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+          params[:project_id] = project.id
+
+          expect do
+            post :create, params: params
+          end.to change(project.blockchain_transactions, :count).by(1)
+
+          expect(project.blockchain_transactions.last).to be_a(BlockchainTransactionAward)
+          expect(project.blockchain_transactions.last.blockchain_transactables.count).to eq(1)
+        end
+      end
+
+      context 'and ERC20_TRANSFER_BATCH_SIZE is present' do
+        before do
+          stub_const('ENV', ENV.to_hash.merge('ERC20_TRANSFER_BATCH_SIZE' => 2))
+        end
+
+        it 'creates a new batch BlockchainTransaction' do
+          params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+          params[:project_id] = project.id
+
+          expect do
+            post :create, params: params
+          end.to change(project.blockchain_transactions, :count).by(1)
+
+          expect(project.blockchain_transactions.last).to be_a(BlockchainTransactionAward)
+          expect(project.blockchain_transactions.last.blockchain_transactables.count).to eq(2)
+        end
+      end
+    end
+
     context 'with account_token_records available for transaction' do
       let!(:account_token_record) { create(:account_token_record, account: project.account, token: project.token) }
 

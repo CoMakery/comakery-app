@@ -5,13 +5,13 @@ RSpec.describe Sign::UserWalletController, type: :controller, vcr: true do
   it_behaves_like 'having ore_id_callbacks'
 
   let(:transaction) { create(:blockchain_transaction) }
-  let(:tranfser) { create(:blockchain_transaction).blockchain_transactable }
+  let(:transfer) { create(:blockchain_transaction).blockchain_transactable }
   let(:account_token_record) { create(:algo_sec_dummy_restrictions) }
   let(:token) { create(:algo_sec_token) }
   let(:transfer_rule) { create(:transfer_rule, token: token) }
 
   before do
-    login(tranfser.project.account)
+    login(transfer.project.account)
   end
 
   describe 'GET /new' do
@@ -21,7 +21,7 @@ RSpec.describe Sign::UserWalletController, type: :controller, vcr: true do
     end
 
     context 'with transfer' do
-      subject { get :new, params: { transfer_id: tranfser.id, source: 'dummy_source_address' } }
+      subject { get :new, params: { transfer_id: transfer.id, source: 'dummy_source_address' } }
 
       render_views
 
@@ -40,6 +40,27 @@ RSpec.describe Sign::UserWalletController, type: :controller, vcr: true do
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)).to include('tx')
         expect(JSON.parse(response.body)).to include('state')
+      end
+    end
+
+    context 'with batch transfer' do
+      let(:transfer) { create(:blockchain_transaction_lockup).blockchain_transactable }
+
+      subject { get :new, params: { project_id: transfer.project.id, source: 'dummy_source_address' } }
+
+      before do
+        transfer.latest_blockchain_transaction.cancelled!
+        transfer.clone_on_assignment
+      end
+
+      it 'creates a correct BlockchainTransaction' do
+        subject
+        expect(BlockchainTransaction.last).to be_a(BlockchainTransactionAward)
+      end
+
+      it 'sets transactables' do
+        subject
+        expect(BlockchainTransaction.last.blockchain_transactables.size).to eq(2)
       end
     end
 

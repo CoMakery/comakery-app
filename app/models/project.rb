@@ -21,6 +21,10 @@ class Project < ApplicationRecord
   belongs_to :token, optional: true, touch: true
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
+  has_many :project_roles, dependent: :destroy
+  has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
+  has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
+  has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
   has_many :transfer_rules, through: :token
 
@@ -65,6 +69,7 @@ class Project < ApplicationRecord
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
   after_create :add_owner_as_interested
+  after_create :add_owner_as_admin
   after_create :create_default_transfer_types
   after_update_commit :broadcast_hot_wallet_mode, if: :saved_change_to_hot_wallet_mode?
 
@@ -110,8 +115,13 @@ class Project < ApplicationRecord
     admins << new_admin unless admins.exists?(new_admin.id)
   end
 
+  # TODO: Remove interests
   def safe_add_interested(interested_account)
     interested << interested_account unless interested_account.interested?(id)
+  end
+
+  def safe_add_project_interested(interested_account)
+    project_interested << interested_account unless interested_account.involved?(id)
   end
 
   def total_awards_earned(all_accounts)
@@ -273,6 +283,10 @@ class Project < ApplicationRecord
 
     def add_owner_as_interested
       interested << account unless account.interested?(id)
+    end
+
+    def add_owner_as_admin
+      project_admins << account unless account.involved?(id)
     end
 
     def store_license_hash

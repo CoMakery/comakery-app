@@ -22,7 +22,7 @@ class AlgorandOptInsController < ApplicationController
     @token_opt_in.status = :pending
     TokenOptIn.transaction do
       if @token_opt_in.save
-        transaction = BlockchainTransactionOptIn.create!(blockchain_transactable: @token_opt_in)
+        transaction = BlockchainTransactionOptIn.create!(blockchain_transactables: @token_opt_in)
         redirect_to sign_url(transaction)
       else
         redirect_to algorand_opt_ins_path, notice: 'Problem with opt-in'

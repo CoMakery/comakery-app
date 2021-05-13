@@ -69,7 +69,7 @@ class Token < ApplicationRecord
   } # Deprecated
 
   enum _token_type: TokenType.list, _prefix: :_token_type
-  delegate :contract, :abi, :supports_balance?, :blockchain_balance, to: :token_type
+  delegate :contract, :abi, :batch_abi, :supports_balance?, :blockchain_balance, to: :token_type
 
   ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
     parent.table[:_blockchain]
@@ -118,6 +118,11 @@ class Token < ApplicationRecord
 
   def default_reg_group
     RegGroup.default_for(self)
+  end
+
+  def supports_batch_transfers?
+    _token_type_token_release_schedule? \
+    || (_token_type_erc20? && batch_contract_address)
   end
 
   private

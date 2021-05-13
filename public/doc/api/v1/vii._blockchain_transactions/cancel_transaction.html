@@ -204,13 +204,14 @@ Api-Transaction-Key: F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T</pre>
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;d73bf2db8fef276725c8012a5c1059ea&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;7ef0374479d99b634417bb871ea9ebc6&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: &quot;40&quot;,
-  &quot;blockchainTransactableId&quot;: 50,
+  &quot;blockchainTransactableId&quot;: null,
+  &quot;blockchainTransactableType&quot;: null,
   &quot;destination&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
   &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
   &quot;amount&quot;: 1,
@@ -223,7 +224,14 @@ Api-Transaction-Key: F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T</pre>
   &quot;statusMessage&quot;: &quot;hot wallet error: insufficient balance&quot;,
   &quot;createdAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
   &quot;updatedAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
-  &quot;syncedAt&quot;: null
+  &quot;syncedAt&quot;: null,
+  &quot;blockchainTransactables&quot;: [
+    {
+      &quot;id&quot;: null,
+      &quot;blockchainTransactableType&quot;: &quot;Award&quot;,
+      &quot;blockchainTransactableId&quot;: 50
+    }
+  ]
 }</pre>
       </div>
     </div>

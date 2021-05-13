@@ -760,7 +760,7 @@ label {
   display: inline-block; }
 
 button {
-  border-radius: 0; }
+  border-radius: 0 !important; }
 
 button:focus:not(:focus-visible) {
   outline: 0; }
@@ -2016,6 +2016,7 @@ progress {
   color: #656d77; }
 
 .form-control {
+  padding-left: 1rem !important;
   display: block;
   width: 100%;
   padding: 0.4375rem 0.75rem;
@@ -2675,48 +2676,48 @@ textarea.form-control-lg {
   margin-left: .5em; }
 
 .btn {
-  display: inline-block;
-  font-weight: 500;
-  line-height: 1.4285714;
-  color: #232e3c;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  background-color: transparent;
-  padding: 8px 24px;
+  display: inline-block !important;
+  font-weight: 500 !important;
+  line-height: 1.4285714 !important;
+  color: #232e3c !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  cursor: pointer !important;
+  -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+      -ms-user-select: none !important;
+          user-select: none !important;
+  background-color: transparent !important;
+  padding: 8px 24px !important;
   /* font-size: 0.875rem; */
-  font-size: 12px;
+  font-size: 12px !important;
   border-radius: 3px;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important; }
   @media (prefers-reduced-motion: reduce) {
     .btn {
-      transition: none; } }
+      transition: none !important; } }
   .btn:hover {
-    color: #232e3c;
-    text-decoration: none; }
+    color: #232e3c !important;
+    text-decoration: none !important; }
   .btn-check:focus + .btn, .btn:focus {
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25); }
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25) !important; }
   .btn:disabled, .btn.disabled,
   fieldset:disabled .btn {
-    pointer-events: none;
-    opacity: 0.65; }
+    pointer-events: none !important;
+    opacity: 0.65 !important; }
 
 .btn-link {
-  font-weight: 400;
-  color: #206bc4;
-  text-decoration: none; }
+  font-weight: 400 !important;
+  color: #206bc4 !important;
+  text-decoration: none !important; }
   .btn-link:hover {
-    color: #1a569d;
-    text-decoration: underline; }
+    color: #1a569d !important;
+    text-decoration: underline !important; }
   .btn-link:focus {
-    text-decoration: underline; }
+    text-decoration: underline !important; }
   .btn-link:disabled, .btn-link.disabled {
-    color: #a0a6ae; }
+    color: #a0a6ae !important; }
 
 .btn-lg, .btn-group-lg > .btn {
   padding: 0.5rem 1.5rem;
@@ -2724,9 +2725,9 @@ textarea.form-control-lg {
   border-radius: 8px; }
 
 .btn-sm, .btn-group-sm > .btn {
-  padding: 0.125rem 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 2px; }
+  padding: 0.125rem 0.5rem !important;
+  font-size: 0.75rem !important;
+  border-radius: 2px !important; }
 
 .fade {
   transition: opacity 0.15s linear; }
@@ -4098,10 +4099,15 @@ textarea.form-control-lg {
   height: 0.75rem;
   padding: 0.25em 0.25em;
   color: #000000;
-  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/0.75rem auto no-repeat;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/0.75rem auto no-repeat !important;
   border: 0;
   border-radius: 4px;
-  opacity: 0.3; }
+  opacity: 0.3;
+  transition: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
   .btn-close:hover {
     color: #000000;
     text-decoration: none;
@@ -4226,7 +4232,7 @@ textarea.form-control-lg {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1040;
+  z-index: -1;
   width: 100vw;
   height: 100vh;
   background-color: #232e3c; }
@@ -9280,19 +9286,6 @@ Navbar vertical
   margin-top: .25rem;
   color: #656d77; }
 
-.footer {
-  border-top: 1px solid #e6e8e9;
-  background-color: #ffffff;
-  padding: 2rem 0;
-  color: #656d77;
-  margin-bottom: -1.25rem;
-  margin-top: 1.25rem; }
-
-.footer-transparent {
-  margin-top: 0;
-  background-color: transparent;
-  border-top: 0; }
-
 .accordion-button:focus:not(:focus-visible) {
   outline: none;
   box-shadow: none; }
@@ -9537,23 +9530,23 @@ Navbar vertical
   color: inherit; }
 
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #232e3c;
-  background-color: #ffffff;
-  white-space: nowrap;
-  border-radius: 8px;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #232e3c !important;
+  background-color: #ffffff !important;
+  white-space: nowrap !important;
+  border-radius: 8px !important;
 }
 
 .btn:hover {
-  color: #232e3c;
-  border-color: #a7abb1;
-  background-color: #f4f6fa; }
+  color: #232e3c !important;
+  border-color: #a7abb1 !important;
+  background-color: #f4f6fa !important; }
 
 .btn:focus {
-  border-color: rgba(var(--upside-btn-color, 32, 107, 196), 0.5);
-  box-shadow: 0 0 0 0.25rem rgba(var(--upside-btn-color, 32, 107, 196), 0.25); }
+  border-color: rgba(var(--upside-btn-color, 32, 107, 196), 0.5) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--upside-btn-color, 32, 107, 196), 0.25) !important; }
 
 .btn:disabled, .btn.disabled {
   cursor: not-allowed; }
@@ -9596,11 +9589,11 @@ Navbar vertical
 }
 
 .btn-primary, .btn-big, .btn-secondary, .btn-subtle, .btn-success, .btn-info, .btn-warning, .btn-danger, .btn-light, .btn-dark, .btn-blue, .btn-azure, .btn-indigo, .btn-purple, .btn-pink, .btn-red, .btn-orange, .btn-yellow, .btn-lime, .btn-green, .btn-teal, .btn-cyan, .btn-facebook, .btn-twitter, .btn-google, .btn-youtube, .btn-vimeo, .btn-dribbble, .btn-github, .btn-instagram, .btn-pinterest, .btn-vk, .btn-rss, .btn-flickr, .btn-bitbucket, .btn-tabler {
-  background: var(--upside-btn-color);
-  color: var(--upside-btn-color-text); }
+  background: var(--upside-btn-color) !important;
+  color: var(--upside-btn-color-text) !important; }
 
   .btn-primary .icon, .btn-big .icon, .btn-secondary .icon, .btn-subtle .icon, .btn-success .icon, .btn-info .icon, .btn-warning .icon, .btn-danger .icon, .btn-light .icon, .btn-dark .icon, .btn-blue .icon, .btn-azure .icon, .btn-indigo .icon, .btn-purple .icon, .btn-pink .icon, .btn-red .icon, .btn-orange .icon, .btn-yellow .icon, .btn-lime .icon, .btn-green .icon, .btn-teal .icon, .btn-cyan .icon, .btn-facebook .icon, .btn-twitter .icon, .btn-google .icon, .btn-youtube .icon, .btn-vimeo .icon, .btn-dribbble .icon, .btn-github .icon, .btn-instagram .icon, .btn-pinterest .icon, .btn-vk .icon, .btn-rss .icon, .btn-flickr .icon, .btn-bitbucket .icon, .btn-tabler .icon {
-    color: inherit; }
+    color: inherit !important; }
 
   .btn-primary:hover, .btn-big:hover, .btn-secondary:hover, .btn-subtle:hover, .btn-success:hover, .btn-info:hover, .btn-warning:hover, .btn-danger:hover, .btn-light:hover, .btn-dark:hover, .btn-blue:hover, .btn-azure:hover, .btn-indigo:hover, .btn-purple:hover, .btn-pink:hover, .btn-red:hover, .btn-orange:hover, .btn-yellow:hover, .btn-lime:hover, .btn-green:hover, .btn-teal:hover, .btn-cyan:hover, .btn-facebook:hover, .btn-twitter:hover, .btn-google:hover, .btn-youtube:hover, .btn-vimeo:hover, .btn-dribbble:hover, .btn-github:hover, .btn-instagram:hover, .btn-pinterest:hover, .btn-vk:hover, .btn-rss:hover, .btn-flickr:hover, .btn-bitbucket:hover, .btn-tabler:hover {
     color: var(--upside-btn-color-text-darker);
@@ -10793,15 +10786,6 @@ Card tabs
 
 .divide-x-5 > :not(template):not(:last-child) {
   padding-right: 2rem !important; }
-
-.icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  font-size: 1.25rem;
-  vertical-align: bottom;
-  stroke-width: 1.5; }
-  .icon:hover {
-    text-decoration: none; }
 
 .icon-inline {
   width: 1.25em;
