@@ -18,16 +18,13 @@ export default class extends Controller {
     )
   }
 
-<<<<<<< HEAD
-=======
-  visitSelectedCategory(){
+  visitSelectedCategory() {
     let selected = $('#category-selector').find('option:selected')
-    if (selected.val() !== 'All'){
+    if (selected.val() !== 'All') {
       Turbo.visit(selected.data('url'))
     }
   }
 
->>>>>>> 3ca34ec2... implemented all functionalities for reorganize transfer columns
   showForm() {
     this.formChildTarget.style.display = 'flex'
 
