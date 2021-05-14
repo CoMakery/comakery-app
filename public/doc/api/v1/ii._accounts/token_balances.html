@@ -180,26 +180,34 @@ table th, table td {
               </tr>
               <tr>
                 <td>
-                    <span class="name">blockchain[maxBalance]</span>
+                    <span class="name">blockchain[locked_balance]</span>
                 </td>
                 <td>
-                  <span class="description">blockchain max balance</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">blockchain[lockupUntil]</span>
-                </td>
-                <td>
-                  <span class="description">blockchain lockup until</span>
+                  <span class="description">locked blockchain balance</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">blockchain[accountFrozen]</span>
+                    <span class="name">blockchain[unlocked_balance]</span>
                 </td>
                 <td>
-                  <span class="description">blockchain account frozen status</span>
+                  <span class="description">unlocked blockchain balance</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[lockup_schedule_ids]</span>
+                </td>
+                <td>
+                  <span class="description">lockup schedule ids</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[updated_at]</span>
+                </td>
+                <td>
+                  <span class="description">blockchain balance</span>
                 </td>
               </tr>
               <tr>
@@ -293,7 +301,7 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;c79c1299373a33875e05e649e71c550d&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;eb01ab3c58dd764cea1135233c11b564&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -314,6 +322,11 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
     &quot;blockchain&quot;: {
       &quot;address&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
       &quot;balance&quot;: 200,
+      &quot;lockedBalance&quot;: 0,
+      &quot;unlockedBalance&quot;: 0,
+      &quot;lockupScheduleIds&quot;: [
+
+      ],
       &quot;updatedAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;
     },
     &quot;totalReceived&quot;: &quot;3.0&quot;,

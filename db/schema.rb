@@ -156,9 +156,9 @@ ActiveRecord::Schema.define(version: 2021_05_14_095756) do
   end
 
   create_table "api_request_logs", force: :cascade do |t|
+    t.jsonb "body", null: false
     t.inet "ip", null: false
     t.string "signature", null: false
-    t.jsonb "body", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_api_request_logs_on_created_at"
     t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
@@ -283,6 +283,8 @@ ActiveRecord::Schema.define(version: 2021_05_14_095756) do
     t.decimal "base_unit_value", precision: 78, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "base_unit_locked_value", precision: 78, default: "0", null: false
+    t.decimal "base_unit_unlocked_value", precision: 78, default: "0", null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
     t.index ["wallet_id", "token_id"], name: "idx_walled_id_token_id", unique: true
     t.index ["wallet_id"], name: "index_balances_on_wallet_id"

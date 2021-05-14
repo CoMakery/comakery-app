@@ -359,9 +359,10 @@ resource 'II. Accounts' do
       response_field 'total_received_and_accepted_in', 'total received and accepted on platform', type: :integer
       response_field 'blockchain[address]', 'blockchain address', type: :string
       response_field 'blockchain[balance]', 'blockchain balance', type: :string
-      response_field 'blockchain[maxBalance]', 'blockchain max balance', type: :integer
-      response_field 'blockchain[lockupUntil]', 'blockchain lockup until', type: :string
-      response_field 'blockchain[accountFrozen]', 'blockchain account frozen status', type: :bool
+      response_field 'blockchain[locked_balance]', 'locked blockchain balance', type: :string
+      response_field 'blockchain[unlocked_balance]', 'unlocked blockchain balance', type: :string
+      response_field 'blockchain[lockup_schedule_ids]', 'lockup schedule ids', type: :array
+      response_field 'blockchain[updated_at]', 'blockchain balance', type: :string
       response_field 'token[id]', 'token id', type: :integer
       response_field 'token[name]', 'token name', type: :string
       response_field 'token[symbol]', 'token symbol', type: :string
