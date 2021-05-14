@@ -33,8 +33,8 @@ describe("EthereumBlockchain check for token balance", () => {
 
     const tokenContractMocked = jest.fn().mockReturnValue({
       methods: {
-        balanceOf: () => { return { call: () => "0"}},
-        decimals: () => { return { call: () => "0"}},
+        balanceOf: () => { return { call: () => null }},
+        decimals: () => { return { call: () => null }},
       }
     })
     jest.spyOn(ethBlockchain, "connect").mockReturnValue(true)

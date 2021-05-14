@@ -266,10 +266,11 @@ class EthereumBlockchain {
     const contract = await this.tokenContract(contractAddress)
     const balanceRes = await contract.methods.balanceOf(hotWalletAddress).call()
     const decimals = await contract.methods.decimals().call()
-    const divisor = new BigNumber(10).pow(decimals)
-    const balance = new BigNumber(balanceRes).div(divisor)
 
-    if (balance) {
+    if (balanceRes && decimals) {
+      const divisor = new BigNumber(10).pow(decimals)
+      const balance = new BigNumber(balanceRes).div(divisor)
+
       this.tokenBalances[hotWalletAddress] = balance
       return balance
     } else {
