@@ -5,7 +5,11 @@ describe Balance, type: :model do
   it { is_expected.to belong_to(:wallet) }
   it { is_expected.to belong_to(:token) }
   it { is_expected.to validate_presence_of(:base_unit_value) }
+  it { is_expected.to validate_presence_of(:base_unit_locked_value) }
+  it { is_expected.to validate_presence_of(:base_unit_unlocked_value) }
   it { is_expected.to validate_numericality_of(:base_unit_value).only_integer.is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:base_unit_locked_value).only_integer.is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:base_unit_unlocked_value).only_integer.is_greater_than_or_equal_to(0) }
   it { is_expected.to validate_uniqueness_of(:wallet_id).scoped_to(:token_id) }
   it { is_expected.to validate_inclusion_of(:token_id).in_array(subject.wallet.tokens_of_the_blockchain.pluck(:id)) }
   let(:balance) { create(:balance) }
@@ -61,6 +65,69 @@ describe Balance, type: :model do
       expect(balance.token).to receive(:from_base_unit).with(balance.base_unit_value).and_return(999)
 
       is_expected.to eq 999
+    end
+  end
+
+  describe '#locked_value' do
+    subject { balance.locked_value }
+
+    specify do
+      expect(balance.token).to receive(:from_base_unit).with(balance.base_unit_locked_value).and_return(999)
+
+      is_expected.to eq 999
+    end
+  end
+
+  describe '#unlocked_value' do
+    subject { balance.unlocked_value }
+
+    specify do
+      expect(balance.token).to receive(:from_base_unit).with(balance.base_unit_unlocked_value).and_return(999)
+
+      is_expected.to eq 999
+    end
+  end
+
+  describe '#lockup_schedule_ids' do
+    let!(:token) { create(:lockup_token) }
+    let!(:project) { create(:project, token: token) }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:wallet) { create(:wallet, address: build(:ethereum_address_1), _blockchain: 'ethereum_rinkeby') }
+    let!(:balance) { create(:balance, wallet: wallet, token: token) }
+    let!(:transfer) { create(:award, account: wallet.account, recipient_wallet: wallet, lockup_schedule_id: 1, commencement_date: Time.current, status: :accepted, award_type: award_type) }
+
+    subject { balance.lockup_schedule_ids }
+
+    context 'for a transfer with the same token' do
+      context 'in paid status' do
+        before do
+          transfer.paid!
+        end
+
+        it { is_expected.to include(transfer.lockup_schedule_id) }
+      end
+
+      context 'in accepted status' do
+        before do
+          transfer.accepted!
+        end
+
+        it { is_expected.to include(transfer.lockup_schedule_id) }
+      end
+
+      context 'in cancelled status' do
+        before do
+          transfer.cancelled!
+        end
+
+        it { is_expected.not_to include(transfer.lockup_schedule_id) }
+      end
+    end
+
+    context 'for a transfer with a different token' do
+      let!(:balance) { create(:balance, wallet: wallet, token: create(:lockup_token)) }
+
+      it { is_expected.not_to include(transfer.lockup_schedule_id) }
     end
   end
 
