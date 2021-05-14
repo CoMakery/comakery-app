@@ -250,7 +250,14 @@ class EthereumBlockchain {
     // Chainjs version does not work for some reason so I implemented custom check using web3
     // const tokenBalance = await this.chain.fetchBalance(hotWalletAddress, chainjs.HelpersEthereum.toEthereumSymbol(this.envs.ethereumTokenSymbol), this.envs.ethereumContractAddress)
 
-    const contract = new this.chain.web3.eth.Contract(this.balanceAbi(), this.envs.ethereumContractAddress.toString())
+    let contractAddress = this.envs.ethereumContractAddress.toString()
+
+    // For Lockup contract we check balance of erc20 contract
+    if (this.envs.ethereumTokenType == 'token_release_schedule') {
+      contractAddress = this.envs.ethereumApprovalContractAddress.toString()
+    }
+
+    const contract = new this.chain.web3.eth.Contract(this.balanceAbi(), contractAddress)
     const balanceRes = await contract.methods.balanceOf(hotWalletAddress).call()
     const decimals = await contract.methods.decimals().call()
     const divisor = new BigNumber(10).pow(decimals)

@@ -107,8 +107,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     }
   }
 
-  // const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
-  const hasTokens = true
+  const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
   if (!hasTokens) {
     console.log(`The Hot Wallet does not have tokens. Please top up the ${hwAddress}`)
     return { status: "failed_before_getting_tx", blockchainTransaction: {}, transaction: {} }
