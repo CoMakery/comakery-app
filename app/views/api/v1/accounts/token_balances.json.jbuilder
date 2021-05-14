@@ -6,6 +6,9 @@ json.array! @account.balances.includes(:wallet, :token).map do |balance|
   json.blockchain do
     json.address balance.wallet.address
     json.balance balance.base_unit_value
+    json.locked_balance balance.base_unit_locked_value
+    json.unlocked_balance balance.base_unit_unlocked_value
+    json.lockup_schedule_ids balance.lockup_schedule_ids
     json.updated_at balance.updated_at
   end
 
