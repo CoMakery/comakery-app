@@ -2,6 +2,7 @@ json.call(
   transaction,
   :id,
   :blockchain_transactable_id,
+  :blockchain_transactable_type,
   :destination,
   :source,
   :amount,
@@ -15,4 +16,12 @@ json.call(
   :created_at,
   :updated_at,
   :synced_at
+)
+
+json.blockchain_transactables(
+  transaction
+    .transaction_batch
+    .batch_transactables
+    .select(:blockchain_transactable_id, :blockchain_transactable_type)
+    .as_json
 )

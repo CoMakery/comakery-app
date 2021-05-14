@@ -10,8 +10,8 @@ class Wallet < ApplicationRecord
   has_many :awards, foreign_key: :recipient_wallet_id, inverse_of: :recipient_wallet, dependent: :nullify
   has_many :account_token_records, dependent: :destroy
 
-  scope :with_whitelabel_mission, lambda { |whitelabel_mission_id|
-    left_outer_joins(account: :managed_mission).where(missions: { id: whitelabel_mission_id })
+  scope :with_mission, lambda { |mission_id|
+    left_outer_joins(account: :managed_mission).where(accounts: { managed_mission_id: mission_id })
   }
 
   validates :source, presence: true
@@ -29,9 +29,9 @@ class Wallet < ApplicationRecord
   before_create :set_primary_flag
   after_commit :mark_first_wallet_as_primary, on: [:destroy], if: :primary_wallet?
 
-  after_create_commit :broadcast_create_wl_account_wallet, if: -> { account&.whitelabel? }
-  after_update_commit :broadcast_update_wl_account_wallet, if: -> { account&.whitelabel? }
-  after_destroy_commit :broadcast_destroy_wl_account_wallet, if: -> { account&.whitelabel? }
+  after_create_commit :broadcast_create, if: -> { account.present? }
+  after_update_commit :broadcast_update, if: -> { account.present? }
+  after_destroy_commit :broadcast_destroy, if: -> { account.present? }
 
   enum source: { user_provided: 0, ore_id: 1, hot_wallet: 2 }
 
@@ -110,24 +110,24 @@ class Wallet < ApplicationRecord
       ore_id? && (wallet_provisions.empty? || wallet_provisions.any?(&:pending?))
     end
 
-    def broadcast_create_wl_account_wallet
-      broadcast_append_later_to "wl_#{account.managed_mission.id}_account_wallets",
-                                target: "wl_account_#{account.id}_wallet_#{id}",
-                                partial: 'accounts/partials/index/wl_account_wallet',
-                                locals: { wl_account_wallet: self }
+    def broadcast_create
+      broadcast_append_later_to "mission_#{account.managed_mission&.id}_account_wallets",
+                                target: "account_#{account.id}_wallet_#{id}",
+                                partial: 'accounts/partials/index/wallet',
+                                locals: { wallet: self }
     end
 
-    def broadcast_update_wl_account_wallet
-      broadcast_replace_to "wl_#{account.managed_mission.id}_account_wallets",
-                           target: "wl_account_#{account.id}_wallet_#{id}",
-                           partial: 'accounts/partials/index/wl_account_wallet',
-                           locals: { wl_account_wallet: self }
+    def broadcast_update
+      broadcast_replace_to "mission_#{account.managed_mission&.id}_account_wallets",
+                           target: "account_#{account.id}_wallet_#{id}",
+                           partial: 'accounts/partials/index/wallet',
+                           locals: { wallet: self }
     end
 
-    def broadcast_destroy_wl_account_wallet
+    def broadcast_destroy
       Turbo::StreamsChannel.broadcast_remove_to(
-        "wl_#{account.managed_mission.id}_account_wallets",
-        target: "wl_account_#{account.id}_wallet_#{id}"
+        "mission_#{account.managed_mission&.id}_account_wallets",
+        target: "account_#{account.id}_wallet_#{id}"
       )
     end
 end

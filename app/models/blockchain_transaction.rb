@@ -1,5 +1,5 @@
 class BlockchainTransaction < ApplicationRecord
-  belongs_to :blockchain_transactable, polymorphic: true
+  belongs_to :transaction_batch
   belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate', dependent: :destroy
 
@@ -18,6 +18,19 @@ class BlockchainTransaction < ApplicationRecord
   enum network: { ethereum: 0, ethereum_ropsten: 1, ethereum_kovan: 2, ethereum_rinkeby: 3, constellation: 4, constellation_test: 5, algorand: 6, algorand_test: 7, algorand_beta: 8 }
 
   validates :network, inclusion: { in: networks.keys.map(&:to_s), message: 'unknown network value' }
+
+  # @abstract Subclass is expected to implement #blockchain_transactables
+  # @!method blockchain_transactables
+  #    Return blockchain transactables
+
+  def blockchain_transactable
+    blockchain_transactables.first
+  end
+
+  def blockchain_transactables=(transactables)
+    self.transaction_batch = TransactionBatch.create!
+    transaction_batch.blockchain_transactables = transactables
+  end
 
   def self.number_of_confirmations
     ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i
@@ -46,12 +59,18 @@ class BlockchainTransaction < ApplicationRecord
       updates.create!(status: status, status_message: status_message)
 
       update_transactable_status if succeed?
+      update_transactable_prioritized_at if pending? || failed? || cancelled?
     end
   end
 
   # @abstract Subclass is expected to implement #update_transactable_status
   # @!method update_transactable_status
   #    Update status of blockchain_transactable record
+
+  # Can be updated in a Subclass to reset prioritized_at column for Transactable
+  def update_transactable_prioritized_at(_new_value = nil)
+    true
+  end
 
   def sync
     return false unless confirmed_on_chain?

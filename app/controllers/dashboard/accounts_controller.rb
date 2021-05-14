@@ -45,7 +45,7 @@ class Dashboard::AccountsController < ApplicationController
   def show
     authorize @project, :accounts?
 
-    account = @project.interested.find(params[:id])
+    account = @project.project_interested.find(params[:id])
 
     respond_to do |format|
       format.turbo_stream do
@@ -89,21 +89,12 @@ class Dashboard::AccountsController < ApplicationController
     end
 
     def accounts_query
-      @q = @project.interested
-                   .joins('inner join projects on projects.id = interests.project_id')
-                   .includes(
-                     :verifications,
-                     :awards,
-                     :latest_verification,
-                     :image_attachment
-                   )
+      @q = Account
+           .joins(:project_roles)
+           .where(project_roles: { project: @project.object })
+           .includes(:verifications, :awards, :latest_verification, :image_attachment)
 
-      if @project.token&.token_type&.operates_with_account_records?
-        @q = @q.joins('inner join account_token_records on account_token_records.token_id = projects.token_id and account_token_records.account_id = accounts.id')
-               .includes(
-                 account_token_records: [:reg_group]
-               )
-      end
+      @q = @q.joins(:account_token_records).includes(account_token_records: [:reg_group]) if @project.token&.token_type&.operates_with_account_records?
 
       @q = @q.ransack(params[:q])
     end

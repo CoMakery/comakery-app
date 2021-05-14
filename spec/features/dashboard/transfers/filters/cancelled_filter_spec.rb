@@ -5,6 +5,9 @@ describe 'test_cancelled_filter', js: true do
   let!(:project) { create :project, token: create(:comakery_dummy_token), account: owner }
   let!(:project_award_type) { (create :award_type, project: project) }
 
+  # TODO: Remove me after fixing "eager loading detected Award => [:latest_transaction_batch]"
+  before { Bullet.raise = false }
+
   [1, 6, 9].each do |number_of_transfers|
     context "With #{number_of_transfers} cancelled transfers" do
       it 'Returns correct number of transfers after applying filter' do

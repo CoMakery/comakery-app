@@ -6,7 +6,7 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
       contract: {
         abi: blockchain_transaction.token.abi,
         method: method_name,
-        parameters: encode_method_params
+        parameters: encode_method_params_json
       }
     })
   end
@@ -19,28 +19,58 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
     []
   end
 
-  def method_id
-    @method_id ||= Ethereum::Abi.parse_abi(
-      JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/comakery.json')))
-    ).second.find { |f| f.name == method_name }.signature
+  def abi
+    JSON.parse(File.read(Rails.root.join('vendor/abi/coin_types/comakery.json')))
   end
 
-  def encode_method_params
-    method_params.map do |pr|
-      case pr
+  def method
+    @method ||= Ethereum::Abi.parse_abi(abi).second.find { |f| f.name == method_name }
+  end
+
+  def method_id
+    method.signature
+  end
+
+  def encode_method_params_json
+    encode_method_params_json_recursive(method_params)
+  end
+
+  def encode_method_params_json_recursive(params)
+    params.map do |param|
+      case param
       when TrueClass, FalseClass
-        pr
+        param
+      when Array
+        encode_method_params_json_recursive(param)
       else
-        pr.to_s
+        param.to_s
       end
     end
+  end
+
+  def encode_method_params_hex
+    Ethereum::Encoder.new.encode_arguments(method.inputs, method_params).downcase
+  end
+
+  def valid_to?
+    to == blockchain_transaction.contract_address.downcase
+  end
+
+  def valid_amount?
+    value&.zero?
   end
 
   def valid_method_id?
     input && input[0...8] == method_id
   end
 
-  def lookup_method_arg(n, length = 32, offset = 8) # rubocop:todo Naming/MethodParameterName
-    valid_method_id? && input[(offset + n * (2 * length))...(offset + (n + 1) * (2 * length))]&.to_i(16)
+  def valid_method_params?
+    input[8..] == encode_method_params_hex
+  end
+
+  def valid?(_ = nil)
+    super \
+    && valid_method_id? \
+    && valid_method_params?
   end
 end

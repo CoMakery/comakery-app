@@ -1,35 +1,50 @@
 require 'rails_helper'
 
 describe BlockchainTransactionAward, vcr: true do
+  it { is_expected.to have_many(:blockchain_transactables_awards).dependent(:nullify) }
+  it { is_expected.to respond_to(:blockchain_transactables) }
+
   describe 'callbacks' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
-    let!(:award_mint) do
-      a = blockchain_transaction.blockchain_transactable.dup
-      a.update(source: :mint)
-      a
-    end
-    let!(:award_burn) do
-      a = blockchain_transaction.blockchain_transactable.dup
-      a.update(source: :burn)
-      a
-    end
-    let!(:blockchain_transaction_mint) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_mint) }
-    let!(:blockchain_transaction_burn) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
-    let!(:blockchain_transaction_rule) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
-    let!(:blockchain_transaction_account) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
-    let!(:contract) do
-      build(
-        :erc20_contract,
-        contract_address: blockchain_transaction.contract_address,
-        abi: blockchain_transaction.token.abi,
-        network: blockchain_transaction.network,
-        nonce: blockchain_transaction.nonce
-      )
-    end
+    let(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
 
     it 'populates transaction data from award' do
+      expect(blockchain_transaction.amounts).not_to be_empty
+      expect(blockchain_transaction.destinations).not_to be_empty
       expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
       expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
+    end
+
+    context 'with lockup token' do
+      let(:blockchain_transaction) { create(:blockchain_transaction_lockup, nonce: 0) }
+
+      it 'populates lockup transaction data from award' do
+        expect(blockchain_transaction.commencement_dates).to eq([blockchain_transaction.blockchain_transactable.commencement_date.to_i])
+        expect(blockchain_transaction.lockup_schedule_ids).to eq([blockchain_transaction.blockchain_transactable.lockup_schedule_id])
+      end
+    end
+  end
+
+  describe '#amounts' do
+    subject { create(:blockchain_transaction).amounts }
+
+    it 'returns amounts as integers' do
+      expect(subject.first).to be_an(Integer)
+    end
+  end
+
+  describe '#commencement_dates' do
+    subject { create(:blockchain_transaction_lockup).commencement_dates }
+
+    it 'returns commencement_dates as integers' do
+      expect(subject.first).to be_an(Integer)
+    end
+  end
+
+  describe '#lockup_schedule_ids' do
+    subject { create(:blockchain_transaction_lockup).lockup_schedule_ids }
+
+    it 'returns lockup_schedule_ids as integers' do
+      expect(subject.first).to be_an(Integer)
     end
   end
 
@@ -64,11 +79,35 @@ describe BlockchainTransactionAward, vcr: true do
       end
     end
 
+    context 'with lockup transfer' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_lockup)
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::ScheduledToken::FundReleaseSchedule)
+      end
+    end
+
+    context 'with lockup transfer batch' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_lockup_batch)
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::ScheduledToken::BatchFundReleaseSchedule)
+      end
+    end
+
     context 'with erc20 transfer' do
       specify do
         blockchain_transaction = build(:blockchain_transaction)
 
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Transfer)
+      end
+    end
+
+    context 'with erc20 transfer batch' do
+      specify do
+        blockchain_transaction = build(:blockchain_transaction_award_batch)
+
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::BatchTransfer)
       end
     end
 
@@ -238,13 +277,40 @@ describe BlockchainTransactionAward, vcr: true do
     subject { blockchain_transaction.broadcast_updates }
 
     it 'broadcasts templates' do
-      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(5).times
+      expect(blockchain_transaction).to receive(:broadcast_replace_later_to).exactly(4).times
       subject
     end
 
     it 'is triggered after update' do
       expect(blockchain_transaction).to receive(:broadcast_updates)
       blockchain_transaction.update(updated_at: Time.current)
+    end
+  end
+
+  describe '#update_transactable_prioritized_at' do
+    let(:blockchain_transaction) { create(:blockchain_transaction_award_batch) }
+    let(:value) { nil }
+    subject { blockchain_transaction.update_transactable_prioritized_at(value) }
+
+    before do
+      blockchain_transaction.blockchain_transactables.update_all(prioritized_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
+      expect(blockchain_transaction.blockchain_transactables.reload.all?(&:prioritized_at)).to be true
+    end
+
+    it 'resets every prioritized_at' do
+      is_expected.to be true
+
+      expect(blockchain_transaction.blockchain_transactables.reload.all? { |a| a.prioritized_at.nil? }).to be true
+    end
+
+    context 'set particular value' do
+      let(:value) { Time.zone.parse('2021-05-01 12:00') }
+
+      it do
+        is_expected.to be true
+
+        expect(blockchain_transaction.blockchain_transactables.reload.all? { |a| a.prioritized_at == value }).to be true
+      end
     end
   end
 end

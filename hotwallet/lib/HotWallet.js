@@ -1,20 +1,28 @@
-const algosdk = require("algosdk")
+const AlgorandHotWallet = require("./AlgorandHotWallet").AlgorandHotWallet
+const EthereumHotWallet = require("./EthereumHotWallet").EthereumHotWallet
 
 class HotWallet {
-  constructor(address, mnemonic, optedInApps = []) {
-    this.address = address
-    this.mnemonic = mnemonic
-    this.optedInApps = optedInApps
+  constructor(network, address, keys, options = {}) {
+    if (["algorand", "algorand_test", "algorand_beta"].indexOf(network) > -1) {
+      this.klass = new AlgorandHotWallet(network, address, keys, options)
+    } else if (["ethereum", "ethereum_ropsten", "ethereum_rinkeby"].indexOf(network) > -1) {
+      this.klass = new EthereumHotWallet(network, address, keys, options)
+    } else {
+      this.klass = undefined
+    }
+
+    this.address = this.klass.address
+    this.publicKey = keys.publicKey
+    this.privateKey = keys.privateKey
+    this.privateKeyEncrypted = keys.privateKeyEncrypted
   }
 
-  isOptedInToApp(appIndexToCheck) {
-    if (!this.optedInApps) { return false }
-    return this.optedInApps.includes(appIndexToCheck)
+  isReadyToSendTx(envs) {
+    return this.klass.isReadyToSendTx(envs)
   }
 
-  secretKey() {
-    const { sk } = algosdk.mnemonicToSecretKey(this.mnemonic)
-    return sk
+  isEthereum() {
+    return this.klass.constructor.name === "EthereumHotWallet"
   }
 }
 exports.HotWallet = HotWallet

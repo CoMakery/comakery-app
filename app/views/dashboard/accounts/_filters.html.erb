@@ -39,6 +39,14 @@
     </div>
   </div>
 
+  <div class="transfers-filters--filter">
+    <div class="transfers-filters--filter--options">
+      <div class="transfers-filters--filter--add-person">
+        <%= render partial: 'add_person' %>
+      </div>
+    </div>
+  </div>
+
   <% if @project.supports_transfer_rules? %>
     <div class="transfers-filters--filter">
       <h3>frozen</h3>

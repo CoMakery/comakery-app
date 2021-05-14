@@ -1,6 +1,18 @@
 class BlockchainTransactionAccountTokenRecord < BlockchainTransaction
+  has_many :blockchain_transactables_account_token_records, through: :transaction_batch, dependent: :nullify
+  alias blockchain_transactables blockchain_transactables_account_token_records
+
   def update_transactable_status
     blockchain_transactable.update!(status: :synced)
+  end
+
+  def update_transactable_prioritized_at(new_value = nil)
+    return unless transaction_batch
+
+    blockchain_transactables.each do |bt|
+      bt.update!(prioritized_at: new_value)
+    end
+    true
   end
 
   # TODO: Refactor on_chain condition into TokenType

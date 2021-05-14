@@ -1,4 +1,7 @@
 class BlockchainTransactionTokenUnfreeze < BlockchainTransaction
+  has_many :blockchain_transactables_tokens, through: :transaction_batch, dependent: :nullify
+  alias blockchain_transactables blockchain_transactables_tokens
+
   def update_transactable_status
     blockchain_transactable.update!(token_frozen: false)
   end

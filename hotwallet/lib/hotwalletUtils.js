@@ -6,15 +6,17 @@ const HotWallet = require("./HotWallet").HotWallet
 exports.HotWallet = HotWallet
 const HotWalletRedis = require("./HotWalletRedis").HotWalletRedis
 exports.HotWalletRedis = HotWalletRedis
-const AlgorandBlockchain = require("./blockchains/AlgorandBlockchain").AlgorandBlockchain
-exports.AlgorandBlockchain = AlgorandBlockchain
+const Blockchain = require("./Blockchain").Blockchain
+exports.Blockchain = Blockchain
+exports.AlgorandBlockchain = require("./Blockchain").AlgorandBlockchain
+exports.EthereumBlockchain = require("./Blockchain").EthereumBlockchain
 const ComakeryApi = require("./ComakeryApi").ComakeryApi
 exports.ComakeryApi = ComakeryApi
 
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
   return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
-    Boolean(envs.purestakeApi) && Boolean(envs.redisUrl) && Boolean(envs.checkForNewTransactionsDelay) &&
-    Boolean(envs.optInApp) && Boolean(envs.blockchainNetwork) && Boolean(envs.maxAmountForTransfer)
+    Boolean(envs.infuraProjectId) && Boolean(envs.redisUrl) && Boolean(envs.emptyQueueDelay) &&
+    Boolean(envs.blockchainNetwork) && Boolean(envs.ethereumTokenSymbol) && Boolean(envs.ethereumContractAddress)
 }
 
 exports.isEmptyObject = function isEmptyObject(obj) {
@@ -35,11 +37,11 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
   const hwCreated = await walletRedis.isHotWalletCreated()
 
   if (hwCreated) {
-    console.log("wallet already created, do nothing...")
+    console.log("wallet already created, using it...")
   } else {
     console.log("Key file does not exists, generating...")
-    const hwAlgorand = new AlgorandBlockchain(envs)
-    const newWallet = hwAlgorand.generateAlgorandKeyPair()
+    const blockchain = new Blockchain(envs)
+    const newWallet = await blockchain.generateNewWallet()
     const hwApi = new ComakeryApi(envs)
     const registerRes = await hwApi.registerHotWallet(newWallet)
 
@@ -56,62 +58,110 @@ exports.hotWalletInitialization = async function hotWalletInitialization(envs, r
 exports.runServer = async function runServer(envs, redisClient) {
   const hwRedis = new HotWalletRedis(envs, redisClient)
 
-  while (true) {
-    const hw = await hwRedis.hotWallet()
-    const optedIn = await hw.isOptedInToApp(envs.optInApp)
+  try {
+    while (true) {
+      let delay = envs.emptyQueueDelay
 
-    if (optedIn) {
-      await exports.waitForNewTransaction(envs, hwRedis)
-    } else {
-      console.log("The Hot Wallet doesn't opted-in to the App. Trying to opt-in")
-      await exports.autoOptIn(envs, hwRedis)
+      const resTx = await exports.waitForNewTransaction(envs, hwRedis)
+
+      if (["cancelled_transaction", "successfull"].indexOf(resTx.status) > -1) {
+        delay = envs.betweenTransactionDelay
+      }
+
+      console.log(`waiting ${delay} seconds`)
+      await exports.sleep(delay * 1000)
     }
-
-    await exports.sleep(envs.checkForNewTransactionsDelay * 1000) // 30 seconds by default
+  } catch (err) {
+    console.error(err)
+    process.exit(1) // kill the process to make pm2 restart
   }
+
 }
 
 exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRedis) {
-  const hwAddress = await hwRedis.hotWalletAddress()
-  const hwAlgorand = new AlgorandBlockchain(envs)
+  const hotWallet = await hwRedis.hotWallet()
+  const hwAddress = await hotWallet.address
+  const blockchain = new Blockchain(envs)
 
-  const enoughAlgos = await hwAlgorand.enoughAlgoBalanceToSendTransaction(hwAddress)
-  if (!enoughAlgos) {
-    console.log(`The Hot Wallet does not have enough balance of ALGOs to send transactions. Please top up the ${hwAddress}`)
-    return false
+  const enoughCoins = await blockchain.enoughCoinBalanceToSendTransaction(hwAddress)
+  if (!enoughCoins) {
+    console.log(`The Hot Wallet does not have enough balance to send transactions. Please top up the ${hwAddress}`)
+    return { status: "failed_before_getting_tx", blockchainTransaction: {}, transaction: {} }
   }
 
-  const hasTokens = await hwAlgorand.positiveTokenBalance(hwAddress)
+  const isReadyToSendTx = hotWallet.isReadyToSendTx(envs)
+  if (!isReadyToSendTx) {
+    if (hotWallet.isEthereum() && envs.ethereumApprovalContractAddress) {
+      let approveTx
+      if (envs.ethereumTokenType == "token_release_schedule") {
+          // For Lockup contract + erc20 token we should send approve tx to erc20 token address to approve the Lockup contract
+          approveTx = await blockchain.klass.approveContractTransactions(hotWallet, envs.ethereumApprovalContractAddress, envs.ethereumContractAddress)
+      } else if (envs.ethereumTokenType == "erc20_batch") {
+        // For erc20 + Batch contract we should send approve tx to erc20 token address to approve the Batch contract
+        approveTx = await blockchain.klass.approveContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumApprovalContractAddress)
+      }
+
+      if (approveTx.transactionId) {
+        hwRedis.saveApprovedContract(envs.ethereumApprovalContractAddress)
+      }
+    }
+  }
+
+  const hasTokens = await blockchain.positiveTokenBalance(hwAddress)
   if (!hasTokens) {
-    console.log(`The Hot Wallet does not have NOTE tokens. Please top up the ${hwAddress}`)
-    return false
+    console.log(`The Hot Wallet does not have tokens. Please top up the ${hwAddress}`)
+    return { status: "failed_before_getting_tx", blockchainTransaction: {}, transaction: {} }
   }
 
   console.log(`Checking for a new transaction to send from ${hwAddress}`)
   const hwApi = new ComakeryApi(envs)
-  const transactionToSign = await hwApi.getNextTransactionToSign(hwAddress)
-  const txValidation = await hwAlgorand.isTransactionValid(transactionToSign.txRaw, hwAddress)
+  const blockchainTransaction = await hwApi.getNextTransactionToSign(hwAddress)
+  const txValidation = await blockchain.isTransactionValid(blockchainTransaction.txRaw, hwAddress)
 
   if (txValidation.valid) {
-    console.log(`Found transaction to send, id=${transactionToSign.id}`)
-    const tx = await exports.signAndSendTx(transactionToSign, envs, hwRedis)
-    if (!exports.isEmptyObject(tx)) {
-      transactionToSign.txHash = tx.transactionId
-      await hwApi.updateTransactionHash(transactionToSign)
+    const prevTx = await hwRedis.getSavedDataForTransaction(blockchainTransaction)
+
+    if (prevTx) {
+      const errorMessage = `The Hot Wallet already sent transaction at least for ${prevTx.key}, details: ${JSON.stringify(prevTx.values)}`
+      console.log(errorMessage)
+      await hwApi.cancelTransaction(blockchainTransaction, errorMessage, "failed")
+      return { status: "tx_already_sent", blockchainTransaction: blockchainTransaction, transaction: {} }
+    }
+
+    console.log(`Found transaction to send, id=${blockchainTransaction.id}`)
+    const tx = await blockchain.sendTransaction(blockchainTransaction, hotWallet, blockchain)
+
+    if (typeof tx.valid == 'undefined' || tx.valid) {
+      // tx successfully sent
+      blockchainTransaction.txHash = tx.transactionId
+
+      if (blockchainTransaction.blockchainTransactableId && blockchainTransaction.blockchainTransactableType) {
+        await hwRedis.saveDavaForTransaction("successfull", blockchainTransaction.blockchainTransactableType, blockchainTransaction.blockchainTransactableId, blockchainTransaction.txHash)
+      } else if (Array.isArray(blockchainTransaction.blockchainTransactables) && blockchainTransaction.blockchainTransactables.length > 0) {
+        blockchainTransaction.blockchainTransactables.forEach(async (bt) => {
+          await hwRedis.saveDavaForTransaction("successfull", bt.blockchainTransactableType, bt.blockchainTransactableId, blockchainTransaction.txHash)
+        })
+      }
+
+      await hwApi.updateTransactionHash(blockchainTransaction)
+      return { status: "successfull", blockchainTransaction: blockchainTransaction, transaction: tx }
     } else {
-      return false
+      // tx failed during sending
+      if (tx.markAs) {
+        await hwApi.cancelTransaction(blockchainTransaction, tx.error, tx.markAs)
+      }
+      return { status: "cancelled_transaction", blockchainTransaction: blockchainTransaction, transaction: tx }
     }
   } else { // tx is invalid
     if (txValidation.markAs) {
-      await hwApi.cancelTransaction(transactionToSign, txValidation.error, txValidation.markAs)
+      await hwApi.cancelTransaction(blockchainTransaction, txValidation.error, txValidation.markAs)
     }
-    return false
+    return { status: "validation_failed", blockchainTransaction: blockchainTransaction, transaction: {} }
   }
-  return true
 }
 
+// TODO: Remove me. It's legacy and will not use anymore
 exports.signAndSendTx = async function signAndSendTx(transactionToSign, envs, hwRedis) {
-  const hwAlgorand = new AlgorandBlockchain(envs)
   const mnemonic = await hwRedis.hotWalletMnenonic()
   const endpoints = hwAlgorand.endpointsByNetwork(transactionToSign.network)
   const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
@@ -131,8 +181,7 @@ exports.signAndSendTx = async function signAndSendTx(transactionToSign, envs, hw
     console.log(`Transaction has successfully signed and sent by ${addr} to blockchain tx hash: ${tx_result.transactionId}`)
     return tx_result
   } catch (err) {
-    // added by oleg
-    console.log(err)
+    console.error(err)
     return {}
   }
 }

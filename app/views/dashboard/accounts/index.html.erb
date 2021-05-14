@@ -1,3 +1,9 @@
+<%= content_for :head do %>
+  <%= stylesheet_link_tag 'upside', media: 'all', 'data-turbo-track': 'reload' %>
+<% end %>
+
+<%= tag.div nil, id: :account_permissions_modal %>
+
 <%= render layout: 'projects/project_settings' do %>
   <div data-controller="sign--wallet-connect sign--metamask">
     <%= render partial: "filters" %>
@@ -5,7 +11,12 @@
     <div class="transfer-rules__buttons">
       <div class="transfer-rules__refresh_from_blockchain">
         <% if @project.supports_transfer_rules? && policy(@project).edit_accounts? && @project.token.token_type.accounts_sync_job %>
-          <%= button_to 'refresh accounts', refresh_from_blockchain_project_dashboard_accounts_path(@project), class: 'transfer-rules__refresh_from_blockchain_button', method: :post, disabled: @project.token.account_token_records.fresh?, data: { disable_with: "..." } %>
+          <%= button_to 'refresh accounts',
+                        refresh_from_blockchain_project_dashboard_accounts_path(@project),
+                        class: 'transfer-rules__refresh_from_blockchain_button',
+                        method: :post,
+                        disabled: @project.token.account_token_records.fresh?,
+                        data: { disable_with: "..." } %>
         <% end %>
       </div>
     </div>
@@ -17,7 +28,11 @@
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
-      <%= render partial: "account", collection: @accounts, as: :account, cached: false %>
+
+      <%= turbo_stream_from "project_#{@project.id}_accounts" %>
+      <%= turbo_frame_tag "project_#{@project.id}_accounts" do %>
+        <%= render partial: 'account', collection: @accounts, as: :account, cached: false %>
+      <% end %>
     </div>
 
     <div class="transfers-pages">
