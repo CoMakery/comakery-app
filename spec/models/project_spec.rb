@@ -19,8 +19,8 @@ describe Project do
     end
   end
 
-  it 'initializes auto_add_interest to false' do
-    expect(described_class.new.auto_add_interest).to be(false)
+  it 'initializes auto_add_account to false' do
+    expect(described_class.new.auto_add_account).to be(false)
   end
 
   it 'defaults to a publicly visible project' do

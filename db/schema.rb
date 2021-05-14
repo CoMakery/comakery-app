@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_163823) do
+ActiveRecord::Schema.define(version: 2021_05_14_095756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -156,9 +156,9 @@ ActiveRecord::Schema.define(version: 2021_05_12_163823) do
   end
 
   create_table "api_request_logs", force: :cascade do |t|
-    t.jsonb "body", null: false
     t.inet "ip", null: false
     t.string "signature", null: false
+    t.jsonb "body", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_api_request_logs_on_created_at"
     t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
@@ -516,9 +516,8 @@ ActiveRecord::Schema.define(version: 2021_05_12_163823) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
-    t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
-    t.boolean "auto_add_interest", default: false, null: false
+    t.boolean "auto_add_account", default: false, null: false
     t.text "github_url"
     t.text "documentation_url"
     t.text "getting_started_url"
@@ -527,6 +526,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_163823) do
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
     t.integer "project_roles_count", default: 0
+    t.integer "interests_count", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["long_id"], name: "index_projects_on_long_id"
