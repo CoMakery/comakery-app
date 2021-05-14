@@ -5,17 +5,17 @@ class EthereumHotWallet {
     this.privateKey = keys.privateKey
     this.publicKey = keys.publicKey
     this.privateKeyEncrypted = keys.privateKeyEncrypted
-    this.approvedBatchContract = options.approvedBatchContract || null
+    this.approvedContract = options.approvedContract || null
   }
 
   isReadyToSendTx(envs) {
-    return this.isApprovedBatchContract(envs.ethereumBatchContractAddress)
+    return this.isApprovedContract(envs.ethereumApprovalContractAddress)
   }
 
-  isApprovedBatchContract(batchContractAddress) {
-    if (!this.approvedBatchContract) { return false }
+  isApprovedContract(approvalContractAddress) {
+    if (!this.approvedContract) { return false }
 
-    return this.approvedBatchContract === batchContractAddress
+    return this.approvedContract === approvalContractAddress
   }
 }
 
