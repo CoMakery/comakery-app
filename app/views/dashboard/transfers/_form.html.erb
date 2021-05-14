@@ -15,7 +15,7 @@
     </div>
 
     <div class="transfers-table__transfer__issuer">
-      <% if @project.token._token_type_token_release_schedule? %>
+      <% if @project.token&._token_type_token_release_schedule? %>
         <label>lockup schedule id & commencement date</label>
 
         <%= f.number_field(:lockup_schedule_id, required: true, placeholder: '0', min: 0, step: 1) %>
