@@ -93,6 +93,7 @@ class Dashboard::AccountsController < ApplicationController
            .joins(:project_roles)
            .where(project_roles: { project: @project.object })
            .includes(:verifications, :awards, :latest_verification, :image_attachment)
+           .distinct
 
       @q = @q.joins(:account_token_records).includes(account_token_records: [:reg_group]) if @project.token&.token_type&.operates_with_account_records?
 
