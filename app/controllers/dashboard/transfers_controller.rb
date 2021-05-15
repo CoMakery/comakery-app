@@ -1,10 +1,13 @@
+require 'zip'
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
   before_action :set_transfers, only: %i[index]
   before_action :set_transfer, only: [:show]
+  before_action :skip_authorization, only: [:export_transfers]
+  before_action :redirect_unless_admin, only: [:export_transfers]
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
-  skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
+  skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data export_transfers]
 
   fragment_cache_key do
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
@@ -16,6 +19,19 @@ class Dashboard::TransfersController < ApplicationController
 
   def show
     authorize @project, :transfers?
+  end
+
+  def export_transfers
+    respond_to do |format|
+      format.zip do
+        compressed_filestream = Zip::OutputStream.write_buffer do |zos|
+          zos.put_next_entry 'transfers.csv'
+          zos.print @project.transfers_csv
+        end
+        compressed_filestream.rewind
+        send_data compressed_filestream.read, filename: 'transfers.zip'
+      end
+    end
   end
 
   def create
@@ -114,5 +130,9 @@ class Dashboard::TransfersController < ApplicationController
 
     def transfer_update_params
       params.fetch(:award, {}).permit(:prioritized_at)
+    end
+
+    def redirect_unless_admin
+      redirect_to root_path unless current_account.comakery_admin?
     end
 end

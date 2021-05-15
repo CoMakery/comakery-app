@@ -15,6 +15,10 @@ class AwardDecorator < Draper::Decorator
     token.blockchain.url_for_tx_human(ethereum_transaction_address) if ethereum_transaction_address.present?
   end
 
+  def ethereum_transaction_id
+    ethereum_transaction_address.present? ? ethereum_transaction_address[:id] : '–'
+  end
+
   def amount_pretty
     number_with_precision(amount, precision: token&.decimal_places.to_i)
   end
@@ -33,6 +37,10 @@ class AwardDecorator < Draper::Decorator
 
   def recipient_user_name
     recipient_auth_team&.name || account.decorate.name
+  end
+
+  def recipient_address
+    account.address_for_blockchain(object.token&._blockchain)
   end
 
   def issuer_address
