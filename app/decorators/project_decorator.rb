@@ -273,37 +273,56 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
-  def transfers_csv
-    labels = ['Recipient User ID', 'Recipient First Name', 'Recipient Last Name', 'Recipient blockchain adddress', 'Sender First Name', 'Sender Last Name', 'Sender blockchain adddress', 'Transfer Name', 'Transfer Type', 'Account', 'Transfered By', project.token&.symbol ? "Amount(#{project.token&.symbol})" : 'Amount', 'Quantity', project.token&.symbol ? "Total(#{project.token&.symbol})" : 'total']
-    labels << 'Transaction' if project.token
-    labels.append('Transaction ID', 'Transfered', 'Created At')
-    Comakery::CSV.generate_multiplatform do |csv|
-      csv << labels
+  # rubocop:todo Metrics/PerceivedComplexity
+  def project_transfers_csv_data # rubocop:todo Metrics/CyclomaticComplexity
+    if project.token&.symbol
+      amount_col = "Amount(#{project.token.symbol})"
+      total_col = "Total(#{project.token.symbol})"
+    else
+      amount_col = 'Amount'
+      total_col = 'Total'
+    end
+
+    column_names = ['Recipient User ID', 'Recipient First Name', 'Recipient Last Name', 'Recipient blockchain adddress', 'Sender First Name', 'Sender Last Name', 'Sender blockchain adddress', 'Transfer Name', 'Transfer Type', 'Account', 'Transfered By', amount_col, 'Quantity', total_col, 'Transaction', 'Transaction ID', 'Transfered', 'Created At'].freeze
+
+    CSV.generate({ force_quotes: true, col_sep: ',' }) do |csv|
+      csv << column_names
       project.awards.completed.includes(:award_type, :issuer, project: [:token]).order(:created_at).decorate.each do |transfer|
-        t_type = TransferType.find(transfer.transfer_type_id)
-        t_account = transfer.account ? transfer.account.decorate.name : transfer.email
-        transfered_by = transfer.paid? ? transfer.issuer.decorate.name : '–'
-        transfered_at = transfer.paid? && transfer.transferred_at ? transfer.transferred_at.strftime('%b %e %Y') : '–'
-        transfer_created = transfer.created_at.strftime('%b %e %Y')
-        if project.token
-          transfer_transaction = if project.token&._token_type?
-            if transfer.paid? && transfer.ethereum_transaction_explorer_url
-              transfer.ethereum_transaction_address_short
-            elsif transfer.project.token&.token_frozen?
-              'frozen'
-            elsif transfer.recipient_address.blank?
-              'needs wallet'
-            else
-              'pending'
-            end
+        transfer_transaction = if project.token && project.token&._token_type?
+          if transfer.paid? && transfer.ethereum_transaction_explorer_url
+            transfer.ethereum_transaction_address_short
+          elsif transfer.project.token&.token_frozen?
+            'frozen'
+          elsif transfer.recipient_address.blank?
+            'needs wallet'
           else
-            '–'
+            'pending'
           end
+        else
+          '-'
         end
-        csv_row_data = [transfer.account.email, transfer.account.first_name, transfer.account.last_name, transfer.recipient_address, transfer.issuer.first_name, transfer.issuer.last_name, transfer.issuer_address, transfer.name, t_type.name, t_account, transfered_by, transfer.amount_pretty, transfer.quantity, transfer.total_amount_pretty]
-        csv_row_data << transfer_transaction if project.token && transfer_transaction.present?
-        csv_row_data.append(transfer.ethereum_transaction_id, transfered_at, transfer_created)
-        csv << csv_row_data
+
+        account = transfer.account
+        issuer = transfer.issuer
+
+        csv << [transfer.account_id,
+                account.first_name,
+                account.last_name,
+                transfer.recipient_address,
+                issuer.first_name,
+                issuer.last_name,
+                transfer.issuer_address,
+                transfer.name,
+                transfer.transfer_type&.name,
+                account ? account.decorate.name : transfer.email,
+                transfer.paid? ? transfer.issuer.decorate.name : '–',
+                transfer.amount_pretty,
+                transfer.quantity,
+                transfer.total_amount_pretty,
+                transfer_transaction,
+                transfer.ethereum_transaction_id,
+                transfer.paid? && transfer.transferred_at ? transfer.transferred_at.strftime('%b %e %Y') : '–',
+                transfer.created_at.strftime('%b %e %Y')]
       end
     end
   end

@@ -1,4 +1,4 @@
-require 'zip'
+require 'csv'
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
@@ -22,16 +22,7 @@ class Dashboard::TransfersController < ApplicationController
   end
 
   def export_transfers
-    respond_to do |format|
-      format.zip do
-        compressed_filestream = Zip::OutputStream.write_buffer do |zos|
-          zos.put_next_entry 'transfers.csv'
-          zos.print @project.transfers_csv
-        end
-        compressed_filestream.rewind
-        send_data compressed_filestream.read, filename: 'transfers.zip'
-      end
-    end
+    send_data @project.project_transfers_csv_data, filename: 'transfers.csv'
   end
 
   def create

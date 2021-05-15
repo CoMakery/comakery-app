@@ -16,7 +16,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def ethereum_transaction_id
-    ethereum_transaction_address.present? ? ethereum_transaction_address[:id] : '–'
+    object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash if token
   end
 
   def amount_pretty

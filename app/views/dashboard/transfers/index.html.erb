@@ -63,8 +63,15 @@
     <% end %>
 
     <%if current_account.comakery_admin?%>
-      <%= link_to 'Download CSV', export_transfers_project_dashboard_transfers_path(@project, format: :zip), class: 'btn button'%>
-    <%end%>
+      <div class='row'>
+        <div class='col-12'>
+          <%= link_to export_transfers_project_dashboard_transfers_path(@project, format: :csv) do %>
+            Download CSV <i class='fa fa-download'></i>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
