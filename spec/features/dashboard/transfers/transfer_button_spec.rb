@@ -198,7 +198,7 @@ describe 'transfer button on Transfers page' do
         end
 
         it 'says pending' do
-          expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'pending')
+          expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'pending')
         end
       end
     end

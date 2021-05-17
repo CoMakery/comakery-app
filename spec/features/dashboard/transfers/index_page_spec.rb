@@ -91,8 +91,6 @@ describe 'transfers_index_page', js: true do
       visit project_dashboard_transfers_path(@project)
 
       expect(page).not_to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(@project, @award.award_type, @award)}']"
-
-      expect(page).to have_selector "a[href='#{project_dashboard_transfer_path(@award.project, @award)}']"
     end
 
     it 'Should appear when the transfer is not in process' do
