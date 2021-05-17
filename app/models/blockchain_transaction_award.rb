@@ -171,7 +171,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         end
       end
 
-      self.amount ||= amounts.first
+      self.amount ||= amounts.sum
     end
 
     def populate_destinations
