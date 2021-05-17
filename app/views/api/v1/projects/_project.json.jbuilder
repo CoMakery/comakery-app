@@ -9,7 +9,7 @@ json.call(
 )
 
 json.account_id project.account.managed_account_id
-json.admin_ids project.project_admins.pluck(:managed_account_id) # not sure if this is correct
+json.admin_ids project.project_admins.pluck(:managed_account_id)
 
 json.transfer_types project.transfer_types do |t|
   json.partial! 'api/v1/transfer_types/transfer_type', transfer_type: t

@@ -11,7 +11,6 @@ class Account < ApplicationRecord
   has_one_attached :image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
-  # has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy # rubocop:todo Rails/InverseOf

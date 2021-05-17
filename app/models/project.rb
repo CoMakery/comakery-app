@@ -1,4 +1,5 @@
 # Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
+# rubocop:disable Rails/HasAndBelongsToMany
 
 class Project < ApplicationRecord
   include ApiAuthorizable
@@ -15,7 +16,7 @@ class Project < ApplicationRecord
 
   belongs_to :account, touch: true
   has_one :hot_wallet, class_name: 'Wallet', touch: true, dependent: :destroy
-  # has_and_belongs_to_many :admins, class_name: 'Account'
+  has_and_belongs_to_many :admins, class_name: 'Account' # TODO: deprecated, should be removed after project roles task is merged to all environments
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent

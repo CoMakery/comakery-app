@@ -20,7 +20,6 @@ describe AwardTypePolicy do
 
     context 'project admin' do
       before do
-        # project.admins << project_admin
         create(:project_role, project: project, account: project_admin, role: :admin)
       end
 
