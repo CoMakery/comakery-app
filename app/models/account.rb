@@ -1,5 +1,4 @@
 # Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
-# rubocop:disable Rails/HasAndBelongsToMany
 
 class Account < ApplicationRecord
   paginates_per 50
@@ -234,7 +233,7 @@ class Account < ApplicationRecord
   end
 
   def my_projects(scope = nil)
-    (scope || Project).left_outer_joins(:project_admins).distinct.where('projects.account_id = :id OR project_roles.account_id = :id', id: id)
+    (scope || Project).joins(:project_admins).distinct.where('projects.account_id = :id OR project_roles.account_id = :id', id: id)
   end
 
   def accessable_projects(scope = nil)
