@@ -181,7 +181,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def transfers_grouping(transfers, limit, grouping, date_modifier, negative)
-    transfers.includes(:transfer_type).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
+    transfers.select(:created_at, :transfer_type_id).includes(:transfer_type).where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
       transfers_chart_types.merge(
         set.group_by(&:transfer_type).map { |k, v| [k.name, transfers_chart_amount(negative, v.sum(&:total_amount))] }.to_h.merge(
           timeframe: timeframe.strftime(date_modifier),
