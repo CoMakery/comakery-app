@@ -3,7 +3,9 @@
     'layouts/ProjectSetupHeader',
     project_for_header: @project.header_props,
     mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props,
-    owner: ProjectPolicy.new(current_account, @project).edit?,
+    owner: policy(@project).edit?,
+    observer: policy(@project).project_observer?,
+    interested: policy(@project).project_interested?,
     expanded: false,
     current: project_page
   ) %>

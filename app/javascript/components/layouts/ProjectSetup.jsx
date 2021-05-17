@@ -20,6 +20,8 @@ class ProjectSetup extends React.Component {
               projectForHeader={this.props.projectForHeader}
               missionForHeader={this.props.missionForHeader}
               owner={this.props.owner}
+              observer={this.props.observer}
+              interested={this.props.interested}
               current={this.props.current}
             />
           }
@@ -40,6 +42,8 @@ ProjectSetup.propTypes = {
   missionForHeader: PropTypes.object,
   projectForHeader: PropTypes.object,
   owner           : PropTypes.bool,
+  observer        : PropTypes.bool,
+  interested      : PropTypes.bool,
   current         : PropTypes.string
 }
 ProjectSetup.defaultProps = {
@@ -49,6 +53,8 @@ ProjectSetup.defaultProps = {
   missionForHeader: null,
   projectForHeader: null,
   owner           : true,
+  observer        : true,
+  interested      : true,
   current         : ''
 }
 export default ProjectSetup
