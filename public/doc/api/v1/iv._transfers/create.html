@@ -176,14 +176,6 @@ table th, table td {
               </tr>
               <tr>
                 <td>
-                    <span class="name">transfer[lockup_schedule_id]</span>
-                </td>
-                <td>
-                  <span class="description">custom lockup schedule id (default: null)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
                     <span class="name">transfer[recipient_wallet_id]</span>
                 </td>
                 <td>
@@ -196,6 +188,22 @@ table th, table td {
                 </td>
                 <td>
                   <span class="description">transfer description</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transfer[lockup_schedule_id]</span>
+                </td>
+                <td>
+                  <span class="description">custom lockup schedule id for (default: null). Required for Lockup contract only</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transfer[commencement_date]</span>
+                </td>
+                <td>
+                  <span class="description">date of commencement for a lockup period (default: null). Required for Lockup contract only</span>
                 </td>
               </tr>
             </tbody>

@@ -91,10 +91,18 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
 
   const isReadyToSendTx = hotWallet.isReadyToSendTx(envs)
   if (!isReadyToSendTx) {
-    if (hotWallet.isEthereum() && envs.ethereumContractAddress && envs.ethereumBatchContractAddress) {
-      const approveTx = await blockchain.klass.approveBatchContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumBatchContractAddress)
+    if (hotWallet.isEthereum() && envs.ethereumApprovalContractAddress) {
+      let approveTx
+      if (envs.ethereumTokenType == "token_release_schedule") {
+          // For Lockup contract + erc20 token we should send approve tx to erc20 token address to approve the Lockup contract
+          approveTx = await blockchain.klass.approveContractTransactions(hotWallet, envs.ethereumApprovalContractAddress, envs.ethereumContractAddress)
+      } else if (envs.ethereumTokenType == "erc20_batch") {
+        // For erc20 + Batch contract we should send approve tx to erc20 token address to approve the Batch contract
+        approveTx = await blockchain.klass.approveContractTransactions(hotWallet, envs.ethereumContractAddress, envs.ethereumApprovalContractAddress)
+      }
+
       if (approveTx.transactionId) {
-        hwRedis.saveApprovedBatchContract(envs.ethereumBatchContractAddress)
+        hwRedis.saveApprovedContract(envs.ethereumApprovalContractAddress)
       }
     }
   }
