@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_042724) do
+ActiveRecord::Schema.define(version: 2021_05_17_195832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -30,7 +30,6 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.integer "status", default: 0
     t.bigint "wallet_id"
     t.datetime "prioritized_at"
-    t.integer "blockchain_transactions_count"
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
@@ -264,8 +263,8 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.bigint "recipient_wallet_id"
     t.datetime "prioritized_at"
     t.decimal "lockup_schedule_id", precision: 78
+    t.integer "blockchain_transactions_count", default: 0
     t.datetime "commencement_date"
-    t.integer "blockchain_transactions_count"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["channel_id"], name: "index_awards_on_channel_id"
@@ -285,6 +284,8 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.decimal "base_unit_value", precision: 78, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "base_unit_locked_value", precision: 78, default: "0", null: false
+    t.decimal "base_unit_unlocked_value", precision: 78, default: "0", null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
     t.index ["wallet_id", "token_id"], name: "idx_walled_id_token_id", unique: true
     t.index ["wallet_id"], name: "index_balances_on_wallet_id"
@@ -528,7 +529,6 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.text "funding_url"
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
-    t.integer "blockchain_transactions_count"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["long_id"], name: "index_projects_on_long_id"
@@ -601,7 +601,6 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "blockchain_transactions_count"
     t.index ["token_id"], name: "index_token_opt_ins_on_token_id"
     t.index ["wallet_id", "token_id"], name: "index_token_opt_ins_on_wallet_id_and_token_id", unique: true
     t.index ["wallet_id"], name: "index_token_opt_ins_on_wallet_id"
@@ -630,7 +629,6 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.integer "_blockchain", default: 0, null: false
     t.integer "_token_type", default: 0, null: false
     t.string "batch_contract_address"
-    t.integer "blockchain_transactions_count"
     t.index ["_blockchain"], name: "index_tokens_on__blockchain"
     t.index ["logo_image_id"], name: "index_tokens_on_logo_image_id"
   end
@@ -649,7 +647,6 @@ ActiveRecord::Schema.define(version: 2021_05_13_042724) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
-    t.integer "blockchain_transactions_count"
     t.index ["receiving_group_id"], name: "index_transfer_rules_on_receiving_group_id"
     t.index ["sending_group_id"], name: "index_transfer_rules_on_sending_group_id"
     t.index ["token_id"], name: "index_transfer_rules_on_token_id"

@@ -87,7 +87,7 @@
 
     <% if @project.token %>
       <% if transfer.blockchain_transactions? %>
-        <%= link_to "#{transfer.blockchain_transactions.size} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
+        <%= link_to "#{transfer.blockchain_transactions_count} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
       <% end %>
 
       <% if policy(transfer).cancel? && transfer.cancelable? %>

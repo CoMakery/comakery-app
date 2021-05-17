@@ -4,7 +4,7 @@ module BlockchainTransactable
   included do
     has_many :batch_transactables, dependent: :destroy, as: :blockchain_transactable
     has_many :transaction_batches, through: :batch_transactables
-    has_many :blockchain_transactions, through: :transaction_batches
+    has_many :blockchain_transactions, through: :transaction_batches, after_add: :update_transfer_blockchain_transactions_size, after_remove: :update_transfer_blockchain_transactions_size
 
     has_one :latest_batch_transactable, class_name: 'BatchTransactable', as: :blockchain_transactable, inverse_of: :blockchain_transactable, dependent: :destroy
     has_one :latest_transaction_batch, through: :latest_batch_transactable, source: :transaction_batch
@@ -76,6 +76,14 @@ module BlockchainTransactable
         self.class.none
       end
     }
+
+    def update_transfer_blockchain_transactions_size(_blockchain_transaction)
+      set_counter_cache
+    end
+
+    def set_counter_cache
+      update!(blockchain_transactions_count: blockchain_transactions.size) if self.class == Award
+    end
 
     def blockchain_transaction_class
       "BlockchainTransaction#{self.class}".constantize

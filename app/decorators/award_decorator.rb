@@ -18,7 +18,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def blockchain_transactions?
-    blockchain_transactions.size.positive?
+    blockchain_transactions_count.positive?
   end
 
   def payable_by_ore_id?(current_account)
