@@ -408,14 +408,23 @@ describe Award do
         a1 = build(:award_ready, award_type: create(:award_type, project: p1))
         a2 = build(:award_ready, award_type: create(:award_type, project: p2))
 
-        a1.update(lockup_schedule_id: 1, commencement_date: Time.current)
-        a2.update(lockup_schedule_id: 1, commencement_date: Time.current)
+        expect(a1.update(lockup_schedule_id: 1, commencement_date: Time.current)).to be true
+        expect(a2.update(lockup_schedule_id: 1, commencement_date: Time.current)).to be false
         expect(a1).to be_valid
         expect(a2).not_to be_valid
-        a1.update(lockup_schedule_id: nil, commencement_date: nil)
-        a2.update(lockup_schedule_id: nil, commencement_date: nil)
+
+        error_messages = a2.errors.messages
+        expect(error_messages[:lockup_schedule_id]).to eq ['must be blank']
+        expect(error_messages[:commencement_date]).to eq ['must be blank']
+
+        expect(a1.update(lockup_schedule_id: nil, commencement_date: nil)).to be false
+        expect(a2.update(lockup_schedule_id: nil, commencement_date: nil)).to be true
         expect(a1).not_to be_valid
         expect(a2).to be_valid
+
+        error_messages = a1.errors.messages
+        expect(error_messages[:lockup_schedule_id]).to eq ["can't be blank"]
+        expect(error_messages[:commencement_date]).to eq ["can't be blank"]
       end
     end
 
