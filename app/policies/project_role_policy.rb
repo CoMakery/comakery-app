@@ -5,7 +5,16 @@ class ProjectRolePolicy < ApplicationPolicy
   end
 
   def update?
-    account.present? && project_admin? && !own_project_role?
+    return false if account.nil? || project_role.account == account
+
+    case project_role.role.to_sym
+    when :admin
+      project_owner?
+    when :interested, :observer
+      project_owner? || project_admin?
+    else
+      raise "Unimplemented role #{project_role.role}"
+    end
   end
 
   private
@@ -16,7 +25,7 @@ class ProjectRolePolicy < ApplicationPolicy
       ProjectPolicy.new(account, project_role.project).project_admin?
     end
 
-    def own_project_role?
-      project_role.account == account
+    def project_owner?
+      ProjectPolicy.new(account, project_role.project).project_owner?
     end
 end
