@@ -44,6 +44,8 @@ RSpec.describe Sign::UserWalletController, type: :controller, vcr: true do
     end
 
     context 'with batch transfer' do
+      let(:transfer) { create(:blockchain_transaction_lockup).blockchain_transactable }
+
       subject { get :new, params: { project_id: transfer.project.id, source: 'dummy_source_address' } }
 
       before do

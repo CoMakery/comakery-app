@@ -75,24 +75,50 @@ class BlockchainTransactionAward < BlockchainTransaction
     self[:amounts].map(&:to_i)
   end
 
+  def commencement_dates
+    self[:commencement_dates].map do |date|
+      (date && Time.zone.parse(date)).to_i
+    end
+  end
+
+  def lockup_schedule_ids
+    self[:lockup_schedule_ids].map(&:to_i)
+  end
+
   private
 
     def on_chain_eth
-      if token._token_type_token?
-        case blockchain_transactable.transfer_type.name
-        when 'mint'
-          Comakery::Eth::Tx::Erc20::Mint.new(token.blockchain.explorer_api_host, tx_hash, self)
-        when 'burn'
-          Comakery::Eth::Tx::Erc20::Burn.new(token.blockchain.explorer_api_host, tx_hash, self)
-        else
-          if blockchain_transactables.size > 1 && token.batch_contract_address
-            Comakery::Eth::Tx::Erc20::BatchTransfer.new(token.blockchain.explorer_api_host, tx_hash, self)
-          else
-            Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash, self)
-          end
-        end
+      if token._token_type_erc20?
+        on_chain_erc20
+      elsif token._token_type_comakery_security_token?
+        on_chain_erc20
+      elsif token._token_type_token_release_schedule?
+        on_chain_lockup
       else
         Comakery::Eth::Tx.new(token.blockchain.explorer_api_host, tx_hash, self)
+      end
+    end
+
+    def on_chain_erc20
+      case blockchain_transactable.transfer_type.name
+      when 'mint'
+        Comakery::Eth::Tx::Erc20::Mint.new(token.blockchain.explorer_api_host, tx_hash, self)
+      when 'burn'
+        Comakery::Eth::Tx::Erc20::Burn.new(token.blockchain.explorer_api_host, tx_hash, self)
+      else
+        if blockchain_transactables.size > 1 && token.batch_contract_address
+          Comakery::Eth::Tx::Erc20::BatchTransfer.new(token.blockchain.explorer_api_host, tx_hash, self)
+        else
+          Comakery::Eth::Tx::Erc20::Transfer.new(token.blockchain.explorer_api_host, tx_hash, self)
+        end
+      end
+    end
+
+    def on_chain_lockup
+      if blockchain_transactables.size > 1
+        Comakery::Eth::Tx::Erc20::ScheduledToken::BatchFundReleaseSchedule.new(token.blockchain.explorer_api_host, tx_hash, self)
+      else
+        Comakery::Eth::Tx::Erc20::ScheduledToken::FundReleaseSchedule.new(token.blockchain.explorer_api_host, tx_hash, self)
       end
     end
 
@@ -135,6 +161,7 @@ class BlockchainTransactionAward < BlockchainTransaction
       super
       populate_amounts
       populate_destinations
+      populate_lockup
     end
 
     def populate_amounts
@@ -144,11 +171,16 @@ class BlockchainTransactionAward < BlockchainTransaction
         end
       end
 
-      self.amount ||= amounts.first
+      self.amount ||= amounts.sum
     end
 
     def populate_destinations
       self.destinations = blockchain_transactables.map(&:recipient_address) if destinations.empty?
       self.destination ||= destinations.first
+    end
+
+    def populate_lockup
+      self.commencement_dates = blockchain_transactables.map(&:commencement_date) if commencement_dates.empty?
+      self.lockup_schedule_ids = blockchain_transactables.map(&:lockup_schedule_id) if lockup_schedule_ids.empty?
     end
 end

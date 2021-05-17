@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    uri: https://rinkeby.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
     body:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
@@ -21,7 +21,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 07 May 2021 22:06:08 GMT
+      - Wed, 12 May 2021 14:20:37 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -32,7 +32,7 @@ http_interactions:
       - Origin
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x9b8983"}'
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x82d007"}'
     http_version: null
-  recorded_at: Fri, 07 May 2021 22:06:09 GMT
+  recorded_at: Wed, 12 May 2021 14:20:37 GMT
 recorded_with: VCR 5.1.0

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_101759) do
+ActiveRecord::Schema.define(version: 2021_05_13_233528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -282,6 +282,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_101759) do
     t.decimal "base_unit_value", precision: 78, default: "0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "base_unit_locked_value", precision: 78, default: "0", null: false
+    t.decimal "base_unit_unlocked_value", precision: 78, default: "0", null: false
     t.index ["token_id"], name: "index_balances_on_token_id"
     t.index ["wallet_id", "token_id"], name: "idx_walled_id_token_id", unique: true
     t.index ["wallet_id"], name: "index_balances_on_wallet_id"
@@ -328,6 +330,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_101759) do
     t.bigint "transaction_batch_id"
     t.text "amounts", default: [], array: true
     t.text "destinations", default: [], array: true
+    t.text "commencement_dates", default: [], array: true
+    t.text "lockup_schedule_ids", default: [], array: true
     t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
     t.index ["blockchain_transactable_type", "blockchain_transactable_id"], name: "index_bc_txs_on_bc_txble_type_and_bc_txble_id"
     t.index ["token_id"], name: "index_blockchain_transactions_on_token_id"
