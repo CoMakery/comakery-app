@@ -71,6 +71,10 @@
       "description": "Project id generated on Infura. Required to use ethereum blockchain.",
       "required": true
     },
+    "ETHEREUM_TOKEN_TYPE": {
+      "description": "Ethereum Token Type: erc20, erc20_batch, token_release_schedule",
+      "required": true
+    },
     "ETHEREUM_TOKEN_SYMBOL": {
       "description": "Ethereum Token symbol (CERE for example). It uses to get a balance of the token",
       "required": true
@@ -79,8 +83,8 @@
       "description": "Ethereum contract address of the token. It uses to get a balance of the token",
       "required": true
     },
-    "ETHEREUM_BATCH_CONTRACT_ADDRESS": {
-      "description": "Ethereum batch contract address. It uses to send batch transfers of the main contract's tokens",
+    "ETHEREUM_APPROVAL_CONTRACT_ADDRESS": {
+      "description": "Ethereum contract address for sending `approve` tx. It uses to allow batch transfers or use lockup contract",
       "required": false
     }
   }
