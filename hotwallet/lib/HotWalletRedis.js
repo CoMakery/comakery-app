@@ -26,7 +26,7 @@ class HotWalletRedis {
     if (savedHW) {
       const network = savedHW.network || this.envs.blockchainNetwork
       const optedInApps = JSON.parse(savedHW.optedInApps || "[]")
-      const approvedBatchContract = savedHW.approvedBatchContract || null
+      const approvedContract = savedHW.approvedContract || null
       const keys = {
         publicKey: savedHW.publicKey,
         privateKey: savedHW.privateKey,
@@ -34,7 +34,7 @@ class HotWalletRedis {
       }
       const options = {
         optedInApps: optedInApps,
-        approvedBatchContract: approvedBatchContract
+        approvedContract: approvedContract
       }
       return new HotWallet(network, savedHW.address, keys, options)
     } else {
@@ -73,9 +73,9 @@ class HotWalletRedis {
     return true
   }
 
-  async saveApprovedBatchContract(batchContract) {
-    await this.hset(this.walletKeyName(), "approvedBatchContract", batchContract)
-    console.log(`The batch contract approvement ${batchContract} has been saved into ${this.walletKeyName()}`)
+  async saveApprovedContract(approvalContract) {
+    await this.hset(this.walletKeyName(), "approvedContract", approvalContract)
+    console.log(`The contract approval ${approvalContract} has been saved into ${this.walletKeyName()}`)
     return true
   }
 

@@ -12,7 +12,7 @@
   </head>
   <body class="antialiased">
     <div class="page">
-      <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+      <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark navbar-collapsed">
         <span id="main-side-handbar" class="handbar"></span>
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
@@ -72,7 +72,7 @@
           </div>
         </div>
       </aside>
-      <aside id="second-side" class="d-flex flex-column sidebar">
+      <aside id="second-side" class="d-flex flex-column sidebar navbar-collapsed">
         <span id="second-side-handbar" class="handbar"></span>
         <div class="top">
           <a href="#" class="d-flex align-items-center n9-color text-decoration-none">
@@ -211,7 +211,7 @@
           </div>          
         </div>
       </aside>
-      <div class="content navbar-ms-2">                
+      <div class="content navbar-ms-3">
 
         <div class="container-xl">
           <!-- Page title -->
@@ -551,6 +551,8 @@
           $("#main-side").removeClass("navbar-collapsed")
           $("#second-side").removeClass("navbar-collapsed")
 
+          $("#second-side").addClass("sidebar-collapse")
+
           $(".content").removeClass("navbar-ms-0")
           $(".content").removeClass("navbar-ms-1")
           $(".content").removeClass("navbar-ms-2")
@@ -565,7 +567,7 @@
 
         }else{
           $("#main-side").addClass("navbar-collapsed")
-          $("#second-side").addClass("navbar-collapsed")          
+          $("#second-side").addClass("navbar-collapsed")
 
           $(".content").removeClass("navbar-ms-0")
           $(".content").removeClass("navbar-ms-1")
@@ -585,6 +587,9 @@
       $("#second-side-handbar").click(function(){
         if($("#second-side").hasClass("sidebar-collapse")){
           $("#second-side").removeClass("sidebar-collapse")
+
+          $("#main-side").addClass("navbar-collapsed")
+          $("#second-side").addClass("navbar-collapsed")
           
           $(".content").removeClass("navbar-ms-0")
           $(".content").removeClass("navbar-ms-1")

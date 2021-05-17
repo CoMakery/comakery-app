@@ -179,14 +179,14 @@ class EthereumBlockchain {
     return '115792089237316195423570985008687907853269984665640564039457584007913129639935'
   }
 
-  approveTxObject(hotWalletAddress, contractAddress, batchContractAddress) {
+  approveTxObject(hotWalletAddress, contractAddress, approvalContractAddress) {
     return {
       from: hotWalletAddress,
       to: contractAddress,
       contract: {
         abi: this.approveAbi(),
         method: 'approve',
-        parameters: [batchContractAddress, this.maxPossibleAmount()]
+        parameters: [approvalContractAddress, this.maxPossibleAmount()]
       }
     }
   }
@@ -206,10 +206,10 @@ class EthereumBlockchain {
     return new HotWallet(this.blockchainNetwork, createAccount.accountName, createAccount.generatedKeys)
   }
 
-  async approveBatchContractTransactions(hotWallet, contractAddress, batchContractAddress) {
+  async approveContractTransactions(hotWallet, contractAddress, approvalContractAddress) {
     await this.connect()
 
-    const txn = this.approveTxObject(hotWallet.address, contractAddress, batchContractAddress)
+    const txn = this.approveTxObject(hotWallet.address, contractAddress, approvalContractAddress)
     txn.data = chainjs.HelpersEthereum.generateDataFromContractAction(txn.contract)
 
     const chainTransaction = await this.chain.new.Transaction()
@@ -220,7 +220,7 @@ class EthereumBlockchain {
       await chainTransaction.validate()
       await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
       const tx_result = await chainTransaction.send(chainjs.Models.ConfirmType.After001)
-      console.log(`Approve batch contract transaction has successfully sent by ${hotWallet.address} to blockchain tx hash: ${tx_result.transactionId}`)
+      console.log(`Approve contract transaction has successfully sent by ${hotWallet.address} to blockchain tx hash: ${tx_result.transactionId}`)
       return tx_result
     } catch (err) {
       console.error(err)
@@ -243,6 +243,12 @@ class EthereumBlockchain {
     return balance.isGreaterThan(new BigNumber(0.001))
   }
 
+  async tokenContract(tokenAddress) {
+    await this.connect()
+
+    return new this.chain.web3.eth.Contract(this.balanceAbi(), tokenAddress)
+  }
+
   async getTokenBalance(hotWalletAddress) {
     if (hotWalletAddress in this.tokenBalances) { return this.tokenBalances[hotWalletAddress] }
 
@@ -250,13 +256,21 @@ class EthereumBlockchain {
     // Chainjs version does not work for some reason so I implemented custom check using web3
     // const tokenBalance = await this.chain.fetchBalance(hotWalletAddress, chainjs.HelpersEthereum.toEthereumSymbol(this.envs.ethereumTokenSymbol), this.envs.ethereumContractAddress)
 
-    const contract = new this.chain.web3.eth.Contract(this.balanceAbi(), this.envs.ethereumContractAddress.toString())
+    let contractAddress = this.envs.ethereumContractAddress.toString()
+
+    // For Lockup contract we check balance of erc20 contract
+    if (this.envs.ethereumTokenType == 'token_release_schedule') {
+      contractAddress = this.envs.ethereumApprovalContractAddress.toString()
+    }
+
+    const contract = await this.tokenContract(contractAddress)
     const balanceRes = await contract.methods.balanceOf(hotWalletAddress).call()
     const decimals = await contract.methods.decimals().call()
-    const divisor = new BigNumber(10).pow(decimals)
-    const balance = new BigNumber(balanceRes).div(divisor)
 
-    if (balance) {
+    if (balanceRes && decimals) {
+      const divisor = new BigNumber(10).pow(decimals)
+      const balance = new BigNumber(balanceRes).div(divisor)
+
       this.tokenBalances[hotWalletAddress] = balance
       return balance
     } else {

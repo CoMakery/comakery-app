@@ -2,7 +2,11 @@ class Balance < ApplicationRecord
   belongs_to :wallet
   belongs_to :token
 
+  has_many :awards, ->(b) { joins(:project).where("projects.token_id": b.token_id) }, through: :wallet
+
   validates :base_unit_value, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :base_unit_locked_value, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :base_unit_unlocked_value, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :wallet_id, uniqueness: { scope: :token_id }
   validates :token_id, inclusion: { in: ->(b) { Array(b.wallet&.tokens_of_the_blockchain&.pluck(:id)) } }
 
@@ -10,6 +14,18 @@ class Balance < ApplicationRecord
 
   def value
     token.from_base_unit(base_unit_value)
+  end
+
+  def locked_value
+    token.from_base_unit(base_unit_locked_value)
+  end
+
+  def unlocked_value
+    token.from_base_unit(base_unit_unlocked_value)
+  end
+
+  def lockup_schedule_ids
+    awards.completed.distinct.pluck(:lockup_schedule_id)
   end
 
   def blockchain_balance_base_unit_value
