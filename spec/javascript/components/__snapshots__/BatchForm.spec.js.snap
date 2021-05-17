@@ -29,7 +29,9 @@ exports[`BatchForm renders correctly without props 1`] = `
     className="batch-form"
     current="batches"
     hasBackButton={true}
+    interested={true}
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -84,7 +86,9 @@ exports[`BatchForm renders correctly without props 1`] = `
         <ProjectSetupHeader
           current="batches"
           expanded={false}
+          interested={true}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -148,7 +152,9 @@ exports[`BatchForm renders correctly without props 1`] = `
             <ProjectSetupHeader
               current="batches"
               expanded={false}
+              interested={true}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >

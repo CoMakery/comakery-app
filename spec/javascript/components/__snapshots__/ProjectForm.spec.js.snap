@@ -35,7 +35,9 @@ exports[`ProjectForm renders correctly without props 1`] = `
   <ProjectSetup
     className="project-form"
     current="form"
+    interested={true}
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={null}
@@ -71,7 +73,9 @@ exports[`ProjectForm renders correctly without props 1`] = `
         <ProjectSetupHeader
           current="form"
           expanded={false}
+          interested={true}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -116,7 +120,9 @@ exports[`ProjectForm renders correctly without props 1`] = `
             <ProjectSetupHeader
               current="form"
               expanded={false}
+              interested={true}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >

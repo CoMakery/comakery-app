@@ -12,7 +12,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
   <ProjectSetup
     className="batch-index"
     current="batches"
+    interested={true}
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -54,7 +56,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
         <ProjectSetupHeader
           current="batches"
           expanded={false}
+          interested={true}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -105,7 +109,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
             <ProjectSetupHeader
               current="batches"
               expanded={false}
+              interested={true}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >

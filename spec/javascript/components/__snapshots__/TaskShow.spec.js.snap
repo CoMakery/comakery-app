@@ -52,7 +52,9 @@ exports[`TaskShow renders correctly without props 1`] = `
     className="task-award-form"
     current="batches"
     hasBackButton={true}
+    interested={true}
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -99,7 +101,9 @@ exports[`TaskShow renders correctly without props 1`] = `
         <ProjectSetupHeader
           current="batches"
           expanded={false}
+          interested={true}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -155,7 +159,9 @@ exports[`TaskShow renders correctly without props 1`] = `
             <ProjectSetupHeader
               current="batches"
               expanded={false}
+              interested={true}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >
