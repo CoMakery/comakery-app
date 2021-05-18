@@ -40,7 +40,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    account.address_for_blockchain(object.token&._blockchain)
+    account ? account.address_for_blockchain(object.token&._blockchain) : ''
   end
 
   def issuer_address
