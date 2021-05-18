@@ -12,9 +12,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def sender_wallet_url
-    if paid?
-      sender_wallet_address && token ? token.blockchain.url_for_address_human(sender_wallet_address) : nil
-    end
+    sender_wallet_address && token ? token.blockchain.url_for_address_human(sender_wallet_address) : nil
   end
 
   def blockchain_transactions?
