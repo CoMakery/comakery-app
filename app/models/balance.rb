@@ -25,15 +25,35 @@ class Balance < ApplicationRecord
   end
 
   def lockup_schedule_ids
-    awards.completed.distinct.pluck(:lockup_schedule_id)
+    awards.paid.distinct.pluck(:lockup_schedule_id)
   end
 
   def blockchain_balance_base_unit_value
     @blockchain_balance_base_unit_value ||= token.blockchain_balance(wallet.address)
   end
 
+  def blockchain_balance_base_unit_locked_value
+    @blockchain_balance_base_unit_locked_value ||= if token._token_type_token_release_schedule?
+      token.blockchain_locked_balance(wallet.address)
+    else
+      0
+    end
+  end
+
+  def blockchain_balance_base_unit_unlocked_value
+    @blockchain_balance_base_unit_unlocked_value ||= if token._token_type_token_release_schedule?
+      token.blockchain_unlocked_balance(wallet.address)
+    else
+      blockchain_balance_base_unit_value
+    end
+  end
+
   def sync_with_blockchain!
-    update(base_unit_value: blockchain_balance_base_unit_value)
+    update!(
+      base_unit_value: blockchain_balance_base_unit_value,
+      base_unit_locked_value: blockchain_balance_base_unit_locked_value,
+      base_unit_unlocked_value: blockchain_balance_base_unit_unlocked_value
+    )
   end
 
   def sync_with_blockchain_later
