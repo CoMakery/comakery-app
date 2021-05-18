@@ -1,4 +1,3 @@
-require 'csv'
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
@@ -22,7 +21,7 @@ class Dashboard::TransfersController < ApplicationController
   end
 
   def export_transfers
-    send_data @project.project_transfers_csv_data, filename: 'transfers.csv'
+    send_data TransfersExporter.new(@project).project_transfers_csv_data, filename: 'transfers.csv'
   end
 
   def create

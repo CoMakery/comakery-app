@@ -62,7 +62,7 @@
       </div>
     <% end %>
 
-    <% if current_account.comakery_admin? %>
+    <% if current_account&.comakery_admin? %>
       <div class='row'>
         <div class='col-12'>
           <%= link_to export_transfers_project_dashboard_transfers_path(@project, format: :csv) do %>

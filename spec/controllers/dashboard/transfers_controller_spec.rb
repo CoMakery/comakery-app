@@ -55,6 +55,19 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
     end
   end
 
+  describe 'GET #export_transfers' do
+    it 'can not download csv of all transfers of any project' do
+      get :export_transfers, params: { format: 'csv', project_id: project.id }
+      expect(response).to redirect_toroot_path
+    end
+
+    it 'Only admin can download csv of all transfers of any project' do
+      project.account.update(comakery_admin: true)
+      get :export_transfers, params: { format: 'csv', project_id: project.id }
+      expect(response).to be_successful
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new transfer' do
