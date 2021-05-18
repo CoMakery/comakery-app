@@ -37,6 +37,7 @@
     <div class="transfers-filters--filter">
       <div class="stacked-chart-legend" style='width: 25%; display: inline-table;'>
         <% @transfers_chart_colors_objects.each do |type, color| %>
+          <% next unless type.default %>
           <div class="stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
             <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
 
@@ -47,16 +48,11 @@
             ) %>
 
             <div style='margin-left:2em; width: 65px;'>
-              <% type_count = @transfers_totals.where(transfer_type_id: type.id).count %>
-              <% type_percent =
-                if @transfers_totals.count.positive?
-                  (type_count.to_f/@transfers_totals.count * 100).to_i
-                else
-                  0
-                end %>
+              <% type_count = @transfer_types_and_counts[type.name] %>
               <%= type_count %>
               <div style="color: <%= color %>; float: right;">
-                <%= "#{type_percent}%" %>
+                <% percentage = @total_size == 0 ? 0 : ((type_count.to_f/@total_size.to_f) * 100).to_i %>
+                <%= " #{percentage}%" %>
               </div>
             </div>
           </div>
