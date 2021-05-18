@@ -31,7 +31,7 @@ describe 'transfers_index_page', js: true do
       visit project_dashboard_transfers_path(project)
 
       # hardcoded from browser
-      rectangle_xpath = "/HTML/BODY[1]/DIV[3]/DIV[2]/DIV[2]/DIV[1]/TURBO-FRAME[1]/DIV[1]/DIV[2]/*[local-name()='svg' and namespace-uri()='http://www.w3.org/2000/svg'][1]/*[local-name()='g' and namespace-uri()='http://www.w3.org/2000/svg'][3]"
+      rectangle_xpath = "/HTML/BODY[1]/DIV[3]/DIV[2]/DIV[2]/DIV[1]/TURBO-FRAME[1]/DIV[1]/DIV[1]/*[local-name()='svg' and namespace-uri()='http://www.w3.org/2000/svg'][1]/*[local-name()='g' and namespace-uri()='http://www.w3.org/2000/svg'][3]"
 
       page.find(:xpath, rectangle_xpath).hover
 
