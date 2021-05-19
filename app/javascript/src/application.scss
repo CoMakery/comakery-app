@@ -606,7 +606,6 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
-  padding: 10px;
 
   .hot-wallet-switcher {
     display: flex;
@@ -642,6 +641,12 @@ form.form-with-submit-button {
       max-width: 200px;
       border-left: none !important;
     }
+  }
+}
+
+.batch-size {
+  input {
+    padding-left: 7em !important;
   }
 }
 
