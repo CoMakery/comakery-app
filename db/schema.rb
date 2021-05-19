@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_233528) do
+ActiveRecord::Schema.define(version: 2021_05_19_082820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -527,6 +527,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_233528) do
     t.text "funding_url"
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
+    t.integer "transfer_batch_size", default: 1, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["long_id"], name: "index_projects_on_long_id"
