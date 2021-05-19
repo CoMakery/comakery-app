@@ -115,15 +115,15 @@ describe ProjectPolicy do
       end
 
       specify do
-        authorized(project_interested, my_public_project, action)
-        authorized(project_interested, my_private_project, action)
-        authorized(project_interested, my_public_project_business_confidential, action)
+        authorized(project_observer, my_public_project, action)
+        authorized(project_observer, my_private_project, action)
+        authorized(project_observer, my_public_project_business_confidential, action)
       end
 
       specify do
-        not_authorized(project_observer, my_public_project, action)
-        not_authorized(project_observer, my_private_project, action)
-        not_authorized(project_observer, my_public_project_business_confidential, action)
+        authorized(project_interested, my_public_project, action)
+        not_authorized(project_interested, my_private_project, action)
+        not_authorized(project_interested, my_public_project_business_confidential, action)
       end
     end
   end
