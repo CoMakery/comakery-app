@@ -498,6 +498,34 @@ form.form-with-submit-button {
   }
 }
 
+.transfer-dropdown-filter-style{
+  color: white !important;
+  background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%);
+  padding-right: 35px;
+  line-height: normal;
+
+  option {
+    color: #3a3a3a;
+  }
+}
+
+.category-and-status-filters{
+  text-align: right;
+}
+
+.display-contents{
+  display: contents;
+}
+
+.status-category-filter-style{
+  line-height: normal;
+  color: #2647CE !important;
+  font-family: inherit !important;
+  max-width: fit-content !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 .transfer-button {
   font-family: Montserrat, sans-serif;
   font-size: 10px;
@@ -606,7 +634,7 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
-  padding: 10px;
+  padding: 0px;
 
   .hot-wallet-switcher {
     display: flex;
@@ -621,7 +649,7 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: -webkit-fill-available;
+      width: stretch;
     }
 
     .hot-wallet-switcher-child {
@@ -854,6 +882,7 @@ form.form-with-submit-button {
     .stacked-chart-legend__type__name {
       text-transform: capitalize;
       font-weight: 500;
+      word-break: keep-all;
     }
   }
 
@@ -1701,11 +1730,11 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__account {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__issuer {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__amount {
@@ -1732,7 +1761,7 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__total_amount {
-      min-width: 60px;
+      min-width: 150px;
       font-weight: 600;
       display: block;
       white-space: nowrap;

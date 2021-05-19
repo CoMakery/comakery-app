@@ -17,24 +17,8 @@
     data-transfers-chart-decimals="<%= @project_token&.decimal_places || 0 %>"
     data-transfers-chart-colors="<%= @project.transfers_chart_colors.to_json %>"
     data-transfers-chart-transfer-type-burn="<%= @negative %>">
-    <h2>transfer history</h2>
 
-    <div class="transfers-chart__info">
-      <div class="transfers-filters--filter">
-        <div class="transfers-filters--filter--options">
-          <% ['Year', 'Month', 'Week', 'Day'].each do |scale_x| %>
-            <div
-              data-target="transfers-chart.scales"
-              data-scale-x="<%= scale_x %>"
-              class="<%= scale_x == (params[:duration] || 'Year') ? 'transfers-filters--filter--options__active' : nil %>">
-              <%= link_to scale_x, fetch_chart_data_project_dashboard_transfers_path(@project, duration: scale_x, q: @filter_params, page: params[:page]), data: {turbo_frame: "chart-data"} %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <div class="transfers-chart__charts">
+    <div class="transfers-chart__charts" style='width: 75%;'>
       <svg id="stacked-chart"></svg>
       <div>
         <svg id="donut-chart" width="300" height="300"></svg>
@@ -48,6 +32,32 @@
         </div>
       </div>
       <div id="stacked-chart-tooltip"></div>
+    </div>
+
+    <div class="transfers-filters--filter">
+      <div class="stacked-chart-legend" style='width: 25%; display: inline-table;'>
+        <% @transfers_chart_colors_objects.each do |type, color| %>
+          <% next unless type.default %>
+          <div class="stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
+            <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
+
+            <%= link_to(
+              type.name,
+              request.params.merge(q: (request.params[:q] || {}).except(:transfer_type_id_eq).merge(transfer_type_id_eq: type.id)),
+              class: "stacked-chart-legend__type__name"
+            ) %>
+
+            <div style='margin-left:2em; width: 65px;'>
+              <% type_count = @transfer_types_and_counts[type.name] %>
+              <%= type_count %>
+              <div style="color: <%= color %>; float: right;">
+                <% percentage = @total_size == 0 ? 0 : ((type_count.to_f/@total_size.to_f) * 100).to_i %>
+                <%= " #{percentage}%" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </turbo-frame>
