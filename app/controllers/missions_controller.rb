@@ -162,7 +162,7 @@ class MissionsController < ApplicationController
     end
 
     def set_mission_props # rubocop:todo Metrics/CyclomaticComplexity
-      projects = @mission.public_projects.order('project_roles_count DESC').includes(:token, :accounts, :award_types, :ready_award_types, :account, project_admins: [:specialty], contributors_distinct: [:specialty])
+      projects = @mission.public_projects.order('project_roles_count DESC').includes(:token, :accounts, :award_types, :ready_award_types, :account, contributors_distinct: [:specialty])
 
       @props = {
         mission: @mission&.serializable_hash&.merge(mission_images)&.merge({ stats: @mission.stats }),
