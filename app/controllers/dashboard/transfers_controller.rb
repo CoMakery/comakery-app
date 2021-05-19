@@ -3,10 +3,8 @@ class Dashboard::TransfersController < ApplicationController
   before_action :set_award_type, only: [:create]
   before_action :set_transfers, only: %i[index]
   before_action :set_transfer, only: [:show]
-  before_action :skip_authorization, only: [:export_transfers]
-  before_action :redirect_unless_admin, only: [:export_transfers]
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
-  skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data export_transfers]
+  skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
 
   fragment_cache_key do
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
@@ -21,7 +19,9 @@ class Dashboard::TransfersController < ApplicationController
   end
 
   def export_transfers
-    send_data TransfersExporter.new(@project).project_transfers_csv_data, filename: 'transfers.csv'
+    authorize @project, :export_transfers?
+
+    send_data TransfersExporter.new(@project).generate_transfers_csv, filename: 'transfers.csv'
   end
 
   def create
@@ -120,9 +120,5 @@ class Dashboard::TransfersController < ApplicationController
 
     def transfer_update_params
       params.fetch(:award, {}).permit(:prioritized_at)
-    end
-
-    def redirect_unless_admin
-      redirect_to root_path unless current_account.comakery_admin?
     end
 end

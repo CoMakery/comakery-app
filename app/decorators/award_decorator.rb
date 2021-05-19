@@ -15,16 +15,40 @@ class AwardDecorator < Draper::Decorator
     token.blockchain.url_for_tx_human(ethereum_transaction_address) if ethereum_transaction_address.present?
   end
 
-  def ethereum_transaction_id
-    object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash if token
-  end
-
   def amount_pretty
     number_with_precision(amount, precision: token&.decimal_places.to_i)
   end
 
   def total_amount_pretty
     number_to_currency(total_amount, precision: token&.decimal_places.to_i, unit: '')
+  end
+
+  def transfer_transaction # rubocop:todo Metrics/CyclomaticComplexity
+    if project.token&._token_type?
+      if paid? && object.ethereum_transaction_address
+        ethereum_transaction_address
+      elsif project.token.token_frozen?
+        'frozen'
+      elsif recipient_address.blank?
+        'needs wallet'
+      else
+        'pending'
+      end
+    else
+      '-'
+    end
+  end
+
+  def transfer_type_name
+    transfer_type ? transfer_type.name : '-'
+  end
+
+  def transfered_date
+    paid? && transferred_at ? transferred_at.strftime('%b %e %Y') : '–'
+  end
+
+  def created_date
+    created_at.strftime('%b %e %Y')
   end
 
   def part_of_email
@@ -45,6 +69,22 @@ class AwardDecorator < Draper::Decorator
 
   def issuer_address
     issuer.address_for_blockchain(object.token&._blockchain)
+  end
+
+  def issuer_first_name
+    issuer&.decorate&.first_name
+  end
+
+  def issuer_last_name
+    issuer&.decorate&.last_name
+  end
+
+  def recipient_first_name
+    account ? account.decorate.first_name : part_of_email
+  end
+
+  def recipient_last_name
+    account ? account.decorate.last_name : '-'
   end
 
   def issuer_display_name

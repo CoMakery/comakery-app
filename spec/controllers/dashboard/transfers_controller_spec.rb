@@ -56,13 +56,14 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
   end
 
   describe 'GET #export_transfers' do
-    it 'can not download csv of all transfers of any project' do
+    it 'can not download csv of all transfers of project' do
+      login(receiver)
+
       get :export_transfers, params: { format: 'csv', project_id: project.id }
       expect(response).to redirect_to root_path
     end
 
-    it 'Only admin can download csv of all transfers of any project' do
-      project.account.update(comakery_admin: true)
+    it 'Only project admin can download csv of all transfers of project' do
       get :export_transfers, params: { format: 'csv', project_id: project.id }
       expect(response).to be_successful
     end

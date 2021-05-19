@@ -69,6 +69,22 @@ describe AwardDecorator do
     expect(award.decorate.communication_channel).to eq channel.name_with_provider
   end
 
+  it 'return issuer first name' do
+    expect(subject.issuer_first_name).to eq 'johnny'
+  end
+
+  it 'return issuer last name' do
+    expect(subject.issuer_last_name).to eq 'johnny'
+  end
+
+  it 'return recipient first name' do
+    expect(subject.recipient_first_name).to eq 'Betty'
+  end
+
+  it 'return recipient last name' do
+    expect(subject.recipient_last_name).to eq 'Ross'
+  end
+
   describe 'total_amount_wei' do
     let!(:amount) { 2 }
     let!(:award_18_decimals) { create(:award, status: :ready, amount: amount) }
@@ -124,6 +140,35 @@ describe AwardDecorator do
 
     it 'returns nil for award without blockchain_transaction' do
       expect(award.decorate.transfer_button_state_class).to be_nil
+    end
+  end
+
+  describe 'transfer_transaction' do
+    it 'return ethereum_transaction_address when transfer status is paid and ethereum_transaction_address is present' do
+      award = create :award, status: 'paid', ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
+      expect(award.decorate.transfer_transaction).to eq('0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb')
+    end
+
+    it 'return frozen when project token frozen' do
+      award = create :award
+      award.project.token.update(token_frozen: true)
+      expect(award.decorate.transfer_transaction).to eq('frozen')
+    end
+
+    it 'return needs wallet when recipient address is blank' do
+      award = create :award
+      expect(award.decorate.transfer_transaction).to eq('needs wallet')
+    end
+
+    it 'return pending when transfer status not paid and token_frozen is false and recipient_address not blank' do
+      award = create :award, award_type: award_type, issuer: issuer, account: recipient
+      expect(award.decorate.transfer_transaction).to eq('pending')
+    end
+
+    it 'return blank when project token not present' do
+      award = create :award
+      award.project.token.update(_token_type: nil)
+      expect(award.decorate.transfer_transaction).to eq('-')
     end
   end
 end
