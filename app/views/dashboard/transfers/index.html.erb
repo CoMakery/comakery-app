@@ -8,7 +8,6 @@
     <% if policy(@project).create_transfer? %>
       <%= render partial: "shared/wallet_connect" %>
     <% end %>
-
     <% if policy(@project).create_transfer? && @project.token&.supports_batch_transfers? && ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
       <div class="row">
         <div class="col-6">

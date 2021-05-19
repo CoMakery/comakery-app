@@ -4,12 +4,12 @@
       <h4>Hot Wallet </h4>
       <div class="hot-wallet-switcher-child">
         <%= link_to(
-                  middle_truncate(project.hot_wallet.address),
-                  project.hot_wallet.blockchain.url_for_address_human(project.hot_wallet.address),
-                  target: :_blank,
-                  class: 'hot_wallet_address_link',
-                  data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "210" }
-                ) %>
+          middle_truncate(project.hot_wallet.address),
+          project.hot_wallet.blockchain.url_for_address_human(project.hot_wallet.address),
+          target: :_blank,
+          class: 'hot_wallet_address_link',
+          data: { controller: "utils--truncate", target: "utils--clipboard.source", width: "210" }
+        ) %>
       </div>
       <%= select_tag "project[hot_wallet_mode]",
                      options_for_select(Project.hot_wallet_modes.keys.map{|name| [name.humanize, name]}, project.hot_wallet_mode),
