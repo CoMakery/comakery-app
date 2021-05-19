@@ -19,7 +19,7 @@ describe 'transfer button on Transfers page' do
     end
 
     it 'is not present' do
-      expect(page).not_to have_css('.transfers-table__transfer__button .transfer-button')
+      expect(page).not_to have_css('.transfers-table__transfer__status .transfer-button')
     end
   end
 
@@ -30,7 +30,7 @@ describe 'transfer button on Transfers page' do
     end
 
     it 'is not present' do
-      expect(page).not_to have_css('.transfers-table__transfer__button .transfer-button')
+      expect(page).not_to have_css('.transfers-table__transfer__status .transfer-button')
     end
   end
 
@@ -67,7 +67,7 @@ describe 'transfer button on Transfers page' do
         end
 
         it 'says frozen' do
-          expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'frozen')
+          expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'frozen')
         end
       end
 
@@ -83,7 +83,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'says needs wallet' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'needs wallet')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'needs wallet')
           end
         end
 
@@ -94,7 +94,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'links to Wallets' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'link OREID')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'link OREID')
           end
         end
 
@@ -104,7 +104,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'links to OREID' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'PAY')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'PAY')
           end
         end
       end
@@ -132,7 +132,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'says pending' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'pending')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'pending')
           end
         end
 
@@ -142,7 +142,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'says pending' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'pending')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'pending')
           end
         end
       end
@@ -153,7 +153,7 @@ describe 'transfer button on Transfers page' do
         end
 
         it 'says pending' do
-          expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'pending')
+          expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'pending')
         end
       end
     end
@@ -195,7 +195,7 @@ describe 'transfer button on Transfers page' do
         end
 
         it 'says frozen' do
-          expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'frozen')
+          expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'frozen')
         end
       end
 
@@ -211,7 +211,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'says needs wallet' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'needs wallet')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'needs wallet')
           end
         end
 
@@ -255,7 +255,7 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'says pending' do
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'pending')
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'pending')
           end
         end
       end
@@ -266,7 +266,7 @@ describe 'transfer button on Transfers page' do
         end
 
         it 'says pending' do
-          expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1, text: 'pending')
+          expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'pending')
         end
       end
     end
