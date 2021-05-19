@@ -753,9 +753,9 @@ exports[`TaskShow renders correctly without props 1`] = `
                     className="task-award-form--form--field--value"
                   >
                     100.00000000
-                     ×
+                     × 
                     1
-                     =
+                     = 
                     100.00000000
                   </div>
                 </div>

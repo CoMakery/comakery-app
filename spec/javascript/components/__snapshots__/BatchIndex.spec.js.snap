@@ -588,7 +588,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         Projects can have one or many batches in them.
                       </li>
                       <li>
-                        A batch must be
+                        A batch must be 
                         <a
                           href=""
                         >
