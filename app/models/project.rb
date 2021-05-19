@@ -70,7 +70,6 @@ class Project < ApplicationRecord
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
-  after_create :add_owner_as_interested
   after_create :add_owner_as_admin
   after_create :create_default_transfer_types
   after_update_commit :broadcast_hot_wallet_mode, if: :saved_change_to_hot_wallet_mode?
@@ -275,10 +274,6 @@ class Project < ApplicationRecord
 
     def udpate_awards_if_token_was_added
       awards.paid.each { |a| a.update(status: :accepted) }
-    end
-
-    def add_owner_as_interested
-      project_interested << account unless account.involved?(id)
     end
 
     def add_owner_as_admin
