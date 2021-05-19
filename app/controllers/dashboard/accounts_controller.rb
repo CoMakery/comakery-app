@@ -99,7 +99,11 @@ class Dashboard::AccountsController < ApplicationController
            .where(project_roles: { project: @project.object })
            .includes(:verifications, :awards, :latest_verification, :image_attachment)
 
-      @q = @q.joins(:account_token_records).includes(account_token_records: [:reg_group]) if @project.token&.token_type&.operates_with_account_records?
+      if @project.token&.token_type&.operates_with_account_records?
+        @q = @q.joins(:account_token_records)
+               .where(account_token_records: { token_id: @project.object.token_id })
+               .includes(account_token_records: [:reg_group])
+      end
 
       @q = @q.ransack(params[:q])
     end

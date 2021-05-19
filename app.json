@@ -117,6 +117,10 @@
       "description": "Intercom app id",
       "required": false
     },
+    "RACK_ATTACK_THROTTLE_API_RPM": {
+      "description": "Throttle API requests per minute",
+      "required": false
+    },
     "RECAPTCHA_SITE_KEY": {
       "description": "Recaptcha site key",
       "required": false

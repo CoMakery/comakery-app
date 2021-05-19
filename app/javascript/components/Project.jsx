@@ -109,7 +109,7 @@ export default class Project extends React.Component {
     super(props)
 
     this.state = {
-      follower: props.follower,
+      follower: props.follower
     }
 
     this.arcTween = this.arcTween.bind(this)
