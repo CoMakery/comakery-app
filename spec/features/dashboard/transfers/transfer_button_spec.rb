@@ -179,7 +179,7 @@ describe 'transfer button on Transfers page' do
       end
 
       it 'links to blockchain transaction' do
-        expect(page).to have_css('.transfers-table__transfer__status .transfer-button a', count: 1)
+        expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1)
       end
     end
 
@@ -222,7 +222,8 @@ describe 'transfer button on Transfers page' do
           end
 
           it 'links to WalletConnect and Metamask controllers' do
-            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'Pay')
+            expect(page.find('.transfers-table__transfer__status .transfer-button').present?).to eq true
+            expect(page.find('.transfers-table__transfer__status .transfer-button').text).to eq 'Pay'
             expect(page).to have_css('.transfers-table__transfer__status .transfer-button a[data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx"]', count: 1)
             expect(page).to have_css('.transfers-table__transfer__status .transfer-button a[data-sign--wallet-connect-target="txButtons"]', count: 1)
             expect(page).to have_css('.transfers-table__transfer__status .transfer-button a[data-sign--metamask-target="txButtons"]', count: 1)
