@@ -101,9 +101,9 @@ class Project < ApplicationRecord
     raise ArgumentError, 'Could not find an Account with that email address' if new_owner.blank?
 
     previous_owner = project.account
-    project.safe_add_admin(previous_owner)
+    project.project_roles.find_by(account: previous_owner).update(role: :admin)
     project.account_id = new_owner.id
-    project.safe_add_admin(new_owner)
+    project.project_roles.find_or_create_by(account: new_owner).update(role: :admin)
     project.save!
   end
 

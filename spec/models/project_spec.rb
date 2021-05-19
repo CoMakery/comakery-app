@@ -577,7 +577,7 @@ describe Project do
     it 'sets preconditions properly' do
       expect(project.account).to eq(previous_owner)
       expect(project.project_admins).to include(previous_owner)
-      expect(project.interested).to include(previous_owner)
+      expect(project.accounts).to include(previous_owner)
     end
 
     describe 'happy path with project object' do
@@ -617,10 +617,10 @@ describe Project do
       expect(project.project_admins.length).to eq(1)
 
       described_class.assign_project_owner_from(project, next_owner.email)
-      expect(project.project_admins.length).to eq(2)
+      expect(project.reload.project_admins.length).to eq(2)
 
       described_class.assign_project_owner_from(project, next_owner.email)
-      expect(project.project_admins.length).to eq(2)
+      expect(project.reload.project_admins.length).to eq(2)
     end
 
     it 'raises an error if an account was not found by email' do
