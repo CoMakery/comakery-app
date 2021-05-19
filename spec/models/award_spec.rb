@@ -201,7 +201,7 @@ describe Award do
       before do
         award_ready_wo_account.update(account: nil)
         award_unpublished_wo_account.update(account: nil)
-        award_type.project.admins << create(:account)
+        award_type.project.project_admins << create(:account)
       end
 
       it 'returns only ready awards without assigned account or assigned to you' do
@@ -235,7 +235,7 @@ describe Award do
 
       it 'returns only awards available for review for project admin/owner' do
         expect(described_class.filtered_for_view('to review', award_submitted.project.account)).to include(award_submitted)
-        expect(described_class.filtered_for_view('to review', award_submitted.project.admins.first)).to include(award_submitted)
+        expect(described_class.filtered_for_view('to review', award_submitted.project.project_admins.first)).to include(award_submitted)
 
         expect(described_class.filtered_for_view('to review', award_submitted.account)).not_to include(award_submitted)
         expect(described_class.filtered_for_view('to review', create(:account))).not_to include(award_submitted)
@@ -243,7 +243,7 @@ describe Award do
 
       it 'returns only awards available for payment for a project admin/owner' do
         expect(described_class.filtered_for_view('to pay', award_accepted.project.account)).to include(award_accepted)
-        expect(described_class.filtered_for_view('to pay', award_accepted.project.admins.first)).to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', award_accepted.project.project_admins.first)).to include(award_accepted)
 
         expect(described_class.filtered_for_view('to pay', award_accepted.account)).not_to include(award_accepted)
         expect(described_class.filtered_for_view('to pay', create(:account))).not_to include(award_accepted)

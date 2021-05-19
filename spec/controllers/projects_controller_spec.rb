@@ -92,7 +92,7 @@ describe ProjectsController do
     let!(:project_role) { create(:project_role, account: account) } # by default it will create project from mom.rb which will be Uber for Cats
 
     before do
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     describe '#login' do

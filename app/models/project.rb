@@ -104,8 +104,7 @@ class Project < ApplicationRecord
     previous_owner = project.account
     project.safe_add_admin(previous_owner)
     project.account_id = new_owner.id
-    project.admins.delete(new_owner)
-    project.add_account(new_owner) # TODO: Update after the merge with the project admins migration branch
+    project.safe_add_admin(new_owner)
     project.save!
   end
 
@@ -114,7 +113,7 @@ class Project < ApplicationRecord
   end
 
   def safe_add_admin(new_admin)
-    admins << new_admin unless admins.exists?(new_admin.id)
+    project_admins << new_admin unless project_admins.exists?(new_admin.id)
   end
 
   def add_account(account)

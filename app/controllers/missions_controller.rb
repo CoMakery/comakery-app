@@ -110,7 +110,7 @@ class MissionsController < ApplicationController
 
       a['specialty'] ||= {}
 
-      if project.account == account || project.admins.include?(account)
+      if project.account == account || project.project_admins.include?(account)
         a['specialty']['name'] = 'Team Leader'
       elsif !project.contributors_distinct.include?(account)
         a['specialty']['name'] = 'Interested'
@@ -162,7 +162,7 @@ class MissionsController < ApplicationController
     end
 
     def set_mission_props # rubocop:todo Metrics/CyclomaticComplexity
-      projects = @mission.public_projects.order('project_roles_count DESC').includes(:token, :accounts, :award_types, :ready_award_types, :account, admins: [:specialty], contributors_distinct: [:specialty])
+      projects = @mission.public_projects.order('project_roles_count DESC').includes(:token, :accounts, :award_types, :ready_award_types, :account, project_admins: [:specialty], contributors_distinct: [:specialty])
 
       @props = {
         mission: @mission&.serializable_hash&.merge(mission_images)&.merge({ stats: @mission.stats }),

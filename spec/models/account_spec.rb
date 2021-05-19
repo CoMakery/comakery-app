@@ -214,7 +214,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'has many projects' do
@@ -241,16 +241,16 @@ describe Account do
       expect(account.team_award_types).to match_array([teammate_award_type])
     end
 
-    it 'has and belongs to many admin_projects' do
-      expect(account.admin_projects).to match_array([admin_project])
+    it 'has many admin_projects' do
+      expect(account.admin_projects).to match_array([admin_project, project]) # owner as admin
     end
 
     it 'has many admin award_types' do
-      expect(account.admin_award_types).to match_array([admin_award_type])
+      expect(account.admin_award_types).to match_array([admin_award_type, award_type]) # same for owner
     end
 
     it 'has many admin awards' do
-      expect(account.admin_awards).to match_array([admin_award])
+      expect(account.admin_awards).to match_array([admin_award, award]) # same for owner
     end
 
     it 'has many verifications' do
@@ -292,7 +292,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns own award types' do
@@ -342,7 +342,7 @@ describe Account do
         create(:award, account: account, specialty: account.specialty)
       end
 
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns started awards' do
@@ -464,7 +464,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns received awards' do
@@ -540,7 +540,7 @@ describe Account do
     before do
       team.build_authentication_team authentication
       team.build_authentication_team authentication1
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'applies scope' do

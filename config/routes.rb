@@ -105,8 +105,6 @@ Rails.application.routes.draw do
       resources :accesses, only: [:index] do
         collection do
           post :regenerate_api_key
-          post :add_admin
-          delete :remove_admin
         end
       end
       resources :reg_groups, only: [:create, :update, :destroy]

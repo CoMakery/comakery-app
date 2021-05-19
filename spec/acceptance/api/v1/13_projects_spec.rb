@@ -21,7 +21,7 @@ resource 'III. Projects' do
 
   before do
     3.times do |n|
-      project.admins << create(:account, managed_account_id: "1c182a7b-4f22-4636-9047-8bab3235294#{n}", managed_mission: active_whitelabel_mission)
+      project.project_admins << create(:account, managed_account_id: "1c182a7b-4f22-4636-9047-8bab3235294#{n}", managed_mission: active_whitelabel_mission)
     end
   end
 

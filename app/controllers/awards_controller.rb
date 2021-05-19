@@ -305,7 +305,7 @@ class AwardsController < ApplicationController
         .accessable_awards(projects_involved)
         .includes(
           :specialty, :issuer, :award_type, :cloned_from,
-          project: [:account, :mission, :token, :admins, channels: [:team]],
+          project: [:account, :mission, :token, :project_admins, channels: [:team]],
           account: [image_attachment: :blob]
         ).filtered_for_view(@filter, current_account)
         .order(expires_at: :asc, updated_at: :desc)

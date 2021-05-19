@@ -251,7 +251,6 @@ describe AwardPolicy do
     let(:award) { create :award, award_type: create(:award_type, project: project) }
 
     before do
-      project.admins << project_admin
       create(:project_role, project: project, account: project_admin, role: :admin)
     end
 
