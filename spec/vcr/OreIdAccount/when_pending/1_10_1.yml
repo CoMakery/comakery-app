@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://service.oreid.io/api/custodial/new-user
+    uri: https://staging.service.oreid.io/api/custodial/new-user
     body:
       encoding: UTF-8
       string: '{"name":"Eva Smith","user_name":"hunter-29e3e791666d5b539ab90fde6938df15c26ef55f","email":"me+e03263b2c9ee235e34332db4cc6174fbbc5e7e28@example.com","picture":null,"user_password":"2d3d80dd3c1ce3315b7c3a96574e987f6d4ac162dd40aec6618ecf481fb11a34!","phone":"","account_type":"native"}'
@@ -47,7 +47,7 @@ http_interactions:
   recorded_at: Fri, 19 Mar 2021 00:55:23 GMT
 - request:
     method: get
-    uri: https://service.oreid.io/api/account/user?account=ore1rmtumbzt
+    uri: https://staging.service.oreid.io/api/account/user?account=ore1rmtumbzt
     body:
       encoding: US-ASCII
       string: ''

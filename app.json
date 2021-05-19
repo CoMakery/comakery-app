@@ -81,6 +81,10 @@
       "required": true,
       "value": "false"
     },
+    "OREID_BASE_DOMAIN": {
+      "description": "Aikon ORE ID API domain (default: staging.service.oreid.io)",
+      "required": false
+    },
     "ORE_ID_API_KEY": {
       "description": "Aikon ORE ID API key",
       "required": false
