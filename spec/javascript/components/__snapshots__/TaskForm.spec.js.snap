@@ -49,6 +49,7 @@ exports[`TaskForm renders correctly without props 1`] = `
     current="batches"
     hasBackButton={true}
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -104,6 +105,7 @@ exports[`TaskForm renders correctly without props 1`] = `
           current="batches"
           expanded={false}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -168,6 +170,7 @@ exports[`TaskForm renders correctly without props 1`] = `
               current="batches"
               expanded={false}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >

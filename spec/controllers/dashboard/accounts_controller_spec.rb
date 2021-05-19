@@ -18,6 +18,8 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         subject
 
         expect(assigns[:accounts]).to include(account)
+
+        expect(assigns[:accounts].ids).to match_array([account.id])
       end
     end
 
@@ -31,6 +33,8 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         subject
 
         expect(assigns[:accounts]).to include(account)
+
+        expect(assigns[:accounts].ids).to match_array([account.id])
       end
     end
 
@@ -43,6 +47,8 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         subject
 
         expect(assigns[:accounts]).to include(project.account)
+
+        expect(assigns[:accounts].ids).to match_array([project.account_id, account.id])
       end
     end
 
@@ -55,7 +61,10 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
 
       it 'returns interested' do
         subject
+
         expect(assigns[:accounts]).to include(project.account)
+
+        expect(assigns[:accounts].ids).to match_array([project.account_id, account.id])
       end
     end
   end

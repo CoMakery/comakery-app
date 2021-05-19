@@ -12,6 +12,7 @@ if enable_simplecov
     add_filter %r{^/doc/}
     add_filter %r{^/config/}
     add_filter %r{^/hotwallet/} # has it's own tests
+    add_filter 'lib/tasks/ci_coverage_report.rake/'
 
     add_group 'Decorators', 'app/decorators'
     add_group 'Interactors', 'app/interactors'

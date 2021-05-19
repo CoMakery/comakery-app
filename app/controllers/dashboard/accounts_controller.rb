@@ -1,6 +1,7 @@
 class Dashboard::AccountsController < ApplicationController
   before_action :assign_project
   before_action :normalize_account_token_records_lockup_until_lt, only: [:index]
+  before_action :set_policy, only: [:index]
   before_action :set_accounts, only: [:index]
   before_action :authorize_project, only: :create
   skip_before_action :require_login, only: %i[index show]
@@ -78,6 +79,10 @@ class Dashboard::AccountsController < ApplicationController
       params[:q][:account_token_records_lockup_until_lt] = Time.zone.parse(t)&.to_i if t
     end
 
+    def set_policy
+      @project_policy = ProjectPolicy.new(current_account, @project)
+    end
+
     def set_accounts
       @page = (params[:page] || 1).to_i
       @accounts_all = accounts_query.result
@@ -94,7 +99,11 @@ class Dashboard::AccountsController < ApplicationController
            .where(project_roles: { project: @project.object })
            .includes(:verifications, :awards, :latest_verification, :image_attachment)
 
-      @q = @q.joins(:account_token_records).includes(account_token_records: [:reg_group]) if @project.token&.token_type&.operates_with_account_records?
+      if @project.token&.token_type&.operates_with_account_records?
+        @q = @q.joins(:account_token_records)
+               .where(account_token_records: { token_id: @project.object.token_id })
+               .includes(account_token_records: [:reg_group])
+      end
 
       @q = @q.ransack(params[:q])
     end

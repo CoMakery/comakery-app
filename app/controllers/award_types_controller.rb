@@ -78,6 +78,8 @@ class AwardTypesController < ApplicationController
 
     # rubocop:todo Metrics/PerceivedComplexity
     def set_index_props # rubocop:todo Metrics/CyclomaticComplexity
+      policy = ProjectPolicy.new(current_user, @project)
+
       @props = {
         editable: policy(@project).edit?,
         batches: @award_types&.with_attached_diagram&.includes(awards: %i[account project assignments])&.map do |batch|
@@ -102,7 +104,7 @@ class AwardTypesController < ApplicationController
           currency_logo: GetImageVariantPath.call(attachment: @project.token&.logo_image, resize_to_fill: [100, 100]).path,
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props.merge(observer: policy.project_observer?),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

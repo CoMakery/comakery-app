@@ -1329,4 +1329,11 @@ describe Award do
       it { is_expected.not_to be_valid }
     end
   end
+
+  describe '#populate_recipient_wallet' do
+    let(:wallet) { create(:eth_wallet) }
+    subject { create(:award, account: wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))) }
+
+    specify { expect(subject.recipient_wallet).to eq(wallet) }
+  end
 end

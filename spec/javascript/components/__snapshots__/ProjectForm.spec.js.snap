@@ -36,6 +36,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
     className="project-form"
     current="form"
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={null}
@@ -72,6 +73,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
           current="form"
           expanded={false}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -117,6 +119,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
               current="form"
               expanded={false}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >

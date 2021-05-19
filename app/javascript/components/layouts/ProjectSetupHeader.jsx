@@ -126,6 +126,7 @@ class ProjectSetupHeader extends React.Component {
     const mission = this.props.missionForHeader
     const project = this.props.projectForHeader
     const owner = this.props.owner
+    const observer = this.props.observer
     const current = this.props.current
 
     return (
@@ -166,7 +167,7 @@ class ProjectSetupHeader extends React.Component {
                 GitHub
               </NavLink>
               }
-              {(owner || project.showBatches) && this.props.whitelabel != true &&
+              {(owner || observer || project.showBatches) && this.props.whitelabel != true &&
               <NavLink current={current === 'batches'} href={project.batchesUrl}>
                 tasks
               </NavLink>
@@ -182,13 +183,13 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
 
-              {(owner || project.showTransfers) &&
+              {(owner || observer || project.showTransfers) &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>
               }
 
-              {(owner || project.showTransfers) &&
+              {(owner || observer || project.showTransfers) &&
                 <NavLink current={current === 'accounts'} href={project.accountsUrl}>
                   accounts
                 </NavLink>
@@ -225,6 +226,7 @@ ProjectSetupHeader.propTypes = {
   missionForHeader: PropTypes.object,
   projectForHeader: PropTypes.object,
   owner           : PropTypes.bool,
+  observer        : PropTypes.bool,
   current         : PropTypes.string,
   expanded        : PropTypes.bool
 }
