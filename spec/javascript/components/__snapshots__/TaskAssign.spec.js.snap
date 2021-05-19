@@ -33,7 +33,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
     className={[Function]}
     current="batches"
     hasBackButton={true}
-    interested={true}
     missionForHeader={null}
     observer={true}
     owner={true}
@@ -75,7 +74,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
         <ProjectSetupHeader
           current="batches"
           expanded={false}
-          interested={true}
           missionForHeader={null}
           observer={true}
           owner={true}
@@ -126,7 +124,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
             <ProjectSetupHeader
               current="batches"
               expanded={false}
-              interested={true}
               missionForHeader={null}
               observer={true}
               owner={true}

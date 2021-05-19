@@ -104,10 +104,7 @@ class AwardTypesController < ApplicationController
           currency_logo: GetImageVariantPath.call(attachment: @project.token&.logo_image, resize_to_fill: [100, 100]).path,
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
-        project_for_header: @project.header_props.merge(
-          observer: policy.project_observer?,
-          interested: policy.project_interested?
-        ),
+        project_for_header: @project.header_props.merge(observer: policy.project_observer?),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

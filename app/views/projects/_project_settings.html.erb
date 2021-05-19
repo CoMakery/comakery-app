@@ -5,7 +5,6 @@
     mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props,
     owner: policy(@project).edit?,
     observer: policy(@project).project_observer?,
-    interested: policy(@project).project_interested?,
     expanded: false,
     current: project_page
   ) %>

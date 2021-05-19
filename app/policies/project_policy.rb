@@ -58,11 +58,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def accounts?
-    show_contributions? || project_observer? || project_interested?
+    show_contributions? || project_observer?
   end
 
   def transfers?
-    show_contributions? || project_observer? || project_interested?
+    show_contributions? || project_observer?
   end
 
   alias update? edit?

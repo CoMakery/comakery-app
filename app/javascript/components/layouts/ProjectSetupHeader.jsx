@@ -127,7 +127,6 @@ class ProjectSetupHeader extends React.Component {
     const project = this.props.projectForHeader
     const owner = this.props.owner
     const observer = this.props.observer
-    const interested = this.props.interested
     const current = this.props.current
 
     return (
@@ -184,13 +183,13 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
 
-              {(owner || observer || interested || project.showTransfers) &&
+              {(owner || observer || project.showTransfers) &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>
               }
 
-              {(owner || observer || interested || project.showTransfers) &&
+              {(owner || observer || project.showTransfers) &&
                 <NavLink current={current === 'accounts'} href={project.accountsUrl}>
                   accounts
                 </NavLink>
@@ -228,7 +227,6 @@ ProjectSetupHeader.propTypes = {
   projectForHeader: PropTypes.object,
   owner           : PropTypes.bool,
   observer        : PropTypes.bool,
-  interested      : PropTypes.bool,
   current         : PropTypes.string,
   expanded        : PropTypes.bool
 }
