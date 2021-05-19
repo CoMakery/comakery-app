@@ -58,6 +58,7 @@ class Project < ApplicationRecord
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :transfer_batch_size, numericality: { greater_than: 0, less_than_or_equal_to: 250, only_integer: true }
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
