@@ -123,12 +123,12 @@ class ProjectDecorator < Draper::Decorator
       video_conference_url: video_conference_url,
       present: true,
       token: {
-        name: token.name,
-        symbol: token.symbol,
-        network: token.blockchain_network,
-        address: token.contract_address,
+        name: token&.name,
+        symbol: token&.symbol,
+        network: token&.blockchain_network,
+        address: token&.contract_address,
         logo_url: GetImageVariantPath.call(
-          attachment: token.logo_image,
+          attachment: token&.logo_image,
           resize_to_fill: [100, 100]
         ).path
       }
