@@ -27,13 +27,13 @@ RSpec.describe TransfersExporter do
 
   describe '#transfers_csv_row' do
     it 'generate row for transfers CSV' do
-      expect(object.transfers_csv_row(transfer.decorate)).to match_array [41, 'Eva', 'Smith', nil, 'Eva', 'Smith', nil, 'Bought', 'Type fb3c15da8f', '50.00000000', 0.1e1, '50.00000000', '0x7709dbc5...', 'Apr  6 2021', 'Apr  6 2021']
+      expect(object.transfers_csv_row(transfer.decorate)).to match_array [41, 'Eva', 'Smith', nil, 'Eva', 'Smith', nil, 'Bought', 'Type fb3c15da8f', '50.00000000', 0.1e1, '50.00000000', '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', 'Apr  6 2021', 'Apr  6 2021']
     end
   end
 
   describe '#generate_transfers_csv' do
     it 'generate the data for transfer CSV' do
-      expect(object.generate_transfers_csv).to eq "\"Recipient User ID\",\"Recipient First Name\",\"Recipient Last Name\",\"Recipient blockchain adddress\",\"Sender First Name\",\"Sender Last Name\",\"Sender blockchain adddress\",\"Transfer Name\",\"Transfer Type\",\"Amount(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Quantity\",\"Total(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Transaction ID\",\"Transfered\",\"Created At\"\n\"41\",\"Eva\",\"Smith\",\"\",\"Eva\",\"Smith\",\"\",\"Bought\",\"Type fb3c15da8f\",\"50.00000000\",\"1.0\",\"50.00000000\",\"0x7709dbc5...\",\"Apr  6 2021\",\"Apr  6 2021\"\n"
+      expect(object.generate_transfers_csv).to eq "\"Recipient User ID\",\"Recipient First Name\",\"Recipient Last Name\",\"Recipient blockchain adddress\",\"Sender First Name\",\"Sender Last Name\",\"Sender blockchain adddress\",\"Transfer Name\",\"Transfer Type\",\"Amount(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Quantity\",\"Total(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Transaction ID\",\"Transfered\",\"Created At\"\n\"41\",\"Eva\",\"Smith\",\"\",\"Eva\",\"Smith\",\"\",\"Bought\",\"Type fb3c15da8f\",\"50.00000000\",\"1.0\",\"50.00000000\",\"0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c\",\"Apr  6 2021\",\"Apr  6 2021\"\n"
     end
   end
 end
