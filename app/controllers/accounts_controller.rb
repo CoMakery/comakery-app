@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
 
   before_action :redirect_if_signed_in, only: %i[new create]
 
-  layout 'legacy'
+  layout 'legacy', except: %i[index]
 
   def index
     authorize(current_user, :index?)
