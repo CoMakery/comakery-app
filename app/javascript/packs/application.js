@@ -45,6 +45,8 @@ import '../src/application.scss'
 import '../src/dist/css/upside.css'
 import '../src/dist/css/upside-vendors.css'
 import '../src/dist/js/upside.js'
+
+// TODO: migrate libs to Yarn
 import '../src/dist/libs/apexcharts/dist/apexcharts.min.js'
 import '../src/dist/libs/choices.js/public/assets/scripts/choices.js'
 import '../src/dist/libs/countup.js/dist/countUp.js'

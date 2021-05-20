@@ -20,6 +20,9 @@ jobs:
       matrix:
         node: [12.x]
 
+    env:
+      NODE_OPTIONS: '--max_old_space_size=4096'
+      
     name: JS
     runs-on: ubuntu-latest
 
