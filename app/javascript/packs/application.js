@@ -53,12 +53,14 @@ import '../src/dist/libs/countup.js/dist/countUp.js'
 import '../src/dist/libs/litepicker/dist/litepicker.js'
 import '../src/dist/libs/nouislider/distribute/nouislider.min.js'
 
-import '../src/wallets/bitcoin_trezor_script.js'
-import '../src/wallets/cardano_trezor_script.js'
-import '../src/wallets/eos_scatter_script.js'
-import '../src/wallets/qrc20_qweb3_script.js'
-import '../src/wallets/qtum_ledger_script.js'
-import '../src/wallets/tezos_trezor_script.js'
+// TODO: enable wallet integration after testing and refactoring
+//
+// import '../src/wallets/bitcoin_trezor_script.js'
+// import '../src/wallets/cardano_trezor_script.js'
+// import '../src/wallets/eos_scatter_script.js'
+// import '../src/wallets/qrc20_qweb3_script.js'
+// import '../src/wallets/qtum_ledger_script.js'
+// import '../src/wallets/tezos_trezor_script.js'
 
 ReactRailsUJS.handleEvent('turbo:load', ReactRailsUJS.handleMount)
 ReactRailsUJS.handleEvent('turbo:before-render', ReactRailsUJS.handleUnmount)
