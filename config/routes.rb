@@ -122,6 +122,10 @@ Rails.application.routes.draw do
       end
     end
 
+    member do
+      get :show_batch_size_form
+    end
+
     collection do
       get :landing
       patch :update_status

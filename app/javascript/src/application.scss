@@ -645,8 +645,18 @@ form.form-with-submit-button {
 }
 
 .batch-size {
-  input {
-    padding-left: 7em !important;
+  #project_transfer_batch_size_input {
+    padding-left: 7.5em !important;
+  }
+
+  #project_transfer_batch_size_input[readonly], #project_transfer_batch_size_input[readonly]:hover {
+    background-color: #fff;
+    color: inherit;
+  }
+
+  .input-label.label-only .input-label-addon {
+    top: 6px;
+    left: 6px;
   }
 }
 

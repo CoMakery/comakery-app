@@ -1,11 +1,15 @@
 <%= turbo_stream_from "project_transfer_batch_size" %>
 <%= turbo_frame_tag "project_transfer_batch_size" do %>
-  <div id="project_<%= project.id %>_transfer_batch_size" class="project-transfer-batch-size">
+  <div id="project_<%= project.id %>_transfer_batch_size" class="project-transfer-batch-size" data-controller="batch-size-input">
     <div class="input-label label-only">
       <div class="input-label-addon">
         Batch size
       </div>
-      <%= number_field_tag "project[transfer_batch_size]", project.transfer_batch_size , id: "project_transfer_batch_size", in: 1..250, class: "form-control" %>
+      <%= text_field_tag "project[transfer_batch_size]", project.transfer_batch_size ,
+                         id: "project_transfer_batch_size_input",
+                         class: "form-control",
+                         readonly: true,
+                         data: {action: "click->batch-size-input#showModalForm"} %>
     </div>
   </div>
 <% end %>
