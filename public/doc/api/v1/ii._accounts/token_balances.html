@@ -4,7 +4,7 @@
     <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
-      
+
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -132,6 +132,14 @@ table th, table td {
                 </td>
                 <td>
                   <span class="description">account id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
@@ -291,17 +299,19 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/token_balances?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617703500&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=SI8aL6I6LW8MLuJkUaySA16%2FSLCNWuNGE97M9Bn9j%2FFrU5v%2Fg1eCBNeioyjIzS5R7wODLOUbXNkKtFdYjZE5AQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/token_balances?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F1c182a7b-4f22-4636-9047-8bab32352949%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=0242d70898bcf3fbb5fa334d1d87804f&amp;body[timestamp]=1617703500&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=SI8aL6I6LW8MLuJkUaySA16%2FSLCNWuNGE97M9Bn9j%2FFrU5v%2Fg1eCBNeioyjIzS5R7wODLOUbXNkKtFdYjZE5AQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617703500&quot;}
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/1c182a7b-4f22-4636-9047-8bab32352949/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;0242d70898bcf3fbb5fa334d1d87804f&quot;, &quot;timestamp&quot;=&gt;&quot;1617703500&quot;}
 proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;SI8aL6I6LW8MLuJkUaySA16/SLCNWuNGE97M9Bn9j/FrU5v/g1eCBNeioyjIzS5R7wODLOUbXNkKtFdYjZE5AQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;eb01ab3c58dd764cea1135233c11b564&quot;</pre>
+              <pre class="response headers">Per-Page: 25
+ETag: W/&quot;eb01ab3c58dd764cea1135233c11b564&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
