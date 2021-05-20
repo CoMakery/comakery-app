@@ -88,7 +88,7 @@ exports[`MissionIndex renders correctly without props 1`] = `
                             name="MISSION/WHITE.svg"
                           >
                             <img
-                              className="icon icon__MISSION/WHITE-svg"
+                              className="icon-legacy icon__MISSION/WHITE-svg"
                               src="test-file-stub"
                             />
                           </Icon>
@@ -113,7 +113,7 @@ exports[`MissionIndex renders correctly without props 1`] = `
                             name="PLUS.svg"
                           >
                             <img
-                              className="icon icon__PLUS-svg"
+                              className="icon-legacy icon__PLUS-svg"
                               src="test-file-stub"
                             />
                           </Icon>

@@ -7,7 +7,7 @@ describe('Footer', () => {
     const wrapper = shallow(<Footer />)
 
     expect(wrapper).toMatchSnapshot()
-    expect(wrapper.exists('.footer')).toBe(true)
+    expect(wrapper.exists('.footer-legacy')).toBe(true)
     expect(wrapper.exists('.footer--logo')).toBe(true)
     expect(wrapper.exists('.footer--content')).toBe(true)
     expect(wrapper.exists('.footer--content--text')).toBe(true)
@@ -21,7 +21,7 @@ describe('Footer', () => {
   it('renders correctly with custom className', () => {
     const wrapper = shallow(<Footer className="__test" />)
 
-    expect(wrapper.exists('.footer.__test')).toBe(true)
+    expect(wrapper.exists('.footer-legacy.__test')).toBe(true)
   })
 
   it('renders correctly with loggedIn flag', () => {

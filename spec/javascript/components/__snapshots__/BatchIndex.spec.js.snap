@@ -327,7 +327,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               name="BATCH/WHITE.svg"
                             >
                               <img
-                                className="icon icon__BATCH/WHITE-svg"
+                                className="icon-legacy icon__BATCH/WHITE-svg"
                                 src="test-file-stub"
                               />
                             </Icon>
@@ -352,7 +352,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               name="PLUS.svg"
                             >
                               <img
-                                className="icon icon__PLUS-svg"
+                                className="icon-legacy icon__PLUS-svg"
                                 src="test-file-stub"
                               />
                             </Icon>

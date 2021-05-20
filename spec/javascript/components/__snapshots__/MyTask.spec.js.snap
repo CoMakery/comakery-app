@@ -124,7 +124,7 @@ exports[`MyTask renders component correctly 1`] = `
                   name="expand-task.svg"
                 >
                   <img
-                    className="icon icon__expand-task-svg"
+                    className="icon-legacy icon__expand-task-svg"
                     src="test-file-stub"
                   />
                 </Icon>
@@ -840,7 +840,7 @@ exports[`MyTask renders component correctly 1`] = `
                             name="DROP_DOWN.svg"
                           >
                             <img
-                              className="icon icon__DROP_DOWN-svg"
+                              className="icon-legacy icon__DROP_DOWN-svg"
                               src="test-file-stub"
                             />
                           </Icon>

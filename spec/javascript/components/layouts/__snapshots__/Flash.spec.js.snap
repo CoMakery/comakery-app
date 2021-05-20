@@ -24,7 +24,7 @@ exports[`Flash renders correctly without props 1`] = `
         name="flash/warning.svg"
       >
         <img
-          className="icon icon__flash/warning-svg flash-message__icon"
+          className="icon-legacy icon__flash/warning-svg flash-message__icon"
           src="test-file-stub"
         />
       </Icon>
@@ -42,7 +42,7 @@ exports[`Flash renders correctly without props 1`] = `
         onClick={[Function]}
       >
         <img
-          className="icon icon__flash/close-svg flash-message__icon flash-message__icon--close"
+          className="icon-legacy icon__flash/close-svg flash-message__icon flash-message__icon--close"
           onClick={[Function]}
           src="test-file-stub"
         />
