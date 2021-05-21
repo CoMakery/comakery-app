@@ -18,7 +18,7 @@
     <label>account</label>
 
     <% if transfer.account %>
-      <%= render partial: "account", locals: {account: transfer.account, wallet: transfer.sender_wallet_address, wallet_url: transfer.sender_wallet_url} %>
+      <%= render partial: "account", locals: { account: transfer.account, wallet: transfer.sender_wallet_address, wallet_url: transfer.sender_wallet_url } %>
     <% elsif transfer.email %>
       <%= transfer.email %>
     <% else %>
@@ -30,7 +30,7 @@
     <label>admin</label>
 
     <% if transfer.paid? %>
-      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.sender_wallet_address, wallet_url: transfer.sender_wallet_url, transfer: transfer} %>
+      <%= render partial: "issuer", locals: { issuer: transfer.issuer, wallet: transfer.sender_wallet_address, wallet_url: transfer.sender_wallet_url, transfer: transfer } %>
     <% else %>
       –
     <% end %>
@@ -86,12 +86,13 @@
     <label>history</label>
 
     <% if @project.token %>
-      <% if transfer.blockchain_transactions? %>
-        <%= link_to "#{transfer.blockchain_transactions_count} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
-      <% end %>
+      <%= render partial: "transfer_history_button", locals: { transfer: transfer } %>
 
       <% if policy(transfer).cancel? && transfer.cancelable? %>
-        <%= link_to "Cancel", project_award_type_award_path(transfer.project, transfer.award_type, transfer), method: :delete, class: 'transfers-table__transfer__button__history' %>
+        <%= link_to 'Cancel',
+                    project_award_type_award_path(transfer.project, transfer.award_type, transfer),
+                    method: :delete,
+                    class: 'transfers-table__transfer__button__history' %>
       <% end %>
     <% else %>
       –
