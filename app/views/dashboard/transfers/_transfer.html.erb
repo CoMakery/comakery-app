@@ -24,7 +24,9 @@
         <% sender_wallet_address = transfer.blockchain_transactions.succeed.last&.source %>
         <% sender_wallet_url = sender_wallet_address && transfer.token ? transfer.token.blockchain.url_for_address_human(sender_wallet_address) : nil %>
       <% end %>
-      <%= render partial: "account", locals: {account: transfer.account, wallet: sender_wallet_address, wallet_url: sender_wallet_url} %>
+      <%= render partial: "account", locals: { account: transfer.issuer,
+                                               wallet: sender_wallet_address,
+                                               wallet_url: sender_wallet_url } %>
     <% elsif transfer.email %>
       <%= transfer.email %>
     <% else %>
