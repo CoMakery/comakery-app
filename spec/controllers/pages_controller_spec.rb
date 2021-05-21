@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe PagesController, type: :controller do
   describe 'contribution_licenses' do
-    it 'renders the latest version of license' do
-      get :contribution_licenses, params: { type: 'CP' }
-      expect(response).to render_template('pages/contribution_licenses')
-      expect(assigns[:license_md]).to include('CP-1.0.0')
+    %w[CP RP].each do |type|
+      it "renders the latest version of #{type} license" do
+        get :contribution_licenses, params: { type: type }
+        expect(response).to render_template('pages/contribution_licenses')
+        expect(assigns[:license_md]).to include("#{type}-1.0.0")
+      end
     end
 
     it 'redirects to 404 if license with given type is not found' do

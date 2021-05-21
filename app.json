@@ -81,6 +81,10 @@
       "required": true,
       "value": "false"
     },
+    "OREID_BASE_DOMAIN": {
+      "description": "Aikon ORE ID API domain (default: staging.service.oreid.io)",
+      "required": false
+    },
     "ORE_ID_API_KEY": {
       "description": "Aikon ORE ID API key",
       "required": false
@@ -115,6 +119,10 @@
     },
     "INTERCOM_APP_ID": {
       "description": "Intercom app id",
+      "required": false
+    },
+    "RACK_ATTACK_THROTTLE_API_RPM": {
+      "description": "Throttle API requests per minute",
       "required": false
     },
     "RECAPTCHA_SITE_KEY": {

@@ -25,6 +25,8 @@ describe Token, type: :model, vcr: true do
     it { is_expected.to respond_to(:batch_abi) }
     it { is_expected.to respond_to(:supports_balance?) }
     it { is_expected.to respond_to(:blockchain_balance) }
+    it { is_expected.to respond_to(:blockchain_locked_balance) }
+    it { is_expected.to respond_to(:blockchain_unlocked_balance) }
   end
 
   describe described_class.support_balance do
