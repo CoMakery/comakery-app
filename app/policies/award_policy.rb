@@ -68,10 +68,6 @@ class AwardPolicy < ApplicationPolicy
     pay? || assign?
   end
 
-  def can_transfer?(project_to_check)
-    project_to_check&.account == account || project_to_check.admins.include?(account)
-  end
-
   def project_editable?
     ProjectPolicy.new(@account, @project).edit?
   end

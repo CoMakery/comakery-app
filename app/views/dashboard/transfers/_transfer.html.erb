@@ -58,7 +58,7 @@
     <% if @project.token %>
 
       <% if transfer.project.token&._token_type? %>
-        <% if policy(transfer).can_transfer?(transfer.project) %>
+        <% if current_account&.decorate&.can_send_awards?(transfer.project) %>
           <% if transfer.payable_by_ore_id?(current_account) %>
             <div class="transfer-button">
               <%= link_to 'link OREID', wallets_path %>
@@ -72,7 +72,8 @@
         <% end %>
       <% end %>
 
-      <% if policy(transfer).can_transfer?(transfer.project) && transfer.accepted? && !@project.hot_wallet_disabled? && @project.hot_wallet %>
+      <% if current_account&.decorate&.can_send_awards?(transfer.project) && transfer.accepted? &&
+          !@project.hot_wallet_disabled? && @project.hot_wallet %>
         <div class="transfers-table__transfer__button__history">
           <%= render partial: 'shared/transfer_prioritize_button', locals: { transfer: transfer } %>
         </div>
