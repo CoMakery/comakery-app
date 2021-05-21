@@ -45,7 +45,7 @@ Rack::Attack.throttle("logins/email", limit: 5, period: 20.seconds) do |req|
 end
 
 ### Throttle API requests by IP (1000rpm)
-Rack::Attack.throttle('api/ip', limit: ENV.fetch('RACK_ATTACK_THROTTLE_API_RPM') { 1000 }, period: 1.minute) do |req|
+Rack::Attack.throttle('api/ip', limit: ENV.fetch('RACK_ATTACK_THROTTLE_API_RPM') { 1000 }.to_i, period: 1.minute) do |req|
   req.ip if req.path.start_with?('/api')
 end
 
