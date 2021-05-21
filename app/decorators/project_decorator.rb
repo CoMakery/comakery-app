@@ -132,11 +132,11 @@ class ProjectDecorator < Draper::Decorator
       token: {
         name: token.name,
         symbol: token.symbol,
-        network: token.blockchain_network,
+        network: token.blockchain.name,
         address: token.contract_address,
         logo_url: GetImageVariantPath.call(
           attachment: token.logo_image,
-          esize_to_fill: [100, 100]
+          resize_to_fill: [100, 100]
         ).path
       }
     }
