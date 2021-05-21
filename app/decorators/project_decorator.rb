@@ -93,7 +93,7 @@ class ProjectDecorator < Draper::Decorator
     token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
-  def header_props # rubocop:todo Metrics/CyclomaticComplexity
+  def header_props
     project_image_path = GetImageVariantPath.call(
       attachment: panoramic_image,
       resize_to_fill: [1500, 300],
@@ -121,13 +121,23 @@ class ProjectDecorator < Draper::Decorator
       governance_url: governance_url,
       funding_url: funding_url,
       video_conference_url: video_conference_url,
-      present: true,
+      present: true
+    }.merge(token_props)
+  end
+
+  def token_props
+    return {} if token.nil?
+
+    {
       token: {
-        name: token&.name,
-        symbol: token&.symbol,
-        network: token&.blockchain_network,
-        address: token&.contract_address,
-        logo_url: GetImageVariantPath.call(attachment: token&.logo_image, esize_to_fill: [100, 100]).path
+        name: token.name,
+        symbol: token.symbol,
+        network: token.blockchain_network,
+        address: token.contract_address,
+        logo_url: GetImageVariantPath.call(
+          attachment: token.logo_image,
+          esize_to_fill: [100, 100]
+        ).path
       }
     }
   end
