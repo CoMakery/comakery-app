@@ -118,4 +118,26 @@ describe 'transfers_index_page', js: true do
     wait_for_turbolinks
     expect(page).to have_content('Transfer Categories')
   end
+
+  context 'when transfer is cancelled' do
+    let!(:transfer) { build(:algorand_app_transfer_tx).blockchain_transaction.blockchain_transactable }
+
+    let!(:project) { transfer.project }
+
+    let!(:ore_id) { create(:ore_id, account: project.account, skip_jobs: true) }
+
+    before do
+      login(project.account)
+
+      visit project_dashboard_transfers_path(project)
+
+      transfer.cancelled!
+
+      select('cancelled', from: 'transfers-filters--filter--options--select')
+    end
+
+    it 'shows transfer button history' do
+      expect(page).to have_css('.transfers-table__transfer__button__history')
+    end
+  end
 end

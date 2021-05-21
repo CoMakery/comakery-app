@@ -66,7 +66,7 @@
             <%= link_to 'link OREID', wallets_path %>
           </div>
         <% else %>
-          <%= render partial: "shared/transfer_button_admin", locals: { transfer: transfer } %>
+          <%= render partial: "shared/transfer_button_admin", locals: { transfer: transfer } unless transfer.cancelled? %>
         <% end %>
       <% else %>
         <% if transfer.recipient_address.blank? && current_account == transfer.account %>
@@ -74,7 +74,7 @@
             <%= link_to 'set wallet', wallets_path %>
           </div>
         <% else %>
-          <%= render partial: "shared/transfer_button_public", locals: { transfer: transfer } %>
+          <%= render partial: "shared/transfer_button_public", locals: { transfer: transfer } unless transfer.cancelled? %>
         <% end %>
       <% end %>
     <% end %>
