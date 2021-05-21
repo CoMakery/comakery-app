@@ -6,7 +6,7 @@ class Api::V1::ProjectRolesController < Api::V1::ApiController
 
   # GET /api/v1/accounts/1/project_roles
   def index
-    fresh_when project_involved_accounts, public: true
+    fresh_when projects_involved, public: true
   end
 
   # POST /api/v1/accounts/1/project_roles
@@ -17,7 +17,7 @@ class Api::V1::ProjectRolesController < Api::V1::ApiController
     )
 
     if project_role.save
-      project_involved_accounts
+      projects_involved
 
       render 'index.json', status: :created
     else
@@ -29,9 +29,9 @@ class Api::V1::ProjectRolesController < Api::V1::ApiController
 
   # DELETE /api/v1/accounts/1/project_roles/1
   def destroy
-    project_involved_account.project_roles.find_by!(account: account).destroy
+    project.project_roles.find_by!(account: account).destroy
 
-    project_involved_accounts
+    projects_involved
 
     render 'index.json', status: :ok
   end
@@ -42,11 +42,11 @@ class Api::V1::ProjectRolesController < Api::V1::ApiController
       @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:account_id])
     end
 
-    def project_involved_accounts
-      @project_involved_accounts ||= paginate(account.projects_involved.where(mission: whitelabel_mission))
+    def projects_involved
+      @projects_involved ||= paginate(account.projects_involved.where(mission: whitelabel_mission))
     end
 
-    def project_involved_account
-      @project_involved_account ||= account.projects_involved.where(mission: whitelabel_mission).find(params[:id])
+    def project
+      @project ||= account.projects_involved.where(mission: whitelabel_mission).find(params[:id])
     end
 end

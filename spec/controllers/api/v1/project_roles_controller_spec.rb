@@ -34,7 +34,7 @@ RSpec.describe Api::V1::ProjectRolesController, type: :controller do
 
       get :index, params: params
       expect(response).to be_successful
-      expect(assigns[:project_involved_accounts]).to eq([])
+      expect(assigns[:projects_involved]).to eq([])
     end
   end
 
