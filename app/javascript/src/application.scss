@@ -667,8 +667,10 @@ form.form-with-submit-button {
       border: solid 1px #e6e8ed;
       font-family: Montserrat;
       font-size: 12px;
+      width: max-content;
       max-width: 200px;
       border-left: none !important;
+      padding-right: 45px;
     }
   }
 }
