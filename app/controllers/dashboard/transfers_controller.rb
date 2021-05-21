@@ -12,6 +12,7 @@ class Dashboard::TransfersController < ApplicationController
 
   def index
     authorize @project, :transfers?
+    @current_account = current_account&.decorate
   end
 
   def show

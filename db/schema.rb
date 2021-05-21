@@ -155,9 +155,9 @@ ActiveRecord::Schema.define(version: 2021_05_13_233528) do
   end
 
   create_table "api_request_logs", force: :cascade do |t|
-    t.jsonb "body", null: false
     t.inet "ip", null: false
     t.string "signature", null: false
+    t.jsonb "body", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_api_request_logs_on_created_at"
     t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_233528) do
     t.bigint "recipient_wallet_id"
     t.datetime "prioritized_at"
     t.decimal "lockup_schedule_id", precision: 78
+    t.integer "blockchain_transactions_count", default: 0
     t.datetime "commencement_date"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
