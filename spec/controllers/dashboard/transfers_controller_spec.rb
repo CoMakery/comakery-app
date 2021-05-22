@@ -59,13 +59,14 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
     it 'can not download csv of all transfers of project' do
       login(receiver)
 
-      get :export_transfers, params: { format: 'csv', project_id: project.id }
+      get :export_transfers, params: { project_id: project.id }
       expect(response).to redirect_to root_path
     end
 
     it 'Only project admin can download csv of all transfers of project' do
-      get :export_transfers, params: { format: 'csv', project_id: project.id }
-      expect(response).to be_successful
+      get :export_transfers, params: { project_id: project.id }
+      expect(response).to redirect_to(project_dashboard_transfers_path(project))
+      expect(controller).to set_flash[:notice]
     end
   end
 

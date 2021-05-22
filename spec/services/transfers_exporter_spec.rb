@@ -17,23 +17,23 @@ RSpec.describe TransfersExporter do
 
   let!(:transfer) { create(:transfer, id: 51, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, transfer_type: create(:transfer_type, id: 47, name: 'Type fb3c15da8f', project: project), account: account) }
 
-  subject(:object) { described_class.new(project) }
+  subject(:object) { described_class.new(project, account) }
 
   describe '#transfers_csv_columns' do
     it 'returns the columns for transfers CSV' do
-      expect(object.transfers_csv_columns).to match_array ['Recipient User ID', 'Recipient First Name', 'Recipient Last Name', 'Recipient blockchain adddress', 'Sender First Name', 'Sender Last Name', 'Sender blockchain adddress', 'Transfer Name', 'Transfer Type', 'Amount(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)', 'Quantity', 'Total(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)', 'Transaction ID', 'Transfered', 'Created At']
+      expect(object.transfers_csv_columns).to eq ['Recipient User ID', 'Recipient First Name', 'Recipient Last Name', 'Recipient blockchain adddress', 'Sender First Name', 'Sender Last Name', 'Sender blockchain adddress', 'Transfer Name', 'Transfer Type', 'Amount(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)', 'Quantity', 'Total(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)', 'Transaction ID', 'Transfered', 'Created At'].to_csv(force_quotes: true)
     end
   end
 
   describe '#transfers_csv_row' do
     it 'generate row for transfers CSV' do
-      expect(object.transfers_csv_row(transfer.decorate)).to match_array [41, 'Eva', 'Smith', nil, 'Eva', 'Smith', nil, 'Bought', 'Type fb3c15da8f', '50.00000000', 0.1e1, '50.00000000', '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', 'Apr  6 2021', 'Apr  6 2021']
+      expect(object.transfers_csv_row(transfer.decorate)).to eq [41, 'Eva', 'Smith', nil, 'Eva', 'Smith', nil, 'Bought', 'Type fb3c15da8f', '50.00000000', 0.1e1, '50.00000000', '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', 'Apr  6 2021', 'Apr  6 2021'].to_csv(force_quotes: true)
     end
   end
 
   describe '#generate_transfers_csv' do
     it 'generate the data for transfer CSV' do
-      expect(object.generate_transfers_csv).to eq "\"Recipient User ID\",\"Recipient First Name\",\"Recipient Last Name\",\"Recipient blockchain adddress\",\"Sender First Name\",\"Sender Last Name\",\"Sender blockchain adddress\",\"Transfer Name\",\"Transfer Type\",\"Amount(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Quantity\",\"Total(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Transaction ID\",\"Transfered\",\"Created At\"\n\"41\",\"Eva\",\"Smith\",\"\",\"Eva\",\"Smith\",\"\",\"Bought\",\"Type fb3c15da8f\",\"50.00000000\",\"1.0\",\"50.00000000\",\"0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c\",\"Apr  6 2021\",\"Apr  6 2021\"\n"
+      expect(object.generate_transfers_csv_data).to eq "\"Recipient User ID\",\"Recipient First Name\",\"Recipient Last Name\",\"Recipient blockchain adddress\",\"Sender First Name\",\"Sender Last Name\",\"Sender blockchain adddress\",\"Transfer Name\",\"Transfer Type\",\"Amount(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Quantity\",\"Total(TKN7b9d835bc7eab2acde5e892b447cd2b83b6788fd)\",\"Transaction ID\",\"Transfered\",\"Created At\"\n\"41\",\"Eva\",\"Smith\",\"\",\"Eva\",\"Smith\",\"\",\"Bought\",\"Type fb3c15da8f\",\"50.00000000\",\"1.0\",\"50.00000000\",\"0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c\",\"Apr  6 2021\",\"Apr  6 2021\"\n"
     end
   end
 end

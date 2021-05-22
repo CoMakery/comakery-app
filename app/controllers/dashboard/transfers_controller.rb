@@ -20,8 +20,8 @@ class Dashboard::TransfersController < ApplicationController
 
   def export_transfers
     authorize @project, :export_transfers?
-
-    send_data TransfersExporter.new(@project).generate_transfers_csv, filename: 'transfers.csv'
+    TransfersExporterJob.perform_later(@project.id, current_account.id)
+    redirect_to project_dashboard_transfers_path(@project), flash: { notice: "Wait for sometime, attachment will be send on your email #{current_user.email}" }
   end
 
   def create
