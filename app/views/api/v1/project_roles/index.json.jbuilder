@@ -1,1 +1,1 @@
-json.array! @project_involved_accounts.pluck(:id)
+json.array! @projects_involved.pluck(:id)
