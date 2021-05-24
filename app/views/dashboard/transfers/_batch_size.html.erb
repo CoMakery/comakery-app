@@ -1,14 +1,16 @@
 <%= turbo_stream_from "project_transfer_batch_size" %>
 <%= turbo_frame_tag "project_transfer_batch_size" do %>
-  <div id="project_<%= project.id %>_transfer_batch_size" class="project-transfer-batch-size">
-    <%= link_to show_batch_size_form_project_path(project), data: { method: :get, controller: 'accept-turbo-stream' } do %>
-      <div class="input-label label-only">
-        <div class="input-label-addon">Batch size</div>
-      </div>
-      <%= text_field_tag "project[transfer_batch_size]", project.transfer_batch_size ,
-                          id: "project_transfer_batch_size_input",
-                          class: "form-control",
-                          readonly: true %>
+  <div id="project_<%= project.id %>_transfer_batch_size"
+       class="project-transfer-batch-size"
+       data-controller="turbo-stream-fetch"
+       data-turbo-stream-fetch-url="<%= show_batch_size_form_project_path(project) %>"
+       data-action="click->turbo-stream-fetch#fetchStream">
+    <div class="input-label label-only">
+      <div class="input-label-addon">Batch size</div>
     </div>
-  <% end %>
+    <%= text_field_tag "project[transfer_batch_size]", project.transfer_batch_size ,
+                        id: "project_transfer_batch_size_input",
+                        class: "form-control",
+                        readonly: true %>
+  </div>
 <% end %>
