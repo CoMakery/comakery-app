@@ -660,6 +660,20 @@ form.form-with-submit-button {
   }
 }
 
+.modal {
+  .btn {
+    border-width: 0;
+  }
+
+  .btn.btn-primary:hover {
+    color: var(--upside-btn-color-text) !important;
+  }
+
+  .btn.btn-secondary:hover {
+    color: var(--upside-btn-color-text) !important;
+  }
+}
+
 .transfers-filters {
   font-size: 12px;
   display: flex;
