@@ -203,7 +203,7 @@ describe ProjectDecorator do
       let!(:project_comakery_token) do
         create(:project,
                token: create(:token, _token_type: :comakery_security_token,
-                             contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten))
+                                     contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten))
       end
 
       let!(:token) { project_comakery_token.token }
