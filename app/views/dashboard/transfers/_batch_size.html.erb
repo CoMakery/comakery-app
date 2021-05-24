@@ -1,7 +1,7 @@
 <%= turbo_stream_from "project_transfer_batch_size" %>
 <%= turbo_frame_tag "project_transfer_batch_size" do %>
   <div id="project_<%= project.id %>_transfer_batch_size" class="project-transfer-batch-size">
-    <%= link_to show_batch_size_form_project_path(@project), data: { method: :get, controller: 'accept-turbo-stream' } do %>
+    <%= link_to show_batch_size_form_project_path(project), data: { method: :get, controller: 'accept-turbo-stream' } do %>
       <div class="input-label label-only">
         <div class="input-label-addon">Batch size</div>
       </div>
