@@ -2,6 +2,8 @@
 
 exports[`TaskAssign renders correctly without props 1`] = `
 <TaskAssign
+  accounts={Array []}
+  accountsSelect={Object {}}
   batch={
     Object {
       "id": 28,
@@ -10,8 +12,6 @@ exports[`TaskAssign renders correctly without props 1`] = `
   }
   csrfToken="00"
   formUrl="/"
-  interested={Array []}
-  interestedSelect={Object {}}
   missionForHeader={null}
   project={
     Object {
@@ -34,6 +34,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
     current="batches"
     hasBackButton={true}
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -74,6 +75,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
           current="batches"
           expanded={false}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -123,6 +125,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
               current="batches"
               expanded={false}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >
