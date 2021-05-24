@@ -14,9 +14,10 @@
       <%= account.name %>
     </div>
 
-    <div class="account-preview__info__verification">
-      <%= image_pack_tag "media/src/images/styleguide/icons/verification-#{account.verification_state}.svg", size: "15x15" %>
-      <%= account.verification_state %>
-    </div>
+    <% if defined?(wallet_address) && wallet_address.present? %>
+      <div class="account-preview__info__wallet">
+        <%= link_to wallet_address, wallet_url, target: '_blank' %>
+      </div>
+    <% end %>
   </div>
 </div>

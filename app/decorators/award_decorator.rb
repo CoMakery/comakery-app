@@ -3,6 +3,18 @@ class AwardDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
+  def sender_wallet_address
+    return unless paid?
+
+    blockchain_transactions.succeed.last&.source
+  end
+
+  def sender_wallet_url
+    return unless sender_wallet_address.present?
+
+    token&.blockchain&.url_for_address_human(sender_wallet_address)
+  end
+
   def ethereum_transaction_address
     token && (object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash)
   end
