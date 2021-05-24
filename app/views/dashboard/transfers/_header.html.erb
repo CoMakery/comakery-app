@@ -2,15 +2,15 @@
   <label>sort by</label>
 
   <div class="transfers-table__transfer__name">
-    <%= sort_link(@q, :name, 'transfer name') %>
+    <%= sort_link(@q, :name, 'transfer') %>
   </div>
 
   <div class="transfers-table__transfer__account">
-    account
+    to
   </div>
 
   <div class="transfers-table__transfer__issuer">
-    <%= sort_link(@q, :issuer_first_name, 'transferred by') %>
+    <%= sort_link(@q, :issuer_first_name, 'from') %>
   </div>
 
   <div class="transfers-table__transfer__amount">
