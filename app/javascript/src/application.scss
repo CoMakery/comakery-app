@@ -1741,7 +1741,7 @@ input.transfer-rules__refresh_from_blockchain_button {
       align-self: center;
     }
 
-    .transfers-table__transfer__button {
+    .transfers-table__transfer__history {
       min-width: 60px;
       flex-direction: column;
       justify-content: center;
@@ -1762,6 +1762,10 @@ input.transfer-rules__refresh_from_blockchain_button {
           background-color: #efefef;
         }
       }
+    }
+
+    .transfers-table__transfer__history {
+      min-width: 60px;
     }
 
     .transfers-table__transfer__transferred_at {
