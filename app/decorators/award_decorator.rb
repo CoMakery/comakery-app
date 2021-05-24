@@ -10,7 +10,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def sender_wallet_url
-    return unless sender_wallet_address.present?
+    return if sender_wallet_address.blank?
 
     token&.blockchain&.url_for_address_human(sender_wallet_address)
   end
