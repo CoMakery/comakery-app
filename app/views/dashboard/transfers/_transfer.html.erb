@@ -19,7 +19,7 @@
     <label>account</label>
 
     <% if transfer.issuer %>
-      <%= render partial: 'account', locals: { transfer: transfer } %>
+      <%= render partial: 'issuer', locals: { transfer: transfer } %>
     <% elsif transfer.email %>
       <%= transfer.email %>
     <% else %>
