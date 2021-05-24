@@ -4,7 +4,7 @@
     <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
-
+      
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>II. Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, balances, project roles.</p>
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
 
       <div class="article">
         <h2>CREATE PROJECT ROLE – ERROR</h2>
@@ -139,7 +139,7 @@ table th, table td {
                     <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">project id to project role</span>
+                  <span class="description">project id</span>
                 </td>
               </tr>
             </tbody>
@@ -189,7 +189,7 @@ table th, table td {
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "nSkCtnxJk/k7GUUzZsRyuZ6VjqFlLppPo58OJVvCJGtRzHiFY8X+3qQfWhiVJmHE0vF1mvClttxM9EXsjUbeDg=="
+    "signature": "mNsf7oDZa+muAoB6DgqaJvhDuhbiikshbXzs2Cz7insIUznhzAf9eRpglsgsrVXIzoqUe60CaWmbQ0YuNy4PBg=="
   }
 }</pre>
 
@@ -200,8 +200,8 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;projectId&quot;: [
-      &quot;has already been followed&quot;
+    &quot;accountId&quot;: [
+      &quot;already has a role in project&quot;
     ]
   }
 }</pre>
