@@ -4,7 +4,9 @@ class OreIdService
   class OreIdService::RemoteInvalidError < StandardError; end
 
   include HTTParty
-  base_uri 'https://service.oreid.io/api'
+
+  BASE_DOMAIN = ENV.fetch('OREID_BASE_DOMAIN', 'staging.service.oreid.io')
+  base_uri "https://#{BASE_DOMAIN}/api"
 
   attr_reader :ore_id, :account
 
@@ -106,7 +108,7 @@ class OreIdService
       state: state
     }
 
-    append_hmac_to_url "https://service.oreid.io/auth?#{params.to_query}"
+    append_hmac_to_url "https://#{BASE_DOMAIN}/auth?#{params.to_query}"
   end
 
   def reset_url(callback_url, state = nil, recovery_token = nil)
@@ -121,7 +123,7 @@ class OreIdService
       account: ore_id.account_name
     }
 
-    append_hmac_to_url "https://service.oreid.io/recover-account?#{params.to_query}"
+    append_hmac_to_url "https://#{BASE_DOMAIN}/recover-account?#{params.to_query}"
   end
 
   def sign_url(transaction:, callback_url:, state:)
@@ -137,7 +139,7 @@ class OreIdService
       state: state
     }
 
-    append_hmac_to_url "https://service.oreid.io/sign?#{params.to_query}"
+    append_hmac_to_url "https://#{BASE_DOMAIN}/sign?#{params.to_query}"
   end
 
   private

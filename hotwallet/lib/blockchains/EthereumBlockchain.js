@@ -287,9 +287,9 @@ class EthereumBlockchain {
     if (typeof blockchainTransaction.txRaw !== 'string') { return { valid: false } }
 
     try {
-      const amount = new BigNumber(blockchainTransaction.amount)
 
       // validate enough tokens
+      const amount = new BigNumber(blockchainTransaction.amount)
       if (amount.isGreaterThan(new BigNumber(0))) {
         const tokenBalance = await this.getTokenBalance(hotWalletAddress)
 
@@ -316,6 +316,16 @@ class EthereumBlockchain {
 
     try {
       await chainTransaction.setFromRaw(txn)
+      const ethFee = await chainTransaction.getSuggestedFee(chainjs.Models.TxExecutionPriority.Fast)
+
+      // validate enough gas
+      if (new BigNumber(ethFee).isGreaterThan(this.getEthBalance)) {
+        const errorMessage = `The Hot Wallet has insufficient gas. Please top up the ${hotWallet.address}`
+        console.error(errorMessage)
+        return { valid: false, markAs: "cancelled", error: errorMessage}
+      }
+
+      await chainTransaction.setDesiredFee(ethFee)
       await chainTransaction.prepareToBeSigned()
       await chainTransaction.validate()
       await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])
