@@ -1,7 +1,5 @@
 <%= turbo_frame_tag "transfer_issuer_#{transfer.id}", target: "_top" do %>
   <% if transfer.paid? %>
-    <% sender_wallet_address = transfer.blockchain_transactions.succeed.last&.source %>
-    <% sender_wallet_url = sender_wallet_address && transfer.token ? transfer.token.blockchain.url_for_address_human(sender_wallet_address) : nil %>
     <% issuer = transfer.issuer.decorate %>
 
     <div class="account-preview">
@@ -18,11 +16,7 @@
           <%= issuer.name %>
         </div>
 
-        <% if sender_wallet_address %>
-          <div class="account-preview__info__wallet">
-            <%= link_to(sender_wallet_address, sender_wallet_url, target: '_blank') %>
-          </div>
-        <% end %>
+        <%= render partial: 'wallet', locals: { transfer: transfer } %>
       </div>
     </div>
   <% else %>

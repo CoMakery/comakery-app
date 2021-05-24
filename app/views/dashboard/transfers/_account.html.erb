@@ -1,4 +1,4 @@
-<% account = account.decorate %>
+<% account = transfer.issuer.decorate %>
 
 <div class="account-preview">
   <div class="account-preview__image">
@@ -14,10 +14,6 @@
       <%= account.name %>
     </div>
 
-    <% if defined?(wallet_address) && wallet_address.present? %>
-      <div class="account-preview__info__wallet">
-        <%= link_to wallet_address, wallet_url, target: '_blank' %>
-      </div>
-    <% end %>
+    <%= render partial: 'wallet', locals: { transfer: transfer } %>
   </div>
 </div>

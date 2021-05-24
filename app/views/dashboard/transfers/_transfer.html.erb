@@ -18,11 +18,8 @@
   <div class="transfers-table__transfer__account">
     <label>account</label>
 
-    <% if transfer.account %>
-      <%= render partial: 'account',
-                 locals: { account: transfer.issuer,
-                           wallet_address: transfer.sender_wallet_address,
-                           wallet_url: transfer.sender_wallet_url } %>
+    <% if transfer.issuer %>
+      <%= render partial: 'account', locals: { transfer: transfer } %>
     <% elsif transfer.email %>
       <%= transfer.email %>
     <% else %>
