@@ -7,6 +7,7 @@ describe 'interests', js: true do
 
   before do
     login account
+    page.driver.browser.manage.add_cookie(name: 'cookieconsent_status', value: 'dismiss')
   end
 
   context 'on project landing page' do
