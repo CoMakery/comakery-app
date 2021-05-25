@@ -43,7 +43,7 @@ resource 'II. Accounts' do
       response_field :verificationState, 'result of latest AML/KYC verification (passed | failed | unknown)', type: :string, enum: %w[passed failed unknown]
       response_field :verificationDate, 'date of latest AML/KYC verification', type: :string
       response_field :verificationMaxInvestmentUsd, 'max investment approved during latest AML/KYC verification', type: :integer
-      response_field :projectInterests, 'list of interested project ids', type: :array, items: { type: :string }
+      response_field :projects, 'list of project ids', type: :array, items: { type: :string }
     end
 
     context '200' do
@@ -69,7 +69,7 @@ resource 'II. Accounts' do
       parameter :image, 'image', type: :string
       parameter :country, 'counry', type: :string, required: true
       parameter :date_of_birth, 'date of birth (YYYY-MM-DD)', type: :string, required: true
-      parameter :project_interests, 'list of interested project ids to subscribe', type: :array, required: false
+      parameter :projects, 'list of project ids to subscribe', type: :array, required: false
     end
 
     with_options with_example: true do
@@ -86,7 +86,7 @@ resource 'II. Accounts' do
           nickname: 'hunter-b1f157fc0d5ec93680d7b307d417bc5bd2c',
           date_of_birth: '1990-01-31',
           country: 'United States of America',
-          project_interests: [project.id.to_s]
+          projects: [project.id.to_s]
         }
       end
 
@@ -171,7 +171,7 @@ resource 'II. Accounts' do
     end
   end
 
-  get '/api/v1/accounts/:id/interests' do
+  get '/api/v1/accounts/:id/project_roles' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
       parameter :page, 'page number', type: :integer
@@ -182,24 +182,24 @@ resource 'II. Accounts' do
       let!(:page) { 1 }
 
       before do
-        project.interests.create(id: 98, account: account, specialty: account.specialty)
-        project2.interests.create(id: 99, account: account, specialty: account.specialty)
+        project.project_roles.create(account: account)
+        project2.project_roles.create(account: account)
       end
 
-      example 'INTERESTS' do
+      example 'PROJECT ROLES' do
         explanation 'Returns an array of project ids'
 
-        request = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET', 'example.org')
+        request = build(:api_signed_request, '', api_v1_account_project_roles_path(account_id: account.managed_account_id), 'GET', 'example.org')
         do_request(request)
         expect(status).to eq(200)
       end
     end
   end
 
-  post '/api/v1/accounts/:id/interests' do
+  post '/api/v1/accounts/:id/project_roles' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
-      parameter :project_id, 'project id to interest', required: true, type: :string
+      parameter :project_id, 'project id', required: true, type: :string
     end
 
     with_options with_example: true do
@@ -210,10 +210,10 @@ resource 'II. Accounts' do
       let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
-      example 'CREATE INTEREST' do
-        explanation 'Returns account interests (See INTERESTS for response details)'
+      example 'CREATE PROJECT ROLE' do
+        explanation 'Returns account project roles (See PROJECT ROLE for response details)'
 
-        request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_project_roles_path(account_id: account.managed_account_id), 'POST', 'example.org')
         result = do_request(request)
         result[0][:response_body] = [30] if status == 201
         expect(status).to eq(201)
@@ -225,23 +225,23 @@ resource 'II. Accounts' do
       let!(:project_id) { project.id }
 
       before do
-        project.interests.create(account: account, specialty: account.specialty)
+        project.project_roles.create(account: account)
       end
 
-      example 'CREATE INTEREST – ERROR' do
+      example 'CREATE PROJECT ROLE – ERROR' do
         explanation 'Returns an array of errors'
 
-        request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_project_roles_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
         expect(status).to eq(400)
       end
     end
   end
 
-  delete '/api/v1/accounts/:id/interests/:project_id' do
+  delete '/api/v1/accounts/:id/project_roles/:project_id' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
-      parameter :project_id, 'project id to uninterest', required: true, type: :string
+      parameter :project_id, 'project id', required: true, type: :string
     end
 
     context '200' do
@@ -249,13 +249,13 @@ resource 'II. Accounts' do
       let!(:project_id) { project.id }
 
       before do
-        project.interests.create(id: 97, account: account, specialty: account.specialty)
+        project.project_roles.create(account: account)
       end
 
-      example 'REMOVE INTEREST' do
-        explanation 'Returns account interests (See INTERESTS for response details)'
+      example 'REMOVE PROJECT ROLE' do
+        explanation 'Returns account project roles (See PROJECT ROLES for response details)'
 
-        request = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE', 'example.org')
+        request = build(:api_signed_request, '', api_v1_account_project_role_path(account_id: account.managed_account_id, id: project.id), 'DELETE', 'example.org')
         do_request(request)
         expect(status).to eq(200)
       end

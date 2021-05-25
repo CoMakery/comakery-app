@@ -8,7 +8,7 @@ describe ApplicationController do
     skip_after_action :verify_policy_scoped
 
     before_action :redirect_back_to_session, only: %i[index]
-    before_action :create_interest_from_session, only: %i[index]
+    before_action :create_project_role_from_session, only: %i[index]
     before_action :unavailable_for_whitelabel, only: %i[index]
 
     def index
@@ -83,15 +83,15 @@ describe ApplicationController do
     end
   end
 
-  describe 'create_interest_from_session' do
+  describe 'create_project_role_from_session' do
     let!(:account) { create(:account) }
     let!(:project) { create(:project) }
 
     it 'creates interest for project stored in session' do
       login(account)
-      get(:index, session: { interested_in_project: project.id })
+      get(:index, session: { involved_in_project: project.id })
 
-      expect(account.interested?(project.id)).to be_truthy
+      expect(account.involved?(project.id)).to be_truthy
     end
   end
 

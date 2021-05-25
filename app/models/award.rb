@@ -84,6 +84,7 @@ class Award < ApplicationRecord
   before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
   before_validation :set_transferred_at, if: -> { status == 'paid' && transferred_at.nil? }
   before_validation :set_default_transfer_type
+  before_validation :populate_recipient_wallet, if: -> { paid? && !recipient_wallet }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
   after_save :add_account_as_interested, if: -> { account }
@@ -385,6 +386,10 @@ class Award < ApplicationRecord
       errors[:recipient_wallet_id] << 'wallet and token are not in the same network'
     end
 
+    def populate_recipient_wallet
+      self.recipient_wallet = account.wallets.find_by(address: recipient_address)
+    end
+
     def abort_destroy
       unless can_be_edited?
         errors[:base] << "#{status.capitalize} task can't be deleted"
@@ -405,7 +410,7 @@ class Award < ApplicationRecord
     end
 
     def add_account_as_interested
-      project.interested << account unless account.interested?(project.id)
+      project.project_interested << account unless account.involved?(project.id)
     end
 
     def store_license_hash

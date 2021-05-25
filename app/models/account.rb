@@ -1,5 +1,4 @@
 # Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
-# rubocop:disable Rails/HasAndBelongsToMany
 
 class Account < ApplicationRecord
   paginates_per 50
@@ -12,7 +11,6 @@ class Account < ApplicationRecord
   has_one_attached :image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
-  has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy # rubocop:todo Rails/InverseOf
@@ -29,10 +27,6 @@ class Account < ApplicationRecord
   # rubocop:todo Rails/InverseOf
   has_many :issued_awards, class_name: 'Award', foreign_key: 'issuer_id' # rubocop:todo Rails/HasManyOrHasOneDependent
   # rubocop:enable Rails/InverseOf
-  has_many :admin_awards, through: :admin_projects, source: :awards
-  has_many :award_types, through: :projects
-  has_many :team_award_types, through: :team_projects, source: :award_types
-  has_many :admin_award_types, through: :admin_projects, source: :award_types
   # rubocop:todo Rails/InverseOf
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # rubocop:enable Rails/InverseOf
@@ -40,8 +34,13 @@ class Account < ApplicationRecord
   has_many :projects_interested, through: :interests, source: :project
   has_many :project_roles, dependent: :destroy
   has_many :projects_involved, through: :project_roles, source: :project
+  has_many :admin_projects, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :project
   has_many :experiences # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :verifications # rubocop:todo Rails/HasManyOrHasOneDependent
+  has_many :admin_awards, through: :admin_projects, source: :awards
+  has_many :award_types, through: :projects
+  has_many :team_award_types, through: :team_projects, source: :award_types
+  has_many :admin_award_types, through: :admin_projects, source: :award_types
   # rubocop:todo Rails/InverseOf
   # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
@@ -163,7 +162,7 @@ class Account < ApplicationRecord
 
     def make_everyone_interested(project)
       find_each(batch_size: 500) do |account|
-        project.safe_add_interested(account)
+        project.add_account(account)
       end
     end
 
@@ -183,11 +182,11 @@ class Account < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def whitelabel_interested_projects(whitelabel_mission)
+  def whitelabel_involved_projects(whitelabel_mission)
     if whitelabel_mission.present?
-      projects_interested.where(mission: whitelabel_mission)
+      projects_involved.where(mission: whitelabel_mission)
     else
-      projects_interested.where(whitelabel: false)
+      projects_involved.where(whitelabel: false)
     end
   end
 
@@ -233,15 +232,15 @@ class Account < ApplicationRecord
   end
 
   def my_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).joins(:project_admins).distinct.where('projects.account_id = :id OR (project_roles.account_id = :id AND project_roles.role = 1)', id: id)
   end
 
   def accessable_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:project_admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR authentication_teams.account_id = :id OR (project_roles.account_id = :id AND project_roles.role = 1)', id: id)
   end
 
   def related_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR ((authentication_teams.account_id = :id OR accounts_projects.account_id = :id) AND projects.visibility NOT in(4))', id: id)
+    (scope || Project).left_outer_joins(:project_admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR ((authentication_teams.account_id = :id OR (project_roles.account_id = :id AND project_roles.role = 1)) AND projects.visibility NOT in(4))', id: id)
   end
 
   def accessable_award_types(project_scope = nil)
@@ -279,16 +278,8 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
-  def interested?(project_id)
-    projects_interested.exists? project_id
-  end
-
   def involved?(project_id)
     projects_involved.exists? project_id
-  end
-
-  def specialty_interested?(project_id, specialty_id)
-    interests.exists?(project_id: project_id, specialty_id: specialty_id)
   end
 
   def valid_and_underage?

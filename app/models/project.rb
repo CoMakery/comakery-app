@@ -20,15 +20,17 @@ class Project < ApplicationRecord
   has_and_belongs_to_many :admins, class_name: 'Account'
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
+
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_roles, dependent: :destroy
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
   has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
-  has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
-  has_many :transfer_rules, through: :token
+  has_many :accounts, through: :project_roles, source: :account
 
+  has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :accounts, source: :account_token_records
+  has_many :transfer_rules, through: :token
   has_many :transfer_types, dependent: :destroy
   has_many :award_types, inverse_of: :project, dependent: :destroy
   # rubocop:todo Rails/InverseOf
@@ -69,7 +71,6 @@ class Project < ApplicationRecord
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
-  after_create :add_owner_as_interested
   after_create :add_owner_as_admin
   after_create :create_default_transfer_types
   after_update_commit :broadcast_hot_wallet_mode, if: :saved_change_to_hot_wallet_mode?
@@ -101,10 +102,9 @@ class Project < ApplicationRecord
     raise ArgumentError, 'Could not find an Account with that email address' if new_owner.blank?
 
     previous_owner = project.account
-    project.safe_add_admin(previous_owner)
+    project.project_roles.find_by(account: previous_owner).update(role: :admin)
     project.account_id = new_owner.id
-    project.admins.delete(new_owner)
-    project.safe_add_interested(new_owner)
+    project.project_roles.find_or_create_by(account: new_owner).update(role: :admin)
     project.save!
   end
 
@@ -113,16 +113,11 @@ class Project < ApplicationRecord
   end
 
   def safe_add_admin(new_admin)
-    admins << new_admin unless admins.exists?(new_admin.id)
+    project_admins << new_admin unless project_admins.exists?(new_admin.id)
   end
 
-  # TODO: Remove interests
-  def safe_add_interested(interested_account)
-    interested << interested_account unless interested_account.interested?(id)
-  end
-
-  def safe_add_project_interested(interested_account)
-    project_interested << interested_account unless interested_account.involved?(id)
+  def add_account(account)
+    accounts << account unless account.involved?(id)
   end
 
   def total_awards_earned(all_accounts)
@@ -224,7 +219,7 @@ class Project < ApplicationRecord
     {
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: interested.size
+      accounts: accounts.size
     }
   end
 
@@ -280,10 +275,6 @@ class Project < ApplicationRecord
 
     def udpate_awards_if_token_was_added
       awards.paid.each { |a| a.update(status: :accepted) }
-    end
-
-    def add_owner_as_interested
-      interested << account unless account.interested?(id)
     end
 
     def add_owner_as_admin

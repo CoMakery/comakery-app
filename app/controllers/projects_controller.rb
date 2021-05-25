@@ -19,15 +19,15 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :admins, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :admins, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :admins, :project_admins).archived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = @whitelabel_mission ? [] : current_account.projects_involved.with_all_attached_images.includes(:account, :admins, :project_admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects(@project_scope).with_all_attached_images.includes(:account, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects(@project_scope).with_all_attached_images.includes(:account, :project_admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = @whitelabel_mission ? [] : current_account.projects.with_all_attached_images.includes(:account, :project_admins).archived.order(updated_at: :desc).limit(100).decorate
+      @involved_projects = @whitelabel_mission ? [] : current_account.projects_involved.with_all_attached_images.includes(:account, :project_admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
-    @interested_project_contributors = TopContributors.call(projects: @interested_projects).contributors
+    @involved_project_contributors = TopContributors.call(projects: @involved_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
   end
 
@@ -132,9 +132,9 @@ class ProjectsController < ApplicationController
       @page = (params[:page] || 1).to_i
 
       @q = policy_scope(@project_scope).ransack(params[:q])
-      @q.sorts = 'interests_count DESC' if @q.sorts.empty?
+      @q.sorts = 'project_roles_count DESC' if @q.sorts.empty?
 
-      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :admins, :project_admins, account: [image_attachment: :blob])
+      @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :project_admins, account: [image_attachment: :blob])
       @projects = @projects_all.page(@page).per(9)
 
       redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?
@@ -236,8 +236,7 @@ class ProjectsController < ApplicationController
       @props = {
         whitelabel: ENV['WHITELABEL'] || false,
         tasks_by_specialty: project_tasks_by_specialty,
-        interested: current_account&.involved?(@project.id),
-        specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
+        follower: current_account&.involved?(@project.id),
         project_data: project_props(@project),
         token_data: token_props(@project&.token&.decorate),
         csrf_token: form_authenticity_token,
@@ -317,7 +316,7 @@ class ProjectsController < ApplicationController
 
       a['specialty'] ||= {}
 
-      if project.account == account || project.admins.include?(account)
+      if project.account == account || project.project_admins.include?(account)
         a['specialty']['name'] = 'Team Leader'
       elsif !project.contributors_distinct.include?(account)
         a['specialty']['name'] = 'Interested'

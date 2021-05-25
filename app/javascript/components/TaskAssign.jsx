@@ -98,7 +98,7 @@ class TaskAssign extends React.Component {
 
     this.state = {
       'account_id'     : null,
-      interestedPresent: this.props.interested.length > 0
+      isAccountsPresent: this.props.accounts.length > 0
     }
   }
 
@@ -132,7 +132,7 @@ class TaskAssign extends React.Component {
           hasBackButton
           subfooter={
             <React.Fragment>
-              {this.state.interestedPresent &&
+              {this.state.isAccountsPresent &&
                 <Button
                   value='send invitation'
                   type='submit'
@@ -189,7 +189,7 @@ class TaskAssign extends React.Component {
             </Warning>
           }
 
-          {this.state.interestedPresent &&
+          {this.state.isAccountsPresent &&
             <form id='task-assign-form' action={this.props.formUrl} encType='multipart/form-data' method='post'>
               <InputFieldDropdown
                 title='select user'
@@ -197,12 +197,12 @@ class TaskAssign extends React.Component {
                 required
                 value={this.state.account_id}
                 eventHandler={this.handleFieldChange}
-                selectEntries={Object.entries(this.props.interestedSelect)}
+                selectEntries={Object.entries(this.props.accountsSelect)}
               />
 
               {this.state.account_id &&
                 <Profile>
-                  <ProfileModal displayInline profile={this.props.interested.find(i => i.id.toString() === this.state.account_id)} />
+                  <ProfileModal displayInline profile={this.props.accounts.find(i => i.id.toString() === this.state.account_id)} />
                 </Profile>
               }
 
@@ -223,8 +223,8 @@ TaskAssign.propTypes = {
   task            : PropTypes.object.isRequired,
   batch           : PropTypes.object.isRequired,
   project         : PropTypes.object.isRequired,
-  interested      : PropTypes.array.isRequired,
-  interestedSelect: PropTypes.object.isRequired,
+  accounts        : PropTypes.array.isRequired,
+  accountsSelect  : PropTypes.object.isRequired,
   formUrl         : PropTypes.string.isRequired,
   csrfToken       : PropTypes.string.isRequired,
   missionForHeader: PropTypes.object,
@@ -245,8 +245,8 @@ TaskAssign.defaultProps = {
     'url'    : 'http://dummy',
     'public?': true
   },
-  interested      : [],
-  interestedSelect: {},
+  accounts        : [],
+  accountsSelect  : {},
   formUrl         : '/',
   csrfToken       : '00',
   missionForHeader: null,

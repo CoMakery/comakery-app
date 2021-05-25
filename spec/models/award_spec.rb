@@ -201,7 +201,7 @@ describe Award do
       before do
         award_ready_wo_account.update(account: nil)
         award_unpublished_wo_account.update(account: nil)
-        award_type.project.admins << create(:account)
+        award_type.project.project_admins << create(:account)
       end
 
       it 'returns only ready awards without assigned account or assigned to you' do
@@ -235,7 +235,7 @@ describe Award do
 
       it 'returns only awards available for review for project admin/owner' do
         expect(described_class.filtered_for_view('to review', award_submitted.project.account)).to include(award_submitted)
-        expect(described_class.filtered_for_view('to review', award_submitted.project.admins.first)).to include(award_submitted)
+        expect(described_class.filtered_for_view('to review', award_submitted.project.project_admins.first)).to include(award_submitted)
 
         expect(described_class.filtered_for_view('to review', award_submitted.account)).not_to include(award_submitted)
         expect(described_class.filtered_for_view('to review', create(:account))).not_to include(award_submitted)
@@ -243,7 +243,7 @@ describe Award do
 
       it 'returns only awards available for payment for a project admin/owner' do
         expect(described_class.filtered_for_view('to pay', award_accepted.project.account)).to include(award_accepted)
-        expect(described_class.filtered_for_view('to pay', award_accepted.project.admins.first)).to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', award_accepted.project.project_admins.first)).to include(award_accepted)
 
         expect(described_class.filtered_for_view('to pay', award_accepted.account)).not_to include(award_accepted)
         expect(described_class.filtered_for_view('to pay', create(:account))).not_to include(award_accepted)
@@ -328,7 +328,7 @@ describe Award do
       end
 
       it 'adds account as interested in project after account is assigned' do
-        expect(project.interested).to include(award.account)
+        expect(project.accounts).to include(award.account)
       end
     end
 
@@ -1328,5 +1328,12 @@ describe Award do
 
       it { is_expected.not_to be_valid }
     end
+  end
+
+  describe '#populate_recipient_wallet' do
+    let(:wallet) { create(:eth_wallet) }
+    subject { create(:award, account: wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))) }
+
+    specify { expect(subject.recipient_wallet).to eq(wallet) }
   end
 end

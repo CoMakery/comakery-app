@@ -198,6 +198,36 @@ describe ProjectDecorator do
     end
   end
 
+  describe 'token_props' do
+    context 'when token present' do
+      let!(:project_comakery_token) do
+        create(:project,
+               token: create(:token, _token_type: :comakery_security_token,
+                                     contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten))
+      end
+
+      let!(:token) { project_comakery_token.token }
+
+      subject(:props) { project_comakery_token.decorate.token_props }
+
+      it 'returns token data' do
+        expect(props[:token][:name]).to eq(token.name)
+        expect(props[:token][:symbol]).to eq(token.symbol)
+        expect(props[:token][:network]).to eq(token.blockchain.name)
+        expect(props[:token][:address]).to eq(token.contract_address)
+        expect(props[:token][:logo_url]).to include('dummy_image.png')
+      end
+    end
+
+    context 'when token is nil' do
+      let!(:project) { create(:project, token: nil) }
+
+      subject(:props) { project.decorate.token_props }
+
+      it { expect(props).to be_empty }
+    end
+  end
+
   describe 'step_for_amount_input' do
     let(:token) { create(:token, decimal_places: 2) }
     let(:project) { create(:project, token: token) }
