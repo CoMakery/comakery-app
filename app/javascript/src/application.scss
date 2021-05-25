@@ -2186,7 +2186,7 @@ footer {
   margin-top: auto;
 }
 
-.footer {
+.footer-legacy {
   justify-content: space-between;
   color: #e8eff7;
   padding: 70px 150px 0px 150px;
@@ -5611,7 +5611,7 @@ input.button--right-space {
   height: 70px;
 }
 
-.mission-stats__kpi .icon {
+.mission-stats__kpi .icon-legacy {
   margin-right: 12px;
   height: 100%;
 }
@@ -5644,7 +5644,7 @@ input.button--right-space {
     align-items: center;
   }
 
-  .mission-stats__kpi .icon {
+  .mission-stats__kpi .icon-legacy {
     margin: 0 0 12px 0;
     height: 60px;
   }
@@ -6056,5 +6056,3 @@ a:focus {
     border: none !important;
   }
 }
-
-@import 'bootstrap_custom';

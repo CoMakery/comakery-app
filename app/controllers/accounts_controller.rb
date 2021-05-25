@@ -11,12 +11,12 @@ class AccountsController < ApplicationController
 
   before_action :redirect_if_signed_in, only: %i[new create]
 
-  layout 'legacy'
+  layout 'legacy', except: %i[index]
 
   def index
     authorize(current_user, :index?)
 
-    @wallets = Wallet.with_mission(@whitelabel_mission&.id).includes(account: :latest_verification)
+    @wallets = Wallet.with_mission(@whitelabel_mission&.id).not_hot_wallet.includes(account: :latest_verification)
 
     @wallets = paginate(@wallets)
   end

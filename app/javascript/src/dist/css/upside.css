@@ -9537,6 +9537,7 @@ Navbar vertical
   background-color: #ffffff !important;
   white-space: nowrap !important;
   border-radius: 8px !important;
+  border: none;
 }
 
 .btn:hover {
@@ -13970,4 +13971,8 @@ Secondary Sidebar
 .pagination a {
   color: #1560fa;
   text-decoration: none;
+}
+
+.mh-75vh {
+  min-height: 75vh;
 }

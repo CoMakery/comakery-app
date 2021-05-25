@@ -26,7 +26,7 @@ describe 'project channels', js: true do
     expect(page).not_to have_selector('.project-form--form--channels--channel')
     find('.project-form--form--channels--add').click
     expect(page).to have_selector('.project-form--form--channels--channel')
-    find_button('create').click
+    find_button('create', { class: 'button__border' }).click
     expect(page).to have_content 'Project Created'
 
     visit current_path

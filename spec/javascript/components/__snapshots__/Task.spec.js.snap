@@ -431,7 +431,7 @@ exports[`Task renders component correctly 1`] = `
                                 name="INVITE_USER.svg"
                               >
                                 <img
-                                  className="icon icon__INVITE_USER-svg sc-ckVGcZ gWBmrP"
+                                  className="icon-legacy icon__INVITE_USER-svg sc-ckVGcZ gWBmrP"
                                   src="test-file-stub"
                                 />
                               </Icon>
@@ -480,7 +480,7 @@ exports[`Task renders component correctly 1`] = `
                                   name="DUPLICATE.svg"
                                 >
                                   <img
-                                    className="icon icon__DUPLICATE-svg sc-dxgOiQ jRoCEF"
+                                    className="icon-legacy icon__DUPLICATE-svg sc-dxgOiQ jRoCEF"
                                     src="test-file-stub"
                                   />
                                 </Icon>
@@ -531,7 +531,7 @@ exports[`Task renders component correctly 1`] = `
                                 name="iconEdit.svg"
                               >
                                 <img
-                                  className="icon icon__iconEdit-svg sc-ckVGcZ gWBmrP"
+                                  className="icon-legacy icon__iconEdit-svg sc-ckVGcZ gWBmrP"
                                   src="test-file-stub"
                                 />
                               </Icon>
@@ -581,7 +581,7 @@ exports[`Task renders component correctly 1`] = `
                                 name="iconTrash.svg"
                               >
                                 <img
-                                  className="icon icon__iconTrash-svg sc-ckVGcZ gWBmrP"
+                                  className="icon-legacy icon__iconTrash-svg sc-ckVGcZ gWBmrP"
                                   src="test-file-stub"
                                 />
                               </Icon>
@@ -820,7 +820,7 @@ exports[`Task renders component correctly 1`] = `
                       name="DROP_DOWN.svg"
                     >
                       <img
-                        className="icon icon__DROP_DOWN-svg"
+                        className="icon-legacy icon__DROP_DOWN-svg"
                         src="test-file-stub"
                       />
                     </Icon>

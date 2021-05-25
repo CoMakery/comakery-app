@@ -90,7 +90,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
                             name="MARK-WHITE.svg"
                           >
                             <img
-                              className="icon icon__MARK-WHITE-svg"
+                              className="icon-legacy icon__MARK-WHITE-svg"
                               src="test-file-stub"
                             />
                           </Icon>
@@ -115,7 +115,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
                             name="PLUS.svg"
                           >
                             <img
-                              className="icon icon__PLUS-svg"
+                              className="icon-legacy icon__PLUS-svg"
                               src="test-file-stub"
                             />
                           </Icon>
