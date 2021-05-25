@@ -11,7 +11,7 @@ json.call(
   :verification_state,
   :verification_date,
   :verification_max_investment_usd,
-  :project_interests,
+  :projects_involved,
   :created_at,
   :updated_at
 )

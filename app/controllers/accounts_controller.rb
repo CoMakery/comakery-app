@@ -62,9 +62,7 @@ class AccountsController < ApplicationController
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
 
-      Project.where(auto_add_interest: true).each do |auto_interest_project|
-        auto_interest_project.safe_add_interested(@account)
-      end
+      Project.where(auto_add_account: true).each { |project| project.add_account(@account) }
 
       redirect_to build_profile_accounts_path
     else

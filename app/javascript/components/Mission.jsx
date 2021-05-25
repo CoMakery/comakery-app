@@ -3,27 +3,27 @@ import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import ProfileModal from '../components/ProfileModal'
 import Pluralize from 'react-pluralize'
-import InterestsController from '../controllers/interests_controller'
+import ProjectRolesController from '../controllers/project_roles_controller'
 
 export default class Mission extends React.Component {
   constructor(props) {
     super(props)
-    this.addInterest = this.addInterest.bind(this)
-    this.removeInterest = this.removeInterest.bind(this)
+    this.addProjectRole = this.addProjectRole.bind(this)
+    this.removeProjectRole = this.removeProjectRole.bind(this)
 
-    const interests = {}
+    const followers = {}
     props.projects.forEach(project => {
       if (project.projectData) {
-        interests[project.projectData.id] = project.interested
+        followers[project.projectData.id] = project.projectFollower
       }
     })
-    this.state = { interests }
+    this.state = { followers }
   }
 
-  addInterest(projectId, specialtyId = null) {
-    new InterestsController().follow(projectId, specialtyId).then(response => {
+  addProjectRole(projectId) {
+    new ProjectRolesController().follow(projectId).then(response => {
       if (response.status === 200) {
-        this.setState({ interests: {...this.state.interests, [projectId]: true} })
+        this.setState({ followers: {...this.state.followers, [projectId]: true} })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
@@ -32,10 +32,10 @@ export default class Mission extends React.Component {
     })
   }
 
-  removeInterest(projectId) {
-    new InterestsController().unfollow(projectId).then(response => {
+  removeProjectRole(projectId) {
+    new ProjectRolesController().unfollow(projectId).then(response => {
       if (response.status === 200) {
-        this.setState({ interests: {...this.state.interests, [projectId]: false} })
+        this.setState({ followers: {...this.state.followers, [projectId]: false} })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
@@ -46,7 +46,7 @@ export default class Mission extends React.Component {
 
   render() {
     const { mission, leaders, projects, newProjectUrl } = this.props
-    const { interests } = this.state
+    const { followers } = this.state
 
     return <div className='mission-container'>
       <div className='mission-header'>
@@ -101,7 +101,7 @@ export default class Mission extends React.Component {
 
             <div className='mission-stats__kpi'>
               <div className='mission-stats__contributor' />
-              <Pluralize singular='person' plural='people' count={mission.stats.interests} />&nbsp;INTERESTED
+              <Pluralize singular='person' plural='people' count={mission.stats.projectRoles} />&nbsp;INTERESTED
             </div>
 
           </div>
@@ -156,7 +156,7 @@ export default class Mission extends React.Component {
                     <div className='mission-projects__single__card__info__stats'>
 
                       <div className='mission-projects__single__card__info__row'>
-                        <Pluralize singular='interested' plural='interested' count={project.stats.interests} />
+                        <Pluralize singular='interested' plural='interested' count={project.stats.accounts} />
                         <Icon name='circleGray.svg' />
                       </div>
 
@@ -170,19 +170,19 @@ export default class Mission extends React.Component {
 
                   <div className='mission-projects__single__card__info__interest'>
                     {project.editable && <a className='mission-projects__single__card__info__interest__link' href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
-                    {!project.editable && interests[project.projectData.id] &&
+                    {!project.editable && followers[project.projectData.id] &&
                       <div
                         className='mission-projects__single__card__info__interest__link'
                         style={{opacity: 0.7}}
-                        onClick={() => { this.removeInterest(project.projectData.id) }}
+                        onClick={() => { this.removeProjectRole(project.projectData.id) }}
                       >
                         Unfollow
                       </div>
                     }
-                    {!project.editable && !interests[project.projectData.id] &&
+                    {!project.editable && !followers[project.projectData.id] &&
                       <div
                         className='mission-projects__single__card__info__interest__link'
-                        onClick={() => { this.addInterest(project.projectData.id) }}
+                        onClick={() => { this.addProjectRole(project.projectData.id) }}
                       >
                         Follow
                       </div>
@@ -196,19 +196,19 @@ export default class Mission extends React.Component {
                 <div dangerouslySetInnerHTML={{__html: project.projectData.description}} />
                 <div className='mission-projects__single__card__info__interest mission-projects__single__card__info__interest--mobile'>
                   {project.editable && <a className='mission-projects__single__card__info__interest__link' href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
-                  {!project.editable && interests[project.projectData.id] &&
+                  {!project.editable && followers[project.projectData.id] &&
                   <div
                     className='mission-projects__single__card__info__interest__link'
                     style={{opacity: 0.7}}
-                    onClick={() => { this.removeInterest(project.projectData.id) }}
+                    onClick={() => { this.removeProjectRole(project.projectData.id) }}
                   >
                         Unfollow
                   </div>
                   }
-                  {!project.editable && !interests[project.projectData.id] &&
+                  {!project.editable && !followers[project.projectData.id] &&
                   <div
                     className='mission-projects__single__card__info__interest__link'
-                    onClick={() => { this.addInterest(project.projectData.id) }}
+                    onClick={() => { this.addProjectRole(project.projectData.id) }}
                   >
                         Follow
                   </div>

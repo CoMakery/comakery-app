@@ -25,8 +25,8 @@ describe('FeaturedMission', () => {
       description: 'This is test mission',
       imageUrl   : '/logo.png',
       projects   : [
-        { id: 1, title: 'Project 1', interested: true },
-        { id: 2, title: 'Project 2', interested: false }
+        { id: 1, title: 'Project 1', involved: true },
+        { id: 2, title: 'Project 2', involved: false }
       ],
       csrfToken: '00'
     }
@@ -50,8 +50,8 @@ describe('FeaturedMission', () => {
       description: 'This is test mission',
       imageUrl   : '/logo.png',
       projects   : [
-        { id: 1, title: 'Project 1', interested: true },
-        { id: 2, title: 'Project 2', interested: false }
+        { id: 1, title: 'Project 1', involved: true },
+        { id: 2, title: 'Project 2', involved: false }
       ],
       csrfToken: '00'
     }
@@ -59,8 +59,8 @@ describe('FeaturedMission', () => {
     const wrapper = mount(<FeaturedMission {...mission} />)
     wrapper.setState({
       projects: [
-        { id: 1, title: 'Project 1', interested: true },
-        { id: 2, title: 'Project 2', interested: true }
+        { id: 1, title: 'Project 1', involved: true },
+        { id: 2, title: 'Project 2', involved: true }
       ]
     })
 

@@ -78,6 +78,8 @@ class AwardTypesController < ApplicationController
 
     # rubocop:todo Metrics/PerceivedComplexity
     def set_index_props # rubocop:todo Metrics/CyclomaticComplexity
+      policy = ProjectPolicy.new(current_user, @project)
+
       @props = {
         editable: policy(@project).edit?,
         batches: @award_types&.with_attached_diagram&.includes(awards: %i[account project assignments])&.map do |batch|
@@ -89,7 +91,7 @@ class AwardTypesController < ApplicationController
             total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: GetImageVariantPath.call(attachment: batch.project.token&.logo_image, resize_to_fill: [100, 100]).path,
             team_pics: batch.project.contributors_distinct.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
-            interested_pics: batch.project.interested.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
+            interested_pics: batch.project.accounts.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
@@ -102,7 +104,7 @@ class AwardTypesController < ApplicationController
           currency_logo: GetImageVariantPath.call(attachment: @project.token&.logo_image, resize_to_fill: [100, 100]).path,
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props.merge(observer: policy.project_observer?),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

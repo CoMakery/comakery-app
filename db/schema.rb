@@ -517,9 +517,8 @@ ActiveRecord::Schema.define(version: 2021_05_19_082820) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
-    t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
-    t.boolean "auto_add_interest", default: false, null: false
+    t.boolean "auto_add_account", default: false, null: false
     t.text "github_url"
     t.text "documentation_url"
     t.text "getting_started_url"
@@ -527,6 +526,8 @@ ActiveRecord::Schema.define(version: 2021_05_19_082820) do
     t.text "funding_url"
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
+    t.integer "project_roles_count", default: 0
+    t.integer "interests_count", default: 0
     t.integer "transfer_batch_size", default: 1, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["image_id"], name: "index_projects_on_image_id"
