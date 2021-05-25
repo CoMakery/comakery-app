@@ -9,7 +9,7 @@ describe 'project accounts page' do
   let(:project) { create(:project, visibility: :public_listed, token: account_token_record.token) }
   subject { visit project_dashboard_accounts_path(project) }
 
-  before { project.safe_add_project_interested(account) }
+  before { project.add_account(account) }
 
   context 'with eth security token' do
     context 'when not logged in' do
@@ -101,19 +101,19 @@ describe 'project accounts page' do
   end
 
   context 'with settings', js: true do
-    let!(:admin) { create(:account) }
+    let!(:project) { create(:project) }
 
-    let!(:project) { create(:project, account: admin) }
+    let!(:project_admin) { create(:account) }
 
     let!(:account) { create(:account) }
 
-    before { login(admin) }
+    before { project.project_admins << project_admin }
+
+    before { login(project_admin) }
 
     before { subject }
 
     context 'change follower permissions' do
-      let!(:project_role) { project.project_roles.find_by(account: account) }
-
       it 'updates project role' do
         expect(
           find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
@@ -136,10 +136,10 @@ describe 'project accounts page' do
     end
 
     context 'change own permissions' do
-      let!(:project_role) { project.project_roles.find_by(account: admin) }
+      let!(:project_role) { project.project_roles.find_by(account: project_admin) }
 
       it 'deny action with flash message' do
-        execute_script("document.querySelector('#project_#{project.id}_account_#{admin.id} #change_permissions_btn').click()")
+        execute_script("document.querySelector('#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn').click()")
 
         within('#account_permissions_modal') do
           select 'Observer', from: 'project_role[role]'

@@ -14,7 +14,7 @@ describe FillRolesWithInterests do
     # interests will have owner, 2 admins and interested
     #
     #
-    expect(project.interests.count).to eq 4
+    expect(project.interests.count).to eq 3
     # owner become admin after create
     # so it's equivalent to no project roles present(after migrate) and inserting
     # owner role from interest
@@ -25,7 +25,7 @@ describe FillRolesWithInterests do
     project.reload
 
     # interests won't change
-    expect(project.interests.count).to eq 4
+    expect(project.interests.count).to eq 3
 
     # because interests have duplicates
     expect(project.project_roles.count).to eq 3

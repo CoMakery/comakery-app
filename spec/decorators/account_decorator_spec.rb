@@ -40,7 +40,7 @@ describe AccountDecorator do
 
     context 'when account is project owner or admin' do
       it 'can send awards' do
-        project.admins << project2.account
+        project.project_admins << project2.account
 
         expect(project.account.decorate.can_send_awards?(project)).to be true
         expect(project2.account.decorate.can_send_awards?(project)).to be true

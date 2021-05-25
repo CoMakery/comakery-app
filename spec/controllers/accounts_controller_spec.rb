@@ -142,9 +142,9 @@ describe AccountsController do
       expect(response).to redirect_to build_profile_accounts_path
     end
 
-    it 'adds default interest in auto add interest projects' do
-      project_auto_add1 = create(:project, auto_add_interest: true)
-      project_auto_add2 = create(:project, auto_add_interest: true)
+    it 'adds default account in auto add account projects' do
+      project_auto_add1 = create(:project, auto_add_account: true)
+      project_auto_add2 = create(:project, auto_add_account: true)
       create(:project)
       post :create, params: {
         account: {
@@ -158,10 +158,10 @@ describe AccountsController do
       }
 
       account = Account.where(email: 'user-yo@test.st').last
-      expect(account.projects_interested).to contain_exactly(project_auto_add1, project_auto_add2)
+      expect(account.projects_involved).to contain_exactly(project_auto_add1, project_auto_add2)
     end
 
-    it 'adds nothing if there are no auto add interest projects' do
+    it 'adds nothing if there are no auto add account projects' do
       create(:project)
       create(:project)
 
@@ -177,7 +177,7 @@ describe AccountsController do
       }
 
       account = Account.where(email: 'user-yo@test.st').last
-      expect(account.projects_interested).to eq([])
+      expect(account.projects_involved).to eq([])
     end
 
     it 'renders errors if email has already been taken' do

@@ -45,7 +45,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_send_awards?(project)
-    project&.account == self || project.admins.include?(self)
+    project&.account == self || project.project_admins.include?(self)
   end
 
   def image_url(size = 100)
@@ -73,10 +73,6 @@ class AccountDecorator < Draper::Decorator
 
   def verification_max_investment_usd
     latest_verification&.max_investment_usd
-  end
-
-  def project_interests
-    projects_interested.pluck(:id)
   end
 
   def total_received_in(token)
