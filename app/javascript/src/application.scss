@@ -655,22 +655,8 @@ form.form-with-submit-button {
   }
 
   .input-label.label-only .input-label-addon {
-    top: 6px;
+    top: 8px;
     left: 6px;
-  }
-}
-
-.modal {
-  .btn {
-    border-width: 0;
-  }
-
-  .btn.btn-primary:hover {
-    color: var(--upside-btn-color-text) !important;
-  }
-
-  .btn.btn-secondary:hover {
-    color: var(--upside-btn-color-text) !important;
   }
 }
 
