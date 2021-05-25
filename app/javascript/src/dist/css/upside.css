@@ -9536,6 +9536,7 @@ Navbar vertical
   border: none;
 }
 
+.btn:disabled, .btn.disabled {
   cursor: not-allowed; }
 
 .btn .icon {
