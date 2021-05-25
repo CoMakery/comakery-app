@@ -9536,16 +9536,6 @@ Navbar vertical
   border: none;
 }
 
-/* .btn:hover {
-  color: #232e3c !important;
-  border-color: #a7abb1 !important;
-  background-color: #f4f6fa !important; }
-
-.btn:focus {
-  border-color: rgba(var(--upside-btn-color, 32, 107, 196), 0.5) !important;
-  box-shadow: 0 0 0 0.25rem rgba(var(--upside-btn-color, 32, 107, 196), 0.25) !important; } */
-
-.btn:disabled, .btn.disabled {
   cursor: not-allowed; }
 
 .btn .icon {
