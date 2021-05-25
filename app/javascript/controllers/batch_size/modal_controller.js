@@ -1,15 +1,8 @@
-import { Controller } from 'stimulus';
+import { Controller } from 'stimulus'
+import jQuery from 'jquery'
 
 export default class extends Controller {
-  connect() {
-    this.jmodal = this.element.jModalController;
-
-    this.jmodal.show()
-  }
-
-  closeModal() {
-    this.jmodal.hide()
-
-    this.jmodal.reset()
+  close() {
+    jQuery(this.element).modal('hide')
   }
 }

@@ -2,9 +2,8 @@
 <%= turbo_frame_tag "project_transfer_batch_size" do %>
   <div id="project_<%= project.id %>_transfer_batch_size"
        class="project-transfer-batch-size"
-       data-controller="turbo-stream-fetch"
-       data-turbo-stream-fetch-url="<%= show_batch_size_form_project_path(project) %>"
-       data-action="click->turbo-stream-fetch#fetchStream">
+       data-bs-toggle="modal"
+       data-bs-target=".project_batch_size_modal">
     <div class="input-label label-only">
       <div class="input-label-addon">Batch size</div>
     </div>

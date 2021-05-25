@@ -1,33 +1,20 @@
-<div class="modal modal-blur fade"
-     id="project_batch_size_modal"
-     tabindex="-1"
-     role="dialog"
-     aria-hidden="false"
-     data-controller="bootstrap--modal batch-size--modal"
-     data-action="modal:hidden->bootstrap--modal#reset">
+<%= turbo_stream_from "project_transfer_batch_size_modal_form" %>
+
+<div class="modal modal-blur fade project_batch_size_modal"
+    id="project_<%= project.id %>_transfer_batch_size_modal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+    data-controller="batch-size--modal"
+    data-action="turbo:submit-start->batch-size--modal#close">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Batch size</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <%= form_with(model: project,
-                    url: project_path(project),
-                    data: { controller: 'batch-size--form',
-                            action: 'batch-size--form#onSubmit batch-size:updated->batch-size--modal#closeModal' }) do |f| %>
-        <div class="modal-body">
-          <ul class="errors alert-danger"></ul>
-          <div class="mb-3 form-range">
-            <%# TODO: Add slider https://preview.tabler.io/docs/range-slider.html %>
-            <%= f.number_field :transfer_batch_size, class: "form-control", in: 1..250 %>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <%= f.submit 'Save',
-                       data: { disable_with: false, target: 'batch-size--form.submit' },
-                       class: 'btn btn-primary' %>
-        </div>
+      <%= turbo_frame_tag "project_transfer_batch_size_modal_form" do %>
+        <%= render partial: 'projects/batch_size_modal_form', locals: { project: project } %>
       <% end %>
     </div>
   </div>

@@ -315,5 +315,9 @@ class Project < ApplicationRecord
       broadcast_replace_later_to 'project_transfer_batch_size',
                                  target: "project_#{id}_transfer_batch_size",
                                  partial: 'dashboard/transfers/batch_size', locals: { project: self }
+
+      broadcast_replace_later_to 'project_transfer_batch_size_modal_form',
+                                 target: "project_#{id}_transfer_batch_size_modal_form",
+                                 partial: 'projects/batch_size_modal_form', locals: { project: self }
     end
 end

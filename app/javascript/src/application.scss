@@ -647,6 +647,7 @@ form.form-with-submit-button {
 .batch-size {
   #project_transfer_batch_size_input {
     padding-left: 7.5em !important;
+    cursor: pointer;
   }
 
   #project_transfer_batch_size_input[readonly], #project_transfer_batch_size_input[readonly]:hover {
@@ -657,6 +658,7 @@ form.form-with-submit-button {
   .input-label.label-only .input-label-addon {
     top: 8px;
     left: 6px;
+    cursor: pointer;
   }
 }
 
