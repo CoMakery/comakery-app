@@ -9537,6 +9537,7 @@ Navbar vertical
   background-color: #ffffff !important;
   white-space: nowrap !important;
   border-radius: 8px !important;
+  border: none;
 }
 
 .btn:hover {
