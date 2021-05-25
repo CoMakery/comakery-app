@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
-  before_action :assign_project, only: %i[edit show update show_batch_size_form]
+  before_action :assign_project, only: %i[edit show update]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
@@ -116,20 +116,6 @@ class ProjectsController < ApplicationController
       render json: { message: 'Successfully updated.' }, status: :ok
     rescue ArgumentError
       render json: { message: 'Invalid Status' }, status: :unprocessable_entity
-    end
-  end
-
-  def show_batch_size_form
-    authorize @project, :edit?
-
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          :project_batch_size_modal,
-          partial: 'batch_size_modal',
-          locals: { project: @project }
-        )
-      end
     end
   end
 
