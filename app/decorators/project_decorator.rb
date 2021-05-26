@@ -137,7 +137,7 @@ class ProjectDecorator < Draper::Decorator
         address_url: token.blockchain.url_for_address_human(token.contract_address),
         logo_url: GetImageVariantPath.call(
           attachment: token.logo_image,
-          resize_to_fill: [15, 15],
+          resize_to_fill: [15, 15]
         ).path
       }
     }
