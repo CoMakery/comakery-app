@@ -22,7 +22,7 @@ class Award < ApplicationRecord
   has_one_attached :submission_image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
-  add_special_orders %w[issuer_first_name]
+  add_special_orders %w[account_first_name issuer_first_name]
 
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
@@ -136,6 +136,14 @@ class Award < ApplicationRecord
   # Used in ransack_reorder
   def self.prepare_ordering_by_issuer_first_name(scope)
     scope.joins(:issuer)
+  end
+
+  def self.prepare_ordering_by_account_first_name(scope)
+    scope.joins(:account)
+  end
+
+  def self.account_first_name_order_string(direction)
+    "accounts.first_name #{direction}, accounts.last_name #{direction}"
   end
 
   def self.issuer_first_name_order_string(direction)
