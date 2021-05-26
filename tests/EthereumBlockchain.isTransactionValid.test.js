@@ -12,10 +12,9 @@ describe("EthereumBlockchain.isTransactionValid", () => {
   })
 
   test('for valid blockchainTransaction', async () => {
-    const bt = {...blockchainTransaction}
-    jest.spyOn(ethBlockchain, "getTokenBalance").mockReturnValueOnce(new BigNumber(10))
+    jest.spyOn(ethBlockchain, "getTokenBalance").mockReturnValueOnce({ balance: new BigNumber("0.000000001"), balanceInBaseUnit: new BigNumber("10") })
 
-    const validResults = await ethBlockchain.isTransactionValid(bt, hwAddress)
+    const validResults = await ethBlockchain.isTransactionValid(blockchainTransaction, hwAddress)
     expect(validResults.valid).toBe(true)
     expect(validResults.markAs).toBe(undefined)
     expect(validResults.error).toBe(undefined)
@@ -32,23 +31,20 @@ describe("EthereumBlockchain.isTransactionValid", () => {
   })
 
   test('for not enough tokens', async () => {
-    const bt = {...blockchainTransaction}
+    jest.spyOn(ethBlockchain, "getTokenBalance").mockReturnValueOnce({ balance: new BigNumber("0.0000000004"), balanceInBaseUnit: new BigNumber("4") })
 
-    jest.spyOn(ethBlockchain, "getTokenBalance").mockReturnValueOnce(new BigNumber(4))
-
-    const validResults = await ethBlockchain.isTransactionValid(bt, hwAddress)
+    const validResults = await ethBlockchain.isTransactionValid(blockchainTransaction, hwAddress)
     expect(validResults.valid).toBe(false)
     expect(validResults.markAs).toBe("cancelled")
     expect(validResults.error).toEqual("The Hot Wallet has insufficient tokens. Please top up the 0x15b4eda54e7aa56e4ca4fe6c19f7bf9d82eca2fc")
   })
 
   test('for unknown error', async () => {
-    const bt = {...blockchainTransaction}
     jest.spyOn(ethBlockchain, "getTokenBalance").mockReturnValueOnce({})
 
-    const validResults = await ethBlockchain.isTransactionValid(bt, hwAddress)
+    const validResults = await ethBlockchain.isTransactionValid(blockchainTransaction, hwAddress)
     expect(validResults.valid).toBe(false)
     expect(validResults.markAs).toBe("failed")
-    expect(validResults.error).toEqual("Unknown error: TypeError: tokenBalance.isLessThan is not a function")
+    expect(validResults.error).toEqual("Unknown error: TypeError: Cannot read property 'isLessThan' of undefined")
   })
 });
