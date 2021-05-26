@@ -220,7 +220,9 @@ class ProjectSetupHeader extends React.Component {
           <div className="project-info">
             <span style={{marginTop: '-40px'}}><img src={project.token.logoUrl}/>&nbsp;</span>
             <span>{project.token.name} ({project.token.symbol}) {project.token.network}&nbsp;</span>
+            {project.token.address &&
             <a href={project.token.addressUrl} className="hot_wallet_address_link">{project.token.address}</a>
+            }
           </div>
           }
         </ProjectInfo>
