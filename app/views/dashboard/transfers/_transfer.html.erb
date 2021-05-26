@@ -15,8 +15,14 @@
     </div>
   </div>
 
-  <div class="transfers-table__transfer__account">
-    <label>account</label>
+  <div class="transfers-table__transfer__recipient">
+    <label>recipient</label>
+
+    <%= render partial: 'recipient', locals: { transfer: transfer } %>
+  </div>
+
+  <div class="transfers-table__transfer__issuer">
+    <label>issuer</label>
 
     <% if transfer.issuer %>
       <%= render partial: 'issuer', locals: { transfer: transfer } %>
@@ -25,12 +31,6 @@
     <% else %>
       –
     <% end %>
-  </div>
-
-  <div class="transfers-table__transfer__issuer">
-    <label>admin</label>
-
-    <%= render partial: 'issuer', locals: { transfer: transfer } %>
   </div>
 
   <div class="transfers-table__transfer__total_amount">
