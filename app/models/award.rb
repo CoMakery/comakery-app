@@ -135,11 +135,11 @@ class Award < ApplicationRecord
 
   # Used in ransack_reorder
   def self.prepare_ordering_by_issuer_first_name(scope)
-    scope.joins(:issuer)
+    scope.joins('INNER JOIN accounts AS issuers ON awards.issuer_id = issuers.id')
   end
 
   def self.prepare_ordering_by_account_first_name(scope)
-    scope.joins(:account)
+    scope.joins('INNER JOIN accounts AS a ON awards.account_id = a.id')
   end
 
   def self.account_first_name_order_string(direction)
