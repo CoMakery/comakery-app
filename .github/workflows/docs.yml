@@ -40,6 +40,7 @@ jobs:
       SLACK_API_SECRET: none
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
+      NODE_OPTIONS: '--max_old_space_size=4096'
       # Settings -> Secrets
       # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
 

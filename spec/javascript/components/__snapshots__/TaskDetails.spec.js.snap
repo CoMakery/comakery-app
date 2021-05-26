@@ -321,7 +321,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                               onClick={[Function]}
                             >
                               <img
-                                className="icon icon__iconCloseCopy-svg"
+                                className="icon-legacy icon__iconCloseCopy-svg"
                                 onClick={[Function]}
                                 src="test-file-stub"
                               />
@@ -954,7 +954,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                           name="DROP_DOWN.svg"
                                         >
                                           <img
-                                            className="icon icon__DROP_DOWN-svg"
+                                            className="icon-legacy icon__DROP_DOWN-svg"
                                             src="test-file-stub"
                                           />
                                         </Icon>

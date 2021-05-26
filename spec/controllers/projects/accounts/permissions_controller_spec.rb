@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Projects::Accounts::PermissionsController, type: :controller do
   let!(:admin) { create(:account) }
-  let!(:project) { create(:project, account: admin) }
+  let!(:project) { create(:project) }
   let!(:account) { create(:account, email: 'example@gmail.com') }
   let!(:project_role) { create(:project_role, project: project, account: account, role: :interested) }
 
@@ -16,7 +16,9 @@ RSpec.describe Projects::Accounts::PermissionsController, type: :controller do
   end
 
   before do
-    login(project.account)
+    project.project_admins << admin
+
+    login(admin)
   end
 
   describe 'GET #show' do

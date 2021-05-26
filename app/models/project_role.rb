@@ -1,6 +1,6 @@
 class ProjectRole < ApplicationRecord
   belongs_to :account
-  belongs_to :project
+  belongs_to :project, counter_cache: true
 
   validates :account_id, uniqueness: { scope: %i[project_id], message: 'already has a role in project' }
 

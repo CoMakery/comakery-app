@@ -13,6 +13,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
     className="batch-index"
     current="batches"
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -55,6 +56,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
           current="batches"
           expanded={false}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -106,6 +108,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
               current="batches"
               expanded={false}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >
@@ -327,7 +330,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               name="BATCH/WHITE.svg"
                             >
                               <img
-                                className="icon icon__BATCH/WHITE-svg"
+                                className="icon-legacy icon__BATCH/WHITE-svg"
                                 src="test-file-stub"
                               />
                             </Icon>
@@ -352,7 +355,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               name="PLUS.svg"
                             >
                               <img
-                                className="icon icon__PLUS-svg"
+                                className="icon-legacy icon__PLUS-svg"
                                 src="test-file-stub"
                               />
                             </Icon>

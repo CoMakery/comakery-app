@@ -8,7 +8,7 @@ class Footer extends React.Component {
     const {className, isLoggedIn, isWhitelabel, whitelabelLogo, whitelabelLogoDark, ...other} = this.props
 
     const classnames = classNames(
-      'footer',
+      'footer-legacy',
       className
     )
 

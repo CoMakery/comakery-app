@@ -16,7 +16,7 @@ RSpec.describe ProjectRolesController, type: :controller do
 
         expect(response).to have_http_status(:ok)
 
-        expect(project.project_interested).to include(account)
+        expect(project.accounts).to include(account)
       end
     end
 

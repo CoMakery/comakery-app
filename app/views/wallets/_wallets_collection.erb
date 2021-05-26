@@ -1,17 +1,10 @@
 <div class="card-header bg-white">
   <div class="d-flex justify-content-between align-items-center flex-wrap">
-    <h5 class="m-0">My Wallets</h5>
-    <div class="d-flex flex-wrap">
-      <% unless wallets.ore_id.empty? %>
-        <%= button_to auth_ore_id_destroy_url, type: "button", class: "btn btn-link font-weight-bold",  method: :delete, data: { turbo: "false" } do %>
-          <span>Unlink OREID</span>
-        <% end %>
-      <% end %>
-    </div>
+    <h5 class="m-0 card-title">My Wallets</h5>
   </div>
 </div>
-<div class="card-body p-0 table-responsive">
-  <table class="table table-borderless table-striped cm-table">
+<div class="card-body table-responsive mb-0">
+  <table class="table table-vcenter table-scroll">
     <thead>
       <tr>
         <th scope="col">Wallet name</th>
@@ -40,19 +33,19 @@
                     wallet.address,
                     wallet.blockchain.url_for_address_human(wallet.address),
                     target: :_blank,
-                    class: 'mr-2 full-address',
+                    class: 'btn btn-subtle full-address',
                     data: { controller: "utils--truncate", target: "utils--clipboard.source" }
                   ) %>
               <div class="hidden" data-target="utils--clipboard.source"><%= wallet.address %></div>
-              <span type="button" class="text-primary" data-action="click->utils--clipboard#copy">
+              <span class="btn btn-subtle" data-action="click->utils--clipboard#copy">
                 <i class="far fa-copy" data-target="utils--clipboard.icon"></i>
               </span>
             </div>
           </td>
           <td>
-            <div class="text-right">
+            <div class="text-center">
               <div class="dropdown">
-                <div class="text-primary" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="btn btn-subtle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-h"></i>
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

@@ -13,7 +13,7 @@ describe 'token upgrade from dummy erc20 to security token', type: :feature do
 
     context 'and interested accounts' do
       before do
-        project.safe_add_project_interested(account)
+        project.add_account(account)
       end
 
       context 'on Accounts dashboard' do

@@ -7,14 +7,14 @@ describe('Icon', () => {
     const wrapper = shallow(<Icon />)
 
     expect(wrapper).toMatchSnapshot()
-    expect(wrapper.exists('.icon')).toBe(true)
+    expect(wrapper.exists('.icon-legacy')).toBe(true)
     expect(wrapper.exists('.icon__atomsIconsSystemHeart-svg')).toBe(true)
   })
 
   it('renders correctly with custom className', () => {
     const wrapper = shallow(<Icon className="__test" />)
 
-    expect(wrapper.exists('.icon.__test')).toBe(true)
+    expect(wrapper.exists('.icon-legacy.__test')).toBe(true)
   })
 
   it('renders correctly with custom name', () => {
