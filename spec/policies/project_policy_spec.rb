@@ -128,7 +128,7 @@ describe ProjectPolicy do
 
   describe '#transfers?' do
     context 'without user' do
-      it { expect(described_class.new(nil, my_public_project).transfers?).to be(false) }
+      it { expect(described_class.new(nil, my_public_project).transfers?).to be(true) }
 
       it { expect(described_class.new(nil, my_private_project).transfers?).to be(false) }
 
