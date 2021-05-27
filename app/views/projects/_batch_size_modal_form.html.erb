@@ -1,0 +1,15 @@
+<%= form_with(model: project,
+              url: project_path(project),
+              id: "project_#{project.id}_transfer_batch_size_modal_form",
+              remote: true) do |f| %>
+  <div class="modal-body">
+    <ul class="errors alert-danger"></ul>
+    <div class="mb-3 form-range">
+      <%= f.number_field :transfer_batch_size, class: "form-control", in: 1..250 %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
+    <%= f.submit 'Save', class: 'btn btn-primary' %>
+  </div>
+<% end %>

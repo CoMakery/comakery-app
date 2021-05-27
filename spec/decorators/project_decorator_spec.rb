@@ -216,7 +216,8 @@ describe ProjectDecorator do
         expect(props[:token][:name]).to eq(token.name)
         expect(props[:token][:symbol]).to eq(token.symbol)
         expect(props[:token][:network]).to eq(token.blockchain.name)
-        expect(props[:token][:address]).to eq(token.contract_address)
+        expect(props[:token][:address]).to include(token.contract_address.first(5))
+        expect(props[:token][:address_url]).to include(token.contract_address)
         expect(props[:token][:logo_url]).to include('dummy_image.png')
       end
     end
