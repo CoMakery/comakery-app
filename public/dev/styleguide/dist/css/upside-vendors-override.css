@@ -1,0 +1,52 @@
+.apexcharts-title-text {
+  font-weight: 600 !important; }
+
+.apexcharts-tooltip-title {
+  font-weight: 600 !important;
+  padding-bottom: .25rem !important; }
+
+.apexcharts-gridline,
+.apexcharts-ycrosshairs,
+.apexcharts-xaxis-tick {
+  stroke: #e6e8e9 !important; }
+
+.apexcharts-tooltip {
+  line-height: 1;
+  color: #ffffff;
+  background: #232e3c !important;
+  border: 0 !important;
+  border-radius: 3px !important; }
+
+.apexcharts-tooltip-title {
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important; }
+
+.apexcharts-tooltip-series-group {
+  padding: 0 8px !important; }
+
+.apexcharts-tooltip-marker {
+  width: .5rem;
+  height: .5rem; }
+
+.apexcharts-gridline,
+.apexcharts-ycrosshairs,
+.apexcharts-xaxis-tick {
+  stroke: #e7eaef; }
+
+.apexcharts-yaxis-label,
+.apexcharts-xaxis-label {
+  fill: #656d77; }
+
+/*! nouislider - 14.6.3 - 11/19/2020 */
+
+.litepicker .container__months {
+  border: none; /* was commented in current version */
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px rgba(18, 34, 74, 0.1); }
+
+.litepicker .container__months .month-item-year {
+  font-weight: 400 !important; }
+
+.datepicker-inline .litepicker .container__months {
+  box-shadow: 0px 4px 20px rgba(18, 34, 74, 0.1); }
