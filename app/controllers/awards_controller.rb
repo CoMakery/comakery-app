@@ -416,7 +416,7 @@ class AwardsController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
-        project_for_header: @@project.header_props(current_account),
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -437,7 +437,7 @@ class AwardsController < ApplicationController
         accounts_select: (@project.accounts + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
-        project_for_header: @@project.header_props(current_account),
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -461,7 +461,7 @@ class AwardsController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
-        project_for_header: @@project.header_props(current_account),
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

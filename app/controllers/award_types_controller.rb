@@ -102,7 +102,7 @@ class AwardTypesController < ApplicationController
           currency_logo: GetImageVariantPath.call(attachment: @project.token&.logo_image, resize_to_fill: [100, 100]).path,
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
-        project_for_header: @@project.header_props(current_account),
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -147,7 +147,7 @@ class AwardTypesController < ApplicationController
         url_on_success: project_award_types_path,
         project_id: @project.id,
         csrf_token: form_authenticity_token,
-        project_for_header: @@project.header_props(current_account),
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
