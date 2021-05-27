@@ -106,25 +106,59 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#transfers? #accounts?' do
-    %i[transfers? accounts?].each do |action|
-      specify do
-        authorized(nil, my_public_project, action)
-        not_authorized(nil, my_private_project, action)
-        not_authorized(nil, my_public_project_business_confidential, action)
+  describe '#accounts?' do
+    specify do
+      authorized(nil, my_public_project, :accounts?)
+      not_authorized(nil, my_private_project, :accounts?)
+      not_authorized(nil, my_public_project_business_confidential, :accounts?)
+    end
+
+    specify do
+      authorized(project_observer, my_public_project, :accounts?)
+      authorized(project_observer, my_private_project, :accounts?)
+      authorized(project_observer, my_public_project_business_confidential, :accounts?)
+    end
+
+    specify do
+      authorized(project_interested, my_public_project, :accounts?)
+      not_authorized(project_interested, my_private_project, :accounts?)
+      not_authorized(project_interested, my_public_project_business_confidential, :accounts?)
+    end
+  end
+
+  describe '#transfers?' do
+    context 'without user' do
+      it { expect(described_class.new(nil, my_public_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(nil, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(nil, my_public_project_business_confidential).transfers?).to be(false) }
+    end
+
+    context 'when user is observer' do
+      it { expect(described_class.new(project_observer, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).transfers?).to be(false) }
+
+      context 'when project without confidentiality' do
+        before { my_public_project.update(require_confidentiality: false) }
+
+        it { expect(described_class.new(project_observer, my_public_project).transfers?).to be(true) }
       end
 
-      specify do
-        authorized(project_observer, my_public_project, action)
-        authorized(project_observer, my_private_project, action)
-        authorized(project_observer, my_public_project_business_confidential, action)
-      end
+      context 'when project require confidentiality' do
+        before { my_public_project.update(require_confidentiality: true) }
 
-      specify do
-        authorized(project_interested, my_public_project, action)
-        not_authorized(project_interested, my_private_project, action)
-        not_authorized(project_interested, my_public_project_business_confidential, action)
+        it { expect(described_class.new(project_observer, my_public_project).transfers?).to be(false) }
       end
+    end
+
+    context 'without user is interested' do
+      it { expect(described_class.new(project_interested, my_public_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(project_interested, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(project_interested, my_public_project_business_confidential).transfers?).to be(false) }
     end
   end
 
