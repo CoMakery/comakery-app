@@ -380,5 +380,20 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       expect(response).to have_http_status(:success)
       expect(project.reload.hot_wallet_mode).to eq('manual_sending')
     end
+
+    it 'does not switch disabled hot wallet mode' do
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash, switch_hot_wallet_to_manual_mode: 'true' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
+      params[:project_id] = project.id
+      params[:id] = blockchain_transaction.id
+
+      project.update(hot_wallet_mode: :disabled)
+
+      expect(project.hot_wallet_mode).to eq('disabled')
+
+      delete :destroy, params: params
+
+      expect(response).to have_http_status(:success)
+      expect(project.reload.hot_wallet_mode).to eq('disabled')
+    end
   end
 end

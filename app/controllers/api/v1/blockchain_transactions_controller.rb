@@ -143,9 +143,8 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def switch_hw_to_manual_mode?
-      params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
-        :switch_hot_wallet_to_manual_mode
-      ).present?
+      params_exists = params.dig(:body, :data, :transaction, :switch_hot_wallet_to_manual_mode).present?
+      params_exists && project.hot_wallet_auto_sending?
     end
 
     def hot_wallet_request?
