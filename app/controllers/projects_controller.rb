@@ -281,6 +281,7 @@ class ProjectsController < ApplicationController
         :status,
         :display_team,
         :hot_wallet_mode,
+        :transfer_batch_size,
         channels_attributes: %i[
           _destroy
           id
