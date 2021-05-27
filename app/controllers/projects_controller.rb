@@ -216,7 +216,7 @@ class ProjectsController < ApplicationController
 
     def project_header
       if @project
-        @project.decorate.header_props.merge(@project.policy_props(current_account))
+        @project.decorate.header_props(current_user)
       else
         { image_url: helpers.image_url('default_project.jpg') }
       end
@@ -246,7 +246,7 @@ class ProjectsController < ApplicationController
         csrf_token: form_authenticity_token,
         my_tasks_path: my_tasks_path(project_id: @project.id),
         editable: policy(@project).edit?,
-        project_for_header: @project.decorate.header_props,
+        project_for_header: @project.decorate.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

@@ -93,7 +93,9 @@ class ProjectDecorator < Draper::Decorator
     token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
-  def header_props
+  def header_props(current_account)
+    policy = ProjectPolicy.new(current_account, self)
+
     project_image_path = GetImageVariantPath.call(
       attachment: panoramic_image,
       resize_to_fill: [1500, 300],
@@ -102,7 +104,6 @@ class ProjectDecorator < Draper::Decorator
 
     {
       title: title,
-      owner: legal_project_owner,
       image_url: project_image_path,
       settings_url: edit_project_path(self),
       access_url: project_dashboard_accesses_path(self),
@@ -121,19 +122,12 @@ class ProjectDecorator < Draper::Decorator
       governance_url: governance_url,
       funding_url: funding_url,
       video_conference_url: video_conference_url,
-      present: true
-    }.merge(token_props)
-  end
-
-  def policy_props(current_account)
-    policy = ProjectPolicy.new(current_account, self)
-
-    {
+      present: true,
       owner: policy.edit?,
       observer: policy.project_observer?,
       interested: policy.project_interested?,
       show_transfers: policy.transfers?
-    }
+    }.merge(token_props)
   end
 
   def token_props
