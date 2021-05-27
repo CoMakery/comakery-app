@@ -1,7 +1,7 @@
 <div class="project_settings">
   <%= react_component(
     'layouts/ProjectSetupHeader',
-    project_for_header: @project.header_props,
+    project_for_header: @project.header_props.merge(@project.policy_props(current_account)),
     mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props,
     owner: policy(@project).edit?,
     observer: policy(@project).project_observer?,

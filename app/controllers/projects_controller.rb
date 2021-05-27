@@ -215,7 +215,11 @@ class ProjectsController < ApplicationController
     # rubocop:enable Metrics/PerceivedComplexity
 
     def project_header
-      @project ? @project.decorate.header_props : { image_url: helpers.image_url('default_project.jpg') }
+      if @project
+        @project.decorate.header_props.merge(@project.policy_props(current_account))
+      else
+        { image_url: helpers.image_url('default_project.jpg') }
+      end
     end
 
     def project_tasks_by_specialty

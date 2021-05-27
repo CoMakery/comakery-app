@@ -112,7 +112,7 @@ class ProjectDecorator < Draper::Decorator
       transfer_rules_url: project_dashboard_transfer_rules_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
       show_batches: award_types.where.not(state: :draft).any?,
-      show_transfers: !require_confidentiality?,
+      require_confidentiality: !require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
       github_url: github_url,
@@ -123,6 +123,17 @@ class ProjectDecorator < Draper::Decorator
       video_conference_url: video_conference_url,
       present: true
     }.merge(token_props)
+  end
+
+  def policy_props(current_account)
+    policy = ProjectPolicy.new(current_account, self)
+
+    {
+      owner: policy.edit?,
+      observer: policy.project_observer?,
+      interested: policy.project_interested?,
+      show_transfers: policy.transfers?
+    }
   end
 
   def token_props
