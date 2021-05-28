@@ -606,7 +606,6 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
-  padding: 10px;
 
   .hot-wallet-switcher {
     display: flex;
@@ -642,6 +641,24 @@ form.form-with-submit-button {
       max-width: 200px;
       border-left: none !important;
     }
+  }
+}
+
+.batch-size {
+  #project_transfer_batch_size_input {
+    padding-left: 7.5em !important;
+    cursor: pointer;
+  }
+
+  #project_transfer_batch_size_input[readonly], #project_transfer_batch_size_input[readonly]:hover {
+    background-color: #fff;
+    color: inherit;
+  }
+
+  .input-label.label-only .input-label-addon {
+    top: 8px;
+    left: 6px;
+    cursor: pointer;
   }
 }
 
@@ -6063,4 +6080,9 @@ a:focus {
     opacity: 0.5;
     border: none !important;
   }
+}
+
+.project-info {
+  display: flex;
+  font-size: 14px;
 }
