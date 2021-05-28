@@ -181,7 +181,7 @@ describe ProjectDecorator do
       expect(props[:title]).to eq(project.title)
       expect(props[:present]).to be_truthy
       expect(props[:show_batches]).to be_truthy
-      expect(props[:show_transfers]).to be_truthy
+      expect(props[:show_contributions]).to be_truthy
       expect(props[:owner]).to be_truthy
       expect(props[:observer]).to be_falsey
       expect(props[:interested]).to be_falsey
