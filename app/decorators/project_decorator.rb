@@ -126,7 +126,7 @@ class ProjectDecorator < Draper::Decorator
       owner: policy.edit?,
       observer: policy.project_observer?,
       interested: policy.project_interested?,
-      show_transfers: policy.transfers?
+      show_contributions: policy.show_contributions?
     }.merge(token_props)
   end
 

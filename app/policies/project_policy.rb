@@ -57,16 +57,6 @@ class ProjectPolicy < ApplicationPolicy
     show_contributions? && project.supports_transfer_rules?
   end
 
-  def accounts?
-    show_contributions? || project_observer?
-  end
-
-  def transfers?
-    return false if project_interested?
-
-    edit? || (project_observer? ? show_contributions_to_everyone? : show_contributions?)
-  end
-
   alias update? edit?
   alias send_award? edit?
   alias accesses? edit?
@@ -83,6 +73,8 @@ class ProjectPolicy < ApplicationPolicy
   alias edit_hot_wallet_mode? edit?
   alias add_person? edit?
   alias change_permissions? edit?
+  alias accounts? show_contributions?
+  alias transfers? show_contributions?
 
   def project_owner?
     account.present? && (project.account == account)

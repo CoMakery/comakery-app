@@ -184,13 +184,13 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
 
-              {project.showTransfers &&
+              {project.showContributions &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>
               }
 
-              {(owner || observer || interested || !project.requireConfidentiality) &&
+              {project.showContributions &&
                 <NavLink current={current === 'accounts'} href={project.accountsUrl}>
                   accounts
                 </NavLink>
@@ -259,7 +259,7 @@ ProjectSetupHeader.defaultProps = {
     imageUrl              : '',
     title                 : '',
     showBatches           : true,
-    showTransfers         : true,
+    showContributions     : true,
     requireConfidentiality: true,
     present               : true,
     githubUrl             : '',
