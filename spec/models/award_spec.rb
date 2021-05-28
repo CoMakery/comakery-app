@@ -1297,7 +1297,7 @@ describe Award do
       context 'order by account_first_name desc' do
         subject { described_class.ransack_reorder('account_first_name desc').map { |a| "#{a.account.first_name} #{a.account.last_name}" } }
 
-        it { is_expected.to eq ['Tyrion Lannister', 'Jaime Lannister', 'Cersei Lannistser'] }
+        it { is_expected.to eq ['Tyrion Lannister', 'Jaime Lannister', 'Cersei Lannister'] }
       end
     end
 
