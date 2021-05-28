@@ -41,7 +41,7 @@
 /*! nouislider - 14.6.3 - 11/19/2020 */
 
 .litepicker .container__months {
-  border: none; /* was commented in current version */
+  border: none; /* TODO: was commented in current version */
   border-radius: 8px;
   box-shadow: 0px 4px 20px rgba(18, 34, 74, 0.1); }
 
