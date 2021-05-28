@@ -62,7 +62,9 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def transfers?
-    edit? || (project_observer? ? show_contributions_to_everyone? : show_contributions?)
+    return false if project_interested?
+
+    edit? || project_observer? ? show_contributions_to_everyone? : show_contributions?
   end
 
   alias update? edit?
