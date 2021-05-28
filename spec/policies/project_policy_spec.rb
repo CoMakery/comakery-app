@@ -150,7 +150,7 @@ describe ProjectPolicy do
     end
 
     context 'without user is interested' do
-      it { expect(described_class.new(project_interested, my_public_project).transfers?).to be(false) }
+      it { expect(described_class.new(project_interested, my_public_project).transfers?).to be(true) }
 
       it { expect(described_class.new(project_interested, my_private_project).transfers?).to be(false) }
 
