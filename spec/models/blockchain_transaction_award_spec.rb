@@ -1,4 +1,4 @@
-  require 'rails_helper'
+require 'rails_helper'
 
 describe BlockchainTransactionAward, vcr: true do
   it { is_expected.to have_many(:blockchain_transactables_awards).dependent(:nullify) }
