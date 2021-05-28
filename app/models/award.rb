@@ -135,7 +135,7 @@ class Award < ApplicationRecord
 
   # Used in ransack_reorder
   def self.prepare_ordering_by_account_first_name(scope)
-    scope.joins('left join accounts AS recipients ON awards.account_id = recipients.id').select('recipients.first_name, recipients.last_name')
+    scope.joins('left join accounts AS recipients ON awards.account_id = recipients.id').select('awards.*, recipients.first_name, recipients.last_name')
   end
 
   def self.account_first_name_order_string(direction)
@@ -143,7 +143,7 @@ class Award < ApplicationRecord
   end
 
   def self.prepare_ordering_by_issuer_first_name(scope)
-    scope.joins('left join accounts AS issuers ON awards.issuer_id = issuers.id').select('issuers.first_name, issuers.last_name')
+    scope.joins('left join accounts AS issuers ON awards.issuer_id = issuers.id').select('awards.*, issuers.first_name, issuers.last_name')
   end
 
   def self.issuer_first_name_order_string(direction)
