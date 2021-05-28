@@ -101,7 +101,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def default_next_award_blockchain_transactable_batch
-      batch_size = ENV['ERC20_TRANSFER_BATCH_SIZE'].to_i
+      batch_size = project.transfer_batch_size
 
       project.awards.ready_for_batch_blockchain_transaction.limit(batch_size) if batch_size > 1 && project.awards.ready_for_batch_blockchain_transaction.any?
     end

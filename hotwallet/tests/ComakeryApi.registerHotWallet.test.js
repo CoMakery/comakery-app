@@ -11,7 +11,7 @@ const algoEnvs = {
   redisUrl: "redis://localhost:6379/0"
 }
 
-describe("Register a Hot Wallet", async () => {
+describe("Register a Hot Wallet", () => {
   const wallet = new hwUtils.HotWallet("algorand_test", "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4", {})
   const redisClient = redis.createClient()
   const hwRedis = new hwUtils.HotWalletRedis(algoEnvs, redisClient)

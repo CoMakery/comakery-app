@@ -43,7 +43,7 @@ class Api::V1::ProjectRolesController < Api::V1::ApiController
     end
 
     def projects_involved
-      @projects_involved ||= paginate(account.projects_involved.where(mission: whitelabel_mission))
+      @projects_involved ||= paginate(account.projects_involved.where(mission: whitelabel_mission).order(:id))
     end
 
     def project
