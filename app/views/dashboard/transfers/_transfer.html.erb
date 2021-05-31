@@ -107,7 +107,7 @@
     <% end %>
   </div>
 
-  <% if @project.token.token._token_type_token_release_schedule? %>
+  <% if @project.token&._token_type_token_release_schedule? %>
     <div class="transfers-table__transfer__lockup_schedule_id">
       <label>schedule id</label>
 
@@ -117,11 +117,7 @@
     <div class="transfers-table__transfer__commencement_date">
       <label>commencement date</label>
 
-      <% if transfer.commencement_date.present? %>
-        <%= transfer.commencement_date&.strftime("%b %e, %Y") %>
-      <% else %>
-        -
-      <% end %>
+      <%= transfer.commencement_date&.strftime("%b %e, %Y") %>
     </div>
   <% end %>
 </div>

@@ -33,7 +33,7 @@
     <%= sort_link(@q, :transferred_at, 'transferred') %>
   </div>
 
-  <% if @project.token.token._token_type_token_release_schedule? %>
+  <% if @project.token&._token_type_token_release_schedule? %>
     <div class="transfers-table__transfer__lockup_schedule_id">
       schedule id
     </div>
