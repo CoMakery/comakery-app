@@ -6,7 +6,7 @@ class Projects::InvitesController < ApplicationController
   def create
     authorize(project, :project_admin?)
 
-    send_invite_result = SendInvite.call(project: project, whitelable_mission: @whitelabel_mission, params: params)
+    send_invite_result = SendInvite.call(project: project, whitelabel_mission: @whitelabel_mission, params: params)
 
     respond_to do |format|
       if send_invite_result.success?
