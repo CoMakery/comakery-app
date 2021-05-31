@@ -32,4 +32,14 @@
   <div class="transfers-table__transfer__transferred_at">
     <%= sort_link(@q, :transferred_at, 'transferred') %>
   </div>
+
+  <% if @project.token&._token_type_token_release_schedule? %>
+    <div class="transfers-table__transfer__lockup_schedule_id">
+      schedule id
+    </div>
+
+    <div class="transfers-table__transfer__commencement_date">
+      commencement date
+    </div>
+  <% end %>
 </div>

@@ -49,4 +49,18 @@
 
     –
   </div>
+
+  <% if @project.token&._token_type_token_release_schedule? %>
+    <div class="transfers-table__transfer__lockup_schedule_id">
+      <label>schedule id</label>
+
+      –
+    </div>
+
+    <div class="transfers-table__transfer__commencement_date">
+      <label>commencement date</label>
+
+      –
+    </div>
+  <% end %>
 </div>

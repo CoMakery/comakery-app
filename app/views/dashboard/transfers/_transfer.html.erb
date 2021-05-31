@@ -106,4 +106,18 @@
       –
     <% end %>
   </div>
+
+  <% if @project.token&._token_type_token_release_schedule? %>
+    <div class="transfers-table__transfer__lockup_schedule_id">
+      <label>schedule id</label>
+
+      <%= transfer.lockup_schedule_id %>
+    </div>
+
+    <div class="transfers-table__transfer__commencement_date">
+      <label>commencement date</label>
+
+      <%= transfer.commencement_date&.strftime("%b %e, %Y") %>
+    </div>
+  <% end %>
 </div>
