@@ -317,7 +317,7 @@ describe Award do
       end
     end
 
-    describe 'add_account_as_interested' do
+    describe 'add_account_as_observer' do
       let(:project) { create(:project) }
       let(:award) { create(:award_ready, award_type: create(:award_type, project: project)) }
 
@@ -327,8 +327,8 @@ describe Award do
         project.reload
       end
 
-      it 'adds account as interested in project after account is assigned' do
-        expect(project.accounts).to include(award.account)
+      it 'adds account as observer in project after account is assigned' do
+        expect(project.project_observers).to include(award.account)
       end
     end
 
