@@ -22,7 +22,7 @@ class Award < ApplicationRecord
   has_one_attached :submission_image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
-  add_special_orders %w[issuer_first_name]
+  add_special_orders %w[account_first_name issuer_first_name]
 
   belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
@@ -87,7 +87,7 @@ class Award < ApplicationRecord
   before_validation :populate_recipient_wallet, if: -> { paid? && !recipient_wallet }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
-  after_save :add_account_as_interested, if: -> { account }
+  after_save :add_account_as_observer, if: -> { account }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :completed_or_cancelled, -> { where 'awards.status in(3,5,6)' }
@@ -134,12 +134,20 @@ class Award < ApplicationRecord
   end
 
   # Used in ransack_reorder
+  def self.prepare_ordering_by_account_first_name(scope)
+    scope.joins('left join accounts AS recipients ON awards.account_id = recipients.id').select('awards.*, recipients.first_name, recipients.last_name')
+  end
+
+  def self.account_first_name_order_string(direction)
+    "recipients.first_name #{direction}, recipients.last_name #{direction}, awards.created_at ASC"
+  end
+
   def self.prepare_ordering_by_issuer_first_name(scope)
-    scope.joins(:issuer)
+    scope.joins('left join accounts AS issuers ON awards.issuer_id = issuers.id').select('awards.*, issuers.first_name, issuers.last_name')
   end
 
   def self.issuer_first_name_order_string(direction)
-    "accounts.first_name #{direction}, accounts.last_name #{direction}"
+    "issuers.first_name #{direction}, issuers.last_name #{direction}, awards.created_at ASC"
   end
 
   def ensure_proof_id_exists
@@ -409,8 +417,8 @@ class Award < ApplicationRecord
       Experience.increment_for(account, specialty)
     end
 
-    def add_account_as_interested
-      project.project_interested << account unless account.involved?(project.id)
+    def add_account_as_observer
+      project.project_observers << account unless account.involved?(project.id)
     end
 
     def store_license_hash

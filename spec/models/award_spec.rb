@@ -317,7 +317,7 @@ describe Award do
       end
     end
 
-    describe 'add_account_as_interested' do
+    describe 'add_account_as_observer' do
       let(:project) { create(:project) }
       let(:award) { create(:award_ready, award_type: create(:award_type, project: project)) }
 
@@ -327,8 +327,8 @@ describe Award do
         project.reload
       end
 
-      it 'adds account as interested in project after account is assigned' do
-        expect(project.accounts).to include(award.account)
+      it 'adds account as observer in project after account is assigned' do
+        expect(project.project_observers).to include(award.account)
       end
     end
 
@@ -1243,9 +1243,12 @@ describe Award do
       issuer1 = create(:account, first_name: 'John', last_name: 'Snow')
       issuer2 = create(:account, first_name: 'Ned', last_name: 'Stark')
       issuer3 = create(:account, first_name: 'Daenerys', last_name: 'Targaryen')
-      create(:award_ready, created_at: Time.zone.parse('2010-11-01 12:00'), name: 'first', issuer: issuer1)
-      create(:award_ready, created_at: Time.zone.parse('2010-11-01 11:00'), name: 'second', issuer: issuer2)
-      create(:award_ready, created_at: Time.zone.parse('2010-11-01 13:00'), name: 'third', issuer: issuer3)
+      account1 = create(:account, first_name: 'Jaime', last_name: 'Lannister')
+      account2 = create(:account, first_name: 'Cersei', last_name: 'Lannister')
+      account3 = create(:account, first_name: 'Tyrion', last_name: 'Lannister')
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 12:00'), name: 'first', issuer: issuer1, account: account1)
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 11:00'), name: 'second', issuer: issuer2, account: account2)
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 13:00'), name: 'third', issuer: issuer3, account: account3)
       Award.all
     end
 
@@ -1273,7 +1276,7 @@ describe Award do
     end
 
     context 'with special params' do
-      context 'order by issuer_first_name' do
+      context 'order by issuer_first_name desc' do
         subject { described_class.ransack_reorder('issuer_first_name desc').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
 
         it { is_expected.to eq ['Ned Stark', 'John Snow', 'Daenerys Targaryen'] }
@@ -1283,6 +1286,18 @@ describe Award do
         subject { described_class.ransack_reorder('issuer_first_name wrong').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
 
         it { is_expected.to eq ['Daenerys Targaryen', 'John Snow', 'Ned Stark'] }
+      end
+
+      context 'order by account_first_name asc' do
+        subject { described_class.ransack_reorder('account_first_name asc').map { |a| "#{a.account.first_name} #{a.account.last_name}" } }
+
+        it { is_expected.to eq ['Cersei Lannister', 'Jaime Lannister', 'Tyrion Lannister'] }
+      end
+
+      context 'order by account_first_name desc' do
+        subject { described_class.ransack_reorder('account_first_name desc').map { |a| "#{a.account.first_name} #{a.account.last_name}" } }
+
+        it { is_expected.to eq ['Tyrion Lannister', 'Jaime Lannister', 'Cersei Lannister'] }
       end
     end
 

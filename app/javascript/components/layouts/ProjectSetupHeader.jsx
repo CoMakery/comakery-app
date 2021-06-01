@@ -123,11 +123,12 @@ const ProjectInfo = styled.div`
 
 class ProjectSetupHeader extends React.Component {
   render() {
-    const mission = this.props.missionForHeader
-    const project = this.props.projectForHeader
-    const owner = this.props.owner
-    const observer = this.props.observer
-    const current = this.props.current
+    const mission    = this.props.missionForHeader
+    const project    = this.props.projectForHeader
+    const owner      = project && project.owner
+    const observer   = project && project.observer
+    const interested = project && project.interested
+    const current    = this.props.current
 
     return (
       <Wrapper backgroundImageUrl={project && project.imageUrl} expanded={this.props.expanded}>
@@ -183,19 +184,19 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
 
-              {(owner || observer || project.showTransfers) &&
+              {project.showContributions &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>
               }
 
-              {(owner || observer || project.showTransfers) &&
+              {project.showContributions &&
                 <NavLink current={current === 'accounts'} href={project.accountsUrl}>
                   accounts
                 </NavLink>
               }
 
-              {(owner || project.showTransfers) && project.supportsTransferRules &&
+              {(owner || !project.requireConfidentiality) && project.supportsTransferRules &&
                 <NavLink current={current === 'transfer_rules'} href={project.transferRulesUrl}>
                   transfer rules
                 </NavLink>
@@ -234,8 +235,6 @@ class ProjectSetupHeader extends React.Component {
 ProjectSetupHeader.propTypes = {
   missionForHeader: PropTypes.object,
   projectForHeader: PropTypes.object,
-  owner           : PropTypes.bool,
-  observer        : PropTypes.bool,
   current         : PropTypes.string,
   expanded        : PropTypes.bool
 }
@@ -247,27 +246,29 @@ ProjectSetupHeader.defaultProps = {
     imageUrl: ''
   },
   projectForHeader: {
-    settingsUrl       : '',
-    adminsUrl         : '',
-    batchesUrl        : '',
-    contributorsUrl   : '',
-    transfersUrl      : '',
-    accountsUrl       : '',
-    landingUrl        : '',
-    imageUrl          : '',
-    title             : '',
-    owner             : '',
-    showBatches       : true,
-    showTransfers     : true,
-    present           : true,
-    githubUrl         : '',
-    documentationUrl  : '',
-    gettingStartedUrl : '',
-    governanceUrl     : '',
-    fundingUrl        : '',
-    videoConferenceUrl: ''
+    owner                 : true,
+    observer              : true,
+    interested            : true,
+    settingsUrl           : '',
+    adminsUrl             : '',
+    batchesUrl            : '',
+    contributorsUrl       : '',
+    transfersUrl          : '',
+    accountsUrl           : '',
+    landingUrl            : '',
+    imageUrl              : '',
+    title                 : '',
+    showBatches           : true,
+    showContributions     : true,
+    requireConfidentiality: true,
+    present               : true,
+    githubUrl             : '',
+    documentationUrl      : '',
+    gettingStartedUrl     : '',
+    governanceUrl         : '',
+    fundingUrl            : '',
+    videoConferenceUrl    : ''
   },
-  owner   : true,
   current : '',
   expanded: false
 }

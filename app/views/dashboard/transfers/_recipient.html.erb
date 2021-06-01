@@ -1,24 +1,24 @@
-<%= turbo_frame_tag "transfer_issuer_#{transfer.id}", target: "_top" do %>
+<%= turbo_frame_tag "transfer_recipient_#{transfer.id}", target: "_top" do %>
   <% if transfer.paid? %>
-    <% issuer = transfer.issuer.decorate %>
+    <% account = transfer.account.decorate %>
 
     <div class="account-preview">
       <div class="account-preview__image">
-        <%= image_tag account_image_url(issuer, 100) %>
+        <%= image_tag account_image_url(account, 100) %>
       </div>
 
       <div class="account-preview__info">
         <div class="account-preview__info__nickname">
-          <%= issuer.nickname %>
+          <%= account.nickname %>
         </div>
 
         <div class="account-preview__info__name">
-          <%= issuer.name %>
+          <%= account.name %>
         </div>
 
-        <% if transfer.sender_wallet_address.present? %>
+        <% if transfer.recipient_wallet_address.present? %>
           <div class="account-preview__info__wallet">
-            <%= link_to(transfer.sender_wallet_address, transfer.sender_wallet_url, target: '_blank') %>
+            <%= link_to(transfer.recipient_wallet_address, transfer.recipient_wallet_url, target: '_blank') %>
           </div>
         <% end %>
       </div>
