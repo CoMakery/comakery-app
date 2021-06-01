@@ -119,7 +119,7 @@ const ProjectInfo = styled.div`
     text-align: center;
   }
 
-  .token-details-hw-address, .token-details-hw-address:hover {
+  .token-details-hw-address {
     color: white;
     text-decoration: underline;
     padding: 0 1em;
