@@ -75,7 +75,6 @@ class Award < ApplicationRecord
 
   validate_image_attached :image, :submission_image
 
-  after_initialize :set_default_transfer_type
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }

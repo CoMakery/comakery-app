@@ -79,7 +79,7 @@ class Dashboard::TransfersController < ApplicationController
                                                   account: [:ore_id_account, :latest_verification, image_attachment: :blob])
       @filter_params = params[:q]&.to_unsafe_h
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
-      @transfers = ordered_transfers.page(@page).per(10)
+      @transfers = ordered_transfers.page(@page).per(10).includes(:transfer_type)
       if (@page > 1) && @transfers.out_of_range?
         flash.notice = "Displaying first page of filtered results. Not enough results to display page #{@page}."
         @page = 1
