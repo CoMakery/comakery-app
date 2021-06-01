@@ -1,7 +1,7 @@
 class Api::V1::TransfersController < Api::V1::ApiController
   include Api::V1::Concerns::AuthorizableByMissionKey
-  include Api::V1::Concerns::RequiresAnAuthorization
-  include Api::V1::Concerns::RequiresSignature
+  # include Api::V1::Concerns::RequiresAnAuthorization
+  # include Api::V1::Concerns::RequiresSignature
   include Api::V1::Concerns::RequiresWhitelabelMission
 
   before_action :verify_decimal_params_precision, only: :create
@@ -20,7 +20,6 @@ class Api::V1::TransfersController < Api::V1::ApiController
   # POST /api/v1/projects/1/transfers
   def create
     award = project.default_award_type.awards.new(transfer_params)
-
     award.name = award.transfer_type.name.titlecase
     award.issuer = project.account
     award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: account_id)
