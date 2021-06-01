@@ -156,7 +156,7 @@ describe Token, type: :model, vcr: true do
       end
     end
   end
-  
+
   describe '#blockchain_transaction_class' do
     subject(:blockchain_transaction_class) { token.blockchain_transaction_class }
 

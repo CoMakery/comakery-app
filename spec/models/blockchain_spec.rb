@@ -32,7 +32,7 @@ describe Blockchain, type: :model do
       is_expected.to include Blockchain::Bitcoin
     end
   end
-  
+
   describe '#testnets_available?' do
     subject(:result) { blockchain.testnets_available? }
 
