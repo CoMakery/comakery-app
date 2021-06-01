@@ -32,6 +32,30 @@ describe Blockchain, type: :model do
       is_expected.to include Blockchain::Bitcoin
     end
   end
+  
+  describe '#testnets_available?' do
+    subject(:result) { blockchain.testnets_available? }
+
+    let(:blockchain) { Blockchain.new }
+
+    context 'when TESTNETS_AVAILABLE is set to true' do
+      before { allow(ENV).to receive(:fetch).with('TESTNETS_AVAILABLE', 'true').and_return('true') }
+
+      it 'should return true' do
+        expect(result).to eq true
+      end
+    end
+
+    context 'when TESTNETS_AVAILABLE is set to false' do
+      before do
+        allow(ENV).to receive(:fetch).with('TESTNETS_AVAILABLE', 'true').and_return('false')
+      end
+
+      it 'should return false' do
+        expect(result).to eq false
+      end
+    end
+  end
 end
 
 shared_examples 'a blockchain' do
