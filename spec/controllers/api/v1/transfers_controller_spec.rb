@@ -149,19 +149,6 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
           expect(assigns[:errors]).not_to be_nil
         end
       end
-
-      context 'when get a wrong account_id' do
-        let(:invalid_attributes) { valid_attributes.merge(account_id: nil) }
-
-        it 'renders an error' do
-          params = build(:api_signed_request, { transfer: invalid_attributes }, api_v1_project_transfers_path(project_id: project.id), 'POST')
-          params[:project_id] = project.id
-
-          post :create, params: params
-          expect(response).to have_http_status(:bad_request)
-          expect(assigns[:errors].messages).to eq({ account: ["can't be blank"] })
-        end
-      end
     end
 
     context 'with invalid amount precision' do
