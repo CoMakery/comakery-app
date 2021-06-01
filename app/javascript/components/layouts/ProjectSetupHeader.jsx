@@ -123,10 +123,12 @@ const ProjectInfo = styled.div`
 
 class ProjectSetupHeader extends React.Component {
   render() {
-    const mission = this.props.missionForHeader
-    const project = this.props.projectForHeader
-    const owner = this.props.owner
-    const current = this.props.current
+    const mission    = this.props.missionForHeader
+    const project    = this.props.projectForHeader
+    const owner      = project && project.owner
+    const observer   = project && project.observer
+    const interested = project && project.interested
+    const current    = this.props.current
 
     return (
       <Wrapper backgroundImageUrl={project && project.imageUrl} expanded={this.props.expanded}>
@@ -166,7 +168,7 @@ class ProjectSetupHeader extends React.Component {
                 GitHub
               </NavLink>
               }
-              {(owner || project.showBatches) && this.props.whitelabel != true &&
+              {(owner || observer || project.showBatches) && this.props.whitelabel != true &&
               <NavLink current={current === 'batches'} href={project.batchesUrl}>
                 tasks
               </NavLink>
@@ -182,19 +184,19 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
 
-              {(owner || project.showTransfers) &&
+              {project.showContributions &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>
               }
 
-              {(owner || project.showTransfers) &&
+              {project.showContributions &&
                 <NavLink current={current === 'accounts'} href={project.accountsUrl}>
                   accounts
                 </NavLink>
               }
 
-              {(owner || project.showTransfers) && project.supportsTransferRules &&
+              {(owner || !project.requireConfidentiality) && project.supportsTransferRules &&
                 <NavLink current={current === 'transfer_rules'} href={project.transferRulesUrl}>
                   transfer rules
                 </NavLink>
@@ -215,6 +217,15 @@ class ProjectSetupHeader extends React.Component {
 
         <ProjectInfo>
           <h1>{project && project.title || 'New Project'}</h1>
+          {project && project.token &&
+          <div className="project-info">
+            <span style={{marginTop: '-40px'}}><img src={project.token.logoUrl}/>&nbsp;</span>
+            <span>{project.token.name} ({project.token.symbol}) {project.token.network}&nbsp;</span>
+            {project.token.address &&
+            <a href={project.token.addressUrl} className="hot_wallet_address_link">{project.token.address}</a>
+            }
+          </div>
+          }
         </ProjectInfo>
       </Wrapper>
     )
@@ -224,7 +235,6 @@ class ProjectSetupHeader extends React.Component {
 ProjectSetupHeader.propTypes = {
   missionForHeader: PropTypes.object,
   projectForHeader: PropTypes.object,
-  owner           : PropTypes.bool,
   current         : PropTypes.string,
   expanded        : PropTypes.bool
 }
@@ -236,27 +246,29 @@ ProjectSetupHeader.defaultProps = {
     imageUrl: ''
   },
   projectForHeader: {
-    settingsUrl       : '',
-    adminsUrl         : '',
-    batchesUrl        : '',
-    contributorsUrl   : '',
-    transfersUrl      : '',
-    accountsUrl       : '',
-    landingUrl        : '',
-    imageUrl          : '',
-    title             : '',
-    owner             : '',
-    showBatches       : true,
-    showTransfers     : true,
-    present           : true,
-    githubUrl         : '',
-    documentationUrl  : '',
-    gettingStartedUrl : '',
-    governanceUrl     : '',
-    fundingUrl        : '',
-    videoConferenceUrl: ''
+    owner                 : true,
+    observer              : true,
+    interested            : true,
+    settingsUrl           : '',
+    adminsUrl             : '',
+    batchesUrl            : '',
+    contributorsUrl       : '',
+    transfersUrl          : '',
+    accountsUrl           : '',
+    landingUrl            : '',
+    imageUrl              : '',
+    title                 : '',
+    showBatches           : true,
+    showContributions     : true,
+    requireConfidentiality: true,
+    present               : true,
+    githubUrl             : '',
+    documentationUrl      : '',
+    gettingStartedUrl     : '',
+    governanceUrl         : '',
+    fundingUrl            : '',
+    videoConferenceUrl    : ''
   },
-  owner   : true,
   current : '',
   expanded: false
 }

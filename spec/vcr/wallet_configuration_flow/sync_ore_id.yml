@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://service.oreid.io/api/custodial/new-user
+    uri: https://staging.service.oreid.io/api/custodial/new-user
     body:
       encoding: UTF-8
       string: '{"name":"Eva Smith","user_name":"wallet creation test","email":"create_a_wallet@for_me.com","picture":null,"user_password":"71a89055e394c22e0b9aaa05bfed628ea5a6b91ca1be990070abc0127ef23d2d!","phone":"","account_type":"native"}'
@@ -47,7 +47,7 @@ http_interactions:
   recorded_at: Wed, 31 Mar 2021 11:07:01 GMT
 - request:
     method: get
-    uri: https://service.oreid.io/api/account/user?account=ore1ro5f2slw
+    uri: https://staging.service.oreid.io/api/account/user?account=ore1ro5f2slw
     body:
       encoding: US-ASCII
       string: ''

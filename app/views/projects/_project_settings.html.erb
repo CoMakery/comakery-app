@@ -1,9 +1,10 @@
 <div class="project_settings">
   <%= react_component(
     'layouts/ProjectSetupHeader',
-    project_for_header: @project.header_props,
+    project_for_header: @project.header_props(current_user),
     mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props,
-    owner: ProjectPolicy.new(current_account, @project).edit?,
+    owner: policy(@project).edit?,
+    observer: policy(@project).project_observer?,
     expanded: false,
     current: project_page
   ) %>

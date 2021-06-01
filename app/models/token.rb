@@ -8,7 +8,7 @@ class Token < ApplicationRecord
   has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
-  has_many :accounts, through: :projects, source: :interested
+  has_many :accounts, through: :projects, source: :accounts
   has_many :account_token_records # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :reg_groups # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :transfer_rules # rubocop:todo Rails/HasManyOrHasOneDependent

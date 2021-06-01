@@ -26,6 +26,8 @@ class Mission < ApplicationRecord
   has_many :awards, through: :award_types
   has_many :interests, through: :public_projects
   has_many :interested, -> { distinct }, through: :public_projects
+  has_many :project_roles, through: :public_projects
+
   # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :managed_accounts, class_name: 'Account', foreign_key: 'managed_mission_id' # rubocop:todo Rails/InverseOf
   # rubocop:enable Rails/HasManyOrHasOneDependent
@@ -68,7 +70,7 @@ class Mission < ApplicationRecord
       projects: unarchived_projects.size,
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: interested.size
+      project_roles: project_roles.size
     }
   end
 

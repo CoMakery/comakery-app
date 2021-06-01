@@ -15,7 +15,7 @@ class Dashboard::AccountsController < ApplicationController
     authorize @project, :accounts?
 
     respond_to do |format|
-      format.html { set_accounts }
+      format.html { set_accounts && set_policy }
       format.json { set_accounts_json }
     end
   end
@@ -63,7 +63,7 @@ class Dashboard::AccountsController < ApplicationController
   def show
     authorize @project, :accounts?
 
-    account = @project.project_interested.find(params[:id])
+    account = @project.accounts.find(params[:id])
 
     respond_to do |format|
       format.turbo_stream do
@@ -94,6 +94,10 @@ class Dashboard::AccountsController < ApplicationController
     def normalize_account_token_records_lockup_until_lt
       t = params.fetch(:q, {}).fetch(:account_token_records_lockup_until_lt, nil)
       params[:q][:account_token_records_lockup_until_lt] = Time.zone.parse(t)&.to_i if t
+    end
+
+    def set_policy
+      @project_policy = ProjectPolicy.new(current_account, @project)
     end
 
     def set_accounts

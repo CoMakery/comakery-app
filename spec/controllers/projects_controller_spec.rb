@@ -92,7 +92,7 @@ describe ProjectsController do
     let!(:project_role) { create(:project_role, account: account) } # by default it will create project from mom.rb which will be Uber for Cats
 
     before do
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     describe '#login' do
@@ -105,7 +105,7 @@ describe ProjectsController do
         expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'admin project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
-        expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats'])
+        expect(assigns[:involved_projects].map(&:title)).to match_array(['Uber for Cats'])
       end
     end
     describe 'logged out'

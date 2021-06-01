@@ -1,14 +1,19 @@
 require 'rails_helper'
 
 describe 'Add person', js: true do
-  let(:account) { create(:account, comakery_admin: true) }
-  let(:owner) { create(:account, comakery_admin: true) }
-  let(:project) { create(:project, account: owner) }
+  let(:account) { create(:account) }
+
+  let(:admin) { create(:account) }
+
+  let(:project) { create(:project) }
+
+  before { project.project_admins << admin }
+
+  before { login(admin) }
+
+  before { visit project_dashboard_accounts_path(project) }
 
   scenario 'grants access to registered account' do
-    login(owner)
-    visit project_dashboard_accounts_path(project)
-
     find('[data-target="#invite-person"]').click
 
     within('#invite-person form') do
@@ -25,9 +30,6 @@ describe 'Add person', js: true do
   end
 
   scenario 'fails with unregistered account' do
-    login(owner)
-    visit project_dashboard_accounts_path(project)
-
     find('a[data-target="#invite-person"]').click
 
     within('#invite-person form') do

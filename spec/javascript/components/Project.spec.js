@@ -16,7 +16,7 @@ describe('Project', () => {
 
   it('renders correctly with props', () => {
     const props = {
-      interested : true,
+      follower: true,
       projectData: {
         id               : 1,
         title            : 'Core Network',

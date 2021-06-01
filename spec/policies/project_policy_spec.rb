@@ -7,6 +7,7 @@ describe ProjectPolicy do
   let!(:project_admin) { create :account }
   let!(:project_contributor) { create :account }
   let!(:project_interested) { create :account }
+  let!(:project_observer) { create :account }
   let!(:authentication) { create(:authentication, account: project_account) }
 
   let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed') }
@@ -33,9 +34,9 @@ describe ProjectPolicy do
     team1.build_authentication_team other_team_member_auth
 
     [my_public_project, my_public_unlisted_project, my_public_project_business_confidential, my_private_project, my_archived_project].each do |pr|
-      pr.admins << project_admin # TODO: this should be removed when add_admin button will be removed
       create(:award, award_type: create(:award_type, project: pr), account: project_contributor)
       create(:project_role, project: pr, account: project_interested)
+      create(:project_role, project: pr, account: project_observer, role: :observer)
       create(:project_role, project: pr, account: project_admin, role: :admin)
     end
   end
@@ -79,31 +80,81 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#show_contributions? #transfers? #accounts?' do
-    %i[show_contributions? transfers? accounts?].each do |action|
-      specify do
-        authorized(nil, my_public_project, action)
-        not_authorized(nil, my_public_project_business_confidential, action)
-        not_authorized(nil, my_private_project, action)
-      end
+  describe '#show_contributions?' do
+    specify do
+      authorized(nil, my_public_project, :show_contributions?)
+      not_authorized(nil, my_public_project_business_confidential, :show_contributions?)
+      not_authorized(nil, my_private_project, :show_contributions?)
+    end
 
-      specify do
-        authorized(project_account, my_public_project, action)
-        authorized(project_account, my_public_project_business_confidential, action)
-        authorized(project_account, my_private_project, action)
-      end
+    specify do
+      authorized(project_account, my_public_project, :show_contributions?)
+      authorized(project_account, my_public_project_business_confidential, :show_contributions?)
+      authorized(project_account, my_private_project, :show_contributions?)
+    end
 
-      specify do
-        authorized(other_team_member, my_public_project, action)
-        not_authorized(other_team_member, my_public_project_business_confidential, action)
-        authorized(other_team_member, my_private_project, action)
-      end
+    specify do
+      authorized(other_team_member, my_public_project, :show_contributions?)
+      not_authorized(other_team_member, my_public_project_business_confidential, :show_contributions?)
+      authorized(other_team_member, my_private_project, :show_contributions?)
+    end
 
-      specify do
-        authorized(different_team_account, my_public_project, action)
-        not_authorized(different_team_account, my_public_project_business_confidential, action)
-        not_authorized(different_team_account, my_private_project, action)
-      end
+    specify do
+      authorized(different_team_account, my_public_project, :show_contributions?)
+      not_authorized(different_team_account, my_public_project_business_confidential, :show_contributions?)
+      not_authorized(different_team_account, my_private_project, :show_contributions?)
+    end
+  end
+
+  describe '#accounts?' do
+    context 'without user' do
+      it { expect(described_class.new(nil, my_public_project).accounts?).to be(true) }
+
+      it { expect(described_class.new(nil, my_private_project).accounts?).to be(false) }
+
+      it { expect(described_class.new(nil, my_public_project_business_confidential).accounts?).to be(false) }
+    end
+
+    context 'when user is observer' do
+      it { expect(described_class.new(project_observer, my_public_project).accounts?).to be(true) }
+
+      it { expect(described_class.new(project_observer, my_private_project).accounts?).to be(false) }
+
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).accounts?).to be(false) }
+    end
+
+    context 'when user is interested' do
+      it { expect(described_class.new(project_interested, my_public_project).accounts?).to be(true) }
+
+      it { expect(described_class.new(project_interested, my_private_project).accounts?).to be(false) }
+
+      it { expect(described_class.new(project_interested, my_public_project_business_confidential).accounts?).to be(false) }
+    end
+  end
+
+  describe '#transfers?' do
+    context 'without user' do
+      it { expect(described_class.new(nil, my_public_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(nil, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(nil, my_public_project_business_confidential).transfers?).to be(false) }
+    end
+
+    context 'when user is observer' do
+      it { expect(described_class.new(project_observer, my_public_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(project_observer, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).transfers?).to be(false) }
+    end
+
+    context 'without user is interested' do
+      it { expect(described_class.new(project_interested, my_public_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(project_interested, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(project_interested, my_public_project_business_confidential).transfers?).to be(false) }
     end
   end
 

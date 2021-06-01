@@ -65,14 +65,16 @@ class ProjectPolicy < ApplicationPolicy
   alias remove_admin? edit?
   alias create_transfer? edit?
   alias update_transfer? edit?
-  alias transfers? show_contributions?
-  alias accounts? show_contributions?
   alias edit_accounts? edit?
   alias edit_reg_groups? edit?
   alias edit_transfer_rules? edit?
   alias freeze_token? edit?
   alias transfer_types? edit?
   alias edit_hot_wallet_mode? edit?
+  alias add_person? edit?
+  alias change_permissions? edit?
+  alias accounts? show_contributions?
+  alias transfers? show_contributions?
 
   def project_owner?
     account.present? && (project.account == account)

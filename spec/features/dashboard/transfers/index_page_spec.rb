@@ -18,6 +18,8 @@ describe 'transfers_index_page', js: true do
 
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(2)
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
+    expect(page).to have_no_content('SCHEDULE ID')
+    expect(page).to have_no_content('COMMENCEMENT DATE')
   end
 
   context 'xss' do
@@ -117,5 +119,47 @@ describe 'transfers_index_page', js: true do
 
     wait_for_turbolinks
     expect(page).to have_content('Transfer Categories')
+  end
+
+  context 'when transfer is cancelled' do
+    let!(:transfer) { build(:algorand_app_transfer_tx).blockchain_transaction.blockchain_transactable }
+
+    let!(:project) { transfer.project }
+
+    let!(:ore_id) { create(:ore_id, account: project.account, skip_jobs: true) }
+
+    before do
+      login(project.account)
+
+      visit project_dashboard_transfers_path(project)
+
+      transfer.cancelled!
+
+      select('cancelled', from: 'transfers-filters--filter--options--select')
+    end
+
+    it 'shows transfer button history' do
+      expect(page).to have_css('.transfers-table__transfer__button__history')
+    end
+  end
+
+  context 'for token_release_schedule' do
+    let(:token) { create(:lockup_token) }
+    let(:project_award_type) { (create :award_type, project: project) }
+    let!(:project) { create :project, token: token, account: owner }
+    let!(:transfer) { create(:transfer, award_type: project_award_type, lockup_schedule_id: 0, commencement_date: Time.zone.parse('2021-01-01 12:00')) }
+
+    before do
+      login(project.account)
+      visit project_dashboard_transfers_path(project)
+    end
+
+    it 'shows schedule id and commencement date columns' do
+      expect(page).to have_content('SCHEDULE ID')
+      expect(page).to have_content('COMMENCEMENT DATE')
+
+      expect(page).to have_css('.transfers-table__transfer__lockup_schedule_id', text: '0')
+      expect(page).to have_css('.transfers-table__transfer__commencement_date', text: 'Jan 1, 2021')
+    end
   end
 end

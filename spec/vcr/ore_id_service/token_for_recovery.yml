@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://service.oreid.io/api/app-token
+    uri: https://staging.service.oreid.io/api/app-token
     body:
       encoding: UTF-8
       string: '{"secrets":[{"type":"RepublicAccountRecoveryToken","value":"dummmyrecovery"}]}'

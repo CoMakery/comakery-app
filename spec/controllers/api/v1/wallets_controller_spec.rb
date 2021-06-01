@@ -249,7 +249,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         parsed_response = JSON.parse(response.body)
         parsed_reset_url = URI.parse(parsed_response['reset_url'])
 
-        expect(parsed_reset_url.host).to eq 'service.oreid.io'
+        expect(parsed_reset_url.host).to eq 'staging.service.oreid.io'
         expect(parsed_reset_url.path).to eq '/recover-account'
         expect(Rack::Utils.parse_nested_query(parsed_reset_url.query)).to eq(
           'account' => 'ore_id_account_dummy',

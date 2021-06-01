@@ -81,6 +81,10 @@
       "required": true,
       "value": "false"
     },
+    "OREID_BASE_DOMAIN": {
+      "description": "Aikon ORE ID API domain (default: staging.service.oreid.io)",
+      "required": false
+    },
     "ORE_ID_API_KEY": {
       "description": "Aikon ORE ID API key",
       "required": false
@@ -154,10 +158,6 @@
       "description": "Create and apply whitelabel with APP_HOST as a default mission",
       "required": true,
       "value": "true"
-    },
-    "ERC20_TRANSFER_BATCH_SIZE": {
-      "description": "Batch size to merge ERC20 transfers for hot wallet",
-      "required": false
     },
     "NODE_MODULES_CACHE": "false",
     "AWS_REGION": "us-east-1",
