@@ -101,6 +101,9 @@ Rails.application.routes.draw do
         collection do
           post :refresh_from_blockchain
         end
+        member do
+          get :wallets
+        end
       end
       resources :accesses, only: [:index] do
         collection do

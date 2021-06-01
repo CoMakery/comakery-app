@@ -1,0 +1,15 @@
+<select
+  name="award[account_id]"
+  type="text"
+  class="form-select"
+  placeholder="Select an account"
+  data-controller="choices account-search"
+  data-action="change->account-search#getWallets"
+  data-account-search-accounts-url-value="<%= "/projects/#{@project.id}/dashboard/accounts" %>"
+  data-choices-target="select"
+  data-choices-search-enabled-value="true"
+  data-choices-remote-search-enabled-value="true"
+  data-choices-remote-search-url-value="<%= project_dashboard_accounts_path(@project, format: :json) + '?q[first_name_or_last_name_cont]=' %>"
+  data-choices-no-choices-text-value="Type to continue..."
+  required>
+</select>

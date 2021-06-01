@@ -1,7 +1,6 @@
 class Dashboard::AccountsController < ApplicationController
   before_action :assign_project
   before_action :normalize_account_token_records_lockup_until_lt, only: [:index]
-  before_action :set_accounts, only: [:index]
   before_action :authorize_project, only: :create
   skip_before_action :require_login, only: %i[index show]
   skip_after_action :verify_policy_scoped, only: %i[index create]
@@ -10,8 +9,27 @@ class Dashboard::AccountsController < ApplicationController
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
   end
 
+  # GET /projects/1/dashboard/accounts
+  # GET /projects/1/dashboard/accounts.json
   def index
     authorize @project, :accounts?
+
+    respond_to do |format|
+      format.html { set_accounts }
+      format.json { set_accounts_json }
+    end
+  end
+
+  # GET /projects/1/dashboard/accounts/1/wallets
+  def wallets
+    authorize @project, :edit?
+
+    @account = @project.accounts.find(params[:id])
+
+    render(
+      partial: 'dashboard/accounts/wallets',
+      locals: { account: @account, blockchain: @project.token&._blockchain }
+    )
   end
 
   def create
@@ -86,6 +104,10 @@ class Dashboard::AccountsController < ApplicationController
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?
     rescue ActiveRecord::StatementInvalid
       head 404
+    end
+
+    def set_accounts_json
+      @accounts = @project.accounts.includes([:image_attachment]).ransack(params[:q]).result.limit(10)
     end
 
     def accounts_query

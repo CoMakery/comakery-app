@@ -103,9 +103,11 @@ class Dashboard::TransfersController < ApplicationController
       params.fetch(:award, {}).permit(
         :amount,
         :quantity,
+        :price,
         :why,
         :description,
         :requirements,
+        :recipient_wallet_id,
         :transfer_type_id,
         :lockup_schedule_id,
         :commencement_date

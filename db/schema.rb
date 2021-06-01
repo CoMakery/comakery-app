@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_233528) do
+ActiveRecord::Schema.define(version: 2021_05_31_030108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_233528) do
     t.datetime "prioritized_at"
     t.decimal "lockup_schedule_id", precision: 78
     t.datetime "commencement_date"
+    t.decimal "price", precision: 14, scale: 2, default: "0.0"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["channel_id"], name: "index_awards_on_channel_id"

@@ -10,6 +10,10 @@ class AccountDecorator < Draper::Decorator
     nickname || name
   end
 
+  def avatar_tag
+    "<span class='avatar avatar-xs' style='background-image: url(#{image_url})'></span>"
+  end
+
   def name_with_nickname
     if nickname.present?
       "#{name} (#{nickname})"
