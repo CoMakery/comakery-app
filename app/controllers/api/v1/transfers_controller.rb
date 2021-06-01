@@ -23,7 +23,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
     award.transfer_type = project.transfer_types&.find_by(name: 'earned') unless award.transfer_type
     award.name = award.transfer_type.name.titlecase
     award.issuer = project.account
-    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: account_id)
+    award.account = whitelabel_mission.managed_accounts.find_by(managed_account_id: account_id)
     award.status = :accepted
 
     award.why = ''
