@@ -35,8 +35,7 @@ RSpec.describe SyncBalanceJob, type: :job do
 
   context 'when balance was updated recently' do
     let(:balance) do
-      create :balance, wallet: wallet, token: token_with_balance_support, base_unit_value: 10,
-             created_at: 1.day.ago(now), updated_at: now
+      create :balance, wallet: wallet, token: token_with_balance_support, base_unit_value: 10, created_at: 1.day.ago(now), updated_at: now
     end
 
     it 'should not update base unit value' do
