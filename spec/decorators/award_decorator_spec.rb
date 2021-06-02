@@ -126,4 +126,57 @@ describe AwardDecorator do
       expect(award.decorate.transfer_button_state_class).to be_nil
     end
   end
+
+  describe '#show_prioritize_button?' do
+    let(:award) { tx.blockchain_transactable.decorate }
+
+    subject { award.show_prioritize_button? }
+
+    context 'for not created tx' do
+      let(:tx) { nil }
+      let(:award) { create(:award).decorate }
+
+      it { is_expected.to be true }
+    end
+
+    context 'for tx with created status' do
+      let(:tx) { create(:blockchain_transaction, status: :created) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'for tx with pending status' do
+      let(:tx) { create(:blockchain_transaction, status: :pending, tx_hash: 'tx hash') }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for tx with cancelled status' do
+      let(:tx) { create(:blockchain_transaction, status: :cancelled, tx_hash: 'tx hash') }
+
+      it { is_expected.to be true }
+    end
+
+    context 'for tx with succeed status' do
+      let(:tx) { create(:blockchain_transaction, status: :succeed, tx_hash: 'tx hash') }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for tx with failed status' do
+      let(:tx) { create(:blockchain_transaction, status: :failed, tx_hash: 'tx hash') }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for tx with failed status and hot wallet in manual mode' do
+      let(:tx) { create(:blockchain_transaction, status: :failed, tx_hash: 'tx hash') }
+
+      before do
+        award.project.hot_wallet_manual_sending!
+      end
+
+      it { is_expected.to be true }
+    end
+  end
 end

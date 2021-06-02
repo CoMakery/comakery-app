@@ -102,4 +102,11 @@ class AwardDecorator < Draper::Decorator
       'in-progress--metamask in-progress--metamask__paid'
     end
   end
+
+  def show_prioritize_button?
+    return true if latest_blockchain_transaction.nil?
+    return false if latest_blockchain_transaction.failed? && project.hot_wallet_auto_sending?
+
+    latest_blockchain_transaction.status.in?(%w[created cancelled failed])
+  end
 end
