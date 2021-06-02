@@ -129,14 +129,27 @@ describe AwardDecorator do
 
   describe '#show_prioritize_button?' do
     let(:award) { tx.blockchain_transactable.decorate }
+    let(:hot_wallet_mode) { :auto_sending }
 
     subject { award.show_prioritize_button? }
+
+    before do
+      award.project.update!(hot_wallet_mode: hot_wallet_mode)
+    end
 
     context 'for not created tx' do
       let(:tx) { nil }
       let(:award) { create(:award).decorate }
 
       it { is_expected.to be true }
+    end
+
+    context 'for not created tx and disabled hot wallet mode' do
+      let(:tx) { nil }
+      let(:award) { create(:award).decorate }
+      let(:hot_wallet_mode) { :disabled }
+
+      it { is_expected.to be false }
     end
 
     context 'for tx with created status' do
@@ -171,10 +184,7 @@ describe AwardDecorator do
 
     context 'for tx with failed status and hot wallet in manual mode' do
       let(:tx) { create(:blockchain_transaction, status: :failed, tx_hash: 'tx hash') }
-
-      before do
-        award.project.hot_wallet_manual_sending!
-      end
+      let(:hot_wallet_mode) { :manual_sending }
 
       it { is_expected.to be true }
     end
