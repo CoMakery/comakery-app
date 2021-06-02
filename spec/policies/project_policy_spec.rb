@@ -144,9 +144,9 @@ describe ProjectPolicy do
     context 'when user is observer' do
       it { expect(described_class.new(project_observer, my_public_project).transfers?).to be(true) }
 
-      it { expect(described_class.new(project_observer, my_private_project).transfers?).to be(false) }
+      it { expect(described_class.new(project_observer, my_private_project).transfers?).to be(true) }
 
-      it { expect(described_class.new(project_observer, my_public_project_business_confidential).transfers?).to be(false) }
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).transfers?).to be(true) }
     end
 
     context 'without user is interested' do
