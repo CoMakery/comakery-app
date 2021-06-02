@@ -27,7 +27,10 @@ class OreIdWalletBalanceSyncJob < ApplicationJob
   end
 
   def wait_to_perform(wallet_provision)
-    wait_time = wallet_provision.next_sync_allowed_after - Time.current
-    wait_time.positive ? wait_time : 0
+    if wallet_provision.next_sync_allowed_after < Time.current
+      0
+    else
+      wallet_provision.next_sync_allowed_after - Time.current
+    end
   end
 end

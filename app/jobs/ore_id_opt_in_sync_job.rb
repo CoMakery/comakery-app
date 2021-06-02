@@ -27,7 +27,10 @@ class OreIdOptInSyncJob < ApplicationJob
   end
 
   def wait_to_perform(ore_id)
-    wait_time = ore_id.next_sync_allowed_after - Time.current
-    wait_time.positive ? wait_time : 0
+    if ore_id.next_sync_allowed_after < Time.current
+      0
+    else
+      ore_id.next_sync_allowed_after - Time.current
+    end
   end
 end
