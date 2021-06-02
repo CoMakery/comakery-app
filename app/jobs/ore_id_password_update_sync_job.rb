@@ -1,4 +1,4 @@
-class OreIdPasswordUpdateSyncJob < ApplicationJob
+class OreIdPasswordUpdateSyncJob < OreIdBaseJob
   queue_as :default
 
   def perform(id)
@@ -22,18 +22,6 @@ class OreIdPasswordUpdateSyncJob < ApplicationJob
       Sentry.capture_exception(e)
     else
       sync.ok!
-    end
-  end
-
-  def reschedule(ore_id)
-    self.class.set(wait: wait_to_perform(ore_id)).perform_later(ore_id.id)
-  end
-
-  def wait_to_perform(ore_id)
-    if ore_id.next_sync_allowed_after < Time.current
-      0
-    else
-      ore_id.next_sync_allowed_after - Time.current
     end
   end
 end
