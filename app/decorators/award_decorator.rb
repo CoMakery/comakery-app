@@ -106,10 +106,7 @@ class AwardDecorator < Draper::Decorator
   def show_prioritize_button?
     return false if project.hot_wallet_disabled?
     return true if latest_blockchain_transaction.nil?
-
-    if latest_blockchain_transaction.failed?
-      return project.hot_wallet_manual_sending? if latest_blockchain_transaction.failed?
-    end
+    return project.hot_wallet_manual_sending? if latest_blockchain_transaction.failed?
 
     latest_blockchain_transaction.status.in?(%w[created cancelled])
   end
