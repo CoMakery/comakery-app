@@ -110,8 +110,6 @@ class AwardDecorator < Draper::Decorator
     if latest_blockchain_transaction.failed?
       return project.hot_wallet_manual_sending? if latest_blockchain_transaction.failed?
     end
-    # return false if latest_blockchain_transaction.failed? && project.hot_wallet_auto_sending?
-    # return true if latest_blockchain_transaction.failed? && project.hot_wallet_manual_sending?
 
     latest_blockchain_transaction.status.in?(%w[created cancelled])
   end
