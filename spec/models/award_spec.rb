@@ -560,6 +560,16 @@ describe Award do
         expect(award_w_quantity.total_amount).to eq(200)
       end
     end
+
+    describe 'transfer_type' do
+      let(:award) { build :award }
+
+      specify 'can not set transfer type from another project' do
+        award.transfer_type = build :transfer_type
+        expect(award).not_to be_valid
+        expect(award.errors.messages).to eq transfer_type_id: ['is not included in the list']
+      end
+    end
   end
 
   describe '.matching_experience_for?(account)' do
