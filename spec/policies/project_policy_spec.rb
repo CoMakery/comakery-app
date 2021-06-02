@@ -118,9 +118,9 @@ describe ProjectPolicy do
     context 'when user is observer' do
       it { expect(described_class.new(project_observer, my_public_project).accounts?).to be(true) }
 
-      it { expect(described_class.new(project_observer, my_private_project).accounts?).to be(false) }
+      it { expect(described_class.new(project_observer, my_private_project).accounts?).to be(true) }
 
-      it { expect(described_class.new(project_observer, my_public_project_business_confidential).accounts?).to be(false) }
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).accounts?).to be(true) }
     end
 
     context 'when user is interested' do
