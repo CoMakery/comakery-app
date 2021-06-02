@@ -56,6 +56,14 @@ class BlockchainTransactionAward < BlockchainTransaction
       broadcast_replace_later_to(
         blockchain_transactable,
         :updates,
+        target: "transfer_recipient_#{blockchain_transactable.id}",
+        partial: 'dashboard/transfers/recipient',
+        locals: { transfer: blockchain_transactable }
+      )
+
+      broadcast_replace_later_to(
+        blockchain_transactable,
+        :updates,
         target: "transfer_button_public_#{blockchain_transactable.id}",
         partial: 'shared/transfer_button_public',
         locals: { transfer: blockchain_transactable }
@@ -171,7 +179,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         end
       end
 
-      self.amount ||= amounts.first
+      self.amount ||= amounts.sum
     end
 
     def populate_destinations

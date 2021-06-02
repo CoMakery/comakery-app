@@ -916,7 +916,7 @@ exports[`Batch renders component correctly 1`] = `
                                   name="iconEdit.svg"
                                 >
                                   <img
-                                    className="icon icon__iconEdit-svg sc-chPdSV DlMfj"
+                                    className="icon-legacy icon__iconEdit-svg sc-chPdSV DlMfj"
                                     src="test-file-stub"
                                   />
                                 </Icon>
@@ -963,7 +963,7 @@ exports[`Batch renders component correctly 1`] = `
                                   name="iconTrash.svg"
                                 >
                                   <img
-                                    className="icon icon__iconTrash-svg sc-chPdSV DlMfj"
+                                    className="icon-legacy icon__iconTrash-svg sc-chPdSV DlMfj"
                                     src="test-file-stub"
                                   />
                                 </Icon>

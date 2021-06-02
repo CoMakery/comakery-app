@@ -52,7 +52,7 @@ exports[`MissionForm renders correctly without props 1`] = `
           onClick={[Function]}
         >
           <img
-            className="icon icon__iconCloseCopy-svg"
+            className="icon-legacy icon__iconCloseCopy-svg"
             onClick={[Function]}
             src="test-file-stub"
           />

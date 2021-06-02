@@ -575,6 +575,7 @@ form.form-with-submit-button {
   background-color: #1560fa !important;
   -webkit-user-select: none;
   margin-bottom: 1em;
+  width: 100px;
 
   a {
     color: white !important;
@@ -605,7 +606,6 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
-  padding: 10px;
 
   .hot-wallet-switcher {
     display: flex;
@@ -620,7 +620,7 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: -webkit-fill-available;
+      width: stretch;
     }
 
     .hot-wallet-switcher-child {
@@ -641,6 +641,24 @@ form.form-with-submit-button {
       max-width: 200px;
       border-left: none !important;
     }
+  }
+}
+
+.batch-size {
+  #project_transfer_batch_size_input {
+    padding-left: 7.5em !important;
+    cursor: pointer;
+  }
+
+  #project_transfer_batch_size_input[readonly], #project_transfer_batch_size_input[readonly]:hover {
+    background-color: #fff;
+    color: inherit;
+  }
+
+  .input-label.label-only .input-label-addon {
+    top: 8px;
+    left: 6px;
+    cursor: pointer;
   }
 }
 
@@ -1700,11 +1718,15 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__account {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__issuer {
-      min-width: 180px;
+      min-width: 120px;
+    }
+
+    .transfers-table__transfer__recipient {
+      min-width: 120px;
     }
 
     .transfers-table__transfer__amount {
@@ -1731,7 +1753,7 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__total_amount {
-      min-width: 60px;
+      min-width: 150px;
       font-weight: 600;
       display: block;
       white-space: nowrap;
@@ -1740,7 +1762,7 @@ input.transfer-rules__refresh_from_blockchain_button {
       align-self: center;
     }
 
-    .transfers-table__transfer__button {
+    .transfers-table__transfer__history {
       min-width: 60px;
       flex-direction: column;
       justify-content: center;
@@ -1761,6 +1783,10 @@ input.transfer-rules__refresh_from_blockchain_button {
           background-color: #efefef;
         }
       }
+    }
+
+    .transfers-table__transfer__history {
+      min-width: 60px;
     }
 
     .transfers-table__transfer__transferred_at {
@@ -2185,7 +2211,7 @@ footer {
   margin-top: auto;
 }
 
-.footer {
+.footer-legacy {
   justify-content: space-between;
   color: #e8eff7;
   padding: 70px 150px 0px 150px;
@@ -5610,7 +5636,7 @@ input.button--right-space {
   height: 70px;
 }
 
-.mission-stats__kpi .icon {
+.mission-stats__kpi .icon-legacy {
   margin-right: 12px;
   height: 100%;
 }
@@ -5643,7 +5669,7 @@ input.button--right-space {
     align-items: center;
   }
 
-  .mission-stats__kpi .icon {
+  .mission-stats__kpi .icon-legacy {
     margin: 0 0 12px 0;
     height: 60px;
   }
@@ -6055,5 +6081,3 @@ a:focus {
     border: none !important;
   }
 }
-
-@import 'bootstrap_custom';

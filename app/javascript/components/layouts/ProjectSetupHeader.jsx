@@ -88,10 +88,8 @@ const ProjectInfo = styled.div`
   flex-grow: 2;
   flex-direction: column;
 
-  img {
+  .token-logo {
     max-height: 150px;
-    margin-bottom: -50px;
-    margin-top: 25px;
     border-radius: 2px;
     box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
@@ -101,9 +99,6 @@ const ProjectInfo = styled.div`
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    text-align: center;
-    min-height: 100px;
-    display: flex;
     align-items: center;
   }
 
@@ -113,20 +108,36 @@ const ProjectInfo = styled.div`
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    text-align: center;
     min-height: 100px;
     display: flex;
     align-items: center;
     margin-top: -50px;
   }
+
+  .token-details {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .token-details-hw-address {
+    color: white;
+    text-decoration: underline;
+    padding: 0 1em;
+  }
+
+  .token-details-hw-address:hover {
+    text-decoration: none;
+  }
 `
 
 class ProjectSetupHeader extends React.Component {
   render() {
-    const mission = this.props.missionForHeader
-    const project = this.props.projectForHeader
-    const owner = this.props.owner
-    const current = this.props.current
+    const mission    = this.props.missionForHeader
+    const project    = this.props.projectForHeader
+    const owner      = project && project.owner
+    const observer   = project && project.observer
+    const interested = project && project.interested
+    const current    = this.props.current
 
     return (
       <Wrapper backgroundImageUrl={project && project.imageUrl} expanded={this.props.expanded}>
@@ -166,7 +177,7 @@ class ProjectSetupHeader extends React.Component {
                 GitHub
               </NavLink>
               }
-              {(owner || project.showBatches) && this.props.whitelabel != true &&
+              {(owner || observer || project.showBatches) && this.props.whitelabel != true &&
               <NavLink current={current === 'batches'} href={project.batchesUrl}>
                 tasks
               </NavLink>
@@ -182,19 +193,19 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
 
-              {(owner || project.showTransfers) &&
+              {project.showContributions &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>
               }
 
-              {(owner || project.showTransfers) &&
+              {project.showContributions &&
                 <NavLink current={current === 'accounts'} href={project.accountsUrl}>
                   accounts
                 </NavLink>
               }
 
-              {(owner || project.showTransfers) && project.supportsTransferRules &&
+              {(owner || !project.requireConfidentiality) && project.supportsTransferRules &&
                 <NavLink current={current === 'transfer_rules'} href={project.transferRulesUrl}>
                   transfer rules
                 </NavLink>
@@ -215,6 +226,21 @@ class ProjectSetupHeader extends React.Component {
 
         <ProjectInfo>
           <h1>{project && project.title || 'New Project'}</h1>
+
+          {project && project.token &&
+            <div className="token-details">
+              <div className="token-details-first-row">
+                <img className="token-logo" src={project.token.logoUrl} />
+                {project.token.name} ({project.token.symbol})
+              </div>
+              <div className="token-details-second-row">
+                {project.token.address &&
+                  <a href={project.token.addressUrl} className="token-details-hw-address">{project.token.address}</a>
+                }
+                {project.token.network}
+              </div>
+            </div>
+          }
         </ProjectInfo>
       </Wrapper>
     )
@@ -224,7 +250,6 @@ class ProjectSetupHeader extends React.Component {
 ProjectSetupHeader.propTypes = {
   missionForHeader: PropTypes.object,
   projectForHeader: PropTypes.object,
-  owner           : PropTypes.bool,
   current         : PropTypes.string,
   expanded        : PropTypes.bool
 }
@@ -236,27 +261,29 @@ ProjectSetupHeader.defaultProps = {
     imageUrl: ''
   },
   projectForHeader: {
-    settingsUrl       : '',
-    adminsUrl         : '',
-    batchesUrl        : '',
-    contributorsUrl   : '',
-    transfersUrl      : '',
-    accountsUrl       : '',
-    landingUrl        : '',
-    imageUrl          : '',
-    title             : '',
-    owner             : '',
-    showBatches       : true,
-    showTransfers     : true,
-    present           : true,
-    githubUrl         : '',
-    documentationUrl  : '',
-    gettingStartedUrl : '',
-    governanceUrl     : '',
-    fundingUrl        : '',
-    videoConferenceUrl: ''
+    owner                 : true,
+    observer              : true,
+    interested            : true,
+    settingsUrl           : '',
+    adminsUrl             : '',
+    batchesUrl            : '',
+    contributorsUrl       : '',
+    transfersUrl          : '',
+    accountsUrl           : '',
+    landingUrl            : '',
+    imageUrl              : '',
+    title                 : '',
+    showBatches           : true,
+    showContributions     : true,
+    requireConfidentiality: true,
+    present               : true,
+    githubUrl             : '',
+    documentationUrl      : '',
+    gettingStartedUrl     : '',
+    governanceUrl         : '',
+    fundingUrl            : '',
+    videoConferenceUrl    : ''
   },
-  owner   : true,
   current : '',
   expanded: false
 }

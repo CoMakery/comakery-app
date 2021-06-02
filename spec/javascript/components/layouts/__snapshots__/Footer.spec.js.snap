@@ -3,7 +3,7 @@
 exports[`Footer renders correctly without props 1`] = `
 <Fragment>
   <div
-    className="footer"
+    className="footer-legacy"
     data-turbo-permanent={true}
   >
     <div

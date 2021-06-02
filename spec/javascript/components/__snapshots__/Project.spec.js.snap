@@ -8,7 +8,7 @@ exports[`Project renders correctly without props 1`] = `
   csrfToken=""
   editPath={null}
   editable={true}
-  interested={false}
+  follower={false}
   missionData={null}
   missionForHeader={null}
   myTasksPath=""
@@ -153,7 +153,7 @@ exports[`Project renders correctly without props 1`] = `
                     "componentStyle": ComponentStyle {
                       "componentId": "sc-VigVT",
                       "isStatic": false,
-                      "lastClassName": "epdllf",
+                      "lastClassName": "eHSNFE",
                       "rules": Array [
                         "
   align-items: center;
@@ -162,10 +162,8 @@ exports[`Project renders correctly without props 1`] = `
   flex-grow: 2;
   flex-direction: column;
 
-  img {
+  .token-logo {
     max-height: 150px;
-    margin-bottom: -50px;
-    margin-top: 25px;
     border-radius: 2px;
     box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
@@ -175,9 +173,6 @@ exports[`Project renders correctly without props 1`] = `
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    text-align: center;
-    min-height: 100px;
-    display: flex;
     align-items: center;
   }
 
@@ -187,11 +182,25 @@ exports[`Project renders correctly without props 1`] = `
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    text-align: center;
     min-height: 100px;
     display: flex;
     align-items: center;
     margin-top: -50px;
+  }
+
+  .token-details {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .token-details-hw-address {
+    color: white;
+    text-decoration: underline;
+    padding: 0 1em;
+  }
+
+  .token-details-hw-address:hover {
+    text-decoration: none;
   }
 ",
                       ],
@@ -208,7 +217,7 @@ exports[`Project renders correctly without props 1`] = `
                 forwardedRef={null}
               >
                 <div
-                  className="sc-VigVT epdllf"
+                  className="sc-VigVT eHSNFE"
                 >
                   <h1>
                     New Project

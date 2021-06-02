@@ -112,7 +112,7 @@ describe Balance, type: :model do
           transfer.accepted!
         end
 
-        it { is_expected.to include(transfer.lockup_schedule_id) }
+        it { is_expected.not_to include(transfer.lockup_schedule_id) }
       end
 
       context 'in cancelled status' do
@@ -141,15 +141,70 @@ describe Balance, type: :model do
     end
   end
 
+  describe '#blockchain_balance_base_unit_locked_value' do
+    subject { balance.blockchain_balance_base_unit_locked_value }
+
+    context 'with a lockup token' do
+      let(:balance) { create(:balance, token: create(:lockup_token), wallet: create(:eth_wallet, _blockchain: :ethereum_rinkeby)) }
+
+      specify do
+        expect(balance.token).to receive(:blockchain_locked_balance).with(balance.wallet.address).and_return(999)
+
+        is_expected.to eq 999
+      end
+    end
+
+    context 'with other tokens' do
+      specify do
+        expect(balance.token).not_to receive(:blockchain_locked_balance).with(balance.wallet.address)
+
+        is_expected.to eq 0
+      end
+    end
+  end
+
+  describe '#blockchain_balance_base_unit_unlocked_value' do
+    subject { balance.blockchain_balance_base_unit_unlocked_value }
+
+    context 'with a lockup token' do
+      let(:balance) { create(:balance, token: create(:lockup_token), wallet: create(:eth_wallet, _blockchain: :ethereum_rinkeby)) }
+
+      specify do
+        expect(balance.token).to receive(:blockchain_unlocked_balance).with(balance.wallet.address).and_return(999)
+
+        is_expected.to eq 999
+      end
+    end
+
+    context 'with other tokens' do
+      specify do
+        expect(balance.token).not_to receive(:blockchain_unlocked_balance).with(balance.wallet.address)
+        expect(balance.token).to receive(:blockchain_balance).with(balance.wallet.address).and_return(999)
+
+        is_expected.to eq 999
+      end
+    end
+  end
+
   describe '#sync_with_blockchain!' do
+    let(:balance) { create(:balance, token: create(:lockup_token), wallet: create(:eth_wallet, _blockchain: :ethereum_rinkeby)) }
     subject { balance.sync_with_blockchain! }
 
     specify do
       expect(balance.token).to receive(:blockchain_balance).with(balance.wallet.address).and_return(999)
+      expect(balance.token).to receive(:blockchain_locked_balance).with(balance.wallet.address).and_return(999)
+      expect(balance.token).to receive(:blockchain_unlocked_balance).with(balance.wallet.address).and_return(999)
 
       expect(balance.base_unit_value).to eq 0
+      expect(balance.base_unit_locked_value).to eq 0
+      expect(balance.base_unit_unlocked_value).to eq 0
+
       is_expected.to be true
-      expect(balance.reload.base_unit_value).to eq 999
+      balance.reload
+
+      expect(balance.base_unit_value).to eq 999
+      expect(balance.base_unit_locked_value).to eq 999
+      expect(balance.base_unit_unlocked_value).to eq 999
     end
   end
 

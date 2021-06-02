@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InterestsController from '../controllers/interests_controller'
+import ProjectRolesController from '../controllers/project_roles_controller'
 
 export default class FeaturedMission extends React.Component {
   constructor(props) {
     super(props)
 
-    this.addInterest = this.addInterest.bind(this)
-    this.removeInterest = this.removeInterest.bind(this)
+    this.addProjectRole = this.addProjectRole.bind(this)
+    this.removeProjectRole = this.removeProjectRole.bind(this)
     this.state = {
       name       : props.name,
       description: props.description,
@@ -16,12 +16,12 @@ export default class FeaturedMission extends React.Component {
     }
   }
 
-  addInterest(projectId) {
-    new InterestsController().follow(projectId).then(response => {
+  addProjectRole(projectId) {
+    new ProjectRolesController().follow(projectId).then(response => {
       if (response.status === 200) {
         let newProjects = Array.from(this.state.projects)
         const index = newProjects.findIndex(project => project.id === projectId)
-        newProjects[index].interested = true
+        newProjects[index].involved = true
         this.setState({projects: newProjects})
       } if (response.status === 401) {
         window.location = '/accounts/new'
@@ -31,13 +31,13 @@ export default class FeaturedMission extends React.Component {
     })
   }
 
-  removeInterest(projectId) {
-    new InterestsController().unfollow(projectId).then(response => {
+  removeProjectRole(projectId) {
+    new ProjectRolesController().unfollow(projectId).then(response => {
       if (response.status === 200) {
         let newProjects = Array.from(this.state.projects)
         const index = newProjects.findIndex(project => project.id === projectId)
-        newProjects[index].interested = false
-        this.setState({projects: newProjects})
+        newProjects[index].involved = false
+        this.setState({ projects: newProjects })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
@@ -63,18 +63,18 @@ export default class FeaturedMission extends React.Component {
           <div className='featured-mission__description'>{description}</div>
           {projects.map(project => <div key={project.id} className='featured-mission__project'>
             <a href={`/projects/${project.id}`} className='featured-mission__project__title'>{project.title}</a>
-            {project.interested &&
+            {project.involved &&
               <div
                 className='featured-mission__project__interest featured-mission__project__interest'
-                onClick={() => { this.removeInterest(project.id) }}
+                onClick={() => { this.removeProjectRole(project.id) }}
               >
                 Unfollow
               </div>
             }
-            {!project.interested &&
+            {!project.involved &&
               <div
                 className='featured-mission__project__interest'
-                onClick={() => { this.addInterest(project.id) }}
+                onClick={() => { this.addProjectRole(project.id) }}
               >
                 Follow
               </div>

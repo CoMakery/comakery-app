@@ -7,7 +7,7 @@ class Icon extends React.Component {
     const {className, name, ...other} = this.props
 
     const classnames = classNames(
-      'icon',
+      'icon-legacy',
       `icon__${name.replace('.', '-')}`,
       className
     )

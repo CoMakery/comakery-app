@@ -49,6 +49,8 @@
     </div>
   <% end %>
 
-  <div class="transfers-table__transfer__settings">
-  </div>
+  <% if @project_policy.change_permissions? %>
+    <div class="transfers-table__transfer__settings">
+    </div>
+  <% end %>
 </div>

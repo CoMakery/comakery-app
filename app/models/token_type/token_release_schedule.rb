@@ -97,4 +97,12 @@ class TokenType::TokenReleaseSchedule < TokenType::Erc20
   def blockchain_balance(_wallet_address)
     super
   end
+
+  def blockchain_locked_balance(wallet_address)
+    contract.contract.call.locked_balance_of(wallet_address)
+  end
+
+  def blockchain_unlocked_balance(wallet_address)
+    contract.contract.call.unlocked_balance_of(wallet_address)
+  end
 end

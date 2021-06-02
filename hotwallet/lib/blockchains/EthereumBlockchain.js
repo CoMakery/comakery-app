@@ -264,30 +264,45 @@ class EthereumBlockchain {
     }
 
     const contract = await this.tokenContract(contractAddress)
+    const balances = { balance: new BigNumber(0), balanceInBaseUnit: new BigNumber(0) }
     const balanceRes = await contract.methods.balanceOf(hotWalletAddress).call()
     const decimals = await contract.methods.decimals().call()
 
     if (balanceRes && decimals) {
       const divisor = new BigNumber(10).pow(decimals)
-      const balance = new BigNumber(balanceRes).div(divisor)
+      balances["balance"] = new BigNumber(balanceRes).div(divisor)
+      balances["balanceInBaseUnit"] = new BigNumber(balanceRes)
 
-      this.tokenBalances[hotWalletAddress] = balance
-      return balance
-    } else {
-      return new BigNumber(0)
+      this.tokenBalances[hotWalletAddress] = balances
     }
+    return balances
   }
 
   async positiveTokenBalance(hotWalletAddress) {
     const tokenBalance = await this.getTokenBalance(hotWalletAddress)
-    return tokenBalance.isGreaterThan(new BigNumber(0))
+    return tokenBalance.balanceInBaseUnit.isGreaterThan(new BigNumber(0))
   }
 
-  async isTransactionValid(transaction, hotWalletAddress) {
-    if (typeof transaction !== 'string') { return { valid: false } }
+  async isTransactionValid(blockchainTransaction, hotWalletAddress) {
+    if (typeof blockchainTransaction.txRaw !== 'string') { return { valid: false } }
 
-    // TODO: Implement me
-    return { valid: true }
+    try {
+      // validate enough tokens
+      const amountInBaseUnit = new BigNumber(blockchainTransaction.amount)
+      if (amountInBaseUnit.isGreaterThan(new BigNumber(0))) {
+        const tokenBalance = await this.getTokenBalance(hotWalletAddress)
+
+        if (tokenBalance.balanceInBaseUnit.isLessThan(amountInBaseUnit)) {
+          const errorMessage = `The Hot Wallet has insufficient tokens. Please top up the ${hotWalletAddress}`
+          console.log(errorMessage)
+          return { valid: false, markAs: "cancelled", error: errorMessage, switchHWToManualMode: true }
+        }
+      }
+
+      return { valid: true }
+    } catch (err) {
+      return { valid: false, markAs: "failed", error: `Unknown error: ${err}`, switchHWToManualMode: true }
+    }
   }
 
   async sendTransaction(transaction, hotWallet) {
@@ -300,6 +315,16 @@ class EthereumBlockchain {
 
     try {
       await chainTransaction.setFromRaw(txn)
+      const ethFee = await chainTransaction.getSuggestedFee(chainjs.Models.TxExecutionPriority.Fast)
+
+      // validate enough gas
+      if (new BigNumber(ethFee).isGreaterThan(this.getEthBalance)) {
+        const errorMessage = `The Hot Wallet has insufficient gas. Please top up the ${hotWallet.address}`
+        console.error(errorMessage)
+        return { valid: false, markAs: "cancelled", error: errorMessage}
+      }
+
+      await chainTransaction.setDesiredFee(ethFee)
       await chainTransaction.prepareToBeSigned()
       await chainTransaction.validate()
       await chainTransaction.sign([chainjs.HelpersEthereum.toEthereumPrivateKey(hotWallet.privateKey)])

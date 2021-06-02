@@ -3,7 +3,7 @@ const EthereumBlockchain = require('../lib/blockchains/EthereumBlockchain').Ethe
 const BigNumber = require('bignumber.js')
 
 describe("EthereumBlockchain check for token balance", () => {
-  test('return balance as a BigNumber object', async () => {
+  test('return balance as an object with balances (in base units and in tokens)', async () => {
     const ethBlockchain = new EthereumBlockchain({
       infuraProjectId: "infura_project_id",
       blockchainNetwork: 'ethereum_ropsten',
@@ -20,7 +20,8 @@ describe("EthereumBlockchain check for token balance", () => {
     jest.spyOn(ethBlockchain, "tokenContract").mockImplementation(tokenContractMocked)
 
     const balance = await ethBlockchain.getTokenBalance("0x2aA78Db0BEff941883C33EA150ed86eaDE09A377")
-    expect(balance).toEqual(new BigNumber("52"))
+    expect(balance.balance).toEqual(new BigNumber("52"))
+    expect(balance.balanceInBaseUnit).toEqual(new BigNumber("52"))
     expect(tokenContractMocked).toHaveBeenCalledWith("0x1d1592c28fff3d3e71b1d29e31147846026a0a37")
   })
 
@@ -41,7 +42,8 @@ describe("EthereumBlockchain check for token balance", () => {
     jest.spyOn(ethBlockchain, "tokenContract").mockImplementation(tokenContractMocked)
 
     const balance = await ethBlockchain.getTokenBalance("0x2aA78Db0BEff941883C33EA150ed86eaDE09A377")
-    expect(balance).toEqual(new BigNumber("0"))
+    expect(balance.balance).toEqual(new BigNumber("0"))
+    expect(balance.balanceInBaseUnit).toEqual(new BigNumber("0"))
     expect(tokenContractMocked).toHaveBeenCalledWith("0xB5e3062f536cE503B27CB366529613aa3bE0408e")
 
   })
@@ -65,7 +67,8 @@ describe("EthereumBlockchain check for token balance", () => {
     jest.spyOn(ethBlockchain, "tokenContract").mockImplementation(tokenContractMocked)
 
     const balance = await ethBlockchain.getTokenBalance("0x2aA78Db0BEff941883C33EA150ed86eaDE09A377")
-    expect(balance).toEqual(new BigNumber("0.99"))
+    expect(balance.balance).toEqual(new BigNumber("0.99"))
+    expect(balance.balanceInBaseUnit).toEqual(new BigNumber("99"))
     expect(tokenContractMocked).toHaveBeenCalledWith("0x68ac9A329c688AfBf1FC2e5d3e8Cb6E88989E2cC")
   })
 });

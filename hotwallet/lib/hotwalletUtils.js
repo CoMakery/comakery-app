@@ -116,7 +116,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
   console.log(`Checking for a new transaction to send from ${hwAddress}`)
   const hwApi = new ComakeryApi(envs)
   const blockchainTransaction = await hwApi.getNextTransactionToSign(hwAddress)
-  const txValidation = await blockchain.isTransactionValid(blockchainTransaction.txRaw, hwAddress)
+  const txValidation = await blockchain.isTransactionValid(blockchainTransaction, hwAddress)
 
   if (txValidation.valid) {
     const prevTx = await hwRedis.getSavedDataForTransaction(blockchainTransaction)
@@ -154,7 +154,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     }
   } else { // tx is invalid
     if (txValidation.markAs) {
-      await hwApi.cancelTransaction(blockchainTransaction, txValidation.error, txValidation.markAs)
+      await hwApi.cancelTransaction(blockchainTransaction, txValidation.error, txValidation.markAs, txValidation.switchHWToManualMode)
     }
     return { status: "validation_failed", blockchainTransaction: blockchainTransaction, transaction: {} }
   }

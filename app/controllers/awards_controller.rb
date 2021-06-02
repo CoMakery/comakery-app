@@ -29,7 +29,7 @@ class AwardsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[confirm]
   skip_after_action :verify_policy_scoped, only: %(index)
   before_action :redirect_back_to_session, only: %i[index]
-  before_action :create_interest_from_session, only: %i[index]
+  before_action :create_project_role_from_session, only: %i[index]
 
   def index; end
 
@@ -292,20 +292,20 @@ class AwardsController < ApplicationController
     end
 
     def run_award_expiration
-      current_account.accessable_awards(projects_interested).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+      current_account.accessable_awards(projects_involved).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
-    def projects_interested
-      current_user.whitelabel_interested_projects(@whitelabel_mission)
+    def projects_involved
+      current_user.whitelabel_involved_projects(@whitelabel_mission)
     end
 
     def set_awards
       @awards =
         current_account
-        .accessable_awards(projects_interested)
+        .accessable_awards(projects_involved)
         .includes(
           :specialty, :issuer, :award_type, :cloned_from,
-          project: [:account, :mission, :token, :admins, channels: [:team]],
+          project: [:account, :mission, :token, :project_admins, channels: [:team]],
           account: [image_attachment: :blob]
         ).filtered_for_view(@filter, current_account)
         .order(expires_at: :asc, updated_at: :desc)
@@ -364,7 +364,7 @@ class AwardsController < ApplicationController
           {
             name: filter,
             current: filter == @filter,
-            count: current_account.accessable_awards(projects_interested).filtered_for_view(filter, current_account).size,
+            count: current_account.accessable_awards(projects_involved).filtered_for_view(filter, current_account).size,
             url: my_tasks_path(filter: filter)
           }
         end,
@@ -416,7 +416,7 @@ class AwardsController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -428,17 +428,16 @@ class AwardsController < ApplicationController
         project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
           url: unlisted_project_url(@project.long_id)
         }),
-        interested: (@project.interested.includes(:specialty) + @project.contributors.includes(:specialty)).uniq.map do |a|
+        accounts: (@project.accounts + @project.contributors).uniq.map do |a|
           a.decorate.serializable_hash(
             only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
-            include: :specialty,
             methods: :image_url
           )
         end,
-        interested_select: (@project.interested + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
+        accounts_select: (@project.accounts + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -462,7 +461,7 @@ class AwardsController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

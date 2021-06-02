@@ -11,16 +11,16 @@ describe Project do
     let!(:account) { create :account }
 
     before do
-      project.admins << account
+      project.project_admins << account
     end
 
     it 'has and belongs to many admins' do
-      expect(project.admins).to match_array([account])
+      expect(project.project_admins).to match_array([account, project.account]) # owner is added as admin
     end
   end
 
-  it 'initializes auto_add_interest to false' do
-    expect(described_class.new.auto_add_interest).to be(false)
+  it 'initializes auto_add_account to false' do
+    expect(described_class.new.auto_add_account).to be(false)
   end
 
   it 'defaults to a publicly visible project' do
@@ -132,8 +132,9 @@ describe Project do
     end
 
     describe 'maximum_tokens' do
+      let(:project) { build(:project) }
+
       it 'accepts empty, zero or positive value' do
-        project = create(:project)
         project.maximum_tokens = nil
         expect(project).to be_valid
 
@@ -145,17 +146,45 @@ describe Project do
       end
 
       it 'rejects negative value' do
-        project = create(:project)
         project.maximum_tokens = -1
         expect(project).not_to be_valid
       end
 
       it 'can be modified if the record has been saved' do
-        project = create(:project)
         project.maximum_tokens += 10
         expect(project).to be_valid
         project.maximum_tokens -= 5
         expect(project).to be_valid
+      end
+    end
+
+    describe '#transfer_batch_size' do
+      context 'validation' do
+        let(:project) { build(:project) }
+
+        it 'accept integers from 1 to 250' do
+          project.transfer_batch_size = 1
+          expect(project).to be_valid
+
+          project.transfer_batch_size = 250
+          expect(project).to be_valid
+        end
+
+        it 'reject values less than 1 or more than 250' do
+          project.transfer_batch_size = 0
+          expect(project).not_to be_valid
+
+          project.transfer_batch_size = 251
+          expect(project).not_to be_valid
+        end
+
+        it 'reject not integer values' do
+          project.transfer_batch_size = nil
+          expect(project).not_to be_valid
+
+          project.transfer_batch_size = 1.3
+          expect(project).not_to be_valid
+        end
       end
     end
 
@@ -357,7 +386,7 @@ describe Project do
       let(:project) { create(:project) }
 
       it 'adds project owner as interested' do
-        expect(project.interested).to include(project.account)
+        expect(project.accounts).to include(project.account)
       end
     end
   end
@@ -533,10 +562,8 @@ describe Project do
     it 'returns number of uniq accounts which have interest, started a task or created this project' do
       project = create(:project)
       create(:award, award_type: create(:award_type, project: project))
-      create(:interest, project: project, account: project.account)
-      create(:interest, project: project)
 
-      expect(project.reload.stats[:interests]).to eq(3)
+      expect(project.reload.stats[:accounts]).to eq(2)
     end
   end
 
@@ -578,8 +605,8 @@ describe Project do
 
     it 'sets preconditions properly' do
       expect(project.account).to eq(previous_owner)
-      expect(project.admins).not_to include(previous_owner)
-      expect(project.interested).to include(previous_owner)
+      expect(project.project_admins).to include(previous_owner)
+      expect(project.accounts).to include(previous_owner)
     end
 
     describe 'happy path with project object' do
@@ -589,10 +616,8 @@ describe Project do
       end
 
       it { expect(project.account).to eq(next_owner) }
-      it { expect(project.admins).not_to include(next_owner) }
-      it { expect(project.admins).to include(previous_owner) }
-      it { expect(project.interested).to include(next_owner) }
-      it { expect(project.interested).to include(previous_owner) }
+      it { expect(project.project_admins).to include(next_owner) }
+      it { expect(project.project_admins).to include(previous_owner) }
     end
 
     describe 'happy path with just project id' do
@@ -602,31 +627,29 @@ describe Project do
       end
 
       it { expect(project.account).to eq(next_owner) }
-      it { expect(project.admins).not_to include(next_owner) }
-      it { expect(project.admins).to include(previous_owner) }
-      it { expect(project.interested).to include(next_owner) }
-      it { expect(project.interested).to include(previous_owner) }
+      it { expect(project.project_admins).to include(next_owner) }
+      it { expect(project.project_admins).to include(previous_owner) }
     end
 
     it 'does not double add interested' do
-      project.interested << next_owner
+      project.accounts << next_owner
 
-      expect(project.interested.length).to eq(2)
+      expect(project.accounts.length).to eq(2)
 
       described_class.assign_project_owner_from(project, next_owner.email)
 
-      expect(project.interested.length).to eq(2)
-      expect(project.interested).to contain_exactly(next_owner, previous_owner)
+      expect(project.accounts.length).to eq(2)
+      expect(project.accounts).to contain_exactly(next_owner, previous_owner)
     end
 
     it 'does not double add admins' do
-      expect(project.admins.length).to eq(0)
+      expect(project.project_admins.length).to eq(1)
 
       described_class.assign_project_owner_from(project, next_owner.email)
-      expect(project.admins.length).to eq(1)
+      expect(project.reload.project_admins.length).to eq(2)
 
       described_class.assign_project_owner_from(project, next_owner.email)
-      expect(project.admins.length).to eq(1)
+      expect(project.reload.project_admins.length).to eq(2)
     end
 
     it 'raises an error if an account was not found by email' do
@@ -649,8 +672,8 @@ describe Project do
       end.to raise_error(ArgumentError, 'Project data is invalid')
 
       expect(project.account).to eq(previous_owner)
-      expect(project.admins).not_to include(previous_owner)
-      expect(project.interested).to include(previous_owner)
+      expect(project.project_admins).to include(previous_owner)
+      expect(project.accounts).to include(previous_owner)
     end
   end
 end

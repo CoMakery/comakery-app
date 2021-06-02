@@ -214,7 +214,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'has many projects' do
@@ -241,16 +241,16 @@ describe Account do
       expect(account.team_award_types).to match_array([teammate_award_type])
     end
 
-    it 'has and belongs to many admin_projects' do
-      expect(account.admin_projects).to match_array([admin_project])
+    it 'has many admin_projects' do
+      expect(account.admin_projects).to match_array([admin_project, project]) # owner as admin
     end
 
     it 'has many admin award_types' do
-      expect(account.admin_award_types).to match_array([admin_award_type])
+      expect(account.admin_award_types).to match_array([admin_award_type, award_type]) # same for owner
     end
 
     it 'has many admin awards' do
-      expect(account.admin_awards).to match_array([admin_award])
+      expect(account.admin_awards).to match_array([admin_award, award]) # same for owner
     end
 
     it 'has many verifications' do
@@ -292,7 +292,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns own award types' do
@@ -342,7 +342,7 @@ describe Account do
         create(:award, account: account, specialty: account.specialty)
       end
 
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns started awards' do
@@ -464,7 +464,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'returns received awards' do
@@ -540,7 +540,7 @@ describe Account do
     before do
       team.build_authentication_team authentication
       team.build_authentication_team authentication1
-      admin_project.admins << account
+      admin_project.project_admins << account
     end
 
     it 'applies scope' do
@@ -655,39 +655,39 @@ describe Account do
     expect(CSV.parse(account.awards_csv, col_sep: "\t", encoding: 'utf-16le')).to eq([["\uFEFFProject", 'Award Type', 'Total Amount', 'Issuer', 'Date'], ['Uber for Cats', 'Contribution', '50.00000000', award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]].map { |row| row.map { |cell| cell.encode 'utf-16le' } })
   end
 
-  describe 'whitelabel_interested_projects' do
+  describe 'whitelabel_involved_projects' do
     let(:account) { create(:account) }
     let(:whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'NOT.test.host') }
 
-    let!(:whitelabel_interested_project) do
+    let!(:whitelabel_involved_project) do
       project = create(:project, title: 'Whitelabel Interested Project', mission: whitelabel_mission)
       # project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
-      create(:interest, project: project, account: account)
+      create(:project_role, project: project, account: account)
       project
     end
 
-    let!(:whitelabel_uninterested_project) do
+    let!(:whitelabel_uninvolved_project) do
       project = create(:project, title: 'Whiitelabel Uninterested Project', mission: whitelabel_mission)
       # project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
       project
     end
 
-    let!(:non_whitelabel_interested_project) do
+    let!(:non_whitelabel_involved_project) do
       project = create(:project, title: 'Non Whitelabel Interested Project')
-      create(:interest, project: project, account: account)
+      create(:project_role, project: project, account: account)
       project
     end
 
-    let!(:non_whitelabel_uninterested_project) do
+    let!(:non_whitelabel_uninvolved_project) do
       project = create(:project, title: 'Non Whitelabel Uninterested Project') # rubocop:todo Lint/UselessAssignment
     end
 
     it 'shows just the non-whitelabel interested task with no whitelabel' do
-      expect(account.whitelabel_interested_projects(nil)).to eq([non_whitelabel_interested_project])
+      expect(account.whitelabel_involved_projects(nil)).to eq([non_whitelabel_involved_project])
     end
 
     it 'shows just the whitelabel interested task with whitelabel' do
-      expect(account.whitelabel_interested_projects(whitelabel_mission)).to eq([whitelabel_interested_project])
+      expect(account.whitelabel_involved_projects(whitelabel_mission)).to eq([whitelabel_involved_project])
     end
   end
 
@@ -699,9 +699,9 @@ describe Account do
     end
 
     it 'loops through all users in batch sizes of 500 and makes them all interested in a project' do
-      expect(project.interested).to contain_exactly(project.account)
+      expect(project.accounts).to contain_exactly(project.account)
       described_class.make_everyone_interested(project)
-      expect(project.interested.to_a).to contain_exactly(*users)
+      expect(project.accounts.to_a).to contain_exactly(*users)
     end
   end
 

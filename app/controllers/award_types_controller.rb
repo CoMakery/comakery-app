@@ -89,7 +89,7 @@ class AwardTypesController < ApplicationController
             total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: GetImageVariantPath.call(attachment: batch.project.token&.logo_image, resize_to_fill: [100, 100]).path,
             team_pics: batch.project.contributors_distinct.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
-            interested_pics: batch.project.interested.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
+            interested_pics: batch.project.accounts.with_attached_image.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
@@ -102,7 +102,7 @@ class AwardTypesController < ApplicationController
           currency_logo: GetImageVariantPath.call(attachment: @project.token&.logo_image, resize_to_fill: [100, 100]).path,
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -147,7 +147,7 @@ class AwardTypesController < ApplicationController
         url_on_success: project_award_types_path,
         project_id: @project.id,
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

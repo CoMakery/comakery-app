@@ -201,7 +201,7 @@ describe Award do
       before do
         award_ready_wo_account.update(account: nil)
         award_unpublished_wo_account.update(account: nil)
-        award_type.project.admins << create(:account)
+        award_type.project.project_admins << create(:account)
       end
 
       it 'returns only ready awards without assigned account or assigned to you' do
@@ -235,7 +235,7 @@ describe Award do
 
       it 'returns only awards available for review for project admin/owner' do
         expect(described_class.filtered_for_view('to review', award_submitted.project.account)).to include(award_submitted)
-        expect(described_class.filtered_for_view('to review', award_submitted.project.admins.first)).to include(award_submitted)
+        expect(described_class.filtered_for_view('to review', award_submitted.project.project_admins.first)).to include(award_submitted)
 
         expect(described_class.filtered_for_view('to review', award_submitted.account)).not_to include(award_submitted)
         expect(described_class.filtered_for_view('to review', create(:account))).not_to include(award_submitted)
@@ -243,7 +243,7 @@ describe Award do
 
       it 'returns only awards available for payment for a project admin/owner' do
         expect(described_class.filtered_for_view('to pay', award_accepted.project.account)).to include(award_accepted)
-        expect(described_class.filtered_for_view('to pay', award_accepted.project.admins.first)).to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', award_accepted.project.project_admins.first)).to include(award_accepted)
 
         expect(described_class.filtered_for_view('to pay', award_accepted.account)).not_to include(award_accepted)
         expect(described_class.filtered_for_view('to pay', create(:account))).not_to include(award_accepted)
@@ -317,7 +317,7 @@ describe Award do
       end
     end
 
-    describe 'add_account_as_interested' do
+    describe 'add_account_as_observer' do
       let(:project) { create(:project) }
       let(:award) { create(:award_ready, award_type: create(:award_type, project: project)) }
 
@@ -327,8 +327,8 @@ describe Award do
         project.reload
       end
 
-      it 'adds account as interested in project after account is assigned' do
-        expect(project.interested).to include(award.account)
+      it 'adds account as observer in project after account is assigned' do
+        expect(project.project_observers).to include(award.account)
       end
     end
 
@@ -408,14 +408,23 @@ describe Award do
         a1 = build(:award_ready, award_type: create(:award_type, project: p1))
         a2 = build(:award_ready, award_type: create(:award_type, project: p2))
 
-        a1.update(lockup_schedule_id: 1, commencement_date: Time.current)
-        a2.update(lockup_schedule_id: 1, commencement_date: Time.current)
+        expect(a1.update(lockup_schedule_id: 1, commencement_date: Time.current)).to be true
+        expect(a2.update(lockup_schedule_id: 1, commencement_date: Time.current)).to be false
         expect(a1).to be_valid
         expect(a2).not_to be_valid
-        a1.update(lockup_schedule_id: nil, commencement_date: nil)
-        a2.update(lockup_schedule_id: nil, commencement_date: nil)
+
+        error_messages = a2.errors.messages
+        expect(error_messages[:lockup_schedule_id]).to eq ['must be blank']
+        expect(error_messages[:commencement_date]).to eq ['must be blank']
+
+        expect(a1.update(lockup_schedule_id: nil, commencement_date: nil)).to be false
+        expect(a2.update(lockup_schedule_id: nil, commencement_date: nil)).to be true
         expect(a1).not_to be_valid
         expect(a2).to be_valid
+
+        error_messages = a1.errors.messages
+        expect(error_messages[:lockup_schedule_id]).to eq ["can't be blank"]
+        expect(error_messages[:commencement_date]).to eq ["can't be blank"]
       end
     end
 
@@ -549,6 +558,16 @@ describe Award do
 
       it 'calculates total_amount multiplying amount by quantity' do
         expect(award_w_quantity.total_amount).to eq(200)
+      end
+    end
+
+    describe 'transfer_type' do
+      let(:award) { build :award }
+
+      specify 'can not set transfer type from another project' do
+        award.transfer_type = build :transfer_type
+        expect(award).not_to be_valid
+        expect(award.errors.messages).to eq transfer_type_id: ['is not included in the list']
       end
     end
   end
@@ -1234,9 +1253,12 @@ describe Award do
       issuer1 = create(:account, first_name: 'John', last_name: 'Snow')
       issuer2 = create(:account, first_name: 'Ned', last_name: 'Stark')
       issuer3 = create(:account, first_name: 'Daenerys', last_name: 'Targaryen')
-      create(:award_ready, created_at: Time.zone.parse('2010-11-01 12:00'), name: 'first', issuer: issuer1)
-      create(:award_ready, created_at: Time.zone.parse('2010-11-01 11:00'), name: 'second', issuer: issuer2)
-      create(:award_ready, created_at: Time.zone.parse('2010-11-01 13:00'), name: 'third', issuer: issuer3)
+      account1 = create(:account, first_name: 'Jaime', last_name: 'Lannister')
+      account2 = create(:account, first_name: 'Cersei', last_name: 'Lannister')
+      account3 = create(:account, first_name: 'Tyrion', last_name: 'Lannister')
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 12:00'), name: 'first', issuer: issuer1, account: account1)
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 11:00'), name: 'second', issuer: issuer2, account: account2)
+      create(:award_ready, created_at: Time.zone.parse('2010-11-01 13:00'), name: 'third', issuer: issuer3, account: account3)
       Award.all
     end
 
@@ -1264,7 +1286,7 @@ describe Award do
     end
 
     context 'with special params' do
-      context 'order by issuer_first_name' do
+      context 'order by issuer_first_name desc' do
         subject { described_class.ransack_reorder('issuer_first_name desc').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
 
         it { is_expected.to eq ['Ned Stark', 'John Snow', 'Daenerys Targaryen'] }
@@ -1274,6 +1296,18 @@ describe Award do
         subject { described_class.ransack_reorder('issuer_first_name wrong').map { |a| "#{a.issuer.first_name} #{a.issuer.last_name}" } }
 
         it { is_expected.to eq ['Daenerys Targaryen', 'John Snow', 'Ned Stark'] }
+      end
+
+      context 'order by account_first_name asc' do
+        subject { described_class.ransack_reorder('account_first_name asc').map { |a| "#{a.account.first_name} #{a.account.last_name}" } }
+
+        it { is_expected.to eq ['Cersei Lannister', 'Jaime Lannister', 'Tyrion Lannister'] }
+      end
+
+      context 'order by account_first_name desc' do
+        subject { described_class.ransack_reorder('account_first_name desc').map { |a| "#{a.account.first_name} #{a.account.last_name}" } }
+
+        it { is_expected.to eq ['Tyrion Lannister', 'Jaime Lannister', 'Cersei Lannister'] }
       end
     end
 
@@ -1319,5 +1353,12 @@ describe Award do
 
       it { is_expected.not_to be_valid }
     end
+  end
+
+  describe '#populate_recipient_wallet' do
+    let(:wallet) { create(:eth_wallet) }
+    subject { create(:award, account: wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))) }
+
+    specify { expect(subject.recipient_wallet).to eq(wallet) }
   end
 end

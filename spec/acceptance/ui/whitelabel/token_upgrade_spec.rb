@@ -13,7 +13,7 @@ describe 'token upgrade from dummy erc20 to security token', type: :feature do
 
     context 'and interested accounts' do
       before do
-        project.safe_add_project_interested(account)
+        project.add_account(account)
       end
 
       context 'on Accounts dashboard' do
@@ -70,10 +70,10 @@ describe 'token upgrade from dummy erc20 to security token', type: :feature do
             create(:transfer, issuer: project.account, account: account, award_type: project.default_award_type)
           end
 
-          it 'lists transfers' do
+          it 'lists transfer statuses' do
             subject
 
-            expect(page).to have_css('.transfers-table__transfer__button .transfer-button', count: 1)
+            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1)
           end
         end
       end

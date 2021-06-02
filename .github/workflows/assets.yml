@@ -22,6 +22,7 @@ jobs:
         node: [12.x]
     env:
       BUNDLER_VERSION: 2.2.3
+      NODE_OPTIONS: '--max_old_space_size=4096'
       RACK_ENV: test
       RAILS_ENV: test
 

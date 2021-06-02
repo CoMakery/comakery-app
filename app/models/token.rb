@@ -8,7 +8,7 @@ class Token < ApplicationRecord
   has_one_attached :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
-  has_many :accounts, through: :projects, source: :interested
+  has_many :accounts, through: :projects, source: :accounts
   has_many :account_token_records # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :reg_groups # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :transfer_rules # rubocop:todo Rails/HasManyOrHasOneDependent
@@ -69,7 +69,17 @@ class Token < ApplicationRecord
   } # Deprecated
 
   enum _token_type: TokenType.list, _prefix: :_token_type
-  delegate :contract, :abi, :batch_abi, :supports_balance?, :blockchain_balance, to: :token_type
+
+  delegate(
+    :contract,
+    :abi,
+    :batch_abi,
+    :supports_balance?,
+    :blockchain_balance,
+    :blockchain_locked_balance,
+    :blockchain_unlocked_balance,
+    to: :token_type
+  )
 
   ransacker :network, formatter: proc { |v| Blockchain.list[v.to_sym] } do |parent|
     parent.table[:_blockchain]

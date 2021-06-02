@@ -93,7 +93,9 @@ class ProjectDecorator < Draper::Decorator
     token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
-  def header_props
+  def header_props(current_account)
+    policy = ProjectPolicy.new(current_account, self)
+
     project_image_path = GetImageVariantPath.call(
       attachment: panoramic_image,
       resize_to_fill: [1500, 300],
@@ -102,7 +104,6 @@ class ProjectDecorator < Draper::Decorator
 
     {
       title: title,
-      owner: legal_project_owner,
       image_url: project_image_path,
       settings_url: edit_project_path(self),
       access_url: project_dashboard_accesses_path(self),
@@ -112,7 +113,7 @@ class ProjectDecorator < Draper::Decorator
       transfer_rules_url: project_dashboard_transfer_rules_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
       show_batches: award_types.where.not(state: :draft).any?,
-      show_transfers: !require_confidentiality?,
+      require_confidentiality: !require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
       github_url: github_url,
@@ -121,7 +122,29 @@ class ProjectDecorator < Draper::Decorator
       governance_url: governance_url,
       funding_url: funding_url,
       video_conference_url: video_conference_url,
-      present: true
+      present: true,
+      owner: policy.edit?,
+      observer: policy.project_observer?,
+      interested: policy.project_interested?,
+      show_contributions: policy.show_contributions?
+    }.merge(token_props)
+  end
+
+  def token_props
+    return {} if token.nil?
+
+    {
+      token: {
+        name: token.name,
+        symbol: token.symbol,
+        network: token.blockchain.name,
+        address: (h.middle_truncate(token.contract_address) if token.contract_address),
+        address_url: (token.blockchain.url_for_address_human(token.contract_address) if token.contract_address),
+        logo_url: GetImageVariantPath.call(
+          attachment: token.logo_image,
+          resize_to_fill: [15, 15]
+        ).path
+      }
     }
   end
 
@@ -130,15 +153,15 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def team_top
-    team = (admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+    team = (project_admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
 
-    team += project_interested.with_attached_image.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
+    team += accounts.with_attached_image.where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
 
     team
   end
 
   def team_size
-    interested.size
+    accounts.size
   end
 
   def step_for_amount_input

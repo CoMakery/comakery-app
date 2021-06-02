@@ -9,7 +9,7 @@ describe 'transfer prioritize button on transfers page', js: true do
 
   before { create(:wallet, source: :hot_wallet, project_id: project.id) }
 
-  before { project.update(hot_wallet_mode: :auto_sending) }
+  before { project.update!(hot_wallet_mode: :auto_sending) }
 
   before { transfer.accepted! }
 
@@ -34,12 +34,12 @@ describe 'transfer prioritize button on transfers page', js: true do
       it 'isn\'t present' do
         visit project_dashboard_transfers_path(project)
 
-        expect(page).not_to have_css('.transfers-table__transfer__button__history #prioritizeBtn')
+        expect(page).to have_no_css('.transfers-table__transfer__button__history #prioritizeBtn')
       end
     end
 
-    context 'with succeed status' do
-      before { blockchain_transaction.update(status: :succeed) }
+    context 'with created status' do
+      before { blockchain_transaction.update(status: :created) }
 
       context 'when hot wallet mode is auto sending' do
         it 'has link to prioritize' do

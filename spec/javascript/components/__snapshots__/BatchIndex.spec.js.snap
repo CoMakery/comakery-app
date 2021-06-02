@@ -13,6 +13,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
     className="batch-index"
     current="batches"
     missionForHeader={null}
+    observer={true}
     owner={true}
     projectForHeader={null}
     sidebar={
@@ -55,6 +56,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
           current="batches"
           expanded={false}
           missionForHeader={null}
+          observer={true}
           owner={true}
           projectForHeader={null}
         />
@@ -106,6 +108,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
               current="batches"
               expanded={false}
               missionForHeader={null}
+              observer={true}
               owner={true}
               projectForHeader={null}
             >
@@ -218,7 +221,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
                               "isStatic": false,
-                              "lastClassName": "IBoeD",
+                              "lastClassName": "jyVnUS",
                               "rules": Array [
                                 "
   align-items: center;
@@ -227,10 +230,8 @@ exports[`BatchIndex renders correctly without props 1`] = `
   flex-grow: 2;
   flex-direction: column;
 
-  img {
+  .token-logo {
     max-height: 150px;
-    margin-bottom: -50px;
-    margin-top: 25px;
     border-radius: 2px;
     box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
@@ -240,9 +241,6 @@ exports[`BatchIndex renders correctly without props 1`] = `
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    text-align: center;
-    min-height: 100px;
-    display: flex;
     align-items: center;
   }
 
@@ -252,11 +250,25 @@ exports[`BatchIndex renders correctly without props 1`] = `
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
-    text-align: center;
     min-height: 100px;
     display: flex;
     align-items: center;
     margin-top: -50px;
+  }
+
+  .token-details {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .token-details-hw-address {
+    color: white;
+    text-decoration: underline;
+    padding: 0 1em;
+  }
+
+  .token-details-hw-address:hover {
+    text-decoration: none;
   }
 ",
                               ],
@@ -273,7 +285,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-EHOje IBoeD"
+                          className="sc-EHOje jyVnUS"
                         >
                           <h1>
                             New Project
@@ -327,7 +339,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               name="BATCH/WHITE.svg"
                             >
                               <img
-                                className="icon icon__BATCH/WHITE-svg"
+                                className="icon-legacy icon__BATCH/WHITE-svg"
                                 src="test-file-stub"
                               />
                             </Icon>
@@ -352,7 +364,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               name="PLUS.svg"
                             >
                               <img
-                                className="icon icon__PLUS-svg"
+                                className="icon-legacy icon__PLUS-svg"
                                 src="test-file-stub"
                               />
                             </Icon>

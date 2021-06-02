@@ -21,7 +21,7 @@ class Api::V1::ProjectsController < Api::V1::ApiController
         paginate(
           project_scope
             .with_all_attached_images
-            .includes(:admins, :account, :transfer_types, token: [logo_image_attachment: :blob])
+            .includes(:project_admins, :account, :transfer_types, token: [logo_image_attachment: :blob])
         )
     end
 

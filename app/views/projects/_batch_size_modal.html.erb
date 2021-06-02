@@ -1,0 +1,21 @@
+<%= turbo_stream_from "project_transfer_batch_size_modal_form" %>
+
+<div class="modal modal-blur fade project_batch_size_modal"
+    id="project_<%= project.id %>_transfer_batch_size_modal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+    data-controller="utils--modal"
+    data-action="turbo:submit-start->utils--modal#close">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Batch size</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= turbo_frame_tag "project_transfer_batch_size_modal_form" do %>
+        <%= render partial: 'projects/batch_size_modal_form', locals: { project: project } %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -172,17 +172,19 @@ describe ProjectDecorator do
     let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
     it 'includes required data for project header component' do
-      props = project.decorate.header_props
-      props_unlisted = unlisted_project.decorate.header_props
+      props = project.decorate.header_props(project.account)
+      props_unlisted = unlisted_project.decorate.header_props(project.account)
       project_wo_image.update(panoramic_image: nil)
-      props_wo_image = project_wo_image.decorate.header_props
-      props_w_comakery = project_comakery_token.decorate.header_props
+      props_wo_image = project_wo_image.decorate.header_props(project.account)
+      props_w_comakery = project_comakery_token.decorate.header_props(project.account)
 
       expect(props[:title]).to eq(project.title)
-      expect(props[:owner]).to eq(project.legal_project_owner)
       expect(props[:present]).to be_truthy
       expect(props[:show_batches]).to be_truthy
-      expect(props[:show_transfers]).to be_truthy
+      expect(props[:show_contributions]).to be_truthy
+      expect(props[:owner]).to be_truthy
+      expect(props[:observer]).to be_falsey
+      expect(props[:interested]).to be_falsey
       expect(props[:supports_transfer_rules]).to be_falsey
       expect(props_w_comakery[:supports_transfer_rules]).to be_truthy
       expect(props[:image_url]).to include('image.png')
@@ -195,6 +197,37 @@ describe ProjectDecorator do
       expect(props[:landing_url]).to include(project.id.to_s)
       expect(props_unlisted[:landing_url]).to include(unlisted_project.long_id.to_s)
       expect(props_wo_image[:image_url]).to include('default_project')
+    end
+  end
+
+  describe 'token_props' do
+    context 'when token present' do
+      let!(:project_comakery_token) do
+        create(:project,
+               token: create(:token, _token_type: :comakery_security_token,
+                                     contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten))
+      end
+
+      let!(:token) { project_comakery_token.token }
+
+      subject(:props) { project_comakery_token.decorate.token_props }
+
+      it 'returns token data' do
+        expect(props[:token][:name]).to eq(token.name)
+        expect(props[:token][:symbol]).to eq(token.symbol)
+        expect(props[:token][:network]).to eq(token.blockchain.name)
+        expect(props[:token][:address]).to include(token.contract_address.first(5))
+        expect(props[:token][:address_url]).to include(token.contract_address)
+        expect(props[:token][:logo_url]).to include('dummy_image.png')
+      end
+    end
+
+    context 'when token is nil' do
+      let!(:project) { create(:project, token: nil) }
+
+      subject(:props) { project.decorate.token_props }
+
+      it { expect(props).to be_empty }
     end
   end
 
