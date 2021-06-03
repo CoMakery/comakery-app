@@ -1,6 +1,5 @@
 <%= render layout: 'projects/project_settings' do %>
-  <div data-controller="transfer-form sign--wallet-connect sign--metamask"
-       data-transfer-form-decimal-places="<%= @project.token ? @project.token.decimal_places : 0 %>">
+  <div data-controller="sign--wallet-connect sign--metamask">
     <%= render partial: 'filters' %>
     <turbo-frame id="chart-data"
                  target="_top"
@@ -27,7 +26,7 @@
             </div>
           </div>
 
-          <%= render partial: "form" %>
+          <%= render partial: "new_modal" %>
         <% end %>
       </div>
 
@@ -83,13 +82,13 @@
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
-      <%= render partial: "form" %>
       <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: false %>
     </div>
+
+    <%= render partial: "edit_modal", collection: @transfers, as: :transfer, cached: true %>
 
     <div class="transfers-pages">
       <%= paginate(@transfers, window: 3) %>
     </div>
-
   </div>
 <% end %>

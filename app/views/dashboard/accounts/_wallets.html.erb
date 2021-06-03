@@ -10,8 +10,8 @@
     data-choices-remote-search-enabled-value="false"
     data-choices-no-choices-text-value="No addresses"
     value="">
-      <% if account && blockchain %>
-        <%= render partial: 'wallets_wallet', collection: account.wallets_for_blockchain(blockchain).order(primary_wallet: :desc), as: :wallet, cached: true %>
+      <% if account %>
+        <%= render partial: 'dashboard/accounts/wallets_wallet', collection: account.wallets_for_blockchain(blockchain).order(primary_wallet: :desc), as: :wallet, cached: false, locals: { transfer: local_assigns[:transfer] } %>
       <% end %>
   </select>
-</turbo>
+</turbo-frame>

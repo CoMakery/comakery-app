@@ -8,6 +8,10 @@ export default class extends Controller {
     'total'
   ]
 
+  connect() {
+    this.calculateTotalPrice()
+  }
+
   calculateTotalPrice() {
     this.totalTarget.textContent = Decimal.mul(
       this.amountTarget.value || 0,

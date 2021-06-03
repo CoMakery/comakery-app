@@ -15,8 +15,14 @@ class Dashboard::AccountsController < ApplicationController
     authorize @project, :accounts?
 
     respond_to do |format|
-      format.html { set_accounts && set_policy }
-      format.json { set_accounts_json }
+      format.html do
+        set_accounts
+        set_policy
+      end
+
+      format.json do
+        set_accounts_json
+      end
     end
   end
 

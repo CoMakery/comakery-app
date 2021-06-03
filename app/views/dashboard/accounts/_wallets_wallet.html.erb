@@ -1,5 +1,6 @@
 <option
   value="<%= wallet.id %>"
+  <%= local_assigns[:transfer]&.recipient_wallet == wallet ? 'selected="selected"' : nil %>
   data-custom-properties='
     <% if wallet.primary_wallet? %>
       <span class="dropdown-item-indicator">
