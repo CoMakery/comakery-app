@@ -53,6 +53,16 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
       get :show, params: { project_id: project.to_param, id: transfer.to_param }
       expect(response).to be_successful
     end
+
+    context 'for cancelled transfers' do
+      let(:transfer) { create(:award, status: :cancelled, award_type: create(:award_type, project: project)) }
+
+      it 'returns a success response' do
+        get :show, params: { project_id: project.to_param, id: transfer.to_param }
+
+        expect(response).to be_successful
+      end
+    end
   end
 
   describe 'POST #create' do
