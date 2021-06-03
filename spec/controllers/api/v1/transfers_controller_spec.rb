@@ -111,6 +111,20 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
         expect(award.requirements).to eq ''
         expect(award.description).to eq ''
       end
+
+      context 'when tranfer_type is not set' do
+        it 'sets awards name to Earned' do
+          params = build(:api_signed_request, { transfer: valid_attributes.except(:transfer_type_id) }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+          params[:project_id] = project.id
+
+          post :create, params: params
+          expect(response).to have_http_status(:created)
+
+          award = Award.last
+          expect(award.transfer_type_id).to eq project.transfer_types.find_by(name: 'earned').id
+          expect(award.name).to eq 'Earned'
+        end
+      end
     end
 
     context 'with invalid params' do

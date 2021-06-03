@@ -65,6 +65,7 @@ class Award < ApplicationRecord
   validates :commencement_date, presence: true, if: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
   validates :lockup_schedule_id, absence: true, unless: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
   validates :commencement_date, absence: true, unless: -> { project&.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule) }
+  validates :transfer_type_id, inclusion: { in: ->(r) { r.project.transfer_types.pluck(:id) } }, if: :project
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }

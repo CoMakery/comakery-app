@@ -27,6 +27,10 @@ RSpec.describe OreIdService, type: :model, vcr: true do
         end
       end
     end
+
+    specify do
+      expect(subject.send(:create_remote_params)).to include('email_verified')
+    end
   end
 
   describe '#create_wallet' do

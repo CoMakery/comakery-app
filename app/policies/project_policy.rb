@@ -44,7 +44,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_contributions?
-    show_contributions_to_everyone? || show_contributions_to_team? || edit?
+    show_contributions_to_everyone? || show_contributions_to_team? || edit? || project_observer?
   end
 
   def show_award_types?
