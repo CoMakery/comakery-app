@@ -235,7 +235,7 @@ class ProjectSetupHeader extends React.Component {
               </div>
               <div className="token-details-second-row">
                 {project.token.address &&
-                  <a href={project.token.addressUrl} className="token-details-hw-address">{project.token.address}</a>
+                  <a href={project.token.addressUrl} className="token-details-hw-address" target="_blank">{project.token.address}</a>
                 }
                 {project.token.network}
               </div>
