@@ -6,6 +6,8 @@ describe Project do
   it_behaves_like 'api_authorizable'
   it_behaves_like 'active_storage_validator', %w[image square_image panoramic_image]
 
+  it { is_expected.to have_many(:accounts) }
+
   describe 'associations' do
     let!(:project) { create :project }
     let!(:account) { create :account }
