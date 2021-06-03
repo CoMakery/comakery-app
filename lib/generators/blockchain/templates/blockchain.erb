@@ -1,7 +1,7 @@
 class Blockchain::<%= class_name %> < Blockchain
   # Generated template for implementing a new blockchain subclass
   # See: rails g blockchain -h
-  
+
   # Name of the blockchain for UI purposes
   # @return [String] name
   def name
@@ -66,6 +66,12 @@ class Blockchain::<%= class_name %> < Blockchain
   # @return [String] url
   def url_for_address_human(addr)
     "https://#{explorer_human_host}/addr/#{addr}"
+  end
+
+  # Token address url on block explorer website
+  # @return [String] url
+  def url_for_token_human(addr)
+    url_for_address_human(addr)
   end
 
   # Address url on block explorer API

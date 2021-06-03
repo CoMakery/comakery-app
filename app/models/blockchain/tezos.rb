@@ -68,6 +68,12 @@ class Blockchain::Tezos < Blockchain
     "https://#{explorer_human_host}/#{addr}"
   end
 
+  # Token address url on block explorer website
+  # @return [String] url
+  def url_for_token_human(addr)
+    url_for_address_human(addr)
+  end
+
   # Address url on block explorer API
   # @return [String] url
   def url_for_address_api(addr)
