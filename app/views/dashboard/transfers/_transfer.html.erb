@@ -124,9 +124,11 @@
           <span></span>
         </a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modal-edit-transfer-<%= transfer.id %>">Edit</a>
+          <% if transfer.accepted? %>
+            <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modal-edit-transfer-<%= transfer.id %>">Edit</a>
+          <% end %>
 
-          <% if transfer.cancelable? %>
+          <% if transfer.cancelable? && !transfer.cancelled? %>
             <%= link_to 'Cancel',
                         project_award_type_award_path(transfer.project, transfer.award_type, transfer),
                         method: :delete,
