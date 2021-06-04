@@ -1,4 +1,5 @@
 const chainjs = require("@open-rights-exchange/chainjs")
+const chainjsHelpers = require("@open-rights-exchange/chainjs/")
 const BigNumber = require('bignumber.js')
 const HotWallet = require("../HotWallet").HotWallet
 
@@ -177,12 +178,10 @@ class AlgorandBlockchain {
   }
 
   async isTransactionValid(blockchainTransaction, hotWalletAddress) {
-    const transaction = blockchainTransaction.txRaw
-
-    if (typeof transaction !== 'string') { return { valid: false } }
+    if (typeof blockchainTransaction.txRaw !== 'string') { return { valid: false } }
 
     try {
-      transaction = JSON.parse(transaction)
+      const transaction = JSON.parse(blockchainTransaction.txRaw)
 
       // Is AppIndex for the current App?
       if (transaction.appIndex !== this.envs.optInApp) {
@@ -210,12 +209,9 @@ class AlgorandBlockchain {
       }
       return { valid: true }
     } catch (err) {
+      console.error(err)
       return { valid: false, markAs: "failed", error: `Unknown error: ${err}` }
     }
-  }
-
-  async sendTransaction(transaction, hotWallet) {
-    console.error("sendTransaction is not implemented for AlgorandBlockchain")
   }
 
   async optInOrSyncApp(hotWallet, appIndex) {
@@ -239,6 +235,39 @@ class AlgorandBlockchain {
     }
 
     return false
+  }
+
+  async sendTransaction(transaction, hotWallet) {
+    await this.connect()
+
+    const chainTransaction = await this.chain.new.Transaction()
+
+    try {
+      await chainTransaction.setFromRaw(chainjs.HelpersAlgorand.jsonParseAndRevive(transaction.txRaw))
+      // const action = await this.chain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppNoOp, txn)
+      // transaction.actions = [action]
+
+      const algoFee = await chainTransaction.getSuggestedFee(chainjs.Models.TxExecutionPriority.Fast)
+      // console.log(algoFee);
+      // validate enough gas
+      if (new BigNumber(algoFee).isGreaterThan(await this.getAlgoBalanceForHotWallet(hotWallet.address))) {
+        const errorMessage = `The Hot Wallet has insufficient algo to pay a fee. Please top up the ${hotWallet.address}`
+        console.error(errorMessage)
+        return { valid: false, markAs: "cancelled", error: errorMessage}
+      }
+
+      await chainTransaction.setDesiredFee(algoFee)
+      await chainTransaction.prepareToBeSigned()
+      await chainTransaction.validate()
+      await chainTransaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(hotWallet.privateKey)])
+      const tx_result = await chainTransaction.send(chainjs.Models.ConfirmType.After001)
+
+      console.log(`Transaction has successfully signed and sent by ${hotWallet.address} to blockchain tx hash: ${tx_result.transactionId}`)
+      return tx_result
+    } catch (err) {
+      console.error(err)
+      return { valid: false, markAs: "failed", error: err.message }
+    }
   }
 }
 exports.AlgorandBlockchain = AlgorandBlockchain
