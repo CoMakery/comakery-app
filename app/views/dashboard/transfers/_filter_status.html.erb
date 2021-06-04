@@ -1,54 +1,54 @@
 <% filters = [
-    {
-        name: 'transferred',
-        class_name: 'transfers-filters--filter--options--transferred__active',
-        query: { status_eq: 5, filter: 'transferred' },
-        present: params[:q] && params[:q][:filter] == 'transferred'
-    }
+  {
+    name: 'transferred',
+    class_name: 'transfers-filters--filter--options--transferred__active',
+    query: { status_eq: 5, filter: 'transferred' },
+    present: params[:q] && params[:q][:filter] == 'transferred'
+  }
 ] %>
 
 <% if @project&.token&.present? %>
   <% filters += [
-      {
-          name: 'ready',
-          class_name: 'transfers-filters--filter--options--ready__active',
-          query: {
-              :transfer_ready => @project.token._blockchain_before_type_cast,
-              filter: 'ready'
-          },
-          present: params[:q] && params[:q][:filter] == 'ready'
+    {
+      name: 'ready',
+      class_name: 'transfers-filters--filter--options--ready__active',
+      query: {
+        :transfer_ready => @project.token._blockchain_before_type_cast,
+        filter: 'ready'
       },
-      {
-          name: 'blocked – needs wallet',
-          class_name: 'transfers-filters--filter--options--blocked__active',
-          query: {
-              :transfer_blocked_by_wallet => @project.token._blockchain_before_type_cast,
-              filter: 'needs_wallet'
-          },
-          present: params[:q] && params[:q][:filter] == 'needs_wallet'
-      }
+      present: params[:q] && params[:q][:filter] == 'ready'
+    },
+    {
+      name: 'blocked – needs wallet',
+      class_name: 'transfers-filters--filter--options--blocked__active',
+      query: {
+        :transfer_blocked_by_wallet => @project.token._blockchain_before_type_cast,
+        filter: 'needs_wallet'
+      },
+      present: params[:q] && params[:q][:filter] == 'needs_wallet'
+    }
   ] %>
 <% end %>
 
 <% filters += [
-    {
-        name: 'blocked – AML/KYC failed',
-        class_name: 'transfers-filters--filter--options--blocked__active',
-        query: { :status_eq => 3, "account_latest_verification_passed_false" => 1, filter: 'aml_kyc_failed' },
-        present: params[:q] && params[:q][:filter] == 'aml_kyc_failed'
-    },
-    {
-        name: 'blocked – AML/KYC unknown',
-        class_name: 'transfers-filters--filter--options--blocked__active',
-        query: { :status_eq => 3, "account_latest_verification_passed_null" => 1, filter: 'aml_kyc_unknown' },
-        present: params[:q] && params[:q][:filter] == 'aml_kyc_unknown'
-    },
-    {
-        name: 'cancelled',
-        class_name: 'transfers-filters--filter--options--blocked__active',
-        query: { :status_eq => 6, filter: 'cancelled' },
-        present: params[:q] && params[:q][:filter] == 'cancelled'
-    }
+  {
+    name: 'blocked – AML/KYC failed',
+    class_name: 'transfers-filters--filter--options--blocked__active',
+    query: {:status_eq => 3, "account_latest_verification_passed_false" => 1, filter: 'aml_kyc_failed'},
+    present: params[:q] && params[:q][:filter] == 'aml_kyc_failed'
+  },
+  {
+    name: 'blocked – AML/KYC unknown',
+    class_name: 'transfers-filters--filter--options--blocked__active',
+    query: {:status_eq => 3, "account_latest_verification_passed_null" => 1, filter: 'aml_kyc_unknown'},
+    present: params[:q] && params[:q][:filter] == 'aml_kyc_unknown'
+  },
+  {
+    name: 'cancelled',
+    class_name: 'transfers-filters--filter--options--blocked__active',
+    query: {:status_eq => 6, filter: 'cancelled'},
+    present: params[:q] && params[:q][:filter] == 'cancelled'
+  }
 ] %>
 
 <% all_queries = filters.map { |f| f[:query].keys }.flatten %>
