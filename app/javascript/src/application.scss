@@ -640,6 +640,7 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
+      width: stretch;
     }
 
     .hot-wallet-switcher-child {
@@ -2645,8 +2646,8 @@ input.button--right-space {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   font-weight: normal;
   margin-bottom: 8px;
 }
@@ -2658,8 +2659,8 @@ input.button--right-space {
   text-transform: uppercase;
   margin-right: 0.5em;
   -webkit-box-flex: 0;
-  -ms-flex-positive: 0;
-  flex-grow: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
 }
 
 .input-field--title--required {
@@ -2670,8 +2671,8 @@ input.button--right-space {
   color: var(--greyish-brown);
   text-transform: capitalize;
   -webkit-box-flex: 2;
-  -ms-flex-positive: 2;
-  flex-grow: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
 }
 
 .input-field--title--counter {
