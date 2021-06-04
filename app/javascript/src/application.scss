@@ -640,7 +640,6 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: stretch;
     }
 
     .hot-wallet-switcher-child {
@@ -894,12 +893,16 @@ form.form-with-submit-button {
     }
   }
 
-  .transfers-filters--filter.search {
-    flex-direction: row;
+  .transfers-filters--filter.hot-wallet {
+    margin-left: auto;
   }
 
   .transfers-filters--filter.wallet-connect {
     margin-left: 1280px;
+  }
+
+  .transfers-filters--filter.search {
+    flex-direction: row;
   }
 
   .transfers-filters--filter.status {
