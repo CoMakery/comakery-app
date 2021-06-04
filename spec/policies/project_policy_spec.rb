@@ -106,25 +106,55 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#transfers? #accounts?' do
-    %i[transfers? accounts?].each do |action|
-      specify do
-        authorized(nil, my_public_project, action)
-        not_authorized(nil, my_private_project, action)
-        not_authorized(nil, my_public_project_business_confidential, action)
-      end
+  describe '#accounts?' do
+    context 'without user' do
+      it { expect(described_class.new(nil, my_public_project).accounts?).to be(true) }
 
-      specify do
-        authorized(project_observer, my_public_project, action)
-        authorized(project_observer, my_private_project, action)
-        authorized(project_observer, my_public_project_business_confidential, action)
-      end
+      it { expect(described_class.new(nil, my_private_project).accounts?).to be(false) }
 
-      specify do
-        authorized(project_interested, my_public_project, action)
-        not_authorized(project_interested, my_private_project, action)
-        not_authorized(project_interested, my_public_project_business_confidential, action)
-      end
+      it { expect(described_class.new(nil, my_public_project_business_confidential).accounts?).to be(false) }
+    end
+
+    context 'when user is observer' do
+      it { expect(described_class.new(project_observer, my_public_project).accounts?).to be(true) }
+
+      it { expect(described_class.new(project_observer, my_private_project).accounts?).to be(true) }
+
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).accounts?).to be(true) }
+    end
+
+    context 'when user is interested' do
+      it { expect(described_class.new(project_interested, my_public_project).accounts?).to be(true) }
+
+      it { expect(described_class.new(project_interested, my_private_project).accounts?).to be(false) }
+
+      it { expect(described_class.new(project_interested, my_public_project_business_confidential).accounts?).to be(false) }
+    end
+  end
+
+  describe '#transfers?' do
+    context 'without user' do
+      it { expect(described_class.new(nil, my_public_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(nil, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(nil, my_public_project_business_confidential).transfers?).to be(false) }
+    end
+
+    context 'when user is observer' do
+      it { expect(described_class.new(project_observer, my_public_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(project_observer, my_private_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(project_observer, my_public_project_business_confidential).transfers?).to be(true) }
+    end
+
+    context 'without user is interested' do
+      it { expect(described_class.new(project_interested, my_public_project).transfers?).to be(true) }
+
+      it { expect(described_class.new(project_interested, my_private_project).transfers?).to be(false) }
+
+      it { expect(described_class.new(project_interested, my_public_project_business_confidential).transfers?).to be(false) }
     end
   end
 

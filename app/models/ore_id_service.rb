@@ -149,6 +149,7 @@ class OreIdService
         'name' => account.name,
         'user_name' => account.nickname || '',
         'email' => account.email,
+        'email_verified' => true,
         'picture' => Attachment::GetPath.call(attachment: account.image).path,
         'user_password' => ore_id.temp_password,
         'phone' => '',

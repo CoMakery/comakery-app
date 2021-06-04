@@ -229,7 +229,7 @@ select::-ms-expand {
   display: none !important;
 }
 
-@keyframes in-progress{
+@keyframes in-progress {
   0% {
     background-position: 0 0;
   }
@@ -373,6 +373,10 @@ form.project_search {
     font-size: 1.17em;
     font-weight: bold;
   }
+
+  .transfers-wallet-connect {
+    margin-left: 69rem;
+  }
 }
 
 .project_settings__content--modal {
@@ -498,6 +502,21 @@ form.form-with-submit-button {
   }
 }
 
+.transfer-dropdown-filter-style {
+  color: white !important;
+  background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%);
+  padding-right: 35px;
+  line-height: normal;
+
+  option {
+    color: #3a3a3a;
+  }
+}
+
+.category-and-status-filters {
+  text-align: right;
+}
+
 .transfer-button {
   font-family: Montserrat, sans-serif;
   font-size: 10px;
@@ -606,6 +625,7 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
+  padding: 0px;
 
   .hot-wallet-switcher {
     display: flex;
@@ -620,7 +640,6 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: -webkit-fill-available;
     }
 
     .hot-wallet-switcher-child {
@@ -638,8 +657,10 @@ form.form-with-submit-button {
       border: solid 1px #e6e8ed;
       font-family: Montserrat;
       font-size: 12px;
+      width: max-content;
       max-width: 200px;
       border-left: none !important;
+      padding-right: 45px;
     }
   }
 }
@@ -667,7 +688,46 @@ form.form-with-submit-button {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-bottom: 3em;
+  margin-bottom: 1em;
+
+  .stacked-chart-legend {
+    position: relative;
+    bottom: 115px;
+    left: 130px;
+  }
+
+  .sort-select {
+    line-height: normal;
+    color: #2647CE !important;
+    font-family: inherit !important;
+    max-width: fit-content !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100px;
+    margin-right: 20px
+  }
+
+  .status-title,
+  .category-title {
+    position: relative;
+    font-size: 12pt;
+    top: 6px
+  }
+
+  .arrow-down-icon {
+    position: relative;
+    top: 15px;
+    right: 45px
+  }
+
+  .transfers-select-arrow-icon {
+    margin-top: 7px;
+    margin-left: 125px;
+    width: 70px;
+    position: absolute;
+    pointer-events: none;
+    color: white;
+  }
 
   a {
     color: #3a3a3a;
@@ -701,10 +761,8 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
     }
 
-    .add-person {
-      display: flex;
-      margin-top: -38px;
-      margin-left: 1650px;
+    .search-label {
+      padding: 7px 12px;
     }
 
     .transfers-filters--filter--form {
@@ -745,6 +803,13 @@ form.form-with-submit-button {
         display: flex;
         padding: 55px 16px 8px 25px !important;
         border: none !important;
+      }
+
+      .transfers-select {
+        color: white;
+        background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%);
+        padding-right: 45px;
+        line-height: normal;
       }
 
       select {
@@ -816,6 +881,35 @@ form.form-with-submit-button {
     }
   }
 
+  .transfers-filters--filter.calendar {
+    display: contents;
+
+    h3 {
+      text-transform: uppercase;
+    }
+
+    .calendar {
+      padding-right: 600px;
+    }
+  }
+
+  .transfers-filters--filter.search {
+    flex-direction: row;
+  }
+
+  .transfers-filters--filter.wallet-connect {
+    margin-left: 1280px;
+  }
+
+  .transfers-filters--filter.status {
+    flex-direction: row;
+    margin-left: auto
+  }
+
+  .transfers-filters--filter.category {
+    flex-direction: row;
+  }
+
   .transfers-filters--clear {
     align-self: center;
     display: inline;
@@ -849,6 +943,10 @@ form.form-with-submit-button {
   }
 }
 
+.transfers-filters--filter.table-panel {
+  flex-direction: row;
+}
+
 .stacked-chart-legend {
   display: flex;
   flex-wrap: wrap;
@@ -871,6 +969,12 @@ form.form-with-submit-button {
     .stacked-chart-legend__type__name {
       text-transform: capitalize;
       font-weight: 500;
+      word-break: keep-all;
+    }
+
+    .stacked-chart-legend__type__percentage {
+      margin-left: 2em;
+      width: 65px;
     }
   }
 
@@ -1718,11 +1822,15 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__account {
-      min-width: 180px;
+      min-width: 120px;
     }
 
     .transfers-table__transfer__issuer {
-      min-width: 180px;
+      min-width: 120px;
+    }
+
+    .transfers-table__transfer__recipient {
+      min-width: 120px;
     }
 
     .transfers-table__transfer__amount {
@@ -1749,7 +1857,7 @@ input.transfer-rules__refresh_from_blockchain_button {
     }
 
     .transfers-table__transfer__total_amount {
-      min-width: 60px;
+      min-width: 150px;
       font-weight: 600;
       display: block;
       white-space: nowrap;
@@ -1758,7 +1866,7 @@ input.transfer-rules__refresh_from_blockchain_button {
       align-self: center;
     }
 
-    .transfers-table__transfer__button {
+    .transfers-table__transfer__history {
       min-width: 60px;
       flex-direction: column;
       justify-content: center;
@@ -1779,6 +1887,10 @@ input.transfer-rules__refresh_from_blockchain_button {
           background-color: #efefef;
         }
       }
+    }
+
+    .transfers-table__transfer__history {
+      min-width: 60px;
     }
 
     .transfers-table__transfer__transferred_at {
@@ -2533,8 +2645,8 @@ input.button--right-space {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   font-weight: normal;
   margin-bottom: 8px;
 }
@@ -2546,8 +2658,8 @@ input.button--right-space {
   text-transform: uppercase;
   margin-right: 0.5em;
   -webkit-box-flex: 0;
-      -ms-flex-positive: 0;
-          flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
 }
 
 .input-field--title--required {
@@ -2558,8 +2670,8 @@ input.button--right-space {
   color: var(--greyish-brown);
   text-transform: capitalize;
   -webkit-box-flex: 2;
-      -ms-flex-positive: 2;
-          flex-grow: 2;
+  -ms-flex-positive: 2;
+  flex-grow: 2;
 }
 
 .input-field--title--counter {
@@ -2736,7 +2848,7 @@ input.button--right-space {
   padding: 7px 7px 7px 7px;
 }
 
-.input-field--content__checkbox--icon__checked:after{
+.input-field--content__checkbox--icon__checked:after {
   content: '';
   display: block;
   width: 13px;
@@ -2950,7 +3062,6 @@ input.button--right-space {
 }
 
 
-
 .mission-index--view--link span {
   font-family: Montserrat, sans-serif;
   font-size: 12px;
@@ -3055,7 +3166,7 @@ input.button--right-space {
 }
 
 .token-index--view--info--item--value,
-.mission-index--view--info--item--value  {
+.mission-index--view--info--item--value {
   font-size: 16px;
   font-family: Georgia,Times,Times New Roman,serif;
   font-weight: 500;
@@ -3457,7 +3568,6 @@ input.button--right-space {
     margin-top: -24px;
   }
 }
-
 
 
 @media screen and (max-width: 1024px) {
@@ -3874,6 +3984,7 @@ input.button--right-space {
 .featured-missions__gallery .slick-next {
   right: -40px;
 }
+
 .featured-missions__gallery .slick-prev::before {
   display: block;
   content: '';
@@ -4020,6 +4131,7 @@ input.button--right-space {
 .featured-missions__footer img {
   height: 218px;
 }
+
 .featured-missions__footer__stat__num {
   margin-top: 57px;
   font-family: Montserrat, sans-serif;
@@ -4032,6 +4144,7 @@ input.button--right-space {
   text-align: center;
   color: var(--primary-pink);
 }
+
 .featured-missions__footer__stat__name {
   font-family: Montserrat, sans-serif;
   font-size: 18px;
@@ -4612,7 +4725,7 @@ input.button--right-space {
   box-sizing: border-box;
   display: block;
   margin: auto;
-  clear:both;
+  clear: both;
   width: 100%;
   margin: auto;
   text-align: center;
@@ -5766,6 +5879,7 @@ input.button--right-space {
   text-decoration: none;
   color: var(--primary-blue);
 }
+
 .mission-projects__single__card {
   box-sizing: border-box;
   position: relative;
@@ -6072,9 +6186,4 @@ a:focus {
     opacity: 0.5;
     border: none !important;
   }
-}
-
-.project-info {
-  display: flex;
-  font-size: 14px;
 }

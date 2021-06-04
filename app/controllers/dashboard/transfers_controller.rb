@@ -1,7 +1,7 @@
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
-  before_action :set_transfers, only: %i[index]
+  before_action :set_transfers, only: %i[index fetch_chart_data]
   before_action :set_transfer, only: [:show]
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
   skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
@@ -71,10 +71,13 @@ class Dashboard::TransfersController < ApplicationController
     end
 
     def set_transfers
-      @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
       @page = (params[:page] || 1).to_i
       @transfers_totals = query.result(distinct: true).reorder('')
-      @transfers_all = @transfers_totals.includes(:token, :transfer_type, :project, award_type: [:project], issuer: [image_attachment: :blob], account: [:ore_id_account, :latest_verification, image_attachment: :blob])
+      @transfer_types_and_counts = @transfers_totals.group(:source).pluck('source, count(source)').to_h
+      @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
+      @transfers_all = @transfers_totals.includes(:project, :token, :transfer_type, :recipient_wallet,
+                                                  award_type: [:project], issuer: [image_attachment: :blob],
+                                                  account: [:ore_id_account, :latest_verification, image_attachment: :blob])
       @filter_params = params[:q]&.to_unsafe_h
       ordered_transfers = @transfers_all.ransack_reorder(params.dig(:q, :s))
       @transfers = ordered_transfers.page(@page).per(10)

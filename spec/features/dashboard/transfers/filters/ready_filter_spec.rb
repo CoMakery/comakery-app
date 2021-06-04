@@ -47,6 +47,6 @@ describe 'test_ready_filter', js: true do
     expect(find('#select_transfers')).to have_content 'Create New Transfer'
     find('.transfers-table__transfer__issuer a.sort_link').click
 
-    expect(find('.transfers-table__transfer__issuer a.sort_link.asc')).to have_content 'TRANSFERRED BY ↓'
+    expect(find('.transfers-table__transfer__issuer a.sort_link.asc')).to have_content 'FROM ↓'
   end
 end

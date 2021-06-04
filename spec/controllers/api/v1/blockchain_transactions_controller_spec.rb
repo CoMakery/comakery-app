@@ -24,7 +24,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
   end
 
   before do
-    project.update(mission: active_whitelabel_mission)
+    project.update(mission: active_whitelabel_mission, hot_wallet_mode: :auto_sending)
     allow(controller).to receive(:authorized).and_return(true)
   end
 
@@ -350,6 +350,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
 
         delete :destroy, params: params
         expect(blockchain_transaction.reload.status).to eq('failed')
+        expect(response).to have_http_status(:success)
       end
     end
 
@@ -359,16 +360,36 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       params[:id] = blockchain_transaction.id
 
       delete :destroy, params: params
+      expect(response).to have_http_status(:success)
       expect(blockchain_transaction.reload.status).to eq('cancelled')
     end
 
-    it 'returns a success response' do
-      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
+    it 'switches hot wallet mode to manual' do
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash, switch_hot_wallet_to_manual_mode: 'true' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
       params[:project_id] = project.id
       params[:id] = blockchain_transaction.id
 
+      expect(project.hot_wallet_mode).to eq('auto_sending')
+
       delete :destroy, params: params
+
       expect(response).to have_http_status(:success)
+      expect(project.reload.hot_wallet_mode).to eq('manual_sending')
+    end
+
+    it 'does not switch disabled hot wallet mode' do
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash, switch_hot_wallet_to_manual_mode: 'true' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
+      params[:project_id] = project.id
+      params[:id] = blockchain_transaction.id
+
+      project.update(hot_wallet_mode: :disabled)
+
+      expect(project.hot_wallet_mode).to eq('disabled')
+
+      delete :destroy, params: params
+
+      expect(response).to have_http_status(:success)
+      expect(project.reload.hot_wallet_mode).to eq('disabled')
     end
   end
 end

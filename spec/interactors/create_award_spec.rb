@@ -4,11 +4,9 @@ describe CreateAward do
   let!(:token) { create(:comakery_dummy_token) }
   let!(:account) { create(:account) }
   let!(:project) { create(:project, token: token, account: account) }
-  let!(:award_type) { create(:award_type) }
+  let!(:award_type) { create(:award_type, project: project) }
   let!(:source_award) do
-    create(:award_ready, award_type: award_type, project: project, image: fixture_file_upload('helmet_cat.png',
-                                                                                              'image/png',
-                                                                                              :binary))
+    create(:award_ready, award_type: award_type, image: fixture_file_upload('helmet_cat.png', 'image/png', :binary))
   end
   let!(:award_params) do
     ActionController::Parameters.new(

@@ -154,7 +154,7 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
     }
   } else { // tx is invalid
     if (txValidation.markAs) {
-      await hwApi.cancelTransaction(blockchainTransaction, txValidation.error, txValidation.markAs)
+      await hwApi.cancelTransaction(blockchainTransaction, txValidation.error, txValidation.markAs, txValidation.switchHWToManualMode)
     }
     return { status: "validation_failed", blockchainTransaction: blockchainTransaction, transaction: {} }
   }

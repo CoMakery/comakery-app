@@ -35,6 +35,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   def destroy
     status = transaction_failed? ? :failed : :cancelled
     transaction.update_status(status, transaction_update_params[:status_message])
+    project.update(hot_wallet_mode: :manual_sending) if switch_hw_to_manual_mode?
 
     render 'show.json', status: :ok
   end
@@ -139,6 +140,11 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
         :failed
       ).present?
+    end
+
+    def switch_hw_to_manual_mode?
+      params_exists = params.dig(:body, :data, :transaction, :switch_hot_wallet_to_manual_mode).present?
+      params_exists && project.hot_wallet_auto_sending?
     end
 
     def hot_wallet_request?

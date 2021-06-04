@@ -194,6 +194,7 @@ resource 'VII. Blockchain Transactions' do
       parameter :tx_hash, 'transaction hash', required: true, type: :string
       parameter :status_message, 'transaction status message', type: :string
       parameter :failed, 'marks transaction as failed, to exclude the transactable from further transactions', type: :string
+      parameter :switch_hot_wallet_to_manual_mode, 'switch hot wallet to manual mode', type: :string
     end
 
     context '200', vcr: true do
@@ -225,12 +226,14 @@ resource 'VII. Blockchain Transactions' do
         {
           tx_hash: blockchain_transaction.tx_hash,
           status_message: 'hot wallet error: unprocessable tx',
-          failed: 'true'
+          failed: 'true',
+          switch_hot_wallet_to_manual_mode: 'true'
         }
       end
 
-      example 'FAIL TRANSACTION' do
-        explanation 'Marks transaction as failed and excludes transfer from further transactions, see GENERATE TRANSACTION for response fields'
+      example 'FAIL TRANSACTION AND SWITCH HOT WALLET MODE TO MANUAL' do
+        explanation 'Marks transaction as failed and excludes transfer from further transactions and switch hot wallet mode to manual. ' \
+                    'See GENERATE TRANSACTION for response fields.'
 
         allow_any_instance_of(BlockchainTransaction).to receive(:id).and_return('40')
 
