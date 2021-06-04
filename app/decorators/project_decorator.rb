@@ -1,5 +1,6 @@
 class ProjectDecorator < Draper::Decorator
   delegate_all
+  decorates_association :token
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
@@ -32,7 +33,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def currency_denomination
-    token&.decorate&.currency_denomination
+    token&.currency_denomination
   end
 
   def payment_description
@@ -138,8 +139,8 @@ class ProjectDecorator < Draper::Decorator
         name: token.name,
         symbol: token.symbol,
         network: token.blockchain.name,
-        address: (h.middle_truncate(token.contract_address) if token.contract_address),
-        address_url: (token.blockchain.url_for_token_human(token.contract_address) if token.contract_address),
+        address: token.trancated_address,
+        address_url: token.explorer_human_url,
         logo_url: GetImageVariantPath.call(
           attachment: token.logo_image,
           resize_to_fill: [15, 15]

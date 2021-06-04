@@ -53,6 +53,8 @@ module ApplicationHelper
   end
 
   def middle_truncate(str, length: 5)
+    return str if str.length <= length * 2
+
     str.truncate(length, omission: "#{str.first(length)}...#{str.last(length)}")
   end
 
