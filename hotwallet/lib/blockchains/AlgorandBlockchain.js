@@ -57,6 +57,10 @@ class AlgorandBlockchain {
     }
   }
 
+  isEmptyObject(obj) {
+    return Boolean(!Object.keys(obj).length)
+  }
+
   async connect() {
     if (!this.chain.isConnected) {
       await this.chain.connect()
@@ -132,9 +136,9 @@ class AlgorandBlockchain {
     return this.algoBalances[hotWalletAddress]
   }
 
-  async isOptedInToCurrentApp(hotWalletAddress) {
+  async isOptedInToCurrentApp(hotWalletAddress, appIndex) {
     const optedInApps = await this.getOptedInAppsForHotWallet(hotWalletAddress)
-    return optedInApps.includes(this.envs.optInApp)
+    return optedInApps.includes(appIndex)
   }
 
   async enoughCoinBalanceToSendTransaction(hotWalletAddress) {
@@ -160,7 +164,7 @@ class AlgorandBlockchain {
     transaction.actions = [action]
     await transaction.prepareToBeSigned()
     await transaction.validate()
-    await transaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(hotWallet.secretKey())])
+    await transaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(hotWallet.privateKey)])
 
     try {
       const tx_result = await transaction.send(chainjs.Models.ConfirmType.After001)
@@ -172,7 +176,9 @@ class AlgorandBlockchain {
     }
   }
 
-  async isTransactionValid(transaction, hotWalletAddress) {
+  async isTransactionValid(blockchainTransaction, hotWalletAddress) {
+    const transaction = blockchainTransaction.txRaw
+
     if (typeof transaction !== 'string') { return { valid: false } }
 
     try {
@@ -210,6 +216,29 @@ class AlgorandBlockchain {
 
   async sendTransaction(transaction, hotWallet) {
     console.error("sendTransaction is not implemented for AlgorandBlockchain")
+  }
+
+  async optInOrSyncApp(hotWallet, appIndex) {
+    // Check if already opted-in on blockchain
+    if (await this.isOptedInToCurrentApp(hotWallet.address, appIndex)) {
+      console.log("HW is already opted-in. Got from Blockchain")
+      return true
+    }
+
+    // Check if the wallet has enough balance to send opt-in transaction
+    if (await this.enoughCoinBalanceToSendTransaction(hotWallet.address)) {
+      tx_result = await this.optInToApp(hotWallet, appIndex)
+      if (this.isEmptyObject(tx_result)) {
+        console.log(`Failed to opt-in into app ${appIndex} for wallet ${hotWallet.address}`)
+        return false
+
+      } else {
+        console.log("HW successfully opted-in!")
+        return true
+      }
+    }
+
+    return false
   }
 }
 exports.AlgorandBlockchain = AlgorandBlockchain
