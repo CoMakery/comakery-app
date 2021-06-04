@@ -62,4 +62,13 @@ RSpec.describe SyncBalanceJob, type: :job do
       expect(Sentry).to have_received(:capture_exception).with(StandardError)
     end
   end
+
+  context 'ready for balance update' do
+    let(:balance) { create(:balance, wallet: wallet, token: token_with_balance_support, created_at: 1.day.ago, updated_at: Time.zone.now, base_unit_value: 10) }
+    it 'rescue error' do
+      allow(balance).to receive(:ready_for_balance_update?).and_raise(StandardError)
+      expect(Sentry).to receive(:capture_exception)
+      subject
+    end
+  end
 end
