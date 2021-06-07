@@ -5,8 +5,6 @@ describe 'transferred date column', js: true do
 
   let!(:project) { transfer.project }
 
-  let!(:ore_id) { create(:ore_id, account: project.account, skip_jobs: true) }
-
   before do
     login(project.account)
 
