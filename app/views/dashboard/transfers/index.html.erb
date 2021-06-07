@@ -9,28 +9,27 @@
                                                                             q: @filter_params, page: params[:page]) %>">
       <div class="centered"><%= image_tag 'spinner.gif' %></div>
     </turbo-frame>
-  </div>
 
-  <%= render partial: 'table_panel' %>
+    <%= render partial: 'table_panel' %>
 
-  <div class="transfers-table animated fadeIn faster">
-    <%= render partial: 'header' %>
-    <%= render partial: 'summary' %>
-    <%= render partial: 'form' %>
-    <%= render partial: 'transfer', collection: @transfers, as: :transfer, cached: false %>
-  </div>
+    <div class="transfers-table animated fadeIn faster">
+      <%= render partial: 'header' %>
+      <%= render partial: 'summary' %>
+      <%= render partial: 'form' %>
+      <%= render partial: 'transfer', collection: @transfers, as: :transfer, cached: false %>
+    </div>
 
-  <div class="transfers-pages">
-    <%= paginate(@transfers, window: 3) %>
-  </div>
+    <div class="transfers-pages">
+      <%= paginate(@transfers, window: 3) %>
+    </div>
 
-  <div class="col-xs-4">
-    <% if policy(@project).create_transfer? && @project.token&.supports_batch_transfers? &&
-        ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
-      <%= render partial: 'shared/transfer_button_batch' %>
-    <% end %>
-  </div>
+    <div class="col-xs-4">
+      <% if policy(@project).create_transfer? && @project.token&.supports_batch_transfers? &&
+          ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
+        <%= render partial: 'shared/transfer_button_batch' %>
+      <% end %>
+    </div>
 
-  <%= render partial: 'form2' %>
+    <%= render partial: 'form2' %>
   </div>
 <% end %>
