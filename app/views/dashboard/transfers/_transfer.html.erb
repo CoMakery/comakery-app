@@ -97,15 +97,7 @@
     <% end %>
   </div>
 
-  <div class="transfers-table__transfer__transferred_at">
-    <label>transferred at</label>
-
-    <% if transfer.paid? && transfer.transferred_at %>
-      <%= transfer.transferred_at.strftime("%b %e, %Y") %>
-    <% else %>
-      –
-    <% end %>
-  </div>
+  <%= render partial: 'transferred_date', locals: { transfer: transfer } %>
 
   <% if @project.token&._token_type_token_release_schedule? %>
     <div class="transfers-table__transfer__lockup_schedule_id">
