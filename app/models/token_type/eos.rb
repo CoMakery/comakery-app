@@ -98,7 +98,7 @@ class TokenType::Eos < TokenType
     raise NotImplementedError
   end
 
-  # Token address url on block explorer website or jast a link to block explorer
+  # Token address url on block explorer website or just a link to block explorer
   # @return [String] url
   def human_url
     "https://#{attrs[:blockchain].explorer_human_host}/"

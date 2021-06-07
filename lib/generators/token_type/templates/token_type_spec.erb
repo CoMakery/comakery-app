@@ -20,4 +20,13 @@ describe TokenType::<%= class_name %> do
   specify { expect(described_class.new.supports_token_freeze?).to be_falsey }
   specify { expect(described_class.new.supports_balance?).to be_falsey }
   specify { expect(described_class.new.blockchain_balance('')).to raise_error(NotImplementedError) }
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Blockchain.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://link-to-block-explorer.com/' }
+    specify { expect(subject.human_url_name).to eq '<%= class_name.upcase %>' }
+  end
 end
