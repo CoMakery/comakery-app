@@ -7,10 +7,12 @@
              'categories',
              {},
              { include_blank: 'All' },
-             { class: 'sort-select', id: 'category-selector', data: { target: 'transfer-form.create', action: 'transfer-form#visitSelectedCategory' } } do %>
+             { class: 'sort-select', id: 'category-selector',
+               data: { controller: 'transfers-sort', action: 'change->transfers-sort#visitSelectedCategory' } } do %>
     <% @transfers_chart_colors_objects.each do |type, _| %>
       <%= tag.option type.name.capitalize,
-                     { 'data-url': project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } %>
+                     { selected: params.dig(:q, :transfer_type_id_eq).to_i == type.id,
+                       data: { url: project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } } %>
     <% end %>
   <% end %>
   <svg class="p5-color arrow-down-icon"
