@@ -45,7 +45,7 @@ class Dashboard::TransfersController < ApplicationController
     @transfers = ordered_transfers.page(1).per(10) if (@page > 1) && @transfers.out_of_range?
     @project_token = @project.token
     @transfers_not_burned_total = @transfers_unfiltered.not_burned.sum(&:total_amount)
-    @transfer_types_and_counts = @transfers_totals.group(:source).pluck('source, count(source)').to_h
+    @transfer_types_and_counts = @transfers_totals.group(:source).pluck('awards.source, count(awards.source)').to_h
     @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
     @filter_params = params[:q]&.to_unsafe_h
     render partial: 'chart'
