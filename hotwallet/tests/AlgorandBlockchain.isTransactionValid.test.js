@@ -1,4 +1,6 @@
 const hwUtils = require("../lib/hotwalletUtils")
+const blockchainTransaction = require('./fixtures/algorandBlockchainTransaction').blockchainTransaction
+
 const envs = {
   projectId: "1",
   projectApiKey: "project_api_key",
@@ -12,8 +14,6 @@ const envs = {
 
 describe("Is transaction valid test suite", () => {
   const hwAddress = "YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4"
-  // transfer 5 tokens
-  const testTx = '{"type":"appl","from":"5CNLUUIIKC52MNNEUAJD6QZDVBQJWQD2M5N2MHDQ6M3Y372WWUJCYQXUUU","appIndex":13997710,"appAccounts":["U7A22RJ53S2G2MOW5JZLPFDLT4IKABMPBUQW2BHW5HSAYUP76CQKCPB7MQ"],"appArgs":["0x7472616e73666572","0x05"],"appOnComplete":0}'
 
   afterAll(() => {
     jest.restoreAllMocks()
@@ -23,7 +23,7 @@ describe("Is transaction valid test suite", () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(5)
 
-    res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
+    res = await hwAlgorand.isTransactionValid(blockchainTransaction, hwAddress)
 
     expect(res).toEqual({ valid: true })
   })
@@ -32,14 +32,15 @@ describe("Is transaction valid test suite", () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(Object.assign(envs, { maxAmountForTransfer: 0 }))
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(5)
 
-    res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
+    res = await hwAlgorand.isTransactionValid(blockchainTransaction, hwAddress)
 
     expect(res).toEqual({ valid: true })
   })
 
   test("invalid: empty transaction", async () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
-    const wrongAppTx = undefined
+    const wrongAppTx = { ...blockchainTransaction }
+    wrongAppTx.txRaw = undefined
 
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(4)
 
@@ -50,7 +51,8 @@ describe("Is transaction valid test suite", () => {
 
   test("invalid: tx is incorrect JSON", async () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
-    const wrongAppTx = '[123'
+    const wrongAppTx = { ...blockchainTransaction }
+    wrongAppTx.txRaw = '[123'
 
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(4)
 
@@ -61,7 +63,10 @@ describe("Is transaction valid test suite", () => {
 
   test("invalid: transaction for another app", async () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
-    const wrongAppTx = '{"type":"appl","from":"5CNLUUIIKC52MNNEUAJD6QZDVBQJWQD2M5N2MHDQ6M3Y372WWUJCYQXUUU","appIndex":93997710,"appAccounts":["U7A22RJ53S2G2MOW5JZLPFDLT4IKABMPBUQW2BHW5HSAYUP76CQKCPB7MQ"],"appArgs":["0x7472616e73666572","0x05"],"appOnComplete":0}'
+    const wrongAppTx = { ...blockchainTransaction }
+    txRaw = JSON.parse(blockchainTransaction.txRaw)
+    txRaw.appIndex = 93997710
+    wrongAppTx.txRaw = JSON.stringify(txRaw)
 
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(4)
 
@@ -74,7 +79,7 @@ describe("Is transaction valid test suite", () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(envs)
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(4)
 
-    res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
+    res = await hwAlgorand.isTransactionValid(blockchainTransaction, hwAddress)
 
     expect(res).toEqual({ valid: false, markAs: "cancelled", error: "The Hot Wallet has insufficient tokens to transfer (4 < 5)" })
   })
@@ -83,7 +88,7 @@ describe("Is transaction valid test suite", () => {
     const hwAlgorand = new hwUtils.AlgorandBlockchain(Object.assign(envs, { maxAmountForTransfer: 4 }))
     jest.spyOn(hwAlgorand, "getTokenBalance").mockReturnValueOnce(5)
 
-    res = await hwAlgorand.isTransactionValid(testTx, hwAddress)
+    res = await hwAlgorand.isTransactionValid(blockchainTransaction, hwAddress)
 
     expect(res).toEqual({ valid: false, markAs: "failed", error: "The transaction has too big amount for transfer (5). Max amount is 4" })
   })

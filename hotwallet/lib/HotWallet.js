@@ -24,5 +24,9 @@ class HotWallet {
   isEthereum() {
     return this.klass.constructor.name === "EthereumHotWallet"
   }
+
+  isAlgorand() {
+    return this.klass.constructor.name === "AlgorandHotWallet"
+  }
 }
 exports.HotWallet = HotWallet

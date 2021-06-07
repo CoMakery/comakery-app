@@ -50,7 +50,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         :updates,
         target: "transfer_issuer_#{blockchain_transactable.id}",
         partial: 'dashboard/transfers/issuer',
-        locals: { transfer: blockchain_transactable }
+        locals: { transfer: blockchain_transactable.decorate }
       )
 
       broadcast_replace_later_to(
@@ -58,7 +58,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         :updates,
         target: "transfer_recipient_#{blockchain_transactable.id}",
         partial: 'dashboard/transfers/recipient',
-        locals: { transfer: blockchain_transactable }
+        locals: { transfer: blockchain_transactable.decorate }
       )
 
       broadcast_replace_later_to(
