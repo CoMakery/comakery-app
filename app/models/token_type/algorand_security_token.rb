@@ -130,4 +130,16 @@ class TokenType::AlgorandSecurityToken < TokenType
   def blockchain_balance(wallet_address)
     contract.app_balance(wallet_address)
   end
+
+  # Token address url on block explorer website or jast a link to block explorer
+  # @return [String] url
+  def human_url
+    "https://#{blockchain.explorer_human_host}/application/#{contract_address}"
+  end
+
+  # Link name for human_url
+  # @return [String] url
+  def human_url_name
+    contract_address
+  end
 end

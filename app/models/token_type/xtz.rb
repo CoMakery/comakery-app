@@ -97,4 +97,16 @@ class TokenType::Xtz < TokenType
   def blockchain_balance(_wallet_address)
     raise NotImplementedError
   end
+
+  # Token address url on block explorer website or jast a link to block explorer
+  # @return [String] url
+  def human_url
+    "https://#{blockchain.explorer_human_host}/"
+  end
+
+  # Link name for human_url
+  # @return [String] url
+  def human_url_name
+    name
+  end
 end

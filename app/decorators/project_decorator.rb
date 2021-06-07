@@ -139,8 +139,8 @@ class ProjectDecorator < Draper::Decorator
         name: token.name,
         symbol: token.symbol,
         network: token.blockchain.name,
-        address: token.trancated_address,
-        address_url: token.explorer_human_url,
+        address: helpers.middle_truncate(token.token_type.human_url_name),
+        address_url: token.token_type.human_url,
         logo_url: GetImageVariantPath.call(
           attachment: token.logo_image,
           resize_to_fill: [15, 15]

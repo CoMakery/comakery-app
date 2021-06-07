@@ -69,4 +69,16 @@ class TokenType::ComakerySecurityToken < TokenType::Erc20
   def accounts_sync_job
     ::BlockchainJob::ComakerySecurityTokenJob::AccountTokenRecordsSyncJob
   end
+
+  # Token address url on block explorer website or jast a link to block explorer
+  # @return [String] url
+  def human_url
+    blockchain.url_for_address_human(contract_address)
+  end
+
+  # Link name for human_url
+  # @return [String] url
+  def human_url_name
+    contract_address
+  end
 end
