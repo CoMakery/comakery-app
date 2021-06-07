@@ -1,52 +1,54 @@
-<div class="modal-body">
-  <div class="row row-cards">
-    <div class="col-lg-6">
-      <label class="form-label required">Recepient Account</label>
-
-      <div class="skeleton-heading"></div>
-    </div>
-
-    <div class="col-lg-6">
-      <label class="form-label">Recepient Blockchain Address</label>
-
-      <div class="skeleton-heading"></div>
-    </div>
-
-    <div class="col-lg-6">
-      <label class="form-label required">Amount</label>
-      <div class="skeleton-heading"></div>
-    </div>
-
-    <div class="col-lg-6">
-      <label class="form-label">Price</label>
-      <div class="skeleton-heading"></div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-body">
-  <div class="row row-cards">
-    <div class="col-lg-6">
-      <label class="form-label required">Category</label>
-      <div class="skeleton-heading"></div>
-    </div>
-
-    <% if @project.token&._token_type_token_release_schedule? %>
+<div class="modal-body create-transfer-form-skeleton">
+  <div class="modal-body">
+    <div class="row row-cards">
       <div class="col-lg-6">
-      </div>
+        <label class="form-label required">Recepient Account</label>
 
-      <div class="col-lg-6">
-        <label class="form-label required">Commencement Date</label>
         <div class="skeleton-heading"></div>
       </div>
 
       <div class="col-lg-6">
-        <label class="form-label required">Lockup Schedule</label>
+        <label class="form-label">Recepient Blockchain Address</label>
+
         <div class="skeleton-heading"></div>
       </div>
-    <% end %>
-  </div>
-</div>
 
-<div class="modal-footer">
+      <div class="col-lg-6">
+        <label class="form-label required">Amount</label>
+        <div class="skeleton-heading"></div>
+      </div>
+
+      <div class="col-lg-6">
+        <label class="form-label">Price</label>
+        <div class="skeleton-heading"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <div class="row row-cards">
+      <div class="col-lg-6">
+        <label class="form-label required">Category</label>
+        <div class="skeleton-heading"></div>
+      </div>
+
+      <% if @project.token&._token_type_token_release_schedule? %>
+        <div class="col-lg-6">
+        </div>
+
+        <div class="col-lg-6">
+          <label class="form-label required">Commencement Date</label>
+          <div class="skeleton-heading"></div>
+        </div>
+
+        <div class="col-lg-6">
+          <label class="form-label required">Lockup Schedule</label>
+          <div class="skeleton-heading"></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+  </div>
 </div>

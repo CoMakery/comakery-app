@@ -18,7 +18,6 @@ describe 'test_cancelled_filter', js: true do
         login(owner)
         visit project_path(project)
         click_link 'transfers'
-        page.find :css, '#select_transfers', wait: 20 # wait for page to load
 
         # verify number of transfers before applying filter is 0 (cancelled transfers are not displayed by default)
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(0)

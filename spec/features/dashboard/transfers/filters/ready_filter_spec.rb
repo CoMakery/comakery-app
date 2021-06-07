@@ -21,8 +21,6 @@ describe 'test_ready_filter', js: true do
         visit project_path(project)
         click_link 'transfers'
 
-        expect(find('#select_transfers')).to have_content 'Create New Transfer'
-
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
 
