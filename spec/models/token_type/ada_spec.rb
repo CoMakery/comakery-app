@@ -19,6 +19,7 @@ describe TokenType::Ada do
   specify { expect(described_class.new.supports_token_burn?).to be_falsey }
   specify { expect(described_class.new.supports_token_freeze?).to be_falsey }
   specify { expect(described_class.new.supports_balance?).to be_falsey }
+  specify { expect(described_class.new.supports_balance?).to be_falsey }
 
   describe '#blockchain_balance' do
     subject { described_class.new.blockchain_balance('dummy_wallet_address') }
@@ -26,5 +27,13 @@ describe TokenType::Ada do
     it do
       expect { subject }.to raise_error NotImplementedError
     end
+  end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Cardano.new } }
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://cardanoexplorer.com/' }
+    specify { expect(subject.human_url_name).to eq 'ADA' }
   end
 end

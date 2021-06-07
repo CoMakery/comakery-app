@@ -101,7 +101,7 @@ class TokenType::Ada < TokenType
   # Token address url on block explorer website or jast a link to block explorer
   # @return [String] url
   def human_url
-    "https://#{blockchain.explorer_human_host}/"
+    "https://#{attrs[:blockchain].explorer_human_host}/"
   end
 
   # Link name for human_url

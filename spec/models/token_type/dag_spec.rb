@@ -27,4 +27,13 @@ describe TokenType::Dag do
       expect { subject }.to raise_error NotImplementedError
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Constellation.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://none/' }
+    specify { expect(subject.human_url_name).to eq 'DAG' }
+  end
 end

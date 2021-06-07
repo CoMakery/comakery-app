@@ -32,4 +32,13 @@ describe TokenType::Eth do
       is_expected.to eq 999
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::EthereumRopsten.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://ropsten.etherscan.io/' }
+    specify { expect(subject.human_url_name).to eq 'ETH' }
+  end
 end
