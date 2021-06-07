@@ -19,6 +19,8 @@ describe 'test_needs_wallet_filter', js: true do
         visit project_path(project)
         click_link 'transfers'
 
+        first(:css, '.transfers-table__transfer', wait: 20)
+
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
 
