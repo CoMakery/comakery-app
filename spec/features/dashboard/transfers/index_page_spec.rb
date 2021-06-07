@@ -8,6 +8,10 @@ describe 'transfers_index_page', js: true do
   let!(:project) { create :project, token: nil, account: owner }
   let!(:project_award_type) { (create :award_type, project: project) }
 
+  # Notice: False positive
+  # We don't want to join latest_transaction_batch into the query, as discussed before.
+  before { Bullet.raise = false }
+
   it 'returns transfers ordered by create desc' do
     create(:award, name: 'second', status: :paid, award_type: project_award_type)
     create(:award, name: 'first', status: :paid, award_type: project_award_type)
