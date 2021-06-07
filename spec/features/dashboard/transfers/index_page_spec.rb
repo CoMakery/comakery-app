@@ -14,7 +14,7 @@ describe 'transfers_index_page', js: true do
 
     login(owner)
     visit project_dashboard_transfers_path(project)
-    page.find :css, '.transfers-table__transfer"]', wait: 20
+    page.find :css, '.transfers-table__transfer', wait: 20
 
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(2)
     expect(page.all(:xpath, './/div[@class="transfers-table__transfer__name"]/h3/a').map(&:text)).to eq %w[first second]
