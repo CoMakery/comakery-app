@@ -1,7 +1,7 @@
 class Dashboard::TransfersController < ApplicationController
   before_action :assign_project
   before_action :set_award_type, only: [:create]
-  before_action :set_transfers, only: %i[index fetch_chart_data]
+  before_action :set_transfers, only: %i[index]
   before_action :set_transfer, only: [:show]
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
   skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
@@ -45,6 +45,8 @@ class Dashboard::TransfersController < ApplicationController
     @transfers = ordered_transfers.page(1).per(10) if (@page > 1) && @transfers.out_of_range?
     @project_token = @project.token
     @transfers_not_burned_total = @transfers_unfiltered.not_burned.sum(&:total_amount)
+    @transfer_types_and_counts = @transfers_totals.group(:source).pluck('source, count(source)').to_h
+    @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
     @filter_params = params[:q]&.to_unsafe_h
     render partial: 'chart'
   end
@@ -73,7 +75,6 @@ class Dashboard::TransfersController < ApplicationController
     def set_transfers
       @page = (params[:page] || 1).to_i
       @transfers_totals = query.result(distinct: true).reorder('')
-      @transfer_types_and_counts = @transfers_totals.group(:source).pluck('source, count(source)').to_h
       @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
       @transfers_all = @transfers_totals.includes(:project, :token, :transfer_type, :recipient_wallet,
                                                   award_type: [:project], issuer: [image_attachment: :blob],

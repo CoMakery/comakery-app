@@ -53,9 +53,13 @@
             <% next unless type.default %>
             <div class="col-sm stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
               <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
-              <%= link_to type.name,
-                          request.params.merge(q: (request.params[:q] || {}).except(:transfer_type_id_eq).merge(transfer_type_id_eq: type.id)),
-                          class: "stacked-chart-legend__type__name" %>
+              <%= link_to(
+                      type.name,
+                      project_dashboard_transfers_path(@project,
+                                                       q: (params[:q]&.to_unsafe_h || {}).except(:transfer_type_id_eq)
+                                                           .merge(transfer_type_id_eq: type.id)),
+                      class: "stacked-chart-legend__type__name"
+                  ) %>
               <div class="col-sm stacked-chart-legend__type__percentage">
                 <% type_count = @transfer_types_and_counts[type.name] %>
                 <%= type_count %>
