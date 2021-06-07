@@ -117,7 +117,7 @@ class Dashboard::TransfersController < ApplicationController
     end
 
     def set_transfer
-      @transfer = @project.awards.completed.find(params[:id])
+      @transfer = @project.awards.find(params[:id])
     end
 
     def set_award_type

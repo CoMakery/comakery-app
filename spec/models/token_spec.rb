@@ -156,4 +156,48 @@ describe Token, type: :model, vcr: true do
       end
     end
   end
+
+  describe '#blockchain_transaction_class' do
+    subject(:blockchain_transaction_class) { token.blockchain_transaction_class }
+
+    context 'when token is frozen' do
+      let(:token) { build :token, token_frozen: true }
+
+      it 'should return correct class' do
+        expect(blockchain_transaction_class).to eq BlockchainTransactionTokenUnfreeze
+      end
+    end
+
+    context 'when token is not frozen' do
+      let(:token) { build :token, token_frozen: false }
+
+      it 'should return correct class' do
+        expect(blockchain_transaction_class).to eq BlockchainTransactionTokenFreeze
+      end
+    end
+  end
+
+  describe '#_token_type_on_qtum?' do
+    subject(:result) { token._token_type_on_qtum? }
+
+    (Blockchain.list.keys - %i[qtum qtum_test]).each do |blockchain|
+      context "when blockchain is #{blockchain}" do
+        let(:token) { build :token, _blockchain: blockchain }
+
+        it 'should return false' do
+          expect(result).to eq false
+        end
+      end
+    end
+
+    %i[qtum qtum_test].each do |blockchain|
+      context "when blockchain is #{blockchain}" do
+        let(:token) { build :token, _blockchain: blockchain }
+
+        it 'should return true' do
+          expect(result).to eq true
+        end
+      end
+    end
+  end
 end

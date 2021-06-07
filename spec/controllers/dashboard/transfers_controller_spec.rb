@@ -57,6 +57,16 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
       get :show, params: { project_id: project.to_param, id: transfer.to_param }
       expect(response).to be_successful
     end
+
+    context 'for cancelled transfers' do
+      let(:transfer) { create(:award, status: :cancelled, award_type: create(:award_type, project: project)) }
+
+      it 'returns a success response' do
+        get :show, params: { project_id: project.to_param, id: transfer.to_param }
+
+        expect(response).to be_successful
+      end
+    end
   end
 
   describe 'POST #create' do
@@ -83,6 +93,16 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
           expect(response).to redirect_to(project_dashboard_transfers_path(project))
         end.not_to change(project.awards, :count)
       end
+    end
+  end
+
+  describe 'prioritize' do
+    subject { patch :prioritize, params: { project_id: project.to_param, id: transfer.to_param } }
+
+    it 'update' do
+      subject
+      expect(response).to redirect_to(project_dashboard_transfers_path(project))
+      expect(flash[:notice]).to match('Transfer will be sent soon')
     end
   end
 end

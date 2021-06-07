@@ -109,7 +109,7 @@ class Account < ApplicationRecord
     saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?
   }
 
-  after_destroy_commit :broadcast_destroy
+  around_destroy :broadcast_destroy
 
   class << self
     def order_by_award(project)
@@ -348,7 +348,7 @@ class Account < ApplicationRecord
   end
 
   def whitelabel?
-    managed_mission&.whitelabel?
+    managed_mission&.whitelabel? || false
   end
 
   private
@@ -399,7 +399,11 @@ class Account < ApplicationRecord
     end
 
     def broadcast_destroy
-      wallet_ids.each do |wallet_id|
+      wallet_ids_to_broadcast = wallet_ids
+
+      yield # perform destroy
+
+      wallet_ids_to_broadcast.each do |wallet_id|
         Turbo::StreamsChannel.broadcast_remove_to(
           "mission_#{managed_mission&.id}_account_wallets",
           target: "account_#{id}_wallet_#{wallet_id}"
