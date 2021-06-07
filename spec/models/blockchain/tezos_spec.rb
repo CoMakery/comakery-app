@@ -15,7 +15,6 @@ describe Blockchain::Tezos do
   specify { expect(described_class.new.url_for_tx_human('null')).to eq('https://tzscan.io/null') }
   specify { expect(described_class.new.url_for_tx_api('null')).to eq('https://example.org/tx/null') }
   specify { expect(described_class.new.url_for_address_human('null')).to eq('https://tzscan.io/null') }
-  specify { expect(described_class.new.url_for_token_human('null')).to eq('https://tzscan.io/null') }
   specify { expect(described_class.new.url_for_address_api('null')).to eq('https://example.org/addr/null') }
   specify { expect(described_class.new.supported_by_wallet_connect?).to be_falsey }
   specify { expect(described_class.new.supported_by_ore_id?).to be_falsey }
