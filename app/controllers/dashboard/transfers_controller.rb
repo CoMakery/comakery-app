@@ -18,6 +18,33 @@ class Dashboard::TransfersController < ApplicationController
     authorize @project, :transfers?
   end
 
+  # GET /projects/1/dashboard/transfers/1/edit
+  def edit
+    authorize @project, :update_transfer?
+
+    @transfer = @project.awards.find(params[:id])
+  end
+
+  # PATCH/PUT /projects/1/dashboard/transfers/1
+  def update
+    authorize @project, :update_transfer?
+
+    @transfer = @project.awards.find(params[:id])
+
+    if @transfer.update(transfer_params)
+      redirect_to project_dashboard_transfers_path(@project), notice: 'Transfer Updated'
+    else
+      redirect_to project_dashboard_transfers_path(@project), flash: { error: @transfer.errors.full_messages.join(', ') }
+    end
+  end
+
+  # GET /projects/1/dashboard/transfers/new
+  def new
+    authorize @project, :create_transfer?
+
+    @transfer = Award.new
+  end
+
   def create
     authorize @project, :create_transfer?
 
@@ -105,9 +132,11 @@ class Dashboard::TransfersController < ApplicationController
       params.fetch(:award, {}).permit(
         :amount,
         :quantity,
+        :price,
         :why,
         :description,
         :requirements,
+        :recipient_wallet_id,
         :transfer_type_id,
         :lockup_schedule_id,
         :commencement_date

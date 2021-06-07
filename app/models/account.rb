@@ -335,6 +335,10 @@ class Account < ApplicationRecord
     wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
+  def wallets_for_blockchain(blockchain)
+    wallets.where(_blockchain: blockchain)
+  end
+
   def sync_balances_later
     wallets.pluck(:id, :_blockchain).each do |wallet_id, blockchain|
       Token.where(_blockchain: blockchain).pluck(:id).each do |token_id|

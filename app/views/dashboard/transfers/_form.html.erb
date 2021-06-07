@@ -1,55 +1,165 @@
-<%= form_with model: Award.new, url: project_dashboard_transfers_path(@project), class: 'transfers-table__form', data: {target: 'transfer-form.form'} do |f| %>
-  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.formChild">
-    <label>create transfer</label>
+<%= form_with(
+  model: @transfer,
+  url: @transfer.persisted? ? project_dashboard_transfer_path(@project, @transfer) : project_dashboard_transfers_path(@project),
+  method: @transfer.persisted? ? 'patch' : 'post',
+  class: 'create-transfer-form',
+  "data-controller": "transfer-form sign--wallet-connect sign--metamask",
+  "data-transfer-form-decimal-places": @project.token ? @project.token.decimal_places : 0
+) do |f| %>
+  <div
+    class="modal-body"
+    data-controller="transfer-form">
+    <div class="row row-cards">
+      <div class="col-lg-6 account-search">
+        <label class="form-label required" for="account-search">Recepient Account</label>
 
-    <div class="transfers-table__transfer__name">
-      <label>Category</label>
+        <% if @transfer.account %>
+          <select
+            id="account-search"
+            type="text"
+            class="form-select"
+            data-controller="choices"
+            data-choices-target="select"
+            data-choices-search-enabled-value="false"
+            data-choices-remote-search-enabled-value="false"
+            disabled
+            required>
+            <option
+              data-custom-properties="<%= @transfer.account.decorate.avatar_tag %>">
+              <%= @transfer.account.decorate.name %>
+            </option>
+          </select>
+        <% else %>
+          <%= render partial: 'dashboard/accounts/account_search' %>
+        <% end %>
+      </div>
 
-      <%= f.select(:transfer_type_id, options_for_select(@project.transfer_types.collect { |t| [t.name.titlecase, t.id] }), { include_blank: 'Category' }, { required: true, id: 'select_category' }) %>
+      <div class="col-lg-6">
+        <label class="form-label" for="account-wallets">Recepient Blockchain Address</label>
+
+        <%= render partial: 'dashboard/accounts/wallets', locals: { account: @transfer.account, blockchain: @project.token&._blockchain, transfer: @transfer } %>
+      </div>
+
+      <div class="col-lg-6">
+        <label class="form-label required" for="amount">Amount</label>
+        <div class="input-button">
+          <%= f.number_field(
+            :amount,
+            required: true,
+            placeholder: '0',
+            min: @project.step_for_amount_input,
+            step: @project.step_for_amount_input,
+            id: 'amount',
+            class: "form-control",
+            data: {
+              "transfer-form-target": "amount",
+              "action": "keyup->transfer-form#calculateTotalPrice change->transfer-form#calculateTotalPrice"
+            }
+          ) %>
+          <span class="input-text-addon">
+            <%= @project.token&.symbol %>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <label class="form-label" for="price">Price</label>
+        <div class="input-group input-group-flat">
+          <span class="input-group-text">$</span>
+          <%= f.number_field(
+            :price,
+            placeholder: 0,
+            min: 0.00,
+            step: 0.01,
+            class: "form-control",
+            id: 'price',
+            data: {
+              "transfer-form-target": "price",
+              "action": "keyup->transfer-form#calculateTotalPrice change->transfer-form#calculateTotalPrice"
+            }
+          ) %>
+        </div>
+      </div>
+
+      <div class="col-lg-12 d-flex align-items-center justify-content-center">
+        <label class="form-label-round form-label-round-large h11 font-weight-medium n8-color n3-bg">
+          Total Price: $
+          <span
+            data-transfer-form-target="total">
+            0.00
+          </span>
+        </label>
+      </div>
     </div>
+  </div>
 
-    <div class="transfers-table__transfer__account">
-      <label>Account</label>
+  <div class="modal-body">
+    <div class="row row-cards">
+      <div class="col-lg-6">
+        <label class="form-label required" for="category">Category</label>
+        <select
+          name="award[transfer_type_id]"
+          value="<%= @transfer.transfer_type_id %>"
+          type="text"
+          class="form-select"
+          id="category"
+          placeholder="Select a type"
+          data-controller="choices"
+          data-choices-target="select"
+          data-choices-search-enabled-value="false"
+          data-choices-remote-search-enabled-value="false"
+          required>
+            <%= render partial: 'transfer_type', collection: @project.transfer_types, as: :transfer_type, cached: false, locals: { transfer: @transfer } %>
+        </select>
+      </div>
 
-      <%= f.select(:account_id, @project.accounts.collect { |a| [ a.decorate.name_with_nickname, a.id ] }, { include_blank: 'Account' }, { required: true }) %>
-    </div>
-
-    <div class="transfers-table__transfer__issuer">
       <% if @project.token&._token_type_token_release_schedule? %>
-        <label>lockup schedule id & commencement date</label>
+        <div class="col-lg-6">
+        </div>
 
-        <%= f.number_field(:lockup_schedule_id, required: true, placeholder: '0', min: 0, step: 1) %>
-        <%= f.datetime_field(:commencement_date, required: true, placeholder: '0', min: 0, step: 1) %>
+        <div class="col-lg-6">
+          <label class="form-label required" for="commencement_date">Commencement Date</label>
+          <div class="input-icon">
+            <input
+              name="award[commencement_date]"
+              value="<%= @transfer.commencement_date %>"
+              id="commencement_date"
+              class="form-control"
+              placeholder="2020-06-20"
+              data-controller="litepicker"
+              data-litepicker-target="input"
+              required>
+
+            <span class="input-icon-addon">
+              <svg width="13.5" height="15" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M5 0C4.44772 0 4 0.447715 4 1V2H3C1.34315 2 0 3.34315 0 5V7V17C0 18.6569 1.34315 20 3 20H15C16.6569 20 18 18.6569 18 17V7V5C18 3.34315 16.6569 2 15 2H14V1C14 0.447715 13.5523 0 13 0C12.4477 0 12 0.447715 12 1V2H6V1C6 0.447715 5.55228 0 5 0ZM13 4H5H3C2.44772 4 2 4.44772 2 5V6H16V5C16 4.44772 15.5523 4 15 4H13ZM2 17V8L16 8V17C16 17.5523 15.5523 18 15 18H3C2.44772 18 2 17.5523 2 17ZM4 11C4 10.4477 4.44772 10 5 10H7C7.55228 10 8 10.4477 8 11V13C8 13.5523 7.55228 14 7 14H5C4.44772 14 4 13.5523 4 13V11Z" fill="currentColor"></path>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <label class="form-label required" for="lockup_schedule">Lockup Schedule</label>
+          <%= f.number_field(
+            :lockup_schedule_id,
+            required: true,
+            placeholder: '0',
+            min: 0,
+            step: 1,
+            class: "form-control",
+            id: 'lockup_schedule'
+          ) %>
+        </div>
       <% end %>
     </div>
+  </div>
 
-    <div class="transfers-table__transfer__amount">
-      <label>amount <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+  <div class="modal-footer">
+    <a class="btn btn-secondary h12" data-bs-dismiss="modal">Cancel</a>
 
-      <%= f.number_field(:amount, required: true, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "transfer-form.amount", action: "keyup->transfer-form#calculateTotal change->transfer-form#calculateTotal"}) %>
-    </div>
-
-    <div class="transfers-table__transfer__quantity">
-      <label>quantity</label>
-
-      <%= f.number_field(:quantity, required: true, placeholder: 'Qty', min: 1, step: @project.step_for_quantity_input, data: {target: "transfer-form.quantity", action: "keyup->transfer-form#calculateTotal change->transfer-form#calculateTotal"}) %>
-    </div>
-
-    <div class="transfers-table__transfer__total_amount">
-      <label>total <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
-
-      <span data-target="transfer-form.total">0</span>
-    </div>
-
-    <div class="transfers-table__transfer__button">
-    </div>
-
-    <div class="transfers-table__transfer__transferred_at">
-      <%= f.hidden_field(:why, value: '—') %>
-      <%= f.hidden_field(:description, value: '—') %>
-      <%= f.hidden_field(:requirements, value: '—') %>
-      <%= f.submit('create') %>
-      <%= button_tag "cancel", type: 'button', data: {action: 'transfer-form#hideForm'} %>
-    </div>
+    <%= f.submit(
+      @transfer.persisted? ? 'Save' : 'Create',
+      class: "btn btn-primary"
+    ) %>
   </div>
 <% end %>

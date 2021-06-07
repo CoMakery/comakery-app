@@ -18,7 +18,8 @@ describe 'test_aml_kyc_unknown_wallet_filter', js: true do
         login(owner)
         visit project_path(project)
         click_link 'transfers'
-        page.find :css, '#select_transfers', wait: 20 # wait for page to load
+
+        first(:css, '.transfers-table__transfer', wait: 20)
 
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)

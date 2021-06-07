@@ -1,0 +1,18 @@
+<turbo-frame id="account_wallets">
+  <select
+    id="account-wallets"
+    name="award[recipient_wallet_id]"
+    type="text"
+    class="form-select"
+    placeholder="Select an address"
+    data-controller="choices"
+    data-choices-target="select"
+    data-choices-search-enabled-value="false"
+    data-choices-remote-search-enabled-value="false"
+    data-choices-no-choices-text-value="No addresses"
+    value="">
+      <% if account %>
+        <%= render partial: 'dashboard/accounts/wallets_wallet', collection: account.wallets_for_blockchain(blockchain).order(primary_wallet: :desc), as: :wallet, cached: false, locals: { transfer: local_assigns[:transfer] } %>
+      <% end %>
+  </select>
+</turbo-frame>

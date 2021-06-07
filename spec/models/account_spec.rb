@@ -815,6 +815,25 @@ describe Account do
     end
   end
 
+  describe '#address_for_blockchain' do
+    let!(:wallet) { create(:wallet) }
+    let!(:wallet2) { create(:wallet, address: build(:bitcoin_address_2), account: wallet.account) }
+    let!(:account) { wallet.account }
+    subject { account.address_for_blockchain(wallet._blockchain) }
+
+    it { is_expected.to eq(wallet.address) }
+  end
+
+  describe '#wallets_for_blockchain' do
+    let!(:wallet) { create(:wallet) }
+    let!(:wallet2) { create(:eth_wallet, account: wallet.account) }
+    let!(:account) { wallet.account }
+    subject { account.wallets_for_blockchain(wallet._blockchain) }
+
+    it { is_expected.to include(wallet) }
+    it { is_expected.not_to include(wallet2) }
+  end
+
   describe '#whitelabel?' do
     subject(:result) { account.whitelabel? }
 

@@ -89,7 +89,7 @@ Rails.application.routes.draw do
     resources :project_roles, only: %i[create destroy], defaults: { format: :json }
 
     namespace :dashboard do
-      resources :transfers, only: %i[index show create] do
+      resources :transfers, only: %i[index show edit update new create] do
         collection do
           get :fetch_chart_data
         end
@@ -100,6 +100,9 @@ Rails.application.routes.draw do
       resources :accounts, only: [:index, :show, :create] do
         collection do
           post :refresh_from_blockchain
+        end
+        member do
+          get :wallets
         end
       end
       resources :accesses, only: [:index] do
