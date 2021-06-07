@@ -4,7 +4,7 @@
     <label>transferred at</label>
 
     <% if transfer.paid? && transfer.transferred_at %>
-      <%= transfer.transferred_at.strftime("%b %e, %Y") %>
+      <%= transfer.transferred_at.strftime('%b %e, %Y') %>
     <% else %>
       –
     <% end %>
