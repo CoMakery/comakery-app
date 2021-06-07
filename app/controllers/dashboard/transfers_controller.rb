@@ -39,7 +39,7 @@ class Dashboard::TransfersController < ApplicationController
   def fetch_chart_data
     authorize @project, :transfers?
     @page = (params[:page] || 1).to_i
-    @transfers_totals = query.result(distinct: true)
+    @transfers_totals = query.result(distinct: true).reorder('')
     ordered_transfers = @transfers_totals.includes(:issuer, :transfer_type, :token).ransack_reorder(params.dig(:q, :s))
     @transfers = ordered_transfers.page(@page).per(10)
     @transfers = ordered_transfers.page(1).per(10) if (@page > 1) && @transfers.out_of_range?
