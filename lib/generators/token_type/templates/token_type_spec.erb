@@ -22,7 +22,9 @@ describe TokenType::<%= class_name %> do
   specify { expect(described_class.new.blockchain_balance('')).to raise_error(NotImplementedError) }
 
   describe 'human url' do
-    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Blockchain.new } }
+    let(:blockchain) { Blockchain.new }
+    let(:attrs) { { contract_address: nil, blockchain: blockchain } }
+    before { allow(blockchain).to receive(:explorer_human_host).and_return('link-to-block-explorer.com') }
 
     subject { described_class.new(**attrs) }
 
