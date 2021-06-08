@@ -14,9 +14,11 @@
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: 'header' %>
       <%= render partial: 'summary' %>
-      <%= render partial: 'form' %>
       <%= render partial: 'transfer', collection: @transfers, as: :transfer, cached: false %>
     </div>
+
+    <%= render partial: 'new_modal' %>
+    <%= render partial: 'edit_modal', collection: @transfers, as: :transfer, cached: true %>
 
     <div class="transfers-pages">
       <%= paginate(@transfers, window: 3) %>
@@ -28,7 +30,5 @@
         <%= render partial: 'shared/transfer_button_batch' %>
       <% end %>
     </div>
-
-    <%= render partial: 'form2' %>
   </div>
 <% end %>

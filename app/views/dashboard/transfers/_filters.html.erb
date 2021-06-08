@@ -77,30 +77,26 @@
   <% if policy(@project).create_transfer? %>
     <div class="transfers-filters--filter">
       <div class="transfers-filters--filter--options">
-        <%= select 'select',
-                   'transfers',
-                   {},
-                   { include_blank: 'Create New Transfer' },
-                   { class: 'transfers-select',
-                     data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } } do %>
-          <%= options_from_collection_for_select(@project.transfer_types, 'id', 'name') %>
-          <% if policy(@project).transfer_types? %>
-            <%= tag.option 'Manage Categories', { 'data-url': project_dashboard_transfer_categories_path(@project) } %>
-          <% end %>
-        <% end %>
-        <svg xmlns="http://www.w3.org/2000/svg"
-             class="transfers-select-arrow-icon"
-             width="24"
-             height="24"
-             viewBox="0 0 24 24"
-             stroke-width="2"
-             stroke="currentColor"
-             fill="none"
-             stroke-linecap="round"
-             stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
+        <div class="dropdown btn btn-primary h12">
+          <a class="dropdown-toggle text-light create-transfer" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+            Create New Transfer
+            <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z"
+                    fill="currentColor">
+              </path>
+            </svg>
+          </a>
+          <div class="dropdown-menu create-transfer-dropdown">
+            <%= render partial: 'transfer_type_dropdown', collection: @project.transfer_types, as: :transfer_type, cached: true %>
+
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-dark" role="button" href="<%= project_dashboard_transfer_categories_path(@project) %>">
+              Manage Categories
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   <% end %>
