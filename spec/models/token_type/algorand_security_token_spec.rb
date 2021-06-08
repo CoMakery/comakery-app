@@ -52,4 +52,13 @@ describe TokenType::AlgorandSecurityToken, vcr: true do
       is_expected.to eq 999
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: '13997710', blockchain: Blockchain::Algorand.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://algoexplorer.io/application/13997710' }
+    specify { expect(subject.human_url_name).to eq '13997710' }
+  end
 end

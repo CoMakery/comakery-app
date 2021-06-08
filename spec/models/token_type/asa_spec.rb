@@ -41,4 +41,13 @@ describe TokenType::Asa do
       is_expected.to eq 999
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: '13076367', blockchain: Blockchain::AlgorandTest.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://testnet.algoexplorer.io/asset/13076367' }
+    specify { expect(subject.human_url_name).to eq '13076367' }
+  end
 end

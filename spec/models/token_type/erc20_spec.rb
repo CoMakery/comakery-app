@@ -50,4 +50,13 @@ describe TokenType::Erc20, vcr: true do
       end
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', blockchain: Blockchain::EthereumRopsten.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://ropsten.etherscan.io/address/0x583cbbb8a8443b38abcc0c956bece47340ea1367' }
+    specify { expect(subject.human_url_name).to eq '0x583cbbb8a8443b38abcc0c956bece47340ea1367' }
+  end
 end
