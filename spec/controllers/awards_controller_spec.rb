@@ -15,7 +15,13 @@ RSpec.describe AwardsController, type: :controller do
     create :wallet, account: receiver.account, _blockchain: project.token._blockchain, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
   end
 
+  let(:now) { Time.zone.local(2021, 6, 3, 15) }
+  let(:header_props) { double(:header_props) }
+  let(:get_image_variant_path_context) { double(:context, path: 'some_image_path') }
+
   before do
+    Timecop.freeze(now)
+
     stub_discord_channels
     team.build_authentication_team issuer
     team.build_authentication_team receiver
@@ -23,6 +29,32 @@ RSpec.describe AwardsController, type: :controller do
     discord_team.build_authentication_team issuer_discord
     discord_team.build_authentication_team receiver_discord
     project.channels.create(team: team, channel_id: '123')
+
+    allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
+    allow_any_instance_of(AwardsController)
+      .to receive(:form_authenticity_token).and_return('some_csrf_token')
+  end
+
+  after { Timecop.return }
+
+  shared_context 'with specialties' do
+    let!(:specialty1) { FactoryBot.create :specialty, name: 'Audio Or Video Production' }
+    let!(:specialty2) { FactoryBot.create :specialty, name: 'Community Development' }
+    let!(:specialty3) { FactoryBot.create :specialty, name: 'Data Gathering' }
+    let!(:specialty4) { FactoryBot.create :specialty, name: 'Marketing & Social' }
+    let!(:specialty5) { FactoryBot.create :specialty, name: 'Software Development' }
+    let!(:specialty6) { FactoryBot.create :specialty, name: 'Design' }
+    let!(:specialty7) { FactoryBot.create :specialty, name: 'Writing' }
+    let!(:specialty8) { FactoryBot.create :specialty, name: 'Research' }
+
+    let(:expected_specialities_list) do
+      {
+        'Audio Or Video Production' => specialty1.id, 'Community Development' => specialty2.id,
+        'Data Gathering' => specialty3.id, 'Marketing & Social' => specialty4.id,
+        'Software Development' => specialty5.id, 'Design' => specialty6.id,
+        'Writing' => specialty7.id, 'Research' => specialty8.id, 'General' => Specialty.default.id
+      }
+    end
   end
 
   describe '#index' do
@@ -139,6 +171,66 @@ RSpec.describe AwardsController, type: :controller do
     end
   end
 
+  describe '#new' do
+    let(:account) { FactoryBot.create(:account, created_at: now) }
+    let!(:transfer_type1) do
+      FactoryBot.build(:transfer_type, project: nil, name: 'mint', created_at: now)
+    end
+    let!(:transfer_type2) do
+      FactoryBot.build(:transfer_type, project: nil, name: 'blah', created_at: now)
+    end
+    let!(:transfer_type3) do
+      FactoryBot.build(:transfer_type, project: nil, name: 'burn', created_at: now)
+    end
+    let(:token) { FactoryBot.create(:token, created_at: now, updated_at: now) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:mission) { FactoryBot.create(:mission, created_at: now) }
+    let(:project) do
+      FactoryBot.create :project, account: account, token: token, mission: mission, created_at: now,
+                                  transfer_types: [transfer_type1, transfer_type2, transfer_type3]
+    end
+    let(:award_type) do
+      FactoryBot.create(:award_type, project: project, created_at: now, updated_at: now)
+    end
+    let(:new_award) { award_type.awards.new }
+
+    include_context 'with specialties'
+
+    let(:expected_form_properties) do
+      {
+        task: new_award.serializable_hash.merge(image_url: get_image_variant_path_context.path),
+        batch: award_type.serializable_hash,
+        project: project.serializable_hash,
+        token: token.serializable_hash,
+        experience_levels: Award::EXPERIENCE_LEVELS,
+        specialties: expected_specialities_list,
+        types: { 'Blah' => transfer_type2.id },
+        form_url: project_award_type_awards_path(project, award_type),
+        form_action: 'POST',
+        url_on_success: project_award_types_path,
+        csrf_token: 'some_csrf_token',
+        project_for_header: project.decorate.header_props(account),
+        mission_for_header: {
+          name: mission.name, image_url: get_image_variant_path_context.path,
+          url: mission_path(mission)
+        }
+      }
+    end
+
+    before do
+      allow(project).to receive(:header_props).with(account).and_return(header_props)
+
+      login(account)
+      get :new, params: { project_id: project.id, award_type_id: award_type.id }
+    end
+
+    it 'should respond with success' do
+      expect(response.status).to eq 200
+      expect(assigns[:props]).to eq expected_form_properties
+      expect(response).to render_template(:new)
+    end
+  end
+
   describe '#create' do
     let(:award_type) { create(:award_type, project: project) }
 
@@ -196,7 +288,6 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#clone' do
-    let(:now) { Time.zone.local(2021, 6, 3, 15) }
     let(:account) { FactoryBot.create(:account, created_at: now) }
     let!(:transfer_type1) do
       FactoryBot.build(:transfer_type, project: nil, name: 'mint', created_at: now)
@@ -207,9 +298,9 @@ RSpec.describe AwardsController, type: :controller do
     let!(:transfer_type3) do
       FactoryBot.build(:transfer_type, project: nil, name: 'burn', created_at: now)
     end
-    let(:token) { create(:token, created_at: now) }
+    let(:token) { FactoryBot.create(:token, created_at: now) }
     let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
-    let(:mission) { create(:mission, created_at: now) }
+    let(:mission) { FactoryBot.create(:mission, created_at: now) }
     let(:project) do
       FactoryBot.create :project, account: account, token: token, mission: mission, created_at: now,
                                   transfer_types: [transfer_type1, transfer_type2, transfer_type3]
@@ -220,23 +311,8 @@ RSpec.describe AwardsController, type: :controller do
                                 transfer_type: transfer_type2, issuer: account, created_at: now
     end
 
-    let!(:specialty1) { FactoryBot.create :specialty, name: 'Audio Or Video Production' }
-    let!(:specialty2) { FactoryBot.create :specialty, name: 'Community Development' }
-    let!(:specialty3) { FactoryBot.create :specialty, name: 'Data Gathering' }
-    let!(:specialty4) { FactoryBot.create :specialty, name: 'Marketing & Social' }
-    let!(:specialty5) { FactoryBot.create :specialty, name: 'Software Development' }
-    let!(:specialty6) { FactoryBot.create :specialty, name: 'Design' }
-    let!(:specialty7) { FactoryBot.create :specialty, name: 'Writing' }
-    let!(:specialty8) { FactoryBot.create :specialty, name: 'Research' }
+    include_context 'with specialties'
 
-    let(:expected_specialities_list) do
-      {
-        'Audio Or Video Production' => specialty1.id, 'Community Development' => specialty2.id,
-        'Data Gathering' => specialty3.id, 'Marketing & Social' => specialty4.id,
-        'Software Development' => specialty5.id, 'Design' => specialty6.id,
-        'Writing' => specialty7.id, 'Research' => specialty8.id, 'General' => Specialty.default.id
-      }
-    end
     let(:expected_form_properties) do
       {
         task: award.serializable_hash.merge(
@@ -259,16 +335,10 @@ RSpec.describe AwardsController, type: :controller do
         }
       }
     end
-    let(:stubbed_header_props) { double(:stubbed_header_props) }
-    let(:get_image_variant_path_context) { double(:context, path: 'some_path') }
 
     before do
-      allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
-      allow_any_instance_of(AwardsController)
-        .to receive(:form_authenticity_token).and_return('some_csrf_token')
       allow(project)
-        .to receive(:header_props).with(account).and_return(stubbed_header_props)
-      Timecop.freeze(now)
+        .to receive(:header_props).with(account).and_return(header_props)
 
       login(account)
       get :clone, params: {
@@ -282,6 +352,67 @@ RSpec.describe AwardsController, type: :controller do
       expect(response.status).to eq 200
       expect(assigns[:props]).to eq expected_form_properties
       expect(response).to render_template(:clone)
+    end
+  end
+
+  describe '#edit' do
+    let(:account) { FactoryBot.create(:account, created_at: now) }
+    let!(:transfer_type1) do
+      FactoryBot.build(:transfer_type, project: nil, name: 'mint', created_at: now)
+    end
+    let!(:transfer_type2) do
+      FactoryBot.build(:transfer_type, project: nil, name: 'blah', created_at: now)
+    end
+    let!(:transfer_type3) do
+      FactoryBot.build(:transfer_type, project: nil, name: 'burn', created_at: now)
+    end
+    let(:token) { FactoryBot.create(:token, created_at: now) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:mission) { FactoryBot.create(:mission, created_at: now) }
+    let(:project) do
+      FactoryBot.create :project, account: account, token: token, mission: mission, created_at: now,
+                                  transfer_types: [transfer_type1, transfer_type2, transfer_type3]
+    end
+    let(:award_type) { FactoryBot.create(:award_type, project: project, created_at: now) }
+    let(:award) do
+      FactoryBot.create :award, account: account, award_type: award_type,
+                                transfer_type: transfer_type2, issuer: account, created_at: now
+    end
+
+    include_context 'with specialties'
+
+    let(:expected_form_properties) do
+      {
+        task: award.serializable_hash.merge(image_url: get_image_variant_path_context.path),
+        batch: award_type.serializable_hash,
+        project: project.serializable_hash,
+        token: token.serializable_hash,
+        experience_levels: Award::EXPERIENCE_LEVELS,
+        specialties: expected_specialities_list,
+        types: { 'Blah' => transfer_type2.id },
+        form_url: project_award_type_award_path(project, award_type, award),
+        form_action: 'PATCH',
+        url_on_success: project_award_types_path,
+        csrf_token: 'some_csrf_token',
+        project_for_header: project.decorate.header_props(account),
+        mission_for_header: {
+          name: mission.name, image_url: get_image_variant_path_context.path,
+          url: mission_path(mission)
+        }
+      }
+    end
+
+    before do
+      allow(project).to receive(:header_props).with(account).and_return(header_props)
+
+      login(account)
+      get :edit, params: { project_id: project.id, award_type_id: award_type.id, id: award.id }
+    end
+
+    it 'should respond with success' do
+      expect(response.status).to eq 200
+      expect(assigns[:props]).to eq expected_form_properties
+      expect(response).to render_template(:edit)
     end
   end
 
