@@ -471,6 +471,69 @@ RSpec.describe AwardsController, type: :controller do
     end
   end
 
+  describe '#award' do
+    let(:account) { FactoryBot.create(:account, created_at: now) }
+    let(:token) { FactoryBot.create(:token, created_at: now) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:mission) { FactoryBot.create(:mission, created_at: now) }
+    let(:project) do
+      FactoryBot.create :project, account: account, token: token, mission: mission, created_at: now
+    end
+    let(:award_type) { FactoryBot.create(:award_type, project: project, created_at: now) }
+    let!(:transfer_type) do
+      FactoryBot.create(:transfer_type, project: project, name: 'mint', created_at: now)
+    end
+    let(:award) do
+      FactoryBot.create :award, account: account, award_type: award_type,
+                                transfer_type: transfer_type, issuer: account, created_at: now
+    end
+    let!(:channel1) { FactoryBot.create(:channel, :slack, project: project) }
+    let!(:channel2) { FactoryBot.create(:channel, :discord, project: project) }
+
+    let(:expected_form_properties) do
+      {
+        task: award.serializable_hash,
+        batch: award_type.serializable_hash,
+        project: project.serializable_hash,
+        token: token.serializable_hash,
+        recipient_address_url:
+          project_award_type_award_recipient_address_path(project, award_type, award),
+        form_url: project_award_type_award_send_award_path(project, award_type, award),
+        members: {
+          channel1.id.to_s => { 'bob' => '234', 'jason' => '123' },
+          channel2.id.to_s => { 'bob' => '234', 'jason' => '123' }
+        },
+        form_action: 'POST',
+        url_on_success: project_award_types_path,
+        channels: {
+          'Email' => '',
+          channel1.channel_id => channel1.id.to_s, channel2.channel_id => channel2.id.to_s
+        },
+        csrf_token: 'some_csrf_token',
+        project_for_header: project.decorate.header_props(account),
+        mission_for_header: {
+          name: mission.name, image_url: get_image_variant_path_context.path,
+          url: mission_path(mission)
+        }
+      }
+    end
+
+    before do
+      allow(project).to receive(:header_props).with(account).and_return(header_props)
+      allow_any_instance_of(Channel).to receive(:members).and_return([%w[jason 123], %w[bob 234]])
+
+      login(account)
+      get :award,
+          params: { project_id: project.id, award_type_id: award_type.id, award_id: award.id }
+    end
+
+    it 'should respond with success' do
+      expect(response.status).to eq 200
+      expect(assigns[:props]).to eq expected_form_properties
+      expect(response).to render_template(:award)
+    end
+  end
+
   describe '#start' do
     let!(:award) { create(:award_ready) }
     let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
