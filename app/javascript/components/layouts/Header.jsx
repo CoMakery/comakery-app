@@ -63,7 +63,7 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
 
         { isAdmin &&
           <React.Fragment>
-            <a href="/accounts" className={currentPath.match(/accounts/) ? 'header--nav--links--current' : null}>
+            <a href="/accounts" className={currentPath.match(/^\/accounts$/) ? 'header--nav--links--current' : null}>
               All Accounts
             </a>
             <a href="/missions" className={currentPath.match(/missions/) ? 'header--nav--links--current' : null}>
