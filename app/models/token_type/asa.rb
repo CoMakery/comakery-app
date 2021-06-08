@@ -116,7 +116,7 @@ class TokenType::Asa < TokenType
   # Token address url on block explorer website or just a link to block explorer
   # @return [String] url
   def human_url
-    "https://#{blockchain.explorer_human_host}/asset/#{contract_address}"
+    blockchain.url_for_asset_human(contract_address)
   end
 
   # Link name for human_url
