@@ -67,6 +67,46 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(assigns[:accounts].ids).to match_array([project.account_id, account.id])
       end
     end
+
+    context 'with json format' do
+      subject { get :index, params: { project_id: project.to_param, format: :json } }
+
+      context 'and a ransack query not supplied' do
+        it { is_expected.to have_http_status(:success) }
+
+        it 'returns accounts' do
+          subject
+          expect(assigns[:accounts]).to match_array([project.account, account])
+        end
+      end
+
+      context 'and a ransack query supplied' do
+        subject { get :index, params: { 'q[nickname_cont]': account.nickname, project_id: project.to_param, format: :json } }
+
+        it { is_expected.to have_http_status(:success) }
+
+        it 'returns accounts' do
+          subject
+          expect(assigns[:accounts]).to match_array([account])
+        end
+      end
+    end
+  end
+
+  describe 'GET #wallets' do
+    subject { get :wallets, params: { project_id: project.to_param, id: account.id } }
+
+    before do
+      project.add_account(account)
+      login(project.account)
+    end
+
+    it { is_expected.to have_http_status(:success) }
+
+    it 'sets account' do
+      subject
+      expect(assigns[:account]).to eq(account)
+    end
   end
 
   describe 'POST #create' do

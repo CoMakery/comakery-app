@@ -42,4 +42,9 @@
       commencement date
     </div>
   <% end %>
+
+  <% if policy(@project).update_transfer? %>
+    <div class="transfers-table__transfer__settings">
+    </div>
+  <% end %>
 </div>

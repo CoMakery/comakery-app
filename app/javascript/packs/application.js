@@ -46,11 +46,12 @@ import '../src/dist/css/upside.css'
 import '../src/dist/css/upside-vendors.css'
 import '../src/dist/js/upside.js'
 
+// TODO: enable when tabler migration is ready
+// import '../src/dist/css/tabler.min.css'
+
 // TODO: migrate libs to Yarn
 import '../src/dist/libs/apexcharts/dist/apexcharts.min.js'
-import '../src/dist/libs/choices.js/public/assets/scripts/choices.js'
 import '../src/dist/libs/countup.js/dist/countUp.js'
-import '../src/dist/libs/litepicker/dist/litepicker.js'
 import '../src/dist/libs/nouislider/distribute/nouislider.min.js'
 
 // TODO: enable wallet integration after testing and refactoring

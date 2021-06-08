@@ -27,40 +27,29 @@
   </div>
 
   <div class="transfers-table__transfer__verification">
-    <label>verification</label>
-
-    –
   </div>
 
   <div class="transfers-table__transfer__status">
-    <label>status</label>
-
-    –
   </div>
 
   <div class="transfers-table__transfer__history">
-    <label>history</label>
-
-    –
   </div>
 
   <div class="transfers-table__transfer__transferred_at">
-    <label>transferred at</label>
-
-    –
   </div>
 
   <% if @project.token&._token_type_token_release_schedule? %>
     <div class="transfers-table__transfer__lockup_schedule_id">
       <label>schedule id</label>
-
-      –
     </div>
 
     <div class="transfers-table__transfer__commencement_date">
       <label>commencement date</label>
+    </div>
+  <% end %>
 
-      –
+  <% if policy(@project).update_transfer? %>
+    <div class="transfers-table__transfer__settings">
     </div>
   <% end %>
 </div>

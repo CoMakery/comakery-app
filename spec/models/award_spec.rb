@@ -58,7 +58,7 @@ describe Award do
   end
 
   describe 'transfer cancelable or not' do
-    it 'should cancel when transaction status succeed' do
+    it 'should not cancel when transaction status succeed' do
       specialty = create(:specialty)
       award = create(:award, specialty: specialty)
       account = create(:account)
@@ -67,7 +67,7 @@ describe Award do
       award.recipient_wallet_id = wallet.id
       latest_blockchain_transaction = create(:blockchain_transaction, status: :succeed, tx_hash: '0')
 
-      expect(latest_blockchain_transaction.blockchain_transactable.cancelable?).to be_truthy
+      expect(latest_blockchain_transaction.blockchain_transactable.cancelable?).to be_falsey
     end
 
     it 'should cancel when transaction status failed' do

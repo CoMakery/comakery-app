@@ -1,0 +1,6 @@
+<option
+  value="<%= transfer_type.id %>"
+  <%= local_assigns[:transfer]&.transfer_type == transfer_type ? 'selected="selected"' : nil %>
+  data-custom-properties="">
+  <%= transfer_type.name.titlecase %>
+</option>
