@@ -8,7 +8,7 @@
     data-transfers-chart-stacked-chart-data-status="Created"
     data-transfers-chart-stacked-chart-data-day="<%= params[:duration] == 'Day' ? @project.transfers_stacked_chart_day(@transfers, negative: @negative).to_json : '' %>"
     data-transfers-chart-stacked-chart-data-week="<%= params[:duration] == 'Week' ? @project.transfers_stacked_chart_week(@transfers, negative: @negative).to_json : '' %>"
-    data-transfers-chart-stacked-chart-data-month="<%= params[:duration] == 'Month'  ? @project.transfers_stacked_chart_month(@transfers, negative: @negative).to_json : '' %>"
+    data-transfers-chart-stacked-chart-data-month="<%= params[:duration] == 'Month' ? @project.transfers_stacked_chart_month(@transfers, negative: @negative).to_json : '' %>"
     data-transfers-chart-stacked-chart-data-year="<%= (params[:duration] == 'Year' || params[:duration].blank?) ? @project.transfers_stacked_chart_year(@transfers, negative: @negative).to_json : '' %>"
     data-transfers-chart-donut-chart-data="<%= @project.transfers_donut_chart(@transfers).to_json %>"
     data-transfers-chart-token-symbol="<%= @project_token&.symbol %>"
@@ -27,13 +27,12 @@
               data-target="transfers-chart.scales"
               data-scale-x="<%= scale_x %>"
               class="<%= scale_x == (params[:duration] || 'Year') ? 'transfers-filters--filter--options__active' : nil %>">
-              <%= link_to scale_x, fetch_chart_data_project_dashboard_transfers_path(@project, duration: scale_x, q: @filter_params, page: params[:page]), data: {turbo_frame: "chart-data"} %>
+              <%= link_to scale_x, fetch_chart_data_project_dashboard_transfers_path(@project, duration: scale_x, q: @filter_params, page: params[:page]), data: { turbo_frame: "chart-data" } %>
             </div>
           <% end %>
         </div>
       </div>
     </div>
-
     <div class="transfers-chart__charts">
       <svg id="stacked-chart"></svg>
       <div>
@@ -48,6 +47,31 @@
         </div>
       </div>
       <div id="stacked-chart-tooltip"></div>
+      <div class="transfers-filters--filter">
+        <div class="stacked-chart-legend">
+          <% @transfers_chart_colors_objects.each do |type, color| %>
+            <% next unless type.default %>
+            <div class="col-sm stacked-chart-legend__type <%= ransack_filter_present?(@q, 'transfer_type_id', 'eq', type.id.to_s) ? 'stacked-chart-legend__type--active' : nil %>">
+              <div class="stacked-chart-legend__type__color" style="background-color: <%= color %>"></div>
+              <%= link_to(
+                      type.name,
+                      project_dashboard_transfers_path(@project,
+                                                       q: (params[:q]&.to_unsafe_h || {}).except(:transfer_type_id_eq)
+                                                           .merge(transfer_type_id_eq: type.id)),
+                      class: "stacked-chart-legend__type__name"
+                  ) %>
+              <div class="col-sm stacked-chart-legend__type__percentage">
+                <% type_count = @transfer_types_and_counts[type.name] %>
+                <%= type_count %>
+                <div style="color: <%= color %>; float: right;">
+                  <% percentage = @transfers_totals.size == 0 ? 0 : ((type_count.to_f / @transfers_totals.size.to_f) * 100).to_i %>
+                  <%= "#{percentage}%" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </turbo-frame>

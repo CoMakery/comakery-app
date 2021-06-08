@@ -9952,7 +9952,6 @@ Navbar vertical
 .calendar {
   display: block;
   font-size: 0.765625rem;
-  border: 1px solid #e6e8e9;
   border-radius: 4px; }
 
 .calendar-nav {
@@ -11107,7 +11106,7 @@ Icon input
     padding-right: 2.5rem; }
   .input-icon .form-control:not(:first-child),
   .input-icon .form-select:not(:last-child){
-    padding-left: 2.5rem; }
+    padding-left: 2.5rem !important; }
   .input-label .form-control:not(:first-child){
     padding-left: 80px;
   }

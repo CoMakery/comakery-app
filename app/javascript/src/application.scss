@@ -229,7 +229,7 @@ select::-ms-expand {
   display: none !important;
 }
 
-@keyframes in-progress{
+@keyframes in-progress {
   0% {
     background-position: 0 0;
   }
@@ -372,6 +372,10 @@ form.project_search {
   h3 {
     font-size: 1.17em;
     font-weight: bold;
+  }
+
+  .transfers-wallet-connect {
+    margin-left: 69rem;
   }
 }
 
@@ -606,6 +610,7 @@ form.form-with-submit-button {
 .hot-wallet {
   font-size: 12px;
   font-family: Montserrat, sans-serif;
+  padding: 0px;
 
   .hot-wallet-switcher {
     display: flex;
@@ -620,7 +625,6 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
       margin-right: 0.5em;
       color: #2647CE;
-      width: stretch;
     }
 
     .hot-wallet-switcher-child {
@@ -638,8 +642,10 @@ form.form-with-submit-button {
       border: solid 1px #e6e8ed;
       font-family: Montserrat;
       font-size: 12px;
+      width: max-content;
       max-width: 200px;
       border-left: none !important;
+      padding-right: 45px;
     }
   }
 }
@@ -667,7 +673,46 @@ form.form-with-submit-button {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-bottom: 3em;
+  margin-bottom: 1em;
+
+  .stacked-chart-legend {
+    position: relative;
+    bottom: 115px;
+    left: 130px;
+  }
+
+  .sort-select {
+    line-height: normal;
+    color: #2647CE !important;
+    font-family: inherit !important;
+    max-width: fit-content !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 110px;
+    margin-right: 20px
+  }
+
+  .status-title,
+  .category-title {
+    position: relative;
+    font-size: 12pt;
+    top: 6px
+  }
+
+  .arrow-down-icon {
+    position: relative;
+    top: 15px;
+    right: 20px
+  }
+
+  .transfers-select-arrow-icon {
+    margin-top: 7px;
+    margin-left: 125px;
+    width: 70px;
+    position: absolute;
+    pointer-events: none;
+    color: white;
+  }
 
   a {
     color: #3a3a3a;
@@ -701,10 +746,8 @@ form.form-with-submit-button {
       margin-bottom: 0.5em;
     }
 
-    .add-person {
-      display: flex;
-      margin-top: -38px;
-      margin-left: 1650px;
+    .search-label {
+      padding: 7px 12px;
     }
 
     .transfers-filters--filter--form {
@@ -745,6 +788,13 @@ form.form-with-submit-button {
         display: flex;
         padding: 55px 16px 8px 25px !important;
         border: none !important;
+      }
+
+      .transfers-select {
+        color: white;
+        background: linear-gradient(101.17deg, #3469F5 0%, #0D47DF 100%);
+        padding-right: 45px;
+        line-height: normal;
       }
 
       select {
@@ -816,6 +866,39 @@ form.form-with-submit-button {
     }
   }
 
+  .transfers-filters--filter.calendar {
+    display: contents;
+
+    h3 {
+      text-transform: uppercase;
+    }
+
+    .calendar {
+      padding-right: 600px;
+    }
+  }
+
+  .transfers-filters--filter.hot-wallet {
+    margin-left: auto;
+  }
+
+  .transfers-filters--filter.wallet-connect {
+    margin-left: 1420px;
+  }
+
+  .transfers-filters--filter.search {
+    flex-direction: row;
+  }
+
+  .transfers-filters--filter.status {
+    flex-direction: row;
+    margin-left: auto
+  }
+
+  .transfers-filters--filter.category {
+    flex-direction: row;
+  }
+
   .transfers-filters--clear {
     align-self: center;
     display: inline;
@@ -849,6 +932,10 @@ form.form-with-submit-button {
   }
 }
 
+.transfers-filters--filter.table-panel {
+  flex-direction: row;
+}
+
 .stacked-chart-legend {
   display: flex;
   flex-wrap: wrap;
@@ -871,6 +958,12 @@ form.form-with-submit-button {
     .stacked-chart-legend__type__name {
       text-transform: capitalize;
       font-weight: 500;
+      word-break: keep-all;
+    }
+
+    .stacked-chart-legend__type__percentage {
+      margin-left: 2em;
+      width: 65px;
     }
   }
 
@@ -2744,7 +2837,7 @@ input.button--right-space {
   padding: 7px 7px 7px 7px;
 }
 
-.input-field--content__checkbox--icon__checked:after{
+.input-field--content__checkbox--icon__checked:after {
   content: '';
   display: block;
   width: 13px;
@@ -2958,7 +3051,6 @@ input.button--right-space {
 }
 
 
-
 .mission-index--view--link span {
   font-family: Montserrat, sans-serif;
   font-size: 12px;
@@ -3063,7 +3155,7 @@ input.button--right-space {
 }
 
 .token-index--view--info--item--value,
-.mission-index--view--info--item--value  {
+.mission-index--view--info--item--value {
   font-size: 16px;
   font-family: Georgia,Times,Times New Roman,serif;
   font-weight: 500;
@@ -3465,7 +3557,6 @@ input.button--right-space {
     margin-top: -24px;
   }
 }
-
 
 
 @media screen and (max-width: 1024px) {
@@ -3882,6 +3973,7 @@ input.button--right-space {
 .featured-missions__gallery .slick-next {
   right: -40px;
 }
+
 .featured-missions__gallery .slick-prev::before {
   display: block;
   content: '';
@@ -4028,6 +4120,7 @@ input.button--right-space {
 .featured-missions__footer img {
   height: 218px;
 }
+
 .featured-missions__footer__stat__num {
   margin-top: 57px;
   font-family: Montserrat, sans-serif;
@@ -4040,6 +4133,7 @@ input.button--right-space {
   text-align: center;
   color: var(--primary-pink);
 }
+
 .featured-missions__footer__stat__name {
   font-family: Montserrat, sans-serif;
   font-size: 18px;
@@ -4620,7 +4714,7 @@ input.button--right-space {
   box-sizing: border-box;
   display: block;
   margin: auto;
-  clear:both;
+  clear: both;
   width: 100%;
   margin: auto;
   text-align: center;
@@ -5774,6 +5868,7 @@ input.button--right-space {
   text-decoration: none;
   color: var(--primary-blue);
 }
+
 .mission-projects__single__card {
   box-sizing: border-box;
   position: relative;
