@@ -610,6 +610,92 @@ RSpec.describe AwardsController, type: :controller do
     end
   end
 
+  describe '#assignment' do
+    let!(:account) { FactoryBot.create(:account, created_at: now) }
+
+    let(:role1) { FactoryBot.create(:account, created_at: now) }
+    let!(:role1_project_role) do
+      FactoryBot.create(:project_role, project: project, account: role1)
+    end
+
+    let(:role2) { FactoryBot.create(:account, created_at: now) }
+    let!(:role2_project_role) do
+      FactoryBot.create(:project_role, project: project, account: role2)
+    end
+
+    let!(:other_account) { FactoryBot.create(:account, created_at: now) }
+
+    let(:contributor) { FactoryBot.create(:account, created_at: now) }
+    let!(:contributor_award) do
+      FactoryBot.create :award, account: contributor, award_type: award_type,
+                                transfer_type: transfer_type, issuer: account, created_at: now
+    end
+
+    let(:token) { FactoryBot.create(:token, created_at: now) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:mission) { FactoryBot.create(:mission, created_at: now) }
+    let(:project) do
+      FactoryBot.create :project, account: account, token: token, mission: mission, created_at: now,
+                                  visibility: :public_listed
+    end
+    let(:award_type) { FactoryBot.create(:award_type, project: project, created_at: now) }
+    let!(:transfer_type) do
+      FactoryBot.create(:transfer_type, project: project, name: 'mint', created_at: now)
+    end
+    let(:award) do
+      FactoryBot.create :award, account: account, award_type: award_type,
+                                transfer_type: transfer_type, issuer: account, created_at: now
+    end
+    let(:base_account_data) do
+      {
+        'behance_url' => nil, 'dribble_url' => nil, 'github_url' => nil,
+        'image_url' => 'some_image_path', 'linkedin_url' => nil, 'nickname' => nil
+      }
+    end
+
+    let(:expected_form_properties) do
+      {
+        task: { id: award.id, name: award.name }.as_json,
+        batch: { id: award_type.id, name: award_type.name }.as_json,
+        project: {
+          id: project.id, title: project.title, public?: true,
+          url: unlisted_project_url(project.long_id)
+        }.as_json,
+        accounts: [
+          base_account_data.merge(account.attributes.slice('id', 'first_name', 'last_name')),
+          base_account_data.merge(role1.attributes.slice('id', 'first_name', 'last_name')),
+          base_account_data.merge(role2.attributes.slice('id', 'first_name', 'last_name')),
+          base_account_data.merge(contributor.attributes.slice('id', 'first_name', 'last_name'))
+        ],
+        accounts_select: {
+          '' => nil, account.name => account.id, role1.name => role1.id, role2.name => role2.id,
+          contributor.name => contributor.id
+        },
+        form_url: project_award_type_award_assign_path(project, award_type, award),
+        csrf_token: 'some_csrf_token',
+        project_for_header: project.decorate.header_props(account),
+        mission_for_header: {
+          name: mission.name, image_url: get_image_variant_path_context.path,
+          url: mission_path(mission)
+        }
+      }
+    end
+
+    before do
+      allow(project).to receive(:header_props).with(account).and_return(header_props)
+
+      login(account)
+      get :assignment,
+          params: { project_id: project.id, award_type_id: award_type.id, award_id: award.id }
+    end
+
+    it 'should respond with success' do
+      expect(response.status).to eq 200
+      expect(assigns[:props]).to eq expected_form_properties
+      expect(response).to render_template(:assignment)
+    end
+  end
+
   describe '#submit' do
     let!(:award) { create(:award) }
 
@@ -808,7 +894,7 @@ RSpec.describe AwardsController, type: :controller do
 
     it 'redirect_to show error for invalid token' do
       login receiver.account
-      get :confirm, params: { token: 12345 }
+      get :confirm, params: { token: 12_345 }
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq 'Invalid award token!'
     end
@@ -887,69 +973,154 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#recipient_address' do
-    let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
-    let(:award_type) { create(:award_type, project: project) }
-    let(:award) { create(:award, award_type: award_type) }
-
-    it 'with email' do
-      acc = create(:account, email: 'test2@comakery.com')
-      create(:wallet, account: acc, address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47', _blockchain: :ethereum_ropsten)
-      create(:wallet, account: acc, address: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM', _blockchain: :qtum)
-
-      login issuer.account
-      award.update(status: 'ready')
-      post :recipient_address, format: 'js', params: {
-        project_id: project.to_param,
-        award_type_id: award_type.to_param,
-        award_id: award.id,
-        email: 'test2@comakery.com'
-      }
-      expect(response.status).to eq(200)
-      expect(response.media_type).to eq('application/json')
-      expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
-
-      project.token.update(_token_type: 'qrc20', _blockchain: 'qtum')
-      award.update(status: 'ready')
-
-      post :recipient_address, format: 'js', params: {
-        project_id: project.to_param,
-        award_type_id: award_type.to_param,
-        award_id: award.to_param,
-        email: 'test2@comakery.com'
-      }
-      expect(response.status).to eq(200)
-      expect(response.media_type).to eq('application/json')
-      expect(JSON.parse(response.body)['address']).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
+  let(:token) do
+      FactoryBot.create :token, _token_type: 'erc20', _blockchain: :ethereum_ropsten,
+                                contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+    end
+    let(:project) do
+      FactoryBot.create :project, account: issuer.account, public: false,
+                                  maximum_tokens: 100_000_000, token: token
+    end
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
+    let!(:transfer_type) do
+      FactoryBot.create(:transfer_type, project: project, name: 'mint')
+    end
+    let(:award) do
+      FactoryBot.create :award, award_type: award_type, transfer_type: transfer_type,
+                                issuer: issuer.account
+    end
+    let!(:wallet) do
+      FactoryBot.create :wallet, account: issuer.account, _blockchain: :ethereum_ropsten,
+                                 address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47'
     end
 
-    it 'with channel_id and uid' do
-      stub_request(:post, 'https://slack.com/api/users.info').to_return(body: {
-        ok: true,
-        "user": {
-          "id": 'U99M9QYFQ',
-          "team_id": 'team id',
-          "name": 'bobjohnson',
-          "profile": {
-            email: 'bobjohnson@example.com'
+    before { login issuer.account }
+
+    context 'with email' do
+      let!(:account) { FactoryBot.create(:account, email: 'test2@comakery.com') }
+      let!(:wallet) do
+        FactoryBot.create :wallet, account: account, _blockchain: :ethereum_ropsten,
+                                   address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47'
+      end
+      let!(:wallet2) do
+        FactoryBot.create :wallet, account: account, address: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM',
+                                   _blockchain: :qtum
+      end
+
+      before { award.update(status: 'ready') }
+
+      context 'with erc20 token' do
+        before do
+          post :recipient_address, format: 'js', params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            award_id: award.id,
+            email: 'test2@comakery.com'
           }
+        end
+
+        it 'should respond with success' do
+          expect(response.status).to eq(200)
+          expect(response.media_type).to eq('application/json')
+          expect(JSON.parse(response.body))
+            .to eq 'address' => '0xaBe4449277c893B3e881c29B17FC737ff527Fa47',
+                   'walletUrl' => 'https://ropsten.etherscan.io/address/'\
+                                  '0xaBe4449277c893B3e881c29B17FC737ff527Fa47'
+        end
+      end
+
+      context 'with qrc20 token' do
+        let!(:token) do
+          FactoryBot.create :token, _token_type: 'qrc20',
+                                    contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+                                    _blockchain: :qtum
+        end
+
+        before do
+          award.update(status: 'ready')
+
+          post :recipient_address, format: 'js', params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            award_id: award.to_param,
+            email: 'test2@comakery.com'
+          }
+        end
+
+        it 'should respond with success' do
+          expect(response.status).to eq(200)
+          expect(response.media_type).to eq('application/json')
+          expect(JSON.parse(response.body))
+            .to eq 'address' => 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM',
+                   'walletUrl' =>
+                     'https://explorer.qtum.org/address/qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM'
+        end
+      end
+    end
+
+    context 'with channel_id and uid' do
+      let!(:account) { FactoryBot.create(:account, email: 'bobjohnson@example.com') }
+      let!(:wallet) do
+        FactoryBot.create :wallet, account: account, _blockchain: :ethereum_ropsten,
+                                   address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48'
+      end
+
+      before do
+        stub_request(:post, 'https://slack.com/api/users.info').to_return(body: {
+          ok: true,
+          "user": {
+            "id": 'U99M9QYFQ',
+            "team_id": 'team id',
+            "name": 'bobjohnson',
+            "profile": {
+              email: 'bobjohnson@example.com'
+            }
+          }
+        }.to_json)
+
+        post :recipient_address, format: 'js', params: {
+          project_id: project.to_param,
+          award_type_id: award_type.to_param,
+          award_id: award.to_param,
+          uid: 'receiver id',
+          channel_id: project.channels.first.id
         }
-      }.to_json)
+      end
 
-      acc = create(:account, email: 'bobjohnson@example.com')
-      create(:wallet, account: acc, address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48', _blockchain: :ethereum_ropsten)
-      login issuer.account
-      award.update(status: 'ready')
+      it 'should respond with success' do
+        expect(response.status).to eq(200)
+        expect(response.media_type).to eq('application/json')
+        expect(JSON.parse(response.body))
+          .to eq 'address' => '0xaBe4449277c893B3e881c29B17FC737ff527Fa48',
+                 'walletUrl' =>
+                   'https://ropsten.etherscan.io/address/0xaBe4449277c893B3e881c29B17FC737ff527Fa48'
+      end
+    end
 
-      post :recipient_address, format: 'js', params: {
-        project_id: project.to_param,
-        award_type_id: award_type.to_param,
-        award_id: award.to_param,
-        uid: 'receiver id',
-        channel_id: project.channels.first.id
-      }
-      expect(response.status).to eq(200)
-      expect(response.media_type).to eq('application/json')
-      expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
+    context 'when token is not assigned' do
+      let!(:token) { nil }
+      let!(:account) { FactoryBot.create(:account, email: 'bobjohnson@example.com') }
+      let!(:wallet) do
+        FactoryBot.create :wallet, account: account, _blockchain: :ethereum_ropsten,
+                                   address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48'
+      end
+
+      before do
+        award.update(status: 'ready')
+
+        post :recipient_address, format: 'js', params: {
+          project_id: project.to_param,
+          award_type_id: award_type.to_param,
+          award_id: award.to_param,
+          email: 'test2@comakery.com'
+        }
+      end
+
+      it 'should respond with success' do
+        expect(response.status).to eq(200)
+        expect(response.media_type).to eq('application/json')
+        expect(JSON.parse(response.body)).to eq 'address' => nil, 'walletUrl' => nil
+      end
     end
   end
 end

@@ -5,5 +5,6 @@ FactoryBot.define do
     coin_type { :btc }
     blockchain_network { :bitcoin_mainnet }
     symbol { :BTC }
+    decimal_places { 0 }
   end
 end

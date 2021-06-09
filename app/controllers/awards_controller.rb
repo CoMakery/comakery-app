@@ -426,7 +426,7 @@ class AwardsController < ApplicationController
         task: @award.serializable_hash(only: %w[id name]),
         batch: @award_type.serializable_hash(only: %w[id name]),
         project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
-          url: unlisted_project_url(@project.long_id)
+          'url' => unlisted_project_url(@project.long_id)
         }),
         accounts: (@project.accounts + @project.contributors).uniq.map do |a|
           a.decorate.serializable_hash(
