@@ -973,7 +973,7 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#recipient_address' do
-  let(:token) do
+    let(:token) do
       FactoryBot.create :token, _token_type: 'erc20', _blockchain: :ethereum_ropsten,
                                 contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
     end
