@@ -1,3 +1,10 @@
-<a class="dropdown-item text-dark" role="button" data-bs-toggle="modal" data-bs-target="#modal-create-transfer">
+<a class="dropdown-item text-dark"
+   role="button"
+   data-controller="transfer-categories"
+   data-action="click->transfer-categories#updateTransferFormSrc"
+   data-transfer-categories-target="category"
+   data-category-id="<%= transfer_type.id %>"
+   data-bs-toggle="modal"
+   data-bs-target="#modal-create-transfer">
   <%= transfer_type.name.titlecase %>
 </a>
