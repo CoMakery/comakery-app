@@ -65,7 +65,7 @@
                                               width: "300" }) %>
           </div>
         <% end %>
-      <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
+      <% elsif hot_wallet_deploy_button_enabled? && policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
         <div class="col-md-12 hot-wallet">
           <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
             <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
