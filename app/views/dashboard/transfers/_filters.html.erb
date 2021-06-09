@@ -1,17 +1,17 @@
-<div class="transfers-filters">
+<div class="row transfers-filters">
   <% if request.params[:q] %>
-    <h2>
-      filters
-
-      <div class="transfers-filters--clear">
-        <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
-      </div>
-    </h2>
+    <div class="col-md-12">
+      <h2>
+        filters
+        <div class="transfers-filters--clear">
+          <%= button_to "clear filters ⌫", project_dashboard_transfers_path, method: :get %>
+        </div>
+      </h2>
+    </div>
   <% end %>
 
   <% if request.params[:q] && request.params[:q][:id_eq] %>
-
-    <div class="transfers-filters--filter">
+    <div class="col-md-4 transfers-filters--filter">
       <h3>transfer id</h3>
 
       <div class="transfers-filters--filter--options">
@@ -22,8 +22,7 @@
     </div>
 
   <% elsif request.params[:q] && request.params[:q][:account_id_eq] %>
-
-    <div class="transfers-filters--filter">
+    <div class="col-md-4 transfers-filters--filter">
       <h3>account id</h3>
 
       <div class="transfers-filters--filter--options">
@@ -34,24 +33,29 @@
     </div>
 
   <% else %>
-    <div class="transfers-filters--filter calendar">
-      <h3>Transfers</h3>&nbsp;
-      <div class="calendar">
-        <%= react_component('TransfersCalendar') %>
+    <div class="col-md-4 transfers-filters--filter calendar">
+      <div class="row">
+        <div class="col-md-3">
+          <h3>Transfers</h3>
+        </div>
+        <div class="col-md-9">
+          <%= react_component('TransfersCalendar') %>
+        </div>
       </div>
     </div>
   <% end %>
-  <div class="transfers-filters--filter hot-wallet">
-    <div class="row align-items-right">
+
+  <div class="col-md-5 hot-wallet">
+    <div class="d-flex flex-row-reverse">
       <% hot_wallet = @project.hot_wallet %>
       <% if hot_wallet.present? %>
         <% if policy(@project).edit_hot_wallet_mode? %>
-          <div class="col-md-9 hot-wallet">
-            <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
-          </div>
-          <div class="col-md-3 batch-size">
+          <div class="p-3 batch-size">
             <%= render partial: 'batch_size', locals: { project: @project } %>
             <%= render partial: 'projects/batch_size_modal', locals: { project: @project } %>
+          </div>
+          <div class="p-2 hot-wallet">
+            <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
           </div>
         <% else %>
           <div class="hot-wallet-address">
@@ -66,43 +70,42 @@
           </div>
         <% end %>
       <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
-        <div class="col-md-12 hot-wallet">
-          <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
-            <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-          </a>
+        <div class="d-flex flex-row-reverse">
+          <div class="p-2 hot-wallet">
+            <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
+              <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+            </a>
+          </div>
         </div>
       <% end %>
     </div>
   </div>
-  <% if policy(@project).create_transfer? %>
-    <div class="transfers-filters--filter">
-      <div class="transfers-filters--filter--options">
-        <div class="dropdown btn btn-primary h12">
-          <a class="dropdown-toggle text-light create-transfer" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-            Create New Transfer
-            <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z"
-                    fill="currentColor">
-              </path>
-            </svg>
-          </a>
-          <div class="dropdown-menu create-transfer-dropdown">
-            <%= render partial: 'transfer_type_dropdown', collection: @project.transfer_types, as: :transfer_type, cached: true %>
 
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item text-dark" role="button" href="<%= project_dashboard_transfer_categories_path(@project) %>">
-              Manage Categories
-            </a>
-          </div>
+  <% if policy(@project).create_transfer? %>
+    <div class="col-md-3 create-new-transfer-button">
+      <div class="dropdown btn btn-primary h12">
+        <a class="dropdown-toggle text-light create-transfer" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+          Create New Transfer
+          <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z"
+                  fill="currentColor">
+            </path>
+          </svg>
+        </a>
+        <div class="dropdown-menu create-transfer-dropdown">
+          <%= render partial: 'transfer_type_dropdown', collection: @project.transfer_types, as: :transfer_type, cached: true %>
+
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-dark" role="button" href="<%= project_dashboard_transfer_categories_path(@project) %>">
+            Manage Categories
+          </a>
         </div>
       </div>
     </div>
   <% end %>
-</div>
-<div class="transfers-filters">
-  <div class="transfers-filters--filter wallet-connect">
+  <div class="col-md-12 wallet-connect">
     <%= render partial: 'shared/wallet_connect' if policy(@project).create_transfer? %>
   </div>
 </div>

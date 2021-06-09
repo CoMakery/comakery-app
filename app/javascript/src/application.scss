@@ -732,11 +732,6 @@ form.form-with-submit-button {
   }
 
   .transfers-filters--filter {
-    flex-direction: column;
-    display: flex;
-    max-width: 100%;
-    margin-right: 3em;
-
     h3 {
       font-size: 1.17em;
       margin-block-start: 1em;
@@ -744,6 +739,7 @@ form.form-with-submit-button {
       text-transform: capitalize;
       font-weight: bold;
       margin-bottom: 0.5em;
+      text-transform: uppercase;
     }
 
     .search-label {
@@ -751,8 +747,6 @@ form.form-with-submit-button {
     }
 
     .transfers-filters--filter--form {
-      display: flex;
-
       .transfers-filters--filter--form--submit {
         border-radius: 6px;
         border: solid 1px #e6e8ed;
@@ -785,7 +779,6 @@ form.form-with-submit-button {
       display: flex;
 
       .transfers-filters--filter--add-person {
-        display: flex;
         padding: 55px 16px 8px 25px !important;
         border: none !important;
       }
@@ -866,17 +859,6 @@ form.form-with-submit-button {
     }
   }
 
-  .transfers-filters--filter.calendar {
-    display: contents;
-
-    h3 {
-      text-transform: uppercase;
-    }
-
-    .calendar {
-      padding-right: 600px;
-    }
-  }
 
   .transfers-filters--filter.hot-wallet {
     margin-left: auto;
