@@ -1356,9 +1356,11 @@ describe Award do
   end
 
   describe '#populate_recipient_wallet' do
-    let(:wallet) { create(:eth_wallet) }
-    subject { create(:award, account: wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))) }
+    let!(:rinkeby_wallet) { create(:eth_wallet, _blockchain: :ethereum_rinkeby) }
+    let!(:ropsten_wallet) { create(:eth_wallet, _blockchain: :ethereum_ropsten, account: rinkeby_wallet.account) }
 
-    specify { expect(subject.recipient_wallet).to eq(wallet) }
+    subject { create(:award, account: ropsten_wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: ropsten_wallet._blockchain)))) }
+
+    specify { expect(subject.recipient_wallet).to eq(ropsten_wallet) }
   end
 end
