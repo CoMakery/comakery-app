@@ -668,19 +668,7 @@ form.form-with-submit-button {
   }
 }
 
-.transfers-filters {
-  font-size: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 1em;
-
-  .stacked-chart-legend {
-    position: relative;
-    bottom: 115px;
-    left: 130px;
-  }
-
+.table-panel {
   .sort-select {
     line-height: normal;
     color: #2647CE !important;
@@ -694,9 +682,7 @@ form.form-with-submit-button {
 
   .status-title,
   .category-title {
-    position: relative;
     font-size: 12pt;
-    top: 6px
   }
 
   .arrow-down-icon {
@@ -712,6 +698,20 @@ form.form-with-submit-button {
     position: absolute;
     pointer-events: none;
     color: white;
+  }
+}
+
+.transfers-filters {
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 1em;
+
+  .stacked-chart-legend {
+    position: relative;
+    bottom: 115px;
+    left: 130px;
   }
 
   a {
@@ -866,19 +866,6 @@ form.form-with-submit-button {
 
   .transfers-filters--filter.wallet-connect {
     margin-left: 1420px;
-  }
-
-  .transfers-filters--filter.search {
-    flex-direction: row;
-  }
-
-  .transfers-filters--filter.status {
-    flex-direction: row;
-    margin-left: auto
-  }
-
-  .transfers-filters--filter.category {
-    flex-direction: row;
   }
 
   .transfers-filters--clear {
