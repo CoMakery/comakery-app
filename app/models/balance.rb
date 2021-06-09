@@ -52,7 +52,8 @@ class Balance < ApplicationRecord
     update!(
       base_unit_value: blockchain_balance_base_unit_value,
       base_unit_locked_value: blockchain_balance_base_unit_locked_value,
-      base_unit_unlocked_value: blockchain_balance_base_unit_unlocked_value
+      base_unit_unlocked_value: blockchain_balance_base_unit_unlocked_value,
+      updated_at: Time.current
     )
   end
 
