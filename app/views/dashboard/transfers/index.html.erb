@@ -8,90 +8,27 @@
                                                                             q: @filter_params, page: params[:page]) %>">
       <div class="centered"><%= image_tag 'spinner.gif' %></div>
     </turbo-frame>
-    <div class="row">
-      <div class="col-md-6">
-        <% if policy(@project).create_transfer? %>
-          <div class="dropdown btn btn-primary h12">
-            <a class="dropdown-toggle text-light create-transfer" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-              Create New Transfer
-              <svg class="ms-1" width="9" height="5" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z" fill="currentColor"></path>
-              </svg>
-            </a>
 
-            <div class="dropdown-menu create-transfer-dropdown">
-              <%= render partial: 'transfer_type_dropdown', collection: @project.transfer_types, as: :transfer_type, cached: true %>
-
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-dark" role="button" href="<%= project_dashboard_transfer_categories_path(@project) %>">
-                Manage Categories
-              </a>
-            </div>
-          </div>
-
-          <%= render partial: "new_modal" %>
-        <% end %>
-      </div>
-
-      <div class="col-md-6 text-end">
-        <div class="row align-items-right">
-          <% hot_wallet = @project.hot_wallet %>
-          <% if hot_wallet.present? %>
-            <% if policy(@project).edit_hot_wallet_mode? %>
-              <div class="col-md-9 hot-wallet">
-                <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
-              </div>
-              <div class="col-md-3 batch-size">
-                <%= render partial: 'batch_size', locals: { project: @project } %>
-                <%= render partial: 'projects/batch_size_modal', locals: { project: @project } %>
-              </div>
-            <% else %>
-              <div class="col-md-12 hot-wallet-address">
-                Hot Wallet:&emsp; <%= link_to(
-                                          middle_truncate(hot_wallet.address),
-                                          hot_wallet.blockchain.url_for_address_human(hot_wallet.address),
-                                          target: :_blank,
-                                          class: 'mr-2',
-                                          data: { controller: "utils--truncate",
-                                                  target: "utils--clipboard.source",
-                                                  width: "300" }
-                                      ) %>
-              </div>
-            <% end %>
-          <% elsif hot_wallet_deploy_button_enabled? && policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
-            <div class="col-md-12 hot-wallet">
-              <h3>Deploy a hot wallet:</h3>
-              <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
-                <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-              </a>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <% if policy(@project).create_transfer? %>
-      <%= render partial: "shared/wallet_connect" %>
-    <% end %>
-
-    <% if policy(@project).create_transfer? && @project.token&.supports_batch_transfers? && ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
-      <div class="row">
-        <div class="col-6">
-          <%= render partial: "shared/transfer_button_batch" %>
-        </div>
-      </div>
-    <% end %>
+    <%= render partial: 'table_panel' %>
 
     <div class="transfers-table animated fadeIn faster">
-      <%= render partial: "header" %>
-      <%= render partial: "summary" %>
-      <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: false %>
+      <%= render partial: 'header' %>
+      <%= render partial: 'summary' %>
+      <%= render partial: 'transfer', collection: @transfers, as: :transfer, cached: false %>
     </div>
 
-    <%= render partial: "edit_modal", collection: @transfers, as: :transfer, cached: true %>
+    <%= render partial: 'new_modal' %>
+    <%= render partial: 'edit_modal', collection: @transfers, as: :transfer, cached: true %>
 
     <div class="transfers-pages">
       <%= paginate(@transfers, window: 3) %>
+    </div>
+
+    <div class="col-xs-4">
+      <% if policy(@project).create_transfer? && @project.token&.supports_batch_transfers? &&
+          ENV['ENABLE_BATCH_TRANSFERS_UI'] %>
+        <%= render partial: 'shared/transfer_button_batch' %>
+      <% end %>
     </div>
   </div>
 <% end %>

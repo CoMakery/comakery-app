@@ -27,4 +27,12 @@ describe TokenType::Ada do
       expect { subject }.to raise_error NotImplementedError
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Cardano.new } }
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://cardanoexplorer.com/' }
+    specify { expect(subject.human_url_name).to eq 'ADA' }
+  end
 end
