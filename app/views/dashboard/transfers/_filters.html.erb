@@ -45,12 +45,12 @@
     </div>
   <% end %>
 
-  <div class="col-md-5 hot-wallet">
+  <div class="col-md-6 hot-wallet">
     <div class="d-flex flex-row-reverse">
       <% hot_wallet = @project.hot_wallet %>
       <% if hot_wallet.present? %>
         <% if policy(@project).edit_hot_wallet_mode? %>
-          <div class="p-3 batch-size">
+          <div class="p-2 batch-size">
             <%= render partial: 'batch_size', locals: { project: @project } %>
             <%= render partial: 'projects/batch_size_modal', locals: { project: @project } %>
           </div>
@@ -82,7 +82,7 @@
   </div>
 
   <% if policy(@project).create_transfer? %>
-    <div class="col-md-3 create-new-transfer-button">
+    <div class="col-md-2 create-new-transfer-button">
       <div class="dropdown btn btn-primary h12">
         <a class="dropdown-toggle text-light create-transfer" data-bs-toggle="dropdown" role="button" aria-expanded="false">
           Create New Transfer
