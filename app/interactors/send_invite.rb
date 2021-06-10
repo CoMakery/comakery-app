@@ -25,7 +25,7 @@ class SendInvite
 
       if project_role.present?
         context.fail!(errors: ["User already has #{project_role.role} permissions for this project. " \
-                               "You can update their role with the action menu on this Accounts page"])
+                               'You can update their role with the action menu on this Accounts page'])
       else
         project_role = project.project_roles.new(account: account, role: params[:role])
 
