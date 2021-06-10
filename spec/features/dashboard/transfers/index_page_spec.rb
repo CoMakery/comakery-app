@@ -77,7 +77,7 @@ describe 'transfers_index_page', js: true do
 
       transfer.cancelled!
 
-      select('cancelled', from: 'transfers-filters--filter--options--select')
+      select('cancelled', from: 'filter-status-select')
     end
 
     it 'shows transfer button history' do

@@ -1,42 +1,38 @@
 <% if @project.token&.blockchain&.supported_by_wallet_connect? %>
-  <div class="row">
-    <div class="col-12">
-        <div class="transfers-filters">
-          <div class="transfers-filters--filter">
-            <div class="transfers-filters--filter--options wallet-connect">
-              <div
-                class="wallet-connect--button"
-                data-action='click->sign--wallet-connect#switch'
-                data-sign--wallet-connect-target='connectButton'
-                data-sign--metamask-target='otherConnectButtons'>
-                <span class="wallet-logo">
-                  <%= image_tag 'wallet-connect-logo.svg', size: "12x12" %>
-                </span>
-                WalletConnect
-                <span class="wallet-connect--button--dot">●</span>
-              </div>
+  <div class="col-md-10 wallet-connect">
+    <div class="d-flex flex-row justify-content-end">
+      <div
+        class="p-2 wallet-connect--button"
+        data-action='click->sign--wallet-connect#switch'
+        data-sign--wallet-connect-target='connectButton'
+        data-sign--metamask-target='otherConnectButtons'>
+        <span class="wallet-logo">
+          <%= image_tag 'wallet-connect-logo.svg', size: "12x12" %>
+        </span>
+        WalletConnect
+        <span class="wallet-connect--button--dot">●</span>
+      </div>
 
-              <div
-                class="wallet-connect--button"
-                data-action='click->sign--metamask#switch'
-                data-sign--wallet-connect-target='otherConnectButtons'
-                data-sign--metamask-target='connectButton'>
-                <span class="wallet-logo">
-                  <%= image_tag 'metamask.png', size: "12x12" %>
-                </span>
-                MetaMask
-                <span class="wallet-connect--button--dot">●</span>
-              </div>
-
-              <div
-                class="wallet-connect--address"
-                data-sign--wallet-connect-target='walletAddress'
-                data-sign--metamask-target='walletAddress'>
-                Disconnected
-              </div>
-            </div>
-          </div>
-        </div>
+      <div
+        class="p-2 wallet-connect--button"
+        data-action='click->sign--metamask#switch'
+        data-sign--wallet-connect-target='otherConnectButtons'
+        data-sign--metamask-target='connectButton'>
+        <span class="wallet-logo">
+          <%= image_tag 'metamask.png', size: "12x12" %>
+        </span>
+        MetaMask
+        <span class="wallet-connect--button--dot">●</span>
+      </div>
     </div>
   </div>
+  <div class="col-md-2 wallet-connect-status">
+    <div
+      class="p-2 wallet-connect--address"
+      data-sign--wallet-connect-target='walletAddress'
+      data-sign--metamask-target='walletAddress'>
+      Disconnected
+    </div>
+  </div>
+</div>
 <% end %>
