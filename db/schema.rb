@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_31_030108) do
+ActiveRecord::Schema.define(version: 2021_06_10_104821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -376,6 +376,18 @@ ActiveRecord::Schema.define(version: 2021_05_31_030108) do
     t.index ["account_id"], name: "index_interests_on_account_id"
     t.index ["project_id"], name: "index_interests_on_project_id"
     t.index ["specialty_id"], name: "index_interests_on_specialty_id"
+  end
+
+  create_table "invites", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "token", null: false
+    t.string "role", null: false
+    t.boolean "accepted", default: false
+    t.integer "invitable_id"
+    t.string "invitable_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token"], name: "index_invites_on_token", unique: true
   end
 
   create_table "missions", force: :cascade do |t|
