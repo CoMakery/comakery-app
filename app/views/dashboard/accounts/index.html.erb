@@ -19,9 +19,7 @@
 
     <% if policy(@project).edit_accounts? %>
       <div class="row">
-        <div class="col-md-12 wallet-connect">
-          <%= render partial: 'shared/wallet_connect' %>
-        </div>
+        <%= render partial: 'shared/wallet_connect' %>
       </div>
     <% end %>
 
