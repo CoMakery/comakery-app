@@ -46,7 +46,7 @@
   <% end %>
 
   <div class="col-md-6 hot-wallet">
-    <div class="d-flex flex-row justify-content-end">
+    <div class="d-flex flex-row justify-content-end align-items-center">
       <% hot_wallet = @project.hot_wallet %>
       <% if hot_wallet.present? %>
         <% if policy(@project).edit_hot_wallet_mode? %>
@@ -70,9 +70,12 @@
           </div>
         <% end %>
       <% elsif hot_wallet_deploy_button_enabled? && policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
-        <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
-          <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-        </a>
+        <label class="m-0 px-2">Deploy a hot wallet</label>
+        <div>
+          <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
+            <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+          </a>
+        </div>
       <% end %>
     </div>
   </div>
