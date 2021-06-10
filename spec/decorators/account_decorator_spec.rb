@@ -24,6 +24,12 @@ describe AccountDecorator do
     end
   end
 
+  describe '#avatar_tag' do
+    subject { create(:account).decorate.avatar_tag }
+
+    it { is_expected.to include("class='avatar avatar-xs'") }
+  end
+
   describe '#name_with_nickname' do
     it 'combines name and nickname' do
       expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: 'bobjon').decorate.name_with_nickname).to eq('Bob Johnson (bobjon)')

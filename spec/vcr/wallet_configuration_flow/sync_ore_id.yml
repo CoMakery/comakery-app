@@ -5,7 +5,7 @@ http_interactions:
     uri: https://staging.service.oreid.io/api/custodial/new-user
     body:
       encoding: UTF-8
-      string: '{"name":"Eva Smith","user_name":"wallet creation test","email":"create_a_wallet@for_me.com","picture":null,"user_password":"71a89055e394c22e0b9aaa05bfed628ea5a6b91ca1be990070abc0127ef23d2d!","phone":"","account_type":"native"}'
+      string: '{"name":"Eva Smith","user_name":"wallet creation test","email":"create_a_wallet@for_me.com","email_verified":true,"picture":null,"user_password":"71a89055e394c22e0b9aaa05bfed628ea5a6b91ca1be990070abc0127ef23d2d!","phone":"","account_type":"native"}'
     headers:
       Api-Key:
       - ENV[ORE_ID_API_KEY]

@@ -7,6 +7,7 @@ describe 'interests', js: true do
 
   before do
     login account
+    page.driver.browser.manage.add_cookie(name: 'cookieconsent_status', value: 'dismiss')
   end
 
   context 'on project landing page' do
@@ -24,6 +25,7 @@ describe 'interests', js: true do
   context 'on mission page' do
     it 'has follow buttons for featured projects' do
       visit mission_path(mission)
+      scroll_to(:bottom)
 
       expect(page).to have_content 'FOLLOW'
       first('.mission-projects__single__card__info__interest__link').click

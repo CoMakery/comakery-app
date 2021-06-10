@@ -1,0 +1,12 @@
+<option
+  value="<%= wallet.id %>"
+  <%= local_assigns[:transfer]&.recipient_wallet == wallet ? 'selected="selected"' : nil %>
+  data-custom-properties='
+    <% if wallet.primary_wallet? %>
+      <span class="dropdown-item-indicator">
+        <span class="badge bg-green-lt">Primary</span>
+      </span>
+    <% end %>
+  '>
+  <%= wallet.address.truncate(11, omission: "…#{wallet.address.last(4)}") %>
+</option>

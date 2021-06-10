@@ -27,4 +27,13 @@ describe TokenType::Btc do
       expect { subject }.to raise_error NotImplementedError
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Bitcoin.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://live.blockcypher.com/btc/' }
+    specify { expect(subject.human_url_name).to eq 'BTC' }
+  end
 end

@@ -3,6 +3,30 @@ class AwardDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
+  def sender_wallet_address
+    return unless paid?
+
+    blockchain_transactions.succeed.last&.source
+  end
+
+  def recipient_wallet_address
+    return unless paid?
+
+    blockchain_transactions.succeed.last&.destination
+  end
+
+  def sender_wallet_url
+    return if sender_wallet_address.blank?
+
+    token&.blockchain&.url_for_address_human(sender_wallet_address)
+  end
+
+  def recipient_wallet_url
+    return if sender_wallet_address.blank?
+
+    token&.blockchain&.url_for_address_human(recipient_wallet_address)
+  end
+
   def ethereum_transaction_address
     token && (object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash)
   end
@@ -125,5 +149,13 @@ class AwardDecorator < Draper::Decorator
     when 'pending'
       'in-progress--metamask in-progress--metamask__paid'
     end
+  end
+
+  def show_prioritize_button?
+    return false if project.hot_wallet_disabled?
+    return true if latest_blockchain_transaction.nil?
+    return project.hot_wallet_manual_sending? if latest_blockchain_transaction.failed?
+
+    latest_blockchain_transaction.status.in?(%w[created cancelled])
   end
 end

@@ -41,7 +41,7 @@ describe 'awards issuing', js: true do
     find('select[name="task[experience_level]"] > option:nth-child(2)').click
     fill_in 'task[amount]', with: '1'
     fill_in 'task[proof_link]', with: 'http://test'
-    find_button('create').click
+    find_button('create', { class: 'button__border' }).click
     expect(page).to have_content 'Task created'
     expect(Award.last.name).to eq 'test name'
     expect(Award.last.why).to eq 'test why'
@@ -59,7 +59,7 @@ describe 'awards issuing', js: true do
     find("a[href='#{project_award_type_award_clone_path(project1, award_type1, award1)}']").click
     expect(page).to have_content 'Create A New Task'
     fill_in 'task[name]', with: 'test name cloned'
-    find_button('create').click
+    find_button('create', { class: 'button__border' }).click
     expect(page).to have_content 'Task created'
     expect(Award.last.name).to eq 'test name cloned'
     expect(Award.last.why).to eq award1.why
@@ -75,7 +75,7 @@ describe 'awards issuing', js: true do
     find("a[href='#{edit_project_award_type_award_path(project1, award_type1, award1)}']").click
     expect(page).to have_content 'Edit Task'
     fill_in 'task[name]', with: 'test name updated'
-    find_button('save').click
+    find_button('save', { class: 'button__border' }).click
     expect(page).to have_content 'Task updated'
     expect(award1.reload.name).to eq 'test name updated'
   end

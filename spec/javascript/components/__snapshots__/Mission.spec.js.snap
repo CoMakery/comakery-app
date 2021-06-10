@@ -95,7 +95,7 @@ exports[`Mission renders correctly without props 1`] = `
               name="PROJECT/WHITE.svg"
             >
               <img
-                className="icon icon__PROJECT/WHITE-svg"
+                className="icon-legacy icon__PROJECT/WHITE-svg"
                 src="test-file-stub"
               />
             </Icon>
@@ -123,7 +123,7 @@ exports[`Mission renders correctly without props 1`] = `
               name="TASK/WHITE.svg"
             >
               <img
-                className="icon icon__TASK/WHITE-svg"
+                className="icon-legacy icon__TASK/WHITE-svg"
                 src="test-file-stub"
               />
             </Icon>

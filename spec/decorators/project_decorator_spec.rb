@@ -172,17 +172,19 @@ describe ProjectDecorator do
     let!(:project_comakery_token) { create(:project, token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
     it 'includes required data for project header component' do
-      props = project.decorate.header_props
-      props_unlisted = unlisted_project.decorate.header_props
+      props = project.decorate.header_props(project.account)
+      props_unlisted = unlisted_project.decorate.header_props(project.account)
       project_wo_image.update(panoramic_image: nil)
-      props_wo_image = project_wo_image.decorate.header_props
-      props_w_comakery = project_comakery_token.decorate.header_props
+      props_wo_image = project_wo_image.decorate.header_props(project.account)
+      props_w_comakery = project_comakery_token.decorate.header_props(project.account)
 
       expect(props[:title]).to eq(project.title)
-      expect(props[:owner]).to eq(project.legal_project_owner)
       expect(props[:present]).to be_truthy
       expect(props[:show_batches]).to be_truthy
-      expect(props[:show_transfers]).to be_truthy
+      expect(props[:show_contributions]).to be_truthy
+      expect(props[:owner]).to be_truthy
+      expect(props[:observer]).to be_falsey
+      expect(props[:interested]).to be_falsey
       expect(props[:supports_transfer_rules]).to be_falsey
       expect(props_w_comakery[:supports_transfer_rules]).to be_truthy
       expect(props[:image_url]).to include('image.png')
@@ -214,7 +216,8 @@ describe ProjectDecorator do
         expect(props[:token][:name]).to eq(token.name)
         expect(props[:token][:symbol]).to eq(token.symbol)
         expect(props[:token][:network]).to eq(token.blockchain.name)
-        expect(props[:token][:address]).to eq(token.contract_address)
+        expect(props[:token][:address]).to include(token.contract_address.first(5))
+        expect(props[:token][:address_url]).to include(token.contract_address)
         expect(props[:token][:logo_url]).to include('dummy_image.png')
       end
     end

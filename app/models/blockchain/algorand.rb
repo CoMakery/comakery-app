@@ -82,10 +82,22 @@ class Blockchain::Algorand < Blockchain
     "https://#{explorer_api_host}/v2/accounts/#{addr}"
   end
 
+  # Asset url on block explorer website
+  # @return [String] url
+  def url_for_asset_human(asset_id)
+    "https://#{explorer_human_host}/asset/#{asset_id}"
+  end
+
   # Asset url on block explorer API
   # @return [String] url
   def url_for_asset_api(asset_id)
     "https://#{explorer_api_host}/v2/assets/#{asset_id}"
+  end
+
+  # App url on block explorer website
+  # @return [String] url
+  def url_for_app_human(app_id)
+    "https://#{explorer_human_host}/application/#{app_id}"
   end
 
   # App url on block explorer API

@@ -1,4 +1,4 @@
-class OreIdWalletOptInTxSyncJob < ApplicationJob
+class OreIdWalletOptInTxSyncJob < OreIdBaseJob
   queue_as :default
 
   def perform(wallet_provision)
@@ -17,18 +17,6 @@ class OreIdWalletOptInTxSyncJob < ApplicationJob
       Sentry.capture_exception(e)
     else
       sync.ok!
-    end
-  end
-
-  def reschedule(wallet_provision)
-    self.class.set(wait: wait_to_perform(wallet_provision)).perform_later(wallet_provision)
-  end
-
-  def wait_to_perform(wallet_provision)
-    if wallet_provision.next_sync_allowed_after < Time.current
-      0
-    else
-      wallet_provision.next_sync_allowed_after - Time.current
     end
   end
 end

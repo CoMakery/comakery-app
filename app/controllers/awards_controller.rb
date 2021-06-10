@@ -33,24 +33,11 @@ class AwardsController < ApplicationController
 
   def index; end
 
-  def new; end
-
-  def award; end
-
-  def assignment; end
-
-  def clone
-    @props[:task][:image_from_id] = @award.id
-  end
-
   def show
     @skip_search_box = true
   end
 
-  def edit
-    @props[:form_url] = project_award_type_award_path(@project, @award_type, @award)
-    @props[:form_action] = 'PATCH'
-  end
+  def new; end
 
   def create
     result = CreateAward.call(
@@ -71,6 +58,11 @@ class AwardsController < ApplicationController
     end
   end
 
+  def edit
+    @props[:form_url] = project_award_type_award_path(@project, @award_type, @award)
+    @props[:form_action] = 'PATCH'
+  end
+
   def update
     image_validator = ImagePixelValidator.new(@award, award_params)
 
@@ -81,6 +73,24 @@ class AwardsController < ApplicationController
       error_response
       render json: @error_response, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    authorize @award, :cancel?
+
+    if @award.update(status: 'cancelled')
+      redirect_back(fallback_location: project_award_types_path, notice: 'Task cancelled')
+    else
+      redirect_back(fallback_location: project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') })
+    end
+  end
+
+  def award; end
+
+  def assignment; end
+
+  def clone
+    @props[:task][:image_from_id] = @award.id
   end
 
   def assign # rubocop:todo Metrics/CyclomaticComplexity
@@ -133,16 +143,6 @@ class AwardsController < ApplicationController
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task rejected'
     else
       redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
-    end
-  end
-
-  def destroy
-    authorize @award, :cancel?
-
-    if @award.update(status: 'cancelled')
-      redirect_back(fallback_location: project_award_types_path, notice: 'Task cancelled')
-    else
-      redirect_back(fallback_location: project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') })
     end
   end
 
@@ -416,7 +416,7 @@ class AwardsController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -437,7 +437,7 @@ class AwardsController < ApplicationController
         accounts_select: (@project.accounts + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
@@ -461,7 +461,7 @@ class AwardsController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
-        project_for_header: @project.header_props,
+        project_for_header: @project.header_props(current_account),
         mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end

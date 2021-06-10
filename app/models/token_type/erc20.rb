@@ -119,4 +119,16 @@ class TokenType::Erc20 < TokenType
   def blockchain_balance(wallet_address)
     contract.contract.call.balance_of(wallet_address)
   end
+
+  # Token address url on block explorer website or just a link to block explorer
+  # @return [String] url
+  def human_url
+    blockchain.url_for_address_human(contract_address)
+  end
+
+  # Link name for human_url
+  # @return [String] url
+  def human_url_name
+    contract_address
+  end
 end

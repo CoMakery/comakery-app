@@ -43,11 +43,11 @@ describe 'accounts index page', js: true do
       it 'broadcasts event' do
         visit accounts_path
 
-        expect(page).to have_content('Failed')
+        expect(page).to have_content('FAILED')
 
         verification.update(passed: true)
 
-        expect(page).to have_content('Accredited')
+        expect(page).to have_content('ACCREDITED')
       end
     end
 

@@ -24,7 +24,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
   end
 
   before do
-    project.update(mission: active_whitelabel_mission)
+    project.update(mission: active_whitelabel_mission, hot_wallet_mode: :auto_sending)
     allow(controller).to receive(:authorized).and_return(true)
   end
 
@@ -155,15 +155,13 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
 
     context 'with award batch available for transaction' do
-      let!(:project) { create(:project, token: create(:lockup_token)) }
+      let!(:project) { create(:project, token: create(:lockup_token), transfer_batch_size: transfer_batch_size) }
       let!(:award) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
       let!(:award2) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
       let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
-      context 'and ERC20_TRANSFER_BATCH_SIZE is not present' do
-        before do
-          stub_const('ENV', ENV.to_hash.merge('ERC20_TRANSFER_BATCH_SIZE' => nil))
-        end
+      context 'and transfer_batch_size is one' do
+        let(:transfer_batch_size) { 1 }
 
         it 'creates a new single BlockchainTransaction' do
           params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
@@ -178,10 +176,8 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
         end
       end
 
-      context 'and ERC20_TRANSFER_BATCH_SIZE is present' do
-        before do
-          stub_const('ENV', ENV.to_hash.merge('ERC20_TRANSFER_BATCH_SIZE' => 2))
-        end
+      context 'and transfer_batch_size is two' do
+        let(:transfer_batch_size) { 2 }
 
         it 'creates a new batch BlockchainTransaction' do
           params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
@@ -354,6 +350,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
 
         delete :destroy, params: params
         expect(blockchain_transaction.reload.status).to eq('failed')
+        expect(response).to have_http_status(:success)
       end
     end
 
@@ -363,16 +360,36 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       params[:id] = blockchain_transaction.id
 
       delete :destroy, params: params
+      expect(response).to have_http_status(:success)
       expect(blockchain_transaction.reload.status).to eq('cancelled')
     end
 
-    it 'returns a success response' do
-      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
+    it 'switches hot wallet mode to manual' do
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash, switch_hot_wallet_to_manual_mode: 'true' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
       params[:project_id] = project.id
       params[:id] = blockchain_transaction.id
 
+      expect(project.hot_wallet_mode).to eq('auto_sending')
+
       delete :destroy, params: params
+
       expect(response).to have_http_status(:success)
+      expect(project.reload.hot_wallet_mode).to eq('manual_sending')
+    end
+
+    it 'does not switch disabled hot wallet mode' do
+      params = build(:api_signed_request, { transaction: { tx_hash: blockchain_transaction.tx_hash, switch_hot_wallet_to_manual_mode: 'true' } }, api_v1_project_blockchain_transaction_path(project_id: project.id, id: blockchain_transaction.id), 'DELETE')
+      params[:project_id] = project.id
+      params[:id] = blockchain_transaction.id
+
+      project.update(hot_wallet_mode: :disabled)
+
+      expect(project.hot_wallet_mode).to eq('disabled')
+
+      delete :destroy, params: params
+
+      expect(response).to have_http_status(:success)
+      expect(project.reload.hot_wallet_mode).to eq('disabled')
     end
   end
 end

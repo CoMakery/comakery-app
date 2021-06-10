@@ -1,15 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Dashboard::TransfersController, type: :controller do
-  let(:project) { create(:project, visibility: :public_listed) }
+  let(:balance) { create(:balance) }
+  let(:project) { create(:project, token: balance.token, visibility: :public_listed) }
   let(:transfer) { create(:award, status: :paid, award_type: create(:award_type, project: project)) }
-  let(:receiver) { create(:account) }
+  let(:wallet) { balance.wallet }
+  let(:receiver) { wallet.account }
 
   let(:valid_attributes) do
     {
       amount: 2,
       quantity: 2,
       why: '-',
+      price: 100,
+      recipient_wallet_id: wallet.id,
       description: '-',
       requirements: '-',
       transfer_type_id: create(:transfer_type, project: project).id.to_s,
@@ -53,6 +57,16 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
       get :show, params: { project_id: project.to_param, id: transfer.to_param }
       expect(response).to be_successful
     end
+
+    context 'for cancelled transfers' do
+      let(:transfer) { create(:award, status: :cancelled, award_type: create(:award_type, project: project)) }
+
+      it 'returns a success response' do
+        get :show, params: { project_id: project.to_param, id: transfer.to_param }
+
+        expect(response).to be_successful
+      end
+    end
   end
 
   describe 'GET #export_transfers' do
@@ -82,6 +96,8 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
         expect(award.name).to eq(award.transfer_type.name.titlecase)
         expect(award.issuer).to eq(project.account)
         expect(award.status).to eq('accepted')
+        expect(award.price).to eq(100)
+        expect(award.recipient_wallet).to eq(wallet)
       end
     end
 
@@ -92,6 +108,16 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
           expect(response).to redirect_to(project_dashboard_transfers_path(project))
         end.not_to change(project.awards, :count)
       end
+    end
+  end
+
+  describe 'prioritize' do
+    subject { patch :prioritize, params: { project_id: project.to_param, id: transfer.to_param } }
+
+    it 'update' do
+      subject
+      expect(response).to redirect_to(project_dashboard_transfers_path(project))
+      expect(flash[:notice]).to match('Transfer will be sent soon')
     end
   end
 end

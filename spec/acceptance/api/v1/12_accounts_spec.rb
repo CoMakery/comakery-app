@@ -404,10 +404,11 @@ resource 'II. Accounts' do
     context '200' do
       let!(:id) { account.managed_account_id }
       let!(:page) { 1 }
-      let!(:award_type) { create(:award_type, project: project) }
+      let(:award_type) { create(:award_type, project: project) }
+      let(:transfer_type) { create(:transfer_type, id: 99, project: award_type.project) }
 
       before do
-        create(:award, id: 90, account: account, status: :paid, amount: 1, transfer_type: create(:transfer_type, id: 99, project: award_type.project))
+        create(:award, id: 90, account: account, status: :paid, amount: 1, award_type: award_type, transfer_type: transfer_type)
       end
 
       example 'TRANSFERS' do

@@ -22,7 +22,7 @@ class Verification < ApplicationRecord
         broadcast_replace_to "mission_#{account.managed_mission&.id}_account_wallets",
                              target: "account_#{account.id}_wallet_#{wallet.id}",
                              partial: 'accounts/partials/index/wallet',
-                             locals: { wallet: wallet }
+                             locals: { wallet: wallet.decorate }
       end
     end
 

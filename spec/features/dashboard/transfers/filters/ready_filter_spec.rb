@@ -21,7 +21,7 @@ describe 'test_ready_filter', js: true do
         visit project_path(project)
         click_link 'transfers'
 
-        expect(find('#select_transfers')).to have_content 'Create New Transfer'
+        first(:css, '.transfers-table__transfer', wait: 20)
 
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
@@ -44,9 +44,8 @@ describe 'test_ready_filter', js: true do
     visit project_path(project)
     click_link 'transfers'
 
-    expect(find('#select_transfers')).to have_content 'Create New Transfer'
     find('.transfers-table__transfer__issuer a.sort_link').click
 
-    expect(find('.transfers-table__transfer__issuer a.sort_link.asc')).to have_content 'TRANSFERRED BY ↓'
+    expect(find('.transfers-table__transfer__issuer a.sort_link.asc')).to have_content 'FROM ↓'
   end
 end

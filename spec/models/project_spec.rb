@@ -6,6 +6,8 @@ describe Project do
   it_behaves_like 'api_authorizable'
   it_behaves_like 'active_storage_validator', %w[image square_image panoramic_image]
 
+  it { is_expected.to have_many(:accounts) }
+
   describe 'associations' do
     let!(:project) { create :project }
     let!(:account) { create :account }
@@ -132,8 +134,9 @@ describe Project do
     end
 
     describe 'maximum_tokens' do
+      let(:project) { build(:project) }
+
       it 'accepts empty, zero or positive value' do
-        project = create(:project)
         project.maximum_tokens = nil
         expect(project).to be_valid
 
@@ -145,17 +148,45 @@ describe Project do
       end
 
       it 'rejects negative value' do
-        project = create(:project)
         project.maximum_tokens = -1
         expect(project).not_to be_valid
       end
 
       it 'can be modified if the record has been saved' do
-        project = create(:project)
         project.maximum_tokens += 10
         expect(project).to be_valid
         project.maximum_tokens -= 5
         expect(project).to be_valid
+      end
+    end
+
+    describe '#transfer_batch_size' do
+      context 'validation' do
+        let(:project) { build(:project) }
+
+        it 'accept integers from 1 to 250' do
+          project.transfer_batch_size = 1
+          expect(project).to be_valid
+
+          project.transfer_batch_size = 250
+          expect(project).to be_valid
+        end
+
+        it 'reject values less than 1 or more than 250' do
+          project.transfer_batch_size = 0
+          expect(project).not_to be_valid
+
+          project.transfer_batch_size = 251
+          expect(project).not_to be_valid
+        end
+
+        it 'reject not integer values' do
+          project.transfer_batch_size = nil
+          expect(project).not_to be_valid
+
+          project.transfer_batch_size = 1.3
+          expect(project).not_to be_valid
+        end
       end
     end
 

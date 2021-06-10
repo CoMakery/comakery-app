@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'models/blockchain_spec'
 
-describe Blockchain::Algorand, vcr: true do
+describe Blockchain::Algorand do
   it_behaves_like 'a blockchain'
 
   specify { expect(described_class.new.name).to eq('Algorand') }
@@ -20,7 +20,9 @@ describe Blockchain::Algorand, vcr: true do
   specify { expect(described_class.new.supported_by_wallet_connect?).to be_falsey }
   specify { expect(described_class.new.supported_by_ore_id?).to be_truthy }
   specify { expect(described_class.new.ore_id_name).to eq('algo_main') }
-  specify { expect(described_class.new.current_block).to be_an(Integer) }
+  specify 'current block', vcr: true do
+    expect(described_class.new.current_block).to be_an(Integer)
+  end
 
   describe '#account_coin_balance' do
     specify do

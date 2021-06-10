@@ -24,6 +24,7 @@ class Project < ApplicationRecord
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_roles, dependent: :destroy
+  has_many :accounts, through: :project_roles
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
   has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
@@ -61,6 +62,7 @@ class Project < ApplicationRecord
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :transfer_batch_size, numericality: { greater_than: 0, less_than_or_equal_to: 250, only_integer: true }
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
@@ -74,6 +76,7 @@ class Project < ApplicationRecord
   after_create :add_owner_as_admin
   after_create :create_default_transfer_types
   after_update_commit :broadcast_hot_wallet_mode, if: :saved_change_to_hot_wallet_mode?
+  after_update_commit :broadcast_batch_size, if: :saved_change_to_transfer_batch_size?
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -294,10 +297,24 @@ class Project < ApplicationRecord
     def broadcast_hot_wallet_mode
       broadcast_replace_later_to 'project_hot_wallet_modes',
                                  target: "project_#{id}_hot_wallet_mode",
-                                 partial: 'dashboard/transfers/hot_wallet_mode', locals: { project: self }
+                                 partial: 'dashboard/transfers/hot_wallet_mode',
+                                 locals: { project: decorate }
 
       broadcast_replace_later_to "transfer_project_#{id}_hot_wallet_mode",
                                  target: "transfer_project_#{id}_hot_wallet_mode",
-                                 partial: 'shared/transfer_prioritize_button/mode', locals: { project: self }
+                                 partial: 'shared/transfer_prioritize_button/mode',
+                                 locals: { project: decorate }
+    end
+
+    def broadcast_batch_size
+      broadcast_replace_later_to 'project_transfer_batch_size',
+                                 target: "project_#{id}_transfer_batch_size",
+                                 partial: 'dashboard/transfers/batch_size',
+                                 locals: { project: decorate }
+
+      broadcast_replace_later_to 'project_transfer_batch_size_modal_form',
+                                 target: "project_#{id}_transfer_batch_size_modal_form",
+                                 partial: 'projects/batch_size_modal_form',
+                                 locals: { project: decorate }
     end
 end

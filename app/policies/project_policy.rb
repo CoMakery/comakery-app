@@ -44,7 +44,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_contributions?
-    show_contributions_to_everyone? || show_contributions_to_team? || edit?
+    show_contributions_to_everyone? || show_contributions_to_team? || edit? || project_observer?
   end
 
   def show_award_types?
@@ -55,14 +55,6 @@ class ProjectPolicy < ApplicationPolicy
 
   def show_transfer_rules?
     show_contributions? && project.supports_transfer_rules?
-  end
-
-  def accounts?
-    show_contributions? || project_observer?
-  end
-
-  def transfers?
-    show_contributions? || project_observer?
   end
 
   alias update? edit?
@@ -82,6 +74,8 @@ class ProjectPolicy < ApplicationPolicy
   alias export_transfers? edit?
   alias add_person? edit?
   alias change_permissions? edit?
+  alias accounts? show_contributions?
+  alias transfers? show_contributions?
 
   def project_owner?
     account.present? && (project.account == account)

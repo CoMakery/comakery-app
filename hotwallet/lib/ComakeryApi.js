@@ -56,10 +56,11 @@ class ComakeryApi {
     }
   }
 
-  async cancelTransaction(blockchainTransaction, errorMessage, status ) {
+  async cancelTransaction(blockchainTransaction, errorMessage, status, switchHWToManualMode) {
     const blockchainTransactionsUrl = `${this.envs.comakeryServerUrl}/api/v1/projects/${this.envs.projectId}/blockchain_transactions/${blockchainTransaction.id}`
     let transactionParams = { status_message: errorMessage }
     if (status == "failed") { transactionParams["failed"] = true }
+    if (switchHWToManualMode) { transactionParams["switch_hot_wallet_to_manual_mode"] = true }
     const params = { body: { data: { transaction: transactionParams } } }
     const config = { data: params, headers: { "API-Transaction-Key": this.envs.projectApiKey } }
 

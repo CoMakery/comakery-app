@@ -29,4 +29,12 @@ describe TokenType::Algo do
       is_expected.to eq 999
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: nil, blockchain: Blockchain::Algorand.new } }
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://algoexplorer.io/' }
+    specify { expect(subject.human_url_name).to eq 'ALGO' }
+  end
 end
