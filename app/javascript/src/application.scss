@@ -618,12 +618,8 @@ form.form-with-submit-button {
 
     h4 {
       font-size: 1em;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
       text-transform: capitalize;
       font-weight: bold;
-      margin-bottom: 0.5em;
-      margin-right: 0.5em;
       color: #2647CE;
     }
 
@@ -668,19 +664,7 @@ form.form-with-submit-button {
   }
 }
 
-.transfers-filters {
-  font-size: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 1em;
-
-  .stacked-chart-legend {
-    position: relative;
-    bottom: 115px;
-    left: 130px;
-  }
-
+.table-panel {
   .sort-select {
     line-height: normal;
     color: #2647CE !important;
@@ -694,9 +678,7 @@ form.form-with-submit-button {
 
   .status-title,
   .category-title {
-    position: relative;
     font-size: 12pt;
-    top: 6px
   }
 
   .arrow-down-icon {
@@ -712,6 +694,20 @@ form.form-with-submit-button {
     position: absolute;
     pointer-events: none;
     color: white;
+  }
+}
+
+.transfers-filters {
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 1em;
+
+  .stacked-chart-legend {
+    position: relative;
+    bottom: 115px;
+    left: 130px;
   }
 
   a {
@@ -732,18 +728,11 @@ form.form-with-submit-button {
   }
 
   .transfers-filters--filter {
-    flex-direction: column;
-    display: flex;
-    max-width: 100%;
-    margin-right: 3em;
-
     h3 {
       font-size: 1.17em;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      text-transform: capitalize;
+      margin: 0;
       font-weight: bold;
-      margin-bottom: 0.5em;
+      text-transform: uppercase;
     }
 
     .search-label {
@@ -785,8 +774,7 @@ form.form-with-submit-button {
       display: flex;
 
       .transfers-filters--filter--add-person {
-        display: flex;
-        padding: 55px 16px 8px 25px !important;
+        margin: 20px 16px 8px 25px;
         border: none !important;
       }
 
@@ -866,17 +854,6 @@ form.form-with-submit-button {
     }
   }
 
-  .transfers-filters--filter.calendar {
-    display: contents;
-
-    h3 {
-      text-transform: uppercase;
-    }
-
-    .calendar {
-      padding-right: 600px;
-    }
-  }
 
   .transfers-filters--filter.hot-wallet {
     margin-left: auto;
@@ -884,19 +861,6 @@ form.form-with-submit-button {
 
   .transfers-filters--filter.wallet-connect {
     margin-left: 1420px;
-  }
-
-  .transfers-filters--filter.search {
-    flex-direction: row;
-  }
-
-  .transfers-filters--filter.status {
-    flex-direction: row;
-    margin-left: auto
-  }
-
-  .transfers-filters--filter.category {
-    flex-direction: row;
   }
 
   .transfers-filters--clear {
@@ -1727,7 +1691,8 @@ input.transfer-rules__refresh_from_blockchain_button {
     background-color: #ffffff;
     border-left: 4px solid transparent;
 
-    & > div {
+    & > div,
+    & > turbo-frame {
       box-sizing: border-box;
       flex-grow: 1;
       width: 100%;
@@ -6139,7 +6104,7 @@ a:focus {
     color: white;
     cursor: pointer;
     font-weight: bold;
-    margin-right: 0.5em;
+    margin-left: 0.5em;
     border-radius: 6px !important;
     border: solid 1px #e6e8ed !important;
     height: 35px !important;

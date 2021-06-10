@@ -54,7 +54,7 @@
 <% all_queries = filters.map { |f| f[:query].keys }.flatten %>
 <% current_filter = filters.find { |f| f[:present] } %>
 
-<p class="status-title">Status: </p>
+<p class="status-title m-0 p-2">Status: </p>
 <%= select_tag(
         nil,
         options_for_select(
@@ -62,8 +62,8 @@
             current_filter && url_for(request.params.merge(q: (request.params[:q] || {}).except(*all_queries).merge(current_filter[:query])))
         ),
         include_blank: 'All',
-        id: 'transfers-filters--filter--options--select',
         class: 'sort-select',
+        id: 'filter-status-select',
         data: {
             controller: 'gooption',
             action: 'change->gooption#goOption',
