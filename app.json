@@ -159,6 +159,11 @@
       "required": true,
       "value": "true"
     },
+    "HOT_WALLET_DEPLOY_BUTTON": {
+      "description": "Show/hide a hot wallet deploy button",
+      "required": false,
+      "value": "true"
+    },
     "NODE_MODULES_CACHE": "false",
     "AWS_REGION": "us-east-1",
     "AWS_API_KEY": "dummy_value_to_be_removed_when_refile_is_no_longer_required",
