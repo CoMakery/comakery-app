@@ -11,6 +11,8 @@ class AccountsController < ApplicationController
 
   before_action :redirect_if_signed_in, only: %i[new create]
 
+  before_action :set_session_from_token, only: :new
+
   layout 'legacy', except: %i[index]
 
   def index
@@ -246,5 +248,11 @@ class AccountsController < ApplicationController
         attachment: account.image,
         resize_to_fill: [190, 190]
       ).path
+    end
+
+    def set_session_from_token
+      if (project_invite = ProjectInvite.find_by token: params[:token])
+        session[:project_invite] = project_invite
+      end
     end
 end
