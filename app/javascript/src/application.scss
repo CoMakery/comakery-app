@@ -618,12 +618,8 @@ form.form-with-submit-button {
 
     h4 {
       font-size: 1em;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
       text-transform: capitalize;
       font-weight: bold;
-      margin-bottom: 0.5em;
-      margin-right: 0.5em;
       color: #2647CE;
     }
 
@@ -734,11 +730,8 @@ form.form-with-submit-button {
   .transfers-filters--filter {
     h3 {
       font-size: 1.17em;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      text-transform: capitalize;
+      margin: 0;
       font-weight: bold;
-      margin-bottom: 0.5em;
       text-transform: uppercase;
     }
 
@@ -747,6 +740,8 @@ form.form-with-submit-button {
     }
 
     .transfers-filters--filter--form {
+      display: flex;
+
       .transfers-filters--filter--form--submit {
         border-radius: 6px;
         border: solid 1px #e6e8ed;
@@ -779,7 +774,7 @@ form.form-with-submit-button {
       display: flex;
 
       .transfers-filters--filter--add-person {
-        padding: 55px 16px 8px 25px !important;
+        margin: 20px 16px 8px 25px;
         border: none !important;
       }
 
@@ -1696,7 +1691,8 @@ input.transfer-rules__refresh_from_blockchain_button {
     background-color: #ffffff;
     border-left: 4px solid transparent;
 
-    & > div {
+    & > div,
+    & > turbo-frame {
       box-sizing: border-box;
       flex-grow: 1;
       width: 100%;

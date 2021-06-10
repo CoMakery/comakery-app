@@ -1,7 +1,10 @@
 <div class="col-md-7">
-  <div class="d-flex flex-row-reverse">
+  <div class="d-flex flex-row justify-content-end">
+    <div class="d-flex flex-row status">
+      <%= render partial: 'filter_status' %>
+    </div>
     <div class="d-flex flex-row category">
-      <p class="category-title">Category: </p>
+      <p class="category-title m-0 p-2">Category: </p>
       <%= select 'select',
                 'categories',
                 {},
@@ -25,9 +28,6 @@
               d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z"
               fill="currentColor"/>
       </svg>
-    </div>
-    <div class="d-flex flex-row status">
-      <%= render partial: 'filter_status' %>
     </div>
   </div>
 </div>

@@ -18,7 +18,11 @@
     </div>
 
     <% if policy(@project).edit_accounts? %>
-      <%= render partial: "shared/wallet_connect" %>
+      <div class="row">
+        <div class="col-md-12 wallet-connect">
+          <%= render partial: 'shared/wallet_connect' %>
+        </div>
+      </div>
     <% end %>
 
     <div class="transfers-table animated fadeIn faster">

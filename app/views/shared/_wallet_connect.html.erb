@@ -1,5 +1,5 @@
 <% if @project.token&.blockchain&.supported_by_wallet_connect? %>
-  <div class="d-flex flex-row">
+  <div class="d-flex flex-row justify-content-end">
     <div
       class="p-2 wallet-connect--button"
       data-action='click->sign--wallet-connect#switch'

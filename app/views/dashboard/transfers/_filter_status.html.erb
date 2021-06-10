@@ -54,7 +54,7 @@
 <% all_queries = filters.map { |f| f[:query].keys }.flatten %>
 <% current_filter = filters.find { |f| f[:present] } %>
 
-<p class="status-title">Status: </p>
+<p class="status-title m-0 p-2">Status: </p>
 <%= select_tag(
         nil,
         options_for_select(

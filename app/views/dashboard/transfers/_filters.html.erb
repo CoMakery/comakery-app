@@ -1,6 +1,6 @@
 <div class="row transfers-filters">
   <% if request.params[:q] %>
-    <div class="col-md-12">
+    <div class="col-md-12 mb-2">
       <h2>
         filters
         <div class="transfers-filters--clear">
@@ -34,7 +34,7 @@
 
   <% else %>
     <div class="col-md-4 transfers-filters--filter calendar">
-      <div class="row">
+      <div class="row align-items-center">
         <div class="col-md-3">
           <h3>Transfers</h3>
         </div>
@@ -46,16 +46,16 @@
   <% end %>
 
   <div class="col-md-6 hot-wallet">
-    <div class="d-flex flex-row-reverse">
+    <div class="d-flex flex-row justify-content-end">
       <% hot_wallet = @project.hot_wallet %>
       <% if hot_wallet.present? %>
         <% if policy(@project).edit_hot_wallet_mode? %>
-          <div class="p-2 batch-size">
+          <div class="hot-wallet">
+            <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
+          </div>
+          <div class="batch-size mx-2">
             <%= render partial: 'batch_size', locals: { project: @project } %>
             <%= render partial: 'projects/batch_size_modal', locals: { project: @project } %>
-          </div>
-          <div class="p-2 hot-wallet">
-            <%= render partial: 'hot_wallet_mode', locals: { project: @project } %>
           </div>
         <% else %>
           <div class="hot-wallet-address">
@@ -70,13 +70,9 @@
           </div>
         <% end %>
       <% elsif policy(@project).edit_hot_wallet_mode? && @project.token&._token_type_on_ethereum? %>
-        <div class="d-flex flex-row-reverse">
-          <div class="p-2 hot-wallet">
-            <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
-              <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-            </a>
-          </div>
-        </div>
+        <a href="<%= deploy_to_heroku_url(@project) %>" target="_blank">
+          <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+        </a>
       <% end %>
     </div>
   </div>
@@ -105,7 +101,10 @@
       </div>
     </div>
   <% end %>
-  <div class="col-md-12 wallet-connect">
-    <%= render partial: 'shared/wallet_connect' if policy(@project).create_transfer? %>
-  </div>
+  <% if policy(@project).create_transfer? %>
+    <div class="col-md-8"></div>
+    <div class="col-md-4 wallet-connect mt-2">
+      <%= render partial: 'shared/wallet_connect' %>
+    </div>
+  <% end %>
 </div>
