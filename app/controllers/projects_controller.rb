@@ -5,7 +5,6 @@ class ProjectsController < ApplicationController
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit show update]
   before_action :assign_project_by_long_id, only: %i[unlisted]
-  before_action :assign_project_role, only: %i[show]
   before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
   before_action :set_award, only: %i[show unlisted]
@@ -127,16 +126,6 @@ class ProjectsController < ApplicationController
 
       return redirect_to('/404.html') unless @project
       return redirect_to(project_path(@project)) unless @project.unlisted?
-    end
-
-    def assign_project_role
-      return if session[:project_invite].blank?
-
-      Projects::ProjectRoles::CreateFromSession.call(
-        project: @project,
-        project_invite: session[:project_invite],
-        whitelabel_mission: @whitelabel_mission
-      )
     end
 
     def set_projects
