@@ -3,13 +3,15 @@ module Projects
     class CreateFromSession
       include Interactor
 
-      delegate :project, :project_invite, :whitelabel_mission, to: :context
+      delegate :account, :session, to: :context
 
       def call
-        if project.invites.pending.exists?(project_invite.id)
-          project_role = project.project_roles.new(account: account, role: project_invite.role)
+        if project.invites.pending.exists?(session[:project_invite].id)
+          project_role = project.project_roles.new(account: account, role: session[:project_invite].role)
 
           if project_role.save
+            context.project_role = project_role
+
             project_invite.update(accepted: true)
 
             session.delete(:project_invite)
@@ -21,12 +23,12 @@ module Projects
 
       private
 
-        def account
-          if whitelabel_mission
-            whitelabel_mission.managed_accounts.find_by(email: email)
-          else
-            Account.find_by(email: email, managed_mission_id: nil)
-          end
+        def project
+          context.project = Project.find(project_invite.invitable_id)
+        end
+
+        def project_invite
+          @project_invite ||= session[:project_invite]
         end
     end
   end
