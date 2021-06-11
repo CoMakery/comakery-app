@@ -12,7 +12,7 @@ RSpec.describe AwardsController, type: :controller do
   let!(:project) { create(:project, account: issuer.account, visibility: :public_listed, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'erc20', contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
   let!(:award_type) { create(:award_type, project: project) }
   let!(:wallet) do
-    create :wallet, account: receiver.account, _blockchain: project.token._blockchain, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+    create :wallet, account: receiver.account, _blockchain: project.token&._blockchain, address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
   end
 
   let(:now) { Time.zone.local(2021, 6, 3, 15) }
@@ -852,6 +852,46 @@ RSpec.describe AwardsController, type: :controller do
           recipient_name = award2.decorate.recipient_display_name.possessive
           expect(flash[:notice]).to eq "#{recipient_name} task has been accepted. "\
                                        'Initiate payment for the task on the payments page.'
+        end
+      end
+
+      context 'when wallet blockchain does not match token blockchain' do
+        let!(:wallet) do
+          FactoryBot.create :wallet, account: receiver.account, _blockchain: :ethereum_kovan,
+                                     address: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367',
+                                     primary_wallet: false
+        end
+        let(:award) do
+          FactoryBot.create :award, award_type: award_type, amount: 100, quantity: 1,
+                                    issuer: account, account: nil, status: 'ready',
+                                    transfer_type: transfer_type
+        end
+
+        before do
+          post :send_award, params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            award_id: award.to_param,
+            task: {
+              uid: receiver.uid,
+              quantity: 1.5,
+              channel_id: channel.id,
+              message: 'Great work'
+            }
+          }
+        end
+
+        it 'records a slack award being created' do
+          expect(response.status).to eq(200)
+
+          expect(award.reload.award_type).to eq award_type
+          expect(award.account).to eq receiver.account
+          expect(award.quantity).to eq 1.5
+
+          expect(flash[:notice])
+            .to eq "The award recipient hasn't entered a blockchain address for us to send the "\
+                   "award to. When the recipient enters their blockchain address you will be "\
+                   "able to approve the token transfer on the awards page."
         end
       end
 
