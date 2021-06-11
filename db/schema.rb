@@ -383,6 +383,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_104821) do
     t.string "token", null: false
     t.string "role", null: false
     t.boolean "accepted", default: false
+    t.datetime "expires_at", null: false
     t.integer "invitable_id"
     t.string "invitable_type"
     t.datetime "created_at", precision: 6, null: false

@@ -5,6 +5,7 @@ class CreateInvites < ActiveRecord::Migration[6.0]
       t.string :token, null: false, index: { unique: true }
       t.string :role, null: false
       t.boolean :accepted, default: false
+      t.datetime :expires_at, null: false
       t.integer :invitable_id
       t.string :invitable_type
 
