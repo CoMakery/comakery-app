@@ -251,8 +251,8 @@ class AccountsController < ApplicationController
     end
 
     def set_session_from_token
-      if (project_invite = ProjectInvite.find_by token: params[:token])
-        session[:project_invite] = project_invite
-      end
+      project_invite = ProjectInvite.find_by(token: params[:token])
+
+      session[:project_invite] = project_invite unless project_invite&.expired?
     end
 end
