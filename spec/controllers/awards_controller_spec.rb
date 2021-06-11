@@ -23,12 +23,6 @@ RSpec.describe AwardsController, type: :controller do
     Timecop.freeze(now)
 
     stub_discord_channels
-    team.build_authentication_team issuer
-    team.build_authentication_team receiver
-    team.build_authentication_team other_auth
-    discord_team.build_authentication_team issuer_discord
-    discord_team.build_authentication_team receiver_discord
-    project.channels.create(team: team, channel_id: '123')
 
     allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
     allow_any_instance_of(AwardsController)
@@ -173,13 +167,13 @@ RSpec.describe AwardsController, type: :controller do
 
   describe '#new' do
     let(:account) { FactoryBot.create(:account, created_at: now) }
-    let!(:transfer_type1) do
+    let(:transfer_type1) do
       FactoryBot.build(:transfer_type, project: nil, name: 'mint', created_at: now)
     end
-    let!(:transfer_type2) do
+    let(:transfer_type2) do
       FactoryBot.build(:transfer_type, project: nil, name: 'blah', created_at: now)
     end
-    let!(:transfer_type3) do
+    let(:transfer_type3) do
       FactoryBot.build(:transfer_type, project: nil, name: 'burn', created_at: now)
     end
     let(:token) { FactoryBot.create(:token, created_at: now, updated_at: now) }
@@ -216,6 +210,8 @@ RSpec.describe AwardsController, type: :controller do
         }
       }
     end
+
+    before(:all) { Timecop.freeze(Time.zone.local(2021, 6, 3, 15)) }
 
     before do
       allow(project).to receive(:header_props).with(account).and_return(header_props)
@@ -357,13 +353,13 @@ RSpec.describe AwardsController, type: :controller do
 
   describe '#edit' do
     let(:account) { FactoryBot.create(:account, created_at: now) }
-    let!(:transfer_type1) do
+    let(:transfer_type1) do
       FactoryBot.build(:transfer_type, project: nil, name: 'mint', created_at: now)
     end
-    let!(:transfer_type2) do
+    let(:transfer_type2) do
       FactoryBot.build(:transfer_type, project: nil, name: 'blah', created_at: now)
     end
-    let!(:transfer_type3) do
+    let(:transfer_type3) do
       FactoryBot.build(:transfer_type, project: nil, name: 'burn', created_at: now)
     end
     let(:token) { FactoryBot.create(:token, created_at: now) }
@@ -775,89 +771,119 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#send_award' do
-    let(:award_type) { create(:award_type, project: project) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
+    let!(:transfer_type) do
+      FactoryBot.create(:transfer_type, project: project, name: 'mint')
+    end
     let(:award) do
-      create(
-        :award,
-        award_type: award_type,
-        amount: 100,
-        quantity: 1,
-        issuer: issuer.account
-      )
+      FactoryBot.create :award, award_type: award_type, amount: 100, quantity: 1, issuer: account,
+                                account: nil, status: 'ready', transfer_type: transfer_type
     end
     let(:award2) do
-      create(
-        :award,
-        award_type: award_type,
-        amount: 100,
-        quantity: 1,
-        issuer: issuer.account
-      )
+      FactoryBot.create :award, award_type: award_type, amount: 100, quantity: 1, issuer: account,
+                                account: nil, status: 'ready', transfer_type: transfer_type
     end
+    let!(:channel) { FactoryBot.create :channel, :slack, project: project, channel_id: '123' }
 
-    context 'logged in' do
+    before { allow_any_instance_of(Award).to receive(:send_award_notifications) }
+
+    context 'when logged in' do
       before do
         login(issuer.account)
         request.env['HTTP_REFERER'] = "/projects/#{project.to_param}"
       end
 
-      it 'records a slack award being created' do
-        expect_any_instance_of(Award).to receive(:send_award_notifications)
-
-        award.update(account: nil, status: 'ready')
-
-        post :send_award, params: {
-          project_id: project.to_param,
-          award_type_id: award_type.to_param,
-          award_id: award.to_param,
-          task: {
-            uid: receiver.uid,
-            quantity: 1.5,
-            channel_id: project.channels.first.id,
-            message: 'Great work'
+      context 'when slack channel' do
+        before do
+          post :send_award, params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            award_id: award.to_param,
+            task: {
+              uid: receiver.uid,
+              quantity: 1.5,
+              channel_id: channel.id,
+              message: 'Great work'
+            }
           }
-        }
-        expect(response.status).to eq(200)
+        end
 
-        award.reload
+        it 'records a slack award being created' do
+          expect(response.status).to eq(200)
 
-        expect(flash[:notice]).to eq("#{award.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page.")
-        expect(award.award_type).to eq(award_type)
-        expect(award.account).to eq(receiver.account)
-        expect(award.quantity).to eq(1.5)
+          expect(award.reload.award_type).to eq award_type
+          expect(award.account).to eq receiver.account
+          expect(award.quantity).to eq 1.5
+
+          recipient_name = award.decorate.recipient_display_name.possessive
+          expect(flash[:notice]).to eq "#{recipient_name} task has been accepted. "\
+                                       'Initiate payment for the task on the payments page.'
+        end
       end
 
-      it 'records a discord award being created' do
-        expect_any_instance_of(Award).to receive(:send_award_notifications)
+      context 'when discord channel' do
+        let!(:channel) { FactoryBot.create :channel, :discord, project: project, channel_id: '123' }
 
-        stub_discord_channels
-        channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+        before do
+          stub_discord_channels
 
-        award2.update(account: nil, status: 'ready')
-
-        post :send_award, params: {
-          project_id: project.to_param,
-          award_type_id: award_type.to_param,
-          award_id: award2.to_param,
-          task: {
-            uid: receiver_discord.uid,
-            quantity: 1.5,
-            channel_id: channel.id,
-            message: 'Great work'
+          post :send_award, params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            award_id: award2.to_param,
+            task: {
+              uid: receiver_discord.uid,
+              quantity: 1.5,
+              channel_id: channel.id,
+              message: 'Great work'
+            }
           }
-        }
-        expect(response.status).to eq(200)
+        end
 
-        award2.reload
-        expect(flash[:notice]).to eq("#{award2.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page.")
-        expect(award2.discord?).to be_truthy
-        expect(award2.award_type).to eq(award_type)
-        expect(award2.account).to eq(receiver.account)
-        expect(award2.quantity).to eq(1.5)
+        it 'records a discord award being created' do
+          expect(response.status).to eq(200)
+
+          expect(award2.reload.discord?).to eq true
+          expect(award2.award_type).to eq award_type
+          expect(award2.account).to eq receiver.account
+          expect(award2.quantity).to eq 1.5
+
+          recipient_name = award2.decorate.recipient_display_name.possessive
+          expect(flash[:notice]).to eq "#{recipient_name} task has been accepted. "\
+                                       'Initiate payment for the task on the payments page.'
+        end
+      end
+
+      context 'when award sending fails' do
+        before do
+          award.why = 'a' * 501
+          award.save(validate: false)
+
+          post :send_award, params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            award_id: award.to_param,
+            task: {
+              uid: receiver.uid,
+              quantity: 1.5,
+              channel_id: channel.id,
+              message: 'Great work'
+            }
+          }
+        end
+
+        it 'should respond with unprocessable entity status' do
+          expect(response.status).to eq(422)
+          expect(JSON.parse(response.body))
+            .to eq 'id' => award.id,
+                   'errors' => { 'task[why]' => 'is too long (maximum is 500 characters)' },
+                   'message' => 'Why is too long (maximum is 500 characters)'
+        end
       end
     end
 
-    context 'logged in not as project owner' do
+    context 'when logged in not as project owner' do
       before do
         account = create(:account)
         login(account)
@@ -977,8 +1003,9 @@ RSpec.describe AwardsController, type: :controller do
       FactoryBot.create :token, _token_type: 'erc20', _blockchain: :ethereum_ropsten,
                                 contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
     end
+    let(:account) { FactoryBot.create(:account, email: 'bobjohnson@example.com') }
     let(:project) do
-      FactoryBot.create :project, account: issuer.account, public: false,
+      FactoryBot.create :project, account: account, public: false,
                                   maximum_tokens: 100_000_000, token: token
     end
     let(:award_type) { FactoryBot.create(:award_type, project: project) }
@@ -987,14 +1014,15 @@ RSpec.describe AwardsController, type: :controller do
     end
     let(:award) do
       FactoryBot.create :award, award_type: award_type, transfer_type: transfer_type,
-                                issuer: issuer.account
+                                issuer: account
     end
     let!(:wallet) do
-      FactoryBot.create :wallet, account: issuer.account, _blockchain: :ethereum_ropsten,
+      FactoryBot.create :wallet, account: account, _blockchain: :ethereum_ropsten,
                                  address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47'
     end
+    let!(:channel) { FactoryBot.create :channel, project: project, channel_id: '123' }
 
-    before { login issuer.account }
+    before { login account }
 
     context 'with email' do
       let!(:account) { FactoryBot.create(:account, email: 'test2@comakery.com') }
@@ -1060,9 +1088,17 @@ RSpec.describe AwardsController, type: :controller do
 
     context 'with channel_id and uid' do
       let!(:account) { FactoryBot.create(:account, email: 'bobjohnson@example.com') }
+      let!(:project) { FactoryBot.create :project, account: account, token: token }
       let!(:wallet) do
         FactoryBot.create :wallet, account: account, _blockchain: :ethereum_ropsten,
                                    address: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48'
+      end
+      let!(:team) { FactoryBot.create :team, :slack }
+      let!(:channel) { FactoryBot.create :channel, project: project, team: team, channel_id: '123' }
+      let!(:authentication) { FactoryBot.create :authentication, :slack, account: account }
+      let!(:authentication_team) do
+        FactoryBot.create :authentication_team, account: account, team: team,
+                                                authentication: authentication
       end
 
       before do
@@ -1083,7 +1119,7 @@ RSpec.describe AwardsController, type: :controller do
           award_type_id: award_type.to_param,
           award_id: award.to_param,
           uid: 'receiver id',
-          channel_id: project.channels.first.id
+          channel_id: channel.id
         }
       end
 
