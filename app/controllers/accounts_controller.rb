@@ -107,7 +107,14 @@ class AccountsController < ApplicationController
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
 
-      redirect_to my_tasks_path
+      if session[:project_invite].present?
+        result = Projects::ProjectRoles::CreateFromSession.call(account: @account, session: session)
+
+        redirect_to project_path(result.project),
+                    flash: { notice: "You have successfully joined the project with the #{result.project_role.role}" }
+      else
+        redirect_to my_tasks_path
+      end
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
