@@ -890,8 +890,8 @@ RSpec.describe AwardsController, type: :controller do
 
           expect(flash[:notice])
             .to eq "The award recipient hasn't entered a blockchain address for us to send the "\
-                   "award to. When the recipient enters their blockchain address you will be "\
-                   "able to approve the token transfer on the awards page."
+                   'award to. When the recipient enters their blockchain address you will be '\
+                   'able to approve the token transfer on the awards page.'
         end
       end
 
