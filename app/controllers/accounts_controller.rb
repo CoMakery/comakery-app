@@ -62,7 +62,11 @@ class AccountsController < ApplicationController
     if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
-      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      if session[:project_invite].present? && !session[:project_invite]&.expired?
+        @account.confirm!
+      else
+        UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      end
 
       Project.where(auto_add_account: true).each { |project| project.add_account(@account) }
 
