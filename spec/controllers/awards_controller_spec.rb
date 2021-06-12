@@ -531,37 +531,92 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#start' do
-    let!(:award) { create(:award_ready) }
-    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:token) { FactoryBot.create(:token) }
+    let(:project) { FactoryBot.create :project, account: account, token: token }
+    let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project, state: :public) }
 
-    it 'starts the task, associating it with current user and redirects to task details page with notice' do
-      login(award.project.account)
+    before { login(account) }
 
-      post :start, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        award_id: award.to_param
-      }
+    context 'when award cannot be cloned' do
+      let!(:award) do
+        FactoryBot.create :award, account: account, transfer_type: transfer_type,
+                                  award_type: award_type, issuer: account, status: 'ready'
+      end
 
-      expect(response).to redirect_to(project_award_type_award_path(award.project, award.award_type, award))
-      expect(flash[:notice]).to eq('Task started')
-      expect(award.reload.started?).to be true
+      context 'when award is valid' do
+        before do
+          post :start, params: {
+            project_id: project.id, award_type_id: award_type.id, award_id: award.id
+          }
+        end
+
+        it 'starts the task, associating it with current user and redirects to task details page with notice' do
+          expect(response).to redirect_to project_award_type_award_path(project, award_type, award)
+          expect(flash[:notice]).to eq('Task started')
+          expect(award.reload.status).to eq 'started'
+        end
+      end
+
+      context 'when award is not valid' do
+        before do
+          award.why = 'a' * 501
+          award.save(validate: false)
+
+          post :start, params: {
+            project_id: project.id, award_type_id: award_type.id, award_id: award.id
+          }
+        end
+
+        it 'does not start the task and redirects to task list page with error' do
+          expect(response).to redirect_to my_tasks_path(filter: 'ready')
+          expect(flash[:error]).to eq 'Why is too long (maximum is 500 characters)'
+          expect(award.reload.status).to eq 'ready'
+        end
+      end
     end
 
-    it 'clones the task before start if it should be cloned' do
-      login(award_cloneable.project.account)
-      post :start, params: {
-        project_id: award_cloneable.project.to_param,
-        award_type_id: award_cloneable.award_type.to_param,
-        award_id: award_cloneable.to_param
-      }
+    context 'when award can be cloned' do
+      let!(:award) do
+        FactoryBot.create :award, account: account, transfer_type: transfer_type,
+                                  award_type: award_type, issuer: account, number_of_assignments: 2,
+                                  status: 'ready'
+      end
 
-      cloned_award = Award.find_by(cloned_on_assignment_from_id: award_cloneable.id)
+      context 'when award is valid' do
+        before do
+          post :start, params: {
+            project_id: project.id, award_type_id: award_type.id, award_id: award.id
+          }
+        end
 
-      expect(response).to redirect_to(project_award_type_award_path(cloned_award.project, cloned_award.award_type, cloned_award))
-      expect(flash[:notice]).to eq('Task started')
-      expect(award_cloneable.reload.ready?).to be true
-      expect(cloned_award.started?).to be true
+        it 'clones the task before start if it should be cloned' do
+          cloned_award = award.assignments.last
+
+          expect(response)
+            .to redirect_to project_award_type_award_path(project, award_type, cloned_award)
+          expect(flash[:notice]).to eq('Task started')
+          expect(award.reload.status).to eq 'ready'
+          expect(cloned_award.status).to eq 'started'
+        end
+      end
+
+      context 'when award is not valid' do
+        before do
+          award.why = 'a' * 501
+          award.save(validate: false)
+        end
+
+        it 'raises error' do
+          expect do
+            post :start, params: {
+              project_id: project.id, award_type_id: award_type.id, award_id: award.id
+            }
+          end.to raise_error
+        end
+      end
     end
   end
 
@@ -570,7 +625,7 @@ RSpec.describe AwardsController, type: :controller do
     let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
     let!(:account) { create(:account) }
 
-    it 'assignes task with selected account and redirects to batches page with notice' do
+    it 'assigns task with selected account and redirects to batches page with notice' do
       login(award.project.account)
       post :assign, params: {
         project_id: award.project.to_param,
