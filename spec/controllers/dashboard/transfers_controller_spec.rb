@@ -69,19 +69,19 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
     end
   end
 
-  describe 'GET #export_transfers' do
-    it 'can not download csv of all transfers of project' do
-      login(receiver)
-
-      get :export_transfers, params: { project_id: project.id }
-      expect(response).to redirect_to root_path
+  describe 'POST #export' do
+    before do
+      ActiveJob::Base.queue_adapter = :test
     end
 
-    it 'Only project admin can download csv of all transfers of project' do
-      get :export_transfers, params: { project_id: project.id }
-      expect(response).to redirect_to(project_dashboard_transfers_path(project))
-      expect(controller).to set_flash[:notice]
+    after do
+      ActiveJob::Base.queue_adapter.enqueued_jobs.clear
     end
+
+    subject { post :export, params: { project_id: project.id } }
+
+    it { is_expected.to redirect_to(project_dashboard_transfers_path(project)) }
+    it { expect { subject }.to enqueue_job(ProjectExportTransfersJob) }
   end
 
   describe 'POST #create' do

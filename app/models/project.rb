@@ -259,6 +259,9 @@ class Project < ApplicationRecord
   end
 
   def should_update_transfers_csv?
+    return true unless transfers_csv
+    return true if awards.completed.blank?
+
     transfers_csv.blob.created_at < awards.completed.maximum(:updated_at)
   end
 
