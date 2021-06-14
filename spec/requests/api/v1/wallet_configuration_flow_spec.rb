@@ -56,7 +56,7 @@ describe 'Wallet configuration flow', type: :request do
 
     expect(status).to eq(200)
     reset_url_response = JSON.parse(response.body)
-    expect(reset_url_response['resetUrl']).to start_with 'https://staging.service.oreid.io/recover-account?account='
+    expect(reset_url_response['resetUrl']).to start_with 'https://service.oreid.io/recover-account?account='
 
     expect(ore_id_account.reload.state).to eq 'unclaimed'
   end

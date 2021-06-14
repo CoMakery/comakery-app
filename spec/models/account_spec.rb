@@ -824,6 +824,14 @@ describe Account do
     it { is_expected.to eq(wallet.address) }
   end
 
+  describe '#ore_id_address_for_blockchain' do
+    let!(:wallet) { create(:ore_id_wallet) }
+    let!(:account) { wallet.account }
+    subject { account.ore_id_address_for_blockchain(wallet._blockchain) }
+
+    it { is_expected.to eq(wallet.address) }
+  end
+
   describe '#wallets_for_blockchain' do
     let!(:wallet) { create(:wallet) }
     let!(:wallet2) { create(:eth_wallet, account: wallet.account) }
