@@ -16,7 +16,7 @@ class UserMailer < ApplicationMailer
     @project = project
     @project_role = project_role
     @domain_name = domain_name
-    @url = new_account_url(id: project.id, token: token)
+    @url = new_account_url(token: token)
     mail to: email, subject: "Invitation to #{@project.title} project"
   end
 
