@@ -10,21 +10,15 @@ describe SendInvite do
 
       context 'and email is valid' do
         context 'when the invite has already been sent to the user' do
-          let(:invite) { FactoryBot.create(:invite, email: params[:email], invitable: project) }
+          let!(:invite) { FactoryBot.create(:invite, email: params[:email], invitable: project) }
 
-          context 'and expired' do
-            before { invite.update(expires_at: DateTime.yesterday) }
-
-            it { expect(invite.expired?).to be(true) }
-
-            subject(:result) do
-              described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
-            end
-
-            it { expect { result }.to change { UserMailer.deliveries.count }.by(1) }
-
-            it { expect(result.success?).to be(true) }
+          subject(:result) do
+            described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
           end
+
+          it { expect(result.errors).to eq(['Invite is already sent']) }
+
+          it { expect(result.success?).to be(false) }
         end
 
         context 'when the invite has not yet been sent to the user' do
