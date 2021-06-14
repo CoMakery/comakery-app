@@ -104,6 +104,7 @@
       </div>
     </div>
   <% end %>
+
   <% if policy(@project).create_transfer? %>
     <%= render partial: 'shared/wallet_connect' %>
   <% end %>

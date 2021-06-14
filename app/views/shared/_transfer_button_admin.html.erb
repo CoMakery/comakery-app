@@ -9,21 +9,17 @@
     <% elsif transfer.recipient_address.blank? %>
       needs wallet
 
-    <% elsif transfer.token.blockchain.supported_by_ore_id? %>
-      <%= button_to sign_ore_id_new_path(transfer_id: transfer.id), class: 'transfer-algo-btn', rel: 'nofollow', method: :post, data: {turbo: "false"} do %>
-        <%= render partial: "shared/wallet_logo", locals: { project: transfer.project, size: 12 } %>
-        <span>PAY</span>
-      <% end %>
-
-    <% elsif transfer.token.blockchain.supported_by_wallet_connect? %>
+    <% elsif transfer.token.blockchain.supported_by_wallet_connect? || transfer.token.blockchain.supported_by_ore_id? %>
       <a
         href='javascript:void(0)'
         class="transfer-tokens-btn transfer-tokens-btn-skip-legacy"
-        data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx"
+        data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx click->sign--ore-id#sendTx"
+        data-sign--ore-id-target='txButtons'
         data-sign--wallet-connect-target='txButtons'
         data-sign--metamask-target='txButtons'
         data-tx-new-url="<%= sign_user_wallet_new_path(transfer_id: transfer.id) %>"
-        data-tx-receive-url="<%= sign_user_wallet_receive_path %>">
+        data-tx-receive-url="<%= sign_user_wallet_receive_path %>"
+        data-tx-oreid-new-url="<%= sign_ore_id_new_path(transfer_id: transfer.id) %>">
 
         <% case transfer.latest_blockchain_transaction&.status %>
         <% when 'created' %>

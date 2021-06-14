@@ -1,33 +1,25 @@
 import { Controller } from 'stimulus'
-import { HelpersEthereum } from "@open-rights-exchange/chainjs"
-import MetaMaskOnboarding from '@metamask/onboarding'
-import { FLASH_ADD_MESSAGE } from '../../src/javascripts/eventTypes'
-import PubSub from 'pubsub-js'
+import { Turbo } from '@hotwired/turbo-rails'
 
 export default class extends Controller {
   static targets = [ "walletAddress", "txButtons", "connectButton", "otherConnectButtons" ]
 
+  static values = {
+    address: String,
+    linkUrl: String
+  }
+
   initialize() {
-    this.name = 'metamask'
+    this.name = 'ore-id'
   }
 
-  async metamaskInit() {
-    const onboarding = new MetaMaskOnboarding()
-    this.onboarding = onboarding
-
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      window.ethereum.on('accountsChanged', this.onAccountsUpdate.bind(this))
-      this.onAccountsUpdate(await window.ethereum.request({
-        method: 'eth_requestAccounts',
-      }))
+  async oreidInit() {
+    if (this.addressValue) {
+      this.accounts = [this.addressValue]
+      this.updateTargets()
     } else {
-      onboarding.startOnboarding()
+      Turbo.visit(this.linkUrlValue)
     }
-  }
-
-  onAccountsUpdate(accounts) {
-    this.accounts = accounts
-    this.updateTargets()
   }
 
   updateTargets() {
@@ -38,7 +30,7 @@ export default class extends Controller {
     } else {
       this.connectButtonTarget.classList.remove('wallet-connect--button__connected')
     }
-
+    
     this.otherConnectButtonsTargets.forEach(button => {
       if (this.accountsPresent()) {
         button.classList.add('wallet-connect--button__disabled')
@@ -46,7 +38,7 @@ export default class extends Controller {
         button.classList.remove('wallet-connect--button__disabled')
       }
     })
-    
+
     this.txButtonsTargets.forEach(button => {
       if (this.accountsPresent()) {
         button.classList.add('transfer-tokens-btn__enabled')
@@ -66,17 +58,15 @@ export default class extends Controller {
     e.preventDefault()
 
     if (this.accountsPresent()) {
-      this.onboarding.stopOnboarding()
-      this.onboarding = null
       this.accounts = null
       this.updateTargets()
     } else {
-      this.metamaskInit()
+      this.oreidInit()
     }
   }
 
   async sendTx(e) {
-    if (!this.accounts) {
+    if (!this.accountsPresent()) {
       return
     }
 
@@ -92,37 +82,14 @@ export default class extends Controller {
     
     let dataset
     
-    if (button.dataset.txNewUrl && button.dataset.txReceiveUrl) {
+    if (button.dataset.txOreidNewUrl) {
       dataset = button.dataset
     } else {
       dataset = await this.saveTransactable(e)
     }
 
-    const txNewUrl = dataset.txNewUrl
-    const txReceiveUrl = dataset.txReceiveUrl
-    const response = await fetch(`${txNewUrl}&source=${this.accounts[0]}`)
-    const responseJSON = await response.json()
-    const tx = JSON.parse(responseJSON.tx)
-    const state = responseJSON.state
-    
-    if (tx.contract) {
-      tx.data = HelpersEthereum.generateDataFromContractAction(tx.contract)
-      delete tx.contract
-    }
-
-    window.ethereum
-      .request({
-        method: 'eth_sendTransaction',
-        params: [tx],
-      })
-      .then(async (txHash) => {
-        await fetch(`${txReceiveUrl}?state=${state}&transaction_id=${txHash}`)
-      })
-      .catch(async (error) => {
-        console.error(error.message)
-        PubSub.publish(FLASH_ADD_MESSAGE, { severity: "error", text: error.message })
-        await fetch(`${txReceiveUrl}?state=${state}&error_message=${error.message}`)
-      })
+    const txNewUrl = dataset.txOreidNewUrl
+    window.open(txNewUrl)
   }
 
   async saveTransactable(e) {
