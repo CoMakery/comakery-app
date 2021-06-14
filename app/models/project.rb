@@ -242,6 +242,34 @@ class Project < ApplicationRecord
     TransferType.create_defaults_for(self) if transfer_types.empty?
   end
 
+  def download_transfers_csv
+    update_transfers_csv
+
+    transfers_csv.blob.download
+  end
+
+  def update_transfers_csv
+    # TODO: Return if shouldn't be updated
+
+    transfers_csv.attach(
+      io: StringIO.new(transfers_to_csv),
+      filename: 'transfers.csv',
+      content_type: 'text/csv'
+    )
+  end
+
+  def transfers_to_csv
+    return '' if awards.completed.blank?
+
+    CSV.generate do |csv_file|
+      csv_file << awards.last.decorate.to_csv_header
+
+      awards.completed.find_each do |award|
+        csv_file << award.decorate.to_csv
+      end
+    end
+  end
+
   private
 
     def valid_tracker_url

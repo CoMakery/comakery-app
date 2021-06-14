@@ -14,16 +14,6 @@
 
     <%= render partial: 'table_panel' %>
 
-    <% if policy(@project).export_transfers? %>
-      <div class='row'>
-        <div class='col-12'>
-          <%= link_to export_transfers_project_dashboard_transfers_path(@project) do %>
-            Export Transfers <i class='fa fa-download'></i>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-
     <div class="transfers-table animated fadeIn faster">
       <%= render partial: 'header' %>
       <%= render partial: 'summary' %>

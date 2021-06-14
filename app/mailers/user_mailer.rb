@@ -35,10 +35,4 @@ class UserMailer < ApplicationMailer
     @old_age = old_age
     mail to: 'support@comakery.com', subject: '[Support] Potential Underage User'
   end
-
-  def transfer_csv_attachment(project, account)
-    attachments['Transfers.csv'] = { mime_type: 'text/csv', content: project.transfers_csv.blob.download }
-    @project = project
-    mail to: account.email, subject: "Project's transfers attachment"
-  end
 end
