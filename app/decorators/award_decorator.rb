@@ -68,16 +68,16 @@ class AwardDecorator < Draper::Decorator
     ]
   end
 
-  def to_csv # rubocop:todo Metrics/CyclomaticComplexity
+  def to_csv # rubocop:todo Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     [
       id,
       transfer_type&.name,
-      account&.id,
+      account&.managed_account_id || account&.id,
       account&.first_name,
       account&.last_name,
       recipient_wallet&.address,
       account&.decorate&.verification_state,
-      issuer&.id,
+      issuer&.managed_account_id || issuer&.id,
       issuer&.first_name,
       issuer&.last_name,
       latest_blockchain_transaction&.source,

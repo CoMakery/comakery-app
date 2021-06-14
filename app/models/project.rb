@@ -249,13 +249,17 @@ class Project < ApplicationRecord
   end
 
   def update_transfers_csv
-    # TODO: Return if shouldn't be updated
+    return unless should_update_transfers_csv?
 
     transfers_csv.attach(
       io: StringIO.new(transfers_to_csv),
       filename: 'transfers.csv',
       content_type: 'text/csv'
     )
+  end
+
+  def should_update_transfers_csv?
+    transfers_csv.blob.created_at < awards.completed.maximum(:updated_at)
   end
 
   def transfers_to_csv
