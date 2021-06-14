@@ -189,4 +189,110 @@ describe AwardDecorator do
       it { is_expected.to be true }
     end
   end
+
+  describe '#to_csv_header' do
+    subject { award.decorate.to_csv_header }
+
+    let(:columns) do
+      [
+        'Id',
+        'Transfer Type',
+        'Recipient Id',
+        'Recipient First Name',
+        'Recipient Last Name',
+        'Recipient Blockchain Address',
+        'Recipient Verification',
+        'Sender Id',
+        'Sender First Name',
+        'Sender Last Name',
+        'Sender Blockchain Address',
+        "Total Amount #{award.token&.symbol}",
+        'Transaction Hash',
+        'Transaction Blockchain',
+        'Transferred At',
+        'Created At'
+      ]
+    end
+
+    it { is_expected.to eq(columns) }
+
+    context 'without token' do
+      before do
+        allow(award).to receive(:token).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+  end
+
+  describe '#to_csv' do
+    let(:blockchain_transaction) { create(:blockchain_transaction) }
+    let(:award) { blockchain_transaction.blockchain_transactable }
+
+    subject { award.decorate.to_csv }
+
+    let(:columns) do
+      [
+        award.id,
+        award.transfer_type&.name,
+        award.account&.managed_account_id || award.account&.id,
+        award.account&.first_name,
+        award.account&.last_name,
+        award.recipient_wallet&.address,
+        award.account&.decorate&.verification_state,
+        award.issuer.managed_account_id || award.issuer.id,
+        award.issuer.first_name,
+        award.issuer.last_name,
+        award.latest_blockchain_transaction&.source,
+        award.total_amount,
+        award.latest_blockchain_transaction&.tx_hash,
+        award.token&.blockchain&.name,
+        award.transferred_at,
+        award.created_at
+      ]
+    end
+
+    it { is_expected.to eq(columns) }
+
+    context 'with managed account ids' do
+      before do
+        allow(award).to receive(:account).and_return(create(:account, managed_account_id: '0'))
+        allow(award).to receive(:issuer).and_return(create(:account, managed_account_id: '1'))
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without account' do
+      before do
+        allow(award).to receive(:account).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without recipient_wallet' do
+      before do
+        allow(award).to receive(:recipient_wallet).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without latest_blockchain_transaction' do
+      before do
+        allow(award).to receive(:latest_blockchain_transaction).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without token' do
+      before do
+        allow(award).to receive(:token).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+  end
 end
