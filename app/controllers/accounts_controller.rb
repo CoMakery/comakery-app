@@ -107,7 +107,7 @@ class AccountsController < ApplicationController
       end
 
       if @project_invite.present?
-        Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite_id: @project_invite)
+        Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite: @project_invite)
 
         redirect_to project_path(@project_invite.project)
       else
