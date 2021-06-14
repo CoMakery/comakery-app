@@ -24,8 +24,8 @@ describe 'test_transferred_filter', js: true do
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
 
-        select('transferred', from: 'transfers-filters--filter--options--select')
-        page.find :xpath, '//select[@id="transfers-filters--filter--options--select"]/option[@selected="selected" and contains (text(), "transferred")]', wait: 20 # wait for page to reload
+        select('transferred', from: 'filter-status-select')
+        page.find :xpath, '//select[@id="filter-status-select"]/option[@selected="selected" and contains (text(), "transferred")]', wait: 20 # wait for page to reload
 
         # verify number of transfers after applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)

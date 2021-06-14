@@ -77,7 +77,7 @@ describe 'transfers_index_page', js: true do
 
       transfer.cancelled!
 
-      select('cancelled', from: 'transfers-filters--filter--options--select')
+      select('cancelled', from: 'filter-status-select')
     end
 
     it 'shows transfer button history' do
@@ -102,6 +102,32 @@ describe 'transfers_index_page', js: true do
 
       expect(page).to have_css('.transfers-table__transfer__lockup_schedule_id', text: '0')
       expect(page).to have_css('.transfers-table__transfer__commencement_date', text: 'Jan 1, 2021')
+    end
+  end
+
+  context 'deploy a hot wallet button', js: false do
+    let(:token) { create(:erc20_token) }
+    let(:project_award_type) { (create :award_type, project: project) }
+    let(:project) { create :project, token: token, account: owner }
+
+    before { login(project.account) }
+
+    context 'for ethereum blockchain' do
+      it 'shows the button when HOT_WALLET_DEPLOY_BUTTON set to true' do
+        stub_const('ENV', ENV.to_hash.merge('HOT_WALLET_DEPLOY_BUTTON' => 'true'))
+
+        visit project_dashboard_transfers_path(project)
+
+        expect(page).to have_content('Deploy a hot wallet')
+      end
+
+      it 'shows the button when HOT_WALLET_DEPLOY_BUTTON set to false' do
+        stub_const('ENV', ENV.to_hash.merge('HOT_WALLET_DEPLOY_BUTTON' => 'false'))
+
+        visit project_dashboard_transfers_path(project)
+
+        expect(page).to have_no_content('Deploy a hot wallet')
+      end
     end
   end
 end

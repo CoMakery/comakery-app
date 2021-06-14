@@ -249,6 +249,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def hot_wallet_deploy_button_enabled?
+    ENV['HOT_WALLET_DEPLOY_BUTTON'] == 'true'
+  end
+  helper_method :hot_wallet_deploy_button_enabled?
+
   private
 
     def compare_all(*pairs)
