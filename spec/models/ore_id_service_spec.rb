@@ -41,7 +41,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     context 'with algorand blockhain' do
       specify do
         VCR.use_cassette('ore_id_service/algo_wallet_created', match_requests_on: %i[method uri]) do
-          expect { subject.create_wallet(Blockchain::AlgorandTest.new) }.to change(subject.ore_id.wallets, :count).by(2)
+          expect { subject.create_wallet(Blockchain::AlgorandTest.new) }.to change(subject.ore_id.wallets, :count).by(3)
         end
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     context 'with ethereum blockhain' do
       specify do
         VCR.use_cassette('ore_id_service/eth_wallet_created', match_requests_on: %i[method uri]) do
-          expect { subject.create_wallet(Blockchain::EthereumRopsten.new) }.to change(subject.ore_id.wallets, :count).by(1)
+          expect { subject.create_wallet(Blockchain::EthereumRopsten.new) }.to change(subject.ore_id.wallets, :count).by(3)
         end
       end
     end

@@ -101,6 +101,7 @@ export default class extends Controller {
         body: new FormData(form),
         method: form.method,
         headers: {
+          'X-Sign-Controller': this.name,
           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         }
       }
