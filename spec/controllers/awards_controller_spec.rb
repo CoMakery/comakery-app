@@ -194,8 +194,8 @@ RSpec.describe AwardsController, type: :controller do
       {
         task: new_award.serializable_hash.merge(image_url: get_image_variant_path_context.path),
         batch: award_type.serializable_hash,
-        project: project.serializable_hash,
-        token: token.serializable_hash,
+        project: project.serializable_hash.merge(timestamps_stub),
+        token: token.serializable_hash.merge(timestamps_stub),
         experience_levels: Award::EXPERIENCE_LEVELS,
         specialties: expected_specialities_list,
         types: { 'Blah' => transfer_type2.id },
@@ -211,8 +211,6 @@ RSpec.describe AwardsController, type: :controller do
       }
     end
 
-    before(:all) { Timecop.freeze(Time.zone.local(2021, 6, 3, 15)) }
-
     before do
       allow(project).to receive(:header_props).with(account).and_return(header_props)
 
@@ -222,7 +220,7 @@ RSpec.describe AwardsController, type: :controller do
 
     it 'should respond with success' do
       expect(response.status).to eq 200
-      expect(assigns[:props]).to eq expected_form_properties
+      expect(assigns[:props]).to match expected_form_properties
       expect(response).to render_template(:new)
     end
   end
