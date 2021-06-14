@@ -187,6 +187,7 @@ RSpec.describe AwardsController, type: :controller do
       FactoryBot.create(:award_type, project: project, created_at: now, updated_at: now)
     end
     let(:new_award) { award_type.awards.new }
+    let(:timestamps_stub) { { 'created_at' => kind_of(Time), 'updated_at' => kind_of(Time) } }
 
     include_context 'with specialties'
 
