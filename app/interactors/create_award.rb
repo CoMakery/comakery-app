@@ -10,7 +10,7 @@ class CreateAward
 
     context.award = award
 
-    context.fail!(errors: award.errors) unless ImagePixelValidator.new(award, context.award_params).valid? && award.save
+    context.fail!(errors: award.errors) unless ImagePreparer.new(award, context.award_params).valid? && award.save
   end
 
   private

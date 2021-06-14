@@ -57,7 +57,7 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
+    if recaptcha_valid?(model: @account, action: 'registration') && ImagePreparer.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -86,7 +86,7 @@ class AccountsController < ApplicationController
 
     old_email = @account.email
 
-    image_validator = ImagePixelValidator.new(@account, account_params)
+    image_validator = ImagePreparer.new(@account, account_params)
 
     if image_validator.valid? && @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)

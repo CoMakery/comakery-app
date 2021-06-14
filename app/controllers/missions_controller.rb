@@ -31,7 +31,7 @@ class MissionsController < ApplicationController
 
     authorize @mission
 
-    if ImagePixelValidator.new(@mission, mission_params).valid? && @mission.save
+    if ImagePreparer.new(@mission, mission_params).valid? && @mission.save
       render json: { id: @mission.id, message: 'Successfully created.' }, status: :ok
     else
       errors = @mission.errors.as_json
@@ -50,7 +50,7 @@ class MissionsController < ApplicationController
   def update
     authorize @mission
 
-    if ImagePixelValidator.new(@mission, mission_params).valid? && @mission.update(mission_params)
+    if ImagePreparer.new(@mission, mission_params).valid? && @mission.update(mission_params)
       render json: { message: 'Successfully updated.' }, status: :ok
     else
       errors = @mission.errors.as_json

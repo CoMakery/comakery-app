@@ -64,7 +64,7 @@ class AwardsController < ApplicationController
   end
 
   def update
-    image_validator = ImagePixelValidator.new(@award, award_params)
+    image_validator = ImagePreparer.new(@award, award_params)
 
     if image_validator.valid? && @award.update(award_params) && @award.update(issuer: current_account)
       set_ok_response
