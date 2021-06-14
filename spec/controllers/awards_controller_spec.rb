@@ -449,20 +449,49 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#destroy' do
-    let!(:award) { create(:award, status: :accepted) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:token) { FactoryBot.create(:token) }
+    let(:project) { FactoryBot.create :project, account: account, token: token }
+    let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
 
-    it 'sets task status to cancelled and redirects to batches page' do
-      login(award.project.account)
+    let!(:award) do
+      FactoryBot.create :award, account: account, award_type: award_type, status: 'invite_ready',
+                                transfer_type: transfer_type, issuer: account
+    end
 
-      delete :destroy, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        id: award.to_param
-      }
+    before { login account }
 
-      expect(response).to redirect_to(project_award_types_path(award.project))
-      expect(flash[:notice]).to eq('Task cancelled')
-      expect(award.reload.cancelled?).to be true
+    context 'when award is valid' do
+      before do
+        delete :destroy, params: {
+          project_id: project.id, award_type_id: award_type.id, id: award.id
+        }
+      end
+
+      it 'cancels the task and redirects to project award types page' do
+        expect(response).to redirect_to project_award_types_path(award.project)
+        expect(flash[:notice]).to eq 'Task cancelled'
+        expect(award.reload.status).to eq 'cancelled'
+      end
+    end
+
+    context 'when award is not valid' do
+      before do
+        award.why = 'a' * 501
+        award.save(validate: false)
+
+        delete :destroy, params: {
+          project_id: project.id, award_type_id: award_type.id, id: award.id
+        }
+      end
+
+      it 'does not cancel the task and redirects to project award types page' do
+        expect(response).to redirect_to project_award_types_path(award.project)
+        expect(flash[:error]).to eq 'Why is too long (maximum is 500 characters)'
+        expect(award.reload.status).to eq 'invite_ready'
+      end
     end
   end
 
@@ -786,40 +815,92 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#submit' do
-    let!(:award) { create(:award) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:token) { FactoryBot.create(:token) }
+    let(:project) { FactoryBot.create :project, account: account, token: token }
+    let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
+
+    let!(:award) do
+      FactoryBot.create :award, account: account, award_type: award_type, status: 'started',
+                                transfer_type: transfer_type, issuer: account
+    end
+
+    let(:mail) { double(:mail, deliver_now: nil) }
+    let(:mail_task) { double(:mail_task, task_submitted: mail) }
 
     before do
-      login(award.account)
-      award.update(status: 'started')
+      allow(TaskMailer).to receive(:with).and_return(mail_task)
+
+      login account
     end
 
-    it 'submits the task and redirects to my task page with notice' do
-      post :submit, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        award_id: award.to_param,
-        task: {
-          submission_url: 'http://test',
-          submission_comment: 'test'
+    context 'without submission params' do
+      before do
+        post :submit, params: {
+          project_id: award.project.id, award_type_id: award.award_type.id, award_id: award.id
         }
-      }
-      expect(response).to redirect_to(my_tasks_path(filter: 'submitted'))
-      expect(flash[:notice]).to eq('Task submitted')
-      expect(award.reload.submitted?).to be true
+      end
+
+      it 'does not submit the task and redirects to task details with error' do
+        expect(response).to redirect_to project_award_type_award_path(project, award_type, award)
+        expect(flash[:error]).to eq 'You must submit a comment, image or URL documenting your work.'
+        expect(award.reload.status).to eq 'started'
+      end
+
+      it 'should not send task submitted email notification' do
+        expect(TaskMailer).not_to have_received(:with)
+        expect(mail_task).not_to have_received(:task_submitted)
+        expect(mail).not_to have_received(:deliver_now)
+      end
     end
 
-    it 'redirects back task details with an error' do
-      post :submit, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        award_id: award.to_param,
-        task: {
-
+    context 'with submission params' do
+      before do
+        post :submit, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+          task: { submission_url: 'http://test', submission_comment: 'test' }
         }
-      }
-      expect(response).to redirect_to(project_award_type_award_path(award.project, award.award_type, award))
-      expect(flash[:error]).to eq('You must submit a comment, image or URL documenting your work.')
-      expect(award.reload.submitted?).to be false
+      end
+
+      it 'submits the task and redirects to user submitted tasks page with notice' do
+        expect(response).to redirect_to my_tasks_path(filter: 'submitted')
+        expect(flash[:notice]).to eq('Task submitted')
+        expect(award.reload.status).to eq 'submitted'
+      end
+
+      it 'should send task submitted email notification' do
+        expect(TaskMailer).to have_received(:with).with(award: award, whitelabel_mission: nil)
+        expect(TaskMailer).to have_received(:with).once
+
+        expect(mail_task).to have_received(:task_submitted).once
+        expect(mail).to have_received(:deliver_now).once
+      end
+    end
+
+    context 'when award is invalid' do
+      before do
+        award.why = 'a' * 501
+        award.save(validate: false)
+
+        post :submit, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+          task: { submission_url: 'http://test', submission_comment: 'test' }
+        }
+      end
+
+      it 'does not submit the task and redirects to task details with error' do
+        expect(response).to redirect_to project_award_type_award_path(project, award_type, award)
+        expect(flash[:error]).to eq 'Why is too long (maximum is 500 characters)'
+        expect(award.reload.status).to eq 'started'
+      end
+
+      it 'should not send task submitted email notification' do
+        expect(TaskMailer).not_to have_received(:with)
+        expect(mail_task).not_to have_received(:task_submitted)
+        expect(mail).not_to have_received(:deliver_now)
+      end
     end
   end
 
@@ -892,22 +973,70 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#reject' do
-    let!(:award) { create(:award) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:token) { FactoryBot.create(:token) }
+    let(:project) { FactoryBot.create :project, account: account, token: token }
+    let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
 
-    before do
-      login(award.project.account)
-      award.update(status: 'submitted')
+    let!(:award) do
+      FactoryBot.create :award, account: account, status: 'submitted', award_type: award_type,
+                                transfer_type: transfer_type, issuer: account
     end
 
-    it 'rejects the task and redirects to my task page with notice' do
-      post :reject, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        award_id: award.to_param
-      }
-      expect(response).to redirect_to(my_tasks_path(filter: 'done'))
-      expect(flash[:notice]).to eq('Task rejected')
-      expect(award.reload.rejected?).to be true
+    let(:mail) { double(:mail, deliver_now: nil) }
+    let(:mail_task) { double(:mail_task, task_rejected: mail) }
+
+    before do
+      allow(TaskMailer).to receive(:with).and_return(mail_task)
+
+      login account
+    end
+
+    context 'when award is valid' do
+      before do
+        post :reject, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id
+        }
+      end
+
+      it 'rejects the task and redirects to my task page with notice' do
+        expect(response).to redirect_to(my_tasks_path(filter: 'done'))
+        expect(flash[:notice]).to eq('Task rejected')
+        expect(award.reload.status).to eq 'rejected'
+      end
+
+      it 'should send task rejected email notification' do
+        expect(TaskMailer).to have_received(:with).with(award: award, whitelabel_mission: nil)
+        expect(TaskMailer).to have_received(:with).once
+
+        expect(mail_task).to have_received(:task_rejected).once
+        expect(mail).to have_received(:deliver_now).once
+      end
+    end
+
+    context 'when award is not valid' do
+      before do
+        award.why = 'a' * 501
+        award.save(validate: false)
+
+        post :reject, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id
+        }
+      end
+
+      it 'does not reject the task and redirects to task for review list page with error' do
+        expect(response).to redirect_to my_tasks_path(filter: 'to review')
+        expect(flash[:error]).to eq 'Why is too long (maximum is 500 characters)'
+        expect(award.reload.status).to eq 'submitted'
+      end
+
+      it 'should not send task rejected email notification' do
+        expect(TaskMailer).not_to have_received(:with)
+        expect(mail_task).not_to have_received(:task_rejected)
+        expect(mail).not_to have_received(:deliver_now)
+      end
     end
   end
 
