@@ -10,22 +10,15 @@ class SendInvite
       if email_valid?
         project_invite = project.invites.find_by(email: params[:email])
 
-        if project_invite.present?
-          if project_invite.expired?
-            project_invite.update_expires_at
+        # TODO: Clarify error message
+        context.fail!(errors: ['Invite is already sent']) if project_invite.present?
 
-            send_invite_to_platform(params[:email], project_invite.token, project, params[:role])
-          else
-            context.fail!(["Project invite is already sent to #{params[:email]}"])
-          end
+        project_invite = project.invites.new(email: params[:email], role: params[:role])
+
+        if project_invite.save
+          send_invite_to_platform(params[:email], project_invite.token, project, params[:role])
         else
-          project_invite = project.invites.new(email: params[:email], role: params[:role])
-
-          if project_invite.save
-            send_invite_to_platform(params[:email], project_invite.token, project, params[:role])
-          else
-            context.fail!(errors: project_invite.errors.full_messages)
-          end
+          context.fail!(errors: project_invite.errors.full_messages)
         end
       else
         # TODO: Clarify error message
@@ -57,7 +50,7 @@ class SendInvite
   private
 
     def email_valid?
-      params[:email] =~ URI::MailTo::EMAIL_REGEXP
+      EmailValidator.new(params[:email]).valid?
     end
 
     def send_invite_to_platform(email, token, project, role)
