@@ -14,8 +14,6 @@ class ProjectsController < ApplicationController
   before_action :set_teams, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
-  before_action :set_show_props, only: %i[show unlisted]
-  before_action :set_flash_from_session, only: %i[show]
 
   layout 'legacy', except: %i[show unlisted new edit]
 
