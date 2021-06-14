@@ -238,11 +238,9 @@ class AwardsController < ApplicationController
     end
 
     def authorize_award_start
-      if policy(@award).start?
-        authorize @award, :start?
-      else
-        redirect_to my_tasks_path, notice: unlock_award_notice
-      end
+      authorize @award, :start?
+    rescue Pundit::NotAuthorizedError
+      redirect_to my_tasks_path, notice: unlock_award_notice
     end
 
     def unlock_award_notice

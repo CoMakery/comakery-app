@@ -618,6 +618,45 @@ RSpec.describe AwardsController, type: :controller do
         end
       end
     end
+
+    context 'when user is not authorized to start' do
+      let!(:award) do
+        FactoryBot.create :award, account: account, transfer_type: transfer_type,
+                                  award_type: award_type, issuer: account, status: 'submitted',
+                                  specialty: specialty, experience_level: 10
+      end
+      let!(:experience) do
+        FactoryBot.create(:experience, account: account, specialty: specialty, level: 3)
+      end
+
+      before do
+        post :start, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id
+        }
+      end
+
+      context 'when award is of some specific specialty' do
+        let(:specialty) { FactoryBot.create :specialty, name: 'Research' }
+
+        it 'does not start the task and redirects to task list page with notice' do
+          expect(response).to redirect_to my_tasks_path
+          expect(flash[:notice]).to eq 'Complete 7 more Research tasks to access tasks that '\
+                                       'require the Established Contributor skill level'
+          expect(award.reload.status).to eq 'submitted'
+        end
+      end
+
+      context 'when award is of the default specialty' do
+        let(:specialty) { Specialty.default }
+
+        it 'does not start the task and redirects to task list page with notice' do
+          expect(response).to redirect_to my_tasks_path
+          expect(flash[:notice]).to eq 'Complete 7 more tasks to access General tasks that '\
+                                       'require the Established Contributor skill level'
+          expect(award.reload.status).to eq 'submitted'
+        end
+      end
+    end
   end
 
   describe '#assign' do
@@ -786,22 +825,70 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#accept' do
-    let!(:award) { create(:award) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:token) { FactoryBot.create(:token) }
+    let(:project) { FactoryBot.create :project, account: account, token: token }
+    let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
 
-    before do
-      login(award.project.account)
-      award.update(status: 'submitted')
+    let!(:award) do
+      FactoryBot.create :award, account: account, status: 'submitted', award_type: award_type,
+                                transfer_type: transfer_type, issuer: account
     end
 
-    it 'accepts the task and redirects to my task page with notice' do
-      post :accept, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        award_id: award.to_param
-      }
-      expect(response).to redirect_to(my_tasks_path(filter: 'to pay'))
-      expect(flash[:notice]).to eq('Task accepted')
-      expect(award.reload.accepted?).to be true
+    let(:mail) { double(:mail, deliver_now: nil) }
+    let(:mail_task) { double(:mail_task, task_accepted: mail) }
+
+    before do
+      allow(TaskMailer).to receive(:with).and_return(mail_task)
+
+      login account
+    end
+
+    context 'when award is valid' do
+      before do
+        post :accept, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id
+        }
+      end
+
+      it 'accepts the task and redirects to my task page with notice' do
+        expect(response).to redirect_to(my_tasks_path(filter: 'to pay'))
+        expect(flash[:notice]).to eq('Task accepted')
+        expect(award.reload.status).to eq 'accepted'
+      end
+
+      it 'should send task accepted email notification' do
+        expect(TaskMailer).to have_received(:with).with(award: award, whitelabel_mission: nil)
+        expect(TaskMailer).to have_received(:with).once
+
+        expect(mail_task).to have_received(:task_accepted).once
+        expect(mail).to have_received(:deliver_now).once
+      end
+    end
+
+    context 'when award is not valid' do
+      before do
+        award.why = 'a' * 501
+        award.save(validate: false)
+
+        post :accept, params: {
+          project_id: project.id, award_type_id: award_type.id, award_id: award.id
+        }
+      end
+
+      it 'does not accept the task and redirects to task for review list page with error' do
+        expect(response).to redirect_to my_tasks_path(filter: 'to review')
+        expect(flash[:error]).to eq 'Why is too long (maximum is 500 characters)'
+        expect(award.reload.status).to eq 'submitted'
+      end
+
+      it 'should not send task accepted email notification' do
+        expect(TaskMailer).not_to have_received(:with)
+        expect(mail_task).not_to have_received(:task_accepted)
+        expect(mail).not_to have_received(:deliver_now)
+      end
     end
   end
 
