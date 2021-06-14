@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
-  skip_after_action :verify_authorized, only: %i[landing]
+  skip_after_action :verify_authorized, only: %i[landing show]
 
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit show update]
@@ -14,6 +14,8 @@ class ProjectsController < ApplicationController
   before_action :set_teams, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
+  before_action :set_show_props, only: %i[show unlisted]
+  before_action :set_flash_from_session, only: %i[show]
 
   layout 'legacy', except: %i[show unlisted new edit]
 
@@ -376,6 +378,16 @@ class ProjectsController < ApplicationController
         else
           redirect_to project_award_types_path(@project)
         end
+      end
+    end
+
+    def set_flash_from_session
+      if (project_invite_id = session[:project_invite_id])
+        project_role = ProjectInvite.find(project_invite_id).role
+
+        session.delete(:project_invite_id)
+
+        flash[:notice] = "You have successfully joined the project with the #{project_role}"
       end
     end
 end

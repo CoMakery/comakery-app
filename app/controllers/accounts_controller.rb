@@ -8,10 +8,9 @@ class AccountsController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
-
   before_action :redirect_if_signed_in, only: %i[new create]
-
   before_action :set_session_from_token, only: :new
+  before_action :find_project_invite, only: %i[create build_profile]
 
   layout 'legacy', except: %i[index]
 
@@ -62,7 +61,7 @@ class AccountsController < ApplicationController
     if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
-      if session[:project_invite].present? && !session[:project_invite]&.expired?
+      if @project_invite.present? && !@project_invite.expired?
         @account.confirm!
       else
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -107,11 +106,10 @@ class AccountsController < ApplicationController
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
 
-      if session[:project_invite].present?
-        result = Projects::ProjectRoles::CreateFromSession.call(account: @account, session: session)
+      if @project_invite.present?
+        Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite_id: @project_invite)
 
-        redirect_to project_path(result.project),
-                    flash: { notice: "You have successfully joined the project with the #{result.project_role.role}" }
+        redirect_to project_path(@project_invite.project)
       else
         redirect_to my_tasks_path
       end
@@ -264,6 +262,14 @@ class AccountsController < ApplicationController
     def set_session_from_token
       project_invite = ProjectInvite.find_by(token: params[:token])
 
-      session[:project_invite] = project_invite unless project_invite&.expired?
+      if project_invite && !project_invite.expired?
+        session[:project_invite_id] = project_invite.id
+      end
+    end
+
+    def find_project_invite
+      return if session[:project_invite_id].blank?
+
+      @project_invite ||= ProjectInvite.find(session[:project_invite_id])
     end
 end
