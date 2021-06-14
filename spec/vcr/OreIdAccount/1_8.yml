@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://staging.service.oreid.io/api/account/user?account=ore1ryuzfqwy
+    uri: https://service.oreid.io/api/account/user?account=ore1ryuzfqwy
     body:
       encoding: US-ASCII
       string: ''

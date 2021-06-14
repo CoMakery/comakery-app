@@ -41,7 +41,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     context 'with algorand blockhain' do
       specify do
         VCR.use_cassette('ore_id_service/algo_wallet_created', match_requests_on: %i[method uri]) do
-          expect { subject.create_wallet(Blockchain::AlgorandTest.new) }.to change(subject.ore_id.wallets, :count).by(2)
+          expect { subject.create_wallet(Blockchain::AlgorandTest.new) }.to change(subject.ore_id.wallets, :count).by(3)
         end
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     context 'with ethereum blockhain' do
       specify do
         VCR.use_cassette('ore_id_service/eth_wallet_created', match_requests_on: %i[method uri]) do
-          expect { subject.create_wallet(Blockchain::EthereumRopsten.new) }.to change(subject.ore_id.wallets, :count).by(1)
+          expect { subject.create_wallet(Blockchain::EthereumRopsten.new) }.to change(subject.ore_id.wallets, :count).by(3)
         end
       end
     end
@@ -204,7 +204,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     specify do
-      url = 'https://staging.service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=dummystate'
+      url = 'https://service.oreid.io/auth?app_access_token=test&background_color=FFFFFF&callback_url=localhost&provider=email&state=dummystate'
       hmac = build(:ore_id_hmac, url)
       expect(subject.authorization_url('localhost', 'dummystate')).to eq("#{url}&hmac=#{hmac}")
     end
@@ -217,7 +217,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
     end
 
     specify do
-      url = 'https://staging.service.oreid.io/recover-account?account=ore1ryuzfqwy&app_access_token=test&background_color=FFFFFF&callback_url=localhost&email=dummyemail&provider=email&recover_action=republic&state=dummystate'
+      url = 'https://service.oreid.io/recover-account?account=ore1ryuzfqwy&app_access_token=test&background_color=FFFFFF&callback_url=localhost&email=dummyemail&provider=email&recover_action=republic&state=dummystate'
       hmac = build(:ore_id_hmac, url)
       expect(subject.reset_url('localhost', 'dummystate', 'dummmyrecovery')).to eq("#{url}&hmac=#{hmac}")
     end
@@ -239,7 +239,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
 
     specify do
       generated_url = subject.sign_url(transaction: transaction, callback_url: 'localhost', state: 'dummystate')
-      expected_url = 'https://staging.service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=false&state=dummystate&transaction=eyJ0eXBlIjoicGF5IiwiZnJvbSI6IllGNkZBTFNYSTRCUlVGWEJGSFlWQ09L%0ARlJPQVdCUVo0Mlk0QlhVSzdTREhUVzdCMjdURVFCM0FIU0EiLCJ0byI6IkUz%0ASVQyVERXRUpTNTVYQ0k1Tk9CMkhPTjZYVUJJWjZTRFQyVEFIVEtEUU1LUjRB%0ASEVRQ1JPT1hGSUUiLCJhbW91bnQiOjF9%0A'
+      expected_url = 'https://service.oreid.io/sign?account=ore1ryuzfqwy&app_access_token=test&broadcast=true&callback_url=localhost&chain_account=YF6FALSXI4BRUFXBFHYVCOKFROAWBQZ42Y4BXUK7SDHTW7B27TEQB3AHSA&chain_network=algo_test&return_signed_transaction=false&state=dummystate&transaction=eyJ0eXBlIjoicGF5IiwiZnJvbSI6IllGNkZBTFNYSTRCUlVGWEJGSFlWQ09L%0ARlJPQVdCUVo0Mlk0QlhVSzdTREhUVzdCMjdURVFCM0FIU0EiLCJ0byI6IkUz%0ASVQyVERXRUpTNTVYQ0k1Tk9CMkhPTjZYVUJJWjZTRFQyVEFIVEtEUU1LUjRB%0ASEVRQ1JPT1hGSUUiLCJhbW91bnQiOjF9%0A'
       hmac = build(:ore_id_hmac, expected_url)
       expect(generated_url).to eq("#{expected_url}&hmac=#{hmac}")
     end
