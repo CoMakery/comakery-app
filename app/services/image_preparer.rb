@@ -20,14 +20,14 @@ class ImagePreparer
 
     def prepare_image(attr, attachment)
       imgfile = attachment.tempfile
-      image = MiniMagick::Image.read(imgfile)
+      image = MiniMagick::Image.open(imgfile.path)
 
       return false unless image_valid?(attr, attachment, image)
 
       strip_exif(image, imgfile)
       true
-    rescue MiniMagick::Error
-      record.errors.add(attr.to_sym, 'is invalid') unless valid_img
+    rescue MiniMagick::Error, MiniMagick::Invalid
+      record.errors.add(attr.to_sym, 'is invalid')
       false
     end
 
