@@ -41,7 +41,7 @@ export default class extends Controller {
     $errorsContainer.html('');
 
     errors.forEach((error) => {
-      $errorsContainer.append($('<li style="list-style-type: none;"/>').html(error));
+      $errorsContainer.append($('<li style="list-style-type: none; text-transform: none;"/>').html(error));
       $errorsContainer.addClass('alert');
     })
   }

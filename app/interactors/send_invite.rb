@@ -1,21 +1,73 @@
 class SendInvite
   include Interactor
 
+  delegate :params, :whitelabel_mission, :project, to: :context
+
   def call
-    context.fail!(errors: ['The user must have signed up to add them']) if account.blank?
+    account = GetAccount.call(whitelabel_mission: whitelabel_mission, email: params[:email]).account
 
-    invite = context.project.project_roles.new(account: account, role: context.params[:role])
+    if account.blank?
+      context.fail!(errors: ['Email is invalid']) unless email_valid?
 
-    context.fail!(errors: invite.errors.full_messages) unless invite.save
+      project_invite = project.invites.find_by(email: params[:email])
+
+      context.fail!(errors: ['Invite is already sent']) if project_invite.present?
+
+      create_project_invite
+    else
+      project_role = project.project_roles.find_by(account: account)
+
+      if project_role.present?
+        context.fail!(errors: ["User already has #{project_role.role} permissions for this project. " \
+                               'You can update their role with the action menu on this Accounts page'])
+      end
+
+      create_project_role(account)
+    end
   end
 
   private
 
-    def account
-      if context.whitelabel_mission
-        context.whitelabel_mission.managed_accounts.find_by(email: context.params[:email])
+    def create_project_invite
+      project_invite = project.invites.new(email: params[:email], role: params[:role])
+
+      if project_invite.save
+        UserMailer.send_invite_to_platform(
+          params[:email],
+          project_invite.token,
+          project,
+          params[:role],
+          domain_name
+        ).deliver_now
       else
-        Account.find_by(email: context.params[:email], managed_mission_id: nil)
+        context.fail!(errors: project_invite.errors.full_messages)
+      end
+    end
+
+    def create_project_role(account)
+      project_role = project.project_roles.new(account: account, role: params[:role])
+
+      if project_role.save
+        UserMailer.send_invite_to_project(
+          account.email,
+          project,
+          params[:role],
+          domain_name
+        ).deliver_now
+      else
+        context.fail!(errors: project_role.errors.full_messages)
+      end
+    end
+
+    def email_valid?
+      EmailValidator.new(params[:email]).valid?
+    end
+
+    def domain_name
+      if whitelabel_mission
+        whitelabel_mission.whitelabel_domain
+      else
+        ENV['APP_HOST']
       end
     end
 end

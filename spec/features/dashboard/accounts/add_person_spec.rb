@@ -13,33 +13,65 @@ describe 'Add person', js: true do
 
   before { visit project_dashboard_accounts_path(project) }
 
-  scenario 'grants access to registered account' do
-    find('[data-target="#invite-person"]').click
+  before(:each) do
+    open_modal
 
-    within('#invite-person form') do
-      fill_in 'email', with: account.email
-
-      select 'Project Member', from: 'role'
-
-      click_button 'Save'
-    end
-
-    expect(find('.flash-message-container')).to have_content('Invite successfully sent')
-
-    expect(page).to have_css("#project_#{project.id}_account_#{account.id}", count: 1)
+    add_person
   end
 
-  scenario 'fails with unregistered account' do
-    find('a[data-target="#invite-person"]').click
+  context 'when send an invitation to an invalid email' do
+    let(:open_modal) { find('[data-target="#invite-person"]').click }
 
-    within('#invite-person form') do
-      fill_in 'email', with: ''
+    let(:add_person) do
+      within('#invite-person form') do
+        fill_in 'email', with: 'invalid'
 
-      select 'Project Member', from: 'role'
+        select 'Project Member', from: 'role'
 
-      click_button 'Save'
+        click_button 'Save'
+      end
     end
 
-    expect(find('#invite-person ul.errors').text).to eq('The User Must Have Signed Up To Add Them')
+    it 'assigns account with role to project' do
+      expect(find('#invite-person ul.errors').text).to eq('Email is invalid')
+    end
+  end
+
+  context 'when assign a role to an existing account' do
+    let(:open_modal) { find('[data-target="#invite-person"]').click }
+
+    let(:add_person) do
+      within('#invite-person form') do
+        fill_in 'email', with: account.email
+
+        select 'Project Member', from: 'role'
+
+        click_button 'Save'
+      end
+    end
+
+    it 'assigns account with role to project' do
+      expect(find('.flash-message-container')).to have_content('Invite successfully sent')
+
+      expect(page).to have_css("#project_#{project.id}_account_#{account.id}", count: 1)
+    end
+  end
+
+  context 'when assign a role to an unregistered user' do
+    let(:open_modal) { find('[data-target="#invite-person"]').click }
+
+    let(:add_person) do
+      within('#invite-person form') do
+        fill_in 'email', with: 'example@gmail.com'
+
+        select 'Project Member', from: 'role'
+
+        click_button 'Save'
+      end
+    end
+
+    it 'sends invite to join a platform' do
+      expect(find('.flash-message-container')).to have_content('Invite successfully sent')
+    end
   end
 end
