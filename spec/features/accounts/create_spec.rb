@@ -45,7 +45,7 @@ describe 'Create account', js: true do
 
       it { expect(page).to have_current_path project_path(project) }
 
-      it { expect(page).to have_content("You have successfully joined the project with the #{invite.role}") }
+      it { expect(page).to have_content("You have successfully joined the project with the #{invite.role} role") }
     end
   end
 end
