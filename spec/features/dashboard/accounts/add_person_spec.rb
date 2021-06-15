@@ -33,7 +33,7 @@ describe 'Add person', js: true do
     end
 
     it 'assigns account with role to project' do
-      expect(find('#invite-person ul.errors').text).to eq('Email Is Invalid')
+      expect(find('#invite-person ul.errors').text).to eq('Email is invalid')
     end
   end
 
