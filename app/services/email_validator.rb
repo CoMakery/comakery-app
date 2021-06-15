@@ -9,5 +9,5 @@ class EmailValidator
 
   private
 
-  attr_reader :email
+    attr_reader :email
 end

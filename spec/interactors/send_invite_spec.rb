@@ -56,8 +56,10 @@ describe SendInvite do
           described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
         end
 
-        it { expect(result.errors).to eq(["User already has #{project_role.role} permissions for this project. " \
-                                          "You can update their role with the action menu on this Accounts page"]) }
+        it {
+          expect(result.errors).to eq(["User already has #{project_role.role} permissions for this project. " \
+                                          'You can update their role with the action menu on this Accounts page'])
+        }
 
         it { expect(result.success?).to be(false) }
       end
