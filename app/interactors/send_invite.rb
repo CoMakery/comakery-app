@@ -22,7 +22,7 @@ class SendInvite
                                'You can update their role with the action menu on this Accounts page'])
       end
 
-      create_project_role
+      create_project_role(account)
     end
   end
 
@@ -44,7 +44,7 @@ class SendInvite
       end
     end
 
-    def create_project_role
+    def create_project_role(account)
       project_role = project.project_roles.new(account: account, role: params[:role])
 
       if project_role.save
