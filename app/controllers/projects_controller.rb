@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
-  skip_after_action :verify_authorized, only: %i[landing show]
+  skip_after_action :verify_authorized, only: %i[landing]
 
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit show update]
@@ -14,6 +14,7 @@ class ProjectsController < ApplicationController
   before_action :set_teams, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
+  before_action :set_flash_from_session, only: %i[show]
 
   layout 'legacy', except: %i[show unlisted new edit]
 
