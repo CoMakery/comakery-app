@@ -386,7 +386,7 @@ class ProjectsController < ApplicationController
 
         session.delete(:project_invite_id)
 
-        flash[:notice] = "You have successfully joined the project with the #{project_role}"
+        flash[:notice] = "You have successfully joined the project with the #{project_role} role"
       end
     end
 end
