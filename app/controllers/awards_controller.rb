@@ -33,24 +33,11 @@ class AwardsController < ApplicationController
 
   def index; end
 
-  def new; end
-
-  def award; end
-
-  def assignment; end
-
-  def clone
-    @props[:task][:image_from_id] = @award.id
-  end
-
   def show
     @skip_search_box = true
   end
 
-  def edit
-    @props[:form_url] = project_award_type_award_path(@project, @award_type, @award)
-    @props[:form_action] = 'PATCH'
-  end
+  def new; end
 
   def create
     result = CreateAward.call(
@@ -71,6 +58,11 @@ class AwardsController < ApplicationController
     end
   end
 
+  def edit
+    @props[:form_url] = project_award_type_award_path(@project, @award_type, @award)
+    @props[:form_action] = 'PATCH'
+  end
+
   def update
     image_validator = ImagePixelValidator.new(@award, award_params)
 
@@ -83,12 +75,30 @@ class AwardsController < ApplicationController
     end
   end
 
-  def assign # rubocop:todo Metrics/CyclomaticComplexity
+  def destroy
+    authorize @award, :cancel?
+
+    if @award.update(status: 'cancelled')
+      redirect_back(fallback_location: project_award_types_path, notice: 'Task cancelled')
+    else
+      redirect_back(fallback_location: project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') })
+    end
+  end
+
+  def award; end
+
+  def assignment; end
+
+  def clone
+    @props[:task][:image_from_id] = @award.id
+  end
+
+  def assign
     account = Account.find(params[:account_id])
 
     @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
 
-    if account && @award.update(account: account, issuer: current_account, status: 'ready')
+    if @award.update(account: account, issuer: current_account, status: 'ready')
       TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_assigned.deliver_now
       redirect_to project_award_types_path(@award.project), notice: 'Task has been assigned'
     else
@@ -133,16 +143,6 @@ class AwardsController < ApplicationController
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task rejected'
     else
       redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
-    end
-  end
-
-  def destroy
-    authorize @award, :cancel?
-
-    if @award.update(status: 'cancelled')
-      redirect_back(fallback_location: project_award_types_path, notice: 'Task cancelled')
-    else
-      redirect_back(fallback_location: project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') })
     end
   end
 
@@ -238,11 +238,9 @@ class AwardsController < ApplicationController
     end
 
     def authorize_award_start
-      if policy(@award).start?
-        authorize @award, :start?
-      else
-        redirect_to my_tasks_path, notice: unlock_award_notice
-      end
+      authorize @award, :start?
+    rescue Pundit::NotAuthorizedError
+      redirect_to my_tasks_path, notice: unlock_award_notice
     end
 
     def unlock_award_notice
@@ -422,19 +420,26 @@ class AwardsController < ApplicationController
     end
 
     def set_assignment_props # rubocop:todo Metrics/CyclomaticComplexity
+      accounts = (@project.accounts + @project.contributors).uniq.map do |a|
+        a.decorate.serializable_hash(
+          only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
+          methods: :image_url
+        )
+      end
+      accounts.sort_by! { |account| account['id'] }
+
+      accounts_select_data =
+        (@project.accounts + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }
+      accounts_select_data.sort_by! { |item| item[1] }
+
       @props = {
         task: @award.serializable_hash(only: %w[id name]),
         batch: @award_type.serializable_hash(only: %w[id name]),
         project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
-          url: unlisted_project_url(@project.long_id)
+          'url' => unlisted_project_url(@project.long_id)
         }),
-        accounts: (@project.accounts + @project.contributors).uniq.map do |a|
-          a.decorate.serializable_hash(
-            only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
-            methods: :image_url
-          )
-        end,
-        accounts_select: (@project.accounts + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
+        accounts: accounts,
+        accounts_select: accounts_select_data.unshift(['', nil]).to_h,
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props(current_account),

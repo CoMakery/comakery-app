@@ -42,7 +42,7 @@ class Dashboard::TransfersController < ApplicationController
   def new
     authorize @project, :create_transfer?
 
-    @transfer = Award.new
+    @transfer = Award.new(transfer_params)
   end
 
   def create

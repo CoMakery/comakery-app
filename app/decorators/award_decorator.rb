@@ -10,9 +10,9 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_wallet_address
-    return unless paid?
+    return unless recipient_wallet
 
-    blockchain_transactions.succeed.last&.destination
+    recipient_wallet.address
   end
 
   def sender_wallet_url
@@ -22,7 +22,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_wallet_url
-    return if sender_wallet_address.blank?
+    return if recipient_wallet_address.blank?
 
     token&.blockchain&.url_for_address_human(recipient_wallet_address)
   end

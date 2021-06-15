@@ -1,29 +1,33 @@
-<div class="transfers-filters--filter status">
-  <%= render partial: 'filter_status' %>
-</div>
-<div class="transfers-filters--filter category">
-  <p class="category-title">Category: </p>
-  <%= select 'select',
-             'categories',
-             {},
-             { include_blank: 'All' },
-             { class: 'sort-select', id: 'category-selector',
-               data: { controller: 'transfers-sort', action: 'change->transfers-sort#visitSelectedCategory' } } do %>
-    <% @transfers_chart_colors_objects.each do |type, _| %>
-      <%= tag.option type.name.capitalize,
-                     { selected: params.dig(:q, :transfer_type_id_eq).to_i == type.id,
-                       data: { url: project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } } %>
-    <% end %>
-  <% end %>
-  <svg class="p5-color arrow-down-icon"
-       width="14"
-       height="8"
-       viewBox="0 0 14 8"
-       fill="none"
-       xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z"
-          fill="currentColor"/>
-  </svg>
+<div class="col-md-7">
+  <div class="d-flex flex-row justify-content-end">
+    <div class="d-flex flex-row status">
+      <%= render partial: 'filter_status' %>
+    </div>
+    <div class="d-flex flex-row category">
+      <p class="category-title m-0 p-2">Category: </p>
+      <%= select 'select',
+                'categories',
+                {},
+                { include_blank: 'All' },
+                { class: 'sort-select', id: 'category-selector',
+                  data: { controller: 'transfers-sort', action: 'change->transfers-sort#visitSelectedCategory' } } do %>
+        <% @transfers_chart_colors_objects.each do |type, _| %>
+          <%= tag.option type.name.capitalize,
+                        { selected: params.dig(:q, :transfer_type_id_eq).to_i == type.id,
+                          data: { url: project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } } %>
+        <% end %>
+      <% end %>
+      <svg class="p5-color arrow-down-icon"
+          width="14"
+          height="8"
+          viewBox="0 0 14 8"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M0.292893 0.292893C-0.0976311 0.683417 -0.0976312 1.31658 0.292893 1.70711L6.29289 7.70711C6.68342 8.09763 7.31658 8.09763 7.70711 7.70711L13.7071 1.70711C14.0976 1.31658 14.0976 0.683418 13.7071 0.292894C13.3166 -0.0976305 12.6834 -0.0976305 12.2929 0.292894L7 5.58579L1.70711 0.292893C1.31658 -0.097631 0.683418 -0.0976311 0.292893 0.292893Z"
+              fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
 </div>

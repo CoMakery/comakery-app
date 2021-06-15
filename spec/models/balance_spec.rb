@@ -206,6 +206,18 @@ describe Balance, type: :model do
       expect(balance.base_unit_locked_value).to eq 999
       expect(balance.base_unit_unlocked_value).to eq 999
     end
+
+    context 'when values are not changed' do
+      before do
+        allow(balance.token).to receive(:blockchain_balance).with(balance.wallet.address).and_return(0)
+        allow(balance.token).to receive(:blockchain_locked_balance).with(balance.wallet.address).and_return(0)
+        allow(balance.token).to receive(:blockchain_unlocked_balance).with(balance.wallet.address).and_return(0)
+      end
+
+      it 'still updates timestamp' do
+        expect { subject }.to change(balance, :updated_at)
+      end
+    end
   end
 
   describe '#sync_with_blockchain_later' do

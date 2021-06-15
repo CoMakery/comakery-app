@@ -1,42 +1,58 @@
-<% if @project.token&.blockchain&.supported_by_wallet_connect? %>
-  <div class="row">
-    <div class="col-12">
-        <div class="transfers-filters">
-          <div class="transfers-filters--filter">
-            <div class="transfers-filters--filter--options wallet-connect">
-              <div
-                class="wallet-connect--button"
-                data-action='click->sign--wallet-connect#switch'
-                data-sign--wallet-connect-target='connectButton'
-                data-sign--metamask-target='otherConnectButtons'>
-                <span class="wallet-logo">
-                  <%= image_tag 'wallet-connect-logo.svg', size: "12x12" %>
-                </span>
-                WalletConnect
-                <span class="wallet-connect--button--dot">●</span>
-              </div>
-
-              <div
-                class="wallet-connect--button"
-                data-action='click->sign--metamask#switch'
-                data-sign--wallet-connect-target='otherConnectButtons'
-                data-sign--metamask-target='connectButton'>
-                <span class="wallet-logo">
-                  <%= image_tag 'metamask.png', size: "12x12" %>
-                </span>
-                MetaMask
-                <span class="wallet-connect--button--dot">●</span>
-              </div>
-
-              <div
-                class="wallet-connect--address"
-                data-sign--wallet-connect-target='walletAddress'
-                data-sign--metamask-target='walletAddress'>
-                Disconnected
-              </div>
-            </div>
-          </div>
+<% if @project.token&.blockchain&.supported_by_wallet_connect? || @project.token&.blockchain&.supported_by_ore_id? %>
+  <div class="col-md-10 wallet-connect">
+    <div class="d-flex flex-row justify-content-end">
+      <% if @project.token&.blockchain&.supported_by_wallet_connect? %>
+        <div
+          class="p-2 wallet-connect--button"
+          data-action='click->sign--wallet-connect#switch'
+          data-sign--ore-id-target='otherConnectButtons'
+          data-sign--wallet-connect-target='connectButton'
+          data-sign--metamask-target='otherConnectButtons'>
+          <span class="wallet-logo">
+            <%= image_tag 'wallet-connect-logo.svg', size: "12x12" %>
+          </span>
+          WalletConnect
+          <span class="wallet-connect--button--dot">●</span>
         </div>
+
+        <div
+          class="p-2 wallet-connect--button"
+          data-action='click->sign--metamask#switch'
+          data-sign--ore-id-target='otherConnectButtons'
+          data-sign--wallet-connect-target='otherConnectButtons'
+          data-sign--metamask-target='connectButton'>
+          <span class="wallet-logo">
+            <%= image_tag 'metamask.png', size: "12x12" %>
+          </span>
+          MetaMask
+          <span class="wallet-connect--button--dot">●</span>
+        </div>
+      <% end %>
+
+      <% if @project.token&.blockchain&.supported_by_ore_id? %>
+        <div
+          class="p-2 wallet-connect--button"
+          data-action='click->sign--ore-id#switch'
+          data-sign--ore-id-target='connectButton'
+          data-sign--wallet-connect-target='otherConnectButtons'
+          data-sign--metamask-target='otherConnectButtons'>
+          <span class="wallet-logo">
+            <%= image_tag 'OREID_Logo_Symbol.svg', size: "12x12" %>
+          </span>
+          ORE ID
+          <span class="wallet-connect--button--dot">●</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-md-2 wallet-connect-status">
+    <div
+      class="p-2 text-truncate wallet-connect--address"
+      data-sign--wallet-connect-target='walletAddress'
+      data-sign--metamask-target='walletAddress'
+      data-sign--ore-id-target='walletAddress'>
+      Disconnected
     </div>
   </div>
 <% end %>

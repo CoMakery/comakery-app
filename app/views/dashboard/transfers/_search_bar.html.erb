@@ -1,19 +1,19 @@
-<div class="transfers-filters--filter search">
-  <label class="col-sm-5 search-label">Transfers List</label>
-  <div class="col-6 px-0">
+<div class="col-md-5 search">
+  <div class="d-flex flex-row">
+    <label class="search-label m-0 p-2">Transfers List</label>
     <div class="input">
       <div class="input-icon">
           <span class="input-icon-addon">
             <svg xmlns="http://www.w3.org/2000/svg"
-                 class="icon"
-                 width="24"
-                 height="24"
-                 viewBox="0 0 24 24"
-                 stroke-width="2"
-                 stroke="currentColor"
-                 fill="none"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
+                class="icon"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" />
             </svg>
@@ -22,10 +22,9 @@
             .except(:account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont))) %>
         <%= search_form_for @q, url: path, method: :get do |f| %>
           <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont,
-                             class: 'form-control',
-                             placeholder: 'Search...',
-                             autofocus: false,
-                             style: 'border-radius: 5px; padding-left: 25px; width: 200%' %>
+                            class: 'form-control',
+                            placeholder: 'Search...',
+                            autofocus: false %>
         <% end %>
       </div>
     </div>

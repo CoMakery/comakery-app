@@ -405,7 +405,7 @@ class Award < ApplicationRecord
     end
 
     def populate_recipient_wallet
-      self.recipient_wallet = account.wallets.find_by(address: recipient_address)
+      self.recipient_wallet = account.wallets.find_by(address: recipient_address, _blockchain: token&._blockchain)
     end
 
     def abort_destroy
