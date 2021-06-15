@@ -19,9 +19,9 @@ module Projects
 
       private
 
-       def project
-         Project.find(project_invite.invitable_id)
-       end
+        def project
+          Project.find(project_invite.invitable_id)
+        end
     end
   end
 end

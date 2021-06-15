@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
   before_action :redirect_if_signed_in, only: %i[new create]
   before_action :set_session_from_token, only: :new
-  before_action :find_project_invite, only: %i[create update_profile]
+  before_action :project_invite, only: %i[create update_profile]
 
   layout 'legacy', except: %i[index]
 
@@ -84,7 +84,8 @@ class AccountsController < ApplicationController
     authorize @account
   end
 
-  def update_profile
+  # TODO: Refactor complexity
+  def update_profile # rubocop:todo Metrics/CyclomaticComplexity
     @account = current_account
 
     authorize @account
@@ -262,12 +263,10 @@ class AccountsController < ApplicationController
     def set_session_from_token
       project_invite = ProjectInvite.find_by(token: params[:token])
 
-      if project_invite && !project_invite.accepted?
-        session[:project_invite_id] = project_invite.id
-      end
+      session[:project_invite_id] = project_invite.id unless project_invite&.accepted?
     end
 
-    def find_project_invite
+    def project_invite
       return if session[:project_invite_id].blank?
 
       @project_invite ||= ProjectInvite.find(session[:project_invite_id])

@@ -3,7 +3,8 @@ class SendInvite
 
   delegate :params, :whitelabel_mission, :project, to: :context
 
-  def call
+  # TODO: Refactor cyclomatic complexity
+  def call # rubocop:todo Metrics/CyclomaticComplexity
     account = GetAccount.call(whitelabel_mission: whitelabel_mission, email: params[:email]).account
 
     if account.blank?
