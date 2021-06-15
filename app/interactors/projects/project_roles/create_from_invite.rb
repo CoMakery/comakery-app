@@ -6,7 +6,7 @@ module Projects
       delegate :account, :project_invite, to: :context
 
       def call
-        if project_invite && project.invites.pending.include?(project_invite)
+        if project_invite && project.invites.pending.exists?(project_invite.id)
           project_role = project.project_roles.new(account: account, role: project_invite.role)
 
           if project_role.save
