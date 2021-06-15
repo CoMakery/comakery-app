@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2021_06_10_104821) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "account_token_records", force: :cascade do |t|
@@ -156,9 +155,9 @@ ActiveRecord::Schema.define(version: 2021_06_10_104821) do
   end
 
   create_table "api_request_logs", force: :cascade do |t|
+    t.jsonb "body", null: false
     t.inet "ip", null: false
     t.string "signature", null: false
-    t.jsonb "body", null: false
     t.datetime "created_at", null: false
     t.index ["created_at"], name: "index_api_request_logs_on_created_at"
     t.index ["signature"], name: "index_api_request_logs_on_signature", unique: true
