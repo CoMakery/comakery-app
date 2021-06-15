@@ -93,7 +93,7 @@ class AwardsController < ApplicationController
     @props[:task][:image_from_id] = @award.id
   end
 
-  def assign # rubocop:todo Metrics/CyclomaticComplexity
+  def assign
     account = Account.find(params[:account_id])
 
     @award = @award.clone_on_assignment if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
