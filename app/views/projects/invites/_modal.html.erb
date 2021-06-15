@@ -21,10 +21,10 @@
             <%= text_field_tag 'email', nil, class: 'form-control', placeholder: 'Email' %>
           </div>
           <div class="input-icon mb-3 mt-1">
-            <%= label_tag :role, 'Permissions', class: 'h11 font-weight-medium n10-color mt-2' %>
+            <%= label_tag :role, 'Role', class: 'h11 font-weight-medium n10-color mt-2' %>
             <div class="choices">
               <%= select_tag :role,
-                             options_for_select(ProjectRole.roles.keys.collect { |role| [role.titleize, role] }),
+                             options_for_select(role_options_for_select),
                              class: 'form-select form-control' %>
             </div>
           </div>
