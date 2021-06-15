@@ -3,8 +3,7 @@ class SendInvite
 
   delegate :params, :whitelabel_mission, :project, to: :context
 
-  # TODO: Refactor cyclomatic complexity
-  def call # rubocop:todo Metrics/CyclomaticComplexity
+  def call
     account = GetAccount.call(whitelabel_mission: whitelabel_mission, email: params[:email]).account
 
     if account.blank?
@@ -14,6 +13,22 @@ class SendInvite
 
       context.fail!(errors: ['Invite is already sent']) if project_invite.present?
 
+      create_project_invite
+    else
+      project_role = project.project_roles.find_by(account: account)
+
+      if project_role.present?
+        context.fail!(errors: ["User already has #{project_role.role} permissions for this project. " \
+                               'You can update their role with the action menu on this Accounts page'])
+      end
+
+      create_project_role
+    end
+  end
+
+  private
+
+    def create_project_invite
       project_invite = project.invites.new(email: params[:email], role: params[:role])
 
       if project_invite.save
@@ -27,37 +42,25 @@ class SendInvite
       else
         context.fail!(errors: project_invite.errors.full_messages)
       end
-    else
-      project_role = project.project_roles.find_by(account: account)
+    end
 
-      if project_role.present?
-        context.fail!(errors: ["User already has #{project_role.role} permissions for this project. " \
-                               'You can update their role with the action menu on this Accounts page'])
+    def create_project_role
+      project_role = project.project_roles.new(account: account, role: params[:role])
+
+      if project_role.save
+        UserMailer.send_invite_to_project(
+          account.email,
+          project,
+          params[:role],
+          domain_name
+        ).deliver_now
       else
-        project_role = project.project_roles.new(account: account, role: params[:role])
-
-        if project_role.save
-          UserMailer.send_invite_to_project(
-            account.email,
-            project,
-            params[:role],
-            domain_name
-          ).deliver_now
-        else
-          context.fail!(errors: project_role.errors.full_messages)
-        end
+        context.fail!(errors: project_role.errors.full_messages)
       end
     end
-  end
-
-  private
 
     def email_valid?
       EmailValidator.new(params[:email]).valid?
-    end
-
-    def send_invite_to_platform(email, token, project, role)
-      UserMailer.send_invite_to_platform(email, token, project, role, domain_name).deliver_now
     end
 
     def domain_name
