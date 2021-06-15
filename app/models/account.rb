@@ -7,7 +7,6 @@ class Account < ApplicationRecord
   include ActiveStorageValidator
   include EthereumAddressable
 
-  # attachment :image, type: :image
   has_one_attached :image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent

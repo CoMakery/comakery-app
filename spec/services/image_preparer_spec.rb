@@ -24,6 +24,31 @@ RSpec.describe ImagePreparer do
     end
   end
 
+  context 'resize' do
+    subject { described_class.new(project, params, resize: '50x50') }
+
+    let!(:params) do
+      ActionController::Parameters.new(
+        {
+          image: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
+        }
+      ).permit!
+    end
+
+    specify 'works' do
+      tmp_img_file_path = params['image'].tempfile.path
+      initial_img = MiniMagick::Image.open(tmp_img_file_path)
+      expect(initial_img.width).to eq 256
+      expect(initial_img.height).to eq 256
+
+      expect(subject.valid?).to be true
+
+      prepared_img = MiniMagick::Image.open(tmp_img_file_path)
+      expect(prepared_img.width).to eq 50
+      expect(prepared_img.height).to eq 50
+    end
+  end
+
   context '#valid?' do
     context 'when params contain valid attachments' do
       let!(:params) do

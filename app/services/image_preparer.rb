@@ -3,12 +3,13 @@ class ImagePreparer
   MAX_HEIGHT = 4096
 
   attr_accessor :record
-  attr_reader   :params, :valid
+  attr_reader   :params, :valid, :options
   alias valid? valid
 
-  def initialize(record, params)
+  def initialize(record, params, options = {})
     @record = record
     @params = params
+    @options = options
     @valid = validate_and_prepare_attachments
   end
 
@@ -24,7 +25,11 @@ class ImagePreparer
 
       return false unless image_valid?(attr, attachment, image)
 
-      strip_exif(image, imgfile)
+      apply_actions(image)
+
+      # replace the initially uploaded image
+      imgfile.rewind
+      image.write(imgfile)
       true
     rescue MiniMagick::Error, MiniMagick::Invalid
       record.errors.add(attr.to_sym, 'is invalid')
@@ -61,16 +66,22 @@ class ImagePreparer
       valid_dimensions
     end
 
-    def strip_exif(image, imgfile)
-      return unless image.type == 'JPEG'
+    def apply_actions(image)
+      process_actions = {}
+      process_actions[:strip] = nil if image.type == 'JPEG'
+      process_actions[:resize] = options[:resize] if options.key?(:resize)
 
-      image.combine_options(&:strip) # strip exif
+      return if process_actions.empty?
 
-      # replace the initially uploaded image
-      imgfile.rewind
-      image.write(imgfile)
-
-      true
+      image.combine_options do |img|
+        process_actions.map do |action, params|
+          if params
+            img.public_send(action, params)
+          else
+            img.public_send(action)
+          end
+        end
+      end
     end
 
     def attachments
