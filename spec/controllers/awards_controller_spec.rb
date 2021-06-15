@@ -688,43 +688,248 @@ RSpec.describe AwardsController, type: :controller do
   end
 
   describe '#assign' do
-    let!(:award) { create(:award_ready) }
-    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
-    let!(:account) { create(:account) }
+    let(:account) { FactoryBot.create(:account) }
+    let(:target_account) { FactoryBot.create(:account) }
+    let(:token) { FactoryBot.create(:token) }
+    let(:project) { FactoryBot.create :project, account: account, token: token }
+    let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project, state: 'public') }
 
-    it 'assigns task with selected account and redirects to batches page with notice' do
-      login(award.project.account)
-      post :assign, params: {
-        project_id: award.project.to_param,
-        award_type_id: award.award_type.to_param,
-        award_id: award.to_param,
-        account_id: account.id
-      }
+    let(:mail) { double(:mail, deliver_now: nil) }
+    let(:mail_task) { double(:mail_task, task_assigned: mail) }
 
-      expect(response).to redirect_to(project_award_types_path(award.project))
-      expect(flash[:notice]).to eq('Task has been assigned')
-      expect(award.reload.ready?).to be true
-      expect(award.reload.account).to eq account
-      expect(award.reload.issuer).to eq award.project.account
+    before do
+      allow(TaskMailer).to receive(:with).and_return(mail_task)
+
+      login account
     end
 
-    it 'clones the task before assignement if it should be cloned' do
-      login(award_cloneable.project.account)
-      post :assign, params: {
-        project_id: award_cloneable.project.to_param,
-        award_type_id: award_cloneable.award_type.to_param,
-        award_id: award_cloneable.to_param,
-        account_id: account.id
-      }
+    shared_examples 'update award' do
+      it do
+        expect(award.reload)
+          .to have_attributes account: target_account, issuer: account, status: 'ready'
+      end
+    end
 
-      cloned_award = Award.find_by(cloned_on_assignment_from_id: award_cloneable.id)
+    shared_examples 'not update award' do
+      it do
+        expect(award.reload)
+          .to have_attributes account: account, issuer: account, status: 'invite_ready'
+      end
+    end
 
-      expect(response).to redirect_to(project_award_types_path(award_cloneable.project))
-      expect(flash[:notice]).to eq('Task has been assigned')
-      expect(award_cloneable.reload.ready?).to be true
-      expect(cloned_award.reload.ready?).to be true
-      expect(cloned_award.reload.account).to eq account
-      expect(cloned_award.reload.issuer).to eq award_cloneable.project.account
+    shared_examples 'clone award' do
+      it do
+        expect(award.reload.assignments.last)
+          .to have_attributes account: target_account, issuer: account, status: 'ready'
+      end
+    end
+
+    shared_examples 'not clone award' do
+      it do
+        expect(award.reload.assignments.last).to eq nil
+      end
+    end
+
+    shared_examples 'send task assigned email notification with original award' do
+      it do
+        expect(TaskMailer).to have_received(:with).with(award: award, whitelabel_mission: nil)
+        expect(TaskMailer).to have_received(:with).once
+
+        expect(mail_task).to have_received(:task_assigned).once
+        expect(mail).to have_received(:deliver_now).once
+      end
+    end
+
+    shared_examples 'send task assigned email notification with award clone' do
+      it do
+        expect(TaskMailer)
+          .to have_received(:with)
+          .with(award: award.reload.assignments.last, whitelabel_mission: nil)
+        expect(TaskMailer).to have_received(:with).once
+
+        expect(mail_task).to have_received(:task_assigned).once
+        expect(mail).to have_received(:deliver_now).once
+      end
+    end
+
+    shared_examples 'not send task assigned email notification' do
+      it do
+        expect(TaskMailer).not_to have_received(:with)
+        expect(mail_task).not_to have_received(:task_assigned)
+        expect(mail).not_to have_received(:deliver_now)
+      end
+    end
+
+    shared_examples 'redirects to batches page with error' do |error_message|
+      it do
+        expect(response).to redirect_to project_award_types_path(project)
+        expect(flash[:error]).to eq error_message
+      end
+    end
+
+    shared_examples 'redirects to batches page with notice' do |notice_message|
+      it do
+        expect(response).to redirect_to project_award_types_path(project)
+        expect(flash[:notice]).to eq notice_message
+      end
+    end
+
+    context 'when award can be cloned' do
+      context 'when award can be cloned for account' do
+        let!(:award) do
+          FactoryBot.create :award, account: account, award_type: award_type,
+                                    status: 'invite_ready', transfer_type: transfer_type,
+                                    issuer: account, number_of_assignments: 2
+        end
+
+        before do
+          allow_any_instance_of(Award)
+            .to receive(:can_be_cloned_for?).with(target_account).and_return(true)
+        end
+
+        context 'when award is valid' do
+          before do
+            post :assign, params: {
+              project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+              account_id: target_account.id
+            }
+          end
+
+          it_behaves_like 'not update award'
+          it_behaves_like 'clone award'
+          it_behaves_like 'send task assigned email notification with award clone'
+          it_behaves_like 'redirects to batches page with notice', 'Task has been assigned'
+        end
+
+        context 'when award is not valid' do
+          before do
+            award.why = 'a' * 501
+            award.save(validate: false)
+          end
+
+          it 'should raise error and not update award' do
+            expect do
+              post :assign, params: {
+                project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+                account_id: target_account.id
+              }
+            end.to raise_error
+
+            expect(award.reload)
+              .to have_attributes account: account, issuer: account, status: 'invite_ready'
+          end
+
+          it 'should not clone award' do
+            expect do
+              post :assign, params: {
+                project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+                account_id: target_account.id
+              }
+            end.to raise_error
+
+            expect(award.reload.assignments.last).to eq nil
+          end
+
+          it 'should not send task submitted email notification' do
+            expect do
+              post :assign, params: {
+                project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+                account_id: target_account.id
+              }
+            end.to raise_error
+
+            expect(TaskMailer).not_to have_received(:with)
+            expect(mail_task).not_to have_received(:task_assigned)
+            expect(mail).not_to have_received(:deliver_now)
+          end
+        end
+      end
+
+      context 'when award cannot be cloned for account' do
+        let!(:award) do
+          FactoryBot.create :award, account: account, award_type: award_type,
+                                    status: 'invite_ready', transfer_type: transfer_type,
+                                    issuer: account, number_of_assignments: 2
+        end
+
+        before do
+          allow_any_instance_of(Award)
+            .to receive(:can_be_cloned_for?).with(target_account).and_return(false)
+        end
+
+        context 'when award is valid' do
+          before do
+            post :assign, params: {
+              project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+              account_id: target_account.id
+            }
+          end
+
+          it_behaves_like 'update award'
+          it_behaves_like 'not clone award'
+          it_behaves_like 'send task assigned email notification with original award'
+          it_behaves_like 'redirects to batches page with notice', 'Task has been assigned'
+        end
+
+        context 'when award is not valid' do
+          before do
+            award.why = 'a' * 501
+            award.save(validate: false)
+
+            post :assign, params: {
+              project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+              account_id: target_account.id
+            }
+          end
+
+          it_behaves_like 'not update award'
+          it_behaves_like 'not clone award'
+          it_behaves_like 'not send task assigned email notification'
+          it_behaves_like 'redirects to batches page with error',
+                          'Why is too long (maximum is 500 characters)'
+        end
+      end
+    end
+
+    context 'when award cannot be cloned' do
+      let!(:award) do
+        FactoryBot.create :award, account: account, award_type: award_type, status: 'invite_ready',
+                                  transfer_type: transfer_type, issuer: account
+      end
+
+      context 'when award is valid' do
+        before do
+          post :assign, params: {
+            project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+            account_id: target_account.id
+          }
+        end
+
+        it_behaves_like 'update award'
+        it_behaves_like 'not clone award'
+        it_behaves_like 'send task assigned email notification with original award'
+        it_behaves_like 'redirects to batches page with notice', 'Task has been assigned'
+      end
+
+      context 'when award is not valid' do
+        before do
+          award.why = 'a' * 501
+          award.save(validate: false)
+
+          post :assign, params: {
+            project_id: project.id, award_type_id: award_type.id, award_id: award.id,
+            account_id: target_account.id
+          }
+        end
+
+        it_behaves_like 'not update award'
+        it_behaves_like 'not clone award'
+        it_behaves_like 'not send task assigned email notification'
+        it_behaves_like 'redirects to batches page with error',
+                        'Why is too long (maximum is 500 characters)'
+      end
     end
   end
 
