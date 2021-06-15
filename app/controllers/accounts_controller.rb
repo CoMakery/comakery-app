@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
   before_action :redirect_if_signed_in, only: %i[new create]
   before_action :set_session_from_token, only: :new
-  before_action :find_project_invite, only: %i[create build_profile]
+  before_action :find_project_invite, only: %i[create update_profile]
 
   layout 'legacy', except: %i[index]
 
@@ -61,7 +61,7 @@ class AccountsController < ApplicationController
     if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
-      if @project_invite.present? && !@project_invite.expired?
+      if @project_invite.present?
         @account.confirm!
       else
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -109,7 +109,7 @@ class AccountsController < ApplicationController
       if @project_invite.present?
         Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite: @project_invite)
 
-        redirect_to project_path(@project_invite.project)
+        redirect_to project_path(@project_invite.invitable_id)
       else
         redirect_to my_tasks_path
       end
@@ -262,7 +262,7 @@ class AccountsController < ApplicationController
     def set_session_from_token
       project_invite = ProjectInvite.find_by(token: params[:token])
 
-      if project_invite && !project_invite.expired?
+      if project_invite && !project_invite.accepted?
         session[:project_invite_id] = project_invite.id
       end
     end
