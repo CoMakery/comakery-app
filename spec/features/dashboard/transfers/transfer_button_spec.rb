@@ -109,17 +109,6 @@ describe 'transfer button on Transfers page' do
           end
         end
 
-        context 'and admin does not have OREID linked' do
-          before do
-            project.account.update!(ore_id_account: nil)
-            subject
-          end
-
-          it 'links to Wallets' do
-            expect(page).to have_css('.transfers-table__transfer__status .transfer-button', count: 1, text: 'link OREID')
-          end
-        end
-
         context 'and admin has OREID linked' do
           before do
             BlockchainTransaction.delete_all
