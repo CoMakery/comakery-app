@@ -19,7 +19,7 @@ describe 'Add person', js: true do
     within('#invite-person form') do
       fill_in 'email', with: account.email
 
-      select 'Interested', from: 'role'
+      select 'Project Member', from: 'role'
 
       click_button 'Save'
     end
@@ -35,7 +35,7 @@ describe 'Add person', js: true do
     within('#invite-person form') do
       fill_in 'email', with: ''
 
-      select 'Interested', from: 'role'
+      select 'Project Member', from: 'role'
 
       click_button 'Save'
     end
