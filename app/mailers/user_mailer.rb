@@ -24,7 +24,6 @@ class UserMailer < ApplicationMailer
     @project = project
     @project_role = project_role
     @domain_name = domain_name
-    @url = project_url(id: project.id)
     mail to: email, subject: "Invitation to #{@project.title} on #{@domain_name}"
   end
 
