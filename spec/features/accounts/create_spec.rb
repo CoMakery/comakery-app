@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe 'Create account', js: true do
   context 'when a user joins to platform via a project invitation' do
-    let(:project) { create(:project) }
+    let(:project) { create(:project, visibility: :public_listed) }
 
-    let(:invite) { FactoryBot.create(:invite, invitable: project, role: 'admin') }
+    let(:invite) { FactoryBot.create(:invite, invitable: project) }
 
     let(:account) { Account.last }
 
