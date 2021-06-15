@@ -7,6 +7,7 @@ describe Project do
   it_behaves_like 'active_storage_validator', %w[image square_image panoramic_image]
 
   it { is_expected.to have_many(:accounts) }
+  it { is_expected.to have_one_attached(:transfers_csv) }
 
   describe 'associations' do
     let!(:project) { create :project }
@@ -677,5 +678,88 @@ describe Project do
       expect(project.project_admins).to include(previous_owner)
       expect(project.accounts).to include(previous_owner)
     end
+  end
+
+  describe '#download_transfers_csv' do
+    let(:award) { create :award }
+    let(:project) { award.project }
+
+    subject { project.download_transfers_csv }
+
+    it { is_expected.to be_a(String) }
+  end
+
+  describe '#update_transfers_csv' do
+    let(:award) { create :award }
+    let(:project) { award.project }
+
+    subject { project.update_transfers_csv }
+
+    context 'when transfers_csv shouldnt be updated' do
+      before do
+        allow(project).to receive(:should_update_transfers_csv?).and_return(false)
+      end
+
+      it { is_expected.to be_nil }
+    end
+
+    before do
+      allow(project).to receive(:should_update_transfers_csv?).and_return(true)
+    end
+
+    specify do
+      expect(project).to receive_message_chain(:transfers_csv, :attach)
+      subject
+    end
+  end
+
+  describe '#should_update_transfers_csv?' do
+    let(:award) { create :award }
+    let(:project) { award.project }
+
+    subject { project.should_update_transfers_csv? }
+
+    context 'with no completed awards' do
+      let(:project) { create(:project) }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'without transfers_csv attached' do
+      it { is_expected.to be_truthy }
+    end
+
+    context 'with completed awards being updated after transfers_csv attached' do
+      before do
+        project.update_transfers_csv
+        award.update(updated_at: Time.current)
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'with completed awards being updated before transfers_csv attached' do
+      before do
+        project.update_transfers_csv
+      end
+
+      it { is_expected.to be_falsey }
+    end
+  end
+
+  describe '#transfers_to_csv' do
+    let(:award) { create :award }
+    let(:project) { award.project }
+
+    subject { CSV.parse(project.transfers_to_csv) }
+
+    context 'with no completed awards' do
+      let(:project) { create(:project) }
+
+      it { is_expected.to be_blank }
+    end
+
+    it { is_expected.to include(award.decorate.to_csv_header) }
+    it { is_expected.to include(award.decorate.to_csv.map { |v| v.nil? ? v : v.to_s }) }
   end
 end
