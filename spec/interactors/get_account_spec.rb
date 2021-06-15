@@ -11,7 +11,7 @@ describe GetAccount do
       before { account.update(managed_mission: whitelabel_mission) }
 
       subject(:result) do
-        described_class.call(whitelabel_mission: whitelabel_mission, email: email)
+        described_class.call(whitelabel_mission: whitelabel_mission, email: Faker::Internet.email)
       end
 
       it { expect(result.success?).to be(true) }
@@ -19,7 +19,7 @@ describe GetAccount do
 
     context 'when whitelabel mission is nil' do
       subject(:result) do
-        described_class.call(whitelabel_mission: nil, email: email)
+        described_class.call(whitelabel_mission: nil, email: Faker::Internet.email)
       end
 
       it { expect(result.success?).to be(true) }
