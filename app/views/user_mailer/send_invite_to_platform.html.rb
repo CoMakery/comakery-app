@@ -4,8 +4,9 @@ class Views::UserMailer::SendInviteToPlatform < Views::Base
   needs :url, :project, :project_role, :domain_name
   def content
     row do
-      text "You have been invited to have the role '#{project_role.capitalize}' for the project #{project.title} on #{domain_name}. " \
-           "To accept the invitation follow this #{link_to 'link', url}"
+      text "You have been invited to have the role '#{project_role.capitalize}' for the project #{project.title} on #{domain_name}."
+      text 'To accept the invitation follow this '
+      link_to 'link', url
     end
   end
 end

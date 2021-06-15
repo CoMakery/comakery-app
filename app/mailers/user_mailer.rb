@@ -17,7 +17,7 @@ class UserMailer < ApplicationMailer
     @project_role = project_role
     @domain_name = domain_name
     @url = new_account_url(token: token)
-    mail to: email, subject: "Invitation to #{@project.title} project"
+    mail to: email, subject: "Invitation to #{@project.title}"
   end
 
   def send_invite_to_project(email, project, project_role, domain_name)

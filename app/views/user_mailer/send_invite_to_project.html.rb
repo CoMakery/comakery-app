@@ -5,7 +5,6 @@ class Views::UserMailer::SendInviteToProject < Views::Base
   def content
     row do
       text "You now have the role '#{project_role.capitalize}' for the project #{project.title} on #{domain_name}."
-      link_to 'Go to project', url
     end
   end
 end
