@@ -7,22 +7,24 @@ class SendInvite
     account = GetAccount.call(whitelabel_mission: whitelabel_mission, email: params[:email]).account
 
     if account.blank?
-      if email_valid?
-        project_invite = project.invites.find_by(email: params[:email])
+      context.fail!(errors: ['Email is invalid']) unless email_valid?
 
-        # TODO: Clarify error message
-        context.fail!(errors: ['Invite is already sent']) if project_invite.present?
+      project_invite = project.invites.find_by(email: params[:email])
 
-        project_invite = project.invites.new(email: params[:email], role: params[:role])
+      context.fail!(errors: ['Invite is already sent']) if project_invite.present?
 
-        if project_invite.save
-          send_invite_to_platform(params[:email], project_invite.token, project, params[:role])
-        else
-          context.fail!(errors: project_invite.errors.full_messages)
-        end
+      project_invite = project.invites.new(email: params[:email], role: params[:role])
+
+      if project_invite.save
+        UserMailer.send_invite_to_platform(
+          params[:email],
+          project_invite.token,
+          project,
+          params[:role],
+          domain_name
+        ).deliver_now
       else
-        # TODO: Clarify error message
-        context.fail!(errors: ['Email is invalid'])
+        context.fail!(errors: project_invite.errors.full_messages)
       end
     else
       project_role = project.project_roles.find_by(account: account)
