@@ -263,7 +263,7 @@ class AccountsController < ApplicationController
     def set_session_from_token
       project_invite = ProjectInvite.find_by(token: params[:token])
 
-      session[:project_invite_id] = project_invite.id unless project_invite&.accepted?
+      session[:project_invite_id] = project_invite.id if project_invite.present? && !project_invite.accepted?
     end
 
     def project_invite
