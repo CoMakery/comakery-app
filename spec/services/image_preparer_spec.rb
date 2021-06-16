@@ -79,5 +79,19 @@ RSpec.describe ImagePreparer do
         expect(project.errors.full_messages).to eq(['Square image exceeds maximum pixel dimensions'])
       end
     end
+
+    context 'when params too big image' do
+      let!(:params) do
+        ActionController::Parameters.new(
+          { image: fixture_file_upload('heavy_image.png', 'image/png', :binary) }
+        ).permit!
+      end
+
+      it 'fails and returns an error' do
+        expect(subject.valid?).to be(false)
+
+        expect(project.errors.full_messages).to eq(['Image has too big size'])
+      end
+    end
   end
 end

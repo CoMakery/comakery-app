@@ -1,6 +1,7 @@
 class ImagePreparer
   MAX_WIDHT = 4096
   MAX_HEIGHT = 4096
+  MAX_SIZE = 2.megabytes
 
   attr_reader :record, :params, :options
 
@@ -34,7 +35,7 @@ class ImagePreparer
     end
 
     def image_valid?(attr, attachment, image)
-      validate_image(attr, attachment, image) && validate_format(attr, attachment, image) && validate_dimensions(attr, attachment, image)
+      validate_image(attr, attachment, image) && validate_format(attr, attachment, image) && validate_size(attr, attachment, image) && validate_dimensions(attr, attachment, image)
     end
 
     def validate_image(attr, _attachment, image)
@@ -53,6 +54,14 @@ class ImagePreparer
 
       record.errors.add(attr.to_sym, 'has unsupported format') unless valid_format
       valid_format
+    end
+
+    def validate_size(attr, _attachment, image)
+      valid_size = image.size < MAX_SIZE
+
+      record.errors.add(attr.to_sym, 'has too big size') unless valid_size
+
+      valid_size
     end
 
     def validate_dimensions(attr, _attachment, image)
