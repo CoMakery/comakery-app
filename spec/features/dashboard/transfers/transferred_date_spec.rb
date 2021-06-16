@@ -14,7 +14,10 @@ describe 'transferred date column', js: true do
   it { expect(page).to have_css('.transfers-table__transfer__transferred_at') }
 
   context 'when transfer is paid' do
-    before { transfer.paid! }
+    before do
+      transfer.paid!
+      visit project_dashboard_transfers_path(project)
+    end
 
     it 'shows transferred date' do
       wait_for_turbolinks
