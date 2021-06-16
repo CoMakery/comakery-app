@@ -23,11 +23,10 @@ class Project < ApplicationRecord
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_roles, dependent: :destroy
-  has_many :accounts, through: :project_roles
+  has_many :accounts, through: :project_roles, source: :account
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
   has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
-  has_many :accounts, through: :project_roles, source: :account
 
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :accounts, source: :account_token_records
   has_many :transfer_rules, through: :token
@@ -45,6 +44,8 @@ class Project < ApplicationRecord
   has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :teams, through: :account
+
+  has_many :invites, as: :invitable, dependent: :destroy
 
   accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 

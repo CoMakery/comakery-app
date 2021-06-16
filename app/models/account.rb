@@ -334,6 +334,10 @@ class Account < ApplicationRecord
     wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
+  def ore_id_address_for_blockchain(blockchain)
+    wallets.find_by(_blockchain: blockchain, source: :ore_id, primary_wallet: true)&.address
+  end
+
   def wallets_for_blockchain(blockchain)
     wallets.where(_blockchain: blockchain)
   end

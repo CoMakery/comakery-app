@@ -15,7 +15,7 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
     end
   end
 
-  describe 'POST #create' do
+  describe 'POST #create', :vcr do
     let(:valid_attributes) do
       {
         sending_group_id: RegGroup.find_or_create_by!(token_id: token.id, blockchain_id: 100),
@@ -41,16 +41,36 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
         expect { subject }.to change(project.token.transfer_rules, :count).by(1)
       end
 
-      context 'with a token supported by ore id', :vcr do
+      context 'with a request coming from ore-id controller' do
+        before do
+          request.headers['X-Sign-Controller'] = 'ore-id'
+        end
+
         it 'redirects to ore_id' do
           subject
           expect(response).to have_http_status(:found)
         end
       end
 
-      context 'with a token supported by wallet connect' do
-        let!(:token) { create(:comakery_dummy_token) }
-        let!(:project) { create(:project, visibility: :public_listed, token: token) }
+      context 'with a request coming from wallet connect controller' do
+        before do
+          request.headers['X-Sign-Controller'] = 'wallet-connect'
+        end
+
+        render_views
+
+        it 'renders json' do
+          subject
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)).to include('tx_new_url')
+          expect(JSON.parse(response.body)).to include('tx_receive_url')
+        end
+      end
+
+      context 'with a request coming from metamask controller' do
+        before do
+          request.headers['X-Sign-Controller'] = 'metamask'
+        end
 
         render_views
 
@@ -79,7 +99,7 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
     end
   end
 
-  describe 'DELETE #destroy' do
+  describe 'DELETE #destroy', :vcr do
     let!(:transfer_rule) { create(:transfer_rule, token: token) }
     subject { delete :destroy, params: { project_id: project.id, id: transfer_rule.id } }
 
@@ -92,10 +112,44 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
       expect(new_rule.lockup_until).to eq(Time.zone.at(0))
     end
 
-    context 'with algorand security token', :vcr do
+    context 'with a request coming from ore-id controller' do
+      before do
+        request.headers['X-Sign-Controller'] = 'ore-id'
+      end
+
       it 'redirects to ore_id' do
         subject
         expect(response).to have_http_status(:found)
+      end
+    end
+
+    context 'with a request coming from wallet connect controller' do
+      before do
+        request.headers['X-Sign-Controller'] = 'wallet-connect'
+      end
+
+      render_views
+
+      it 'renders json' do
+        subject
+        expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body)).to include('tx_new_url')
+        expect(JSON.parse(response.body)).to include('tx_receive_url')
+      end
+    end
+
+    context 'with a request coming from metamask controller' do
+      before do
+        request.headers['X-Sign-Controller'] = 'metamask'
+      end
+
+      render_views
+
+      it 'renders json' do
+        subject
+        expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body)).to include('tx_new_url')
+        expect(JSON.parse(response.body)).to include('tx_receive_url')
       end
     end
   end

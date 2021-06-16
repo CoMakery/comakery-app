@@ -1,4 +1,10 @@
 class ProjectRole < ApplicationRecord
+  HUMANIZED_ROLE_NAMES = {
+    interested: 'Project Member',
+    admin: 'Admin',
+    observer: 'Read Only Admin'
+  }.freeze
+
   belongs_to :account
   belongs_to :project, counter_cache: true
 

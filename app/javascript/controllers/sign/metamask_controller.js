@@ -7,6 +7,10 @@ import PubSub from 'pubsub-js'
 export default class extends Controller {
   static targets = [ "walletAddress", "txButtons", "connectButton", "otherConnectButtons" ]
 
+  initialize() {
+    this.name = 'metamask'
+  }
+
   async metamaskInit() {
     const onboarding = new MetaMaskOnboarding()
     this.onboarding = onboarding
@@ -46,14 +50,16 @@ export default class extends Controller {
     this.txButtonsTargets.forEach(button => {
       if (this.accountsPresent()) {
         button.classList.add('transfer-tokens-btn__enabled')
+        button.dataset.connectedController = this.name
       } else {
         button.classList.remove('transfer-tokens-btn__enabled')
+        button.dataset.connectedController = null
       }
     })
   }
 
   accountsPresent() {
-    return this.accounts && this.accounts > 0
+    return this.accounts && this.accounts.length > 0
   }
 
   switch(e) {
@@ -77,6 +83,11 @@ export default class extends Controller {
     e.preventDefault()
 
     const button = e.target.closest("a")
+
+    if (button.dataset.connectedController !== this.name) {
+      return
+    }
+
     button.classList.remove('transfer-tokens-btn__enabled')
     
     let dataset
@@ -123,6 +134,7 @@ export default class extends Controller {
         body: new FormData(form),
         method: form.method,
         headers: {
+          'X-Sign-Controller': this.name,
           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         }
       }

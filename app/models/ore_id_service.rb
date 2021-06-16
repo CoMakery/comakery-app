@@ -5,7 +5,7 @@ class OreIdService
 
   include HTTParty
 
-  BASE_DOMAIN = ENV.fetch('OREID_BASE_DOMAIN', 'staging.service.oreid.io')
+  BASE_DOMAIN = ENV.fetch('OREID_BASE_DOMAIN', 'service.oreid.io')
   base_uri "https://#{BASE_DOMAIN}/api"
 
   attr_reader :ore_id, :account

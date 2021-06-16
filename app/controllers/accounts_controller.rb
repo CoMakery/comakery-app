@@ -8,8 +8,9 @@ class AccountsController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
-
   before_action :redirect_if_signed_in, only: %i[new create]
+  before_action :set_session_from_token, only: :new
+  before_action :project_invite, only: %i[create update_profile]
 
   layout 'legacy', except: %i[index]
 
@@ -60,7 +61,11 @@ class AccountsController < ApplicationController
     if recaptcha_valid?(model: @account, action: 'registration') && prepare_avatar(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
-      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      if @project_invite.present?
+        @account.confirm!
+      else
+        UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      end
 
       Project.where(auto_add_account: true).each { |project| project.add_account(@account) }
 
@@ -79,7 +84,8 @@ class AccountsController < ApplicationController
     authorize @account
   end
 
-  def update_profile
+  # TODO: Refactor complexity
+  def update_profile # rubocop:todo Metrics/CyclomaticComplexity
     @account = current_account
 
     authorize @account
@@ -99,7 +105,13 @@ class AccountsController < ApplicationController
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
 
-      redirect_to my_tasks_path
+      if @project_invite.present?
+        Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite: @project_invite)
+
+        redirect_to project_path(@project_invite.invitable_id)
+      else
+        redirect_to my_tasks_path
+      end
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
@@ -241,5 +253,17 @@ class AccountsController < ApplicationController
 
     def prepare_avatar(account, params)
       ImagePreparer.new(account, params, resize: '190x190')
+    end
+
+    def set_session_from_token
+      project_invite = ProjectInvite.find_by(token: params[:token])
+
+      session[:project_invite_id] = project_invite.id if project_invite.present? && !project_invite.accepted?
+    end
+
+    def project_invite
+      return if session[:project_invite_id].blank?
+
+      @project_invite ||= ProjectInvite.find(session[:project_invite_id])
     end
 end
