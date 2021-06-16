@@ -25,7 +25,7 @@ class TokensController < ApplicationController
     @token = Token.create token_params
     authorize @token
 
-    if ImagePixelValidator.new(@token, token_params).valid? && @token.save
+    if ImagePreparer.new(@token, token_params).valid? && @token.save
       render json: { id: @token.id }, status: :ok
     else
       errors  = @token.errors.messages.map { |k, v| ["token[#{k}]", v.to_sentence] }.to_h
@@ -51,7 +51,7 @@ class TokensController < ApplicationController
   def update
     authorize @token
 
-    if ImagePixelValidator.new(@token, token_params).valid? && @token.update(token_params)
+    if ImagePreparer.new(@token, token_params).valid? && @token.update(token_params)
       render json: { message: 'Token updated' }, status: :ok
     else
       errors  = @token.errors.messages.map { |k, v| [k, v.to_sentence] }.to_s
