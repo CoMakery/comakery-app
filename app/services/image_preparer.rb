@@ -1,3 +1,4 @@
+# Resize options: https://legacy.imagemagick.org/Usage/resize/#noaspect
 class ImagePreparer
   MAX_WIDHT = 4096
   MAX_HEIGHT = 4096
@@ -19,7 +20,6 @@ class ImagePreparer
 
     def prepare_image(attr, attachment)
       imgfile = attachment.tempfile
-      # binding.pry
       image = MiniMagick::Image.open(imgfile.path)
 
       return false unless image_valid?(attr, attachment, image)
