@@ -2,22 +2,19 @@ class ImagePreparer
   MAX_WIDHT = 4096
   MAX_HEIGHT = 4096
 
-  attr_accessor :record
-  attr_reader   :params, :valid, :options
-  alias valid? valid
+  attr_reader :record, :params, :options
 
   def initialize(record, params, options = {})
     @record = record
     @params = params
     @options = options
-    @valid = validate_and_prepare_attachments
+  end
+
+  def valid?
+    @valid ||= attachments.all? { |attr, attachment| prepare_image(attr, attachment) }
   end
 
   private
-
-    def validate_and_prepare_attachments
-      attachments.all? { |attr, attachment| prepare_image(attr, attachment) }
-    end
 
     def prepare_image(attr, attachment)
       imgfile = attachment.tempfile
