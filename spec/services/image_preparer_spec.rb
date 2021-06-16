@@ -80,7 +80,7 @@ RSpec.describe ImagePreparer do
       end
     end
 
-    context 'when params too big image' do
+    context 'when params has too big image' do
       let!(:params) do
         ActionController::Parameters.new(
           { image: fixture_file_upload('heavy_image.png', 'image/png', :binary) }

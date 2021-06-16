@@ -19,15 +19,18 @@ class ImagePreparer
 
     def prepare_image(attr, attachment)
       imgfile = attachment.tempfile
+      # binding.pry
       image = MiniMagick::Image.open(imgfile.path)
 
       return false unless image_valid?(attr, attachment, image)
 
-      apply_actions(image)
-
       # replace the initially uploaded image
+      apply_actions(image)
       imgfile.rewind
       image.write(imgfile)
+
+      change_original_filename(attr, attachment, image)
+
       true
     rescue MiniMagick::Error, MiniMagick::Invalid
       record.errors.add(attr.to_sym, 'is invalid')
@@ -96,5 +99,11 @@ class ImagePreparer
 
     def attachment_keys
       record.attachment_reflections.keys
+    end
+
+    def change_original_filename(attr, attachment, image)
+      if attachment.class.method_defined?(:original_filename=) # some tests can't change it
+        attachment.original_filename = "#{record.model_name.param_key}_#{attr}.#{image.type.downcase}" # account_image.jpeg
+      end
     end
 end
