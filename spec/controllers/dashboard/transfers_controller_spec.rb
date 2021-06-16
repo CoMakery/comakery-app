@@ -69,6 +69,21 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
     end
   end
 
+  describe 'POST #export' do
+    before do
+      ActiveJob::Base.queue_adapter = :test
+    end
+
+    after do
+      ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+    end
+
+    subject { post :export, params: { project_id: project.id } }
+
+    it { is_expected.to redirect_to(project_dashboard_transfers_path(project)) }
+    it { expect { subject }.to enqueue_job(ProjectExportTransfersJob) }
+  end
+
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new transfer' do

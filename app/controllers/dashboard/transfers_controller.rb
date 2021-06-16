@@ -18,6 +18,15 @@ class Dashboard::TransfersController < ApplicationController
     authorize @project, :transfers?
   end
 
+  # POST /projects/1/dashboard/transfers/export
+  def export
+    authorize @project, :export_transfers?
+
+    ProjectExportTransfersJob.perform_later(@project.id, current_account.id)
+
+    redirect_to project_dashboard_transfers_path(@project), notice: "CSV will be sent to #{current_account.email}"
+  end
+
   # GET /projects/1/dashboard/transfers/1/edit
   def edit
     authorize @project, :update_transfer?

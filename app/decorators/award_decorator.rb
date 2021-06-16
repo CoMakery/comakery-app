@@ -47,6 +47,48 @@ class AwardDecorator < Draper::Decorator
     number_to_currency(total_amount, precision: token&.decimal_places.to_i, unit: '')
   end
 
+  def to_csv_header
+    [
+      'Id',
+      'Transfer Type',
+      'Recipient Id',
+      'Recipient First Name',
+      'Recipient Last Name',
+      'Recipient Blockchain Address',
+      'Recipient Verification',
+      'Sender Id',
+      'Sender First Name',
+      'Sender Last Name',
+      'Sender Blockchain Address',
+      "Total Amount #{token&.symbol}",
+      'Transaction Hash',
+      'Transaction Blockchain',
+      'Transferred At',
+      'Created At'
+    ]
+  end
+
+  def to_csv # rubocop:todo Metrics/CyclomaticComplexity
+    [
+      id,
+      transfer_type&.name,
+      account&.managed_account_id || account&.id,
+      account&.first_name,
+      account&.last_name,
+      recipient_wallet&.address,
+      account&.decorate&.verification_state,
+      issuer.managed_account_id || issuer.id,
+      issuer.first_name,
+      issuer.last_name,
+      latest_blockchain_transaction&.source,
+      total_amount,
+      latest_blockchain_transaction&.tx_hash,
+      token&.blockchain&.name,
+      transferred_at,
+      created_at
+    ]
+  end
+
   def part_of_email
     "#{email.split('@').first}@..." if email
   end
