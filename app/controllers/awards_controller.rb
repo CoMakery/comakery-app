@@ -1,6 +1,7 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
-  before_action :unavailable_for_whitelabel, only: %i[index]
+  before_action :unavailable_for_whitelabel
+  before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
@@ -215,6 +216,10 @@ class AwardsController < ApplicationController
     def set_project
       @project = @project_scope.find_by(id: params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
+    end
+
+    def unavailable_for_lockup_token
+      redirect_to project_url(@project) if @project.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule)
     end
 
     def authorize_project_edit

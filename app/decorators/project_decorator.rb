@@ -117,6 +117,7 @@ class ProjectDecorator < Draper::Decorator
       require_confidentiality: !require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
+      token_lockup: token&.token_type&.is_a?(TokenType::TokenReleaseSchedule),
       github_url: github_url,
       documentation_url: documentation_url,
       getting_started_url: getting_started_url,
