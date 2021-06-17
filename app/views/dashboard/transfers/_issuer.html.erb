@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "transfer_issuer_#{transfer.id}", target: "_top" do %>
+  <% transfer = transfer.decorate %>
   <% issuer = transfer.issuer.decorate %>
 
   <div class="account-preview">

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "transfer_prioritize_button_#{transfer.id}", target: '_top' do %>
-  <% if transfer.show_prioritize_button? %>
+  <% if transfer.decorate.show_prioritize_button? %>
     <div class="transfers-table__transfer__button__history">
       <%= link_to prioritize_project_dashboard_transfer_path(project_id: transfer.project.id, id: transfer.id),
                   class: 'transfer-algo-btn',
