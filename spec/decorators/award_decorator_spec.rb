@@ -23,7 +23,7 @@ describe AwardDecorator do
                         status: :created, token: token, transaction_batch: transaction_batch,
                         source: 'src1', destination: 'dest1'
     end
-    let(:transaction2) do  
+    let(:transaction2) do
       FactoryBot.create :blockchain_transaction,
                         status: :succeed, token: token, transaction_batch: transaction_batch,
                         source: 'src2', destination: 'dest2'
