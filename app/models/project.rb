@@ -7,9 +7,6 @@ class Project < ApplicationRecord
 
   nilify_blanks
 
-  # attachment :image
-  # attachment :square_image, type: :image
-  # attachment :panoramic_image, type: :image
   has_one_attached :image
   has_one_attached :square_image
   has_one_attached :panoramic_image

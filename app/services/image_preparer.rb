@@ -76,10 +76,7 @@ class ImagePreparer
     end
 
     def apply_actions(image, options)
-      process_actions = {}
-      process_actions[:strip] = nil if image.type == 'JPEG'
-      process_actions[:resize] = options[:resize] if options.key?(:resize)
-
+      process_actions = prepare_actions(image, options)
       return if process_actions.empty?
 
       image.combine_options do |img|
@@ -91,6 +88,14 @@ class ImagePreparer
           end
         end
       end
+    end
+
+    def prepare_actions(image, options)
+      options ||= {}
+      process_actions = {}
+      process_actions[:strip] = nil if image.type == 'JPEG'
+      process_actions[:resize] = options[:resize] if options.key?(:resize)
+      process_actions
     end
 
     def attachments
