@@ -6,7 +6,9 @@ describe AwardDecorator do
   let(:token) { FactoryBot.create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten) }
   let(:project) { FactoryBot.create :project, account: issuer, token: token }
   let(:award_type) { FactoryBot.create :award_type, project: project }
-  let(:award) { FactoryBot.create :award, award_type: award_type, issuer: issuer }
+  let(:award) do
+    FactoryBot.create :award, award_type: award_type, issuer: issuer, transfer_type: transfer_type
+  end
   let(:account) { FactoryBot.create(:account) }
   let(:project) { FactoryBot.create :project, token: token, account: account }
   let(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
@@ -145,33 +147,25 @@ describe AwardDecorator do
     let(:token) { FactoryBot.create(:token) }
     let(:project) { FactoryBot.create :project, account: account, token: token }
     let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
-    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
     let(:award_type) { FactoryBot.create(:award_type, project: project) }
     let!(:award) do
       FactoryBot.create :award, account: account, status: :paid, award_type: award_type,
-                                transfer_type: transfer_type, issuer: account
+                                transfer_type: transfer_type, issuer: account,
+                                recipient_wallet: wallet
     end
 
-    context 'when recipient wallet address is present' do
-      let(:transaction_batch) { FactoryBot.create :transaction_batch }
-      let(:transaction) do
-        FactoryBot.create :blockchain_transaction,
-                          status: :succeed, token: token, transaction_batch: transaction_batch,
-                          source: 'src2', destination: 'dest2'
-      end
-      let(:blockchain_transactions) { BlockchainTransaction.where(id: transaction.id).all }
-
-      before do
-        allow_any_instance_of(Token).to receive(:_token_type_on_ethereum?).and_return(true)
-        allow(award).to receive(:blockchain_transactions).and_return(blockchain_transactions)
-      end
+    context 'when recipient wallet is present' do
+      let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
 
       it 'should return correct recipient wallet url' do
-        expect(recipient_wallet_url).to eq 'https://live.blockcypher.com/btc/address/dest2'
+        expect(recipient_wallet_url)
+          .to eq "https://live.blockcypher.com/btc/address/#{wallet.address}"
       end
     end
 
-    context 'when recipient wallet address is not present' do
+    context 'when recipient wallet is not present' do
+      let(:wallet) { nil }
+
       it 'should return nil' do
         expect(recipient_wallet_url).to eq nil
       end
@@ -488,42 +482,133 @@ describe AwardDecorator do
     let(:token) { FactoryBot.create(:token) }
     let(:project) { FactoryBot.create :project, account: account, token: token }
     let!(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
-    let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
     let(:award_type) { FactoryBot.create(:award_type, project: project) }
     let!(:award) do
-      FactoryBot.create :award, account: account, status: status, award_type: award_type,
-                                transfer_type: transfer_type, issuer: account
+      FactoryBot.create :award, account: account, award_type: award_type,
+                                transfer_type: transfer_type, issuer: account,
+                                recipient_wallet: wallet
     end
 
-    include_context 'with award blockchain transactions'
+    context 'when recipient wallet is present' do
+      let(:wallet) { FactoryBot.create(:wallet, account: account, _blockchain: token._blockchain) }
 
-    context 'when award is paid' do
-      let(:status) { :paid }
-
-      context 'when there are succeed transactions' do
-        it 'should return destination of last succeeded blockchain transaction' do
-          expect(recipient_wallet_address).to eq 'dest4'
-        end
-      end
-
-      context 'when there are no succeed transactions' do
-        let(:transaction2) { nil }
-        let(:transaction4) { nil }
-
-        it 'should return nil' do
-          expect(recipient_wallet_address).to eq nil
-        end
+      it 'should return correct recipient wallet address' do
+        expect(recipient_wallet_address).to eq wallet.address
       end
     end
 
-    %i[ready started submitted accepted rejected cancelled invite_ready].each do |status_value|
-      let(:status) { status_value }
+    context 'when recipient wallet is not present' do
+      let(:wallet) { nil }
 
-      context "when award is #{status_value}" do
-        it 'should return nil' do
-          expect(recipient_wallet_address).to eq nil
-        end
+      it 'should return nil' do
+        expect(recipient_wallet_address).to eq nil
       end
+    end
+  end
+
+  describe '#to_csv_header' do
+    subject { award.decorate.to_csv_header }
+
+    let(:columns) do
+      [
+        'Id',
+        'Transfer Type',
+        'Recipient Id',
+        'Recipient First Name',
+        'Recipient Last Name',
+        'Recipient Blockchain Address',
+        'Recipient Verification',
+        'Sender Id',
+        'Sender First Name',
+        'Sender Last Name',
+        'Sender Blockchain Address',
+        "Total Amount #{award.token&.symbol}",
+        'Transaction Hash',
+        'Transaction Blockchain',
+        'Transferred At',
+        'Created At'
+      ]
+    end
+
+    it { is_expected.to eq(columns) }
+
+    context 'without token' do
+      before do
+        allow(award).to receive(:token).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+  end
+
+  describe '#to_csv' do
+    let(:blockchain_transaction) { create(:blockchain_transaction) }
+    let(:award) { blockchain_transaction.blockchain_transactable }
+
+    subject { award.decorate.to_csv }
+
+    let(:columns) do
+      [
+        award.id,
+        award.transfer_type&.name,
+        award.account&.managed_account_id || award.account&.id,
+        award.account&.first_name,
+        award.account&.last_name,
+        award.recipient_wallet&.address,
+        award.account&.decorate&.verification_state,
+        award.issuer.managed_account_id || award.issuer.id,
+        award.issuer.first_name,
+        award.issuer.last_name,
+        award.latest_blockchain_transaction&.source,
+        award.total_amount,
+        award.latest_blockchain_transaction&.tx_hash,
+        award.token&.blockchain&.name,
+        award.transferred_at,
+        award.created_at
+      ]
+    end
+
+    it { is_expected.to eq(columns) }
+
+    context 'with managed account ids' do
+      before do
+        allow(award).to receive(:account).and_return(create(:account, managed_account_id: '0'))
+        allow(award).to receive(:issuer).and_return(create(:account, managed_account_id: '1'))
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without account' do
+      before do
+        allow(award).to receive(:account).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without recipient_wallet' do
+      before do
+        allow(award).to receive(:recipient_wallet).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without latest_blockchain_transaction' do
+      before do
+        allow(award).to receive(:latest_blockchain_transaction).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
+    end
+
+    context 'without token' do
+      before do
+        allow(award).to receive(:token).and_return(nil)
+      end
+
+      it { is_expected.to eq(columns) }
     end
   end
 end
