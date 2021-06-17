@@ -8,8 +8,9 @@ class AccountsController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
-
   before_action :redirect_if_signed_in, only: %i[new create]
+  before_action :set_session_from_token, only: :new
+  before_action :project_invite, only: %i[create update_profile]
 
   layout 'legacy', except: %i[index]
 
@@ -57,10 +58,14 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    if recaptcha_valid?(model: @account, action: 'registration') && ImagePixelValidator.new(@account, account_params).valid? && @account.save
+    if recaptcha_valid?(model: @account, action: 'registration') && prepare_avatar(@account, account_params).valid? && @account.save
       session[:account_id] = @account.id
 
-      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      if @project_invite.present?
+        @account.confirm!
+      else
+        UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      end
 
       Project.where(auto_add_account: true).each { |project| project.add_account(@account) }
 
@@ -79,16 +84,15 @@ class AccountsController < ApplicationController
     authorize @account
   end
 
-  def update_profile
+  # TODO: Refactor complexity
+  def update_profile # rubocop:todo Metrics/CyclomaticComplexity
     @account = current_account
 
     authorize @account
 
     old_email = @account.email
 
-    image_validator = ImagePixelValidator.new(@account, account_params)
-
-    if image_validator.valid? && @account.update(account_params.merge(name_required: true))
+    if prepare_avatar(@account, account_params).valid? && @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
       if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
         session.delete(:account_id)
@@ -101,7 +105,13 @@ class AccountsController < ApplicationController
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
 
-      redirect_to my_tasks_path
+      if @project_invite.present?
+        Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite: @project_invite)
+
+        redirect_to project_path(@project_invite.invitable_id)
+      else
+        redirect_to my_tasks_path
+      end
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
@@ -144,7 +154,7 @@ class AccountsController < ApplicationController
     old_age = @current_account.age || 18
     authorize @current_account
     respond_to do |format|
-      if @current_account.update(account_params.merge(name_required: true))
+      if prepare_avatar(@current_account, account_params).valid? && @current_account.update(account_params.merge(name_required: true))
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@current_account).deliver if @current_account.email_confirm_token
 
         check_date(old_age) if old_age < 18
@@ -237,14 +247,23 @@ class AccountsController < ApplicationController
 
     def account_decorate(account)
       account.as_json(only: %i[email first_name last_name nickname date_of_birth country ethereum_auth_address]).merge(
-        image_url: account_image_url(account)
+        image_url: helpers.account_image_url(account, 190)
       )
     end
 
-    def account_image_url(account)
-      GetImageVariantPath.call(
-        attachment: account.image,
-        resize_to_fill: [190, 190]
-      ).path
+    def prepare_avatar(account, params)
+      ImagePreparer.new(account, params, resize: '190x190!')
+    end
+
+    def set_session_from_token
+      project_invite = ProjectInvite.find_by(token: params[:token])
+
+      session[:project_invite_id] = project_invite.id if project_invite.present? && !project_invite.accepted?
+    end
+
+    def project_invite
+      return if session[:project_invite_id].blank?
+
+      @project_invite ||= ProjectInvite.find(session[:project_invite_id])
     end
 end

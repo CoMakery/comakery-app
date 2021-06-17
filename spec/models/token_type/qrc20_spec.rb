@@ -47,4 +47,13 @@ describe TokenType::Qrc20, vcr: true do
       expect { subject }.to raise_error NotImplementedError
     end
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: '8cfe9e9893e4386645eae8107cd53aaccf96b7fd', blockchain: Blockchain::EthereumRopsten.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://ropsten.etherscan.io/address/8cfe9e9893e4386645eae8107cd53aaccf96b7fd' }
+    specify { expect(subject.human_url_name).to eq '8cfe9e9893e4386645eae8107cd53aaccf96b7fd' }
+  end
 end

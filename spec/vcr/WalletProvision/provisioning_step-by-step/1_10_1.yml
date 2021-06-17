@@ -62,7 +62,7 @@ http_interactions:
   recorded_at: Thu, 14 Jan 2021 11:56:41 GMT
 - request:
     method: post
-    uri: https://staging.service.oreid.io/api/transaction/sign
+    uri: https://service.oreid.io/api/transaction/sign
     body:
       encoding: UTF-8
       string: '{"account":"ore1raevigpd","user_password":"b1002674f2b8fc0a794ecbf1ea78bfdb79a9bac1f3effdcea7c1c3929aa5647b!","chain_account":"YFGM3UODOZVHSI4HXKPXOKFI6T2YCIK3HKWJYXYFQBONJD4D3HD2DPMYW4","broadcast":true,"chain_network":"algo_test","return_signed_transaction":true,"transaction":"eyJmcm9tIjoiWUZHTTNVT0RPWlZIU0k0SFhLUFhPS0ZJNlQyWUNJSzNIS1dK\nWVhZRlFCT05KRDREM0hEMkRQTVlXNCIsInRvIjoiWUZHTTNVT0RPWlZIU0k0\nSFhLUFhPS0ZJNlQyWUNJSzNIS1dKWVhZRlFCT05KRDREM0hEMkRQTVlXNCIs\nImFtb3VudCI6MCwidHlwZSI6ImF4ZmVyIiwiYXNzZXRJbmRleCI6MTMwNzYz\nNjd9\n"}'

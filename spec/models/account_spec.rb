@@ -135,6 +135,38 @@ describe Account do
         end
       end
     end
+
+    describe 'broadcast_destroy' do
+      context 'on account destroy' do
+        let(:mission) { create(:mission) }
+        let(:account) { create(:account, managed_mission: mission) }
+        let!(:wallet1) { create(:wallet, account: account, address: build(:bitcoin_address_1)) }
+        let!(:wallet2) { create(:eth_wallet, account: account) }
+        let!(:wallet3) { create(:wallet, address: build(:bitcoin_address_2)) }
+
+        before { allow(Turbo::StreamsChannel).to receive(:broadcast_remove_to) }
+
+        it 'should broadcast related wallets removal' do
+          account.destroy!
+
+          expect(Turbo::StreamsChannel)
+            .to have_received(:broadcast_remove_to)
+            .with "mission_#{mission.id}_account_wallets",
+                  target: "account_#{account.id}_wallet_#{wallet1.id}"
+          expect(Turbo::StreamsChannel)
+            .to have_received(:broadcast_remove_to)
+            .with "mission_#{mission.id}_account_wallets",
+                  target: "account_#{account.id}_wallet_#{wallet2.id}"
+
+          expect(Turbo::StreamsChannel)
+            .not_to have_received(:broadcast_remove_to)
+            .with "mission_#{mission.id}_account_wallets",
+                  target: "account_#{account.id}_wallet_#{wallet3.id}"
+
+          expect(Turbo::StreamsChannel).to have_received(:broadcast_remove_to).twice
+        end
+      end
+    end
   end
 
   it 'enforces unique emails, case-insensitively' do
@@ -779,6 +811,65 @@ describe Account do
       it 'schedules balances sync' do
         expect_any_instance_of(Balance).to receive(:sync_with_blockchain_later)
         subject
+      end
+    end
+  end
+
+  describe '#address_for_blockchain' do
+    let!(:wallet) { create(:wallet) }
+    let!(:wallet2) { create(:wallet, address: build(:bitcoin_address_2), account: wallet.account) }
+    let!(:account) { wallet.account }
+    subject { account.address_for_blockchain(wallet._blockchain) }
+
+    it { is_expected.to eq(wallet.address) }
+  end
+
+  describe '#ore_id_address_for_blockchain' do
+    let!(:wallet) { create(:ore_id_wallet) }
+    let!(:account) { wallet.account }
+    subject { account.ore_id_address_for_blockchain(wallet._blockchain) }
+
+    it { is_expected.to eq(wallet.address) }
+  end
+
+  describe '#wallets_for_blockchain' do
+    let!(:wallet) { create(:wallet) }
+    let!(:wallet2) { create(:eth_wallet, account: wallet.account) }
+    let!(:account) { wallet.account }
+    subject { account.wallets_for_blockchain(wallet._blockchain) }
+
+    it { is_expected.to include(wallet) }
+    it { is_expected.not_to include(wallet2) }
+  end
+
+  describe '#whitelabel?' do
+    subject(:result) { account.whitelabel? }
+
+    context 'when managed mission is present' do
+      let(:account) { build(:account, managed_mission: mission) }
+
+      context 'when managed mission whitelabel enabled' do
+        let(:mission) { build(:mission, whitelabel: true) }
+
+        it 'should return true' do
+          expect(result).to eq true
+        end
+      end
+
+      context 'when managed mission whitelabel disabled' do
+        let(:mission) { build(:mission, whitelabel: false) }
+
+        it 'should return true' do
+          expect(result).to eq false
+        end
+      end
+    end
+
+    context 'when managed mission is not present' do
+      let(:account) { build(:account) }
+
+      it 'should return false' do
+        expect(result).to eq false
       end
     end
   end

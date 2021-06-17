@@ -13,6 +13,7 @@ class Project < ApplicationRecord
   has_one_attached :image
   has_one_attached :square_image
   has_one_attached :panoramic_image
+  has_one_attached :transfers_csv
 
   belongs_to :account, touch: true
   has_one :hot_wallet, class_name: 'Wallet', touch: true, dependent: :destroy
@@ -23,10 +24,10 @@ class Project < ApplicationRecord
   has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_roles, dependent: :destroy
+  has_many :accounts, through: :project_roles, source: :account
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
   has_many :project_interested, -> { where(project_roles: { role: :interested }) }, through: :project_roles, source: :account
   has_many :project_observers, -> { where(project_roles: { role: :observer }) }, through: :project_roles, source: :account
-  has_many :accounts, through: :project_roles, source: :account
 
   has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :accounts, source: :account_token_records
   has_many :transfer_rules, through: :token
@@ -44,6 +45,8 @@ class Project < ApplicationRecord
   has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :teams, through: :account
+
+  has_many :invites, as: :invitable, dependent: :destroy
 
   accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
@@ -240,6 +243,41 @@ class Project < ApplicationRecord
     TransferType.create_defaults_for(self) if transfer_types.empty?
   end
 
+  def download_transfers_csv
+    update_transfers_csv
+
+    transfers_csv.blob.download
+  end
+
+  def update_transfers_csv
+    return unless should_update_transfers_csv?
+
+    transfers_csv.attach(
+      io: StringIO.new(transfers_to_csv),
+      filename: 'transfers.csv',
+      content_type: 'text/csv'
+    )
+  end
+
+  def should_update_transfers_csv?
+    return true unless transfers_csv.attached?
+    return true if awards.completed.blank?
+
+    transfers_csv.blob.created_at < awards.completed.maximum(:updated_at)
+  end
+
+  def transfers_to_csv
+    return '' if awards.completed.blank?
+
+    CSV.generate do |csv_file|
+      csv_file << awards.last.decorate.to_csv_header
+
+      awards.completed.find_each do |award|
+        csv_file << award.decorate.to_csv
+      end
+    end
+  end
+
   private
 
     def valid_tracker_url
@@ -295,20 +333,24 @@ class Project < ApplicationRecord
     def broadcast_hot_wallet_mode
       broadcast_replace_later_to 'project_hot_wallet_modes',
                                  target: "project_#{id}_hot_wallet_mode",
-                                 partial: 'dashboard/transfers/hot_wallet_mode', locals: { project: self }
+                                 partial: 'dashboard/transfers/hot_wallet_mode',
+                                 locals: { project: decorate }
 
       broadcast_replace_later_to "transfer_project_#{id}_hot_wallet_mode",
                                  target: "transfer_project_#{id}_hot_wallet_mode",
-                                 partial: 'shared/transfer_prioritize_button/mode', locals: { project: self }
+                                 partial: 'shared/transfer_prioritize_button/mode',
+                                 locals: { project: decorate }
     end
 
     def broadcast_batch_size
       broadcast_replace_later_to 'project_transfer_batch_size',
                                  target: "project_#{id}_transfer_batch_size",
-                                 partial: 'dashboard/transfers/batch_size', locals: { project: self }
+                                 partial: 'dashboard/transfers/batch_size',
+                                 locals: { project: decorate }
 
       broadcast_replace_later_to 'project_transfer_batch_size_modal_form',
                                  target: "project_#{id}_transfer_batch_size_modal_form",
-                                 partial: 'projects/batch_size_modal_form', locals: { project: self }
+                                 partial: 'projects/batch_size_modal_form',
+                                 locals: { project: decorate }
     end
 end

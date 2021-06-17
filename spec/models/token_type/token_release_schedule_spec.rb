@@ -60,4 +60,13 @@ describe TokenType::TokenReleaseSchedule, vcr: true do
 
     it { is_expected.to eq 700000000000 }
   end
+
+  describe 'human url' do
+    let(:attrs) { { contract_address: '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1', blockchain: Blockchain::EthereumRopsten.new } }
+
+    subject { described_class.new(**attrs) }
+
+    specify { expect(subject.human_url).to eq 'https://ropsten.etherscan.io/address/0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1' }
+    specify { expect(subject.human_url_name).to eq '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1' }
+  end
 end

@@ -101,4 +101,16 @@ class TokenType::Eth < TokenType
   def blockchain_balance(wallet_address)
     contract.account_balance(wallet_address)
   end
+
+  # Token address url on block explorer website or just a link to block explorer
+  # @return [String] url
+  def human_url
+    "https://#{blockchain.explorer_human_host}/"
+  end
+
+  # Link name for human_url
+  # @return [String] url
+  def human_url_name
+    name
+  end
 end

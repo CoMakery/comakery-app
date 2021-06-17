@@ -13,7 +13,6 @@ gem 'coffee-rails'
 gem 'countries', require: 'countries/global'
 gem 'd3-rails', '~>3.5'
 gem 'draper'
-gem 'fastimage'
 gem 'font_assets'
 gem 'font-awesome-rails'
 gem 'fortitude'
@@ -78,6 +77,8 @@ group(:development, :test) do
   gem 'citizen-scripts', github: 'CoMakery/citizen-scripts', ref: 'dev', require: false
   gem 'dotenv-rails'
   gem 'erb_lint', '~> 0.0.35', require: false
+  gem 'factory_bot_rails'
+  gem 'faker'
   gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'

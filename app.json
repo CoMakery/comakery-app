@@ -82,7 +82,7 @@
       "value": "false"
     },
     "OREID_BASE_DOMAIN": {
-      "description": "Aikon ORE ID API domain (default: staging.service.oreid.io)",
+      "description": "Aikon ORE ID API domain (default: service.oreid.io)",
       "required": false
     },
     "ORE_ID_API_KEY": {
@@ -157,6 +157,11 @@
     "WHITELABEL": {
       "description": "Create and apply whitelabel with APP_HOST as a default mission",
       "required": true,
+      "value": "true"
+    },
+    "HOT_WALLET_DEPLOY_BUTTON": {
+      "description": "Show/hide a hot wallet deploy button",
+      "required": false,
       "value": "true"
     },
     "NODE_MODULES_CACHE": "false",

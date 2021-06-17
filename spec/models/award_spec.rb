@@ -58,7 +58,7 @@ describe Award do
   end
 
   describe 'transfer cancelable or not' do
-    it 'should cancel when transaction status succeed' do
+    it 'should not cancel when transaction status succeed' do
       specialty = create(:specialty)
       award = create(:award, specialty: specialty)
       account = create(:account)
@@ -67,7 +67,7 @@ describe Award do
       award.recipient_wallet_id = wallet.id
       latest_blockchain_transaction = create(:blockchain_transaction, status: :succeed, tx_hash: '0')
 
-      expect(latest_blockchain_transaction.blockchain_transactable.cancelable?).to be_truthy
+      expect(latest_blockchain_transaction.blockchain_transactable.cancelable?).to be_falsey
     end
 
     it 'should cancel when transaction status failed' do
@@ -1356,9 +1356,11 @@ describe Award do
   end
 
   describe '#populate_recipient_wallet' do
-    let(:wallet) { create(:eth_wallet) }
-    subject { create(:award, account: wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: :ethereum_ropsten)))) }
+    let!(:rinkeby_wallet) { create(:eth_wallet, _blockchain: :ethereum_rinkeby) }
+    let!(:ropsten_wallet) { create(:eth_wallet, _blockchain: :ethereum_ropsten, account: rinkeby_wallet.account) }
 
-    specify { expect(subject.recipient_wallet).to eq(wallet) }
+    subject { create(:award, account: ropsten_wallet.account, status: :paid, award_type: create(:award_type, project: create(:project, token: create(:token, _token_type: :eth, _blockchain: ropsten_wallet._blockchain)))) }
+
+    specify { expect(subject.recipient_wallet).to eq(ropsten_wallet) }
   end
 end

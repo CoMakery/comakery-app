@@ -43,7 +43,7 @@ RSpec.describe AlgorandOptInsController, type: :controller do
       allow_any_instance_of(OreIdService).to receive(:create_token).and_return('dummy_token')
 
       post :create, params: { wallet_id: wallet.id, token_id: asset_token.id }
-      expect(response).to redirect_to %r{^https://staging.service.oreid.io/sign?}
+      expect(response).to redirect_to %r{^https://service.oreid.io/sign?}
     end
   end
 end

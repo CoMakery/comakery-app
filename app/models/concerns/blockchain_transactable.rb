@@ -93,16 +93,13 @@ module BlockchainTransactable
       latest_blockchain_transaction.blockchain_transactables.where.not(id: id)
     end
 
-    # TODO: Handle all transaction statuses and cover with specs
-    #
-    # Logic below doesn't handle all possible cases properly
     def cancelable?
       case latest_blockchain_transaction&.status
       when 'created'
         !latest_blockchain_transaction&.waiting_in_created?
-      when 'pending'
+      when 'pending', 'cancelled', 'succeed'
         false
-      else
+      when 'failed', nil
         true
       end
     end

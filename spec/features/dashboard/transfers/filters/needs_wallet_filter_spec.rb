@@ -18,13 +18,14 @@ describe 'test_needs_wallet_filter', js: true do
         login(owner)
         visit project_path(project)
         click_link 'transfers'
-        expect(find('#select_transfers')).to have_content 'Create New Transfer'
+
+        first(:css, '.transfers-table__transfer', wait: 20)
 
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
 
-        select('blocked – needs wallet', from: 'transfers-filters--filter--options--select')
-        page.find :xpath, '//select[@id="transfers-filters--filter--options--select"]/option[@selected="selected" and contains (text(), "blocked – needs wallet")]', wait: 20 # wait for page to reload
+        select('blocked – needs wallet', from: 'filter-status-select')
+        page.find :xpath, '//select[@id="filter-status-select"]/option[@selected="selected" and contains (text(), "blocked – needs wallet")]', wait: 20 # wait for page to reload
 
         # verify number of transfers after applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)

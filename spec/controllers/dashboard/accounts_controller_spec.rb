@@ -67,6 +67,46 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(assigns[:accounts].ids).to match_array([project.account_id, account.id])
       end
     end
+
+    context 'with json format' do
+      subject { get :index, params: { project_id: project.to_param, format: :json } }
+
+      context 'and a ransack query not supplied' do
+        it { is_expected.to have_http_status(:success) }
+
+        it 'returns accounts' do
+          subject
+          expect(assigns[:accounts]).to match_array([project.account, account])
+        end
+      end
+
+      context 'and a ransack query supplied' do
+        subject { get :index, params: { 'q[nickname_cont]': account.nickname, project_id: project.to_param, format: :json } }
+
+        it { is_expected.to have_http_status(:success) }
+
+        it 'returns accounts' do
+          subject
+          expect(assigns[:accounts]).to match_array([account])
+        end
+      end
+    end
+  end
+
+  describe 'GET #wallets' do
+    subject { get :wallets, params: { project_id: project.to_param, id: account.id } }
+
+    before do
+      project.add_account(account)
+      login(project.account)
+    end
+
+    it { is_expected.to have_http_status(:success) }
+
+    it 'sets account' do
+      subject
+      expect(assigns[:account]).to eq(account)
+    end
   end
 
   describe 'POST #create' do
@@ -107,7 +147,11 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         expect(account_token_record.wallet).to eq new_account.wallets.first
       end
 
-      context 'with a token supported by wallet connect' do
+      context 'with a request coming from wallet connect controller' do
+        before do
+          request.headers['X-Sign-Controller'] = 'wallet-connect'
+        end
+
         render_views
 
         it 'renders json' do
@@ -118,8 +162,25 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
         end
       end
 
-      context 'with a token supported by ore id', :vcr do
-        let(:account_token_record) { create(:blockchain_transaction_account_token_record_algo).blockchain_transactable }
+      context 'with a request coming from metamask controller' do
+        before do
+          request.headers['X-Sign-Controller'] = 'metamask'
+        end
+
+        render_views
+
+        it 'renders json' do
+          subject
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)).to include('tx_new_url')
+          expect(JSON.parse(response.body)).to include('tx_receive_url')
+        end
+      end
+
+      context 'with a request coming from ore-id controller', :vcr do
+        before do
+          request.headers['X-Sign-Controller'] = 'ore-id'
+        end
 
         it 'redirects to ore_id' do
           subject

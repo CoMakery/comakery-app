@@ -19,15 +19,6 @@ exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
     Boolean(envs.blockchainNetwork) && Boolean(envs.ethereumTokenSymbol) && Boolean(envs.ethereumContractAddress)
 }
 
-exports.isEmptyObject = function isEmptyObject(obj) {
-  for (var prop in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-      return false
-    }
-  }
-  return true
-}
-
 exports.sleep = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -104,6 +95,14 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
       if (approveTx.transactionId) {
         hwRedis.saveApprovedContract(envs.ethereumApprovalContractAddress)
       }
+    } else if (hotWallet.isAlgorand() && envs.optInApp) {
+      // Opt-in to Algorand contract
+      const isOptedIn = await blockchain.klass.optInOrSyncApp(hotWallet, envs.optInApp)
+
+      if (isOptedIn) {
+        const optedInApps = await blockchain.klass.getOptedInAppsForHotWallet(hotWallet.address)
+        await hwRedis.saveOptedInApps(optedInApps)
+      }
     }
   }
 
@@ -157,67 +156,5 @@ exports.waitForNewTransaction = async function waitForNewTransaction(envs, hwRed
       await hwApi.cancelTransaction(blockchainTransaction, txValidation.error, txValidation.markAs, txValidation.switchHWToManualMode)
     }
     return { status: "validation_failed", blockchainTransaction: blockchainTransaction, transaction: {} }
-  }
-}
-
-// TODO: Remove me. It's legacy and will not use anymore
-exports.signAndSendTx = async function signAndSendTx(transactionToSign, envs, hwRedis) {
-  const mnemonic = await hwRedis.hotWalletMnenonic()
-  const endpoints = hwAlgorand.endpointsByNetwork(transactionToSign.network)
-  const algoChain = new chainjs.ChainFactory().create(chainjs.ChainType.AlgorandV1, endpoints)
-  const { addr, sk } = algosdk.mnemonicToSecretKey(mnemonic)
-
-  await algoChain.connect()
-  const transaction = await algoChain.new.Transaction()
-  const txn = JSON.parse(transactionToSign.txRaw || "{}")
-  const action = await algoChain.composeAction(chainjs.ModelsAlgorand.AlgorandChainActionType.AppNoOp, txn)
-  transaction.actions = [action]
-  await transaction.prepareToBeSigned()
-  await transaction.validate()
-  await transaction.sign([chainjs.HelpersAlgorand.toAlgorandPrivateKey(sk)])
-
-  try {
-    const tx_result = await transaction.send(chainjs.Models.ConfirmType.After001)
-    console.log(`Transaction has successfully signed and sent by ${addr} to blockchain tx hash: ${tx_result.transactionId}`)
-    return tx_result
-  } catch (err) {
-    console.error(err)
-    return {}
-  }
-}
-
-exports.autoOptIn = async function autoOptIn(envs, hwRedis) {
-  const hw = await hwRedis.hotWallet()
-
-  // Already opted-in and we already know about it
-  if (hw.isOptedInToApp(envs.optInApp)) {
-    console.log("HW opted-in. Cached in Redis")
-    return hw.optedInApps
-  }
-
-  const hwAlgorand = new AlgorandBlockchain(envs)
-  // Check if already opted-in on blockchain
-  if (await hwAlgorand.isOptedInToCurrentApp(hw.address)) {
-    console.log("HW opted-in. Got from Blockchain")
-
-    // Save it in Redis and return
-    const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
-    await hwRedis.saveOptedInApps(optedInApps)
-    return optedInApps
-  }
-
-  // Check if the wallet has enough balance to send opt-in transaction
-  if (await hwAlgorand.enoughAlgoBalanceToSendTransaction(hw.address)) {
-    tx_result = await hwAlgorand.optInToApp(hw, envs.optInApp)
-    if (exports.isEmptyObject(tx_result)) {
-      console.log(`Failed to opt-in into app ${envs.optInApp} for wallet ${hw.address}`)
-    } else {
-      console.log("HW successfully opted-in!")
-
-      // Successfully opted-in
-      const optedInApps = await hwAlgorand.getOptedInAppsForHotWallet(hw.address)
-      await hwRedis.saveOptedInApps(optedInApps)
-      return optedInApps
-    }
   }
 }

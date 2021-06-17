@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_19_082820) do
+ActiveRecord::Schema.define(version: 2021_06_10_104821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(version: 2021_05_19_082820) do
     t.datetime "prioritized_at"
     t.decimal "lockup_schedule_id", precision: 78
     t.datetime "commencement_date"
+    t.decimal "price", precision: 14, scale: 2, default: "0.0"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["channel_id"], name: "index_awards_on_channel_id"
@@ -375,6 +376,19 @@ ActiveRecord::Schema.define(version: 2021_05_19_082820) do
     t.index ["account_id"], name: "index_interests_on_account_id"
     t.index ["project_id"], name: "index_interests_on_project_id"
     t.index ["specialty_id"], name: "index_interests_on_specialty_id"
+  end
+
+  create_table "invites", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "token", null: false
+    t.string "role", null: false
+    t.boolean "accepted", default: false
+    t.integer "invitable_id"
+    t.string "invitable_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_invites_on_email", unique: true
+    t.index ["token"], name: "index_invites_on_token", unique: true
   end
 
   create_table "missions", force: :cascade do |t|
@@ -517,6 +531,7 @@ ActiveRecord::Schema.define(version: 2021_05_19_082820) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
+    t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
     t.boolean "auto_add_account", default: false, null: false
     t.text "github_url"
@@ -527,7 +542,6 @@ ActiveRecord::Schema.define(version: 2021_05_19_082820) do
     t.text "video_conference_url"
     t.integer "hot_wallet_mode", default: 0, null: false
     t.integer "project_roles_count", default: 0
-    t.integer "interests_count", default: 0
     t.integer "transfer_batch_size", default: 1, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["image_id"], name: "index_projects_on_image_id"

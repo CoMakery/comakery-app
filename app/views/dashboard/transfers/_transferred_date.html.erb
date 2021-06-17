@@ -1,0 +1,12 @@
+<%= turbo_stream_from :transfer_transferred_date %>
+<%= turbo_frame_tag "transfer_#{transfer.id}_transferred_date" do %>
+  <div class="transfers-table__transfer__transferred_at">
+    <label>transferred at</label>
+
+    <% if transfer.paid? && transfer.transferred_at %>
+      <%= transfer.transferred_at.strftime('%b %e, %Y') %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+<% end %>

@@ -1,8 +1,6 @@
 class Dashboard::AccountsController < ApplicationController
   before_action :assign_project
   before_action :normalize_account_token_records_lockup_until_lt, only: [:index]
-  before_action :set_policy, only: [:index]
-  before_action :set_accounts, only: [:index]
   before_action :authorize_project, only: :create
   skip_before_action :require_login, only: %i[index show]
   skip_after_action :verify_policy_scoped, only: %i[index create]
@@ -11,8 +9,33 @@ class Dashboard::AccountsController < ApplicationController
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
   end
 
+  # GET /projects/1/dashboard/accounts
+  # GET /projects/1/dashboard/accounts.json
   def index
     authorize @project, :accounts?
+
+    respond_to do |format|
+      format.html do
+        set_accounts
+        set_policy
+      end
+
+      format.json do
+        set_accounts_json
+      end
+    end
+  end
+
+  # GET /projects/1/dashboard/accounts/1/wallets
+  def wallets
+    authorize @project, :edit?
+
+    @account = @project.accounts.find(params[:id])
+
+    render(
+      partial: 'dashboard/accounts/wallets',
+      locals: { account: @account, blockchain: @project.token&._blockchain }
+    )
   end
 
   def create
@@ -23,14 +46,14 @@ class Dashboard::AccountsController < ApplicationController
     account_token_record.lockup_until = Time.zone.parse(account_token_record_params[:lockup_until])
 
     if account_token_record.save
-      # TODO: Add a blockchain flag whether a tx should by processed by OREID UI, regardless OREID blockchain support
-      if account_token_record.token.blockchain.supported_by_ore_id?
-        redirect_to sign_ore_id_new_path(account_token_record_id: account_token_record.id)
-      elsif account_token_record.token.blockchain.supported_by_wallet_connect?
+      case request.headers['X-Sign-Controller']
+      when 'metamask', 'wallet-connect'
         render json: {
           tx_new_url: sign_user_wallet_new_path(account_token_record_id: account_token_record.id),
           tx_receive_url: sign_user_wallet_receive_path
         }
+      when 'ore-id'
+        redirect_to sign_ore_id_new_path(account_token_record_id: account_token_record.id)
       else
         @account_token_record = account_token_record
 
@@ -91,6 +114,10 @@ class Dashboard::AccountsController < ApplicationController
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?
     rescue ActiveRecord::StatementInvalid
       head 404
+    end
+
+    def set_accounts_json
+      @accounts = @project.accounts.includes([:image_attachment]).ransack(params[:q]).result.limit(10)
     end
 
     def accounts_query

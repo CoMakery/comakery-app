@@ -7,7 +7,6 @@ class Account < ApplicationRecord
   include ActiveStorageValidator
   include EthereumAddressable
 
-  # attachment :image, type: :image
   has_one_attached :image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
@@ -109,7 +108,7 @@ class Account < ApplicationRecord
     saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?
   }
 
-  after_destroy_commit :broadcast_destroy
+  around_destroy :broadcast_destroy
 
   class << self
     def order_by_award(project)
@@ -335,6 +334,14 @@ class Account < ApplicationRecord
     wallets.find_by(_blockchain: blockchain, primary_wallet: true)&.address
   end
 
+  def ore_id_address_for_blockchain(blockchain)
+    wallets.find_by(_blockchain: blockchain, source: :ore_id, primary_wallet: true)&.address
+  end
+
+  def wallets_for_blockchain(blockchain)
+    wallets.where(_blockchain: blockchain)
+  end
+
   def sync_balances_later
     wallets.pluck(:id, :_blockchain).each do |wallet_id, blockchain|
       Token.where(_blockchain: blockchain).pluck(:id).each do |token_id|
@@ -344,7 +351,7 @@ class Account < ApplicationRecord
   end
 
   def whitelabel?
-    managed_mission&.whitelabel?
+    managed_mission&.whitelabel? || false
   end
 
   private
@@ -395,7 +402,11 @@ class Account < ApplicationRecord
     end
 
     def broadcast_destroy
-      wallet_ids.each do |wallet_id|
+      wallet_ids_to_broadcast = wallet_ids
+
+      yield # perform destroy
+
+      wallet_ids_to_broadcast.each do |wallet_id|
         Turbo::StreamsChannel.broadcast_remove_to(
           "mission_#{managed_mission&.id}_account_wallets",
           target: "account_#{id}_wallet_#{wallet_id}"

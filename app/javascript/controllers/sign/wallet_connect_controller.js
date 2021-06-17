@@ -8,6 +8,10 @@ import PubSub from 'pubsub-js'
 export default class extends Controller {
   static targets = [ "walletAddress", "txButtons", "connectButton", "otherConnectButtons" ]
 
+  initialize() {
+    this.name = 'wallet-connect'
+  }
+
   async walletConnectInit() {
     const bridge = "https://bridge.walletconnect.org"
     const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
@@ -81,8 +85,10 @@ export default class extends Controller {
     this.txButtonsTargets.forEach(button => {
       if (this.connector && this.connector.connected) {
         button.classList.add('transfer-tokens-btn__enabled')
+        button.dataset.connectedController = this.name
       } else {
         button.classList.remove('transfer-tokens-btn__enabled')
+        button.dataset.connectedController = null
       }
     })
   }
@@ -110,6 +116,11 @@ export default class extends Controller {
     e.preventDefault()
 
     const button = e.target.closest("a")
+
+    if (button.dataset.connectedController !== this.name) {
+      return
+    }
+
     button.classList.remove('transfer-tokens-btn__enabled')
     
     let dataset
@@ -153,6 +164,7 @@ export default class extends Controller {
         body: new FormData(form),
         method: form.method,
         headers: {
+          'X-Sign-Controller': this.name,
           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         }
       }

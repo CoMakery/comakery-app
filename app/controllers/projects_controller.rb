@@ -14,6 +14,7 @@ class ProjectsController < ApplicationController
   before_action :set_teams, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
+  before_action :set_flash_from_session, only: %i[show]
 
   layout 'legacy', except: %i[show unlisted new edit]
 
@@ -60,7 +61,7 @@ class ProjectsController < ApplicationController
 
     authorize @project
 
-    if ImagePixelValidator.new(@project, project_params).valid? && @project.save
+    if ImagePreparer.new(@project, project_params).valid? && @project.save
       set_generic_props
       camelize_props
       render json: { id: @project.id, props: @props }, status: :ok
@@ -96,7 +97,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
-    if ImagePixelValidator.new(@project, project_params).valid? && @project.update(project_params)
+    if ImagePreparer.new(@project, project_params).valid? && @project.update(project_params)
       set_generic_props
       camelize_props
       render json: { message: 'Project updated', id: @project.id, props: @props }, status: :ok
@@ -376,6 +377,16 @@ class ProjectsController < ApplicationController
         else
           redirect_to project_award_types_path(@project)
         end
+      end
+    end
+
+    def set_flash_from_session
+      if (project_invite_id = session[:project_invite_id])
+        project_role = ProjectInvite.find(project_invite_id).role
+
+        session.delete(:project_invite_id)
+
+        flash[:notice] = "You have successfully joined the project with the #{project_role} role"
       end
     end
 end

@@ -90,6 +90,8 @@ class Award < ApplicationRecord
   after_save :update_account_experience, if: -> { completed? }
   after_save :add_account_as_observer, if: -> { account }
 
+  after_update_commit :broadcast_update, if: :saved_change_to_transferred_at?
+
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :completed_or_cancelled, -> { where 'awards.status in(3,5,6)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
@@ -365,6 +367,13 @@ class Award < ApplicationRecord
 
   private
 
+    def broadcast_update
+      broadcast_replace_to :transfer_transferred_date,
+                           target: "transfer_#{id}_transferred_date",
+                           partial: 'dashboard/transfers/transferred_date',
+                           locals: { transfer: self }
+    end
+
     def calculate_total_amount
       self.total_amount = BigDecimal(amount || 0) * BigDecimal(quantity || 1)
     end
@@ -396,7 +405,7 @@ class Award < ApplicationRecord
     end
 
     def populate_recipient_wallet
-      self.recipient_wallet = account.wallets.find_by(address: recipient_address)
+      self.recipient_wallet = account.wallets.find_by(address: recipient_address, _blockchain: token&._blockchain)
     end
 
     def abort_destroy
