@@ -243,10 +243,12 @@ describe AccountsController do
         account: {
           first_name: 'Update',
           last_name: 'Profile',
-          country: 'United Kingdom'
+          country: 'United Kingdom',
+          image: fixture_file_upload('image_with_exif.jpg', 'image/jpg', :binary)
         }
       }
       expect(response).to redirect_to my_tasks_path
+      expect(assigns[:current_account].image.filename).to eq 'account_image.jpeg'
     end
 
     it 'renders errors for invalid params' do

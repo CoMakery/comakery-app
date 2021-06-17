@@ -92,6 +92,7 @@ Rails.application.routes.draw do
       resources :transfers, only: %i[index show edit update new create] do
         collection do
           get :fetch_chart_data
+          post :export
         end
         member do
           patch :prioritize

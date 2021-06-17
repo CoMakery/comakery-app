@@ -55,13 +55,7 @@
 
       <% if transfer.project.token&._token_type? %>
         <% if current_account&.decorate&.can_send_awards?(transfer.project) %>
-          <% if transfer.token&.blockchain&.supported_by_ore_id? && current_account&.ore_id_account.nil? %>
-            <div class="transfer-button">
-              <%= link_to 'link OREID', wallets_path %>
-            </div>
-          <% else %>
-            <%= render partial: 'shared/transfer_button_admin', locals: { transfer: transfer } unless transfer.cancelled? %>
-          <% end %>
+          <%= render partial: 'shared/transfer_button_admin', locals: { transfer: transfer } unless transfer.cancelled? %>
         <% else %>
           <% if transfer.recipient_address.blank? && current_account == transfer.account %>
             <div class="transfer-button">
