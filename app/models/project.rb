@@ -13,6 +13,7 @@ class Project < ApplicationRecord
   has_one_attached :image
   has_one_attached :square_image
   has_one_attached :panoramic_image
+  has_one_attached :transfers_csv
 
   belongs_to :account, touch: true
   has_one :hot_wallet, class_name: 'Wallet', touch: true, dependent: :destroy
@@ -240,6 +241,41 @@ class Project < ApplicationRecord
 
   def create_default_transfer_types
     TransferType.create_defaults_for(self) if transfer_types.empty?
+  end
+
+  def download_transfers_csv
+    update_transfers_csv
+
+    transfers_csv.blob.download
+  end
+
+  def update_transfers_csv
+    return unless should_update_transfers_csv?
+
+    transfers_csv.attach(
+      io: StringIO.new(transfers_to_csv),
+      filename: 'transfers.csv',
+      content_type: 'text/csv'
+    )
+  end
+
+  def should_update_transfers_csv?
+    return true unless transfers_csv.attached?
+    return true if awards.completed.blank?
+
+    transfers_csv.blob.created_at < awards.completed.maximum(:updated_at)
+  end
+
+  def transfers_to_csv
+    return '' if awards.completed.blank?
+
+    CSV.generate do |csv_file|
+      csv_file << awards.last.decorate.to_csv_header
+
+      awards.completed.find_each do |award|
+        csv_file << award.decorate.to_csv
+      end
+    end
   end
 
   private

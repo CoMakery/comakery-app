@@ -265,7 +265,6 @@ GEM
     faraday-net_http (1.0.1)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    fastimage (2.2.3)
     ffi (1.15.0)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -803,7 +802,6 @@ DEPENDENCIES
   ethereum.rb (~> 2.3)
   factory_bot_rails
   faker
-  fastimage
   font-awesome-rails
   font_assets
   fortitude
