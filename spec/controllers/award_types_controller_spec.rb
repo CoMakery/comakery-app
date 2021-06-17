@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'controllers/unavailable_for_lockup_token_spec'
 
 RSpec.describe AwardTypesController, type: :controller do
   let(:issuer) { create(:authentication) }
@@ -27,6 +28,12 @@ RSpec.describe AwardTypesController, type: :controller do
   end
 
   describe 'GET #index' do
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+
+      subject { get :index, params: { project_id: project.to_param } }
+    end
+
     it 'returns a success response' do
       AwardType.create! valid_attributes
       get :index, params: { project_id: project.to_param }
@@ -35,6 +42,12 @@ RSpec.describe AwardTypesController, type: :controller do
   end
 
   describe 'GET #new' do
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+
+      subject { get :index, params: { project_id: project.to_param } }
+    end
+
     it 'returns a success response' do
       get :new, params: { project_id: project.to_param }
       expect(response).to be_successful
@@ -42,6 +55,12 @@ RSpec.describe AwardTypesController, type: :controller do
   end
 
   describe 'GET #edit' do
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+
+      subject { get :index, params: { project_id: project.to_param } }
+    end
+
     it 'returns a success response' do
       award_type = AwardType.create! valid_attributes
       get :edit, params: { project_id: project.to_param, id: award_type.to_param }
@@ -50,6 +69,12 @@ RSpec.describe AwardTypesController, type: :controller do
   end
 
   describe 'POST #create' do
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+
+      subject { get :index, params: { project_id: project.to_param } }
+    end
+
     context 'with valid params' do
       it 'creates a new AwardType' do
         expect do
@@ -81,6 +106,12 @@ RSpec.describe AwardTypesController, type: :controller do
   end
 
   describe 'PUT #update' do
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+
+      subject { get :index, params: { project_id: project.to_param, id: 0 } }
+    end
+
     context 'with valid params' do
       let(:new_attributes) do
         {
@@ -120,6 +151,12 @@ RSpec.describe AwardTypesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:project) { create(:project, token: create(:lockup_token)) }
+
+      subject { get :index, params: { project_id: project.to_param, id: 0 } }
+    end
+
     it 'destroys the requested award_type' do
       award_type = AwardType.create! valid_attributes
       expect do

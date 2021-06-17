@@ -218,10 +218,6 @@ class AwardsController < ApplicationController
       redirect_to('/404.html') unless @project
     end
 
-    def unavailable_for_lockup_token
-      redirect_to project_url(@project) if @project.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule)
-    end
-
     def authorize_project_edit
       authorize @project, :edit?
     end
