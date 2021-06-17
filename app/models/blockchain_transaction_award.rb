@@ -42,7 +42,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         :updates,
         target: "transfer_history_button_#{blockchain_transactable.id}",
         partial: 'dashboard/transfers/transfer_history_button',
-        locals: { transfer: blockchain_transactable.decorate }
+        locals: { transfer: blockchain_transactable }
       )
 
       broadcast_replace_later_to(
@@ -66,7 +66,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         :updates,
         target: "transfer_button_public_#{blockchain_transactable.id}",
         partial: 'shared/transfer_button_public',
-        locals: { transfer: blockchain_transactable.decorate }
+        locals: { transfer: blockchain_transactable }
       )
 
       broadcast_replace_later_to(
@@ -74,7 +74,7 @@ class BlockchainTransactionAward < BlockchainTransaction
         :updates,
         target: "transfer_button_admin_#{blockchain_transactable.id}",
         partial: 'shared/transfer_button_admin',
-        locals: { transfer: blockchain_transactable.decorate }
+        locals: { transfer: blockchain_transactable }
       )
     end
   end
