@@ -252,7 +252,7 @@ class AccountsController < ApplicationController
     end
 
     def prepare_avatar(account, params)
-      ImagePreparer.new(account, params, resize: '190x190!')
+      ImagePreparer.new(account, params, image: { resize: '190x190!' })
     end
 
     def set_session_from_token

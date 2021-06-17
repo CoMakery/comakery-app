@@ -25,7 +25,7 @@ RSpec.describe ImagePreparer do
   end
 
   context 'resize' do
-    subject { described_class.new(project, params, resize: '50x50') }
+    subject { described_class.new(project, params, image: { resize: '50x50!' }) }
 
     let!(:params) do
       ActionController::Parameters.new(

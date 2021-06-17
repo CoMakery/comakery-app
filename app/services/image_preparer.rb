@@ -25,7 +25,7 @@ class ImagePreparer
       return false unless image_valid?(attr, attachment, image)
 
       # replace the initially uploaded image
-      apply_actions(image)
+      apply_actions(image, @options[attr.to_sym])
       imgfile.rewind
       image.write(imgfile)
 
@@ -75,7 +75,7 @@ class ImagePreparer
       valid_dimensions
     end
 
-    def apply_actions(image)
+    def apply_actions(image, options)
       process_actions = {}
       process_actions[:strip] = nil if image.type == 'JPEG'
       process_actions[:resize] = options[:resize] if options.key?(:resize)
