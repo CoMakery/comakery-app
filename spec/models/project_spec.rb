@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'models/concerns/api_authorizable_spec'
-require 'models/concerns/active_storage_validator_spec'
 
 describe Project do
   it_behaves_like 'api_authorizable'

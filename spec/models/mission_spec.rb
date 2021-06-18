@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'models/concerns/active_storage_validator_spec'
 
 describe Mission do
   it_behaves_like 'active_storage_validator', %w[image logo whitelabel_logo whitelabel_logo_dark whitelabel_favicon]

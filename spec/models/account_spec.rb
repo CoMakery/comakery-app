@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'models/concerns/active_storage_validator_spec'
 
 describe Account do
   it_behaves_like 'active_storage_validator', %w[image]

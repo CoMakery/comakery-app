@@ -1,7 +1,6 @@
 require 'rails_helper'
 require 'models/concerns/belongs_to_blockchain_spec'
 require 'models/concerns/blockchain_transactable_spec'
-require 'models/concerns/active_storage_validator_spec'
 
 describe Token, type: :model, vcr: true do
   it_behaves_like 'belongs_to_blockchain'
