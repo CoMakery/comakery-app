@@ -23,7 +23,7 @@ class ImagePreparer
       # skip validation if it provided as a Hash
       return true if attachment.is_a?(Hash) && attachment.key?(:io)
 
-      imgfile = MiniMagickattachment.tempfile
+      imgfile = attachment.tempfile
       image = MiniMagick::Image.open(imgfile.path)
 
       return false unless image_valid?(image)
