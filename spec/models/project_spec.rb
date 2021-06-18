@@ -3,7 +3,6 @@ require 'models/concerns/api_authorizable_spec'
 
 describe Project do
   it_behaves_like 'api_authorizable'
-  it_behaves_like 'active_storage_validator', %w[image square_image panoramic_image]
 
   it { is_expected.to have_many(:accounts) }
   it { is_expected.to have_one_attached(:transfers_csv) }

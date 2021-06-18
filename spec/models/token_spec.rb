@@ -5,7 +5,6 @@ require 'models/concerns/blockchain_transactable_spec'
 describe Token, type: :model, vcr: true do
   it_behaves_like 'belongs_to_blockchain'
   it_behaves_like 'blockchain_transactable'
-  it_behaves_like 'active_storage_validator', ['logo_image']
 
   it { is_expected.to have_many(:projects) }
   it { is_expected.to have_many(:accounts) }

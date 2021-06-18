@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe Account do
-  it_behaves_like 'active_storage_validator', %w[image]
-
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }
   it { is_expected.to have_one(:ore_id_account).dependent(:destroy) }
