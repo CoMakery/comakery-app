@@ -20,14 +20,13 @@ class ImagePreparer
   private
 
     def validate_and_prepare_image
-      # binding.pry
-      imgfile = attachment.tempfile
+      # skip validation if it provided as a Hash
+      return true if attachment.is_a?(Hash) && attachment.key?(:io)
+
+      imgfile = MiniMagickattachment.tempfile
       image = MiniMagick::Image.open(imgfile.path)
 
-      unless image_valid?(image)
-        @attachment = nil
-        return false
-      end
+      return false unless image_valid?(image)
 
       # replace the initially uploaded image
       apply_actions(image)
