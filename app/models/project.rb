@@ -333,24 +333,20 @@ class Project < ApplicationRecord
     def broadcast_hot_wallet_mode
       broadcast_replace_later_to 'project_hot_wallet_modes',
                                  target: "project_#{id}_hot_wallet_mode",
-                                 partial: 'dashboard/transfers/hot_wallet_mode',
-                                 locals: { project: decorate }
+                                 partial: 'dashboard/transfers/hot_wallet_mode', locals: { project: self }
 
       broadcast_replace_later_to "transfer_project_#{id}_hot_wallet_mode",
                                  target: "transfer_project_#{id}_hot_wallet_mode",
-                                 partial: 'shared/transfer_prioritize_button/mode',
-                                 locals: { project: decorate }
+                                 partial: 'shared/transfer_prioritize_button/mode', locals: { project: self }
     end
 
     def broadcast_batch_size
       broadcast_replace_later_to 'project_transfer_batch_size',
                                  target: "project_#{id}_transfer_batch_size",
-                                 partial: 'dashboard/transfers/batch_size',
-                                 locals: { project: decorate }
+                                 partial: 'dashboard/transfers/batch_size', locals: { project: self }
 
       broadcast_replace_later_to 'project_transfer_batch_size_modal_form',
                                  target: "project_#{id}_transfer_batch_size_modal_form",
-                                 partial: 'projects/batch_size_modal_form',
-                                 locals: { project: decorate }
+                                 partial: 'projects/batch_size_modal_form', locals: { project: self }
     end
 end
