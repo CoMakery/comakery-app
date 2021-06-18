@@ -11,7 +11,7 @@ describe ValidateAttachments do
   it 'removes attachments with invalid content_type' do
     subject
 
-    expect { token_invalid_logo.logo_image.attached? }.to be false
+    expect(token_invalid_logo.logo_image.attached?).to be false
     expect(token.reload.logo_image.attached?).to be true
   end
 end
