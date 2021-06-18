@@ -20,6 +20,7 @@ class ImagePreparer
   private
 
     def validate_and_prepare_image
+      return true if attachment.nil?
       # skip validation if it provided as a Hash
       return true if attachment.is_a?(Hash) && attachment.key?(:io)
 
