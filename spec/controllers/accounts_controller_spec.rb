@@ -248,7 +248,7 @@ describe AccountsController do
         }
       }
       expect(response).to redirect_to my_tasks_path
-      expect(assigns[:current_account].image.filename).to eq 'account_image.jpeg'
+      expect(assigns[:current_account].image.filename).to eq 'image.jpeg'
     end
 
     it 'renders errors for invalid params' do

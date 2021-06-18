@@ -353,11 +353,6 @@ class Account < ApplicationRecord
     managed_mission&.whitelabel? || false
   end
 
-  # def image=(attrs)
-  #   binding.pry
-  #   super(attrs)
-  # end
-
   private
 
     def validate_age
