@@ -85,7 +85,7 @@ class AccountsController < ApplicationController
   end
 
   # TODO: Refactor complexity
-  def update_profile # rubocop:todo Metrics/CyclomaticComplexity
+  def update_profile
     @account = current_account
 
     authorize @account
