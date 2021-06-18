@@ -236,6 +236,10 @@ class ApplicationController < ActionController::Base
     redirect_to redirect_url
   end
 
+  def unavailable_for_lockup_token
+    redirect_to project_url(@project) if @project.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule)
+  end
+
   def redirect_to_default_whitelabel_domain
     return if ENV['WHITELABEL'] != 'true'
     return if @whitelabel_mission

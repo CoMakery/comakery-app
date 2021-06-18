@@ -1,5 +1,6 @@
 class AwardTypesController < ApplicationController
   before_action :assign_project
+  before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index]
   before_action :authorize_project_show, only: %i[index]
   before_action :set_award_type, only: %i[edit update destroy]
