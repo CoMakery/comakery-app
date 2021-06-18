@@ -19,10 +19,13 @@ class ImagePreparer
 
   private
 
+    # skip validation if it not user provided
+    def skip_validation?
+      (attachment.is_a?(Hash) && attachment.key?(:io)) || attachment.is_a?(ActiveStorage::Blob)
+    end
+
     def validate_and_prepare_image
-      return true if attachment.nil?
-      # skip validation if it provided as a Hash
-      return true if attachment.is_a?(Hash) && attachment.key?(:io)
+      return true if attachment.nil? || skip_validation?
 
       imgfile = attachment.tempfile
       image = MiniMagick::Image.open(imgfile.path)
