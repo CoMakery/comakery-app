@@ -1,5 +1,4 @@
 class Token < ApplicationRecord
-  include ActiveStorageValidator
   include BelongsToBlockchain
   include BlockchainTransactable
   include PrepareImage
@@ -19,7 +18,6 @@ class Token < ApplicationRecord
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_token_type, :denomination, presence: true
 
-  validate_image_attached :logo_image
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 

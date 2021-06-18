@@ -1,5 +1,4 @@
 class Mission < ApplicationRecord
-  include ActiveStorageValidator
   include PrepareImage
 
   default_scope { order(display_order: :asc) }
@@ -50,7 +49,6 @@ class Mission < ApplicationRecord
   validates :description, length: { maximum: 500 }
   validate :whitelabel_api_public_keys_cannot_be_overwritten
 
-  validate_image_attached :logo, :image, :whitelabel_logo, :whitelabel_logo_dark, :whitelabel_favicon
   before_save :populate_api_key, if: -> { whitelabel }
 
   def serialize

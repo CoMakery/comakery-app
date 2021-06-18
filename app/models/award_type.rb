@@ -1,5 +1,4 @@
 class AwardType < ApplicationRecord
-  include ActiveStorageValidator
   include PrepareImage
 
   belongs_to :project, touch: true
@@ -11,8 +10,6 @@ class AwardType < ApplicationRecord
   validates :name, length: { maximum: 100 }
   validates :goal, length: { maximum: 250 }
   validates :description, length: { maximum: 750 }
-
-  validate_image_attached :diagram
 
   after_create :switch_tasks_publicity
   after_save :switch_tasks_publicity, if: -> { saved_change_to_state? }
