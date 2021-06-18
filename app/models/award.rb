@@ -6,6 +6,7 @@ class Award < ApplicationRecord
   include ActiveStorageValidator
   include BlockchainTransactable
   include RansackReorder
+  include PrepareImage
 
   EXPERIENCE_LEVELS = {
     'New Contributor' => 0,
@@ -16,10 +17,8 @@ class Award < ApplicationRecord
   STARTED_TASKS_PER_CONTRIBUTOR = 5
   QUANTITY_PRECISION = 2
 
-  # attachment :image, type: :image
-  # attachment :submission_image, type: :image
-  has_one_attached :image
-  has_one_attached :submission_image
+  has_one_attached_and_prepare_image :image
+  has_one_attached_and_prepare_image :submission_image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
   add_special_orders %w[account_first_name issuer_first_name]

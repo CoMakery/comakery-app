@@ -58,7 +58,7 @@ class AccountsController < ApplicationController
       account_params: account_params
     ).account
 
-    if recaptcha_valid?(model: @account, action: 'registration') && prepare_avatar(@account, account_params).valid? && @account.save
+    if recaptcha_valid?(model: @account, action: 'registration') && @account.save_if_no_errors
       session[:account_id] = @account.id
 
       if @project_invite.present?
@@ -92,7 +92,7 @@ class AccountsController < ApplicationController
 
     old_email = @account.email
 
-    if prepare_avatar(@account, account_params).valid? && @account.update(account_params.merge(name_required: true))
+    if @account.update_if_no_errors(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
       if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
         session.delete(:account_id)
@@ -154,7 +154,7 @@ class AccountsController < ApplicationController
     old_age = @current_account.age || 18
     authorize @current_account
     respond_to do |format|
-      if prepare_avatar(@current_account, account_params).valid? && @current_account.update(account_params.merge(name_required: true))
+      if @current_account.update_if_no_errors(account_params.merge(name_required: true))
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@current_account).deliver if @current_account.email_confirm_token
 
         check_date(old_age) if old_age < 18
@@ -249,10 +249,6 @@ class AccountsController < ApplicationController
       account.as_json(only: %i[email first_name last_name nickname date_of_birth country ethereum_auth_address]).merge(
         image_url: helpers.account_image_url(account, 190)
       )
-    end
-
-    def prepare_avatar(account, params)
-      ImagePreparer.new(account, params, image: { resize: '190x190!' })
     end
 
     def set_session_from_token

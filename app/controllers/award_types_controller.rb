@@ -21,7 +21,7 @@ class AwardTypesController < ApplicationController
   def create
     @award_type = @project.award_types.new(award_type_params)
 
-    if ImagePreparer.new(@award_type, award_type_params).valid? && @award_type.save
+    if @award_type.save_if_no_errors
       set_ok_response
       render json: @ok_response, status: :ok
     else
@@ -31,7 +31,7 @@ class AwardTypesController < ApplicationController
   end
 
   def update
-    if ImagePreparer.new(@award_type, award_type_params).valid? && @award_type.update(award_type_params)
+    if @award_type.update_if_no_errors(award_type_params)
       set_ok_response
       render json: @ok_response, status: :ok
     else

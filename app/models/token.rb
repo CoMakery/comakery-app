@@ -2,10 +2,11 @@ class Token < ApplicationRecord
   include ActiveStorageValidator
   include BelongsToBlockchain
   include BlockchainTransactable
+  include PrepareImage
 
   nilify_blanks
 
-  has_one_attached :logo_image
+  has_one_attached_and_prepare_image :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :accounts

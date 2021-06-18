@@ -6,8 +6,9 @@ class Account < ApplicationRecord
 
   include ActiveStorageValidator
   include EthereumAddressable
+  include PrepareImage
 
-  has_one_attached :image
+  has_one_attached_and_prepare_image :image, resize: '190x190!'
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :awards, dependent: :destroy
@@ -353,6 +354,11 @@ class Account < ApplicationRecord
   def whitelabel?
     managed_mission&.whitelabel? || false
   end
+
+  # def image=(attrs)
+  #   binding.pry
+  #   super(attrs)
+  # end
 
   private
 
