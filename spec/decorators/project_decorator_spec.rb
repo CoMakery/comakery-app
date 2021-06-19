@@ -2,52 +2,76 @@ require 'rails_helper'
 
 describe ProjectDecorator do
   let(:amount_with_24_decimal_precision) { BigDecimal('9.999_999_999_999_999_999_999') }
-  let(:project) { (create :project, maximum_tokens: 1000000000).decorate }
+  let(:token) { FactoryBot.create :token, decimal_places: 8 }
+  let(:project) do
+    FactoryBot.create(:project, maximum_tokens: 1_000_000_000, token: token).decorate
+  end
   let(:award_type) { create :award_type, project: project }
 
   describe '#description_html' do
+    subject(:description_html) { project.decorate.description_html }
+
     let(:project) do
-      create(:project,
-             description: 'Hi [google](http://www.google.com)')
-        .decorate
+      FactoryBot.build_stubbed :project, description: 'Hi [google](http://www.google.com)'
     end
 
-    specify do
-      expect(project.description_html).to include('Hi <a href="http://www.google.com"')
+    it 'should return correct description html' do
+      expect(description_html).to include('Hi <a href="http://www.google.com"')
+    end
+  end
+
+  describe '#hot_wallet_address' do
+    subject(:hot_wallet_address) { project.decorate.hot_wallet_address }
+
+    let(:hot_wallet) { FactoryBot.build_stubbed :wallet }
+
+    context 'when project with hot wallet' do
+      let(:project) { FactoryBot.build_stubbed :project, hot_wallet: hot_wallet }
+
+      it 'should return hot wallet address' do
+        expect(hot_wallet_address).to eq hot_wallet.address
+      end
+    end
+
+    context 'when project without hot wallet' do
+      let(:project) { FactoryBot.build_stubbed :project, hot_wallet: nil }
+
+      it 'should return nil' do
+        expect(hot_wallet_address).to eq nil
+      end
     end
   end
 
   describe '#description_text_truncated' do
+    subject(:description_text_truncated) { project.decorate.description_text_truncated }
+
     let(:project) do
-      create(:project,
-             description: '[Hola](http://google.com) ' + 'a' * 1000)
-        .decorate
+      FactoryBot.build_stubbed(:project, description: '[Hola](http://google.com) ' + 'a' * 1000)
     end
 
     specify do
       length_including_dots = 500
-      expect(project.description_text_truncated(500).length).to eq(length_including_dots)
+      expect(project.decorate.description_text_truncated(500).length).to eq(length_including_dots)
     end
 
     it 'ends with "..."' do
-      truncated_description = project.description_text_truncated
-      last_char = truncated_description.length
+      last_char = description_text_truncated.length
       start_of_end = last_char - 4
-      expect(truncated_description[start_of_end, last_char]).to eq('a...')
+      expect(description_text_truncated[start_of_end, last_char]).to eq('a...')
     end
 
     it 'does not include html' do
-      expect(project.description_text_truncated).not_to include("<a href='http://google.com'")
-      expect(project.description_text_truncated).to include('Hola')
+      expect(description_text_truncated).not_to include("<a href='http://google.com'")
+      expect(description_text_truncated).to include('Hola')
     end
 
     it 'can pass in a max length' do
-      expect(project.description_text_truncated(8)).to eq('Hola ...')
+      expect(project.decorate.description_text_truncated(8)).to eq('Hola ...')
     end
 
     it 'can use a length longer than the string length' do
-      project = create(:project, description: 'hola').decorate
-      expect(project.description_text_truncated(100)).to eq('hola')
+      project = FactoryBot.build_stubbed(:project, description: 'hola')
+      expect(project.decorate.description_text_truncated(100)).to eq('hola')
     end
   end
 
@@ -150,8 +174,44 @@ describe ProjectDecorator do
     expect(project.contributors_by_award_amount).to eq []
   end
 
-  it 'maximum_tokens_pretty' do
-    expect(project.maximum_tokens_pretty).to eq '1,000,000,000'
+  describe '#maximum_tokens_pretty' do
+    subject(:maximum_tokens_pretty) { project.decorate.maximum_tokens_pretty }
+
+    context 'when project with token' do
+      let(:project) { FactoryBot.build_stubbed(:project, maximum_tokens: 1_000_000_000, token: token) }
+
+      context 'when token has decimal places specified' do
+        let(:token) { FactoryBot.create :token, decimal_places: 8 }
+
+        it 'should return formatted maximum tokens value' do
+          expect(maximum_tokens_pretty).to eq '1,000,000,000.00000000'
+        end
+      end
+
+      context 'when token does not have decimal places specified' do
+        let(:token) { FactoryBot.create :token, token_type: FactoryBot.build_stubbed(:token_type), decimal_places: nil }
+
+        it 'should return formatted maximum tokens value' do
+          expect(maximum_tokens_pretty).to eq '1,000,000,000'
+        end
+      end
+
+      context 'when token has zero decimal places specified' do
+        let(:token) { FactoryBot.create :token, decimal_places: 0 }
+
+        it 'should return formatted maximum tokens value' do
+          expect(maximum_tokens_pretty).to eq '1,000,000,000'
+        end
+      end
+    end
+
+    context 'when project without token' do
+      let(:project) { FactoryBot.build_stubbed(:project, maximum_tokens: 1_000_000_000, token: nil) }
+
+      it 'should return formatted maximum tokens value' do
+        expect(maximum_tokens_pretty).to eq '1,000,000,000'
+      end
+    end
   end
 
   it 'format_with_decimal_places' do

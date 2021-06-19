@@ -298,13 +298,4 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
-  def self.pretty_number(*currency_methods)
-    currency_methods.each do |method_name|
-      define_method "#{method_name}_pretty" do
-        number_with_precision(send(method_name), precision: 0, delimiter: ',').to_s
-      end
-    end
-  end
-
-  pretty_number :maximum_tokens
 end
