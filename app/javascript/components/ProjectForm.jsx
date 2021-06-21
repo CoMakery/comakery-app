@@ -25,8 +25,6 @@ class ProjectForm extends React.Component {
     this.handleChannelFieldChange = this.handleChannelFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.verifySquareImgRes = this.verifySquareImgRes.bind(this)
-    this.verifyPanoramicImgRes = this.verifyPanoramicImgRes.bind(this)
     this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.squareImgInputRef = React.createRef()
@@ -195,28 +193,6 @@ class ProjectForm extends React.Component {
     this.setState({
       'project[channels]': channels
     })
-  }
-
-  verifySquareImgRes(img) {
-    const errorMessage = 'Please attach the correct image'
-
-    if ((img.naturalWidth >= 1200) && (img.naturalHeight >= 800) && (img.naturalWidth / img.naturalHeight === 1.5)) {
-      this.errorRemove('project[square_image]', errorMessage)
-    } else {
-      this.squareImgInputRef.current.value = ''
-      this.errorAdd('project[square_image]', errorMessage)
-    }
-  }
-
-  verifyPanoramicImgRes(img) {
-    const errorMessage = 'Please attach the correct image'
-
-    if ((img.naturalWidth >= 1500) && (img.naturalHeight >= 300) && (img.naturalWidth / img.naturalHeight === 5)) {
-      this.errorRemove('project[panoramic_image]', errorMessage)
-    } else {
-      this.panoramicImgInputRef.current.value = ''
-      this.errorAdd('project[panoramic_image]', errorMessage)
-    }
   }
 
   verifyImgSize(event) {
@@ -391,8 +367,7 @@ class ProjectForm extends React.Component {
               errors={this.state.errors['project[square_image]']}
               imgPreviewUrl={this.props.project.squareImageUrl}
               imgPreviewDimensions='150x100'
-              imgRequirements='Image should be at least 1200px x 800px'
-              imgVerifier={this.verifySquareImgRes}
+              imgRequirements='The best image size is 1200px x 800px'
               imgInputRef={this.squareImgInputRef}
             />
 
@@ -403,8 +378,7 @@ class ProjectForm extends React.Component {
               errors={this.state.errors['project[panoramic_image]']}
               imgPreviewUrl={this.props.project.panoramicImageUrl}
               imgPreviewDimensions='375x75'
-              imgRequirements='Image should be at least 1500px x 300px'
-              imgVerifier={this.verifyPanoramicImgRes}
+              imgRequirements='The best image size is 1500px x 300px'
               imgInputRef={this.panoramicImgInputRef}
             />
 
