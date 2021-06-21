@@ -1,20 +1,16 @@
 require 'rails_helper'
 
-# TODO: fix me
-RSpec.xdescribe ImagePreparer do
-  subject { described_class.new(project, params) }
+RSpec.describe ImagePreparer do
+  subject { described_class.new(attr_name, attachment, options) }
 
-  let!(:project) { create(:project) }
+  let(:attr_name) { 'image' }
+  let(:options) { nil }
 
   context 'strip EXIF for jpeg' do
-    let!(:params) do
-      ActionController::Parameters.new(
-        { image: fixture_file_upload('image_with_exif.jpg', 'image/jpg', :binary) }
-      ).permit!
-    end
+    let(:attachment) { fixture_file_upload('image_with_exif.jpg', 'image/jpg', :binary) }
 
     specify do
-      tmp_img_file_path = params['image'].tempfile.path
+      tmp_img_file_path = attachment.path
       initial_img = MiniMagick::Image.open(tmp_img_file_path)
       expect(initial_img.exif.count).to eq 50
 
@@ -26,18 +22,12 @@ RSpec.xdescribe ImagePreparer do
   end
 
   context 'resize' do
-    subject { described_class.new(project, params, image: { resize: '50x50!' }) }
-
-    let!(:params) do
-      ActionController::Parameters.new(
-        {
-          image: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
-        }
-      ).permit!
-    end
+    let(:attr_name) { 'square_image' }
+    let(:attachment) { fixture_file_upload('helmet_cat.png', 'image/png', :binary) }
+    let(:options) { { resize: '50x50!' } }
 
     specify 'works' do
-      tmp_img_file_path = params['image'].tempfile.path
+      tmp_img_file_path = attachment.path
       initial_img = MiniMagick::Image.open(tmp_img_file_path)
       expect(initial_img.width).to eq 256
       expect(initial_img.height).to eq 256
@@ -52,46 +42,28 @@ RSpec.xdescribe ImagePreparer do
 
   context '#valid?' do
     context 'when params contain valid attachments' do
-      let!(:params) do
-        ActionController::Parameters.new(
-          {
-            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
-          }
-        ).permit!
-      end
+      let!(:attachment) { fixture_file_upload('helmet_cat.png', 'image/png', :binary) }
 
-      it { expect(subject.valid?).to be(true) }
+      it { expect(subject.valid?).to be true }
     end
 
     context 'when params contain attachments with pixel bomb' do
-      let!(:params) do
-        ActionController::Parameters.new(
-          {
-            square_image: fixture_file_upload('lottapixel.jpg', 'image/jpg', :binary),
-            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
-          }
-        ).permit!
-      end
+      let!(:attachment) { fixture_file_upload('lottapixel.jpg', 'image/jpg', :binary) }
 
       it 'fails and returns an error' do
-        expect(subject.valid?).to be(false)
-
-        expect(project.errors.full_messages).to eq(['Square image exceeds maximum pixel dimensions'])
+        expect(subject.valid?).to be false
+        expect(subject.attachment).to be nil
+        expect(subject.error).to eq 'exceeds maximum pixel dimensions'
       end
     end
 
     context 'when params has too big image' do
-      let!(:params) do
-        ActionController::Parameters.new(
-          { image: fixture_file_upload('heavy_image.png', 'image/png', :binary) }
-        ).permit!
-      end
+      let!(:attachment) { fixture_file_upload('heavy_image.png', 'image/png', :binary) }
 
       it 'fails and returns an error' do
         expect(subject.valid?).to be(false)
-
-        expect(project.errors.full_messages).to eq(['Image has too big size'])
+        expect(subject.attachment).to be nil
+        expect(subject.error).to eq 'has too big size'
       end
     end
   end
