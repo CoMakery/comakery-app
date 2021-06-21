@@ -337,8 +337,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                 }
                 imgPreviewDimensions="100x100"
-                imgRequirements="Image should be at least 800px x 800px"
-                imgVerifier={[Function]}
+                imgRequirements="The best image size is 800px x 800px"
                 name="logo"
                 required={true}
                 title="Mission Logo"
@@ -364,7 +363,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                   imgPreviewDimensions="100x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 800px x 800px"
+                  imgRequirements="The best image size is 800px x 800px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -412,7 +411,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 800px x 800px
+                        The best image size is 800px x 800px
                       </span>
                     </div>
                   </div>
@@ -432,8 +431,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                 }
                 imgPreviewDimensions="150x100"
-                imgRequirements="Image should be at least 1200px x 800px"
-                imgVerifier={[Function]}
+                imgRequirements="The best image size is 1200px x 800px"
                 name="image"
                 required={true}
                 title="Mission Image"
@@ -459,7 +457,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                   imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 1200px x 800px"
+                  imgRequirements="The best image size is 1200px x 800px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -507,7 +505,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 1200px x 800px
+                        The best image size is 1200px x 800px
                       </span>
                     </div>
                   </div>
@@ -942,8 +940,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                 }
                 imgPreviewDimensions="150x100"
-                imgRequirements="Image should be at least 1000px x 200px"
-                imgVerifier={[Function]}
+                imgRequirements="The best image size is 1000px x 200px"
                 name="whitelabelLogo"
                 title="Mission Whitelabel Logo"
               >
@@ -967,7 +964,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                   imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 1000px x 200px"
+                  imgRequirements="The best image size is 1000px x 200px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -1015,7 +1012,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 1000px x 200px
+                        The best image size is 1000px x 200px
                       </span>
                     </div>
                   </div>
@@ -1034,8 +1031,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                 }
                 imgPreviewDimensions="150x100"
-                imgRequirements="Image should be at least 1000px x 200px"
-                imgVerifier={[Function]}
+                imgRequirements="The best image size is 1000px x 200px"
                 name="whitelabelLogoDark"
                 title="Mission Whitelabel Logo Dark"
               >
@@ -1059,7 +1055,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                   imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 1000px x 200px"
+                  imgRequirements="The best image size is 1000px x 200px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -1107,7 +1103,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 1000px x 200px
+                        The best image size is 1000px x 200px
                       </span>
                     </div>
                   </div>
@@ -1126,8 +1122,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                 }
                 imgPreviewDimensions="100x100"
-                imgRequirements="Image should be at least 64px x 64px"
-                imgVerifier={[Function]}
+                imgRequirements="The best image size is 64px x 64px"
                 name="whitelabelFavicon"
                 title="Mission Whitelabel Favicon"
               >
@@ -1151,7 +1146,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   }
                   imgPreviewDimensions="100x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 64px x 64px"
+                  imgRequirements="The best image size is 64px x 64px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -1199,7 +1194,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 64px x 64px
+                        The best image size is 64px x 64px
                       </span>
                     </div>
                   </div>
