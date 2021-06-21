@@ -1,0 +1,446 @@
+.icon-behance {
+  display: block;
+  background: url("../icons/Behance.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-hot-wallet {
+  display: block;
+  background: url("../icons/Hot Wallet.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; }
+.icon-google {
+  display: block;
+  background: url("../icons/Google.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-github {
+  display: block;
+  background: url("../icons/GitHub.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; }/* '' */
+.icon-dribble {
+  display: block;
+  background: url("../icons/Dribbble.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-linkedin {
+  display: block;
+  background: url("../icons/Linkedin.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-cursor {
+  display: block;
+  background: url("../icons/Cursor.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; }/* '' */
+.icon-empty-state-3 {
+  display: block;
+  background: url("../icons/EmptyState.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-empty-state-2 {
+  display: block;
+  background: url("../icons/EmptyState-2.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-empty-state-1 {
+  display: block;
+  background: url("../icons/EmptyState-1.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-onbording {
+  display: block;
+  background: url("../icons/EmptyState-3.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; }
+.icon-wallets {
+  display: block;
+  background: url("../icons/Wallets.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-check-date {
+  display: block;
+  background: url("../icons/New CheckDate.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-copy {
+  display: block;
+  background: url("../icons/Copy.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-url {
+  display: block;
+  background: url("../icons/URL.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-users {
+  display: block;
+  background: url("../icons/Users.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-dates {
+  display: block;
+  background: url("../icons/New Dates.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-publish {
+  display: block;
+  background: url("../icons/New Bublish.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-connections {
+  display: block;
+  background: url("../icons/Connections.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-transfer {
+  display: block;
+  background: url("../icons/Transfer.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-plus-in-circle {
+  display: block;
+  background: url("../icons/PlusInCircleOutline.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-percent {
+  display: block;
+  background: url("../icons/Percent.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-private {
+  display: block;
+  background: url("../icons/New Private.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-filter {
+  display: block;
+  background: url("../icons/Filter.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-tokens {
+  display: block;
+  background: url("../icons/New Tokens.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-archive {
+  display: block;
+  background: url("../icons/Archive.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-history {
+  display: block;
+  background: url("../icons/New History.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-hide {
+  display: block;
+  background: url("../icons/Hide.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-retry {
+  display: block;
+  background: url("../icons/New Retry.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-tasks {
+  display: block;
+  background: url("../icons/New Tasks.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-public {
+  display: block;
+  background: url("../icons/Public.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-term {
+  display: block;
+  background: url("../icons/Term.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-visible {
+  display: block;
+  background: url("../icons/Visibe.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-rules {
+  display: block;
+  background: url("../icons/New Rules.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-settings {
+  display: block;
+  background: url("../icons/New Settings.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-search {
+  display: block;
+  background: url("../icons/New Search.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-refresh {
+  display: block;
+  background: url("../icons/Refresh.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-plus {
+  display: block;
+  background: url("../icons/Plus.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-overview {
+  display: block;
+  background: url("../icons/New Overview.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-notification {
+  display: block;
+  background: url("../icons/Notifications.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-xyz {
+  display: block;
+  background: url("../icons/XYZ.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-slack {
+  display: block;
+  background: url("../icons/Slack.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-discord {
+  display: block;
+  background: url("../icons/Discord.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-ore-id {
+  display: block;
+  background: url("../icons/ORE ID.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-metamask {
+  display: block;
+  background: url("../icons/MetaMask.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-layout {
+  display: block;
+  background: url("../icons/Layout.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-info-in-circle {
+  display: block;
+  background: url("../icons/InfoInCircle.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-file {
+  display: block;
+  background: url("../icons/File.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-export {
+  display: block;
+  background: url("../icons/Export.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-expand-vertical-list {
+  display: block;
+  background: url("../icons/ExpandVerticalList.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-expand-up {
+  display: block;
+  background: url("../icons/ExpandUp.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-expand-right {
+  display: block;
+  background: url("../icons/ExpandRight.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-expand-left {
+  display: block;
+  background: url("../icons/ExpandLeft.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-expand-down {
+  display: block;
+  background: url("../icons/ExpandDown.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-edit {
+  display: block;
+  background: url("../icons/Edit.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-delete {
+  display: block;
+  background: url("../icons/New Delete.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-dates {
+  display: block;
+  background: url("../icons/Dates.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-cross {
+  display: block;
+  background: url("../icons/Cross.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-check {
+  display: block;
+  background: url("../icons/Check.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-calendar {
+  display: block;
+  background: url("../icons/New Calendar.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-base {
+  display: block;
+  background: url("../icons/Base.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-back-to {
+  display: block;
+  background: url("../icons/BackTo.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-assets {
+  display: block;
+  background: url("../icons/New Assets.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-up-right {
+  display: block;
+  background: url("../icons/ArrowUpRight.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-up-left {
+  display: block;
+  background: url("../icons/ArrowUpLeft.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-up {
+  display: block;
+  background: url("../icons/ArrowUp.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-right {
+  display: block;
+  background: url("../icons/ArrowRight.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-left {
+  display: block;
+  background: url("../icons/ArrowLeft.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-down-right {
+  display: block;
+  background: url("../icons/ArrowDownRight.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-down-left {
+  display: block;
+  background: url("../icons/ArrowDownLeft.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-arrow-down {
+  display: block;
+  background: url("../icons/ArrowDown.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+/*.icon-icon-2:before { content: '\e846'; } !* '' *!*/
+/*.icon-icon-1:before { content: '\e847'; } !* '' *!*/
+.icon-actions-horizontal {
+  display: block;
+  background: url("../icons/ActionsHorizontal.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; } /* '' */
+.icon-actions-vertical {
+  display: block;
+  background: url("../icons/ActionsVertical.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; }
+.icon-alarm-in-circle {
+  display: block;
+  background: url("../icons/AlarmInCircle.svg");
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px; }

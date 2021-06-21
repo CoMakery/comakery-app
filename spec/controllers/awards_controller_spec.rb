@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'controllers/unavailable_for_lockup_token_spec'
 
 RSpec.describe AwardsController, type: :controller do
   let!(:team) { create :team }
@@ -127,6 +128,12 @@ RSpec.describe AwardsController, type: :controller do
   describe '#show' do
     let(:award) { create(:award, award_type: award_type) }
     let(:account) { project.account.decorate }
+
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:award) { create(:award, award_type: award_type) }
+
+      subject { get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param } }
+    end
 
     it 'shows member tasks to logged in members' do
       login(account)
