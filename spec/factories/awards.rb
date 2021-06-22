@@ -3,7 +3,7 @@ FactoryBot.define do
     account
     transfer_type
     award_type
-    association :issuer, factory: :account
+    issuer { account }
     sequence(:name) { |n| "Award #{n}" }
     amount { 10 }
     image { dummy_image }

@@ -4,6 +4,8 @@ class ProjectDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
+  TEAM_TOP_LIMIT = 8
+
   PAYMENT_DESCRIPTIONS = {
     'project_token' => 'Project Tokens'
   }.freeze
@@ -87,11 +89,11 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def tokens_awarded_with_symbol
-    token&.symbol ? "#{token.symbol} Tokens Awarded" : 'Tokens Awarded'
+    "#{token.symbol} Tokens Awarded".strip
   end
 
   def send_coins?
-    token&._token_type? && %w[eth btc ada qtum eos xtz].include?(token&._token_type)
+    %w[eth btc ada qtum eos xtz].include?(token&._token_type)
   end
 
   def header_props(current_account)
@@ -117,6 +119,7 @@ class ProjectDecorator < Draper::Decorator
       require_confidentiality: !require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
+      token_lockup: token&.token_type&.is_a?(TokenType::TokenReleaseSchedule),
       github_url: github_url,
       documentation_url: documentation_url,
       getting_started_url: getting_started_url,
@@ -149,16 +152,13 @@ class ProjectDecorator < Draper::Decorator
     }
   end
 
-  def team_top_limit
-    8
-  end
-
   def team_top
-    team = (project_admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+    admins = project_admins.with_attached_image.includes(:specialty).first(4).to_a.unshift(account)
+    team = (admins + top_contributors.to_a).uniq
+    return team.first(TEAM_TOP_LIMIT) if team.size >= TEAM_TOP_LIMIT
 
-    team += accounts.with_attached_image.where.not(id: team.pluck(:id)).first(team_top_limit - team.size) if team.size < team_top_limit
-
-    team
+    free_slots_count = TEAM_TOP_LIMIT - team.size
+    team + accounts.with_attached_image.where.not(id: team.pluck(:id)).first(free_slots_count)
   end
 
   def team_size
@@ -296,14 +296,4 @@ class ProjectDecorator < Draper::Decorator
       "≈ #{ratio} %"
     end
   end
-
-  def self.pretty_number(*currency_methods)
-    currency_methods.each do |method_name|
-      define_method "#{method_name}_pretty" do
-        number_with_precision(send(method_name), precision: 0, delimiter: ',').to_s
-      end
-    end
-  end
-
-  pretty_number :maximum_tokens
 end
