@@ -1,8 +1,13 @@
 require 'rails_helper'
 require 'models/concerns/api_authorizable_spec'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Project do
   it_behaves_like 'api_authorizable'
+
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'square_image'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'panoramic_image'
 
   it { is_expected.to have_many(:accounts) }
   it { is_expected.to have_one_attached(:transfers_csv) }

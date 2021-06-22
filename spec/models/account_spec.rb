@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Account do
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image', resize: '190x190!'
+
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }
   it { is_expected.to have_one(:ore_id_account).dependent(:destroy) }

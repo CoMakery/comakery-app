@@ -1,6 +1,13 @@
 require 'rails_helper'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Mission do
+  it_behaves_like 'has_one_attached_and_prepare_image', 'logo'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'whitelabel_logo'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'whitelabel_logo_dark'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'whitelabel_favicon'
+
   describe 'validations' do
     it 'requires many attributes' do
       errors = described_class.new.tap(&:valid?).errors.full_messages

@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe AwardType do
+  it_behaves_like 'has_one_attached_and_prepare_image', 'diagram'
+
   describe 'associations' do
     let(:project) { create(:project, account: create(:account)) }
 

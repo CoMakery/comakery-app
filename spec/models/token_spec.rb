@@ -1,10 +1,12 @@
 require 'rails_helper'
 require 'models/concerns/belongs_to_blockchain_spec'
 require 'models/concerns/blockchain_transactable_spec'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Token, type: :model, vcr: true do
   it_behaves_like 'belongs_to_blockchain'
   it_behaves_like 'blockchain_transactable'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'logo_image'
 
   it { is_expected.to have_many(:projects) }
   it { is_expected.to have_many(:accounts) }
