@@ -10,7 +10,7 @@ class Project < ApplicationRecord
   has_one_attached_and_prepare_image :image
   has_one_attached_and_prepare_image :square_image
   has_one_attached_and_prepare_image :panoramic_image
-  has_one_attached_and_prepare_image :transfers_csv
+  has_one_attached :transfers_csv
 
   belongs_to :account, touch: true
   has_one :hot_wallet, class_name: 'Wallet', touch: true, dependent: :destroy
