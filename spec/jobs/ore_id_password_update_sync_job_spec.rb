@@ -5,11 +5,11 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
   let(:now) { Time.zone.local(2021, 6, 1, 15) }
   let(:self_reschedule_job) { double('OreIdPasswordUpdateSyncJob', perform_later: nil) }
-  let(:ore_id) { create(:ore_id, skip_jobs: true, state: 'unclaimed') }
+  let(:ore_id) { FactoryBot.create(:ore_id_account, state: 'pending_manual') }
 
   before do
     allow(described_class).to receive(:set).with(any_args).and_return(self_reschedule_job)
-    allow_any_instance_of(ore_id.class).to receive(:claim!)
+    allow_any_instance_of(OreIdAccount).to receive(:claim!)
     allow(Sentry).to receive(:capture_exception)
     Timecop.freeze(now)
   end
@@ -53,7 +53,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
     context 'and service raises an error' do
       context 'when error is a standard error' do
-        before { allow_any_instance_of(ore_id.class).to receive(:claim!).and_raise(StandardError) }
+        before { allow_any_instance_of(OreIdAccount).to receive(:claim!).and_raise(StandardError) }
 
         context 'when next sync allowed time is in the future' do
           before do
@@ -76,7 +76,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
       context 'when error is a OreIdAccount::ProvisioningError' do
         before do
-          allow_any_instance_of(ore_id.class)
+          allow_any_instance_of(OreIdAccount)
             .to receive(:claim!).and_raise(OreIdAccount::ProvisioningError)
         end
 
