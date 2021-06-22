@@ -4,50 +4,63 @@ class ImagePreparer
   MAX_HEIGHT = 4096
   MAX_SIZE = 2.megabytes
 
-  attr_reader :record, :params, :options
+  attr_reader :field_name, :attachment, :options, :error
 
-  def initialize(record, params, options = {})
-    @record = record
-    @params = params
-    @options = options
+  def initialize(field_name, attachment, options = {})
+    @field_name = field_name
+    @attachment = attachment
+    @options = options || {}
+    @error = nil
   end
 
   def valid?
-    @valid ||= attachments.all? { |attr, attachment| prepare_image(attr, attachment) }
+    @valid ||= validate_and_prepare_image
   end
 
   private
 
-    def prepare_image(attr, attachment)
+    # skip validation if it not user provided
+    def skip_validation?
+      (attachment.is_a?(Hash) && attachment.key?(:io)) || attachment.is_a?(ActiveStorage::Blob)
+    end
+
+    def validate_and_prepare_image
+      return true if attachment.nil? || skip_validation?
+
       imgfile = attachment.tempfile
       image = MiniMagick::Image.open(imgfile.path)
 
-      return false unless image_valid?(attr, attachment, image)
+      return false unless image_valid?(image)
 
       # replace the initially uploaded image
       apply_actions(image)
       imgfile.rewind
       image.write(imgfile)
 
-      change_original_filename(attr, attachment, image)
+      change_original_filename(image)
 
       true
     rescue MiniMagick::Error, MiniMagick::Invalid
-      record.errors.add(attr.to_sym, 'is invalid')
+      self.error = 'is invalid'
       false
     end
 
-    def image_valid?(attr, attachment, image)
-      validate_image(attr, attachment, image) && validate_format(attr, attachment, image) && validate_size(attr, attachment, image) && validate_dimensions(attr, attachment, image)
+    def error=(error)
+      @attachment = nil
+      @error = error
     end
 
-    def validate_image(attr, _attachment, image)
+    def image_valid?(image)
+      validate_image(image) && validate_format(image) && validate_size(image) && validate_dimensions(image)
+    end
+
+    def validate_image(image)
       valid_img = image.valid?
-      record.errors.add(attr.to_sym, 'is invalid') unless valid_img
+      self.error = 'is invalid' unless valid_img
       valid_img
     end
 
-    def validate_format(attr, attachment, image)
+    def validate_format(image)
       valid_format =
         case image.type
         when 'JPEG' then attachment.content_type.in?(%w[image/jpg image/jpeg])
@@ -55,31 +68,28 @@ class ImagePreparer
         else false
         end
 
-      record.errors.add(attr.to_sym, 'has unsupported format') unless valid_format
+      self.error = 'has unsupported format' unless valid_format
       valid_format
     end
 
-    def validate_size(attr, _attachment, image)
+    def validate_size(image)
       valid_size = image.size < MAX_SIZE
 
-      record.errors.add(attr.to_sym, 'has too big size') unless valid_size
+      self.error = 'has too big size' unless valid_size
 
       valid_size
     end
 
-    def validate_dimensions(attr, _attachment, image)
+    def validate_dimensions(image)
       valid_dimensions = image.width <= MAX_WIDHT && image.height <= MAX_HEIGHT
 
-      record.errors.add(attr.to_sym, 'exceeds maximum pixel dimensions') unless valid_dimensions
+      self.error = 'exceeds maximum pixel dimensions' unless valid_dimensions
 
       valid_dimensions
     end
 
     def apply_actions(image)
-      process_actions = {}
-      process_actions[:strip] = nil if image.type == 'JPEG'
-      process_actions[:resize] = options[:resize] if options.key?(:resize)
-
+      process_actions = prepare_actions(image)
       return if process_actions.empty?
 
       image.combine_options do |img|
@@ -93,17 +103,16 @@ class ImagePreparer
       end
     end
 
-    def attachments
-      params.to_h.slice(*attachment_keys)
+    def prepare_actions(image)
+      process_actions = {}
+      process_actions[:strip] = nil if image.type == 'JPEG'
+      process_actions[:resize] = options[:resize] if options.key?(:resize)
+      process_actions
     end
 
-    def attachment_keys
-      record.attachment_reflections.keys
-    end
-
-    def change_original_filename(attr, attachment, image)
+    def change_original_filename(image)
       if attachment.class.method_defined?(:original_filename=) # some tests can't change it
-        attachment.original_filename = "#{record.model_name.param_key}_#{attr}.#{image.type.downcase}" # account_image.jpeg
+        attachment.original_filename = "#{field_name}.#{image.type.downcase}" # image.jpeg
       end
     end
 end

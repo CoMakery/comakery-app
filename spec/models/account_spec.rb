@@ -1,8 +1,8 @@
 require 'rails_helper'
-require 'models/concerns/active_storage_validator_spec'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Account do
-  it_behaves_like 'active_storage_validator', %w[image]
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image', resize: '190x190!'
 
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }

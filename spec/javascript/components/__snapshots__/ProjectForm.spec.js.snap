@@ -588,8 +588,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     }
                   }
                   imgPreviewDimensions="150x100"
-                  imgRequirements="Image should be at least 1200px x 800px"
-                  imgVerifier={[Function]}
+                  imgRequirements="The best image size is 1200px x 800px"
                   name="project[square_image]"
                   title="project image"
                 >
@@ -613,7 +612,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     }
                     imgPreviewDimensions="150x100"
                     imgPreviewUrl=""
-                    imgRequirements="Image should be at least 1200px x 800px"
+                    imgRequirements="The best image size is 1200px x 800px"
                     imgVerifier={[Function]}
                     max=""
                     min=""
@@ -661,7 +660,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         <span
                           className="input-field--content__file--requirements"
                         >
-                          Image should be at least 1200px x 800px
+                          The best image size is 1200px x 800px
                         </span>
                       </div>
                     </div>
@@ -680,8 +679,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     }
                   }
                   imgPreviewDimensions="375x75"
-                  imgRequirements="Image should be at least 1500px x 300px"
-                  imgVerifier={[Function]}
+                  imgRequirements="The best image size is 1500px x 300px"
                   name="project[panoramic_image]"
                   title="project image – panoramic"
                 >
@@ -705,7 +703,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     }
                     imgPreviewDimensions="375x75"
                     imgPreviewUrl=""
-                    imgRequirements="Image should be at least 1500px x 300px"
+                    imgRequirements="The best image size is 1500px x 300px"
                     imgVerifier={[Function]}
                     max=""
                     min=""
@@ -753,7 +751,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         <span
                           className="input-field--content__file--requirements"
                         >
-                          Image should be at least 1500px x 300px
+                          The best image size is 1500px x 300px
                         </span>
                       </div>
                     </div>

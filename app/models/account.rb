@@ -4,10 +4,10 @@ class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
 
-  include ActiveStorageValidator
   include EthereumAddressable
+  include PrepareImage
 
-  has_one_attached :image
+  has_one_attached_and_prepare_image :image, resize: '190x190!'
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :awards, dependent: :destroy
@@ -96,7 +96,6 @@ class Account < ApplicationRecord
     record.errors.add(attr, 'is unsafe') if ApplicationController.helpers.sanitize(value) != value
   end
 
-  validate_image_attached :image
   validate :validate_age, on: :create
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
   after_validation :normalize_ethereum_auth_address

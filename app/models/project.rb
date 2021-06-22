@@ -3,16 +3,13 @@
 
 class Project < ApplicationRecord
   include ApiAuthorizable
-  include ActiveStorageValidator
+  include PrepareImage
 
   nilify_blanks
 
-  # attachment :image
-  # attachment :square_image, type: :image
-  # attachment :panoramic_image, type: :image
-  has_one_attached :image
-  has_one_attached :square_image
-  has_one_attached :panoramic_image
+  has_one_attached_and_prepare_image :image
+  has_one_attached_and_prepare_image :square_image
+  has_one_attached_and_prepare_image :panoramic_image
   has_one_attached :transfers_csv
 
   belongs_to :account, touch: true
@@ -70,7 +67,6 @@ class Project < ApplicationRecord
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
-  validate_image_attached :image, :square_image, :panoramic_image
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }

@@ -1,10 +1,14 @@
 require 'rails_helper'
 require 'models/concerns/blockchain_transactable_spec'
 require 'models/concerns/ransack_reorder_spec'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Award do
   it_behaves_like 'blockchain_transactable'
   it_behaves_like 'ransack_reorder'
+
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'submission_image'
 
   it { is_expected.to respond_to(:commencement_date) }
 
