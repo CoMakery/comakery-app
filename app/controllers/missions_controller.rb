@@ -31,7 +31,7 @@ class MissionsController < ApplicationController
 
     authorize @mission
 
-    if @mission.save_if_no_errors
+    if @mission.save
       render json: { id: @mission.id, message: 'Successfully created.' }, status: :ok
     else
       errors = @mission.errors.as_json
@@ -50,7 +50,7 @@ class MissionsController < ApplicationController
   def update
     authorize @mission
 
-    if @mission.update_if_no_errors(mission_params)
+    if @mission.update(mission_params)
       render json: { message: 'Successfully updated.' }, status: :ok
     else
       errors = @mission.errors.as_json

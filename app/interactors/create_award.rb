@@ -10,7 +10,7 @@ class CreateAward
 
     context.award = award
 
-    context.fail!(errors: award.errors) unless award.save_if_no_errors
+    context.fail!(errors: award.errors) unless award.save
   end
 
   private

@@ -65,7 +65,7 @@ class AwardsController < ApplicationController
   end
 
   def update
-    if @award.update_if_no_errors(award_params) && @award.update(issuer: current_account)
+    if @award.update(award_params) && @award.update(issuer: current_account)
       set_ok_response
       render json: @ok_response, status: :ok
     else

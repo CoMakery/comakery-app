@@ -6,6 +6,8 @@ module PrepareImage
     def has_one_attached_and_prepare_image(name, **options)
       has_one_attached :"#{name}"
 
+      before_validation :add_image_errors
+
       generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         def #{name}=(attachable)
           uploaded_image_options["#{name}"] = #{options}
@@ -22,13 +24,23 @@ module PrepareImage
     end
   end
 
+  def uploaded_image_errors
+    @uploaded_image_errors ||= {}
+  end
+
   def uploaded_image_options
     @uploaded_image_options ||= {}
   end
 
   def prepare_attached_image(field_name, attachable)
     preparer = ImagePreparer.new(field_name, attachable, uploaded_image_options[field_name.to_s])
-    errors.add(field_name, preparer.error) unless preparer.valid?
+    @uploaded_image_errors[field_name] = preparer.error unless preparer.valid?
     preparer.attachment
+  end
+
+  def add_image_errors
+    uploaded_image_errors.each do |field_name, error|
+      errors.add(field_name, error)
+    end
   end
 end
