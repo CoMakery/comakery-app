@@ -10,6 +10,7 @@ module PrepareImage
 
       generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         def #{name}=(attachable)
+          uploaded_image_errors.delete("#{name}") if uploaded_image_errors.key?("#{name}")
           uploaded_image_options["#{name}"] = #{options}
           attachable = prepare_attached_image("#{name}", attachable)
 
@@ -34,13 +35,13 @@ module PrepareImage
 
   def prepare_attached_image(field_name, attachable)
     preparer = ImagePreparer.new(field_name, attachable, uploaded_image_options[field_name.to_s])
-    @uploaded_image_errors[field_name] = preparer.error unless preparer.valid?
+    uploaded_image_errors[field_name] = preparer.error unless preparer.valid?
     preparer.attachment
   end
 
   def add_image_errors
     uploaded_image_errors.each do |field_name, error|
-      errors.add(field_name, error)
+      errors.add(field_name, error) if error
     end
   end
 end
