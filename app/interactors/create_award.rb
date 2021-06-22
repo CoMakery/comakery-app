@@ -6,7 +6,7 @@ class CreateAward
 
     award.issuer = context.account
 
-    attach_image_from_source(award) if award.image.blank?
+    attach_image_from_source(award) if context.award_params[:image].blank?
 
     context.award = award
 
