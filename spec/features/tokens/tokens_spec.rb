@@ -17,7 +17,7 @@ describe 'tokens features', js: true do
 
     select('eth', from: 'token[_token_type]', visible: false)
     select('ethereum', from: 'token[_blockchain]', visible: false)
-    fill_in('token[name]', with: '')
+    fill_in('token[name]', with: 'ETH token')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'create & close'

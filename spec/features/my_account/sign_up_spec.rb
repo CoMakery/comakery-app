@@ -77,7 +77,7 @@ describe 'my account', js: true do
     visit build_profile_accounts_path
     expect(page).not_to have_content("can't be blank")
     click_on 'Get Started'
-    expect(page).to have_content("First name can't be blank")
+    expect(page).to have_content("Email can't be blank")
   end
 
   scenario 'MetaMask button disabled' do

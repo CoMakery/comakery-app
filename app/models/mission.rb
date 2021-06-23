@@ -1,17 +1,13 @@
 class Mission < ApplicationRecord
-  include ActiveStorageValidator
+  include PrepareImage
+
   default_scope { order(display_order: :asc) }
 
-  # attachment :logo
-  # attachment :image
-  # attachment :whitelabel_logo
-  # attachment :whitelabel_logo_dark
-  # attachment :whitelabel_favicon
-  has_one_attached :logo
-  has_one_attached :image
-  has_one_attached :whitelabel_logo
-  has_one_attached :whitelabel_logo_dark
-  has_one_attached :whitelabel_favicon
+  has_one_attached_and_prepare_image :logo
+  has_one_attached_and_prepare_image :image
+  has_one_attached_and_prepare_image :whitelabel_logo
+  has_one_attached_and_prepare_image :whitelabel_logo_dark
+  has_one_attached_and_prepare_image :whitelabel_favicon
 
   has_many :projects, inverse_of: :mission # rubocop:todo Rails/HasManyOrHasOneDependent
   # rubocop:todo Rails/InverseOf
@@ -53,7 +49,6 @@ class Mission < ApplicationRecord
   validates :description, length: { maximum: 500 }
   validate :whitelabel_api_public_keys_cannot_be_overwritten
 
-  validate_image_attached :logo, :image, :whitelabel_logo, :whitelabel_logo_dark, :whitelabel_favicon
   before_save :populate_api_key, if: -> { whitelabel }
 
   def serialize

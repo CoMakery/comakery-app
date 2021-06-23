@@ -21,11 +21,6 @@ export default class MissionForm extends React.Component {
     this.enable = this.enable.bind(this)
     this.handleChangeFormData = this.handleChangeFormData.bind(this)
     this.handleSaveMission = this.handleSaveMission.bind(this)
-    this.verifyImageRes = this.verifyImageRes.bind(this)
-    this.verifyLogoRes = this.verifyLogoRes.bind(this)
-    this.verifyWhitelableLogoRes = this.verifyWhitelableLogoRes.bind(this)
-    this.verifyWhitelableLogoDarkRes = this.verifyWhitelableLogoDarkRes.bind(this)
-    this.verifyWhitelabelFaviconRes = this.verifyWhitelabelFaviconRes.bind(this)
     this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.imageInputRef = React.createRef()
@@ -192,60 +187,6 @@ export default class MissionForm extends React.Component {
     })
   }
 
-  verifyImageRes(img) {
-    const errorMessage = 'invalid resolution'
-    if ((img.naturalWidth < 1200) || (img.naturalHeight < 800) || (img.naturalWidth / img.naturalHeight !== 1.5)) {
-      this.imageInputRef.current.value = ''
-      this.errorAdd('image', errorMessage)
-    } else {
-      this.errorRemove('image', errorMessage)
-    }
-  }
-
-  verifyLogoRes(img) {
-    const errorMessage = 'invalid resolution'
-
-    if ((img.naturalWidth < 800) || (img.naturalHeight < 800) || (img.naturalWidth / img.naturalHeight !== 1)) {
-      this.logoInputRef.current.value = ''
-      this.errorAdd('logo', errorMessage)
-    } else {
-      this.errorRemove('logo', errorMessage)
-    }
-  }
-
-  verifyWhitelableLogoRes(img) {
-    const errorMessage = 'invalid resolution'
-
-    if ((img.naturalWidth < 1000) || (img.naturalHeight < 200) || (img.naturalWidth / img.naturalHeight !== 5)) {
-      this.logoInputRef.current.value = ''
-      this.errorAdd('whitelabelLogo', errorMessage)
-    } else {
-      this.errorRemove('whitelabelLogo', errorMessage)
-    }
-  }
-
-  verifyWhitelableLogoDarkRes(img) {
-    const errorMessage = 'invalid resolution'
-
-    if ((img.naturalWidth < 1000) || (img.naturalHeight < 200) || (img.naturalWidth / img.naturalHeight !== 5)) {
-      this.logoInputRef.current.value = ''
-      this.errorAdd('whitelabelLogoDark', errorMessage)
-    } else {
-      this.errorRemove('whitelabelLogoDark', errorMessage)
-    }
-  }
-
-  verifyWhitelabelFaviconRes(img) {
-    const errorMessage = 'invalid resolution'
-
-    if ((img.naturalWidth < 64) || (img.naturalHeight < 64) || (img.naturalWidth / img.naturalHeight !== 1)) {
-      this.logoInputRef.current.value = ''
-      this.errorAdd('whitelabelFavicon', errorMessage)
-    } else {
-      this.errorRemove('whitelabelFavicon', errorMessage)
-    }
-  }
-
   verifyImgSize(event) {
     let file = event.target.files[0]
 
@@ -396,8 +337,7 @@ export default class MissionForm extends React.Component {
             required
             imgPreviewDimensions='100x100'
             imgPreviewUrl={logoPreview}
-            imgRequirements='Image should be at least 800px x 800px'
-            imgVerifier={this.verifyLogoRes}
+            imgRequirements='The best image size is 800px x 800px'
             imgInputRef={this.logoInputRef}
             eventHandler={this.handleChangeFormData}
             errors={errors.logo}
@@ -408,8 +348,7 @@ export default class MissionForm extends React.Component {
             required
             imgPreviewDimensions='150x100'
             imgPreviewUrl={imagePreview}
-            imgRequirements='Image should be at least 1200px x 800px'
-            imgVerifier={this.verifyImageRes}
+            imgRequirements='The best image size is 1200px x 800px'
             imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}
             errors={errors.image}
@@ -464,8 +403,7 @@ export default class MissionForm extends React.Component {
             title='Mission Whitelabel Logo'
             imgPreviewDimensions='150x100'
             imgPreviewUrl={whitelabelLogoPreview}
-            imgRequirements='Image should be at least 1000px x 200px'
-            imgVerifier={this.verifyWhitelableLogoRes}
+            imgRequirements='The best image size is 1000px x 200px'
             imgInputRef={this.whitelabelLogoInputRef}
             eventHandler={this.handleChangeFormData}
             errors={errors.whitelabelLogo}
@@ -476,8 +414,7 @@ export default class MissionForm extends React.Component {
             title='Mission Whitelabel Logo Dark'
             imgPreviewDimensions='150x100'
             imgPreviewUrl={whitelabelLogoDarkPreview}
-            imgRequirements='Image should be at least 1000px x 200px'
-            imgVerifier={this.verifyWhitelableLogoDarkRes}
+            imgRequirements='The best image size is 1000px x 200px'
             imgInputRef={this.whitelabelLogoDarkInputRef}
             eventHandler={this.handleChangeFormData}
             errors={errors.whitelabelLogoDark}
@@ -488,7 +425,7 @@ export default class MissionForm extends React.Component {
             title='Mission Whitelabel Favicon'
             imgPreviewDimensions='100x100'
             imgPreviewUrl={whitelabelFaviconPreview}
-            imgRequirements='Image should be at least 64px x 64px'
+            imgRequirements='The best image size is 64px x 64px'
             imgVerifier={this.verifyWhitelabelFaviconRes}
             imgInputRef={this.whitelabelFaviconInputRef}
             eventHandler={this.handleChangeFormData}
