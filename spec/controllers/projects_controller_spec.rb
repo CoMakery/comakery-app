@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ProjectsController do
-  let!(:team) { create :team }
+  let!(:team) { create :team, name: 'test-team' }
   let!(:authentication) { create(:authentication) }
   let!(:account) { authentication.account }
 
@@ -20,8 +20,8 @@ describe ProjectsController do
 
   let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
-  let!(:token) { create(:token) }
-  let!(:mission) { create(:mission, token_id: token.id) }
+  let!(:token) { FactoryBot.create(:token) }
+  let!(:mission) { FactoryBot.create(:mission, name: 'mission1', token_id: token.id) }
 
   before do
     team.build_authentication_team authentication
@@ -119,11 +119,12 @@ describe ProjectsController do
 
   describe '#new' do
     context 'when not logged in' do
-      it 'redirects you somewhere pretty' do
+      before do
         session[:account_id] = nil
-
         get :new
+      end
 
+      it 'redirects you somewhere pretty' do
         expect(response.status).to eq(302)
         expect(response).to redirect_to(new_account_url)
       end
@@ -132,9 +133,12 @@ describe ProjectsController do
     context 'when logged in with unconfirmed account' do
       let!(:account1) { create :account, email_confirm_token: '123' }
 
-      it 'redirects to home page' do
+      before do
         login account1
         get :new
+      end
+
+      it 'redirects to home page' do
         expect(response.status).to eq(302)
         expect(response).to redirect_to(show_account_url)
       end
@@ -143,12 +147,61 @@ describe ProjectsController do
     context 'when slack returns successful api calls' do
       render_views
 
-      it 'works' do
-        get :new
+      let(:expected_props) do
+        {
+          csrf_token: instance_of(String),
+          decimal_places: Token.select(:id, :decimal_places),
+          discord_bot_url: nil,
+          discord_enabled: false,
+          form_action: 'POST',
+          form_url: projects_path,
+          is_whitelabel: false,
+          license_url: contribution_licenses_path(type: 'CP'),
+          mission_for_header: nil,
+          missions: { 'No Mission' => '', 'mission1' => 1 },
+          project: assigns(:project).serializable_hash.merge(
+            {
+              mission_id: nil,
+              token_id: nil,
+              github_url: assigns(:project).github_url,
+              documentation_url: assigns(:project).documentation_url,
+              getting_started_url: assigns(:project).getting_started_url,
+              governance_url: assigns(:project).governance_url,
+              funding_url: assigns(:project).funding_url,
+              video_conference_url: assigns(:project).video_conference_url,
+              url: unlisted_project_url(assigns(:project).long_id, protocol: :https)
+            }.as_json
+          ),
+          project_for_header: { image_url: instance_of(String) },
+          slack_enabled: true,
+          teams: [
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            },
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            }
+          ],
+          terms_readonly: nil,
+          tokens: { 'No Token' => '', token.name => token.id },
+          visibilities: Project.visibilities.keys
+        }
+      end
+      let(:get_image_variant_path_context) { double(:context, path: 'some_image_path') }
 
+      before do
+        allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
+
+        get :new
+      end
+
+      it 'works' do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).to be_public
+        expect(assigns[:props]).to match expected_props
       end
     end
   end
@@ -194,8 +247,8 @@ describe ProjectsController do
     end
 
     it 'when invalid, returns 422' do
-      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
-        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+      expect do
+        expect do
           post :create, params: {
             project: {
               # title: "Project title here",
@@ -255,7 +308,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
       end.to change { Project.count }.by(1)
 
-      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+      expect do
         post :create, params: {
           project: {
             title: 'Project title here',
@@ -426,7 +479,7 @@ describe ProjectsController do
       context 'with rendered views' do
         render_views
         it 'returns 422 when updating fails' do
-          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
+          expect do
             put :update, params: {
               id: cat_project.to_param,
               project: {

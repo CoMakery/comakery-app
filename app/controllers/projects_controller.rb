@@ -47,8 +47,10 @@ class ProjectsController < ApplicationController
     authorize @project
 
     @props[:project] = @project.serializable_hash.merge(
-      url: "https://#{current_domain}/p/#{@project.long_id}",
-      mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+      {
+        url: "https://#{current_domain}/p/#{@project.long_id}",
+        mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+      }.as_json
     )
   end
 
@@ -193,7 +195,7 @@ class ProjectsController < ApplicationController
             funding_url: @project.funding_url,
             video_conference_url: @project.video_conference_url,
             url: unlisted_project_url(@project.long_id)
-          }
+          }.as_json
         ),
         tokens: @tokens,
         decimal_places: Token.select(:id, :decimal_places),
