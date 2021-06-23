@@ -8,12 +8,7 @@ class SendInvite
 
     if account.blank?
       context.fail!(errors: ['Email is invalid']) unless email_valid?
-
-      project_invite = project.invites.find_by(email: params[:email])
-
-      context.fail!(errors: ['Invite is already sent']) if project_invite.present?
-
-      create_project_invite
+      create_project_role_invite
     else
       project_role = project.project_roles.find_by(account: account)
 
@@ -28,19 +23,14 @@ class SendInvite
 
   private
 
-    def create_project_invite
-      project_invite = project.invites.new(email: params[:email], role: params[:role])
+    def create_project_role_invite
+      project_role = project.project_roles.new(role: params[:role])
+      project_role.new_invite(email: params[:email])
 
-      if project_invite.save
-        UserMailer.send_invite_to_platform(
-          params[:email],
-          project_invite.token,
-          project,
-          params[:role],
-          domain_name
-        ).deliver_now
+      if project_role.save
+        UserMailer.send_invite_to_platform(project_role).deliver_now
       else
-        context.fail!(errors: project_invite.errors.full_messages)
+        context.fail!(errors: project_role.errors.full_messages)
       end
     end
 
@@ -48,12 +38,7 @@ class SendInvite
       project_role = project.project_roles.new(account: account, role: params[:role])
 
       if project_role.save
-        UserMailer.send_invite_to_project(
-          account.email,
-          project,
-          params[:role],
-          domain_name
-        ).deliver_now
+        UserMailer.send_invite_to_project(project_role).deliver_now
       else
         context.fail!(errors: project_role.errors.full_messages)
       end
@@ -61,13 +46,5 @@ class SendInvite
 
     def email_valid?
       EmailValidator.new(params[:email]).valid?
-    end
-
-    def domain_name
-      if whitelabel_mission
-        whitelabel_mission.whitelabel_domain
-      else
-        ENV['APP_HOST']
-      end
     end
 end

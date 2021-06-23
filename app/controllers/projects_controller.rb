@@ -381,12 +381,12 @@ class ProjectsController < ApplicationController
     end
 
     def set_flash_from_session
-      if (project_invite_id = session[:project_invite_id])
-        project_role = ProjectInvite.find(project_invite_id).role
+      # TODO: Add invites_controller#accepted to redirect to correct resource on invite acceptance
+      invite = Invite.find(session[:invite_id])
 
-        session.delete(:project_invite_id)
-
-        flash[:notice] = "You have successfully joined the project with the #{project_role} role"
+      if invite
+        session.delete(:invite_id)
+        flash[:notice] = "You have successfully joined the project with the #{invite.invitable.role} role"
       end
     end
 end

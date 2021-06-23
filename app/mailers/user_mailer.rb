@@ -11,20 +11,16 @@ class UserMailer < ApplicationMailer
     mail to: authentication.account.email, subject: 'Confirm your account email'
   end
 
-  def send_invite_to_platform(email, token, project, project_role, domain_name)
-    @token = token
-    @project = project
+  def send_invite_to_platform(project_role)
     @project_role = project_role
-    @domain_name = domain_name
-    @url = new_account_url(token: token)
-    mail to: email, subject: "Invitation to #{@project.title}"
+
+    mail to: @project_role.invite.email, subject: "Invitation to #{@project_role.project.title}"
   end
 
-  def send_invite_to_project(email, project, project_role, domain_name)
-    @project = project
+  def send_invite_to_project(project_role)
     @project_role = project_role
-    @domain_name = domain_name
-    mail to: email, subject: "Invitation to #{@project.title} on #{@domain_name}"
+
+    mail to: email, subject: "Invitation to #{@project_role.project.title} on #{@brand_name}"
   end
 
   def send_award_notifications(award)

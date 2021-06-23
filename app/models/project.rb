@@ -46,8 +46,6 @@ class Project < ApplicationRecord
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :teams, through: :account
 
-  has_many :invites, as: :invitable, dependent: :destroy
-
   accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
   enum payment_type: {
