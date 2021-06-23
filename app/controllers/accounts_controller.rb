@@ -9,7 +9,6 @@ class AccountsController < ApplicationController
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
   before_action :redirect_if_signed_in, only: %i[new create]
-  before_action :set_session_invite_id, only: :new
 
   layout 'legacy', except: %i[index]
 
@@ -103,9 +102,7 @@ class AccountsController < ApplicationController
       end
 
       if invite.present?
-        # TODO: Add invites_controller#accepted to redirect to correct resource on invite acceptance
-
-        redirect_to project_path(invite.invitable.project)
+        redirect_to invite_path(invite.token)
       else
         redirect_to my_tasks_path
       end
@@ -246,10 +243,6 @@ class AccountsController < ApplicationController
       account.as_json(only: %i[email first_name last_name nickname date_of_birth country ethereum_auth_address]).merge(
         image_url: helpers.account_image_url(account, 190)
       )
-    end
-
-    def set_session_invite_id
-      session[:invite_id] = Invite.pending.find_by(token: params[:token])
     end
 
     def invite

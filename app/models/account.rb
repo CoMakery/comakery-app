@@ -54,7 +54,9 @@ class Account < ApplicationRecord
 
   belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
-  belongs_to :invite
+  has_many :invites, dependent: :destroy
+
+  attr_accessor :invite
 
   enum deprecated_specialty: {
     audio_video_production: 'Audio Or Video Production',
@@ -105,7 +107,6 @@ class Account < ApplicationRecord
   before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
   after_create :populate_awards
-  after_create :accept_invite
 
   after_update_commit :broadcast_update, if: lambda {
     saved_change_to_first_name? || saved_change_to_last_name? || saved_change_to_email?
@@ -364,11 +365,7 @@ class Account < ApplicationRecord
     end
 
     def confirm_on_invite
-      confirm if !confirmed? && invite && invite.email == email
-    end
-
-    def accept_invite
-      invite.accepted! if invite && !invite.accepted?
+      confirm if !confirmed? && invite&.email == email
     end
 
     def validate_age

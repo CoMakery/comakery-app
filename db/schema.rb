@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_23_201253) do
+ActiveRecord::Schema.define(version: 2021_06_23_225624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,9 +90,7 @@ ActiveRecord::Schema.define(version: 2021_06_23_201253) do
     t.bigint "managed_mission_id"
     t.string "ethereum_auth_address", limit: 42
     t.string "constellation_wallet", limit: 40
-    t.bigint "invite_id"
     t.index ["image_id"], name: "index_accounts_on_image_id"
-    t.index ["invite_id"], name: "index_accounts_on_invite_id"
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
     t.index ["latest_verification_id"], name: "index_accounts_on_latest_verification_id"
     t.index ["managed_account_id"], name: "index_accounts_on_managed_account_id"
@@ -389,6 +387,8 @@ ActiveRecord::Schema.define(version: 2021_06_23_201253) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "force_email", default: false, null: false
+    t.bigint "account_id"
+    t.index ["account_id"], name: "index_invites_on_account_id"
     t.index ["invitable_id", "invitable_type", "email"], name: "index_invites_on_invitable_id_and_invitable_type_and_email", unique: true
     t.index ["invitable_id", "invitable_type"], name: "index_invites_on_invitable_id_and_invitable_type", unique: true
     t.index ["token"], name: "index_invites_on_token", unique: true
@@ -730,7 +730,6 @@ ActiveRecord::Schema.define(version: 2021_06_23_201253) do
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
   add_foreign_key "account_token_records", "wallets"
-  add_foreign_key "accounts", "invites"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_ore_id_wallet_recoveries", "api_request_logs"
@@ -747,6 +746,7 @@ ActiveRecord::Schema.define(version: 2021_06_23_201253) do
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
+  add_foreign_key "invites", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "project_roles", "accounts"
   add_foreign_key "project_roles", "projects"

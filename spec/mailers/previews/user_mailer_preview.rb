@@ -19,11 +19,11 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.reset_password(Account.where.not(reset_password_token: nil).sample)
   end
 
-  def send_invite_to_platform(_project_role)
+  def send_invite_to_platform
     UserMailer.send_invite_to_platform(ProjectRole.where(account: nil).sample)
   end
 
-  def send_invite_to_project(_project_role)
+  def send_invite_to_project
     UserMailer.send_invite_to_platform(ProjectRole.where.not(account: nil).sample)
   end
 end

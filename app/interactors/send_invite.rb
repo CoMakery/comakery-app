@@ -25,7 +25,7 @@ class SendInvite
 
     def create_project_role_invite
       project_role = project.project_roles.new(role: params[:role])
-      project_role.new_invite(email: params[:email])
+      project_role.new_invite(email: params[:email], force_email: true)
 
       if project_role.save
         UserMailer.send_invite_to_platform(project_role).deliver_now
