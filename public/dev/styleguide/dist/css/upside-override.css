@@ -1058,7 +1058,7 @@ body .content *:hover::-webkit-scrollbar-thumb {
 
 .page-header {
   /* TODO: some props were deleted as well as some classes */
-  align-items: center;
+  /*align-items: center;*/
   padding: 20px 0;
   /* TODO: items below were commented, need to check behaviour */
   /* min-height: 2.25rem; */
