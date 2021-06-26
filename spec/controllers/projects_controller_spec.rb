@@ -209,9 +209,9 @@ describe ProjectsController do
   describe '#create' do
     render_views
 
-    it 'when valid, creates a project and associates it with the current account' do
-      expect do
-        post :create, params: {
+    context 'when valid' do
+      let(:params) do
+        {
           project: {
             title: 'Project title here',
             description: 'Project description here',
@@ -231,109 +231,96 @@ describe ProjectsController do
             visibility: 'member'
           }
         }
-        expect(response.status).to eq(200)
-      end.to change { Project.count }.by(1)
+      end
 
-      project = Project.last
-      expect(project.title).to eq('Project title here')
-      expect(project.description).to eq('Project description here')
-      expect(project.square_image.attached?).to eq(true)
-      expect(project.panoramic_image.attached?).to eq(true)
-      expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
-      expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
-      expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
-      expect(project.maximum_tokens).to eq(150)
-      expect(project.account_id).to eq(account.id)
+      it 'creates a project and associates it with the current account' do
+        expect { post :create, params: params }.to change { Project.count }.by(1)
+
+        expect(response.status).to eq(200)
+        project = Project.last
+        expect(project.title).to eq('Project title here')
+        expect(project.description).to eq('Project description here')
+        expect(project.square_image.attached?).to eq(true)
+        expect(project.panoramic_image.attached?).to eq(true)
+        expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
+        expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
+        expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
+        expect(project.maximum_tokens).to eq(150)
+        expect(project.account_id).to eq(account.id)
+      end
     end
 
-    it 'when invalid, returns 422' do
-      expect do
-        expect do
-          post :create, params: {
-            project: {
-              # title: "Project title here",
-              description: 'Project description here',
-              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              tracker: 'http://github.com/here/is/my/tracker',
-              token_id: create(:token).id,
-              mission_id: create(:mission).id,
-              require_confidentiality: false,
-              exclusive_contributions: false,
-              visibility: 'member',
-              award_types_attributes: [
-                { name: 'Small Award', amount: 1000, community_awardable: true },
-                { name: 'Big Award', amount: 2000 },
-                { name: '', amount: '' }
-              ]
-            }
-          }
-          expect(response.status).to eq(422)
-        end.not_to change { Project.count }
-      end.not_to change { AwardType.count }
-
-      expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
-      project = assigns[:project]
-
-      expect(project.description).to eq('Project description here')
-      expect(project.square_image.attached?).to eq(true)
-      expect(project.panoramic_image.attached?).to eq(true)
-      expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
-      expect(project.account_id).to eq(account.id)
-    end
-
-    it 'when duplicated, redirects with error' do
-      expect do
-        post :create, params: {
+    context 'when invalid' do
+      let(:params) do
+        {
           project: {
-            title: 'Project title here',
+            # title: "Project title here",
             description: 'Project description here',
             square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
             panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
             tracker: 'http://github.com/here/is/my/tracker',
-            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-            slack_channel: 'slack_channel',
-            maximum_tokens: '150',
-            legal_project_owner: 'legal project owner',
-            payment_type: 'project_token',
             token_id: create(:token).id,
             mission_id: create(:mission).id,
-            long_id: '0',
             require_confidentiality: false,
             exclusive_contributions: false,
-            visibility: 'member'
+            visibility: 'member',
+            award_types_attributes: [
+              { name: 'Small Award', amount: 1000, community_awardable: true },
+              { name: 'Big Award', amount: 2000 },
+              { name: '', amount: '' }
+            ]
           }
         }
-        expect(response.status).to eq(200)
-      end.to change { Project.count }.by(1)
+      end
 
-      expect do
-        post :create, params: {
-          project: {
-            title: 'Project title here',
-            description: 'Project description here',
-            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            tracker: 'http://github.com/here/is/my/tracker',
-            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-            slack_channel: 'slack_channel',
-            maximum_tokens: '150',
-            legal_project_owner: 'legal project owner',
-            payment_type: 'project_token',
-            token_id: create(:token).id,
-            mission_id: create(:mission).id,
-            long_id: '0',
-            require_confidentiality: false,
-            exclusive_contributions: false,
-            visibility: 'member'
-          }
-        }
+      it 'returns 422' do
+        expect { post :create, params: params }.not_to(change { [Project.count, AwardType.count] })
+
         expect(response.status).to eq(422)
-      end.not_to change { Project.count }
 
-      expect(JSON.parse(response.body)['message']).to eq("Long identifier can't be blank or not unique")
+        expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
+        project = assigns[:project]
+
+        expect(project.description).to eq('Project description here')
+        expect(project.square_image.attached?).to eq(true)
+        expect(project.panoramic_image.attached?).to eq(true)
+        expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
+        expect(project.account_id).to eq(account.id)
+      end
+    end
+
+    context 'when duplicated' do
+      let(:params) do
+        {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            long_id: '0',
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
+          }
+        }
+      end
+
+      it 'redirects with error' do
+        expect { post :create, params: params }.to change { Project.count }.by(1)
+        expect(response.status).to eq(200)
+
+        expect { post :create, params: params }.not_to(change { Project.count })
+        expect(response.status).to eq(422)
+        expect(JSON.parse(response.body)['message'])
+          .to eq("Long identifier can't be blank or not unique")
+      end
     end
   end
 
@@ -562,21 +549,24 @@ describe ProjectsController do
 
       context 'with rendered views' do
         render_views
-        it 'returns 422 when updating fails' do
-          expect do
-            put :update, params: {
-              id: cat_project.to_param,
-              project: {
-                title: '',
-                description: 'updated Project description here',
-                tracker: 'http://github.com/here/is/my/tracker/updated',
-                legal_project_owner: 'legal project owner',
-                payment_type: 'project_token'
-              }
-            }
-            expect(response.status).to eq(422)
-          end.not_to change { Project.count }
 
+        let(:params) do
+          {
+            id: cat_project.to_param,
+            project: {
+              title: '',
+              description: 'updated Project description here',
+              tracker: 'http://github.com/here/is/my/tracker/updated',
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_token'
+            }
+          }
+        end
+
+        it 'returns 422 when updating fails' do
+          expect { put :update, params: params }.not_to(change { Project.count })
+
+          expect(response.status).to eq(422)
           project = assigns[:project]
           expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
           expect(project.title).to eq('')
