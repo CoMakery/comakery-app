@@ -63,7 +63,7 @@ class ProjectsController < ApplicationController
 
     authorize @project
 
-    if @project.save
+    if ImagePreparer.new(@project, project_params).valid? && @project.save
       set_generic_props
       camelize_props
       render json: { id: @project.id, props: @props }, status: :ok
@@ -99,7 +99,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
-    if @project.update(project_params)
+    if ImagePreparer.new(@project, project_params).valid? && @project.update(project_params)
       set_generic_props
       camelize_props
       render json: { message: 'Project updated', id: @project.id, props: @props }, status: :ok
@@ -311,10 +311,6 @@ class ProjectsController < ApplicationController
       @can_award = awardable_types_result.can_award
     end
 
-    def project_detail_path
-      @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
-    end
-
     def contributor_props(account, project)
       a = account.decorate.serializable_hash(
         only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
@@ -351,25 +347,12 @@ class ProjectsController < ApplicationController
     end
 
     def token_props(token)
-      if token.present?
-        token.as_json(only: %i[name symbol _token_type]).merge(
-          image_url: GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
-        )
-      end
-    end
+      return if token.nil?
 
-    def mission_props(mission)
-      mission_logo_path = GetImageVariantPath.call(
-        attachment: mission.logo,
-        resize_to_fill: [100, 100]
-      ).path
-
-      if mission.present?
-        mission.as_json(only: %i[id name]).merge(
-          logo_url: mission_logo_path,
-          mission_url: mission_path(mission)
-        )
-      end
+      token.as_json(only: %i[name symbol _token_type]).merge(
+        'image_url' =>
+          GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
+      )
     end
 
     def redirect_for_whitelabel
