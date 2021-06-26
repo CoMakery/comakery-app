@@ -589,17 +589,31 @@ describe ProjectsController do
     describe '#show' do
       let!(:awardable_auth) { create(:authentication) }
       let(:another_account) { FactoryBot.create(:account) }
+      let(:interested_account) { FactoryBot.create(:account) }
+      let!(:interested_account_project_role) do
+        FactoryBot.create :project_role, project: cat_project, account: interested_account,
+                                         role: :interested
+      end
 
       let!(:cat_project_award) do
         FactoryBot.create :award,
                           account: account, amount: 200, status: :ready,
-                          award_type: FactoryBot.create(:award_type, state: :public, project: cat_project),
+                          award_type:
+                            FactoryBot.create(:award_type, state: :public, project: cat_project),
                           transfer_type: transfer_type
       end
       let!(:cat_project_award2) do
         FactoryBot.create :award,
                           account: another_account, amount: 200, status: :ready,
-                          award_type: FactoryBot.create(:award_type, state: :public, project: cat_project),
+                          award_type:
+                            FactoryBot.create(:award_type, state: :public, project: cat_project),
+                          transfer_type: transfer_type
+      end
+      let!(:cat_project_award3) do
+        FactoryBot.create :award,
+                          account: another_account, amount: 290, status: :paid,
+                          award_type:
+                            FactoryBot.create(:award_type, state: :public, project: cat_project),
                           transfer_type: transfer_type
       end
       let!(:transfer_type) { FactoryBot.create :transfer_type, project: cat_project }
@@ -615,8 +629,8 @@ describe ProjectsController do
           maximum_tokens: cat_project.maximum_tokens,
           awarded_tokens: cat_project.decorate.total_awarded_pretty,
           team_size: cat_project.decorate.team_size,
-          team: [instance_of(Hash)],
-          chart_data: [],
+          team: [instance_of(Hash), instance_of(Hash), instance_of(Hash)],
+          chart_data: [290],
           stats: cat_project.stats
         )
       end
@@ -640,6 +654,46 @@ describe ProjectsController do
               mission_for_header: mission.decorate.header_props
             }
           end
+          let(:expected_team) do
+            [
+              {
+                'id' => account.id,
+                'first_name' => account.first_name,
+                'last_name' => account.last_name,
+                'nickname' => account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => { 'id' => Specialty.first.id, 'name' => 'Team Leader' }
+              },
+              {
+                'id' => another_account.id,
+                'first_name' => another_account.first_name,
+                'last_name' => another_account.last_name,
+                'nickname' => another_account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => {}
+              },
+              {
+                'id' => interested_account.id,
+                'first_name' => interested_account.first_name,
+                'last_name' => interested_account.last_name,
+                'nickname' => interested_account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => { 'name' => 'Interested' }
+              }
+            ]
+          end
 
           it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
             login(account)
@@ -650,6 +704,7 @@ describe ProjectsController do
             expect(assigns[:award]).to be_new_record
             expect(assigns[:can_award]).to eq true
             expect(assigns[:props]).to match expected_props
+            expect(assigns[:props][:project_data][:team]).to match_array expected_team
           end
         end
 
