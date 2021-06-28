@@ -42,6 +42,7 @@ RSpec.describe InvitesController, type: :controller do
           invite.reload
 
           expect(invite).to be_accepted
+          expect(invite.invitable.account).to eq(account)
         end
       end
     end
