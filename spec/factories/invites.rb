@@ -4,6 +4,10 @@ FactoryBot.define do
     accepted { false }
     association :invitable, factory: :project_role, account: nil
 
+    trait :for_admin do
+      association :invitable, factory: :project_role, account: nil, role: :admin
+    end
+
     trait :accepted do
       accepted { true }
       account
