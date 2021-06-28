@@ -724,7 +724,7 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
-    before { Timecop.freeze }
+    before { Timecop.freeze(now) }
 
     after { Timecop.return }
 
@@ -985,7 +985,7 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
-    before { Timecop.freeze }
+    before { Timecop.freeze(now) }
 
     after { Timecop.return }
 
@@ -1250,7 +1250,7 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
-    before { Timecop.freeze }
+    before { Timecop.freeze(now) }
 
     after { Timecop.return }
 
