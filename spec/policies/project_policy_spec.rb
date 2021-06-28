@@ -158,6 +158,28 @@ describe ProjectPolicy do
     end
   end
 
+  describe '#export_transfers?' do
+    subject { described_class.new(user, my_public_project).export_transfers? }
+
+    context 'without user' do
+      let(:user) { nil }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when user is observer' do
+      let(:user) { project_observer }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when user is admin' do
+      let(:user) { project_admin }
+
+      it { is_expected.to be_truthy }
+    end
+  end
+
   describe 'show_transfer_rules?' do
     let!(:my_public_project_w_comakery_token) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed', token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
