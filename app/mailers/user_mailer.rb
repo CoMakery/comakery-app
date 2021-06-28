@@ -14,13 +14,13 @@ class UserMailer < ApplicationMailer
   def send_invite_to_platform(project_role)
     @project_role = project_role
 
-    mail to: @project_role.invite.email, subject: "Invitation to #{@project_role.project.title}"
+    mail to: @project_role.invite.email, subject: "Invitation to #{@project_role.project.title} on #{@brand_name}"
   end
 
   def send_invite_to_project(project_role)
     @project_role = project_role
 
-    mail to: email, subject: "Invitation to #{@project_role.project.title} on #{@brand_name}"
+    mail to: @project_role.account.email, subject: "Invitation to #{@project_role.project.title} on #{@brand_name}"
   end
 
   def send_award_notifications(award)

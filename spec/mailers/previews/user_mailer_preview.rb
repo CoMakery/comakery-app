@@ -24,6 +24,6 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def send_invite_to_project
-    UserMailer.send_invite_to_platform(ProjectRole.where.not(account: nil).sample)
+    UserMailer.send_invite_to_project(ProjectRole.where.not(account: nil).sample)
   end
 end

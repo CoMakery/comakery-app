@@ -8,7 +8,7 @@ class Invite < ApplicationRecord
   validates :account, presence: true, if: -> { accepted? }
   validate :validate_account_email, if: -> { account.present? }
 
-  after_save :invite_accepted, if: -> { accepted? }
+  after_save_commit :invite_accepted, if: -> { accepted? }
 
   delegate :invite_accepted, to: :invitable
 

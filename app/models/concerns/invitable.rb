@@ -6,7 +6,7 @@ module Invitable
     before_validation :populate_account
 
     def populate_account
-      self.account = invite.account if invite&.accepted?
+      self.account ||= invite&.account
     end
 
     def invite_accepted

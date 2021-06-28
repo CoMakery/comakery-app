@@ -365,7 +365,7 @@ class Account < ApplicationRecord
     end
 
     def confirm_on_invite
-      confirm if !confirmed? && invite&.email == email
+      self.email_confirm_token = nil if !confirmed? && invite&.email == email
     end
 
     def validate_age

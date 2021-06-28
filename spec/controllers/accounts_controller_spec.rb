@@ -67,6 +67,21 @@ describe AccountsController do
       get :new
       expect(response).to redirect_to my_project_path
     end
+
+    context 'when signing up from invite' do
+      let(:invite) { FactoryBot.create :invite }
+
+      subject { get :new }
+
+      before do
+        session[:invite_id] = invite.id
+      end
+
+      specify do
+        subject
+        expect(assigns[:account].email).to eq(invite.email)
+      end
+    end
   end
 
   describe '#create' do
@@ -207,6 +222,32 @@ describe AccountsController do
       }
       expect(response).to redirect_to my_project_path
     end
+
+    context 'when signing up from invite' do
+      let(:invite) { FactoryBot.create :invite }
+
+      subject do
+        post :create, params: {
+          account: {
+            email: 'user-yo@test.st',
+            first_name: 'User',
+            last_name: 'Tester',
+            date_of_birth: '01/01/2000',
+            country: 'America',
+            password: '12345678'
+          }
+        }
+      end
+
+      before do
+        session[:invite_id] = invite.id
+      end
+
+      specify do
+        subject
+        expect(assigns[:account].invite).to eq(invite)
+      end
+    end
   end
 
   describe '#confirm' do
@@ -282,6 +323,24 @@ describe AccountsController do
       }
       expect(response).to redirect_to my_tasks_path
       expect(account.reload.email_confirm_token).not_to be_nil
+    end
+
+    context 'when signing up from invite' do
+      let(:invite) { FactoryBot.create :invite }
+
+      subject do
+        post :update_profile, params: {
+          account: {
+            first_name: 'Update'
+          }
+        }
+      end
+
+      before do
+        session[:invite_id] = invite.id
+      end
+
+      it { is_expected.to redirect_to invite_path(invite.token) }
     end
   end
 

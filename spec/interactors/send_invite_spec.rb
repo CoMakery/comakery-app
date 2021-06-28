@@ -5,77 +5,68 @@ describe SendInvite do
     let!(:project) { create(:project) }
     let!(:whitelabel_mission) { create(:whitelabel_mission) }
 
+    subject do
+      described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
+    end
+
+    context 'when email is not valid' do
+      let(:params) { { email: 'invalid', role: :interested } }
+
+      it { is_expected.not_to be_success }
+
+      specify do
+        expect(subject.errors).to eq(['Email is invalid'])
+      end
+    end
+
     context 'when account is not registered' do
       let(:params) { { email: 'unregistered@gmail.com', role: :interested } }
 
-      context 'and email is valid' do
-        context 'when the invite has already been sent to the user' do
-          let!(:invite) { FactoryBot.create(:invite, email: params[:email], invitable: project) }
+      it { is_expected.to be_success }
 
-          subject(:result) do
-            described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
-          end
-
-          it { expect(result.errors).to eq(['Invite is already sent']) }
-
-          it { expect(result.success?).to be(false) }
-        end
-
-        context 'when the invite has not yet been sent to the user' do
-          subject(:result) do
-            described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
-          end
-
-          it { expect { result }.to change { UserMailer.deliveries.count }.by(1) }
-
-          it { expect(result.success?).to be(true) }
-        end
+      specify do
+        expect { subject }.to change { UserMailer.deliveries.count }.by(1)
       end
 
-      context 'and email is not valid' do
-        let(:params) { { email: 'invalid', role: :interested } }
+      specify do
+        expect { subject }.to change { ProjectRole.count }.by(1)
+        expect(project.project_roles.last.account).to be_nil
+        expect(project.project_roles.last.role).to eq('interested')
+      end
 
-        subject(:result) do
-          described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
-        end
-
-        it { expect(result.errors).to eq(['Email is invalid']) }
-
-        it { expect(result.success?).to be(false) }
+      specify do
+        expect { subject }.to change { Invite.pending.count }.by(1)
       end
     end
 
     context 'when account is registered' do
       let(:account) { create(:account, managed_mission: whitelabel_mission) }
 
-      context 'and involved to project' do
+      context 'and has a project role' do
         let(:project_role) { create(:project_role, project: project, account: account, role: :admin) }
         let(:params) { { email: project_role.account.email, role: :interested } }
 
-        subject(:result) do
-          described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
+        it { is_expected.not_to be_success }
+
+        specify do
+          expect(subject.errors).to eq(['Account already has a role in project'])
         end
-
-        it {
-          expect(result.errors).to eq(["User already has #{project_role.role} permissions for this project. " \
-                                          'You can update their role with the action menu on this Accounts page'])
-        }
-
-        it { expect(result.success?).to be(false) }
       end
 
-      context 'and not involved to project' do
+      context 'and doesnt have a project role' do
         let(:params) { { email: account.email, role: :interested } }
 
-        subject(:result) do
-          described_class.call(params: params, whitelabel_mission: whitelabel_mission, project: project)
+        it { is_expected.to be_success }
+
+        specify do
+          expect { subject }.to change { UserMailer.deliveries.count }.by(1)
         end
 
-        it { expect { result }.to change(ProjectRole, :count).by(1) }
-
-        it { expect { result }.to change { UserMailer.deliveries.count }.by(1) }
-
-        it { expect(result.success?).to be(true) }
+        specify do
+          expect { subject }.to change { ProjectRole.count }.by(1)
+          expect(project.project_roles.last.account).to eq(account)
+          expect(project.project_roles.last.role).to eq('interested')
+        end
       end
     end
   end

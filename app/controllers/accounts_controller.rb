@@ -246,6 +246,6 @@ class AccountsController < ApplicationController
     end
 
     def invite
-      @invite ||= Invite.pending.find(session[:invite_id])
+      @invite ||= Invite.pending.find_by(id: session[:invite_id])
     end
 end
