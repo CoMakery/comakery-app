@@ -691,11 +691,17 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
+    before do
+      allow(project).to receive(:transfer_types).and_wrap_original do |method|
+        method.call.order(:name)
+      end
+    end
+
     it 'should return hash with color mappings' do
-      expect(transfers_chart_colors).to match_array 'bought' => '#7B00D7',
-                                                    'burn' => '#E5004F',
-                                                    'earned' => '#73C30E',
-                                                    'mint' => '#0884FF'
+      expect(transfers_chart_colors).to match_array 'bought' => '#73C30E',
+                                                    'burn' => '#7B00D7',
+                                                    'earned' => '#0884FF',
+                                                    'mint' => '#E5004F'
     end
   end
 
@@ -708,11 +714,17 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
+    before do
+      allow(project).to receive(:transfer_types).and_wrap_original do |method|
+        method.call.order(:name)
+      end
+    end
+
     it 'should return hash with transfer type objects and color mappings' do
-      expect(transfers_chart_colors_objects).to match_array bought_transfer_type => '#7B00D7',
-                                                            burn_transfer_type => '#E5004F',
-                                                            earned_transfer_type => '#73C30E',
-                                                            mint_transfer_type => '#0884FF'
+      expect(transfers_chart_colors_objects).to match_array bought_transfer_type => '#73C30E',
+                                                            burn_transfer_type => '#7B00D7',
+                                                            earned_transfer_type => '#0884FF',
+                                                            mint_transfer_type => '#E5004F'
     end
   end
 
