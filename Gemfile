@@ -79,7 +79,7 @@ group(:development, :test) do
   gem 'erb_lint', '~> 0.0.35', require: false
   gem 'factory_bot_rails'
   gem 'faker'
-  gem 'html-proofer', require: false
+  gem 'html-proofer'
   gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'
