@@ -79,6 +79,7 @@ group(:development, :test) do
   gem 'erb_lint', '~> 0.0.35', require: false
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'html-proofer'
   gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -86,7 +87,6 @@ group(:development, :test) do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
-  gem 'html-proofer'
 end
 
 group(:development) do

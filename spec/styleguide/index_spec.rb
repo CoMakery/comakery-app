@@ -104,7 +104,6 @@ describe 'styleguide', type: :feature do
   scenario 'form-elements' do
     visit '/dev/styleguide/form-elements.html'
     within('.row.row-cards') do
-
       expect(page).to have_css('form', count: 3)
     end
   end
@@ -126,7 +125,6 @@ describe 'styleguide', type: :feature do
 
   xscenario 'inputs' do
     visit '/dev/styleguide/inputs.html'
-
   end
 
   scenario 'invoice' do
@@ -136,12 +134,10 @@ describe 'styleguide', type: :feature do
 
   xscenario 'labels' do
     visit '/dev/styleguide/labels.html'
-
   end
 
   xscenario 'labels-old' do
     visit '/dev/styleguide/labels-old.html'
-
   end
 
   scenario 'layout-combo' do
@@ -227,12 +223,10 @@ describe 'styleguide', type: :feature do
 
   xscenario 'logo' do
     visit '/dev/styleguide/logo.html'
-
   end
 
   xscenario 'map-fullsize' do
     visit '/dev/styleguide/map-fullsize.html'
-
   end
 
   scenario 'maps' do
@@ -347,6 +341,5 @@ describe 'styleguide', type: :feature do
   scenario 'wizard' do
     visit '/dev/styleguide/wizard.html'
     expect(page).to have_content('Welcome to Tabler!')
-
   end
 end
