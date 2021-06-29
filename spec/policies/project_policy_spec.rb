@@ -158,26 +158,17 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#export_transfers?' do
-    subject { described_class.new(user, my_public_project).export_transfers? }
+  permissions :export_transfers? do
+    subject { described_class }
 
-    context 'without user' do
-      let(:user) { nil }
+    it { is_expected.to permit(project_account, my_public_project) }
+    it { is_expected.to permit(project_admin, my_public_project) }
+    it { is_expected.to permit(project_contributor, my_public_project) }
+    it { is_expected.to permit(project_observer, my_public_project) }
 
-      it { is_expected.to be_falsey }
-    end
-
-    context 'when user is observer' do
-      let(:user) { project_observer }
-
-      it { is_expected.to be_truthy }
-    end
-
-    context 'when user is admin' do
-      let(:user) { project_admin }
-
-      it { is_expected.to be_truthy }
-    end
+    it { is_expected.not_to permit(nil, my_public_project) }
+    it { is_expected.not_to permit(project_interested, my_public_project) }
+    it { is_expected.not_to permit(other_team_member, my_public_project) }
   end
 
   describe 'show_transfer_rules?' do
