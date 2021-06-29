@@ -24,11 +24,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    project.public_listed? || (team_member? && project.unarchived?) || edit?
+    project.public_listed? || (team_member? && !project.archived?) || edit?
   end
 
   def unlisted?
-    project.public_unlisted? || (team_member? && project.unarchived?) || edit?
+    project.public_unlisted? || (team_member? && !project.archived?) || edit?
   end
 
   def edit?
@@ -40,7 +40,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_contributions_to_team?
-    team_member? && project.unarchived? && !project.require_confidentiality?
+    team_member? && !project.archived? && !project.require_confidentiality?
   end
 
   def show_contributions?
