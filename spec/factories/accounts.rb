@@ -5,5 +5,9 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     date_of_birth { '1990/01/01' }
     country { 'United States of America' }
+
+    trait :unconfirmed do
+      email_confirm_token { SecureRandom.hex(6) }
+    end
   end
 end

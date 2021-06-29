@@ -1,14 +1,17 @@
 class ProjectRole < ApplicationRecord
+  include Invitable
+
   HUMANIZED_ROLE_NAMES = {
     interested: 'Project Member',
     admin: 'Admin',
     observer: 'Read Only Admin'
   }.freeze
 
-  belongs_to :account
+  belongs_to :account, optional: true
   belongs_to :project, counter_cache: true
 
-  validates :account_id, uniqueness: { scope: %i[project_id], message: 'already has a role in project' }
+  validates :account_id, presence: true, if: -> { invite&.accepted? }
+  validates :account_id, uniqueness: { scope: %i[project_id], message: 'already has a role in project' }, if: -> { account.present? }
 
   after_update_commit :broadcast_update, if: :saved_change_to_role?
   after_create_commit :broadcast_create

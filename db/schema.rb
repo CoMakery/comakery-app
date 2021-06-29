@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_104821) do
+ActiveRecord::Schema.define(version: 2021_06_25_144748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -381,13 +381,16 @@ ActiveRecord::Schema.define(version: 2021_06_10_104821) do
   create_table "invites", force: :cascade do |t|
     t.string "email", null: false
     t.string "token", null: false
-    t.string "role", null: false
     t.boolean "accepted", default: false
     t.integer "invitable_id"
     t.string "invitable_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_invites_on_email", unique: true
+    t.boolean "force_email", default: false, null: false
+    t.bigint "account_id"
+    t.index ["account_id"], name: "index_invites_on_account_id"
+    t.index ["invitable_id", "invitable_type", "email"], name: "index_invites_on_invitable_id_and_invitable_type_and_email", unique: true
+    t.index ["invitable_id", "invitable_type"], name: "index_invites_on_invitable_id_and_invitable_type", unique: true
     t.index ["token"], name: "index_invites_on_token", unique: true
   end
 
@@ -470,7 +473,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_104821) do
   end
 
   create_table "project_roles", force: :cascade do |t|
-    t.bigint "account_id", null: false
+    t.bigint "account_id"
     t.bigint "project_id", null: false
     t.integer "role", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
@@ -743,6 +746,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_104821) do
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
+  add_foreign_key "invites", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "project_roles", "accounts"
   add_foreign_key "project_roles", "projects"
