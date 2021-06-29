@@ -158,6 +158,19 @@ describe ProjectPolicy do
     end
   end
 
+  permissions :export_transfers? do
+    subject { described_class }
+
+    it { is_expected.to permit(project_account, my_public_project) }
+    it { is_expected.to permit(project_admin, my_public_project) }
+    it { is_expected.to permit(project_contributor, my_public_project) }
+    it { is_expected.to permit(project_observer, my_public_project) }
+
+    it { is_expected.not_to permit(nil, my_public_project) }
+    it { is_expected.not_to permit(project_interested, my_public_project) }
+    it { is_expected.not_to permit(other_team_member, my_public_project) }
+  end
+
   describe 'show_transfer_rules?' do
     let!(:my_public_project_w_comakery_token) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed', token: create(:token, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten)) }
 
