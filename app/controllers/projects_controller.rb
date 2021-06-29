@@ -46,8 +46,10 @@ class ProjectsController < ApplicationController
     authorize @project
 
     @props[:project] = @project.serializable_hash.merge(
-      url: "https://#{current_domain}/p/#{@project.long_id}",
-      mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+      {
+        url: "https://#{current_domain}/p/#{@project.long_id}",
+        mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+      }.as_json
     )
   end
 
@@ -192,7 +194,7 @@ class ProjectsController < ApplicationController
             funding_url: @project.funding_url,
             video_conference_url: @project.video_conference_url,
             url: unlisted_project_url(@project.long_id)
-          }
+          }.as_json
         ),
         tokens: @tokens,
         decimal_places: Token.select(:id, :decimal_places),
@@ -308,10 +310,6 @@ class ProjectsController < ApplicationController
       @can_award = awardable_types_result.can_award
     end
 
-    def project_detail_path
-      @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
-    end
-
     def contributor_props(account, project)
       a = account.decorate.serializable_hash(
         only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
@@ -348,25 +346,12 @@ class ProjectsController < ApplicationController
     end
 
     def token_props(token)
-      if token.present?
-        token.as_json(only: %i[name symbol _token_type]).merge(
-          image_url: GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
-        )
-      end
-    end
+      return if token.nil?
 
-    def mission_props(mission)
-      mission_logo_path = GetImageVariantPath.call(
-        attachment: mission.logo,
-        resize_to_fill: [100, 100]
-      ).path
-
-      if mission.present?
-        mission.as_json(only: %i[id name]).merge(
-          logo_url: mission_logo_path,
-          mission_url: mission_path(mission)
-        )
-      end
+      token.as_json(only: %i[name symbol _token_type]).merge(
+        'image_url' =>
+          GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
+      )
     end
 
     def redirect_for_whitelabel

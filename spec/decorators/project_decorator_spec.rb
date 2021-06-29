@@ -691,11 +691,17 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
+    before do
+      allow(project).to receive(:transfer_types).and_wrap_original do |method|
+        method.call.order(:name)
+      end
+    end
+
     it 'should return hash with color mappings' do
-      expect(transfers_chart_colors).to match_array 'bought' => '#7B00D7',
-                                                    'burn' => '#E5004F',
-                                                    'earned' => '#73C30E',
-                                                    'mint' => '#0884FF'
+      expect(transfers_chart_colors).to match_array 'bought' => '#73C30E',
+                                                    'burn' => '#7B00D7',
+                                                    'earned' => '#0884FF',
+                                                    'mint' => '#E5004F'
     end
   end
 
@@ -708,11 +714,17 @@ describe ProjectDecorator do
     let!(:mint_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'mint') }
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
+    before do
+      allow(project).to receive(:transfer_types).and_wrap_original do |method|
+        method.call.order(:name)
+      end
+    end
+
     it 'should return hash with transfer type objects and color mappings' do
-      expect(transfers_chart_colors_objects).to match_array bought_transfer_type => '#7B00D7',
-                                                            burn_transfer_type => '#E5004F',
-                                                            earned_transfer_type => '#73C30E',
-                                                            mint_transfer_type => '#0884FF'
+      expect(transfers_chart_colors_objects).to match_array bought_transfer_type => '#73C30E',
+                                                            burn_transfer_type => '#7B00D7',
+                                                            earned_transfer_type => '#0884FF',
+                                                            mint_transfer_type => '#E5004F'
     end
   end
 
@@ -736,55 +748,55 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_week).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 3, 29).to_i, :timeframe => "29\tMar"
+              :i => Time.zone.local(2021, 3, 29).to_i, :timeframe => "29\tMar"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 5).to_i, :timeframe => "05\tApr"
+              :i => Time.zone.local(2021, 4, 5).to_i, :timeframe => "05\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 12).to_i, :timeframe => "12\tApr"
+              :i => Time.zone.local(2021, 4, 12).to_i, :timeframe => "12\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 19).to_i, :timeframe => "19\tApr"
+              :i => Time.zone.local(2021, 4, 19).to_i, :timeframe => "19\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 26).to_i, :timeframe => "26\tApr"
+              :i => Time.zone.local(2021, 4, 26).to_i, :timeframe => "26\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 3).to_i, :timeframe => "03\tMay"
+              :i => Time.zone.local(2021, 5, 3).to_i, :timeframe => "03\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 10).to_i, :timeframe => "10\tMay"
+              :i => Time.zone.local(2021, 5, 10).to_i, :timeframe => "10\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 17).to_i, :timeframe => "17\tMay"
+              :i => Time.zone.local(2021, 5, 17).to_i, :timeframe => "17\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 24).to_i, :timeframe => "24\tMay"
+              :i => Time.zone.local(2021, 5, 24).to_i, :timeframe => "24\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 31).to_i, :timeframe => "31\tMay"
+              :i => Time.zone.local(2021, 5, 31).to_i, :timeframe => "31\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 7).to_i, :timeframe => "07\tJun"
+              :i => Time.zone.local(2021, 6, 7).to_i, :timeframe => "07\tJun"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 14).to_i, :timeframe => "14\tJun"
+              :i => Time.zone.local(2021, 6, 14).to_i, :timeframe => "14\tJun"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 21).to_i, :timeframe => "21\tJun"
+              :i => Time.zone.local(2021, 6, 21).to_i, :timeframe => "21\tJun"
             }
           ]
         end
@@ -858,55 +870,55 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_week).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 7, 'burn' => 0,
-              :i => Time.new(2021, 3, 29).to_i, :timeframe => "29\tMar"
+              :i => Time.zone.local(2021, 3, 29).to_i, :timeframe => "29\tMar"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 5).to_i, :timeframe => "05\tApr"
+              :i => Time.zone.local(2021, 4, 5).to_i, :timeframe => "05\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 3,
-              :i => Time.new(2021, 4, 12).to_i, :timeframe => "12\tApr"
+              :i => Time.zone.local(2021, 4, 12).to_i, :timeframe => "12\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 19).to_i, :timeframe => "19\tApr"
+              :i => Time.zone.local(2021, 4, 19).to_i, :timeframe => "19\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 26).to_i, :timeframe => "26\tApr"
+              :i => Time.zone.local(2021, 4, 26).to_i, :timeframe => "26\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 3).to_i, :timeframe => "03\tMay"
+              :i => Time.zone.local(2021, 5, 3).to_i, :timeframe => "03\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 10).to_i, :timeframe => "10\tMay"
+              :i => Time.zone.local(2021, 5, 10).to_i, :timeframe => "10\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 17).to_i, :timeframe => "17\tMay"
+              :i => Time.zone.local(2021, 5, 17).to_i, :timeframe => "17\tMay"
             },
             {
               'bought' => 0, 'earned' => 10, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 24).to_i, :timeframe => "24\tMay"
+              :i => Time.zone.local(2021, 5, 24).to_i, :timeframe => "24\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 5, 'burn' => 13,
-              :i => Time.new(2021, 5, 31).to_i, :timeframe => "31\tMay"
+              :i => Time.zone.local(2021, 5, 31).to_i, :timeframe => "31\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 7).to_i, :timeframe => "07\tJun"
+              :i => Time.zone.local(2021, 6, 7).to_i, :timeframe => "07\tJun"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 14).to_i, :timeframe => "14\tJun"
+              :i => Time.zone.local(2021, 6, 14).to_i, :timeframe => "14\tJun"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 21).to_i, :timeframe => "21\tJun"
+              :i => Time.zone.local(2021, 6, 21).to_i, :timeframe => "21\tJun"
             }
           ]
         end
@@ -921,55 +933,55 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_week).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => -7, 'burn' => 0,
-              :i => Time.new(2021, 3, 29).to_i, :timeframe => "29\tMar"
+              :i => Time.zone.local(2021, 3, 29).to_i, :timeframe => "29\tMar"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 5).to_i, :timeframe => "05\tApr"
+              :i => Time.zone.local(2021, 4, 5).to_i, :timeframe => "05\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => -3,
-              :i => Time.new(2021, 4, 12).to_i, :timeframe => "12\tApr"
+              :i => Time.zone.local(2021, 4, 12).to_i, :timeframe => "12\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 19).to_i, :timeframe => "19\tApr"
+              :i => Time.zone.local(2021, 4, 19).to_i, :timeframe => "19\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 26).to_i, :timeframe => "26\tApr"
+              :i => Time.zone.local(2021, 4, 26).to_i, :timeframe => "26\tApr"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 3).to_i, :timeframe => "03\tMay"
+              :i => Time.zone.local(2021, 5, 3).to_i, :timeframe => "03\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 10).to_i, :timeframe => "10\tMay"
+              :i => Time.zone.local(2021, 5, 10).to_i, :timeframe => "10\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 17).to_i, :timeframe => "17\tMay"
+              :i => Time.zone.local(2021, 5, 17).to_i, :timeframe => "17\tMay"
             },
             {
               'bought' => 0, 'earned' => -10, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 24).to_i, :timeframe => "24\tMay"
+              :i => Time.zone.local(2021, 5, 24).to_i, :timeframe => "24\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => -5, 'burn' => -13,
-              :i => Time.new(2021, 5, 31).to_i, :timeframe => "31\tMay"
+              :i => Time.zone.local(2021, 5, 31).to_i, :timeframe => "31\tMay"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 7).to_i, :timeframe => "07\tJun"
+              :i => Time.zone.local(2021, 6, 7).to_i, :timeframe => "07\tJun"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 14).to_i, :timeframe => "14\tJun"
+              :i => Time.zone.local(2021, 6, 14).to_i, :timeframe => "14\tJun"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 21).to_i, :timeframe => "21\tJun"
+              :i => Time.zone.local(2021, 6, 21).to_i, :timeframe => "21\tJun"
             }
           ]
         end
@@ -997,55 +1009,55 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_month).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 6, 1).to_i, :timeframe => "Jun\t'20"
+              :i => Time.zone.local(2020, 6, 1).to_i, :timeframe => "Jun\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 7, 1).to_i, :timeframe => "Jul\t'20"
+              :i => Time.zone.local(2020, 7, 1).to_i, :timeframe => "Jul\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 8, 1).to_i, :timeframe => "Aug\t'20"
+              :i => Time.zone.local(2020, 8, 1).to_i, :timeframe => "Aug\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 9, 1).to_i, :timeframe => "Sep\t'20"
+              :i => Time.zone.local(2020, 9, 1).to_i, :timeframe => "Sep\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 10, 1).to_i, :timeframe => "Oct\t'20"
+              :i => Time.zone.local(2020, 10, 1).to_i, :timeframe => "Oct\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 11, 1).to_i, :timeframe => "Nov\t'20"
+              :i => Time.zone.local(2020, 11, 1).to_i, :timeframe => "Nov\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 12, 1).to_i, :timeframe => "Dec\t'20"
+              :i => Time.zone.local(2020, 12, 1).to_i, :timeframe => "Dec\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 1, 1).to_i, :timeframe => "Jan\t'21"
+              :i => Time.zone.local(2021, 1, 1).to_i, :timeframe => "Jan\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 2, 1).to_i, :timeframe => "Feb\t'21"
+              :i => Time.zone.local(2021, 2, 1).to_i, :timeframe => "Feb\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 3, 1).to_i, :timeframe => "Mar\t'21"
+              :i => Time.zone.local(2021, 3, 1).to_i, :timeframe => "Mar\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 1).to_i, :timeframe => "Apr\t'21"
+              :i => Time.zone.local(2021, 4, 1).to_i, :timeframe => "Apr\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 5, 1).to_i, :timeframe => "May\t'21"
+              :i => Time.zone.local(2021, 5, 1).to_i, :timeframe => "May\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 1).to_i, :timeframe => "Jun\t'21"
+              :i => Time.zone.local(2021, 6, 1).to_i, :timeframe => "Jun\t'21"
             }
           ]
         end
@@ -1119,55 +1131,55 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_month).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 6, 1).to_i, :timeframe => "Jun\t'20"
+              :i => Time.zone.local(2020, 6, 1).to_i, :timeframe => "Jun\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 7, 'burn' => 0,
-              :i => Time.new(2020, 7, 1).to_i, :timeframe => "Jul\t'20"
+              :i => Time.zone.local(2020, 7, 1).to_i, :timeframe => "Jul\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 8, 1).to_i, :timeframe => "Aug\t'20"
+              :i => Time.zone.local(2020, 8, 1).to_i, :timeframe => "Aug\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 9, 1).to_i, :timeframe => "Sep\t'20"
+              :i => Time.zone.local(2020, 9, 1).to_i, :timeframe => "Sep\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 10, 1).to_i, :timeframe => "Oct\t'20"
+              :i => Time.zone.local(2020, 10, 1).to_i, :timeframe => "Oct\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 11, 1).to_i, :timeframe => "Nov\t'20"
+              :i => Time.zone.local(2020, 11, 1).to_i, :timeframe => "Nov\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 12, 1).to_i, :timeframe => "Dec\t'20"
+              :i => Time.zone.local(2020, 12, 1).to_i, :timeframe => "Dec\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 3,
-              :i => Time.new(2021, 1, 1).to_i, :timeframe => "Jan\t'21"
+              :i => Time.zone.local(2021, 1, 1).to_i, :timeframe => "Jan\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 13,
-              :i => Time.new(2021, 2, 1).to_i, :timeframe => "Feb\t'21"
+              :i => Time.zone.local(2021, 2, 1).to_i, :timeframe => "Feb\t'21"
             },
             {
               'bought' => 0, 'earned' => 10, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 3, 1).to_i, :timeframe => "Mar\t'21"
+              :i => Time.zone.local(2021, 3, 1).to_i, :timeframe => "Mar\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 1).to_i, :timeframe => "Apr\t'21"
+              :i => Time.zone.local(2021, 4, 1).to_i, :timeframe => "Apr\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 5, 'burn' => 0,
-              :i => Time.new(2021, 5, 1).to_i, :timeframe => "May\t'21"
+              :i => Time.zone.local(2021, 5, 1).to_i, :timeframe => "May\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 1).to_i, :timeframe => "Jun\t'21"
+              :i => Time.zone.local(2021, 6, 1).to_i, :timeframe => "Jun\t'21"
             }
           ]
         end
@@ -1182,55 +1194,55 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_month).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 6, 1).to_i, :timeframe => "Jun\t'20"
+              :i => Time.zone.local(2020, 6, 1).to_i, :timeframe => "Jun\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => -7, 'burn' => 0,
-              :i => Time.new(2020, 7, 1).to_i, :timeframe => "Jul\t'20"
+              :i => Time.zone.local(2020, 7, 1).to_i, :timeframe => "Jul\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 8, 1).to_i, :timeframe => "Aug\t'20"
+              :i => Time.zone.local(2020, 8, 1).to_i, :timeframe => "Aug\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 9, 1).to_i, :timeframe => "Sep\t'20"
+              :i => Time.zone.local(2020, 9, 1).to_i, :timeframe => "Sep\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 10, 1).to_i, :timeframe => "Oct\t'20"
+              :i => Time.zone.local(2020, 10, 1).to_i, :timeframe => "Oct\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 11, 1).to_i, :timeframe => "Nov\t'20"
+              :i => Time.zone.local(2020, 11, 1).to_i, :timeframe => "Nov\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 12, 1).to_i, :timeframe => "Dec\t'20"
+              :i => Time.zone.local(2020, 12, 1).to_i, :timeframe => "Dec\t'20"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => -3,
-              :i => Time.new(2021, 1, 1).to_i, :timeframe => "Jan\t'21"
+              :i => Time.zone.local(2021, 1, 1).to_i, :timeframe => "Jan\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => -13,
-              :i => Time.new(2021, 2, 1).to_i, :timeframe => "Feb\t'21"
+              :i => Time.zone.local(2021, 2, 1).to_i, :timeframe => "Feb\t'21"
             },
             {
               'bought' => 0, 'earned' => -10, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 3, 1).to_i, :timeframe => "Mar\t'21"
+              :i => Time.zone.local(2021, 3, 1).to_i, :timeframe => "Mar\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 4, 1).to_i, :timeframe => "Apr\t'21"
+              :i => Time.zone.local(2021, 4, 1).to_i, :timeframe => "Apr\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => -5, 'burn' => 0,
-              :i => Time.new(2021, 5, 1).to_i, :timeframe => "May\t'21"
+              :i => Time.zone.local(2021, 5, 1).to_i, :timeframe => "May\t'21"
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 6, 1).to_i, :timeframe => "Jun\t'21"
+              :i => Time.zone.local(2021, 6, 1).to_i, :timeframe => "Jun\t'21"
             }
           ]
         end
@@ -1262,47 +1274,47 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_year).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2011, 1, 1).to_i, :timeframe => '2011'
+              :i => Time.zone.local(2011, 1, 1).to_i, :timeframe => '2011'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2012, 1, 1).to_i, :timeframe => '2012'
+              :i => Time.zone.local(2012, 1, 1).to_i, :timeframe => '2012'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2013, 1, 1).to_i, :timeframe => '2013'
+              :i => Time.zone.local(2013, 1, 1).to_i, :timeframe => '2013'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2014, 1, 1).to_i, :timeframe => '2014'
+              :i => Time.zone.local(2014, 1, 1).to_i, :timeframe => '2014'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2015, 1, 1).to_i, :timeframe => '2015'
+              :i => Time.zone.local(2015, 1, 1).to_i, :timeframe => '2015'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2016, 1, 1).to_i, :timeframe => '2016'
+              :i => Time.zone.local(2016, 1, 1).to_i, :timeframe => '2016'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2017, 1, 1).to_i, :timeframe => '2017'
+              :i => Time.zone.local(2017, 1, 1).to_i, :timeframe => '2017'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2018, 1, 1).to_i, :timeframe => '2018'
+              :i => Time.zone.local(2018, 1, 1).to_i, :timeframe => '2018'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2019, 1, 1).to_i, :timeframe => '2019'
+              :i => Time.zone.local(2019, 1, 1).to_i, :timeframe => '2019'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2020, 1, 1).to_i, :timeframe => '2020'
+              :i => Time.zone.local(2020, 1, 1).to_i, :timeframe => '2020'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 1, 1).to_i, :timeframe => '2021'
+              :i => Time.zone.local(2021, 1, 1).to_i, :timeframe => '2021'
             }
           ]
         end
@@ -1376,47 +1388,47 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_year).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2011, 1, 1).to_i, :timeframe => '2011'
+              :i => Time.zone.local(2011, 1, 1).to_i, :timeframe => '2011'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2012, 1, 1).to_i, :timeframe => '2012'
+              :i => Time.zone.local(2012, 1, 1).to_i, :timeframe => '2012'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2013, 1, 1).to_i, :timeframe => '2013'
+              :i => Time.zone.local(2013, 1, 1).to_i, :timeframe => '2013'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2014, 1, 1).to_i, :timeframe => '2014'
+              :i => Time.zone.local(2014, 1, 1).to_i, :timeframe => '2014'
             },
             {
               'bought' => 0, 'earned' => 10, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2015, 1, 1).to_i, :timeframe => '2015'
+              :i => Time.zone.local(2015, 1, 1).to_i, :timeframe => '2015'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2016, 1, 1).to_i, :timeframe => '2016'
+              :i => Time.zone.local(2016, 1, 1).to_i, :timeframe => '2016'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 16,
-              :i => Time.new(2017, 1, 1).to_i, :timeframe => '2017'
+              :i => Time.zone.local(2017, 1, 1).to_i, :timeframe => '2017'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2018, 1, 1).to_i, :timeframe => '2018'
+              :i => Time.zone.local(2018, 1, 1).to_i, :timeframe => '2018'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 7, 'burn' => 0,
-              :i => Time.new(2019, 1, 1).to_i, :timeframe => '2019'
+              :i => Time.zone.local(2019, 1, 1).to_i, :timeframe => '2019'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 5, 'burn' => 0,
-              :i => Time.new(2020, 1, 1).to_i, :timeframe => '2020'
+              :i => Time.zone.local(2020, 1, 1).to_i, :timeframe => '2020'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 1, 1).to_i, :timeframe => '2021'
+              :i => Time.zone.local(2021, 1, 1).to_i, :timeframe => '2021'
             }
           ]
         end
@@ -1431,47 +1443,47 @@ describe ProjectDecorator do
           expect(transfers_stacked_chart_year).to eq [
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2011, 1, 1).to_i, :timeframe => '2011'
+              :i => Time.zone.local(2011, 1, 1).to_i, :timeframe => '2011'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2012, 1, 1).to_i, :timeframe => '2012'
+              :i => Time.zone.local(2012, 1, 1).to_i, :timeframe => '2012'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2013, 1, 1).to_i, :timeframe => '2013'
+              :i => Time.zone.local(2013, 1, 1).to_i, :timeframe => '2013'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2014, 1, 1).to_i, :timeframe => '2014'
+              :i => Time.zone.local(2014, 1, 1).to_i, :timeframe => '2014'
             },
             {
               'bought' => 0, 'earned' => -10, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2015, 1, 1).to_i, :timeframe => '2015'
+              :i => Time.zone.local(2015, 1, 1).to_i, :timeframe => '2015'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2016, 1, 1).to_i, :timeframe => '2016'
+              :i => Time.zone.local(2016, 1, 1).to_i, :timeframe => '2016'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => -16,
-              :i => Time.new(2017, 1, 1).to_i, :timeframe => '2017'
+              :i => Time.zone.local(2017, 1, 1).to_i, :timeframe => '2017'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2018, 1, 1).to_i, :timeframe => '2018'
+              :i => Time.zone.local(2018, 1, 1).to_i, :timeframe => '2018'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => -7, 'burn' => 0,
-              :i => Time.new(2019, 1, 1).to_i, :timeframe => '2019'
+              :i => Time.zone.local(2019, 1, 1).to_i, :timeframe => '2019'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => -5, 'burn' => 0,
-              :i => Time.new(2020, 1, 1).to_i, :timeframe => '2020'
+              :i => Time.zone.local(2020, 1, 1).to_i, :timeframe => '2020'
             },
             {
               'bought' => 0, 'earned' => 0, 'mint' => 0, 'burn' => 0,
-              :i => Time.new(2021, 1, 1).to_i, :timeframe => '2021'
+              :i => Time.zone.local(2021, 1, 1).to_i, :timeframe => '2021'
             }
           ]
         end
