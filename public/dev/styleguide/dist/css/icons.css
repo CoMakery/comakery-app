@@ -444,3 +444,39 @@
   background-size: 30px 30px;
   width: 30px;
   height: 30px; }
+.logo-blue-bg {
+  display: block;
+  background: url("../logo/logo-blue-bg.svg");
+  background-size: 324px 95px;
+  width: 324px;
+  height: 95px; }
+.logo-blue-bg-sm {
+  display: block;
+  background: url("../logo/logo-blue-bg-sm.svg");
+  background-size: 127px 48px;
+  width: 127px;
+  height: 48px; }
+.logo-icon {
+  display: block;
+  background: url("../logo/logo-icon.svg");
+  background-size: 40px 46px;
+  width: 40px;
+  height: 46px; }
+.logo-icon-gradient {
+  display: block;
+  background: url("../logo/logo-icon-gradient.svg");
+  background-size: 21px 21px;
+  width: 21px;
+  height: 21px; }
+.logo-icon-text {
+  display: block;
+  background: url("../logo/logo-icon-text.svg");
+  background-size: 206px 46px;
+  width: 206px;
+  height: 46px; }
+.logo-white-bg {
+  display: block;
+  background: url("../logo/logo-white-bg.svg");
+  background-size: 300px 71px;
+  width: 300px;
+  height: 71px; }

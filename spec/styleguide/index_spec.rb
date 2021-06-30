@@ -115,7 +115,7 @@ describe 'styleguide', type: :feature do
 
   scenario 'icons' do
     visit '/dev/styleguide/icons.html'
-    within('.row.row-cards') { expect(page).to have_css('.col-12', count: 3) }
+    within('.row.row-cards') { expect(page).to have_css('.col-12', count: 4) }
   end
 
   scenario 'icons-old' do
