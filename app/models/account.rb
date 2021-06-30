@@ -54,6 +54,9 @@ class Account < ApplicationRecord
 
   belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
+  has_many :invites, dependent: :destroy
+
+  attr_accessor :invite
 
   enum deprecated_specialty: {
     audio_video_production: 'Audio Or Video Production',
@@ -97,7 +100,9 @@ class Account < ApplicationRecord
   end
 
   validate :validate_age, on: :create
+  validate :validate_invite_email, on: :create
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
+  before_validation :confirm_on_invite
   after_validation :normalize_ethereum_auth_address
   before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
@@ -354,6 +359,14 @@ class Account < ApplicationRecord
   end
 
   private
+
+    def validate_invite_email
+      errors.add(:email, 'must match invite email') if invite&.force_email? && invite.email != email
+    end
+
+    def confirm_on_invite
+      self.email_confirm_token = nil if !confirmed? && invite&.email == email
+    end
 
     def validate_age
       errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18

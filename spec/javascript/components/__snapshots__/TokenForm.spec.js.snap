@@ -466,8 +466,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                     />,
                   }
                 }
-                imgRequirements="Image should be at least 500px x 500px"
-                imgVerifier={[Function]}
+                imgRequirements="The best image size is 500px x 500px"
                 name="token[logo_image]"
                 required={true}
                 title="token logo"
@@ -493,7 +492,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                   }
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 500px x 500px"
+                  imgRequirements="The best image size is 500px x 500px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -541,7 +540,7 @@ exports[`TokenForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 500px x 500px
+                        The best image size is 500px x 500px
                       </span>
                     </div>
                   </div>

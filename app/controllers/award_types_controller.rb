@@ -171,7 +171,7 @@ class AwardTypesController < ApplicationController
       @error_response = {
         id: @award_type.id,
         message: @award_type.errors.full_messages.join(', '),
-        errors: @award_type.errors.messages.map { |k, v| ["award_type[#{k}]", v.to_sentence] }.to_h
+        errors: @award_type.errors.messages.map { |k, v| ["batch[#{k}]", v.to_sentence] }.to_h
       }
     end
 end

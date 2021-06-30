@@ -59,7 +59,7 @@
       <div class="transfers-table__transfer__role">
         <label>Role</label>
 
-        <span><%= account_project_role.role.capitalize %></span>
+        <span><%= ProjectRole::HUMANIZED_ROLE_NAMES[account_project_role.role.to_sym] %></span>
       </div>
 
       <% if project.supports_transfer_rules? %>

@@ -71,11 +71,14 @@ class ProjectPolicy < ApplicationPolicy
   alias freeze_token? edit?
   alias transfer_types? edit?
   alias edit_hot_wallet_mode? edit?
-  alias export_transfers? edit?
   alias add_person? edit?
   alias change_permissions? edit?
   alias accounts? show_contributions?
   alias transfers? show_contributions?
+
+  def export_transfers?
+    edit? || project_observer?
+  end
 
   def project_owner?
     account.present? && (project.account == account)
