@@ -31,7 +31,7 @@
     </div>
 
     <% if policy(@project).edit_transfer_rules? %>
-      <div class="transfers-table__transfer__action transfers-table__transfer__action--warn">
+      <div class="transfers-table__transfer__action">
         <div class="transfer-button <%= transfer_rule.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">
           <% if @project.token&.token_frozen? %>
             frozen
