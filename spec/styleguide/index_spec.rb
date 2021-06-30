@@ -103,8 +103,8 @@ describe 'styleguide', type: :feature do
 
   scenario 'form-elements' do
     visit '/dev/styleguide/form-elements.html'
-    within('.row.row-cards') do
-      expect(page).to have_css('form', count: 3)
+    within('.page-body') do
+      expect(page).to have_css('form', count: 6)
     end
   end
 
