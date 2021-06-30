@@ -118,26 +118,9 @@ describe 'styleguide', type: :feature do
     within('.row.row-cards') { expect(page).to have_css('.col-12', count: 4) }
   end
 
-  scenario 'icons-old' do
-    visit '/dev/styleguide/icons-old.html'
-    within('.row.row-cards') { expect(page).to have_css('.demo-icons-list-wrap', count: 2) }
-  end
-
-  xscenario 'inputs' do
-    visit '/dev/styleguide/inputs.html'
-  end
-
   scenario 'invoice' do
     visit '/dev/styleguide/invoice.html'
     expect(page).to have_selector(:link_or_button, 'Print Invoice')
-  end
-
-  xscenario 'labels' do
-    visit '/dev/styleguide/labels.html'
-  end
-
-  xscenario 'labels-old' do
-    visit '/dev/styleguide/labels-old.html'
   end
 
   scenario 'layout-combo' do
@@ -221,10 +204,6 @@ describe 'styleguide', type: :feature do
     within('.row.row-cards') { expect(page).to have_css('.col-md-6', count: 2) }
   end
 
-  xscenario 'logo' do
-    visit '/dev/styleguide/logo.html'
-  end
-
   xscenario 'map-fullsize' do
     visit '/dev/styleguide/map-fullsize.html'
   end
@@ -298,11 +277,7 @@ describe 'styleguide', type: :feature do
 
   scenario 'tables' do
     visit '/dev/styleguide/tables.html'
-    within('.row.row-cards') { expect(page).to have_css('.col-12', count: 5) }
-  end
-
-  xscenario 'tables-old' do
-    visit '/dev/styleguide/tables-old.html'
+    within('.row.row-cards') { expect(page).to have_css('.col-12', count: 14) }
   end
 
   scenario 'tabs' do
@@ -318,10 +293,6 @@ describe 'styleguide', type: :feature do
   scenario 'typography' do
     visit '/dev/styleguide/typography.html'
     expect(page).to have_css('.col-12.markdown')
-  end
-
-  xscenario 'ui-components' do
-    visit '/dev/styleguide/ui-components.html'
   end
 
   scenario 'users' do
