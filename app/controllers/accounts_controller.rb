@@ -9,8 +9,6 @@ class AccountsController < ApplicationController
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[index new create confirm confirm_authentication show download_data]
   before_action :redirect_if_signed_in, only: %i[new create]
-  before_action :set_session_from_token, only: :new
-  before_action :project_invite, only: %i[create update_profile]
 
   layout 'legacy', except: %i[index]
 
@@ -23,7 +21,9 @@ class AccountsController < ApplicationController
   end
 
   def new
-    @account = Account.new(email: params[:account_email])
+    @account = Account.new(
+      email: params[:account_email] || invite&.email
+    )
   end
 
   def show # rubocop:todo Metrics/CyclomaticComplexity
@@ -55,17 +55,13 @@ class AccountsController < ApplicationController
   def create
     @account = Accounts::Initialize.call(
       whitelabel_mission: @whitelabel_mission,
-      account_params: account_params
+      account_params: account_params.merge(invite: invite)
     ).account
 
     if recaptcha_valid?(model: @account, action: 'registration') && @account.save
       session[:account_id] = @account.id
 
-      if @project_invite.present?
-        @account.confirm!
-      else
-        UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
-      end
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver unless @account.confirmed?
 
       Project.where(auto_add_account: true).each { |project| project.add_account(@account) }
 
@@ -105,10 +101,8 @@ class AccountsController < ApplicationController
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
 
-      if @project_invite.present?
-        Projects::ProjectRoles::CreateFromInvite.call(account: @account, project_invite: @project_invite)
-
-        redirect_to project_path(@project_invite.invitable_id)
+      if invite.present?
+        redirect_to invite_path(invite.token)
       else
         redirect_to my_tasks_path
       end
@@ -251,15 +245,7 @@ class AccountsController < ApplicationController
       )
     end
 
-    def set_session_from_token
-      project_invite = ProjectInvite.find_by(token: params[:token])
-
-      session[:project_invite_id] = project_invite.id if project_invite.present? && !project_invite.accepted?
-    end
-
-    def project_invite
-      return if session[:project_invite_id].blank?
-
-      @project_invite ||= ProjectInvite.find(session[:project_invite_id])
+    def invite
+      @invite ||= Invite.pending.find_by(id: session[:invite_id])
     end
 end

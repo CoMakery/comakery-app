@@ -22,7 +22,6 @@ class TokenForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.fetchSymbolAndDecimals = this.fetchSymbolAndDecimals.bind(this)
-    this.verifyImgRes = this.verifyImgRes.bind(this)
     this.verifyImgSize = this.verifyImgSize.bind(this)
 
     this.lofoInputRef = React.createRef()
@@ -115,17 +114,6 @@ class TokenForm extends React.Component {
       'token[contract_address]',
       'token[batch_contract_address]'
     ])
-  }
-
-  verifyImgRes(img) {
-    const errorMessage = 'invalid resolution'
-
-    if ((img.naturalWidth < 500) || (img.naturalHeight < 500) || (img.naturalWidth / img.naturalHeight !== 1)) {
-      this.lofoInputRef.current.value = ''
-      this.errorAdd('token[logo_image]', errorMessage)
-    } else {
-      this.errorRemove('token[logo_image]', errorMessage)
-    }
   }
 
   verifyImgSize(event) {
@@ -458,8 +446,7 @@ class TokenForm extends React.Component {
               eventHandler={this.verifyImgSize}
               errors={this.state.errors['token[logo_image]']}
               imgPreviewUrl={this.props.token.logoUrl}
-              imgRequirements='Image should be at least 500px x 500px'
-              imgVerifier={this.verifyImgRes}
+              imgRequirements='The best image size is 500px x 500px'
               imgInputRef={this.lofoInputRef}
             />
 

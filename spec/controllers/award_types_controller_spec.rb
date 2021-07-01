@@ -146,6 +146,7 @@ RSpec.describe AwardTypesController, type: :controller do
         expect(response.status).to eq(422)
         expect(response.media_type).to eq('application/json')
         expect(JSON.parse(response.body)['message']).to eq('Name is too long (maximum is 100 characters)')
+        expect(JSON.parse(response.body)['errors']).to include('batch[name]')
       end
     end
   end

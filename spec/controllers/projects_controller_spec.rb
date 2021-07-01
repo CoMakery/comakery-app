@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ProjectsController do
-  let!(:team) { create :team }
+  let!(:team) { create :team, name: 'test-team' }
   let!(:authentication) { create(:authentication) }
   let!(:account) { authentication.account }
 
@@ -20,8 +20,8 @@ describe ProjectsController do
 
   let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
 
-  let!(:token) { create(:token) }
-  let!(:mission) { create(:mission, token_id: token.id) }
+  let!(:token) { FactoryBot.create(:token) }
+  let!(:mission) { FactoryBot.create(:mission, name: 'mission1', token_id: token.id) }
 
   before do
     team.build_authentication_team authentication
@@ -119,11 +119,12 @@ describe ProjectsController do
 
   describe '#new' do
     context 'when not logged in' do
-      it 'redirects you somewhere pretty' do
+      before do
         session[:account_id] = nil
-
         get :new
+      end
 
+      it 'redirects you somewhere pretty' do
         expect(response.status).to eq(302)
         expect(response).to redirect_to(new_account_url)
       end
@@ -132,9 +133,12 @@ describe ProjectsController do
     context 'when logged in with unconfirmed account' do
       let!(:account1) { create :account, email_confirm_token: '123' }
 
-      it 'redirects to home page' do
+      before do
         login account1
         get :new
+      end
+
+      it 'redirects to home page' do
         expect(response.status).to eq(302)
         expect(response).to redirect_to(show_account_url)
       end
@@ -143,12 +147,61 @@ describe ProjectsController do
     context 'when slack returns successful api calls' do
       render_views
 
-      it 'works' do
-        get :new
+      let(:expected_props) do
+        {
+          csrf_token: instance_of(String),
+          decimal_places: Token.select(:id, :decimal_places),
+          discord_bot_url: nil,
+          discord_enabled: false,
+          form_action: 'POST',
+          form_url: projects_path,
+          is_whitelabel: false,
+          license_url: contribution_licenses_path(type: 'CP'),
+          mission_for_header: nil,
+          missions: { 'No Mission' => '', 'mission1' => mission.id },
+          project: assigns(:project).serializable_hash.merge(
+            {
+              mission_id: nil,
+              token_id: nil,
+              github_url: assigns(:project).github_url,
+              documentation_url: assigns(:project).documentation_url,
+              getting_started_url: assigns(:project).getting_started_url,
+              governance_url: assigns(:project).governance_url,
+              funding_url: assigns(:project).funding_url,
+              video_conference_url: assigns(:project).video_conference_url,
+              url: unlisted_project_url(assigns(:project).long_id, protocol: :https)
+            }.as_json
+          ),
+          project_for_header: { image_url: instance_of(String) },
+          slack_enabled: true,
+          teams: [
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            },
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            }
+          ],
+          terms_readonly: nil,
+          tokens: { 'No Token' => '', token.name => token.id },
+          visibilities: Project.visibilities.keys
+        }
+      end
+      let(:get_image_variant_path_context) { double(:context, path: 'some_image_path') }
 
+      before do
+        allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
+
+        get :new
+      end
+
+      it 'works' do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).to be_public
+        expect(assigns[:props]).to match expected_props
       end
     end
   end
@@ -156,9 +209,9 @@ describe ProjectsController do
   describe '#create' do
     render_views
 
-    it 'when valid, creates a project and associates it with the current account' do
-      expect do
-        post :create, params: {
+    context 'when valid' do
+      let(:params) do
+        {
           project: {
             title: 'Project title here',
             description: 'Project description here',
@@ -178,109 +231,96 @@ describe ProjectsController do
             visibility: 'member'
           }
         }
-        expect(response.status).to eq(200)
-      end.to change { Project.count }.by(1)
+      end
 
-      project = Project.last
-      expect(project.title).to eq('Project title here')
-      expect(project.description).to eq('Project description here')
-      expect(project.square_image.attached?).to eq(true)
-      expect(project.panoramic_image.attached?).to eq(true)
-      expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
-      expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
-      expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
-      expect(project.maximum_tokens).to eq(150)
-      expect(project.account_id).to eq(account.id)
+      it 'creates a project and associates it with the current account' do
+        expect { post :create, params: params }.to change { Project.count }.by(1)
+
+        expect(response.status).to eq(200)
+        project = Project.last
+        expect(project.title).to eq('Project title here')
+        expect(project.description).to eq('Project description here')
+        expect(project.square_image.attached?).to eq(true)
+        expect(project.panoramic_image.attached?).to eq(true)
+        expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
+        expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
+        expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
+        expect(project.maximum_tokens).to eq(150)
+        expect(project.account_id).to eq(account.id)
+      end
     end
 
-    it 'when invalid, returns 422' do
-      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
-        expect do # rubocop:todo Lint/AmbiguousBlockAssociation
-          post :create, params: {
-            project: {
-              # title: "Project title here",
-              description: 'Project description here',
-              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              tracker: 'http://github.com/here/is/my/tracker',
-              token_id: create(:token).id,
-              mission_id: create(:mission).id,
-              require_confidentiality: false,
-              exclusive_contributions: false,
-              visibility: 'member',
-              award_types_attributes: [
-                { name: 'Small Award', amount: 1000, community_awardable: true },
-                { name: 'Big Award', amount: 2000 },
-                { name: '', amount: '' }
-              ]
-            }
-          }
-          expect(response.status).to eq(422)
-        end.not_to change { Project.count }
-      end.not_to change { AwardType.count }
-
-      expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
-      project = assigns[:project]
-
-      expect(project.description).to eq('Project description here')
-      expect(project.square_image.attached?).to eq(true)
-      expect(project.panoramic_image.attached?).to eq(true)
-      expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
-      expect(project.account_id).to eq(account.id)
-    end
-
-    it 'when duplicated, redirects with error' do
-      expect do
-        post :create, params: {
+    context 'when invalid' do
+      let(:params) do
+        {
           project: {
-            title: 'Project title here',
+            # title: "Project title here",
             description: 'Project description here',
             square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
             panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
             tracker: 'http://github.com/here/is/my/tracker',
-            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-            slack_channel: 'slack_channel',
-            maximum_tokens: '150',
-            legal_project_owner: 'legal project owner',
-            payment_type: 'project_token',
             token_id: create(:token).id,
             mission_id: create(:mission).id,
-            long_id: '0',
             require_confidentiality: false,
             exclusive_contributions: false,
-            visibility: 'member'
+            visibility: 'member',
+            award_types_attributes: [
+              { name: 'Small Award', amount: 1000, community_awardable: true },
+              { name: 'Big Award', amount: 2000 },
+              { name: '', amount: '' }
+            ]
           }
         }
-        expect(response.status).to eq(200)
-      end.to change { Project.count }.by(1)
+      end
 
-      expect do # rubocop:todo Lint/AmbiguousBlockAssociation
-        post :create, params: {
-          project: {
-            title: 'Project title here',
-            description: 'Project description here',
-            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            tracker: 'http://github.com/here/is/my/tracker',
-            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-            slack_channel: 'slack_channel',
-            maximum_tokens: '150',
-            legal_project_owner: 'legal project owner',
-            payment_type: 'project_token',
-            token_id: create(:token).id,
-            mission_id: create(:mission).id,
-            long_id: '0',
-            require_confidentiality: false,
-            exclusive_contributions: false,
-            visibility: 'member'
-          }
-        }
+      it 'returns 422' do
+        expect { post :create, params: params }.not_to(change { [Project.count, AwardType.count] })
+
         expect(response.status).to eq(422)
-      end.not_to change { Project.count }
 
-      expect(JSON.parse(response.body)['message']).to eq("Long identifier can't be blank or not unique")
+        expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
+        project = assigns[:project]
+
+        expect(project.description).to eq('Project description here')
+        expect(project.square_image.attached?).to eq(true)
+        expect(project.panoramic_image.attached?).to eq(true)
+        expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
+        expect(project.account_id).to eq(account.id)
+      end
+    end
+
+    context 'when duplicated' do
+      let(:params) do
+        {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            long_id: '0',
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
+          }
+        }
+      end
+
+      it 'redirects with error' do
+        expect { post :create, params: params }.to change { Project.count }.by(1)
+        expect(response.status).to eq(200)
+
+        expect { post :create, params: params }.not_to(change { Project.count })
+        expect(response.status).to eq(422)
+        expect(JSON.parse(response.body)['message'])
+          .to eq("Long identifier can't be blank or not unique")
+      end
     end
   end
 
@@ -312,12 +352,29 @@ describe ProjectsController do
   end
 
   context 'with a project' do
-    let!(:token) { create(:token) }
-    let!(:token_unlisted) { create(:token, unlisted: true) }
-    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account, mission_id: mission.id) }
-    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account, mission_id: mission.id) }
-    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account, mission_id: mission.id) }
-    let!(:fox_project) { create(:project, token: token_unlisted, title: 'Foxes', description: 'Foxes with boxes', account: account, mission_id: mission.id) }
+    let!(:token_unlisted) { FactoryBot.create(:token, unlisted: true) }
+    let!(:cat_project) do
+      FactoryBot.create :project,
+                        visibility: :member, token: token, title: 'Cats',
+                        description: 'Cats with lazers', account: account, mission_id: mission.id
+    end
+    let!(:dog_project) do
+      FactoryBot.create :project,
+                        visibility: :member, token: token, title: 'Dogs',
+                        description: 'Dogs with donuts', account: account, mission_id: mission.id
+    end
+    let!(:yak_project) do
+      FactoryBot.create :project,
+                        visibility: :member, token: token, title: 'Yaks',
+                        description: 'Yaks with parser generaters', account: account,
+                        mission_id: mission.id
+    end
+    let!(:fox_project) do
+      FactoryBot.create :project,
+                        visibility: :member, token: token_unlisted, title: 'Foxes',
+                        description: 'Foxes with boxes', account: account, mission_id: mission.id
+    end
+    let!(:channel) { FactoryBot.create :channel, :discord, project: cat_project, team: team }
 
     describe '#index' do
       let!(:cat_project_award) { create(:award, account: create(:account), amount: 200, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago, updated_at: 2.days.ago) }
@@ -343,6 +400,12 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(['Cats'])
+      end
+
+      it 'do not show any non-public projects for not login user' do
+        logout
+        get :index
+        expect(assigns[:projects].map(&:title)).to eq []
       end
 
       it 'only show public projects for not login user' do
@@ -380,11 +443,72 @@ describe ProjectsController do
     end
 
     describe '#edit' do
+      let(:expected_props) do
+        {
+          csrf_token: instance_of(String),
+          decimal_places: Token.select(:id, :decimal_places),
+          discord_bot_url: nil,
+          discord_enabled: false,
+          form_action: 'PATCH',
+          form_url: project_path(cat_project),
+          is_whitelabel: false,
+          license_url: contribution_licenses_path(type: 'CP'),
+          mission_for_header: {
+            image_url: 'some_image_path', name: 'mission1', url: mission_path(mission)
+          },
+          missions: { 'No Mission' => '', 'mission1' => mission.id },
+          project: assigns(:project).serializable_hash.merge(
+            {
+              mission_id: mission.id,
+              token_id: token.id,
+              channels: [
+                {
+                  channel_id: channel.channel_id,
+                  id: channel.id,
+                  name_with_provider: channel.name_with_provider,
+                  team_id: team.id.to_s
+                }
+              ],
+              panoramic_image_url: 'some_image_path',
+              square_image_url: 'some_image_path',
+              github_url: assigns(:project).github_url,
+              documentation_url: assigns(:project).documentation_url,
+              getting_started_url: assigns(:project).getting_started_url,
+              governance_url: assigns(:project).governance_url,
+              funding_url: assigns(:project).funding_url,
+              video_conference_url: assigns(:project).video_conference_url,
+              url: unlisted_project_url(assigns(:project).long_id)
+            }.as_json
+          ),
+          project_for_header: cat_project.decorate.header_props(account),
+          slack_enabled: true,
+          teams: [
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            },
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            }
+          ],
+          terms_readonly: false,
+          tokens: { 'No Token' => '', token.name => token.id },
+          visibilities: Project.visibilities.keys
+        }
+      end
+      let(:get_image_variant_path_context) { double(:context, path: 'some_image_path') }
+
+      before do
+        allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
+      end
+
       it 'works' do
         get :edit, params: { id: cat_project.to_param }
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to eq(cat_project)
+        expect(assigns[:props]).to match expected_props
       end
 
       it 'doesnt include unlisted tokens' do
@@ -425,21 +549,24 @@ describe ProjectsController do
 
       context 'with rendered views' do
         render_views
-        it 'returns 422 when updating fails' do
-          expect do # rubocop:todo Lint/AmbiguousBlockAssociation
-            put :update, params: {
-              id: cat_project.to_param,
-              project: {
-                title: '',
-                description: 'updated Project description here',
-                tracker: 'http://github.com/here/is/my/tracker/updated',
-                legal_project_owner: 'legal project owner',
-                payment_type: 'project_token'
-              }
-            }
-            expect(response.status).to eq(422)
-          end.not_to change { Project.count }
 
+        let(:params) do
+          {
+            id: cat_project.to_param,
+            project: {
+              title: '',
+              description: 'updated Project description here',
+              tracker: 'http://github.com/here/is/my/tracker/updated',
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_token'
+            }
+          }
+        end
+
+        it 'returns 422 when updating fails' do
+          expect { put :update, params: params }.not_to(change { Project.count })
+
+          expect(response.status).to eq(422)
           project = assigns[:project]
           expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
           expect(project.title).to eq('')
@@ -451,16 +578,175 @@ describe ProjectsController do
 
     describe '#show' do
       let!(:awardable_auth) { create(:authentication) }
+      let(:another_account) { FactoryBot.create(:account) }
+      let(:interested_account) { FactoryBot.create(:account) }
+      let!(:interested_account_project_role) do
+        FactoryBot.create :project_role, project: cat_project, account: interested_account,
+                                         role: :interested
+      end
+
+      let!(:cat_project_award) do
+        FactoryBot.create :award,
+                          account: account, amount: 200, status: :ready,
+                          award_type:
+                            FactoryBot.create(:award_type, state: :public, project: cat_project),
+                          transfer_type: transfer_type
+      end
+      let!(:cat_project_award2) do
+        FactoryBot.create :award,
+                          account: another_account, amount: 200, status: :ready,
+                          award_type:
+                            FactoryBot.create(:award_type, state: :public, project: cat_project),
+                          transfer_type: transfer_type
+      end
+      let!(:cat_project_award3) do
+        FactoryBot.create :award,
+                          account: another_account, amount: 290, status: :paid,
+                          award_type:
+                            FactoryBot.create(:award_type, state: :public, project: cat_project),
+                          transfer_type: transfer_type
+      end
+      let!(:transfer_type) { FactoryBot.create :transfer_type, project: cat_project }
+
+      let(:expected_project_props) do
+        cat_project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
+          description_html: cat_project.description,
+          show_contributions: true,
+          square_image_url: instance_of(String),
+          panoramic_image_url: instance_of(String),
+          video_id: cat_project.video_id,
+          token_percentage: cat_project.decorate.percent_awarded_pretty,
+          maximum_tokens: cat_project.maximum_tokens,
+          awarded_tokens: cat_project.decorate.total_awarded_pretty,
+          team_size: cat_project.decorate.team_size,
+          team: [instance_of(Hash), instance_of(Hash), instance_of(Hash)],
+          chart_data: [290],
+          stats: cat_project.stats
+        )
+      end
 
       context 'when on team' do
-        it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
+        context 'when team leader' do
+          let(:expected_props) do
+            {
+              whitelabel: false,
+              tasks_by_specialty: instance_of(Array),
+              follower: true,
+              project_data: expected_project_props,
+              token_data: {
+                _token_type: token._token_type, image_url: nil, name: token.name,
+                symbol: token.symbol
+              }.as_json,
+              csrf_token: instance_of(String),
+              my_tasks_path: my_tasks_path(project_id: cat_project.id),
+              editable: true,
+              project_for_header: cat_project.decorate.header_props(account),
+              mission_for_header: mission.decorate.header_props
+            }
+          end
+          let(:expected_team) do
+            [
+              {
+                'id' => account.id,
+                'first_name' => account.first_name,
+                'last_name' => account.last_name,
+                'nickname' => account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => { 'id' => Specialty.first.id, 'name' => 'Team Leader' }
+              },
+              {
+                'id' => another_account.id,
+                'first_name' => another_account.first_name,
+                'last_name' => another_account.last_name,
+                'nickname' => another_account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => {}
+              },
+              {
+                'id' => interested_account.id,
+                'first_name' => interested_account.first_name,
+                'last_name' => interested_account.last_name,
+                'nickname' => interested_account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => { 'name' => 'Interested' }
+              }
+            ]
+          end
+
+          it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
+            login(account)
+            get :show, params: { id: cat_project.to_param }
+
+            expect(response.code).to eq '200'
+            expect(assigns(:project)).to eq cat_project
+            expect(assigns[:award]).to be_new_record
+            expect(assigns[:can_award]).to eq true
+            expect(assigns[:props]).to match expected_props
+            expect(assigns[:props][:project_data][:team]).to match_array expected_team
+          end
+        end
+
+        context 'when contributor' do
+          let(:expected_props) do
+            {
+              whitelabel: false,
+              tasks_by_specialty: instance_of(Array),
+              follower: true,
+              project_data: expected_project_props,
+              token_data: {
+                _token_type: token._token_type, image_url: nil, name: token.name,
+                symbol: token.symbol
+              }.as_json,
+              csrf_token: instance_of(String),
+              my_tasks_path: my_tasks_path(project_id: cat_project.id),
+              editable: false,
+              project_for_header: cat_project.decorate.header_props(another_account),
+              mission_for_header: mission.decorate.header_props
+            }
+          end
+
+          it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
+            login(another_account)
+            get :show, params: { id: cat_project.to_param }
+
+            expect(response.code).to eq '200'
+            expect(assigns(:project)).to eq cat_project
+            expect(assigns[:award]).to be_new_record
+            expect(assigns[:can_award]).to eq false
+            expect(assigns[:props]).to match expected_props
+          end
+        end
+      end
+
+      context 'when with invitation' do
+        let(:invite) { FactoryBot.create :project_invite, role: 'admin' }
+
+        before { session[:project_invite_id] = invite.id }
+
+        it 'should respond with project data and correct notice' do
           login(account)
           get :show, params: { id: cat_project.to_param }
 
-          # expect(response.code).to eq '200'
+          expect(response.code).to eq '200'
           expect(assigns(:project)).to eq cat_project
           expect(assigns[:award]).to be_new_record
-          expect(assigns[:can_award]).to eq(true)
+          expect(assigns[:can_award]).to eq true
+          expect(flash[:notice])
+            .to eq 'You have successfully joined the project with the admin role'
+
+          expect(session.key?(:project_invite_id)).to eq false
         end
       end
     end

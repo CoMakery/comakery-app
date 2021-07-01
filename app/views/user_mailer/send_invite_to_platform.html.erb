@@ -1,0 +1,7 @@
+<p>
+  You have been invited to have the role '<%= @project_role.role.capitalize %>' for the project <%= @project_role.project.title %> on <%= @brand_name %>.
+</p>
+
+<p>
+  To accept the invitation follow this <%= link_to 'link', invite_url(@project_role.invite.token) %>.
+</p>

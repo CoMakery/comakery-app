@@ -167,6 +167,12 @@ Rails.application.routes.draw do
     get 'user_wallet/receive'
   end
 
+  resources :invites, only: [:show] do
+    member do
+      get :redirect
+    end
+  end
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
