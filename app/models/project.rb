@@ -80,6 +80,7 @@ class Project < ApplicationRecord
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(1)' }
   scope :with_all_attached_images, -> { with_attached_image.with_attached_square_image.with_attached_panoramic_image }
+  scope :confidential, -> { where(require_confidentiality: true) }
 
   delegate :_token_type, to: :token, allow_nil: true
   delegate :_token_type_on_ethereum?, to: :token, allow_nil: true
