@@ -45,7 +45,7 @@ RSpec.describe Invite, type: :model do
     end
   end
 
-  describe '.pending' do
+  describe '#pending' do
     subject { described_class.pending }
 
     let(:invite_accepted) { FactoryBot.create :invite, :accepted }
@@ -53,5 +53,11 @@ RSpec.describe Invite, type: :model do
 
     it { is_expected.to include(invite_pending) }
     it { is_expected.not_to include(invite_accepted) }
+  end
+
+  describe '#generate_unique_secure_token' do
+    subject(:token) { described_class.generate_unique_secure_token }
+
+    it { expect(token.length).to eq(Invite::TOKEN_LENGTH) }
   end
 end
