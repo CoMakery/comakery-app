@@ -127,6 +127,8 @@ Prerequisites:
 - Yarn
 - Chrome and [Chromedriver](https://chromedriver.chromium.org/)
 
+You can chech the last versions of yarn, node and else if needed in docker-compose.yml
+
 To insall chromedriver on OS X use: `brew cask install chromedriver`. Rspec specs will fail if you have an earlier or mismatched version.
 
 Here's a complicated but possibly useful chromedriver reference setup. [Reference setup](https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/ruby/images/2.4.4-stretch/browsers/Dockerfile)
@@ -224,7 +226,9 @@ Run Rubocop Ruby code metrics with: `bin/rubocop`
 ## Code Commit and Deployment Workflow
 
 * Develop your code locally in a git feature branch
-* `bin/shipit` to git push your branch to GitHub *only if tests and quality checks pass*. This runs the same checks that CircleCI will run after you push your code to GitHub.
+* Run `overcommit --install` and `overcommit --sign` to manage and configure Git hooks
+* Run quality checks and your tests (rspec, rubocop etc). The same checks CircleCI will run after you push your code to GitHub.
+* Go trough usual git flow to push your changes: `git add`, `git commit`, `git push` - to push changed to your branch 
 * On GitHub, create a pull request from your feature Branch to the `acceptance` branch
 * Get your code reviewed by at least one CoMakery person
 * Noah <@aquabu> will do a final review and merge your PR to `acceptance`
