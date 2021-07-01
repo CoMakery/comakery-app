@@ -117,7 +117,7 @@ describe 'project accounts page' do
       it 'updates project role' do
         expect(
           find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
-        ).to have_text('Interested')
+        ).to have_text('Project Member')
 
         execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #change_permissions_btn').click()")
 
@@ -142,7 +142,7 @@ describe 'project accounts page' do
         execute_script("document.querySelector('#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn').click()")
 
         within('#account_permissions_modal') do
-          select 'Observer', from: 'project_role[role]'
+          select 'Read Only Admin', from: 'project_role[role]'
 
           execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
         end
