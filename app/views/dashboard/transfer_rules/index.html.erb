@@ -1,11 +1,13 @@
 <%= render layout: 'projects/project_settings' do %>
   <div data-controller="sign--wallet-connect sign--metamask">
-    <% if policy(@project).edit_transfer_rules? %>
-      <%= render partial: "shared/wallet_connect" %>
-    <% end %>
+    <div class="row">
+      <% if policy(@project).edit_transfer_rules? %>
+        <%= render partial: 'shared/wallet_connect' %>
+      <% end %>
+    </div>
 
-    <%= render partial: "reg_groups" %>
-    <%= render partial: "transfer_rules" %>
-    <%= render partial: "frozen_status" %>
+    <%= render partial: 'reg_groups' %>
+    <%= render partial: 'transfer_rules' %>
+    <%= render partial: 'frozen_status' %>
   </div>
 <% end %>
