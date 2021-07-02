@@ -4,6 +4,22 @@ module BlockchainJob
       ALLOW_GROUP_TRANSFER_HASH = '0x5845e315015ee03f0d4ab1d198172b4f733609dc3de8b957ae1d86c874030189'.freeze
 
       def perform(token)
+        logger = Logger.new("#{Rails.root}/rules")
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+        logger.info('XXX')
+
         @token = token
         raise 'Token is not Comakery Type' unless @token._token_type_comakery_security_token?
 
@@ -18,6 +34,10 @@ module BlockchainJob
 
         TransferRule.transaction do
           @transfer_rules.each(&:save!)
+
+          logger.info(@transfer_rules.pluck(:id, :status))
+
+          @transfer_rules
         end
       end
 
