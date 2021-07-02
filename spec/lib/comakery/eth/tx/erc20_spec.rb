@@ -9,7 +9,7 @@ describe Comakery::Eth::Tx::Erc20, vcr: true do
     specify { expect(subject[:from]).to eq(erc20_transfer.blockchain_transaction.source) }
     specify { expect(subject[:to]).to eq(erc20_transfer.blockchain_transaction.token.contract_address) }
     specify { expect(subject[:value]).to eq(erc20_transfer.encode_value(0)) }
-    specify { expect(subject[:contract][:abi]).to be_present }
+    specify { expect(subject[:contract][:abi]).to eq(erc20_transfer.method_abi) }
     specify { expect(subject[:contract][:method]).to eq(erc20_transfer.method_name) }
     specify { expect(subject[:contract][:parameters]).to eq(erc20_transfer.encode_method_params_json) }
   end
