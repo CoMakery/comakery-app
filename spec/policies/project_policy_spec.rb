@@ -58,8 +58,7 @@ describe ProjectPolicy do
         projects = ProjectPolicy::Scope.new(nil, Project).resolve
 
         expect(projects.map(&:title).sort).to eq([my_public_project,
-                                                  others_public_project,
-                                                  my_public_project_business_confidential].map(&:title).sort)
+                                                  others_public_project].map(&:title).sort)
       end
     end
   end

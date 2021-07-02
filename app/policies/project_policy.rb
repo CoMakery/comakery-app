@@ -18,7 +18,7 @@ class ProjectPolicy < ApplicationPolicy
       if @account
         account.accessable_projects(scope)
       else
-        scope.publics
+        scope.publics.non_confidential
       end
     end
   end

@@ -136,7 +136,6 @@ class ProjectsController < ApplicationController
       @q = policy_scope(@project_scope).ransack(params[:q])
       @q.sorts = 'project_roles_count DESC' if @q.sorts.empty?
 
-      # check if confidentiality
       @projects_all = @q.result.with_all_attached_images.includes(:token, :mission, :project_admins, account: [image_attachment: :blob])
       @projects = @projects_all.page(@page).per(9)
 
@@ -356,7 +355,7 @@ class ProjectsController < ApplicationController
     end
 
     def redirect_for_whitelabel
-      if @whitelabel_mission && !@project.require_confidentiality?
+      if @whitelabel_mission
         if policy(@project).show_contributions?
           redirect_to project_dashboard_transfers_path(@project)
         else
