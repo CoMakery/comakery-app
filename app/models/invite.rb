@@ -16,11 +16,11 @@ class Invite < ApplicationRecord
 
   scope :pending, -> { where(accepted: false) }
 
-  private
+  def self.generate_unique_secure_token
+    SecureRandom.base58(TOKEN_LENGTH)
+  end
 
-    def self.generate_unique_secure_token
-      SecureRandom.base58(TOKEN_LENGTH)
-    end
+  private
 
     def validate_account_email
       errors.add(:account, 'must have the same email') if force_email? && email != account.email
