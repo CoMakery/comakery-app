@@ -729,26 +729,6 @@ describe ProjectsController do
           end
         end
       end
-
-      context 'when with invitation' do
-        let(:invite) { FactoryBot.create :project_invite, role: 'admin' }
-
-        before { session[:project_invite_id] = invite.id }
-
-        it 'should respond with project data and correct notice' do
-          login(account)
-          get :show, params: { id: cat_project.to_param }
-
-          expect(response.code).to eq '200'
-          expect(assigns(:project)).to eq cat_project
-          expect(assigns[:award]).to be_new_record
-          expect(assigns[:can_award]).to eq true
-          expect(flash[:notice])
-            .to eq 'You have successfully joined the project with the admin role'
-
-          expect(session.key?(:project_invite_id)).to eq false
-        end
-      end
     end
 
     describe 'redirect_for_whitelabel' do
