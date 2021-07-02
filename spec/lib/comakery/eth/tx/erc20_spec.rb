@@ -51,12 +51,12 @@ describe Comakery::Eth::Tx::Erc20, vcr: true do
       [{
         'constant' => false,
         'inputs' => [
-          { 'name' => '_to', 'type' => 'address' },
-          { 'name' => '_value', 'type' => 'uint256' }
+          { 'internalType' => 'address', 'name' => 'to', 'type' => 'address' },
+          { 'internalType' => 'uint256', 'name' => 'value', 'type' => 'uint256' }
         ],
         'name' => 'transfer',
         'outputs' => [
-          { 'name' => '', 'type' => 'bool' }
+          { 'internalType' => 'bool', 'name' => 'success', 'type' => 'bool' }
         ],
         'payable' => false,
         'stateMutability' => 'nonpayable',
