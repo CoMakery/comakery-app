@@ -49,18 +49,18 @@ describe Comakery::Eth::Tx::Erc20, vcr: true do
 
     let(:erc20_transfer_abi) do
       [{
-        "constant"=>false,
-        "inputs"=>[
-          {"name"=>"_to", "type"=>"address"},
-          {"name"=>"_value", "type"=>"uint256"}
+        'constant' => false,
+        'inputs' => [
+          { 'name' => '_to', 'type' => 'address' },
+          { 'name' => '_value', 'type' => 'uint256' }
         ],
-        "name"=>"transfer",
-        "outputs"=>[
-          {"name"=>"", "type"=>"bool"}
+        'name' => 'transfer',
+        'outputs' => [
+          { 'name' => '', 'type' => 'bool' }
         ],
-        "payable"=>false,
-        "stateMutability"=>"nonpayable",
-        "type"=>"function"
+        'payable' => false,
+        'stateMutability' => 'nonpayable',
+        'type' => 'function'
       }]
     end
 
