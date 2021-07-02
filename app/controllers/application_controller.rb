@@ -6,8 +6,6 @@ class ApplicationController < ActionController::Base
   # layout 'raw'
   include Pundit
 
-  around_action :set_current_account
-
   after_action :verify_authorized, except: :index # rubocop:todo Rails/LexicallyScopedActionFilter
   after_action :verify_policy_scoped, only: :index # rubocop:todo Rails/LexicallyScopedActionFilter
   after_action :set_whitelabel_cors
@@ -120,13 +118,6 @@ class ApplicationController < ActionController::Base
 
   def check_age
     redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website' if current_account&.valid_and_underage? && controller_name != 'accounts'
-  end
-
-  def set_current_account
-    Current.account = current_account
-    yield
-  ensure
-    Current.account = nil
   end
 
   def current_account
