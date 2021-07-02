@@ -30,6 +30,326 @@ describe ProjectsController do
     stub_slack_channel_list
   end
 
+  describe '#unlisted' do
+    let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
+    let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
+    let!(:normal_project) { create :project, account: account, mission_id: mission.id }
+    let!(:account2) { create :account }
+    let!(:authentication2) { create(:authentication, account: account2) }
+
+    it 'everyone can access public unlisted project via long id' do
+      get :unlisted, params: { long_id: public_unlisted_project.long_id }
+      expect(response.code).to eq '200'
+      expect(assigns(:project)).to eq public_unlisted_project
+    end
+
+    it 'other team member cannot access member unlisted project' do
+      login account2
+      get :unlisted, params: { long_id: member_unlisted_project.long_id }
+      expect(response).to redirect_to(root_url)
+    end
+
+    it 'team member can access member unlisted project' do
+      team.build_authentication_team authentication2
+      login account2
+      get :unlisted, params: { long_id: member_unlisted_project.long_id }
+      expect(response.code).to eq '302'
+      expect(assigns(:project)).to eq member_unlisted_project
+    end
+
+    it 'redirect_to project/id page for normal project' do
+      login account
+      get :unlisted, params: { long_id: normal_project.long_id }
+      expect(response).to redirect_to(project_path(normal_project))
+    end
+
+    it 'project owner can access unlisted project by id' do
+      login public_unlisted_project.account
+      get :show, params: { id: public_unlisted_project.id }
+      expect(response.code).to eq '200'
+      expect(assigns(:project)).to eq public_unlisted_project
+    end
+
+    it 'not project owner cannot access unlisted project by id' do
+      login create(:account)
+      get :show, params: { id: public_unlisted_project.id }
+      expect(response).to redirect_to('/')
+    end
+
+    it 'redirects to 404 when long id is not valid' do
+      get :unlisted, params: { long_id: 'wrong' }
+      expect(response).to redirect_to('/404.html')
+    end
+  end
+
+  describe '#landing' do
+    let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account, mission_id: mission.id) }
+    let!(:admin_project) { create(:project, visibility: 'public_listed', title: 'admin project', mission_id: mission.id) }
+    let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account, mission_id: mission.id) }
+    let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
+    let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
+    let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
+    let!(:project_role) { create(:project_role, account: account) } # by default it will create project from mom.rb which will be Uber for Cats
+
+    before do
+      admin_project.project_admins << account
+    end
+
+    describe '#login' do
+      it 'returns your private projects, and public projects that *do not* belong to you' do
+        expect(TopContributors).to receive(:call).exactly(4).times.and_return(double(success?: true, contributors: {}))
+        other_member_project.channels.create(team: team, channel_id: 'general')
+
+        get :landing
+        expect(response.status).to eq(200)
+        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'admin project', 'unlisted project', 'member project'])
+        expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
+        expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
+        expect(assigns[:involved_projects].map(&:title)).to match_array(['Uber for Cats'])
+      end
+    end
+    describe 'logged out'
+    it 'redirect to signup page if you are not logged in' do
+      logout
+      get :landing
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to(new_account_url)
+    end
+  end
+
+  describe '#new' do
+    context 'when not logged in' do
+      before do
+        session[:account_id] = nil
+        get :new
+      end
+
+      it 'redirects you somewhere pretty' do
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(new_account_url)
+      end
+    end
+
+    context 'when logged in with unconfirmed account' do
+      let!(:account1) { create :account, email_confirm_token: '123' }
+
+      before do
+        login account1
+        get :new
+      end
+
+      it 'redirects to home page' do
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(show_account_url)
+      end
+    end
+
+    context 'when slack returns successful api calls' do
+      render_views
+
+      let(:expected_props) do
+        {
+          csrf_token: instance_of(String),
+          decimal_places: Token.select(:id, :decimal_places),
+          discord_bot_url: nil,
+          discord_enabled: false,
+          form_action: 'POST',
+          form_url: projects_path,
+          is_whitelabel: false,
+          license_url: contribution_licenses_path(type: 'CP'),
+          mission_for_header: nil,
+          missions: { 'No Mission' => '', 'mission1' => mission.id },
+          project: assigns(:project).serializable_hash.merge(
+            {
+              mission_id: nil,
+              token_id: nil,
+              github_url: assigns(:project).github_url,
+              documentation_url: assigns(:project).documentation_url,
+              getting_started_url: assigns(:project).getting_started_url,
+              governance_url: assigns(:project).governance_url,
+              funding_url: assigns(:project).funding_url,
+              video_conference_url: assigns(:project).video_conference_url,
+              url: unlisted_project_url(assigns(:project).long_id, protocol: :https)
+            }.as_json
+          ),
+          project_for_header: { image_url: instance_of(String) },
+          slack_enabled: true,
+          teams: [
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            },
+            {
+              channels: [{ channel: 'a-channel-name', channel_id: 'a-channel-name' }],
+              discord: false, team: '[slack] test-team', team_id: team.id.to_s
+            }
+          ],
+          terms_readonly: nil,
+          tokens: { 'No Token' => '', token.name => token.id },
+          visibilities: Project.visibilities.keys
+        }
+      end
+      let(:get_image_variant_path_context) { double(:context, path: 'some_image_path') }
+
+      before do
+        allow(GetImageVariantPath).to receive(:call).and_return(get_image_variant_path_context)
+
+        get :new
+      end
+
+      it 'works' do
+        expect(response.status).to eq(200)
+        expect(assigns[:project]).to be_a_new_record
+        expect(assigns[:project]).to be_public
+        expect(assigns[:props]).to match expected_props
+      end
+    end
+  end
+
+  describe '#create' do
+    render_views
+
+    context 'when valid' do
+      let(:params) do
+        {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
+          }
+        }
+      end
+
+      it 'creates a project and associates it with the current account' do
+        expect { post :create, params: params }.to change { Project.count }.by(1)
+
+        expect(response.status).to eq(200)
+        project = Project.last
+        expect(project.title).to eq('Project title here')
+        expect(project.description).to eq('Project description here')
+        expect(project.square_image.attached?).to eq(true)
+        expect(project.panoramic_image.attached?).to eq(true)
+        expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
+        expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
+        expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
+        expect(project.maximum_tokens).to eq(150)
+        expect(project.account_id).to eq(account.id)
+      end
+    end
+
+    context 'when invalid' do
+      let(:params) do
+        {
+          project: {
+            # title: "Project title here",
+            description: 'Project description here',
+            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            tracker: 'http://github.com/here/is/my/tracker',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member',
+            award_types_attributes: [
+              { name: 'Small Award', amount: 1000, community_awardable: true },
+              { name: 'Big Award', amount: 2000 },
+              { name: '', amount: '' }
+            ]
+          }
+        }
+      end
+
+      it 'returns 422' do
+        expect { post :create, params: params }.not_to(change { [Project.count, AwardType.count] })
+
+        expect(response.status).to eq(422)
+
+        expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
+        project = assigns[:project]
+
+        expect(project.description).to eq('Project description here')
+        expect(project.square_image.attached?).to eq(true)
+        expect(project.panoramic_image.attached?).to eq(true)
+        expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
+        expect(project.account_id).to eq(account.id)
+      end
+    end
+
+    context 'when duplicated' do
+      let(:params) do
+        {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            long_id: '0',
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
+          }
+        }
+      end
+
+      it 'redirects with error' do
+        expect { post :create, params: params }.to change { Project.count }.by(1)
+        expect(response.status).to eq(200)
+
+        expect { post :create, params: params }.not_to(change { Project.count })
+        expect(response.status).to eq(422)
+        expect(JSON.parse(response.body)['message'])
+          .to eq("Long identifier can't be blank or not unique")
+      end
+    end
+  end
+
+  describe '#update_status' do
+    let!(:project) { create(:project, mission_id: mission.id) }
+
+    context 'when not logged in' do
+      it 'redirects to root' do
+        session[:account_id] = nil
+        post :update_status, params: { project_id: project.id }
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(new_account_url)
+      end
+    end
+
+    context 'when logged in with admin flag' do
+      it 'update valid project status' do
+        login admin_account
+        post :update_status, params: { project_id: project.id, status: 'active' }
+        expect(response.status).to eq(200)
+      end
+
+      it 'renders error with invalid status' do
+        login admin_account
+        post :update_status, params: { project_id: project.id, status: 'archived' }
+        expect(response.status).to eq(422)
+      end
+    end
+  end
 
   context 'with a project' do
     let!(:token_unlisted) { FactoryBot.create(:token, unlisted: true) }

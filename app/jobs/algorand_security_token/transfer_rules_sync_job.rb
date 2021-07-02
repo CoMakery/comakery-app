@@ -6,28 +6,11 @@ module AlgorandSecurityToken
 
     def perform(token)
       @token = token
-      logger = Logger.new("#{Rails.root}/rules")
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
-      logger.info('XXX')
 
-      Sidekiq::Logging.logger('HERE')
       rules.each do |k, lockup_until|
         groups = key_to_reg_groups(k)
 
-        rule = TransferRule.create!(
+        TransferRule.create!(
           token: token,
           lockup_until: lockup_until,
           sending_group: groups[0],
@@ -35,14 +18,6 @@ module AlgorandSecurityToken
           status: :synced,
           synced_at: Time.current
         )
-
-        Sidekiq::Logging.logger(rule)
-        Sidekiq::Logging.logger('\n')
-
-        logger.info(rule)
-        logger.info('\n')
-
-        rule
       end
     end
 
