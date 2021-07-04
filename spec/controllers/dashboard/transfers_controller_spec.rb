@@ -43,16 +43,33 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
   before { login(account) }
 
   describe 'GET #index' do
-    it 'returns a success response' do
-      get :index, params: { project_id: project.to_param }
-      expect(response).to be_successful
+    context 'when success' do
+      it 'returns a success response' do
+        get :index, params: { project_id: project.to_param }
+        expect(response).to be_successful
+      end
+
+      context 'when page is out of range' do
+        it 'returns a success response with a notice' do
+          get :index, params: { project_id: project.to_param, page: 9999 }
+          expect(response).to be_successful
+          expect(controller).to set_flash[:notice]
+        end
+      end
     end
 
-    context 'when page is out of range' do
-      it 'returns a success response with a notice' do
-        get :index, params: { project_id: project.to_param, page: 9999 }
-        expect(response).to be_successful
-        expect(controller).to set_flash[:notice]
+    context 'when failure' do
+      context 'when when statement invalid error' do
+        before do
+          allow_any_instance_of(Ransack::Search)
+            .to receive(:result).and_raise(ActiveRecord::StatementInvalid)
+          get :index, params: { project_id: project.to_param }
+        end
+
+        it 'should respond with 404 code' do
+          expect(response.code).to eq '404'
+          expect(response.body).to be_blank
+        end
       end
     end
   end
