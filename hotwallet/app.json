@@ -45,7 +45,7 @@
       "value": "https://comakery.com"
     },
     "PURESTAKE_API": {
-      "description": "Api key generated on Purestake to operate with Algorand blockchain. Required to use algorand blockchain.",
+      "description": "Api key generated on Purestake to operate with Algorand blockchain. Required to use with algorand blockchain.",
       "required": false
     },
     "EMPTY_QUEUE_DELAY": {
@@ -68,23 +68,27 @@
       "required": false
     },
     "INFURA_PROJECT_ID": {
-      "description": "Project id generated on Infura. Required to use ethereum blockchain.",
-      "required": true
+      "description": "Project id generated on Infura. Required to use with ethereum blockchain.",
+      "required": false
     },
     "ETHEREUM_TOKEN_TYPE": {
-      "description": "Ethereum Token Type: erc20, erc20_batch, token_release_schedule",
-      "required": true
+      "description": "Ethereum Token Type: erc20, erc20_batch, token_release_schedule. Required to use with ethereum blockchain.",
+      "required": false
     },
     "ETHEREUM_TOKEN_SYMBOL": {
-      "description": "Ethereum Token symbol (CERE for example). It uses to get a balance of the token",
-      "required": true
+      "description": "Ethereum Token symbol (CERE for example). It uses to get a balance of the token. Required to use with ethereum blockchain.",
+      "required": false
     },
     "ETHEREUM_CONTRACT_ADDRESS": {
-      "description": "Ethereum contract address of the token. It uses to get a balance of the token",
-      "required": true
+      "description": "Ethereum contract address of the token. It uses to get a balance of the token. Required to use with ethereum blockchain.",
+      "required": false
     },
     "ETHEREUM_APPROVAL_CONTRACT_ADDRESS": {
       "description": "Ethereum contract address for sending `approve` tx. It uses to allow batch transfers or use lockup contract",
+      "required": false
+    },
+    "OPT_IN_APP": {
+      "description": "Algorand app to auto opt-in. Required to use with algorand blockchain.",
       "required": false
     }
   }
