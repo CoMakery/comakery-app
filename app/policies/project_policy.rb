@@ -17,12 +17,10 @@ class ProjectPolicy < ApplicationPolicy
     def resolve
       if @account
         account.accessable_projects(scope)
+      elsif scope.first&.whitelabel?
+        scope.non_confidential.publics
       else
-        if scope.first.whitelabel?
-          scope.non_confidential.publics
-        else
-          scope.publics
-        end
+        scope.publics
       end
     end
   end
