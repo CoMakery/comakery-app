@@ -16,6 +16,7 @@ class Invite < ApplicationRecord
 
   scope :pending, -> { where(accepted: false) }
 
+  # Override ActiveRecord::SecureToken class method (remove after upgrade to rails 6.1)
   def self.generate_unique_secure_token
     SecureRandom.base58(TOKEN_LENGTH)
   end
