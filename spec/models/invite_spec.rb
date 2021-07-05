@@ -8,6 +8,12 @@ RSpec.describe Invite, type: :model do
   it { is_expected.to belong_to(:account).optional }
   it { is_expected.to validate_uniqueness_of(:email).scoped_to(%i[invitable_id invitable_type]).case_insensitive }
 
+  context 'when invite is created' do
+    subject { FactoryBot.create :invite }
+
+    it { expect(subject.token).to be_present }
+  end
+
   context 'when accepted' do
     subject { FactoryBot.build :invite, :accepted }
 
