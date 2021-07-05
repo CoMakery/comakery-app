@@ -4,7 +4,7 @@ class Projects::Accounts::SettingsController < ApplicationController
   def show
     authorize(project, :accounts?)
 
-    @project_role = ProjectRole.find_by(project_id: params[:project_id], account_id: params[:account_id])
+    @project_role = ProjectRole.find_by!(project_id: params[:project_id], account_id: params[:account_id])
 
     @project_policy = ProjectPolicy.new(current_account, project)
   end
