@@ -51,7 +51,7 @@ RSpec.describe Invite, type: :model do
     end
   end
 
-  describe '#pending' do
+  describe '.pending' do
     subject { described_class.pending }
 
     let(:invite_accepted) { FactoryBot.create :invite, :accepted }
