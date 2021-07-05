@@ -10,5 +10,9 @@ FactoryBot.define do
     trait :using_security_token do
       association :token, factory: %i[token security_token]
     end
+
+    trait :ropsten do
+      association :token, factory: %i[token eth ropsten]
+    end
   end
 end

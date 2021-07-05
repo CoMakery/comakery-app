@@ -3,7 +3,6 @@ FactoryBot.define do
     sequence(:name) { |n| "Token #{n}" }
     coin_type { :btc }
     blockchain_network { :bitcoin_mainnet }
-    symbol { :BTC }
     _blockchain { :bitcoin }
     decimal_places { 0 }
 
@@ -14,6 +13,15 @@ FactoryBot.define do
       _blockchain { :ethereum_ropsten }
       symbol { :XYZ2 }
       decimal_places { 0 }
+    end
+
+    trait :eth do
+      symbol { nil }
+      _token_type { :eth }
+    end
+
+    trait :ropsten do
+      _blockchain { :ethereum_ropsten }
     end
   end
 end
