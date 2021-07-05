@@ -73,7 +73,7 @@ describe ProjectPolicy do
           expect(projects.map(&:title).sort).to eq([my_whitelabel_non_confidential_project].map(&:title).sort)
         end
 
-        it 'returns all public confidential and non-confidential projects for whitelabels if account is nil' do
+        it 'returns all public confidential and non-confidential projects for whitelabels if account has access' do
           whitelabel_projects = Project.where(whitelabel: true)
           projects = ProjectPolicy::Scope.new(project_account, whitelabel_projects).resolve
 
