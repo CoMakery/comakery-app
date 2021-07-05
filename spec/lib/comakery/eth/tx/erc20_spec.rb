@@ -9,7 +9,7 @@ describe Comakery::Eth::Tx::Erc20, vcr: true do
     specify { expect(subject[:from]).to eq(erc20_transfer.blockchain_transaction.source) }
     specify { expect(subject[:to]).to eq(erc20_transfer.blockchain_transaction.token.contract_address) }
     specify { expect(subject[:value]).to eq(erc20_transfer.encode_value(0)) }
-    specify { expect(subject[:contract][:abi]).to eq(erc20_transfer.blockchain_transaction.token.abi) }
+    specify { expect(subject[:contract][:abi]).to eq(erc20_transfer.method_abi) }
     specify { expect(subject[:contract][:method]).to eq(erc20_transfer.method_name) }
     specify { expect(subject[:contract][:parameters]).to eq(erc20_transfer.encode_method_params_json) }
   end
@@ -42,6 +42,29 @@ describe Comakery::Eth::Tx::Erc20, vcr: true do
     subject { erc20_transfer.method_params }
 
     it { is_expected.to eq(['0x8599d17ac1cec71ca30264ddfaaca83c334f8451', 100]) }
+  end
+
+  describe '#method_abi' do
+    subject { erc20_transfer.method_abi }
+
+    let(:erc20_transfer_abi) do
+      [{
+        'constant' => false,
+        'inputs' => [
+          { 'internalType' => 'address', 'name' => 'to', 'type' => 'address' },
+          { 'internalType' => 'uint256', 'name' => 'value', 'type' => 'uint256' }
+        ],
+        'name' => 'transfer',
+        'outputs' => [
+          { 'internalType' => 'bool', 'name' => 'success', 'type' => 'bool' }
+        ],
+        'payable' => false,
+        'stateMutability' => 'nonpayable',
+        'type' => 'function'
+      }]
+    end
+
+    it { is_expected.to match_array(erc20_transfer_abi) }
   end
 
   describe '#encode_method_params_json' do
