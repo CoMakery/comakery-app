@@ -2,6 +2,8 @@ FactoryBot.define do
   factory :token do
     sequence(:name) { |n| "Token #{n}" }
     coin_type { :btc }
+    denomination { :BTC }
+    symbol { :BTC }
     blockchain_network { :bitcoin_mainnet }
     _blockchain { :bitcoin }
     decimal_places { 0 }
