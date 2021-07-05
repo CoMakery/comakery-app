@@ -158,14 +158,6 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#show_account_settings?' do
-    it { expect(described_class.new(nil, my_public_project).show_settings?).to be(false) }
-    it { expect(described_class.new(project_interested, my_public_project).show_settings?).to be(false) }
-    it { expect(described_class.new(project_account, my_public_project).show_settings?).to be(true) }
-    it { expect(described_class.new(project_admin, my_public_project).show_settings?).to be(true) }
-    it { expect(described_class.new(project_observer, my_public_project).show_settings?).to be(true) }
-  end
-
   permissions :export_transfers? do
     subject { described_class }
 
