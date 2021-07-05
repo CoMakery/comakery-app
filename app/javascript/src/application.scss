@@ -1367,6 +1367,10 @@ form.form-with-submit-button {
 .freeze-token {
   display: flex;
 
+  button {
+    display: flex;
+  }
+
   .transfer-button {
     padding: 0.75em;
     border: 1px solid #fe2d6c;
