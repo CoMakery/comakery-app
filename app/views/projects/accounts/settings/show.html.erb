@@ -6,7 +6,6 @@
                                                 account_id: @project_role.account_id),
                 method: :get,
                 id: 'change_permissions_btn',
-                class: 'dropdown-item',
-                disabled: !@project_policy.change_permissions? %>
+                class: "dropdown-item #{@project_policy.change_permissions? ? '' : 'disabled' }" %>
   </div>
 </turbo-frame>
