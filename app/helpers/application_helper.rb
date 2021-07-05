@@ -75,8 +75,7 @@ module ApplicationHelper
     }
 
     if token._token_type_on_ethereum?
-      token_type = token._token_type
-      token_type = 'erc20_batch' if token_type == 'erc20' && token.batch_contract_address.present?
+      token_type = ethereum_token_type(token)
       approval_address =
         case token_type
         when 'erc20_batch' then token.batch_contract_address
@@ -88,8 +87,17 @@ module ApplicationHelper
       params[:env][:ETHEREUM_TOKEN_SYMBOL] = token.symbol
       params[:env][:ETHEREUM_CONTRACT_ADDRESS] = token.contract_address
       params[:env][:ETHEREUM_APPROVAL_CONTRACT_ADDRESS] = approval_address if token_type.in?(%w[erc20_batch token_release_schedule])
+    elsif token._token_type_on_algorand?
+      params[:env][:PURESTAKE_API] = ENV['PURESTAKE_API']
+      params[:env][:OPT_IN_APP] = token.contract_address
     end
 
     "https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&#{params.to_param}"
+  end
+
+  def ethereum_token_type(token)
+    return 'erc20_batch' if token._token_type == 'erc20' && token.batch_contract_address.present?
+
+    token._token_type
   end
 end

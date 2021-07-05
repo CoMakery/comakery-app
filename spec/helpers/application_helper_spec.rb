@@ -36,6 +36,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     before do
       allow(request).to receive(:protocol).and_return('https://')
       allow(request).to receive(:host_with_port).and_return('comakery.com')
+      stub_const('ENV', ENV.to_hash.merge('PURESTAKE_API' => 'purestake_api_key'))
     end
 
     context 'for eth blockchain without batch contract' do
@@ -60,10 +61,10 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     context 'for algorand blockchain' do
-      let(:token) { build(:algorand_token) }
+      let(:token) { build(:algorand_token, contract_address: 'algorand_contract_address') }
 
-      it 'do not contain ETH params' do
-        is_expected.to eq 'https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&env%5BBLOCKCHAIN_NETWORK%5D=algorand_test&env%5BCOMAKERY_SERVER_URL%5D=https%3A%2F%2Fcomakery.com&env%5BPROJECT_ID%5D=123'
+      it 'contains PURESTAKE_API and OPT_IN_APP params' do
+        is_expected.to eq 'https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-server/tree/hotwallet&env%5BBLOCKCHAIN_NETWORK%5D=algorand_test&env%5BCOMAKERY_SERVER_URL%5D=https%3A%2F%2Fcomakery.com&env%5BOPT_IN_APP%5D=algorand_contract_address&env%5BPROJECT_ID%5D=123&env%5BPURESTAKE_API%5D=purestake_api_key'
       end
     end
   end
