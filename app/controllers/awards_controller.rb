@@ -33,11 +33,9 @@ class AwardsController < ApplicationController
   before_action :create_project_role_from_session, only: %i[index]
 
   def index
-    begin
-      authorize(current_account, :index?)
-    rescue Pundit::NotAuthorizedError
-      redirect_to projects_path
-    end
+    authorize(current_account, :index?)
+  rescue Pundit::NotAuthorizedError
+    redirect_to projects_path
   end
 
   def show

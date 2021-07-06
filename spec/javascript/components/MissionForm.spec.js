@@ -45,7 +45,7 @@ describe('MissionForm', () => {
       'description'           : 'test description',
       'project_awards_visible': 'false',
       'logoUrl'               : '/logo.png',
-      'imageUrl'              : '/image.png',
+      'imageUrl'              : '/image.png'
     }
     const wrapper = mount(<MissionForm mission={mission} />)
 
