@@ -8,6 +8,12 @@ RSpec.describe Invite, type: :model do
   it { is_expected.to belong_to(:account).optional }
   it { is_expected.to validate_uniqueness_of(:email).scoped_to(%i[invitable_id invitable_type]).case_insensitive }
 
+  context 'when invite is created' do
+    subject { FactoryBot.create :invite }
+
+    it { expect(subject.token).to be_present }
+  end
+
   context 'when accepted' do
     subject { FactoryBot.build :invite, :accepted }
 
@@ -53,5 +59,11 @@ RSpec.describe Invite, type: :model do
 
     it { is_expected.to include(invite_pending) }
     it { is_expected.not_to include(invite_accepted) }
+  end
+
+  describe '#generate_unique_secure_token' do
+    subject(:token) { described_class.generate_unique_secure_token }
+
+    it { expect(token.length).to eq(Invite::TOKEN_LENGTH) }
   end
 end
