@@ -6,9 +6,7 @@ class Dashboard::TransfersController < ApplicationController
   skip_before_action :require_login, only: %i[index show fetch_chart_data]
   skip_after_action :verify_policy_scoped, only: %i[index show fetch_chart_data]
 
-  fragment_cache_key do
-    "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
-  end
+  fragment_cache_key { "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}" }
 
   def index
     authorize @project, :transfers?
@@ -152,9 +150,5 @@ class Dashboard::TransfersController < ApplicationController
         :lockup_schedule_id,
         :commencement_date
       )
-    end
-
-    def transfer_update_params
-      params.fetch(:award, {}).permit(:prioritized_at)
     end
 end
