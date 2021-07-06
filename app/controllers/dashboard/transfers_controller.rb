@@ -102,7 +102,6 @@ class Dashboard::TransfersController < ApplicationController
         .completed_or_cancelled
 
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
-      @transfers_unfiltered = @transfers_unfiltered.not_burned unless transfer_type_name == 'burn'
       @q = @transfers_unfiltered.ransack(params[:q])
     end
 
