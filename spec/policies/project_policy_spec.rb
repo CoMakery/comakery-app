@@ -29,6 +29,13 @@ describe ProjectPolicy do
 
   let!(:different_team_account) { create(:account).tap { |a| create(:authentication, account: a) } }
 
+  let(:projects) do
+    [
+      my_public_project, my_public_unlisted_project, my_private_project, my_archived_project,
+      others_private_project, others_archived_project, others_public_project
+    ]
+  end
+
   before do
     team1.build_authentication_team authentication
     team1.build_authentication_team other_team_member_auth
@@ -243,25 +250,54 @@ describe ProjectPolicy do
   end
 
   describe 'show_award_types?' do
-    it 'allows showing award types of projects that are public or owned by the current account' do
-      expect(described_class.new(nil, my_public_project).show_award_types?).to be true
-      expect(described_class.new(nil, my_public_unlisted_project).show_award_types?).to be true
-      expect(described_class.new(nil, others_private_project).show_award_types?).to be_falsey
-      expect(described_class.new(nil, others_archived_project).show_award_types?).to be_falsey
+    context 'when project without mission or awards are hidden' do
+      it 'allows showing award types of projects that are public or owned by the current account' do
+        expect(described_class.new(nil, my_public_project).show_award_types?).to be false
+        expect(described_class.new(nil, my_public_unlisted_project).show_award_types?).to be false
+        expect(described_class.new(nil, others_private_project).show_award_types?).to be_falsey
+        expect(described_class.new(nil, others_archived_project).show_award_types?).to be_falsey
 
-      expect(described_class.new(project_account, my_public_project).show_award_types?).to be true
-      expect(described_class.new(project_account, my_public_unlisted_project).show_award_types?).to be true
-      expect(described_class.new(project_account, my_private_project).show_award_types?).to be true
-      expect(described_class.new(project_account, my_archived_project).show_award_types?).to be true
-      expect(described_class.new(project_account, others_private_project).show_award_types?).to be false
-      expect(described_class.new(project_account, others_archived_project).show_award_types?).to be false
+        expect(described_class.new(project_account, my_public_project).show_award_types?).to be false
+        expect(described_class.new(project_account, my_public_unlisted_project).show_award_types?).to be false
+        expect(described_class.new(project_account, my_private_project).show_award_types?).to be false
+        expect(described_class.new(project_account, my_archived_project).show_award_types?).to be false
+        expect(described_class.new(project_account, others_private_project).show_award_types?).to be false
+        expect(described_class.new(project_account, others_archived_project).show_award_types?).to be false
 
-      expect(described_class.new(other_team_member, others_public_project).show_award_types?).to be true
-      expect(described_class.new(other_team_member, my_private_project).show_award_types?).to be true
+        expect(described_class.new(other_team_member, others_public_project).show_award_types?).to be false
+        expect(described_class.new(other_team_member, my_private_project).show_award_types?).to be false
 
-      expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be true
-      expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be true
-      expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
+        expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be false
+        expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be false
+        expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
+      end
+    end
+
+    context 'when project with mission and awards visible' do
+      before do
+        projects.each { |project| project.mission.update(project_awards_visible: true) if project.mission.present? }
+      end
+
+      it 'allows showing award types of projects that are public or owned by the current account' do
+        expect(described_class.new(nil, my_public_project).show_award_types?).to be true
+        expect(described_class.new(nil, my_public_unlisted_project).show_award_types?).to be true
+        expect(described_class.new(nil, others_private_project).show_award_types?).to be_falsey
+        expect(described_class.new(nil, others_archived_project).show_award_types?).to be_falsey
+
+        expect(described_class.new(project_account, my_public_project).show_award_types?).to be true
+        expect(described_class.new(project_account, my_public_unlisted_project).show_award_types?).to be true
+        expect(described_class.new(project_account, my_private_project).show_award_types?).to be true
+        expect(described_class.new(project_account, my_archived_project).show_award_types?).to be true
+        expect(described_class.new(project_account, others_private_project).show_award_types?).to be false
+        expect(described_class.new(project_account, others_archived_project).show_award_types?).to be false
+
+        expect(described_class.new(other_team_member, others_public_project).show_award_types?).to be true
+        expect(described_class.new(other_team_member, my_private_project).show_award_types?).to be true
+
+        expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be true
+        expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be true
+        expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
+      end
     end
   end
 

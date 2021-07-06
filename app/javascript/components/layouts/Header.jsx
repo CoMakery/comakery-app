@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import Icon from './../styleguide/Icon'
 
-const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
+const navContent = (isLoggedIn, isAdmin, isWhitelabel, projectAwardsVisible, currentPath) => {
   return <React.Fragment>
     { !isLoggedIn &&
       <div className="header--nav--links">
@@ -80,7 +80,7 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
           My Projects
         </a>
 
-        { !isWhitelabel &&
+        { projectAwardsVisible &&
           <a href="/tasks" className={currentPath.match(/\/tasks/) ? 'header--nav--links--current' : null}>
             My Tasks
           </a>
@@ -120,7 +120,7 @@ class Header extends React.Component {
     this.state = { mobileMenuActive: false }
   }
   render() {
-    const {className, isAdmin, isLoggedIn, isWhitelabel, whitelabelLogo, currentPath, ...other} = this.props
+    const {className, isAdmin, isLoggedIn, isWhitelabel, whitelabelLogo, projectAwardsVisible, currentPath, ...other} = this.props
 
     const classnames = classNames(
       'header',
@@ -128,7 +128,7 @@ class Header extends React.Component {
     )
 
     const {mobileMenuActive} = this.state
-    const nav = navContent(isLoggedIn, isAdmin, isWhitelabel, currentPath)
+    const nav = navContent(isLoggedIn, isAdmin, isWhitelabel, projectAwardsVisible, currentPath)
 
     return (
       <React.Fragment>
@@ -177,13 +177,15 @@ class Header extends React.Component {
   }
 }
 Header.propTypes = {
-  currentPath: PropTypes.string,
-  isAdmin    : PropTypes.bool,
-  isLoggedIn : PropTypes.bool
+  currentPath         : PropTypes.string,
+  isAdmin             : PropTypes.bool,
+  isLoggedIn          : PropTypes.bool,
+  projectAwardsVisible: PropTypes.bool,
 }
 Header.defaultProps = {
-  currentPath: '/',
-  isAdmin    : false,
-  isLoggedIn : false
+  currentPath         : '/',
+  isAdmin             : false,
+  isLoggedIn          : false,
+  projectAwardsVisible: false,
 }
 export default Header

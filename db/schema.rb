@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_144748) do
+ActiveRecord::Schema.define(version: 2021_07_06_104324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -429,6 +429,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_144748) do
     t.string "whitelabel_api_public_key"
     t.string "whitelabel_api_key"
     t.string "wallet_recovery_api_public_key"
+    t.boolean "project_awards_visible", default: false
     t.index ["image_id"], name: "index_missions_on_image_id"
     t.index ["logo_id"], name: "index_missions_on_logo_id"
     t.index ["token_id"], name: "index_missions_on_token_id"

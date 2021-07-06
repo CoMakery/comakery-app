@@ -1,6 +1,12 @@
 class AwardPolicy < ApplicationPolicy
   attr_reader :account, :award
 
+  def initialize(account, award)
+    @account = account
+    @award = award
+    @project = @award.project
+  end
+
   class Scope < Scope
     attr_reader :account, :scope
 
@@ -18,10 +24,8 @@ class AwardPolicy < ApplicationPolicy
     end
   end
 
-  def initialize(account, award)
-    @account = account
-    @award = award
-    @project = @award.project
+  def index?
+    @project.mission&.project_awards_visible?
   end
 
   def show?

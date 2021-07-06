@@ -1,6 +1,12 @@
 class AwardTypePolicy < ApplicationPolicy
   attr_reader :account, :award_type
 
+  def initialize(account, award_type)
+    @account = account
+    @award_type = award_type
+    @project = @award_type.project
+  end
+
   class Scope < Scope
     attr_reader :account, :scope
 
@@ -17,5 +23,9 @@ class AwardTypePolicy < ApplicationPolicy
         scope.where.not(state: :draft)
       end
     end
+  end
+
+  def index?
+    @project.mission&.project_awards_visible?
   end
 end
