@@ -1,6 +1,4 @@
 class AwardTypesController < ApplicationController
-  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
-
   before_action :assign_project
   before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index]
@@ -12,7 +10,11 @@ class AwardTypesController < ApplicationController
   skip_before_action :require_login, only: %i[index]
 
   def index
-    authorize @project, :show_award_types?
+    begin
+      authorize @project, :show_award_types?
+    rescue Pundit::NotAuthorizedError
+      redirect_to '/404.html'
+    end
   end
 
   def new; end
@@ -172,9 +174,5 @@ class AwardTypesController < ApplicationController
         message: @award_type.errors.full_messages.join(', '),
         errors: @award_type.errors.messages.map { |k, v| ["batch[#{k}]", v.to_sentence] }.to_h
       }
-    end
-
-    def not_authorized
-      redirect_to '/404.html'
     end
 end

@@ -1,6 +1,4 @@
 class AwardsController < ApplicationController
-  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
-
   before_action :set_project, except: %i[index confirm]
   before_action :unavailable_for_lockup_token, except: %i[index confirm]
   before_action :unavailable_for_whitelabel
@@ -35,7 +33,11 @@ class AwardsController < ApplicationController
   before_action :create_project_role_from_session, only: %i[index]
 
   def index
-    authorize(current_account, :index?)
+    begin
+      authorize(current_account, :index?)
+    rescue Pundit::NotAuthorizedError
+      redirect_to projects_path
+    end
   end
 
   def show
@@ -534,9 +536,5 @@ class AwardsController < ApplicationController
       else
         "Congratulations, you just claimed your award! Be sure to enter your #{blockchain_name} adress on your #{view_context.link_to('wallets page', wallets_path)} to receive your tokens."
       end
-    end
-
-    def not_authorized
-      redirect_to projects_path
     end
 end
