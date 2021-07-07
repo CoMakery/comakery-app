@@ -55,9 +55,11 @@ describe 'accounts index page', js: true do
       it 'broadcasts event' do
         visit accounts_path
 
+        expect(page).to have_css("#account_#{account.id}_wallet_#{wallet.id}", count: 1)
+
         wallet.destroy
 
-        expect(page.all('#main-table tr').size).to eq(1)
+        expect(page).not_to have_css("#account_#{account.id}_wallet_#{wallet.id}")
       end
     end
   end

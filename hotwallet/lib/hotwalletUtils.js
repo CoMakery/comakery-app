@@ -13,10 +13,18 @@ exports.EthereumBlockchain = require("./Blockchain").EthereumBlockchain
 const ComakeryApi = require("./ComakeryApi").ComakeryApi
 exports.ComakeryApi = ComakeryApi
 
+
 exports.checkAllVariablesAreSet = function checkAllVariablesAreSet(envs) {
-  return Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.comakeryServerUrl) &&
-    Boolean(envs.infuraProjectId) && Boolean(envs.redisUrl) && Boolean(envs.emptyQueueDelay) &&
-    Boolean(envs.blockchainNetwork) && Boolean(envs.ethereumTokenSymbol) && Boolean(envs.ethereumContractAddress)
+  const isRequiredVarsSet = Boolean(envs.projectId) && Boolean(envs.projectApiKey) && Boolean(envs.redisUrl)
+    && Boolean(envs.comakeryServerUrl) && Boolean(envs.blockchainNetwork) && Boolean(envs.emptyQueueDelay)
+
+  if (!isRequiredVarsSet) return false
+
+  if (["ethereum", "ethereum_ropsten", "ethereum_rinkeby"].indexOf(envs.blockchainNetwork) > -1) { // Ethereum
+    return Boolean(envs.infuraProjectId) && Boolean(envs.ethereumTokenSymbol) && Boolean(envs.ethereumContractAddress)
+  } else { // Algorand
+    return Boolean(envs.purestakeApi) && Boolean(envs.optInApp)
+  }
 }
 
 exports.sleep = function (ms) {

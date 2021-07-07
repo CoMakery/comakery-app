@@ -359,6 +359,10 @@ class Award < ApplicationRecord
     update!(transaction_error: error, status: :accepted)
   end
 
+  def populate_recipient_wallet
+    self.recipient_wallet = account&.wallets&.find_by(address: recipient_address, _blockchain: token&._blockchain)
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private
@@ -398,10 +402,6 @@ class Award < ApplicationRecord
       return if recipient_wallet._blockchain == token&._blockchain
 
       errors[:recipient_wallet_id] << 'wallet and token are not in the same network'
-    end
-
-    def populate_recipient_wallet
-      self.recipient_wallet = account.wallets.find_by(address: recipient_address, _blockchain: token&._blockchain)
     end
 
     def abort_destroy

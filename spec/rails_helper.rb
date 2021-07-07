@@ -115,7 +115,7 @@ def login_account(account)
 end
 
 def login(account)
-  account.authentications.first || create(:authentication, account_id: account.id)
+  account.authentications.first || FactoryBot.create(:authentication, account_id: account.id)
 
   if request
     request.session[:account_id] = account.id

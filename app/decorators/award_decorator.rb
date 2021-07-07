@@ -82,7 +82,7 @@ class AwardDecorator < Draper::Decorator
       issuer.last_name,
       latest_blockchain_transaction&.source,
       total_amount,
-      latest_blockchain_transaction&.tx_hash,
+      ethereum_transaction_address,
       token&.blockchain&.name,
       transferred_at,
       created_at

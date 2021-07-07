@@ -116,7 +116,7 @@ class ProjectDecorator < Draper::Decorator
       transfer_rules_url: project_dashboard_transfer_rules_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
       show_batches: award_types.where.not(state: :draft).any?,
-      require_confidentiality: !require_confidentiality?,
+      require_confidentiality: require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
       token_lockup: token&.token_type&.is_a?(TokenType::TokenReleaseSchedule),

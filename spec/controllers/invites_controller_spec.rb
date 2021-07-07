@@ -6,6 +6,14 @@ RSpec.describe InvitesController, type: :controller do
 
     subject { get :show, params: { id: invite.token } }
 
+    context 'when invite token is not claimed with the url token' do
+      subject { get :show, params: { id: invite.token.downcase } }
+
+      before { subject }
+
+      it { expect(session[:invite_id]).to eq(nil) }
+    end
+
     context 'when invite is accepted' do
       let(:invite) { FactoryBot.create :invite, :accepted }
 

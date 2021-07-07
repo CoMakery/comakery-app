@@ -4,7 +4,7 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
       to: blockchain_transaction.token.contract_address,
       value: encode_value(0),
       contract: {
-        abi: blockchain_transaction.token.abi,
+        abi: method_abi,
         method: method_name,
         parameters: encode_method_params_json
       }
@@ -17,6 +17,14 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
 
   def method_params
     []
+  end
+
+  def method_abi
+    [
+      blockchain_transaction.token.abi.find do |func|
+        func['name'] == method_name
+      end
+    ]
   end
 
   def abi
