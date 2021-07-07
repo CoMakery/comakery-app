@@ -18,7 +18,8 @@ JS_CONSOLE_FILTER = Regexp.union([
                                    'Failed to load resource: net::ERR_FAILED',
                                    "No 'Access-Control-Allow-Origin' header is present on the requested resource.",
                                    'Warning: componentWillReceiveProps has been renamed',
-                                   'https://api-iam.intercom.io/messenger/web/ping'
+                                   'https://api-iam.intercom.io/messenger/web/ping',
+                                   'https://reactjs.org/link/react-devtools"'
                                  ])
 
 Capybara.register_driver :chrome do |app|
