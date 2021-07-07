@@ -10,6 +10,8 @@ class DeleteInvalidImages < ActiveRecord::DataMigration
 
   def process_project_images
     Project.find_each do |project|
+      Rails.logger.info "Project #{project.id}"
+
       purge_if_invalid(project.image)
       purge_if_invalid(project.square_image)
       purge_if_invalid(project.panoramic_image)
@@ -18,12 +20,16 @@ class DeleteInvalidImages < ActiveRecord::DataMigration
 
   def process_account_images
     Account.find_each do |account|
+      Rails.logger.info "Account #{account.id}"
+
       purge_if_invalid(account.image)
     end
   end
 
   def process_mission_images
     Mission.find_each do |mission|
+      Rails.logger.info "Mission #{mission.id}"
+
       purge_if_invalid(mission.logo)
       purge_if_invalid(mission.image)
       purge_if_invalid(mission.whitelabel_logo)
@@ -34,6 +40,8 @@ class DeleteInvalidImages < ActiveRecord::DataMigration
 
   def process_token_images
     Token.find_each do |token|
+      Rails.logger.info "Token #{token.id}"
+
       purge_if_invalid(token.logo_image)
     end
   end
