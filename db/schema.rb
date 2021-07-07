@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_144748) do
+ActiveRecord::Schema.define(version: 2021_07_01_142532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -380,7 +380,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_144748) do
 
   create_table "invites", force: :cascade do |t|
     t.string "email", null: false
-    t.string "token", null: false
+    t.string "token", limit: 72, null: false
     t.boolean "accepted", default: false
     t.integer "invitable_id"
     t.string "invitable_type"
