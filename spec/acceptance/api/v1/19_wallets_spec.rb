@@ -131,6 +131,28 @@ resource 'IX. Wallets' do
         expect(status).to eq(400)
         expect(response_body).to eq '{"errors":{"0":{"blockchain":["unknown blockchain value"]}}}'
       end
+
+      let!(:create_params_1) { { wallets: [{ blockchain: nil, source: :ore_id, tokens_to_provision: tokens_to_provision, name: 'Wallet name' }] } }
+      let!(:id_1) { account.managed_account_id }
+      let(:asa_token) { create(:asa_token, id: 50) }
+      let(:ast_token) { create(:algo_sec_token, id: 55) }
+      let(:reg_group) { create(:reg_group, id: 45, token: ast_token) }
+      let(:tokens_to_provision) do
+        [
+          { token_id: asa_token.id.to_s },
+          { token_id: ast_token.id.to_s, max_balance: '100', lockup_until: '1', reg_group_id: reg_group.id.to_s, account_frozen: 'false' }
+        ]
+      end
+
+      example 'CREATE WALLET – ORE_ID WITH PROVISIONING – ERROR' do
+        explanation 'Returns an array of errors'
+
+        request = build(:api_signed_request, create_params_1, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        allow_any_instance_of(Wallet).to receive(:id_1).and_return(23)
+        do_request(request)
+        expect(status).to eq(400)
+        expect(response_body).to eq '{"errors":{"0":{"blockchain":["unknown blockchain value","is not supported with ore_id source"]}}}'
+      end
     end
   end
 
