@@ -115,7 +115,7 @@ class ProjectDecorator < Draper::Decorator
       accounts_url: project_dashboard_accounts_path(self),
       transfer_rules_url: project_dashboard_transfer_rules_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
-      show_batches: award_types.where.not(state: :draft).any? && mission&.project_awards_visible?,
+      show_batches: show_batches?,
       require_confidentiality: require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
@@ -132,6 +132,14 @@ class ProjectDecorator < Draper::Decorator
       interested: policy.project_interested?,
       show_contributions: policy.show_contributions?
     }.merge(token_props)
+  end
+
+  def show_batches?
+    if mission.present? && mission.whitelabel?
+      mission.project_awards_visible?
+    else
+      award_types.where.not(state: :draft).any?
+    end
   end
 
   def token_props

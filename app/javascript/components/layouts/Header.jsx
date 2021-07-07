@@ -80,7 +80,7 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, projectAwardsVisible, cur
           My Projects
         </a>
 
-        { projectAwardsVisible &&
+        { (!isWhitelabel || projectAwardsVisible) &&
           <a href="/tasks" className={currentPath.match(/\/tasks/) ? 'header--nav--links--current' : null}>
             My Tasks
           </a>

@@ -1,10 +1,10 @@
 class AwardTypePolicy < ApplicationPolicy
-  attr_reader :account, :award_type
+  attr_reader :account, :award_type, :mission
 
   def initialize(account, award_type)
     @account = account
     @award_type = award_type
-    @project = @award_type.project
+    @mission = @award_type.project.mission
   end
 
   class Scope < Scope
@@ -26,6 +26,8 @@ class AwardTypePolicy < ApplicationPolicy
   end
 
   def index?
-    @project.mission&.project_awards_visible?
+    return mission.project_awards_visible? if mission.present? && mission.whitelabel?
+
+    true
   end
 end
