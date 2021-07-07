@@ -38,8 +38,8 @@ resource 'X. Tokens' do
     end
 
     context '200' do
-      let!(:cat_token) { create(:static_token, id: 20, name: 'Cats') }
-      let!(:dog_token) { create(:static_token, id: 25, name: 'Dogs', _blockchain: 'cardano', symbol: 'TKN676f3ac72f320bb17911868a001314e3533cd150') }
+      let!(:cat_token) { create(:static_token, id: 11111111, name: 'Cats') }
+      let!(:dog_token) { create(:static_token, id: 11111112, name: 'Dogs', _blockchain: 'cardano', symbol: 'TKN676f3ac72f320bb17911868a001314e3533cd150') }
 
       example 'GET' do
         explanation 'Returns tokens.'
@@ -72,7 +72,7 @@ resource 'X. Tokens' do
     end
 
     context '400' do
-      let!(:cat_token) { create(:token, id: 40, name: 'Cats') }
+      let!(:cat_token) { create(:token, id: 11111113, name: 'Cats') }
 
       example 'INDEX – ERROR' do
         explanation 'Returns an array of errors'
