@@ -48,12 +48,16 @@ class DeleteInvalidImages < ActiveRecord::DataMigration
 
   def process_award_images
     Award.find_each do |award|
+      Rails.logger.info "Award #{award.id}"
+
       purge_if_invalid(award.image)
     end
   end
 
   def process_award_type_images
     AwardType.find_each do |award_type|
+      Rails.logger.info "AwardType #{award_type.id}"
+
       purge_if_invalid(award_type.diagram)
     end
   end
