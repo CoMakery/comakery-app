@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # respond_to :html
   # layout 'raw'
   include Pundit
+
   after_action :verify_authorized, except: :index # rubocop:todo Rails/LexicallyScopedActionFilter
   after_action :verify_policy_scoped, only: :index # rubocop:todo Rails/LexicallyScopedActionFilter
   after_action :set_whitelabel_cors
@@ -237,7 +238,13 @@ class ApplicationController < ActionController::Base
   end
 
   def unavailable_for_lockup_token
-    redirect_to project_url(@project) if @project.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule)
+    if @project.token&.token_type&.is_a?(TokenType::TokenReleaseSchedule)
+      if @whitelabel_mission
+        redirect_to projects_url
+      else
+        redirect_to project_url(@project)
+      end
+    end
   end
 
   def redirect_to_default_whitelabel_domain

@@ -126,6 +126,7 @@ Prerequisites:
 - Bundler
 - Yarn
 - Chrome and [Chromedriver](https://chromedriver.chromium.org/)
+- ImageMagick
 
 You can check actual versions of yarn, node and other tools in docker-compose.yml file.
 

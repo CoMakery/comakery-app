@@ -113,6 +113,10 @@ class Token < ApplicationRecord
     blockchain&.name&.match?(/^Ethereum/)
   end
 
+  def _token_type_on_algorand?
+    blockchain&.name&.match?(/^Algorand/)
+  end
+
   def _token_type_on_qtum?
     blockchain&.name&.match?(/^Qtum/)
   end
