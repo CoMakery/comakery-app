@@ -301,7 +301,6 @@ describe ProjectPolicy do
           expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be true
           expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
         end
-
       end
 
       context 'and awards hidden' do
@@ -326,7 +325,6 @@ describe ProjectPolicy do
           expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be false
           expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be false
           expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
-
         end
       end
     end
