@@ -13,7 +13,7 @@ resource 'VIII. Reg Groups' do
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:reg_group) { create(:reg_group, id: 11111112, name: 'RegGroup 18ba883fac1e9b8e3f400bf3cf718c5ea33daf27', blockchain_id: 1001, token: create(:comakery_dummy_token, id: 11111113)) }
+  let!(:reg_group) { create(:reg_group, id: 11111112, name: 'RegGroup 18ba883fac1e9b8e3f400bf3cf718c5ea33daf27', blockchain_id: 11111112, token: create(:comakery_dummy_token, id: 11111113)) }
   let!(:project) { create(:project, id: 11111114, mission: active_whitelabel_mission, token: reg_group.token) }
 
   explanation 'Create and delete reg groups, retrieve reg group data.'
