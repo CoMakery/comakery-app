@@ -46,6 +46,8 @@ Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+ResponseBodyError = Class.new(StandardError)
+
 RSpec.configure do |config|
   config.include ModelValidations, type: :model
 
@@ -74,6 +76,12 @@ RSpec.configure do |config|
 
   config.after(:each) do
     Timecop.return
+  end
+
+  config.after(:example) do |example|
+    if example.exception
+      raise ResponseBodyError, response_body if defined?(response_body) && response_body
+    end
   end
 
   if Bullet.enable?
