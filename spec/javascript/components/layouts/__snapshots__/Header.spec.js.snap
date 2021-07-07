@@ -37,6 +37,12 @@ exports[`Header renders correctly without props 1`] = `
           My Projects
         </a>
         <a
+          className={null}
+          href="/tasks"
+        >
+          My Tasks
+        </a>
+        <a
           href="https://forum.comakery.com"
           target="_blank"
         >
