@@ -10,14 +10,14 @@ describe 'accounts index page', js: true do
     before { login(account) }
 
     it 'show table with records' do
-      visit '/accounts/?proofer-ignore'
+      visit accounts_path
 
       expect(page.all('#main-table tr').size).to eq(2)
     end
 
     context 'when the account is updated' do
       it 'broadcasts event' do
-        visit '/accounts/?proofer-ignore'
+        visit accounts_path
 
         expect(page).to have_content('Eva Smith')
 
@@ -29,7 +29,7 @@ describe 'accounts index page', js: true do
 
     context 'when the wallet is updated' do
       it 'broadcasts event' do
-        visit '/accounts/?proofer-ignore'
+        visit accounts_path
 
         expect(page).to have_content('3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt')
 
@@ -41,7 +41,7 @@ describe 'accounts index page', js: true do
 
     context 'when the verification is updated' do
       it 'broadcasts event' do
-        visit '/accounts/?proofer-ignore'
+        visit accounts_path
 
         expect(page).to have_content('FAILED')
 
@@ -53,7 +53,7 @@ describe 'accounts index page', js: true do
 
     context 'when the wallet was destroyed' do
       it 'broadcasts event' do
-        visit '/accounts/?proofer-ignore'
+        visit accounts_path
 
         wallet.destroy
 
@@ -70,7 +70,7 @@ describe 'accounts index page', js: true do
     before { login(account) }
 
     it 'show table with records' do
-      visit '/accounts/?proofer-ignore'
+      visit accounts_path
 
       expect(page.all('#main-table tr').size).to eq(2)
     end
