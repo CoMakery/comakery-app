@@ -56,6 +56,25 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
           expect(controller).to set_flash[:notice]
         end
       end
+
+      context 'when a project has burn transfers' do
+        let!(:award_type) { FactoryBot.create(:award_type, project: project) }
+        let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
+        let!(:burn_transfer) do
+          FactoryBot.create :award, account: project.account, amount: 200, status: :paid, award_type: award_type,
+                                    transfer_type: burn_transfer_type
+        end
+
+        it 'returns a success response with burn transfer record' do
+          get :index, params: { project_id: project.to_param }
+
+          expect(response).to be_successful
+
+          expect(assigns[:transfers]).to include(burn_transfer)
+
+          expect(controller).to set_flash[:notice]
+        end
+      end
     end
 
     context 'when failure' do
