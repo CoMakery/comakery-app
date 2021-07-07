@@ -15,7 +15,7 @@ resource 'VII. Blockchain Transactions' do
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:blockchain_transaction) { create(:static_blockchain_transaction, id: 49) }
+  let!(:blockchain_transaction) { create(:static_blockchain_transaction, id: 11111111) }
   let!(:project) { blockchain_transaction.blockchain_transactable.project }
 
   before do
@@ -105,7 +105,7 @@ resource 'VII. Blockchain Transactions' do
 
       example 'GENERATE TRANSACTION – TRANSACTABLE TYPE' do
         explanation 'Generates a new blockchain transaction for transactable with supplied type and locks the transactable for 10 minutes'
-        create(:static_transfer_rule, id: 35, token: project.token)
+        create(:static_transfer_rule, id: 11111112, token: project.token)
 
         request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: 'transfer_rules' }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
@@ -119,7 +119,7 @@ resource 'VII. Blockchain Transactions' do
 
       example 'GENERATE TRANSACTION – TRANSACTABLE TYPE AND TRANSACTABLE ID' do
         explanation 'Generates a new blockchain transaction for transactable with supplied type and id and locks the transactable for 10 minutes'
-        t = create(:static_transfer_rule, id: 20, token: project.token)
+        t = create(:static_transfer_rule, id: 11111113, token: project.token)
 
         request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: 'transfer_rules', blockchain_transactable_id: t.id }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 

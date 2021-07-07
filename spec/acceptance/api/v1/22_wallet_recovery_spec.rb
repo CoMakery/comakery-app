@@ -14,7 +14,7 @@ resource 'XI. Wallet Recovery' do
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: nil, wallet_recovery_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:static_account, id: 62, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 11111111, managed_mission: active_whitelabel_mission) }
   let(:private_wrapping_key) { '18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725' }
   let(:public_wrapping_key) { '0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6' }
 

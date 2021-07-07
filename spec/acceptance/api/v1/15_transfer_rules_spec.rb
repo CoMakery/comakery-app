@@ -14,8 +14,8 @@ resource 'V. Transfer Rules' do
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:transfer_rule) { create(:static_transfer_rule, id: 40) }
-  let!(:project) { create(:project, id: 50, mission: active_whitelabel_mission, token: transfer_rule.token) }
+  let!(:transfer_rule) { create(:static_transfer_rule, id: 11111111) }
+  let!(:project) { create(:project, id: 11111112, mission: active_whitelabel_mission, token: transfer_rule.token) }
 
   explanation 'Create and delete transfer rules, retrieve transfer rules data.'
 
@@ -93,8 +93,8 @@ resource 'V. Transfer Rules' do
 
       let!(:valid_attributes) do
         {
-          sending_group_id: create(:reg_group, id: 70, token: transfer_rule.token).id.to_s,
-          receiving_group_id: create(:reg_group, id: 71, token: transfer_rule.token).id.to_s,
+          sending_group_id: create(:reg_group, id: 11111113, token: transfer_rule.token).id.to_s,
+          receiving_group_id: create(:reg_group, id: 11111114, token: transfer_rule.token).id.to_s,
           lockup_until: '1'
         }
       end

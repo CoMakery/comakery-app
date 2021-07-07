@@ -14,7 +14,7 @@ resource 'VI. Wallet Transfer Rules' do
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account_token_record) { create(:static_account_token_record, id: 75) }
+  let!(:account_token_record) { create(:static_account_token_record, id: 11111111) }
   let!(:account) { account_token_record.account }
   let!(:token) { account_token_record.token }
   let!(:wallet) { account_token_record.wallet }
@@ -100,7 +100,7 @@ resource 'VI. Wallet Transfer Rules' do
         {
           max_balance: '100',
           lockup_until: '1',
-          reg_group_id: create(:reg_group, id: 60, token: account_token_record.token).id.to_s,
+          reg_group_id: create(:reg_group, id: 11111113, token: account_token_record.token).id.to_s,
           managed_account_id: create(:account, managed_account_id: 'new_managed_account').managed_account_id,
           account_frozen: 'false'
         }
@@ -122,7 +122,7 @@ resource 'VI. Wallet Transfer Rules' do
         {
           max_balance: '-100',
           lockup_until: '1',
-          reg_group_id: create(:reg_group, id: 30, token: account_token_record.token).id.to_s,
+          reg_group_id: create(:reg_group, id: 11111114, token: account_token_record.token).id.to_s,
           managed_account_id: create(:account, managed_account_id: 'new_managed_account').managed_account_id,
           account_frozen: 'false'
         }
