@@ -115,10 +115,11 @@ class ProjectDecorator < Draper::Decorator
       accounts_url: project_dashboard_accounts_path(self),
       transfer_rules_url: project_dashboard_transfer_rules_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
-      show_batches: show_batches?,
+      show_batches: award_types.where.not(state: :draft).any?,
       require_confidentiality: require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
+      project_awards_visible: project_awards_visible?,
       token_lockup: token&.token_type&.is_a?(TokenType::TokenReleaseSchedule),
       github_url: github_url,
       documentation_url: documentation_url,
@@ -134,12 +135,8 @@ class ProjectDecorator < Draper::Decorator
     }.merge(token_props)
   end
 
-  def show_batches?
-    if mission.present? && mission.whitelabel?
-      mission.project_awards_visible?
-    else
-      award_types.where.not(state: :draft).any?
-    end
+  def project_awards_visible?
+    mission.project_awards_visible? if mission.present? && mission.whitelabel?
   end
 
   def token_props
