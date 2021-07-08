@@ -15,7 +15,7 @@ describe 'Award Types index', skip: true do
     end
 
     context 'with non-whitelabel mission' do
-      before { project.update(mission: build(:mission) ) }
+      before { project.update(mission: build(:mission)) }
 
       it { expect(page).to have_current_path(project_award_types_path(project)) }
     end
@@ -23,13 +23,13 @@ describe 'Award Types index', skip: true do
     context 'with whitelabel mission and project awards hidden' do
       let(:whitelabel_mission) { create :whitelabel_mission, whitelabel_domain: 'www.example.com' }
 
-      before { project.update(mission: whitelabel_mission ) }
+      before { project.update(mission: whitelabel_mission) }
 
       it { expect(page).to have_current_path(root_path) }
     end
 
     context 'with whitelabel mission and project awards visible' do
-      before { project.mission.update(project_awards_visible: true ) }
+      before { project.mission.update(project_awards_visible: true) }
 
       it { expect(page).to have_current_path(project_award_types_path(project)) }
     end
