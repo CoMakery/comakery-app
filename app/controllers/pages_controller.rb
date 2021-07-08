@@ -6,6 +6,9 @@ class PagesController < ApplicationController
   skip_after_action :verify_authorized
 
   layout 'legacy', except: %i[styleguide featured]
+  layout 'layout_pages', only: [:new_styling]
+
+  def new_styling; end
 
   def featured # rubocop:todo Metrics/CyclomaticComplexity
     top_missions = Mission.active.without_whitelabel.with_attached_image.first(4)
