@@ -738,8 +738,6 @@ describe ProjectDecorator do
 
     before { Timecop.freeze(now) }
 
-    after { Timecop.return }
-
     context 'when no awards' do
       let(:transfers) { Award.none }
 
@@ -998,8 +996,6 @@ describe ProjectDecorator do
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
     before { Timecop.freeze(now) }
-
-    after { Timecop.return }
 
     context 'when no awards' do
       let(:transfers) { Award.none }
@@ -1263,8 +1259,6 @@ describe ProjectDecorator do
     let!(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 
     before { Timecop.freeze(now) }
-
-    after { Timecop.return }
 
     context 'when no awards' do
       let(:transfers) { Award.none }
