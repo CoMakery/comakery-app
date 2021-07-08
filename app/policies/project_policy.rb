@@ -51,7 +51,7 @@ class ProjectPolicy < ApplicationPolicy
 
   def show_award_types?
     if project.mission.present? && project.mission.whitelabel?
-      (show? || unlisted?) && project.mission.project_awards_visible?
+      project.mission.project_awards_visible?
     else
       show? || unlisted?
     end
@@ -79,6 +79,7 @@ class ProjectPolicy < ApplicationPolicy
   alias change_permissions? edit?
   alias accounts? show_contributions?
   alias transfers? show_contributions?
+  alias show_awards? show_award_types?
 
   def export_transfers?
     edit? || project_observer?

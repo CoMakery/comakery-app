@@ -11,8 +11,6 @@ class AwardTypesController < ApplicationController
 
   def index
     authorize @project, :show_award_types?
-  rescue Pundit::NotAuthorizedError
-    redirect_to '/404.html'
   end
 
   def new; end

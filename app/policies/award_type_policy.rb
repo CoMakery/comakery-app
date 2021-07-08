@@ -24,10 +24,4 @@ class AwardTypePolicy < ApplicationPolicy
       end
     end
   end
-
-  def index?
-    return mission.project_awards_visible? if mission.present? && mission.whitelabel?
-
-    true
-  end
 end

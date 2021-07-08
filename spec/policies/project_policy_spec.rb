@@ -249,7 +249,7 @@ describe ProjectPolicy do
     end
   end
 
-  describe 'show_award_types?' do
+  describe 'show_awards? show_award_types?' do
     context 'when project with non-whitelabel or without mission' do
       it 'allows show award types of projects that are public or owned by the current account' do
         expect(described_class.new(nil, my_public_project).show_award_types?).to be true

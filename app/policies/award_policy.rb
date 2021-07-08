@@ -5,7 +5,6 @@ class AwardPolicy < ApplicationPolicy
     @account = account
     @award = award
     @project = @award.project
-    @mission = @project.mission
   end
 
   class Scope < Scope
@@ -23,12 +22,6 @@ class AwardPolicy < ApplicationPolicy
         scope.none
       end
     end
-  end
-
-  def index?
-    return mission.project_awards_visible? if mission.present? && mission.whitelabel?
-
-    true
   end
 
   def show?

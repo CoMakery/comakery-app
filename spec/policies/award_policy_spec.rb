@@ -51,22 +51,6 @@ describe AwardPolicy do
     end
   end
 
-  describe '#index?' do
-    let(:award_type) { create :award_type }
-
-    subject { described_class.new(award_type.project.account, award_type.awards.new) }
-
-    context 'when mission project awards are hidden' do
-      it { expect(subject.index?).to be(false) }
-    end
-
-    context 'when mission project awards are visible' do
-      before { award_type.project.mission.update(project_awards_visible: true) }
-
-      it { expect(subject.index?).to be(true) }
-    end
-  end
-
   describe 'create?' do
     let(:award_type) { create :award_type }
 
