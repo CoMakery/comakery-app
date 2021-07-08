@@ -6,6 +6,7 @@ resource 'VIII. Reg Groups' do
   before do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    allow_any_instance_of(Api::V1::RegGroupsController).to receive(:nonce_unique?).and_return(true)
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }

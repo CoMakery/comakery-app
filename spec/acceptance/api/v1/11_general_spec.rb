@@ -14,6 +14,7 @@ resource 'I. General' do
 
   before do
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    allow_any_instance_of(Api::V1::ProjectsController).to receive(:nonce_unique?).and_return(true)
     project.transfer_types.each_with_index do |t_type, i|
       t_type.update_column(:id, 905 + i) # rubocop:disable Rails/SkipsModelValidations
     end

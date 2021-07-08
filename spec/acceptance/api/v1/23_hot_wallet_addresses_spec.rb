@@ -7,6 +7,7 @@ resource 'XII. Hot Wallet Addresses' do
   before do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
+    allow_any_instance_of(Api::V1::HotWalletAddressesController).to receive(:nonce_unique?).and_return(true)
     allow_any_instance_of(ApiKey).to receive(:key).and_return('28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO')
   end
 
