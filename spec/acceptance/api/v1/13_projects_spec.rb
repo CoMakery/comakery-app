@@ -7,17 +7,14 @@ resource 'III. Projects' do
   before do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
-  end
-
-  after do
-    Timecop.return
+    allow_any_instance_of(Api::V1::ProjectsController).to receive(:nonce_unique?).and_return(true)
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
 
-  let!(:project) { create(:static_project, id: 98, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 84), account: create(:static_account, id: 100, managed_mission: active_whitelabel_mission)) }
+  let!(:project) { create(:static_project, id: 11111111, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 11111112), account: create(:static_account, id: 11111113, managed_mission: active_whitelabel_mission)) }
 
-  let!(:project2) { create(:static_project, id: 25, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 85, name: 'ComakeryToken-6565af0266e546fb62111bbcece711a5b6034a2f', symbol: 'XYZe744a975bde638d8a1a3df7fc39f5afcf4be0358'), account: create(:account, email: 'me+b884e29cbea5f547cc6d2f4e632642d153afbb45@example.com', nickname: 'hunter-ec09c6af6ea2846f4d0e09690dc00c3f7878165g', managed_account_id: 'e0510e56-b036-43bf-9e8c-e691a3dc4100', id: 99, managed_mission: active_whitelabel_mission)) }
+  let!(:project2) { create(:static_project, id: 11111114, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 11111115, name: 'ComakeryToken-6565af0266e546fb62111bbcece711a5b6034a2f', symbol: 'XYZe744a975bde638d8a1a3df7fc39f5afcf4be0358'), account: create(:account, email: 'me+b884e29cbea5f547cc6d2f4e632642d153afbb45@example.com', nickname: 'hunter-ec09c6af6ea2846f4d0e09690dc00c3f7878165g', managed_account_id: 'e0510e56-b036-43bf-9e8c-e691a3dc4100', id: 11111116, managed_mission: active_whitelabel_mission)) }
 
   before do
     3.times do |n|

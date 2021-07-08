@@ -30,8 +30,6 @@ RSpec.describe AwardsController, type: :controller do
       .to receive(:form_authenticity_token).and_return('some_csrf_token')
   end
 
-  after { Timecop.return }
-
   shared_context 'with specialties' do
     let!(:specialty1) { FactoryBot.create :specialty, name: 'Audio Or Video Production' }
     let!(:specialty2) { FactoryBot.create :specialty, name: 'Community Development' }
@@ -347,8 +345,6 @@ RSpec.describe AwardsController, type: :controller do
         project_id: project.id, award_type_id: award_type.id, award_id: award.id
       }
     end
-
-    after { Timecop.return }
 
     it 'should respond with success' do
       expect(response.status).to eq 200

@@ -167,7 +167,7 @@ module Comakery
       def verify_nonce
         nonce = @request.fetch('body', {}).fetch('nonce', '')
         raise Comakery::APISignatureError, 'Nonce is too long' if nonce.length > MAX_NONCE_SIZE
-        raise Comakery::APISignatureError, 'Invalid nonce' unless @is_nonce_unique.call(@request.fetch('body', {}).fetch('nonce', ''))
+        raise Comakery::APISignatureError, 'Invalid nonce' unless @is_nonce_unique.call(nonce)
       end
 
       def verify_timestamp
