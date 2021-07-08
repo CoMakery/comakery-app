@@ -29,7 +29,7 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
-      expect(Sentry).not_to receive(:capture_exception)
+      expect(Sentry).not_to receive(:capture_exception).with(RuntimeError)
 
       perform
 
