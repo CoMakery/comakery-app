@@ -2,42 +2,36 @@ require 'rails_helper'
 
 describe 'Award Types index' do
   context 'when project' do
-    before(:each) do
+    let(:project) { create :project }
+
+    before do
       login(project.account)
 
       visit project_award_types_path(project)
     end
 
     context 'without mission' do
-      let(:project) { create :project }
-
       it { expect(page).to have_current_path(project_award_types_path(project)) }
     end
 
     context 'with non-whitelabel mission' do
-      let(:project) { create :project, mission: build(:mission) }
-
-      it { expect(page).to have_current_path(project_award_types_path(project)) }
-    end
-
-    context 'with whitelabel mission and project awards visible' do
-      let(:whitelabel_mission) do
-        create :whitelabel_mission, whitelabel_domain: 'www.example.com', project_awards_visible: true
-      end
-
-      let(:project) { create :project, mission: whitelabel_mission }
+      before { project.update(mission: build(:mission) ) }
 
       it { expect(page).to have_current_path(project_award_types_path(project)) }
     end
 
     context 'with whitelabel mission and project awards hidden' do
-      let(:whitelabel_mission) do
-        create :whitelabel_mission, whitelabel_domain: 'www.example.com', project_awards_visible: false
-      end
+      let(:whitelabel_mission) { create :whitelabel_mission, whitelabel_domain: 'www.example.com' }
 
-      let(:project) { create :project, mission: whitelabel_mission }
+      before { project.update(mission: whitelabel_mission ) }
 
-      it { expect(page).to have_current_path('/404.html') }
+      it { expect(page).to have_current_path(project_award_types_path(project)) }
+    end
+
+    context 'with whitelabel mission and project awards visible' do
+      before { project.mission.update(project_awards_visible: true ) }
+
+      it { expect(page).to have_current_path(project_award_types_path(project)) }
     end
   end
 end
