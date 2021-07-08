@@ -32,7 +32,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def ethereum_transaction_address_short
-    "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
+    "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address.present?
   end
 
   def ethereum_transaction_explorer_url
@@ -82,7 +82,7 @@ class AwardDecorator < Draper::Decorator
       issuer.last_name,
       latest_blockchain_transaction&.source,
       total_amount,
-      latest_blockchain_transaction&.tx_hash,
+      ethereum_transaction_address,
       token&.blockchain&.name,
       transferred_at,
       created_at

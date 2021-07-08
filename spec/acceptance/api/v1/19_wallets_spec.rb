@@ -7,14 +7,11 @@ resource 'IX. Wallets' do
   before do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
-  end
-
-  after do
-    Timecop.return
+    allow_any_instance_of(Api::V1::WalletsController).to receive(:nonce_unique?).and_return(true)
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:static_account, id: 60, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 11111111, managed_mission: active_whitelabel_mission) }
 
   explanation 'Create, update, delete and retrieve account wallets.'
 
@@ -42,7 +39,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet) { create(:wallet, id: 35, account: account) }
+      let!(:wallet) { create(:wallet, id: 11111112, account: account) }
       let!(:page) { 1 }
 
       example 'INDEX' do
@@ -98,9 +95,9 @@ resource 'IX. Wallets' do
 
     context '201' do
       let!(:id) { account.managed_account_id }
-      let(:asa_token) { create(:asa_token, id: 50) }
-      let(:ast_token) { create(:algo_sec_token, id: 55) }
-      let(:reg_group) { create(:reg_group, id: 45, token: ast_token) }
+      let(:asa_token) { create(:asa_token, id: 11111113) }
+      let(:ast_token) { create(:algo_sec_token, id: 11111114) }
+      let(:reg_group) { create(:reg_group, id: 11111115, token: ast_token) }
       let(:tokens_to_provision) do
         [
           { token_id: asa_token.id.to_s },
@@ -146,7 +143,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, id: 60, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 11111116, account: account).id.to_s }
       let(:update_params) { { wallet: { primary_wallet: true } } }
 
       example 'UPDATE WALLET' do
@@ -180,7 +177,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, id: 59, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 11111117, account: account).id.to_s }
 
       example 'GET WALLET' do
         explanation 'Returns specified wallet (See INDEX for response details)'
@@ -200,7 +197,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet_id) { create(:wallet, id: 31, account: account).id.to_s }
+      let!(:wallet_id) { create(:wallet, id: 11111118, account: account).id.to_s }
 
       example 'REMOVE WALLET' do
         explanation 'Returns account wallets (See INDEX for response details)'
@@ -225,7 +222,7 @@ resource 'IX. Wallets' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:wallet) { create(:ore_id_wallet, id: 35, account: account) }
+      let!(:wallet) { create(:ore_id_wallet, id: 11111119, account: account) }
       let(:wallet_id) { wallet.id.to_s }
       let!(:redirect_url) { 'localhost' }
 

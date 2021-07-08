@@ -3,9 +3,9 @@ require 'bigdecimal'
 class Award < ApplicationRecord
   paginates_per 50
 
-  include ActiveStorageValidator
   include BlockchainTransactable
   include RansackReorder
+  include PrepareImage
 
   EXPERIENCE_LEVELS = {
     'New Contributor' => 0,
@@ -16,10 +16,8 @@ class Award < ApplicationRecord
   STARTED_TASKS_PER_CONTRIBUTOR = 5
   QUANTITY_PRECISION = 2
 
-  # attachment :image, type: :image
-  # attachment :submission_image, type: :image
-  has_one_attached :image
-  has_one_attached :submission_image
+  has_one_attached_and_prepare_image :image
+  has_one_attached_and_prepare_image :submission_image
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
   add_special_orders %w[account_first_name issuer_first_name]
@@ -73,8 +71,6 @@ class Award < ApplicationRecord
   validate :cancellation, if: -> { status_changed? && status_was.in?(%w[rejected paid cancelled]) && status == 'cancelled' }
   validate :recipient_wallet_belongs_to_account, if: -> { recipient_wallet_id.present? }
   validate :recipient_wallet_and_token_in_same_network, if: -> { recipient_wallet_id.present? }
-
-  validate_image_attached :image, :submission_image
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
@@ -363,6 +359,10 @@ class Award < ApplicationRecord
     update!(transaction_error: error, status: :accepted)
   end
 
+  def populate_recipient_wallet
+    self.recipient_wallet = account&.wallets&.find_by(address: recipient_address, _blockchain: token&._blockchain)
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private
@@ -402,10 +402,6 @@ class Award < ApplicationRecord
       return if recipient_wallet._blockchain == token&._blockchain
 
       errors[:recipient_wallet_id] << 'wallet and token are not in the same network'
-    end
-
-    def populate_recipient_wallet
-      self.recipient_wallet = account.wallets.find_by(address: recipient_address, _blockchain: token&._blockchain)
     end
 
     def abort_destroy

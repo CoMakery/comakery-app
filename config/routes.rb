@@ -67,6 +67,7 @@ Rails.application.routes.draw do
     resources :invites, only: [:create], controller: 'projects/invites'
     resources :accounts do
       resources :permissions, only: %i[show update], controller: 'projects/accounts/permissions'
+      resource :settings, only: [:show], controller: 'projects/accounts/settings'
     end
 
     resources :award_types, path: 'batches', except: [:show] do
@@ -165,6 +166,12 @@ Rails.application.routes.draw do
 
     match 'user_wallet/new', to: 'user_wallet#new', via: [:get, :post]
     get 'user_wallet/receive'
+  end
+
+  resources :invites, only: [:show] do
+    member do
+      get :redirect
+    end
   end
 
   namespace :api, defaults: { format: :json } do

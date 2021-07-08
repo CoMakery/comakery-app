@@ -30,10 +30,7 @@
               <div class="h12 font-weight-medium n10-color ms-1">PERMISSIONS</div>
               <br>
               <%= f.select :role,
-                           options_for_select(
-                               ProjectRole.roles.keys.collect { |role| [role.titleize, role] },
-                               selected: project_role.role
-                           ),
+                           options_for_select(role_options_for_select),
                            {},
                            { class: 'form-select form-control' } %>
             </div>

@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'controllers/unavailable_for_lockup_token_spec'
 
 RSpec.describe AwardsController, type: :controller do
   let!(:team) { create :team }
@@ -28,8 +29,6 @@ RSpec.describe AwardsController, type: :controller do
     allow_any_instance_of(AwardsController)
       .to receive(:form_authenticity_token).and_return('some_csrf_token')
   end
-
-  after { Timecop.return }
 
   shared_context 'with specialties' do
     let!(:specialty1) { FactoryBot.create :specialty, name: 'Audio Or Video Production' }
@@ -127,6 +126,12 @@ RSpec.describe AwardsController, type: :controller do
   describe '#show' do
     let(:award) { create(:award, award_type: award_type) }
     let(:account) { project.account.decorate }
+
+    it_behaves_like 'unavailable_for_lockup_token' do
+      let!(:award) { create(:award, award_type: award_type) }
+
+      subject { get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param } }
+    end
 
     it 'shows member tasks to logged in members' do
       login(account)
@@ -340,8 +345,6 @@ RSpec.describe AwardsController, type: :controller do
         project_id: project.id, award_type_id: award_type.id, award_id: award.id
       }
     end
-
-    after { Timecop.return }
 
     it 'should respond with success' do
       expect(response.status).to eq 200

@@ -1,1 +1,0 @@
-class ProjectInvite < Invite; end

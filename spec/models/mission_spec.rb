@@ -1,8 +1,12 @@
 require 'rails_helper'
-require 'models/concerns/active_storage_validator_spec'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Mission do
-  it_behaves_like 'active_storage_validator', %w[image logo whitelabel_logo whitelabel_logo_dark whitelabel_favicon]
+  it_behaves_like 'has_one_attached_and_prepare_image', 'logo'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'whitelabel_logo'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'whitelabel_logo_dark'
+  it_behaves_like 'has_one_attached_and_prepare_image', 'whitelabel_favicon'
 
   describe 'validations' do
     it 'requires many attributes' do

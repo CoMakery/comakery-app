@@ -1,6 +1,7 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
-  before_action :unavailable_for_whitelabel, only: %i[index]
+  before_action :unavailable_for_lockup_token, except: %i[index confirm]
+  before_action :unavailable_for_whitelabel
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
@@ -64,9 +65,7 @@ class AwardsController < ApplicationController
   end
 
   def update
-    image_validator = ImagePreparer.new(@award, award_params)
-
-    if image_validator.valid? && @award.update(award_params) && @award.update(issuer: current_account)
+    if @award.update(award_params) && @award.update(issuer: current_account)
       set_ok_response
       render json: @ok_response, status: :ok
     else

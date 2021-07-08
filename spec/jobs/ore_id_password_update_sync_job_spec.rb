@@ -5,38 +5,39 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
   let(:now) { Time.zone.local(2021, 6, 1, 15) }
   let(:self_reschedule_job) { double('OreIdPasswordUpdateSyncJob', perform_later: nil) }
-  let(:ore_id) { create(:ore_id, skip_jobs: true, state: 'unclaimed') }
+  let(:ore_id) { FactoryBot.create(:ore_id_account, state: 'pending_manual') }
 
   before do
     allow(described_class).to receive(:set).with(any_args).and_return(self_reschedule_job)
-    allow_any_instance_of(ore_id.class).to receive(:claim!)
-    allow(Sentry).to receive(:capture_exception)
+    allow_any_instance_of(OreIdAccount).to receive(:claim!)
     Timecop.freeze(now)
   end
 
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
+      expect(Sentry).to receive(:capture_exception).with(StandardError).once
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(ore_id.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(StandardError)
+      expect(ore_id.reload.synchronisations.last).to be_failed
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
+      expect(Sentry).not_to receive(:capture_exception).with(StandardError)
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(ore_id.synchronisations).to be_empty
-      expect(Sentry).not_to have_received(:capture_exception).with(StandardError)
+      expect(ore_id.reload.synchronisations).to be_empty
     end
   end
 
@@ -53,7 +54,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
     context 'and service raises an error' do
       context 'when error is a standard error' do
-        before { allow_any_instance_of(ore_id.class).to receive(:claim!).and_raise(StandardError) }
+        before { allow_any_instance_of(OreIdAccount).to receive(:claim!).and_raise(StandardError) }
 
         context 'when next sync allowed time is in the future' do
           before do
@@ -76,7 +77,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
       context 'when error is a OreIdAccount::ProvisioningError' do
         before do
-          allow_any_instance_of(ore_id.class)
+          allow_any_instance_of(OreIdAccount)
             .to receive(:claim!).and_raise(OreIdAccount::ProvisioningError)
         end
 
@@ -87,14 +88,15 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
           end
 
           it 'should fail and reschedule itself with the delay' do
+            expect(Sentry).not_to receive(:capture_exception)
+
             perform
 
             expect(described_class).to have_received(:set).with(wait: 1.hour).once
             expect(described_class).to have_received(:set).once
             expect(self_reschedule_job).to have_received(:perform_later).once
 
-            expect(ore_id.synchronisations.last).to be_failed
-            expect(Sentry).not_to have_received(:capture_exception)
+            expect(ore_id.reload.synchronisations.last).to be_failed
           end
         end
 
@@ -105,16 +107,15 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
           end
 
           it 'should fail and reschedule itself with the delay' do
+            expect(Sentry).not_to receive(:capture_exception)
+
             perform
 
             expect(described_class).to have_received(:set).with(wait: 0).once
             expect(described_class).to have_received(:set).once
             expect(self_reschedule_job).to have_received(:perform_later).once
 
-            expect(ore_id.synchronisations.last).to be_failed
-            expect(Sentry)
-              .not_to have_received(:capture_exception)
-              .with(instance_of(OreIdAccount::ProvisioningError))
+            expect(ore_id.reload.synchronisations.last).to be_failed
           end
         end
       end

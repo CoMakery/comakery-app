@@ -7,17 +7,14 @@ resource 'II. Accounts' do
   before do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
-  end
-
-  after do
-    Timecop.return
+    allow_any_instance_of(Api::V1::AccountsController).to receive(:nonce_unique?).and_return(true)
   end
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:static_account, id: 80, managed_mission: active_whitelabel_mission) }
-  let!(:verification) { create(:verification, id: 99, account: account) }
-  let!(:project) { create(:static_project, id: 98, mission: active_whitelabel_mission) }
-  let!(:project2) { create(:static_project, id: 99, mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 11111111, managed_mission: active_whitelabel_mission) }
+  let!(:verification) { create(:verification, id: 11111112, account: account) }
+  let!(:project) { create(:static_project, id: 11111113, mission: active_whitelabel_mission) }
+  let!(:project2) { create(:static_project, id: 11111114, mission: active_whitelabel_mission) }
 
   explanation 'Retrieve and manage account data, balances, interests.'
 
@@ -376,7 +373,7 @@ resource 'II. Accounts' do
 
     context '200' do
       let!(:id) { account.managed_account_id }
-      let!(:token) { create(:static_token, id: 98, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
+      let!(:token) { create(:static_token, id: 11111115, _token_type: :comakery_security_token, contract_address: build(:ethereum_contract_address), _blockchain: :ethereum_ropsten) }
       let!(:balance) { create(:balance, base_unit_value: 200, token: token, wallet: create(:eth_wallet, account: account)) }
       let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
 
@@ -405,10 +402,10 @@ resource 'II. Accounts' do
       let!(:id) { account.managed_account_id }
       let!(:page) { 1 }
       let(:award_type) { create(:award_type, project: project) }
-      let(:transfer_type) { create(:transfer_type, id: 99, project: award_type.project) }
+      let(:transfer_type) { create(:transfer_type, id: 11111116, project: award_type.project) }
 
       before do
-        create(:award, id: 90, account: account, status: :paid, amount: 1, award_type: award_type, transfer_type: transfer_type)
+        create(:award, id: 11111117, account: account, status: :paid, amount: 1, award_type: award_type, transfer_type: transfer_type)
       end
 
       example 'TRANSFERS' do

@@ -74,4 +74,6 @@ if Rails.env.development? || Rails.env.test?
                          title: 'Proj 3',
                          visibility: :public_listed,
                          mission: dummy_mission))
+
+  FactoryBot.create :project, :using_security_token, account: Account.first
 end

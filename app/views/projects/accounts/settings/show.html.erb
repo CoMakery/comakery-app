@@ -1,0 +1,11 @@
+<turbo-frame id="account_settings">
+  <div class="dropdown-menu dropdown-menu-end">
+    <%= link_to 'Change Permissions',
+                project_account_permission_path(id: @project_role.id,
+                                                project_id: @project_role.project_id,
+                                                account_id: @project_role.account_id),
+                method: :get,
+                id: 'change_permissions_btn',
+                class: "dropdown-item #{@project_policy.change_permissions? ? '' : 'disabled' }" %>
+  </div>
+</turbo-frame>

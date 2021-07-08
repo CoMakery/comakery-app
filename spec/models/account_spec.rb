@@ -1,12 +1,13 @@
 require 'rails_helper'
-require 'models/concerns/active_storage_validator_spec'
+require 'models/concerns/has_one_attached_and_prepare_image_spec'
 
 describe Account do
-  it_behaves_like 'active_storage_validator', %w[image]
+  it_behaves_like 'has_one_attached_and_prepare_image', 'image', resize: '190x190!'
 
   it { is_expected.to have_many(:wallets).dependent(:destroy) }
   it { is_expected.to have_many(:balances).through(:wallets) }
   it { is_expected.to have_one(:ore_id_account).dependent(:destroy) }
+  it { is_expected.to have_many(:invites).dependent(:destroy) }
 
   subject(:account) { create :account, password: '12345678' }
 
@@ -15,6 +16,38 @@ describe Account do
   end
 
   specify { expect(subject.name).to eq("#{subject.first_name} #{subject.last_name}") }
+
+  context 'when created from an invite' do
+    let(:invite) { FactoryBot.build(:invite) }
+
+    context 'and email matches invite email' do
+      subject { FactoryBot.build(:account, :unconfirmed, email: invite.email, invite: invite) }
+
+      before do
+        subject.valid?
+      end
+
+      it { is_expected.to be_confirmed }
+      it { is_expected.to be_valid }
+    end
+
+    context 'and email doesnt match invite email' do
+      subject { FactoryBot.build(:account, :unconfirmed, invite: invite) }
+
+      before do
+        subject.valid?
+      end
+
+      it { is_expected.not_to be_confirmed }
+      it { is_expected.to be_valid }
+
+      context 'and invite forces the email to match' do
+        let(:invite) { FactoryBot.build(:invite, force_email: true) }
+
+        it { is_expected.not_to be_valid }
+      end
+    end
+  end
 
   describe 'validations' do
     describe 'urls' do

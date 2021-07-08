@@ -1,5 +1,6 @@
 class AwardTypesController < ApplicationController
   before_action :assign_project
+  before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index]
   before_action :authorize_project_show, only: %i[index]
   before_action :set_award_type, only: %i[edit update destroy]
@@ -21,7 +22,7 @@ class AwardTypesController < ApplicationController
   def create
     @award_type = @project.award_types.new(award_type_params)
 
-    if ImagePreparer.new(@award_type, award_type_params).valid? && @award_type.save
+    if @award_type.save
       set_ok_response
       render json: @ok_response, status: :ok
     else
@@ -31,7 +32,7 @@ class AwardTypesController < ApplicationController
   end
 
   def update
-    if ImagePreparer.new(@award_type, award_type_params).valid? && @award_type.update(award_type_params)
+    if @award_type.update(award_type_params)
       set_ok_response
       render json: @ok_response, status: :ok
     else
@@ -170,7 +171,7 @@ class AwardTypesController < ApplicationController
       @error_response = {
         id: @award_type.id,
         message: @award_type.errors.full_messages.join(', '),
-        errors: @award_type.errors.messages.map { |k, v| ["award_type[#{k}]", v.to_sentence] }.to_h
+        errors: @award_type.errors.messages.map { |k, v| ["batch[#{k}]", v.to_sentence] }.to_h
       }
     end
 end

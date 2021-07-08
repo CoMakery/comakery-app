@@ -3,16 +3,13 @@
 
 class Project < ApplicationRecord
   include ApiAuthorizable
-  include ActiveStorageValidator
+  include PrepareImage
 
   nilify_blanks
 
-  # attachment :image
-  # attachment :square_image, type: :image
-  # attachment :panoramic_image, type: :image
-  has_one_attached :image
-  has_one_attached :square_image
-  has_one_attached :panoramic_image
+  has_one_attached_and_prepare_image :image
+  has_one_attached_and_prepare_image :square_image
+  has_one_attached_and_prepare_image :panoramic_image
   has_one_attached :transfers_csv
 
   belongs_to :account, touch: true
@@ -46,8 +43,6 @@ class Project < ApplicationRecord
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :teams, through: :account
 
-  has_many :invites, as: :invitable, dependent: :destroy
-
   accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
   enum payment_type: {
@@ -70,7 +65,6 @@ class Project < ApplicationRecord
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
-  validate_image_attached :image, :square_image, :panoramic_image
   before_validation :set_whitelabel, if: -> { mission }
   before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
@@ -86,6 +80,7 @@ class Project < ApplicationRecord
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(1)' }
   scope :with_all_attached_images, -> { with_attached_image.with_attached_square_image.with_attached_panoramic_image }
+  scope :non_confidential, -> { where(require_confidentiality: false) }
 
   delegate :_token_type, to: :token, allow_nil: true
   delegate :_token_type_on_ethereum?, to: :token, allow_nil: true
@@ -333,24 +328,20 @@ class Project < ApplicationRecord
     def broadcast_hot_wallet_mode
       broadcast_replace_later_to 'project_hot_wallet_modes',
                                  target: "project_#{id}_hot_wallet_mode",
-                                 partial: 'dashboard/transfers/hot_wallet_mode',
-                                 locals: { project: decorate }
+                                 partial: 'dashboard/transfers/hot_wallet_mode', locals: { project: self }
 
       broadcast_replace_later_to "transfer_project_#{id}_hot_wallet_mode",
                                  target: "transfer_project_#{id}_hot_wallet_mode",
-                                 partial: 'shared/transfer_prioritize_button/mode',
-                                 locals: { project: decorate }
+                                 partial: 'shared/transfer_prioritize_button/mode', locals: { project: self }
     end
 
     def broadcast_batch_size
       broadcast_replace_later_to 'project_transfer_batch_size',
                                  target: "project_#{id}_transfer_batch_size",
-                                 partial: 'dashboard/transfers/batch_size',
-                                 locals: { project: decorate }
+                                 partial: 'dashboard/transfers/batch_size', locals: { project: self }
 
       broadcast_replace_later_to 'project_transfer_batch_size_modal_form',
                                  target: "project_#{id}_transfer_batch_size_modal_form",
-                                 partial: 'projects/batch_size_modal_form',
-                                 locals: { project: decorate }
+                                 partial: 'projects/batch_size_modal_form', locals: { project: self }
     end
 end

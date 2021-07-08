@@ -4,10 +4,9 @@
 <% synced_record = account.account_token_records.where(token: project.token, status: :synced).last %>
 <% last_record = account.account_token_records.where(token: project.token).last %>
 <% last_record_is_not_synced = synced_record && last_record && synced_record.id != last_record.id %>
-<% @project_policy ||= ProjectPolicy.new(project_role&.account, project_role&.project) %>
 
 <div id="project_<%= project.id %>_account_<%= account.id %>">
-  <%= form_with(last_record&.decorate&.form_attrs(project) || { url: project_dashboard_accounts_path(project), class: 'account-form' } ) do |f| %>
+  <%= form_with(last_record&.decorate&.form_attrs(project) || { url: project_dashboard_accounts_path(project), class: 'account-form' }) do |f| %>
     <%= f.hidden_field :account_id, value: account.id %>
 
     <% if policy(project).edit_accounts? && project.supports_transfer_rules? && account.address_for_blockchain(project.token._blockchain) %>
@@ -17,7 +16,7 @@
 
     <div class="transfers-table__transfer">
       <div class="transfers-table__transfer__account">
-        <%= render partial: "dashboard/transfers/account", locals: {account: account} %>
+        <%= render partial: "dashboard/transfers/account", locals: { account: account } %>
       </div>
 
       <div class="transfers-table__transfer__aml-kyc">
@@ -59,7 +58,7 @@
       <div class="transfers-table__transfer__role">
         <label>Role</label>
 
-        <span><%= account_project_role.role.capitalize %></span>
+        <span><%= ProjectRole::HUMANIZED_ROLE_NAMES[account_project_role.role.to_sym] %></span>
       </div>
 
       <% if project.supports_transfer_rules? %>
@@ -79,7 +78,7 @@
             <% end %>
           </div>
 
-          <%= f.number_field(:max_balance, required: true, placeholder: '0', min: project.step_for_amount_input, step: project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
+          <%= f.number_field(:max_balance, required: true, placeholder: '0', min: project.step_for_amount_input, step: project.step_for_amount_input, data: { target: "account-form.addressMaxBalance account-form-controls.inputs", action: "change->account-form#forceInputPrecision" }, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__lockup_until">
@@ -94,7 +93,7 @@
             <%= last_record&.decorate&.lockup_until_pretty %>
           </div>
 
-          <%= f.datetime_local_field(:lockup_until, step: 1, required: true, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form-controls.inputs"}, class: 'hidden') %>
+          <%= f.datetime_local_field(:lockup_until, step: 1, required: true, placeholder: 'dd.mm.yyyy', data: { target: "account-form.addressLockupUntil account-form-controls.inputs" }, class: 'hidden') %>
         </div>
 
         <div class="transfers-table__transfer__reg_group">
@@ -109,7 +108,7 @@
             <%= last_record&.reg_group ? "#{last_record.reg_group.name} (#{last_record.reg_group.blockchain_id})" : "–" %>
           </div>
 
-          <%= f.select(:reg_group_id, project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: true }, { required: true, class: 'hidden', data: {target: "account-form.addressGroupId account-form-controls.inputs"} }) %>
+          <%= f.select(:reg_group_id, project.token.reg_groups.collect { |g| ["#{g.name} (#{g.blockchain_id})", g.id] }, { include_blank: true }, { required: true, class: 'hidden', data: { target: "account-form.addressGroupId account-form-controls.inputs" } }) %>
         </div>
 
         <div class="transfers-table__transfer__frozen">
@@ -129,7 +128,7 @@
             <% end %>
           </div>
 
-          <%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: true }, { required: true, class: 'hidden', data: {target: "account-form.addressFrozen account-form-controls.inputs"} }) %>
+          <%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: true }, { required: true, class: 'hidden', data: { target: "account-form.addressFrozen account-form-controls.inputs" } }) %>
         </div>
 
         <div class="transfers-table__transfer__status">
@@ -149,7 +148,7 @@
             <% if last_record&.latest_blockchain_transaction && last_record.latest_blockchain_transaction&.tx_hash %>
               <div class="account-table__account-token-record__status">
                 <div class="transfer-button">
-                  <%= link_to"Tx ➔", last_record.token.blockchain.url_for_tx_human(last_record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
+                  <%= link_to "Tx ➔", last_record.token.blockchain.url_for_tx_human(last_record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
                 </div>
               </div>
             <% end %>
@@ -161,27 +160,22 @@
         </div>
       <% end %>
 
-      <% if @project_policy.change_permissions? %>
-        <div class="transfers-table__transfer__settings">
-          <div class="dropdown">
-            <a class="dropdown" data-id="settings" data-boundary="viewport" data-toggle="dropdown">
-              <svg class="n9-color" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
-              </svg>
-              <span></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end">
-              <%= link_to 'Change Permissions',
-                          project_account_permission_path(id: account_project_role.id, project_id: project.id, account_id: account.id),
-                          method: :get,
-                          data: { controller: 'accept-turbo-stream' },
-                          id: 'change_permissions_btn',
-                          class: 'dropdown-item' %>
-            </div>
-          </div>
+      <div class="transfers-table__transfer__settings">
+        <div class="dropdown">
+          <a class="dropdown" data-id="settings" data-boundary="viewport" data-toggle="dropdown">
+            <svg class="n9-color" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2C0 3.10457 0.895431 4 2 4C3.10457 4 4 3.10457 4 2C4 0.895431 3.10457 0 2 0ZM9 0C7.89543 0 7 0.895431 7 2C7 3.10457 7.89543 4 9 4C10.1046 4 11 3.10457 11 2C11 0.895431 10.1046 0 9 0ZM14 2C14 0.895431 14.8954 0 16 0C17.1046 0 18 0.895431 18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2Z" fill="currentColor"></path>
+            </svg>
+            <span></span>
+          </a>
+          <turbo-frame target="_top"
+                       loading="lazy"
+                       id="account_settings"
+                       src="<%= project_account_settings_path(project_id: project.id, account_id: account.id) %>">
+          </turbo-frame>
         </div>
-        </div>
-      <% end %>
+      </div>
+    </div>
 
     <% if policy(project).edit_accounts? && project.supports_transfer_rules? && last_record && account.address_for_blockchain(project.token._blockchain) %>
       <div class="transfers-table--edit-save hidden" data-target="account-form-controls.inputs">

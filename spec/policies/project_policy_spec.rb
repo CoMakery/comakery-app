@@ -58,8 +58,28 @@ describe ProjectPolicy do
         projects = ProjectPolicy::Scope.new(nil, Project).resolve
 
         expect(projects.map(&:title).sort).to eq([my_public_project,
-                                                  others_public_project,
-                                                  my_public_project_business_confidential].map(&:title).sort)
+                                                  my_public_project_business_confidential,
+                                                  others_public_project].map(&:title).sort)
+      end
+
+      context 'for whitelabels' do
+        let!(:my_whitelabel_non_confidential_project) { create(:project, title: 'whitelabel non-confidential', account: project_account, visibility: 'public_listed', require_confidentiality: false, mission: create(:mission, whitelabel: true)) }
+        let!(:my_whitelabel_confidential_project) { create(:project, title: 'whitelabel confidential', account: project_account, visibility: 'public_listed', require_confidentiality: true, mission: create(:mission, whitelabel: true)) }
+
+        it 'returns all public non-confidential projects for whitelabels if account is nil' do
+          whitelabel_projects = Project.where(whitelabel: true)
+          projects = ProjectPolicy::Scope.new(nil, whitelabel_projects).resolve
+
+          expect(projects.map(&:title).sort).to eq([my_whitelabel_non_confidential_project].map(&:title).sort)
+        end
+
+        it 'returns all public confidential and non-confidential projects for whitelabels if account has access' do
+          whitelabel_projects = Project.where(whitelabel: true)
+          projects = ProjectPolicy::Scope.new(project_account, whitelabel_projects).resolve
+
+          expect(projects.map(&:title).sort).to eq([my_whitelabel_confidential_project,
+                                                    my_whitelabel_non_confidential_project].map(&:title).sort)
+        end
       end
     end
   end
@@ -156,6 +176,19 @@ describe ProjectPolicy do
 
       it { expect(described_class.new(project_interested, my_public_project_business_confidential).transfers?).to be(false) }
     end
+  end
+
+  permissions :export_transfers? do
+    subject { described_class }
+
+    it { is_expected.to permit(project_account, my_public_project) }
+    it { is_expected.to permit(project_admin, my_public_project) }
+    it { is_expected.to permit(project_contributor, my_public_project) }
+    it { is_expected.to permit(project_observer, my_public_project) }
+
+    it { is_expected.not_to permit(nil, my_public_project) }
+    it { is_expected.not_to permit(project_interested, my_public_project) }
+    it { is_expected.not_to permit(other_team_member, my_public_project) }
   end
 
   describe 'show_transfer_rules?' do

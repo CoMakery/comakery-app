@@ -1367,6 +1367,10 @@ form.form-with-submit-button {
 .freeze-token {
   display: flex;
 
+  button {
+    display: flex;
+  }
+
   .transfer-button {
     padding: 0.75em;
     border: 1px solid #fe2d6c;
@@ -6139,5 +6143,13 @@ a:focus {
   .wallet-connect--address {
     opacity: 0.5;
     border: none !important;
+  }
+}
+
+.dropdown-menu {
+  a.disabled {
+    background-color: #c7c7c7;
+    pointer-events: none;
+    color: gray
   }
 }

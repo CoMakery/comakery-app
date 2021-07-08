@@ -14,7 +14,6 @@ class ProjectsController < ApplicationController
   before_action :set_teams, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
-  before_action :set_flash_from_session, only: %i[show]
 
   layout 'legacy', except: %i[show unlisted new edit]
 
@@ -47,8 +46,10 @@ class ProjectsController < ApplicationController
     authorize @project
 
     @props[:project] = @project.serializable_hash.merge(
-      url: "https://#{current_domain}/p/#{@project.long_id}",
-      mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+      {
+        url: "https://#{current_domain}/p/#{@project.long_id}",
+        mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+      }.as_json
     )
   end
 
@@ -61,7 +62,7 @@ class ProjectsController < ApplicationController
 
     authorize @project
 
-    if ImagePreparer.new(@project, project_params).valid? && @project.save
+    if @project.save
       set_generic_props
       camelize_props
       render json: { id: @project.id, props: @props }, status: :ok
@@ -97,7 +98,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
-    if ImagePreparer.new(@project, project_params).valid? && @project.update(project_params)
+    if @project.update(project_params)
       set_generic_props
       camelize_props
       render json: { message: 'Project updated', id: @project.id, props: @props }, status: :ok
@@ -193,7 +194,7 @@ class ProjectsController < ApplicationController
             funding_url: @project.funding_url,
             video_conference_url: @project.video_conference_url,
             url: unlisted_project_url(@project.long_id)
-          }
+          }.as_json
         ),
         tokens: @tokens,
         decimal_places: Token.select(:id, :decimal_places),
@@ -309,10 +310,6 @@ class ProjectsController < ApplicationController
       @can_award = awardable_types_result.can_award
     end
 
-    def project_detail_path
-      @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
-    end
-
     def contributor_props(account, project)
       a = account.decorate.serializable_hash(
         only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
@@ -349,25 +346,12 @@ class ProjectsController < ApplicationController
     end
 
     def token_props(token)
-      if token.present?
-        token.as_json(only: %i[name symbol _token_type]).merge(
-          image_url: GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
-        )
-      end
-    end
+      return if token.nil?
 
-    def mission_props(mission)
-      mission_logo_path = GetImageVariantPath.call(
-        attachment: mission.logo,
-        resize_to_fill: [100, 100]
-      ).path
-
-      if mission.present?
-        mission.as_json(only: %i[id name]).merge(
-          logo_url: mission_logo_path,
-          mission_url: mission_path(mission)
-        )
-      end
+      token.as_json(only: %i[name symbol _token_type]).merge(
+        'image_url' =>
+          GetImageVariantPath.call(attachment: token.logo_image, resize_to_fill: [25, 18]).path
+      )
     end
 
     def redirect_for_whitelabel
@@ -377,16 +361,6 @@ class ProjectsController < ApplicationController
         else
           redirect_to project_award_types_path(@project)
         end
-      end
-    end
-
-    def set_flash_from_session
-      if (project_invite_id = session[:project_invite_id])
-        project_role = ProjectInvite.find(project_invite_id).role
-
-        session.delete(:project_invite_id)
-
-        flash[:notice] = "You have successfully joined the project with the #{project_role} role"
       end
     end
 end

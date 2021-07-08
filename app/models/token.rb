@@ -1,11 +1,11 @@
 class Token < ApplicationRecord
-  include ActiveStorageValidator
   include BelongsToBlockchain
   include BlockchainTransactable
+  include PrepareImage
 
   nilify_blanks
 
-  has_one_attached :logo_image
+  has_one_attached_and_prepare_image :logo_image
 
   has_many :projects # rubocop:todo Rails/HasManyOrHasOneDependent
   has_many :accounts, through: :projects, source: :accounts
@@ -18,7 +18,6 @@ class Token < ApplicationRecord
   validates :name, uniqueness: true # rubocop:todo Rails/UniqueValidationWithoutIndex
   validates :name, :symbol, :decimal_places, :_token_type, :denomination, presence: true
 
-  validate_image_attached :logo_image
   before_validation :set_values_from_token_type
   after_create :default_reg_group, if: -> { token_type.operates_with_reg_groups? }
 
@@ -112,6 +111,10 @@ class Token < ApplicationRecord
 
   def _token_type_on_ethereum?
     blockchain&.name&.match?(/^Ethereum/)
+  end
+
+  def _token_type_on_algorand?
+    blockchain&.name&.match?(/^Algorand/)
   end
 
   def _token_type_on_qtum?
