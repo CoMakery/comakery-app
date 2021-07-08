@@ -23,7 +23,7 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(wallet_provision.synchronisations.last).to be_failed
+      expect(wallet_provision.reload.synchronisations.last).to be_failed
     end
   end
 
@@ -37,7 +37,7 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(wallet_provision.synchronisations).to be_empty
+      expect(wallet_provision.reload.synchronisations).to be_empty
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
       perform
 
       expect(wallet_provision).to have_received(:create_opt_in_tx).once
-      expect(wallet_provision.synchronisations.last).to be_ok
+      expect(wallet_provision.reload.synchronisations.last).to be_ok
     end
 
     context 'and service raises an error' do

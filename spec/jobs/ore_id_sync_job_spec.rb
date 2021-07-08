@@ -23,7 +23,7 @@ RSpec.describe OreIdSyncJob, type: :job do
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(ore_id.synchronisations.last).to be_failed
+      expect(ore_id.reload.synchronisations.last).to be_failed
     end
   end
 
@@ -37,7 +37,7 @@ RSpec.describe OreIdSyncJob, type: :job do
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(ore_id.synchronisations).to be_empty
+      expect(ore_id.reload.synchronisations).to be_empty
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe OreIdSyncJob, type: :job do
 
       perform
 
-      expect(ore_id.synchronisations.last).to be_ok
+      expect(ore_id.reload.synchronisations.last).to be_ok
     end
 
     context 'and service raises an error' do
