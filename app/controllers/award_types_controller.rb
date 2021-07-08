@@ -10,7 +10,11 @@ class AwardTypesController < ApplicationController
   skip_before_action :require_login, only: %i[index]
 
   def index
-    authorize @project, :show_award_types?
+    if @whitelabel_mission.present?
+      authorize(@project, :show_wl_award_types?)
+    else
+      authorize(@project, :show_award_types?)
+    end
   end
 
   def new; end

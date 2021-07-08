@@ -34,7 +34,11 @@ class AwardsController < ApplicationController
   before_action :create_project_role_from_session, only: %i[index]
 
   def index
-    authorize @project, :show_awards?
+    if @whitelabel_mission.present?
+      authorize(@project, :show_wl_awards?)
+    else
+      authorize(@project, :show_awards?)
+    end
   end
 
   def show

@@ -272,60 +272,59 @@ describe ProjectPolicy do
         expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
       end
     end
+  end
 
-    context 'when project with whitelabel mission' do
-      let(:whitelabel_mission) { create :whitelabel_mission, whitelabel_domain: 'www.example.com' }
+  describe 'show_wl_awards? show_wl_award_types?' do
+    let(:whitelabel_mission) { create :whitelabel_mission }
+    before { projects.each { |project| project.update(mission: whitelabel_mission) } }
 
-      before { projects.each { |project| project.update(mission: whitelabel_mission) } }
+    context 'when project awards is visible' do
+      before { projects.each { |project| project.mission.update(project_awards_visible: true) } }
 
-      context 'and awards visible' do
-        before { projects.each { |project| project.mission.update(project_awards_visible: true) } }
+      it 'shows award types' do
+        expect(described_class.new(nil, my_public_project).show_wl_awards?).to be true
+        expect(described_class.new(nil, my_public_unlisted_project).show_wl_awards?).to be true
+        expect(described_class.new(nil, others_private_project).show_wl_awards?).to be_falsey
+        expect(described_class.new(nil, others_archived_project).show_wl_awards?).to be_falsey
 
-        it 'allows showing award types' do
-          expect(described_class.new(nil, my_public_project).show_award_types?).to be true
-          expect(described_class.new(nil, my_public_unlisted_project).show_award_types?).to be true
-          expect(described_class.new(nil, others_private_project).show_award_types?).to be_falsey
-          expect(described_class.new(nil, others_archived_project).show_award_types?).to be_falsey
+        expect(described_class.new(project_account, my_public_project).show_wl_awards?).to be true
+        expect(described_class.new(project_account, my_public_unlisted_project).show_wl_awards?).to be true
+        expect(described_class.new(project_account, my_private_project).show_wl_awards?).to be true
+        expect(described_class.new(project_account, my_archived_project).show_wl_awards?).to be true
+        expect(described_class.new(project_account, others_private_project).show_wl_awards?).to be false
+        expect(described_class.new(project_account, others_archived_project).show_wl_awards?).to be false
 
-          expect(described_class.new(project_account, my_public_project).show_award_types?).to be true
-          expect(described_class.new(project_account, my_public_unlisted_project).show_award_types?).to be true
-          expect(described_class.new(project_account, my_private_project).show_award_types?).to be true
-          expect(described_class.new(project_account, my_archived_project).show_award_types?).to be true
-          expect(described_class.new(project_account, others_private_project).show_award_types?).to be false
-          expect(described_class.new(project_account, others_archived_project).show_award_types?).to be false
+        expect(described_class.new(other_team_member, others_public_project).show_wl_awards?).to be true
+        expect(described_class.new(other_team_member, my_private_project).show_wl_awards?).to be true
 
-          expect(described_class.new(other_team_member, others_public_project).show_award_types?).to be true
-          expect(described_class.new(other_team_member, my_private_project).show_award_types?).to be true
-
-          expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be true
-          expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be true
-          expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
-        end
+        expect(described_class.new(different_team_account, my_public_project).show_wl_awards?).to be true
+        expect(described_class.new(different_team_account, my_public_unlisted_project).show_wl_awards?).to be true
+        expect(described_class.new(different_team_account, my_private_project).show_wl_awards?).to be_falsey
       end
+    end
 
-      context 'and awards hidden' do
-        before { projects.each { |project| project.mission.update(project_awards_visible: false) } }
+    context 'when project awards visibility is hidden' do
+      before { projects.each { |project| project.mission.update(project_awards_visible: false) } }
 
-        it 'prohibits showing award types' do
-          expect(described_class.new(nil, my_public_project).show_award_types?).to be false
-          expect(described_class.new(nil, my_public_unlisted_project).show_award_types?).to be false
-          expect(described_class.new(nil, others_private_project).show_award_types?).to be_falsey
-          expect(described_class.new(nil, others_archived_project).show_award_types?).to be_falsey
+      it 'prohibits show project award types' do
+        expect(described_class.new(nil, my_public_project).show_wl_awards?).to be false
+        expect(described_class.new(nil, my_public_unlisted_project).show_wl_awards?).to be false
+        expect(described_class.new(nil, others_private_project).show_wl_awards?).to be_falsey
+        expect(described_class.new(nil, others_archived_project).show_wl_awards?).to be_falsey
 
-          expect(described_class.new(project_account, my_public_project).show_award_types?).to be false
-          expect(described_class.new(project_account, my_public_unlisted_project).show_award_types?).to be false
-          expect(described_class.new(project_account, my_private_project).show_award_types?).to be false
-          expect(described_class.new(project_account, my_archived_project).show_award_types?).to be false
-          expect(described_class.new(project_account, others_private_project).show_award_types?).to be false
-          expect(described_class.new(project_account, others_archived_project).show_award_types?).to be false
+        expect(described_class.new(project_account, my_public_project).show_wl_awards?).to be false
+        expect(described_class.new(project_account, my_public_unlisted_project).show_wl_awards?).to be false
+        expect(described_class.new(project_account, my_private_project).show_wl_awards?).to be false
+        expect(described_class.new(project_account, my_archived_project).show_wl_awards?).to be false
+        expect(described_class.new(project_account, others_private_project).show_wl_awards?).to be false
+        expect(described_class.new(project_account, others_archived_project).show_wl_awards?).to be false
 
-          expect(described_class.new(other_team_member, others_public_project).show_award_types?).to be false
-          expect(described_class.new(other_team_member, my_private_project).show_award_types?).to be false
+        expect(described_class.new(other_team_member, others_public_project).show_wl_awards?).to be false
+        expect(described_class.new(other_team_member, my_private_project).show_wl_awards?).to be false
 
-          expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be false
-          expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be false
-          expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
-        end
+        expect(described_class.new(different_team_account, my_public_project).show_wl_awards?).to be false
+        expect(described_class.new(different_team_account, my_public_unlisted_project).show_wl_awards?).to be false
+        expect(described_class.new(different_team_account, my_private_project).show_wl_awards?).to be_falsey
       end
     end
   end

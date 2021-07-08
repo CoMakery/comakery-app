@@ -136,7 +136,9 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def project_awards_visible?
-    mission.project_awards_visible? if mission.present? && mission.whitelabel?
+    return true unless mission.present? && mission.whitelabel?
+
+    mission.project_awards_visible?
   end
 
   def token_props

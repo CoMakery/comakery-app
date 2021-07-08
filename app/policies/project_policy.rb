@@ -49,12 +49,12 @@ class ProjectPolicy < ApplicationPolicy
     show_contributions_to_everyone? || show_contributions_to_team? || edit? || project_observer?
   end
 
-  def show_award_types?
-    if project.mission.present? && project.mission.whitelabel?
-      project.mission.project_awards_visible?
-    else
-      show? || unlisted?
-    end
+  def show_wl_awards?
+    (show? || unlisted?) && project.mission.project_awards_visible?
+  end
+
+  def show_awards?
+    show? || unlisted?
   end
 
   def show_transfer_rules?
@@ -79,7 +79,8 @@ class ProjectPolicy < ApplicationPolicy
   alias change_permissions? edit?
   alias accounts? show_contributions?
   alias transfers? show_contributions?
-  alias show_awards? show_award_types?
+  alias show_award_types? show_awards?
+  alias show_wl_award_types? show_wl_awards?
 
   def export_transfers?
     edit? || project_observer?

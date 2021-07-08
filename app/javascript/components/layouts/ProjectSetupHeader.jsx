@@ -177,8 +177,8 @@ class ProjectSetupHeader extends React.Component {
                 GitHub
               </NavLink>
               }
-              {(owner || observer || project.showBatches) && !project.whitelabel && !project.tokenLockup ||
-                project.whitelabel && project.projectAwardsVisible &&
+              {((owner || observer || project.showBatches) && !project.whitelabel && !project.tokenLockup ||
+                (project.whitelabel && project.projectAwardsVisible)) &&
               <NavLink current={current === 'batches'} href={project.batchesUrl}>
                 tasks
               </NavLink>
