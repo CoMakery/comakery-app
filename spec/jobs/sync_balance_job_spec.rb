@@ -15,7 +15,6 @@ RSpec.describe SyncBalanceJob, type: :job do
 
   before do
     allow(balance).to receive(:blockchain_balance_base_unit_value).and_return(999)
-    allow(Sentry).to receive(:capture_exception)
     Timecop.freeze(now)
   end
 
@@ -26,6 +25,8 @@ RSpec.describe SyncBalanceJob, type: :job do
     end
 
     it 'should not report an exception' do
+      allow(Sentry).to receive(:capture_exception)
+
       perform
       expect(Sentry).not_to have_received(:capture_exception)
     end
@@ -42,6 +43,7 @@ RSpec.describe SyncBalanceJob, type: :job do
     end
 
     it 'should not report an exception' do
+      allow(Sentry).to receive(:capture_exception)
       perform
       expect(Sentry).not_to have_received(:capture_exception)
     end
@@ -56,16 +58,18 @@ RSpec.describe SyncBalanceJob, type: :job do
     end
 
     it 'should report an exception' do
+      allow(Sentry).to receive(:capture_exception)
       perform
-      expect(Sentry).to have_received(:capture_exception).with(StandardError)
+      expect(Sentry).to have_received(:capture_exception).with(StandardError).once
     end
   end
 
   context 'ready for balance update' do
     let(:balance) { create(:balance, wallet: wallet, token: token_with_balance_support, created_at: 1.day.ago, updated_at: Time.zone.now, base_unit_value: 10) }
     it 'rescue error' do
+      allow(Sentry).to receive(:capture_exception)
       allow(balance).to receive(:ready_for_balance_update?).and_raise(StandardError)
-      expect(Sentry).to receive(:capture_exception)
+      expect(Sentry).to receive(:capture_exception).once
       subject
     end
   end

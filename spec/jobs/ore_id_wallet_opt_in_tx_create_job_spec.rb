@@ -10,12 +10,13 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
   before do
     allow(described_class).to receive(:set).with(any_args).and_return(self_reschedule_job)
     allow(wallet_provision).to receive(:create_opt_in_tx)
-    allow(Sentry).to receive(:capture_exception)
     Timecop.freeze(now)
   end
 
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
+      allow(Sentry).to receive(:capture_exception)
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
@@ -23,12 +24,14 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
       expect(self_reschedule_job).to have_received(:perform_later).once
 
       expect(wallet_provision.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+      expect(Sentry).to have_received(:capture_exception).with(RuntimeError).once
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
+      allow(Sentry).to receive(:capture_exception)
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
