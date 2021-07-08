@@ -15,7 +15,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
 
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
-      allow(Sentry).to receive(:capture_exception)
+      expect(Sentry).to receive(:capture_exception).with(StandardError).once
 
       perform
 
@@ -24,13 +24,12 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
       expect(self_reschedule_job).to have_received(:perform_later).once
 
       expect(ore_id.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(StandardError).once
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
-      allow(Sentry).to receive(:capture_exception)
+      expect(Sentry).not_to receive(:capture_exception)
 
       perform
 
@@ -39,7 +38,6 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
       expect(self_reschedule_job).to have_received(:perform_later).once
 
       expect(ore_id.synchronisations).to be_empty
-      expect(Sentry).not_to have_received(:capture_exception).with(StandardError)
     end
   end
 
@@ -90,7 +88,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
           end
 
           it 'should fail and reschedule itself with the delay' do
-            allow(Sentry).to receive(:capture_exception)
+            expect(Sentry).not_to receive(:capture_exception)
 
             perform
 
@@ -99,7 +97,6 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
             expect(self_reschedule_job).to have_received(:perform_later).once
 
             expect(ore_id.synchronisations.last).to be_failed
-            expect(Sentry).not_to have_received(:capture_exception)
           end
         end
 
@@ -110,7 +107,7 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
           end
 
           it 'should fail and reschedule itself with the delay' do
-            allow(Sentry).to receive(:capture_exception)
+            expect(Sentry).not_to receive(:capture_exception)
 
             perform
 
@@ -119,7 +116,6 @@ RSpec.describe OreIdPasswordUpdateSyncJob, type: :job do
             expect(self_reschedule_job).to have_received(:perform_later).once
 
             expect(ore_id.synchronisations.last).to be_failed
-            expect(Sentry).not_to have_received(:capture_exception)
           end
         end
       end

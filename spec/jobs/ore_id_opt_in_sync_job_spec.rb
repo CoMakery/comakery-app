@@ -15,31 +15,27 @@ RSpec.describe OreIdOptInSyncJob, type: :job do
 
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
-      allow(Sentry).to receive(:capture_exception)
+      expect(Sentry).to receive(:capture_exception).with(RuntimeError).once
 
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
-
-      expect(ore_id.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(RuntimeError).once
+      expect(ore_id.reload.synchronisations.last).to be_failed
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
-      allow(Sentry).to receive(:capture_exception)
+      expect(Sentry).not_to receive(:capture_exception)
 
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
-
-      expect(ore_id.synchronisations).to be_empty
-      expect(Sentry).not_to have_received(:capture_exception)
+      expect(ore_id.reload.synchronisations).to be_empty
     end
   end
 

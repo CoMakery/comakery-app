@@ -15,7 +15,7 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
 
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
-      allow(Sentry).to receive(:capture_exception)
+      expect(Sentry).to receive(:capture_exception).with(RuntimeError).once
 
       perform
 
@@ -24,13 +24,12 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
       expect(self_reschedule_job).to have_received(:perform_later).once
 
       expect(wallet_provision.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(RuntimeError).once
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
-      allow(Sentry).to receive(:capture_exception)
+      expect(Sentry).not_to receive(:capture_exception)
 
       perform
 
@@ -39,7 +38,6 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
       expect(self_reschedule_job).to have_received(:perform_later).once
 
       expect(wallet_provision.synchronisations).to be_empty
-      expect(Sentry).not_to have_received(:capture_exception)
     end
   end
 
