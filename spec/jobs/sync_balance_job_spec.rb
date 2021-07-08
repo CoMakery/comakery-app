@@ -19,8 +19,6 @@ RSpec.describe SyncBalanceJob, type: :job do
     Timecop.freeze(now)
   end
 
-  after { Timecop.return }
-
   context 'when balance was update long time ago' do
     it 'should update base unit value' do
       perform

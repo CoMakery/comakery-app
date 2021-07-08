@@ -8,10 +8,6 @@ resource 'I. General' do
     Timecop.freeze(Time.zone.local(2021, 4, 6, 10, 5, 0))
   end
 
-  after do
-    Timecop.return
-  end
-
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
 
   let!(:project) { create(:static_project, id: 11111111, mission: active_whitelabel_mission, token: create(:static_comakery_token, id: 11111112)) }

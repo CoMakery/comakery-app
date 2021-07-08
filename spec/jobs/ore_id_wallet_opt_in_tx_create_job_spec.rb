@@ -14,8 +14,6 @@ RSpec.describe OreIdWalletOptInTxCreateJob, type: :job do
     Timecop.freeze(now)
   end
 
-  after { Timecop.return }
-
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
       perform

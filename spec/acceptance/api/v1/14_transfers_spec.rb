@@ -9,10 +9,6 @@ resource 'IV. Transfers' do
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
-  after do
-    Timecop.return
-  end
-
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:static_account, id: 11111111, managed_mission: active_whitelabel_mission) }
   let!(:project) { create(:static_project, id: 11111112, mission: active_whitelabel_mission, token: create(:static_token, id: 11111113, decimal_places: 8, _blockchain: :ethereum)) }

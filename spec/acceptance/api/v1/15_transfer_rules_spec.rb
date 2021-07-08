@@ -9,10 +9,6 @@ resource 'V. Transfer Rules' do
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
-  after do
-    Timecop.return
-  end
-
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:transfer_rule) { create(:static_transfer_rule, id: 11111111) }
   let!(:project) { create(:project, id: 11111112, mission: active_whitelabel_mission, token: transfer_rule.token) }

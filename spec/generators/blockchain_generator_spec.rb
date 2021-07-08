@@ -1,8 +1,6 @@
 # rubocop: disable Style/BlockDelimiters
 
-require 'generator_spec'
 require 'rails_helper'
-require 'spec_helper'
 require 'generators/blockchain/blockchain_generator'
 
 describe BlockchainGenerator, type: :generator do

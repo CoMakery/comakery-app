@@ -10,10 +10,6 @@ resource 'VII. Blockchain Transactions' do
     allow_any_instance_of(ApiKey).to receive(:key).and_return('F957nHNpAp3Ja9cQ3IEEbvhryjoaFr6T')
   end
 
-  after do
-    Timecop.return
-  end
-
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:blockchain_transaction) { create(:static_blockchain_transaction, id: 11111111) }
   let!(:project) { blockchain_transaction.blockchain_transactable.project }

@@ -74,7 +74,7 @@ RSpec.configure do |config|
     Webpacker.compile
   end
 
-  config.after(:each) do
+  config.after do
     Timecop.return
   end
 
