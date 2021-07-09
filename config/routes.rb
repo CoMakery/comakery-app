@@ -67,6 +67,7 @@ Rails.application.routes.draw do
     resources :invites, only: [:create], controller: 'projects/invites'
     resources :accounts do
       resources :permissions, only: %i[show update], controller: 'projects/accounts/permissions'
+      resource :settings, only: [:show], controller: 'projects/accounts/settings'
     end
 
     resources :award_types, path: 'batches', except: [:show] do

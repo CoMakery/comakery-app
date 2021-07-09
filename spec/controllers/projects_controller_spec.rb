@@ -391,8 +391,8 @@ describe ProjectsController do
         get :index
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Cats Dogs Yaks Foxes])
-        expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
+        expect(assigns[:projects].map(&:title)).to match_array(%w[Cats Dogs Yaks Foxes])
+        expect(assigns[:project_contributors].keys).to match_array([cat_project, dog_project, yak_project])
       end
 
       it 'allows searching' do
