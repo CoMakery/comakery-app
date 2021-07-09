@@ -61,4 +61,5 @@ Rails.application.configure do
   config.log_level = :fatal
 
   config.serve_static_assets = true
+  config.assets.digest = false
 end
