@@ -71,8 +71,6 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
           expect(response).to be_successful
 
           expect(assigns[:transfers]).to include(burn_transfer)
-
-          expect(controller).to set_flash[:notice]
         end
       end
     end
