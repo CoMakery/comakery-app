@@ -30,8 +30,6 @@ RSpec.describe AwardsController, type: :controller do
       .to receive(:form_authenticity_token).and_return('some_csrf_token')
   end
 
-  after { Timecop.return }
-
   shared_context 'with specialties' do
     let!(:specialty1) { FactoryBot.create :specialty, name: 'Audio Or Video Production' }
     let!(:specialty2) { FactoryBot.create :specialty, name: 'Community Development' }
@@ -59,29 +57,29 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'returns my tasks' do
-      get :index, params: { project_id: project.id }
+      get :index
       expect(response.status).to eq(200)
     end
 
     it 'uses filtering' do
-      get :index, params: { project_id: project.id, filter: 'started' }
+      get :index, params: { filter: 'started' }
       expect(response.status).to eq(200)
       expect(assigns[:props][:tasks].count).to eq(0)
     end
 
     it 'uses pagination' do
-      get :index, params: { project_id: project.id, filter: 'submitted', page: '2' }
+      get :index, params: { filter: 'submitted', page: '2' }
       expect(response.status).to eq(200)
       expect(assigns[:props][:tasks].count).to eq(1)
     end
 
     it 'redirects to 404 when provided with incorrect page' do
-      get :index, params: { project_id: project.id, page: '3' }
+      get :index, params: { page: '3' }
       expect(response).to redirect_to('/404.html')
     end
 
     it 'sets project filter' do
-      project = create(:project, visibility: :public_listed)
+      project = create(:project)
       get :index, params: { project_id: project.id }
 
       expect(response.status).to eq(200)
@@ -89,20 +87,16 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'do not show wl projects for main' do
-      wl_mission = create :whitelabel_mission
+      wl_mission = create :mission, whitelabel_domain: 'wl.test.host', whitelabel: true, whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)
       wl_project = create :project, mission: wl_mission, title: 'WL project title'
 
-      controller.instance_variable_set(:@whitelabel_mission, wl_mission)
-
       get :index, params: { project_id: wl_project.id }
-
-      expect(response.status).to eq(302)
-
+      expect(response.status).to eq(200)
       expect(assigns[:project]).to be nil
     end
 
     it 'sets default project filter if user has no experience' do
-      project = create(:project, visibility: :public_unlisted)
+      project = create(:project)
       ENV['DEFAULT_PROJECT_ID'] = project.id.to_s
       login(create(:account))
 
@@ -123,9 +117,8 @@ RSpec.describe AwardsController, type: :controller do
       whitelabel_task.project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
       whitelabel_task.save!
 
-      get :index, params: { project_id: project.id }
+      get :index
       expect(response.status).to eq(200)
-
       expect(assigns[:awards]).not_to include(whitelabel_task)
     end
   end
@@ -352,8 +345,6 @@ RSpec.describe AwardsController, type: :controller do
         project_id: project.id, award_type_id: award_type.id, award_id: award.id
       }
     end
-
-    after { Timecop.return }
 
     it 'should respond with success' do
       expect(response.status).to eq 200
