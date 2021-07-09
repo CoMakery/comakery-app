@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe OreIdOptInSyncJob, type: :job do
   subject(:perform) { described_class.perform_now(ore_id.id) }
 
-  let(:now) { Time.zone.local(2021, 6, 1, 15) }
+  let!(:now) { Time.zone.local(2021, 6, 1, 15) }
   let(:self_reschedule_job) { double('OreIdOptInSyncJob', perform_later: nil) }
   let(:ore_id) { create(:ore_id, skip_jobs: true) }
 
   before do
+    Timecop.freeze(now)
     allow(described_class).to receive(:set).with(any_args).and_return(self_reschedule_job)
     allow_any_instance_of(ore_id.class).to receive(:sync_opt_ins)
-    Timecop.freeze(now)
   end
 
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
