@@ -107,11 +107,11 @@ describe 'project accounts page' do
 
     let!(:account) { create(:account) }
 
-    before { project.project_admins << project_admin }
-
-    before { login(project_admin) }
-
-    before { subject }
+    before do
+      project.project_admins << project_admin
+      login(project_admin)
+      subject
+    end
 
     context 'change follower permissions' do
       it 'updates project role' do
