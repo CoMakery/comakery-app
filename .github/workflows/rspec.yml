@@ -145,6 +145,7 @@ jobs:
       with:
         name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
+        if-no-files-found: error
 
   simplecov:
     runs-on: ubuntu-latest
