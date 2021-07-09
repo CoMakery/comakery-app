@@ -1,0 +1,34 @@
+<turbo-frame id="transfer_settings">
+  <% if @transfer.accepted? %>
+    <a class="dropdown-item edit-transfer" role="button" data-bs-toggle="modal" data-bs-target="#modal-edit-transfer-<%= @transfer.id %>">Edit</a>
+  <% end %>
+
+  <% if @transfer.cancelable? && !@transfer.cancelled? %>
+    <%= link_to 'Cancel',
+                project_award_type_award_path(@transfer.project, @transfer.award_type, @transfer),
+                method: :delete,
+                class: 'dropdown-item',
+                role: 'button' %>
+  <% end %>
+
+  <% if current_account&.decorate&.can_send_awards?(@project) && @transfer.accepted? &&
+    !@project.hot_wallet_disabled? && @project.hot_wallet %>
+    <% if @transfer.decorate.show_prioritize_button? %>
+      <div class="transfers-table__transfer__button__history">
+        <%= link_to prioritize_project_dashboard_transfer_path(project_id: @transfer.project.id, id: @transfer.id),
+                    class: 'dropdown-item transfer-algo-btn',
+                    rel: 'nofollow',
+                    method: :patch,
+                    id: 'prioritizeBtn',
+                    data: { turbo: 'false' } do %>
+
+          <% if @project.hot_wallet_auto_sending? %>
+            <span>Prioritize</span>
+          <% elsif @project.hot_wallet_manual_sending? %>
+            <span>Pay by Hot Wallet</span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</turbo-frame>
