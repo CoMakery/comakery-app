@@ -16,8 +16,9 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
-  before_action :set_whitelabel_mission
+  before_action :whitelabel_mission
   before_action :redirect_to_default_whitelabel_domain
+  before_action :require_login_strict
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
   before_action :set_project_scope
@@ -273,10 +274,15 @@ class ApplicationController < ActionController::Base
       end.reduce(:&)
     end
 
-    def set_whitelabel_mission
-      # rubocop:todo Naming/MemoizedInstanceVariableName
+    def whitelabel_mission
       @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
-      # rubocop:enable Naming/MemoizedInstanceVariableName
+    end
+
+    def require_login_strict
+      return unless whitelabel_mission&.require_invitation?
+      return if current_account
+
+      redirect_to new_session_path
     end
 
     def set_project_scope
