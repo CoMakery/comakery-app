@@ -72,7 +72,7 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
     context 'with unknown blockchain' do
       let(:create_params) { { wallets: [{ blockchain: :unknown, address: build(:constellation_address_1), name: 'Wallet' }] } }
       let(:token) { create(:asa_token) }
-      let(:ore_id_params) { {wallets: [{ blockchain: :unknown, source: 'ore_id', tokens_to_provision: [{ token_id: token.id.to_s }], name: 'Algotest wallet' }]} }
+      let(:ore_id_params) { { wallets: [{ blockchain: :unknown, source: 'ore_id', tokens_to_provision: [{ token_id: token.id.to_s }], name: 'Algotest wallet' }] } }
 
       it 'renders an error' do
         params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
