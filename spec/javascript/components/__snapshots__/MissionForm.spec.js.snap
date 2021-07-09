@@ -617,7 +617,7 @@ exports[`MissionForm renders correctly without props 1`] = `
               </InputFieldDropdown>
               <InputFieldDropdown
                 eventHandler={[Function]}
-                name="whitelabel"
+                name="requireInvitation"
                 required={true}
                 selectEntries={
                   Array [
@@ -650,7 +650,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   max=""
                   min=""
-                  name="whitelabel"
+                  name="requireInvitation"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
@@ -697,7 +697,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <select
                         className="input-field--content__select"
                         disabled={false}
-                        name="whitelabel"
+                        name="requireInvitation"
                         onChange={[Function]}
                         required={true}
                         value="false"
