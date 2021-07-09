@@ -36,9 +36,11 @@
 
   <body>
     <%= render partial: 'layouts/google_tag_no_script.html' %>
-
     <header>
-      <%= render 'layouts/header_pages' %>
+      <%= render 'layouts/header_new_styling' %>
+      <% if current_account && @project %>
+        <%= render partial: 'shared/project_new_styling_header' %>
+      <% end %>
     </header>
 
     <%= render partial: 'layouts/project_search_form' unless @whitelabel_mission || @skip_search_box %>

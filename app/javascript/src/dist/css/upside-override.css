@@ -978,10 +978,10 @@ body .content *:hover::-webkit-scrollbar-thumb {
 .navbar-brand-image {
   height: 24px;
   width: auto;
-  content: url("../../images/styleguide/icons/Logo-Header.svg");
+  content: url("../../static/logo-white.svg");
 }
 .navbar-collapsed .navbar-brand-image{
-  content: url("../../images/styleguide/icons/Logo-Header.svg");
+  content: url("../../static/logo-small.svg");
 }
 
 .navbar-dark {
