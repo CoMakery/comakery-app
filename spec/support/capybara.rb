@@ -18,7 +18,8 @@ JS_CONSOLE_FILTER = Regexp.union([
                                    'Failed to load resource: net::ERR_FAILED',
                                    "No 'Access-Control-Allow-Origin' header is present on the requested resource.",
                                    'Warning: componentWillReceiveProps has been renamed',
-                                   'https://api-iam.intercom.io/messenger/web/ping'
+                                   'https://api-iam.intercom.io/messenger/web/ping',
+                                   'https://reactjs.org/link/react-devtools"'
                                  ])
 
 Capybara.register_driver :chrome do |app|
@@ -58,7 +59,7 @@ end
 Capybara.javascript_driver = :chrome
 Capybara.ignore_hidden_elements = true
 Capybara.server = :puma
-Capybara.default_max_wait_time = 20
+Capybara.default_max_wait_time = 60
 
 # Keep only the screenshots generated from the last failing test suite
 Capybara::Screenshot.prune_strategy = :keep_last_run

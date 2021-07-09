@@ -1,4 +1,6 @@
 class Invite < ApplicationRecord
+  TOKEN_LENGTH = 72
+
   has_secure_token
 
   belongs_to :invitable, polymorphic: true
@@ -13,6 +15,11 @@ class Invite < ApplicationRecord
   delegate :invite_accepted, to: :invitable
 
   scope :pending, -> { where(accepted: false) }
+
+  # Override ActiveRecord::SecureToken class method (remove after upgrade to rails 6.1)
+  def self.generate_unique_secure_token
+    SecureRandom.base58(TOKEN_LENGTH)
+  end
 
   private
 

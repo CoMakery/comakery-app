@@ -22,10 +22,10 @@ class ProjectRole < ApplicationRecord
   private
 
     def broadcast_update
-      broadcast_replace_to "project_#{project.id}_accounts",
-                           target: "project_#{project.id}_account_#{account.id}",
-                           partial: 'dashboard/accounts/account',
-                           locals: { project_role: self }
+      broadcast_replace_later_to "project_#{project.id}_accounts",
+                                 target: "project_#{project.id}_account_#{account.id}",
+                                 partial: 'dashboard/accounts/account',
+                                 locals: { project_role: self }
     end
 
     def broadcast_create

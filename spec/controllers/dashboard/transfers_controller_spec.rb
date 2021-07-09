@@ -251,9 +251,7 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
           expect(assigns(:transfers)).to eq []
           expect(assigns(:transfers_not_burned_total)).to eq 0
           expect(assigns(:transfer_types_and_counts)).to eq({})
-          expect(assigns(:transfers_chart_colors_objects))
-            .to eq project.transfer_types.find_by(name: 'earned') => '#73C30E',
-                   project.transfer_types.find_by(name: 'bought') => '#7B00D7'
+          expect(assigns(:transfers_chart_colors_objects).values).to match_array ['#73C30E', '#7B00D7']
           expect(assigns(:project_token)).to eq token
           expect(assigns(:filter_params)).to eq 'filter' => 'search_query'
         end

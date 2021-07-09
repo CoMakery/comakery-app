@@ -187,7 +187,7 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/50/transfer_rules</pre>
+          <pre class="request route highlight">POST /api/v1/projects/11111112/transfer_rules</pre>
 
 
             <h4>Body</h4>
@@ -195,12 +195,12 @@ table th, table td {
   "body": {
     "data": {
       "transfer_rule": {
-        "sending_group_id": "70",
-        "receiving_group_id": "71",
+        "sending_group_id": "11111113",
+        "receiving_group_id": "11111114",
         "lockup_until": "1"
       }
     },
-    "url": "http://example.org/api/v1/projects/50/transfer_rules",
+    "url": "http://example.org/api/v1/projects/11111112/transfer_rules",
     "method": "POST",
     "nonce": "0242d70898bcf3fbb5fa334d1d87804f",
     "timestamp": "1617703500"
@@ -208,22 +208,22 @@ table th, table td {
   "proof": {
     "type": "Ed25519Signature2018",
     "verificationMethod": "O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=",
-    "signature": "ENhf3A1RTLx6VCLhHv0uaXuizSxLissnvFMOHSyI4lCiqS5KcsctKLc7K4VIuglaWKgVx0cgrhTSbfyKx1fXDw=="
+    "signature": "kXNbKsuzxGEX7D3ydX2YIG1HCbo860Bd9fNm+KZOJLpMNnobT1a6XpnsvyMUb/G97tcrTw73sBFoL6def+RiAA=="
   }
 }</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;6fbc24b1830bc0876141356655850afd&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;992dca6d8a3451ca5fa8b11ad01fda20&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;id&quot;: 1,
   &quot;tokenId&quot;: 60,
-  &quot;sendingGroupId&quot;: 70,
-  &quot;receivingGroupId&quot;: 71,
+  &quot;sendingGroupId&quot;: 11111113,
+  &quot;receivingGroupId&quot;: 11111114,
   &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
   &quot;status&quot;: &quot;created&quot;,
   &quot;createdAt&quot;: &quot;2021-04-06T10:05:00.000Z&quot;,
