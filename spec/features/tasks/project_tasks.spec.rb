@@ -39,10 +39,10 @@ describe 'project page', :js do
   context 'when project with whitelabel mission' do
     let!(:whitelabel_mission) { create :whitelabel_mission }
 
+    before { project.update(mission: whitelabel_mission) }
+
     context 'and awards hidden' do
       before do
-        project.update(mission: whitelabel_mission)
-
         login(account)
 
         visit project_path(project)
@@ -55,7 +55,7 @@ describe 'project page', :js do
 
     context 'and awards visible' do
       before do
-        project.update(mission: whitelabel_mission, project_awards_visible: true)
+        project.mission.update(project_awards_visible: true)
 
         login(account)
 
