@@ -53,7 +53,7 @@ class ProjectPolicy < ApplicationPolicy
     (show? || unlisted?) && project.mission.project_awards_visible?
   end
 
-  def show_awards?
+  def show_award_types?
     show? || unlisted?
   end
 
@@ -79,7 +79,6 @@ class ProjectPolicy < ApplicationPolicy
   alias change_permissions? edit?
   alias accounts? show_contributions?
   alias transfers? show_contributions?
-  alias show_award_types? show_awards?
   alias show_wl_award_types? show_wl_awards?
 
   def export_transfers?
