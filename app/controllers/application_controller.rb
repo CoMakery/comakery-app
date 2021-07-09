@@ -248,8 +248,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_default_whitelabel_domain
-    return if ENV['WHITELABEL'] != 'true'
-    return if @whitelabel_mission
+    return if @whitelabel_mission.present?
 
     redirect_to root_url(host: ENV['APP_HOST'])
   end
