@@ -80,6 +80,17 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         expect(response).to have_http_status(400)
         expect(assigns[:errors][0][:_blockchain]).to eq ['unknown blockchain value']
       end
+
+      it 'creates a provisioned wallet' do
+        token = create(:asa_token)
+        ore_id_params = { wallets: [{ blockchain: :unknown, source: 'ore_id', tokens_to_provision: [{ token_id: token.id.to_s }], name: 'Algotest wallet' }] }
+        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params
+        expect(response).to have_http_status(400)
+        expect(assigns[:errors][0][:_blockchain]).to eq ['unknown blockchain value', 'is not supported with ore_id source']
+      end
     end
 
     context 'when one of wallets send is invalid' do
