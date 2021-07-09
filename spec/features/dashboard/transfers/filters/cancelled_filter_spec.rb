@@ -19,13 +19,13 @@ describe 'test_cancelled_filter', js: true do
         visit project_path(project)
         click_link 'transfers'
 
-        first(:css, '.transfers-table__transfer', wait: 20)
+        first(:css, '.transfers-table__transfer')
 
         # verify number of transfers before applying filter is 0 (cancelled transfers are not displayed by default)
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(0)
 
         select('cancelled', from: 'filter-status-select')
-        page.find :xpath, '//select[@id="filter-status-select"]/option[@selected="selected" and contains (text(), "cancelled")]', wait: 20 # wait for page to reload
+        page.find :xpath, '//select[@id="filter-status-select"]/option[@selected="selected" and contains (text(), "cancelled")]'
 
         # verify number of transfers after applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)

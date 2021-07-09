@@ -19,13 +19,13 @@ describe 'test_aml_kyc_unknown_wallet_filter', js: true do
         visit project_path(project)
         click_link 'transfers'
 
-        first(:css, '.transfers-table__transfer', wait: 20)
+        first(:css, '.transfers-table__transfer')
 
         # verify number of transfers before applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)
 
         select('blocked – AML/KYC unknown', from: 'filter-status-select')
-        page.find :xpath, '//select[@id="filter-status-select"]/option[@selected="selected" and contains (text(), "blocked – AML/KYC unknown")]', wait: 20 # wait for page to reload
+        page.find :xpath, '//select[@id="filter-status-select"]/option[@selected="selected" and contains (text(), "blocked – AML/KYC unknown")]'
 
         # verify number of transfers after applying filter
         expect(page.all(:xpath, './/div[@class="transfers-table__transfer"]').size).to eq(number_of_transfers)

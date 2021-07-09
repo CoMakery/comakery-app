@@ -21,7 +21,7 @@ describe 'tokens features', js: true do
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'create & close'
-    find :css, '.token-index', wait: 10
+    find :css, '.token-index'
 
     expect(Token.last._token_type).to eq 'eth'
     expect(Token.last._blockchain).to eq 'ethereum'
@@ -39,11 +39,11 @@ describe 'tokens features', js: true do
     fill_in('token[name]', with: 'erc20 test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
-    find :css, 'input[name="token[symbol]"][value="HOT"]', wait: 10
-    find :css, 'input[name="token[decimal_places]"][value="32"]', wait: 10
+    find :css, 'input[name="token[symbol]"][value="HOT"]'
+    find :css, 'input[name="token[decimal_places]"][value="32"]'
 
     click_on 'create & close'
-    find :css, '.token-index', wait: 10
+    find :css, '.token-index'
 
     expect(Token.last._token_type).to eq 'erc20'
     expect(Token.last._blockchain).to eq 'ethereum'
@@ -65,11 +65,11 @@ describe 'tokens features', js: true do
     fill_in('token[name]', with: 'qrc20 test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
-    find :css, 'input[name="token[symbol]"][value="BIG"]', wait: 10
-    find :css, 'input[name="token[decimal_places]"][value="0"]', wait: 10
+    find :css, 'input[name="token[symbol]"][value="BIG"]'
+    find :css, 'input[name="token[decimal_places]"][value="0"]'
 
     click_on 'create & close'
-    find :css, '.token-index', wait: 10
+    find :css, '.token-index'
 
     expect(Token.last._token_type).to eq 'qrc20'
     expect(Token.last._blockchain).to eq 'qtum_test'
@@ -118,7 +118,7 @@ describe 'tokens features', js: true do
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png')) # rubocop:todo Rails/FilePath
 
     click_on 'save & close'
-    find :css, '.token-index', wait: 10
+    find :css, '.token-index'
 
     expect(Token.last._token_type).to eq 'eth'
     expect(Token.last._blockchain).to eq 'ethereum'
