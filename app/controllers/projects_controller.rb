@@ -240,7 +240,7 @@ class ProjectsController < ApplicationController
 
     def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
-        whitelabel: @whitelabel_mission.present?,
+        whitelabel: ENV['WHITELABEL'] || false,
         tasks_by_specialty: project_tasks_by_specialty,
         follower: current_account&.involved?(@project.id),
         project_data: project_props(@project),
