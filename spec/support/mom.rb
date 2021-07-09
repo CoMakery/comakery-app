@@ -124,7 +124,7 @@ class Mom
     defaults = {
       token: token,
       name: "RegGroup #{SecureRandom.hex(20)}",
-      blockchain_id: RegGroup.maximum(:id).to_i + 1000
+      blockchain_id: RegGroup.maximum(:id).to_i + SecureRandom.hex(20).to_i(16)
     }
     RegGroup.new(defaults.merge(attrs))
   end

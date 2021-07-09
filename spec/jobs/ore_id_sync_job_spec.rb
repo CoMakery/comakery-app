@@ -10,35 +10,34 @@ RSpec.describe OreIdSyncJob, type: :job do
   before do
     allow(OreIdSyncJob).to receive(:set).with(any_args).and_return(self_reschedule_job)
     allow_any_instance_of(OreIdAccount).to receive(:create_remote!)
-    allow(Sentry).to receive(:capture_exception)
     Timecop.freeze(now)
   end
 
-  after { Timecop.return }
-
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
+      expect(Sentry).to receive(:capture_exception).with(RuntimeError).once
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(ore_id.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+      expect(ore_id.reload.synchronisations.last).to be_failed
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
+      expect(Sentry).not_to receive(:capture_exception).with(RuntimeError)
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(ore_id.synchronisations).to be_empty
-      expect(Sentry).not_to have_received(:capture_exception)
+      expect(ore_id.reload.synchronisations).to be_empty
     end
   end
 
@@ -50,7 +49,7 @@ RSpec.describe OreIdSyncJob, type: :job do
 
       perform
 
-      expect(ore_id.synchronisations.last).to be_ok
+      expect(ore_id.reload.synchronisations.last).to be_ok
     end
 
     context 'and service raises an error' do
@@ -81,7 +80,6 @@ RSpec.describe OreIdSyncJob, type: :job do
 
     context 'when next sync allowed time is in the future' do
       before do
-        allow(Sentry).to receive(:capture_exception).and_call_original
         allow_any_instance_of(ore_id.class)
           .to receive(:next_sync_allowed_after).and_return(1.hour.since(now))
       end

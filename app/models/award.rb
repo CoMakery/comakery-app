@@ -360,7 +360,7 @@ class Award < ApplicationRecord
   end
 
   def populate_recipient_wallet
-    self.recipient_wallet = account.wallets.find_by(address: recipient_address, _blockchain: token&._blockchain)
+    self.recipient_wallet = account&.wallets&.find_by(address: recipient_address, _blockchain: token&._blockchain)
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true
