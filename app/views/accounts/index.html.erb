@@ -9,25 +9,26 @@
           <div class="table-wrap">
             <table id="main-table" class="table table-vcenter card-table">
               <thead>
-              <tr>
-                <th class="h10 n8-color">Name</th>
-                <th class="h10 n8-color">Email</th>
-                <th class="h10 n8-color">Blockchain</th>
-                <th class="h10 n8-color">Address</th>
-                <th class="h10 n8-color">Primary</th>
-                <th class="h10 n8-color">Vetting Status</th>
-                <th class="h10 n8-color">Vetting Date</th>
-                <th class="fixed-side"></th>
-              </tr>
+                <tr>
+                  <th class="h10 n8-color">Name</th>
+                  <th class="h10 n8-color">Email</th>
+                  <th class="h10 n8-color">Blockchain</th>
+                  <th class="h10 n8-color">Address</th>
+                  <th class="h10 n8-color">Primary</th>
+                  <th class="h10 n8-color">Vetting Status</th>
+                  <th class="h10 n8-color">Vetting Date</th>
+                  <th class="fixed-side"></th>
+                </tr>
               </thead>
-              <body>
-              <%= turbo_stream_from "mission_#{@whitelabel_mission&.id}_account_wallets" %>
-              <%= turbo_frame_tag "mission_#{@whitelabel_mission&.id}_account_wallets" do %>
-                <%= render partial: 'accounts/partials/index/wallet',
-                           collection: @wallets,
-                           as: :wallet %>
-              <% end %>
-              </body>
+
+              <tbody>
+                <%= turbo_stream_from "mission_#{@whitelabel_mission&.id}_account_wallets" %>
+                <%= turbo_frame_tag "mission_#{@whitelabel_mission&.id}_account_wallets" do %>
+                  <%= render partial: 'accounts/partials/index/wallet',
+                            collection: @wallets,
+                            as: :wallet %>
+                <% end %>
+              </tbody>
             </table>
           </div>
         </div>
