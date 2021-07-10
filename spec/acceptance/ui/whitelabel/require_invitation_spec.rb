@@ -45,7 +45,7 @@ describe 'require invitation', type: :feature, js: false do
           visit projects_path
         end
 
-        it { is_expected.not_to have_current_path new_session_path }
+        it { is_expected.to have_current_path projects_path }
       end
     end
   end
@@ -59,7 +59,7 @@ describe 'require invitation', type: :feature, js: false do
           visit new_account_path
         end
 
-        it { is_expected.not_to have_current_path new_session_path }
+        it { is_expected.to have_current_path new_account_path }
       end
 
       context 'when trying to access projects page' do
@@ -67,7 +67,7 @@ describe 'require invitation', type: :feature, js: false do
           visit projects_path
         end
 
-        it { is_expected.not_to have_current_path new_session_path }
+        it { is_expected.to have_current_path projects_path }
       end
     end
   end
