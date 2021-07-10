@@ -33,6 +33,22 @@ describe 'require invitation', type: :feature, js: false do
 
         it { is_expected.to have_current_path new_session_path }
       end
+
+      context 'when trying to follow an invite link' do
+        before do
+          visit invite_path(FactoryBot.create(:invite).token)
+        end
+
+        it { is_expected.to have_current_path new_account_path }
+      end
+
+      context 'when trying to unsubscribe' do
+        before do
+          visit unsubscription_path
+        end
+
+        it { is_expected.to have_current_path unsubscription_path }
+      end
     end
 
     context 'and user is signed in' do
