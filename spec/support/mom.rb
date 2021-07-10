@@ -1022,7 +1022,8 @@ class Mom
       whitelabel: true,
       whitelabel_domain: whitelabel_domain,
       whitelabel_api_public_key: build(:api_public_key),
-      whitelabel_api_key: build(:api_key)
+      whitelabel_api_key: build(:api_key),
+      require_invitation: attrs[:require_invitation]
     )
   end
 
