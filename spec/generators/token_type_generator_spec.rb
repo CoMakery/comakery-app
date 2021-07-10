@@ -1,8 +1,6 @@
 # rubocop: disable Style/BlockDelimiters
 
-require 'generator_spec'
 require 'rails_helper'
-require 'spec_helper'
 require 'generators/token_type/token_type_generator'
 
 describe TokenTypeGenerator, type: :generator do

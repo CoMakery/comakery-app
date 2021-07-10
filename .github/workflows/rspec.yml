@@ -29,7 +29,7 @@ jobs:
       KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
       KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-      KNAPSACK_PRO_FIXED_QUEUE_SPLIT: "true"
+      KNAPSACK_PRO_FIXED_QUEUE_SPLIT: true
       BUNDLER_VERSION: 2.2.3
       RACK_ENV: test
       RAILS_ENV: test
@@ -137,14 +137,15 @@ jobs:
       run: env bundle exec rails db:migrate
 
     - name: Run tests
-      run: env bundle exec rake knapsack_pro:queue:rspec || env bundle exec rspec --only-failures --format documentation
+      run: env bundle exec rake knapsack_pro:queue:rspec
 
     - name: Upload a Build Artifact
       if: always()
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v2
       with:
         name: coverage_${{ matrix.ci_node_index }}
         path: coverage/
+        if-no-files-found: error
 
   simplecov:
     runs-on: ubuntu-latest
@@ -165,7 +166,7 @@ jobs:
 
       - name: Upload a Build Artifact
         if: always()
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v2
         with:
           name: Total Coverage
           path: coverage/

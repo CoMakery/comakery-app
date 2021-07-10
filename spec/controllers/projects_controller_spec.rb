@@ -391,8 +391,8 @@ describe ProjectsController do
         get :index
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Cats Dogs Yaks Foxes])
-        expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
+        expect(assigns[:projects].map(&:title)).to match_array(%w[Cats Dogs Yaks Foxes])
+        expect(assigns[:project_contributors].keys).to match_array([cat_project, dog_project, yak_project])
       end
 
       it 'allows searching' do
@@ -717,15 +717,61 @@ describe ProjectsController do
             }
           end
 
+          let(:expected_team) do
+            [
+              {
+                'id' => account.id,
+                'first_name' => account.first_name,
+                'last_name' => account.last_name,
+                'nickname' => account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => { 'id' => Specialty.first.id, 'name' => 'Team Leader' }
+              },
+              {
+                'id' => another_account.id,
+                'first_name' => another_account.first_name,
+                'last_name' => another_account.last_name,
+                'nickname' => another_account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => {}
+              },
+              {
+                'id' => interested_account.id,
+                'first_name' => interested_account.first_name,
+                'last_name' => interested_account.last_name,
+                'nickname' => interested_account.nickname,
+                'linkedin_url' => nil,
+                'github_url' => nil,
+                'dribble_url' => nil,
+                'behance_url' => nil,
+                'image_url' => instance_of(String),
+                'specialty' => { 'name' => 'Interested' }
+              }
+            ]
+          end
+
           it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
             login(another_account)
             get :show, params: { id: cat_project.to_param }
 
-            expect(response.code).to eq '200'
-            expect(assigns(:project)).to eq cat_project
+            expect(response.code).to eq('200')
+            expect(assigns(:project)).to eq(cat_project)
             expect(assigns[:award]).to be_new_record
-            expect(assigns[:can_award]).to eq false
-            expect(assigns[:props]).to match expected_props
+            expect(assigns[:can_award]).to eq(false)
+            expect(assigns[:props][:token_data]).to eq(expected_props[:token_data])
+            expect(assigns[:props][:project_data][:team]).to match_array(expected_team)
+            expect(assigns[:props][:project_for_header]).to eq(expected_props[:project_for_header])
+            expect(assigns[:props][:mission_for_header]).to eq(expected_props[:mission_for_header])
+            expect(assigns[:props][:csrf_token]).to be_an_instance_of(String)
+            expect(assigns[:props][:tasks_by_specialty]).to be_an_instance_of(Array)
           end
         end
       end

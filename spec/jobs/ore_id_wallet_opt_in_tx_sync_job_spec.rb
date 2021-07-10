@@ -10,35 +10,34 @@ RSpec.describe OreIdWalletOptInTxSyncJob, type: :job do
   before do
     allow(described_class).to receive(:set).with(any_args).and_return(self_reschedule_job)
     allow(wallet_provision).to receive(:sync_opt_in_tx)
-    allow(Sentry).to receive(:capture_exception)
     Timecop.freeze(now)
   end
 
-  after { Timecop.return }
-
   shared_examples 'fails and reschedules itself with the delay' do |expected_delay|
     it do
+      expect(Sentry).to receive(:capture_exception).with(RuntimeError).once
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(wallet_provision.synchronisations.last).to be_failed
-      expect(Sentry).to have_received(:capture_exception).with(RuntimeError)
+      expect(wallet_provision.reload.synchronisations.last).to be_failed
     end
   end
 
   shared_examples 'skips and reschedules itself with the delay' do |expected_delay|
     it do
+      expect(Sentry).not_to receive(:capture_exception).with(RuntimeError)
+
       perform
 
       expect(described_class).to have_received(:set).with(wait: expected_delay).once
       expect(described_class).to have_received(:set).once
       expect(self_reschedule_job).to have_received(:perform_later).once
 
-      expect(wallet_provision.synchronisations).to be_empty
-      expect(Sentry).not_to have_received(:capture_exception)
+      expect(wallet_provision.reload.synchronisations).to be_empty
     end
   end
 
@@ -49,7 +48,7 @@ RSpec.describe OreIdWalletOptInTxSyncJob, type: :job do
       perform
 
       expect(wallet_provision).to have_received(:sync_opt_in_tx).once
-      expect(wallet_provision.synchronisations.last).to be_ok
+      expect(wallet_provision.reload.synchronisations.last).to be_ok
     end
 
     context 'and an error is raised' do
