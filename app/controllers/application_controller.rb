@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login_strict
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
-  before_action :set_project_scope
+  before_action :project_scope
 
   def basic_auth
     return unless ENV.key?('BASIC_AUTH')
@@ -285,10 +285,8 @@ class ApplicationController < ActionController::Base
       redirect_to new_session_path
     end
 
-    def set_project_scope
-      # rubocop:todo Naming/MemoizedInstanceVariableName
+    def project_scope
       @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
-      # rubocop:enable Naming/MemoizedInstanceVariableName
     end
 
     def set_whitelabel_cors

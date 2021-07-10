@@ -1009,7 +1009,8 @@ class Mom
       subtitle: 'test1',
       description: 'test1',
       image: dummy_image,
-      logo: dummy_image
+      logo: dummy_image,
+      require_invitation: false
     }
     Mission.new(defaults.merge(attrs))
   end

@@ -187,7 +187,7 @@ describe ApplicationController do
     end
   end
 
-  describe 'set_project_scope' do
+  describe 'project_scope' do
     let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
     let!(:whitelabel_project) { create(:project, mission: whitelabel_mission) }
     let!(:project) { create(:project) }
