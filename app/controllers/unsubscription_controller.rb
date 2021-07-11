@@ -1,5 +1,6 @@
 class UnsubscriptionController < ApplicationController
   before_action :verify_signature
+  skip_before_action :require_login_strict
   skip_before_action :require_login
   skip_after_action :verify_authorized
 

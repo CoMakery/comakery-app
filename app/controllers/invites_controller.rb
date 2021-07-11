@@ -1,4 +1,5 @@
 class InvitesController < ApplicationController
+  skip_before_action :require_login_strict
   skip_before_action :require_login, only: %i[show]
   skip_after_action :verify_authorized
 

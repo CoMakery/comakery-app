@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   include ProtectedWithRecaptcha
 
+  skip_before_action :require_login_strict
   skip_before_action :require_login, :check_age
   skip_before_action :require_email_confirmation, only: %i[destroy]
   skip_after_action :verify_authorized, :verify_policy_scoped
