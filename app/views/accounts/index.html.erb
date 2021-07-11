@@ -7,6 +7,8 @@
       <div class="card-body">
         <div id="table-scroll" class="table-responsive table-scroll">
           <div class="table-wrap">
+            <%= turbo_stream_from "mission_#{@whitelabel_mission&.id}_account_wallets" %>
+
             <table id="main-table" class="table table-vcenter card-table">
               <thead>
                 <tr>
@@ -22,12 +24,7 @@
               </thead>
 
               <tbody>
-                <%= turbo_stream_from "mission_#{@whitelabel_mission&.id}_account_wallets" %>
-                <%= turbo_frame_tag "mission_#{@whitelabel_mission&.id}_account_wallets" do %>
-                  <%= render partial: 'accounts/partials/index/wallet',
-                            collection: @wallets,
-                            as: :wallet %>
-                <% end %>
+                <%= render partial: 'accounts/partials/index/wallet', collection: @wallets, as: :wallet %>
               </tbody>
             </table>
           </div>

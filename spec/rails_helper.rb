@@ -81,6 +81,7 @@ RSpec.configure do |config|
   config.after(:example) do |example|
     if example.exception
       raise ResponseBodyError, response_body if defined?(response_body) && response_body
+      raise ResponseBodyError, page.source if defined?(page) && page&.source
     end
   end
 
