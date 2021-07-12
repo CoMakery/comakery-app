@@ -28,13 +28,18 @@ class AwardsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm show]
   skip_after_action :verify_authorized, only: %i[confirm]
-  skip_after_action :verify_policy_scoped, only: %i[index]
-  skip_after_action :verify_policy_scoped, only: %i[index]
+  skip_after_action :verify_policy_scoped, only: [:index]
   before_action :redirect_back_to_session, only: %i[index]
   before_action :create_project_role_from_session, only: %i[index]
 
   def index
-    authorize(@project, :show_wl_awards?) if @whitelabel_mission.present?
+    policy_scope = AwardPolicy::Scope.new(current_account, Award, @whitelabel_mission)
+
+    if policy_scope.index?
+      policy_scope.resolve
+    else
+      raise Pundit::NotAuthorizedError
+    end
   end
 
   def show

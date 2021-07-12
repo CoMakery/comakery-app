@@ -87,7 +87,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'do not show wl projects for main' do
-      wl_mission = create :mission, whitelabel_domain: 'wl.test.host', whitelabel: true, whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)
+      wl_mission = create :mission, whitelabel_domain: 'wl.test.host', whitelabel: true, whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key), project_awards_visible: true
       wl_project = create :project, mission: wl_mission, title: 'WL project title'
 
       get :index, params: { project_id: wl_project.id }
