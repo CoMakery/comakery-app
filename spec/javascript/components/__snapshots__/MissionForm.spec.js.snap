@@ -615,6 +615,110 @@ exports[`MissionForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldDropdown>
+              <InputFieldDropdown
+                eventHandler={[Function]}
+                name="requireInvitation"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "Require Invitation and Hide Projects",
+                      "true",
+                    ],
+                    Array [
+                      "Allow Anyone To Signup and Show Projects Publicly",
+                      "false",
+                    ],
+                  ]
+                }
+                symbolLimit={0}
+                title="Whitelabel Access"
+                value="false"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown"
+                  copyOnClick={false}
+                  disabled={false}
+                  errors={Array []}
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="requireInvitation"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "Require Invitation and Hide Projects",
+                        "true",
+                      ],
+                      Array [
+                        "Allow Anyone To Signup and Show Projects Publicly",
+                        "false",
+                      ],
+                    ]
+                  }
+                  step=""
+                  symbolLimit={0}
+                  title="Whitelabel Access"
+                  type="select"
+                  value="false"
+                >
+                  <div
+                    className="input-field input-field__dropdown"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Whitelabel Access
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="requireInvitation"
+                        onChange={[Function]}
+                        required={true}
+                        value="false"
+                      >
+                        <option
+                          key="true"
+                          value="true"
+                        >
+                          Require Invitation and Hide Projects
+                        </option>
+                        <option
+                          key="false"
+                          value="false"
+                        >
+                          Allow Anyone To Signup and Show Projects Publicly
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdown>
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="whitelabelDomain"

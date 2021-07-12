@@ -4,6 +4,7 @@ class AccountsController < ApplicationController
   include ProtectedWithRecaptcha
   include Rails::Pagination
 
+  skip_before_action :require_login_strict, if: :invite
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
