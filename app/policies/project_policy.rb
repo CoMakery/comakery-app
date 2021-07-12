@@ -49,10 +49,6 @@ class ProjectPolicy < ApplicationPolicy
     show_contributions_to_everyone? || show_contributions_to_team? || edit? || project_observer?
   end
 
-  def show_wl_awards?
-    (show? || unlisted?) && project.mission.project_awards_visible?
-  end
-
   def show_award_types?
     show? || unlisted?
   end
@@ -79,7 +75,6 @@ class ProjectPolicy < ApplicationPolicy
   alias change_permissions? edit?
   alias accounts? show_contributions?
   alias transfers? show_contributions?
-  alias show_wl_award_types? show_wl_awards?
 
   def export_transfers?
     edit? || project_observer?

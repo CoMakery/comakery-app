@@ -3,17 +3,18 @@ class AwardTypesController < ApplicationController
   before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index]
   before_action :set_award_type, only: %i[edit update destroy]
-  before_action :set_award_types, only: %i[index]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: %i[index]
   skip_after_action :verify_policy_scoped, only: %i[index]
   skip_before_action :require_login, only: %i[index]
 
   def index
-    if @whitelabel_mission.present?
-      authorize(@project, :show_wl_award_types?)
+    policy_scope = AwardTypePolicy::Scope.new(current_account, @project, @whitelabel_mission, @project.award_types)
+
+    if policy_scope.index?
+      policy_scope.resolve
     else
-      authorize(@project, :show_award_types?)
+      raise Pundit::NotAuthorizedError
     end
   end
 
@@ -72,10 +73,6 @@ class AwardTypesController < ApplicationController
         :description,
         :diagram
       )
-    end
-
-    def set_award_types
-      @award_types = AwardTypePolicy::Scope.new(current_user, @project, @project.award_types).resolve
     end
 
     # rubocop:todo Metrics/PerceivedComplexity
