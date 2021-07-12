@@ -1024,8 +1024,7 @@ class Mom
       whitelabel_domain: whitelabel_domain,
       whitelabel_api_public_key: build(:api_public_key),
       whitelabel_api_key: build(:api_key),
-      require_invitation: attrs[:require_invitation] ? true : false
-      whitelabel_api_key: build(:api_key),
+      require_invitation: attrs[:require_invitation] ? true : false,
       project_awards_visible: attrs.fetch(:project_awards_visible, false)
     )
   end
