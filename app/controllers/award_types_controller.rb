@@ -2,6 +2,8 @@ class AwardTypesController < ApplicationController
   before_action :assign_project
   before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index]
+  before_action :set_policy_scope, only: [:index]
+  before_action :set_award_types, only: [:index]
   before_action :set_award_type, only: %i[edit update destroy]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: %i[index]
@@ -9,13 +11,7 @@ class AwardTypesController < ApplicationController
   skip_before_action :require_login, only: %i[index]
 
   def index
-    policy_scope = AwardTypePolicy::Scope.new(current_account, @project, @whitelabel_mission, @project.award_types)
-
-    if policy_scope.index?
-      policy_scope.resolve
-    else
-      raise Pundit::NotAuthorizedError
-    end
+    raise Pundit::NotAuthorizedError unless @policy_scope.index?
   end
 
   def new; end
@@ -56,6 +52,14 @@ class AwardTypesController < ApplicationController
   end
 
   private
+
+    def set_policy_scope
+      @policy_scope ||= AwardTypePolicy::Scope.new(current_account, @project, @whitelabel_mission, @project.award_types)
+    end
+
+    def set_award_types
+      @award_types = @policy_scope.resolve
+    end
 
     def authorize_project_edit
       authorize @project, :edit?

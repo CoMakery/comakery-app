@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Award Types index' do
   context 'when project' do
-    let(:project) { create :project }
+    let!(:project) { create :project }
 
     let(:visit_batches_page) do
       login(project.account)
