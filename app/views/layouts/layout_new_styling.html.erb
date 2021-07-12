@@ -38,6 +38,9 @@
     <div class="wrapper">
 
       <%= render 'layouts/header_new_styling' %>
+      <% if current_page?(styleguide_project_new_styling_path) %>
+        <%= render 'shared/project_new_styling' %>
+      <% end %>
 
       <div class="page-wrapper">
         <%= yield %>
