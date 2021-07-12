@@ -1,11 +1,12 @@
 class PagesController < ApplicationController
   before_action :unavailable_for_whitelabel
 
-  skip_before_action :require_login
+  skip_before_action :require_login, except: [:styleguide]
   skip_before_action :require_email_confirmation
   skip_after_action :verify_authorized
 
-  layout 'legacy', except: %i[styleguide featured]
+  layout 'legacy', except: [:featured]
+  layout 'layout_new_styling', only: [:styleguide]
 
   def featured # rubocop:todo Metrics/CyclomaticComplexity
     top_missions = Mission.active.without_whitelabel.with_attached_image.first(4)
