@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   before_action :unavailable_for_whitelabel
 
-  skip_before_action :require_login, except: [:styleguide]
+  skip_before_action :require_login
   skip_before_action :require_email_confirmation
   skip_after_action :verify_authorized
 
