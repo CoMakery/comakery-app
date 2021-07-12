@@ -41,6 +41,7 @@ export default class MissionForm extends React.Component {
       description                : props.mission.description || '',
       projectAwardsVisible       : props.mission.projectAwardsVisible ? 'true' : 'false',
       whitelabel                 : props.mission.whitelabel ? 'true' : 'false',
+      requireInvitation          : props.mission.requireInvitation ? 'true' : 'false',
       whitelabelDomain           : props.mission.whitelabelDomain || '',
       whitelabelContactEmail     : props.mission.whitelabelContactEmail || '',
       whitelabelApiPublicKey     : props.mission.whitelabelApiPublicKey || '',
@@ -113,6 +114,7 @@ export default class MissionForm extends React.Component {
       description,
       projectAwardsVisible,
       whitelabel,
+      requireInvitation,
       whitelabelDomain,
       whitelabelContactEmail,
       whitelabelApiPublicKey,
@@ -129,6 +131,7 @@ export default class MissionForm extends React.Component {
     formData.append('mission[description]', description)
     formData.append('mission[project_awards_visible]', projectAwardsVisible)
     formData.append('mission[whitelabel]', whitelabel)
+    formData.append('mission[require_invitation]', requireInvitation)
     formData.append('mission[whitelabel_domain]', whitelabelDomain)
     formData.append('mission[whitelabel_contact_email]', whitelabelContactEmail)
     formData.append('mission[whitelabel_api_public_key]', whitelabelApiPublicKey)
@@ -271,6 +274,7 @@ export default class MissionForm extends React.Component {
       description,
       projectAwardsVisible,
       whitelabel,
+      requireInvitation,
       whitelabelDomain,
       whitelabelContactEmail,
       whitelabelApiPublicKey,
@@ -375,6 +379,16 @@ export default class MissionForm extends React.Component {
             value={whitelabel}
             eventHandler={this.handleChangeFormData}
             selectEntries={Object.entries({'Enabled': 'true', 'Disabled': 'false'})}
+            symbolLimit={0}
+          />
+
+          <InputFieldDropdown
+            title='Whitelabel Access'
+            required
+            name='requireInvitation'
+            value={requireInvitation}
+            eventHandler={this.handleChangeFormData}
+            selectEntries={Object.entries({'Require Invitation and Hide Projects': 'true', 'Allow Anyone To Signup and Show Projects Publicly': 'false'})}
             symbolLimit={0}
           />
 

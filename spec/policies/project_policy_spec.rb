@@ -190,12 +190,12 @@ describe ProjectPolicy do
 
     it { is_expected.to permit(project_account, my_public_project) }
     it { is_expected.to permit(project_admin, my_public_project) }
-    it { is_expected.to permit(project_contributor, my_public_project) }
     it { is_expected.to permit(project_observer, my_public_project) }
 
     it { is_expected.not_to permit(nil, my_public_project) }
     it { is_expected.not_to permit(project_interested, my_public_project) }
     it { is_expected.not_to permit(other_team_member, my_public_project) }
+    it { is_expected.not_to permit(project_contributor, my_public_project) }
   end
 
   describe 'show_transfer_rules?' do
