@@ -2203,6 +2203,9 @@ Secondary Sidebar
 .navbar-collapsed .navbar-brand{
   justify-content: center;
 }
+.navbar-collapsed .nav-link .nav-link-title{
+  display: none;
+}
 .navbar-ms-0{
   -webkit-margin-start: 56px !important;
   margin-inline-start: 56px !important;

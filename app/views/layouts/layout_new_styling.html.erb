@@ -39,9 +39,30 @@
 
       <%= render 'layouts/header_new_styling' %>
 
-      <div class="page-wrapper">
+      <div class="page-wrapper content navbar-ms-0">
         <%= yield %>
       </div>
     </div>
   </body>
 </html>
+<script>
+  $("#main-side-handbar").click(function(){
+    if($("#main-side").hasClass("navbar-collapsed")){
+      $("#main-side").removeClass("navbar-collapsed")
+
+      $(".content").removeClass("navbar-ms-0")
+      $(".content").removeClass("navbar-ms-1")
+      $(".content").removeClass("navbar-ms-2")
+      $(".dropdown-menu").addClass("show")
+      $(".dropdown").addClass("active")
+    }else{
+      $("#main-side").addClass("navbar-collapsed")
+
+      $(".content").addClass("navbar-ms-0")
+      $(".content").removeClass("navbar-ms-1")
+      $(".content").removeClass("navbar-ms-2")
+      $(".dropdown-menu").removeClass("show")
+      $(".dropdown").removeClass("active")
+    }
+  })
+</script>

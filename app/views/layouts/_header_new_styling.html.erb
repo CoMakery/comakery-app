@@ -1,16 +1,14 @@
-<aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+<aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark navbar-collapsed">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <h1 class="navbar-brand navbar-brand-autodark">
-      <a href=".">
-        <img src="Logo-Header.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
-      </a>
-    </h1>
-    <div class="collapse navbar-collapse" id="navbar-menu">
+    <a id="main-side-handbar" class="handbar" role="button" data-bs-toggle="collapse" href="#navbar-menu" aria-expanded="false" aria-controls="#navbar-menu"></a>
+    <div class="collapse navbar-collapse" id="navbar-menu" data-bs-toggle="collapse">
+      <h1 class="navbar-brand navbar-brand-autodark">
+        <a href=".">
+          <img src="Logo-Header.svg" alt="Tabler" class="navbar-brand-image">
+        </a>
+      </h1>
       <ul class="navbar-nav pt-lg-3">
-        <li class="nav-item">
+        <li class="nav-item <%= active_class(projects_path) %>">
           <a class="nav-link" href="/projects/mine">
             <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-grid" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>
@@ -21,7 +19,7 @@
           </a>
         </li>
         <% unless current_account %>
-          <li class="nav-item">
+          <li class="nav-item <%= active_class(new_session_path) %>">
             <a class="nav-link" href="/session/new">
               <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
@@ -31,7 +29,7 @@
               </span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item <%= active_class(new_session_path) %>">
             <a class="nav-link" href="/accounts/new">
               <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
@@ -42,7 +40,7 @@
             </a>
           </li>
         <% else %>
-          <li class="nav-item">
+          <li class="nav-item <%= active_class(my_tasks_path) %>">
             <a class="nav-link" href="/tasks">
               <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
@@ -52,20 +50,12 @@
               </span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/account">
-              <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-              </span>
-              <span class="nav-link-title">
-                Account
-              </span>
-            </a>
-          </li>
-          <li class="nav-item">
+          <li class="nav-item <%= active_class(wallets_path) %>">
             <a class="nav-link" href="/wallets">
-              <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+              <span class="nav-link-icon d-md-none d-lg-inline-block">
+                <svg width="16.67" height="15" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M19 6.55773C19 5.0609 17.7943 3.83259 16.2584 3.70763L15.6224 1.93532C15.0695 0.394627 13.2812 -0.395792 11.6908 0.197587L2.13569 3.76269C2.04025 3.7983 1.95378 3.84635 1.87753 3.90413C0.776754 4.32788 0 5.35631 0 6.55773V15.1394C0 16.7193 1.34315 18 3 18L16 18C17.6569 18 19 16.7193 19 15.1394V12.9773C19.5978 12.6475 20 12.0312 20 11.3253V9.4183C20 8.71242 19.5978 8.09612 19 7.76638V6.55773ZM17 7.51125V6.55773C17 6.03112 16.5523 5.60421 16 5.60421L3 5.60421C2.44772 5.60421 2 6.03112 2 6.55773L2 15.1394C2 15.666 2.44772 16.093 3 16.093L16 16.093C16.5523 16.093 17 15.666 17 15.1394V13.2324H16C14.3431 13.2324 13 11.9517 13 10.3718C13 8.79198 14.3431 7.51126 16 7.51125H17ZM13.7301 2.55276L14.1408 3.69716L7.7999 3.69717L12.4196 1.97351C12.9497 1.77572 13.5458 2.03919 13.7301 2.55276ZM15 10.3718C15 9.84521 15.4477 9.4183 16 9.4183H18V11.3253H16C15.4477 11.3253 15 10.8984 15 10.3718Z" fill="currentColor"></path>
+                </svg>
               </span>
               <span class="nav-link-title">
                 Wallets
@@ -74,7 +64,7 @@
           </li>
           <% if current_account.comakery_admin? %>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+              <a class="nav-link" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="true">
                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3" /><line x1="12" y1="12" x2="20" y2="7.5" /><line x1="12" y1="12" x2="12" y2="21" /><line x1="12" y1="12" x2="4" y2="7.5" /><line x1="16" y1="5.25" x2="8" y2="9.75" /></svg>
                 </span>
@@ -96,18 +86,16 @@
               </div>
             </li>
           <% end %>
-          <li class="nav-item">
-            <a class="nav-link" href="/session" data-method="delete">
-              <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-              </span>
-              <span class="nav-link-title">
-                Sign Out
-              </span>
-            </a>
-          </li>
         <% end %>
       </ul>
+      <% if current_account %>
+        <a class="nav-link" href="/account">
+          <div class="profile d-flex flex-row align-items-center">
+            <img class="rounded-circle" src="<%= account_image_url(current_account, 30) %>">
+            <label class="ms-2 flex-fill h14 font-weight-medium n2-color nav-link-title"><%= current_account.name %></label>
+          </div>
+        </a>
+      <% end %>
     </div>
   </div>
 </aside>
