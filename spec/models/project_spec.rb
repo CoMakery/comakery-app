@@ -386,7 +386,7 @@ describe Project do
         end
       end
 
-      context 'when hot wallet mode is changed' do
+      context 'when hot wallet mode is not changed' do
         let(:new_attributes) { { title: 'New Title' } }
 
         it 'should not broadcast hot wallet mode' do
