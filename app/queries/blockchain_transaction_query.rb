@@ -42,14 +42,20 @@ class BlockchainTransactionQuery
 
     where_sql = <<~SQL
       (blockchain_transactions.id IS NULL) OR
-      (blockchain_transactions.status IN (#{blockchain_transactions_cancelled_statuses})) OR
-      (blockchain_transactions.status = #{BlockchainTransaction.statuses[:created]} AND blockchain_transactions.created_at < :timestamp)
+      (blockchain_transactions.status IN (:blockchain_transactions_cancelled_statuses)) OR
+      (blockchain_transactions.status = :blockchain_transaction_created_status AND blockchain_transactions.created_at < :timestamp)
     SQL
 
-    q = project.public_send(transactable_class.table_name)
-      .joins(ApplicationRecord.sanitize_sql_array([joins_sql]))
-      .distinct
-      .where(where_sql, timestamp: 10.minutes.ago)
+    q = project
+        .public_send(transactable_class.table_name)
+        .joins(ApplicationRecord.sanitize_sql_array([joins_sql]))
+        .distinct
+        .where(
+          where_sql,
+          blockchain_transactions_cancelled_statuses: blockchain_transactions_cancelled_statuses,
+          blockchain_transaction_created_status: BlockchainTransaction.statuses[:created],
+          timestamp: 10.minutes.ago
+        )
 
     if transactable_class == Award
       q = scopes_for_awards(q)
@@ -59,7 +65,7 @@ class BlockchainTransactionQuery
       q = scopes_for_transfer_rules(q)
     end
 
-    q = filter_unverified_accounts(q, transactable_class.table_name) if options[:verified_accounts_only]
+    q = filter_unverified_accounts(q, transactable_class) if options[:verified_accounts_only]
     q
   end
 
@@ -68,7 +74,7 @@ class BlockchainTransactionQuery
     def blockchain_transactions_cancelled_statuses
       statuses = [BlockchainTransaction.statuses[:cancelled]]
       statuses << BlockchainTransaction.statuses[:failed] if options[:include_failed]
-      statuses.join(', ')
+      statuses
     end
 
     def scopes_for_awards(scope)
@@ -87,14 +93,14 @@ class BlockchainTransactionQuery
       scope.not_synced
     end
 
-    def filter_unverified_accounts(scope, table_name)
+    def filter_unverified_accounts(scope, transactable_class)
       verified_joins_sql = <<~SQL
         LEFT JOIN (
           select distinct on (account_id) *
           from verifications
           where passed = true
         ) as account_verified
-        ON account_verified.account_id = #{table_name}.account_id
+        ON account_verified.account_id = #{transactable_class.table_name}.account_id
       SQL
 
       scope.joins(verified_joins_sql).where('account_verified.passed = true')
