@@ -1,6 +1,11 @@
 <turbo-frame id="transfer_settings">
   <% if @transfer.accepted? %>
-    <a class="dropdown-item edit-transfer" role="button" data-bs-toggle="modal" data-bs-target="#modal-edit-transfer-<%= @transfer.id %>">Edit</a>
+    <a class="dropdown-item edit-transfer"
+       role="button"
+       data-bs-toggle="modal"
+       data-bs-target="#modal-edit-transfer-<%= @transfer.id %>">
+      Edit
+    </a>
   <% end %>
 
   <% if @transfer.cancelable? && !@transfer.cancelled? %>
