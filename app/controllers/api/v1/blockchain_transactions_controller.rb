@@ -65,11 +65,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def transactable
-      @transactable ||= if transactable_type
-        custom_transactable
-      else
-        default_transactable
-      end
+      @transactable ||= BlockchainTransactionQuery.new(
+        project: project,
+        transactable_classes: [AccountTokenRecord, Award],
+        target: { for: :hot_wallet, mode: (hot_wallet_manual_sending? ? :manual : :auto) },
+        verified_accounts_only: false # TODO: change me to true
+      ).next_transactions
     end
 
     def custom_transactable
@@ -78,7 +79,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       if transactable_id
         collection.ready_for_manual_blockchain_transaction.find(transactable_id)
       else
-        collection.ready_for_blockchain_transaction.first
+        collection.ready_for_blockchain_transaction(false).first
       end
     end
 
