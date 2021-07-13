@@ -1009,7 +1009,8 @@ class Mom
       subtitle: 'test1',
       description: 'test1',
       image: dummy_image,
-      logo: dummy_image
+      logo: dummy_image,
+      require_invitation: false
     }
     Mission.new(defaults.merge(attrs))
   end
@@ -1023,7 +1024,8 @@ class Mom
       whitelabel_domain: whitelabel_domain,
       whitelabel_logo: dummy_image,
       whitelabel_api_public_key: build(:api_public_key),
-      whitelabel_api_key: build(:api_key)
+      whitelabel_api_key: build(:api_key),
+      require_invitation: attrs[:require_invitation] ? true : false
     )
   end
 

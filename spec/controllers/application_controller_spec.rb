@@ -126,7 +126,7 @@ describe ApplicationController do
     end
   end
 
-  describe 'set_whitelabel_mission' do
+  describe 'whitelabel_mission' do
     let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
 
     it 'assigns whitelabel mission which matches current_domain' do
@@ -142,7 +142,52 @@ describe ApplicationController do
     end
   end
 
-  describe 'set_project_scope' do
+  describe 'require_login_strict' do
+    class RequireLoginStrictController < ApplicationController; end
+
+    describe ApplicationController do
+      controller RequireLoginStrictController do
+        skip_before_action :require_login
+        skip_after_action :verify_policy_scoped
+
+        def index
+          head 200
+        end
+      end
+
+      subject { get :index }
+
+      context 'when whitelabel mission is not present' do
+        it { is_expected.to have_http_status(200) }
+      end
+
+      context 'when whitelabel mission is present' do
+        context 'and does not require invitation' do
+          let!(:whitelabel_mission) { create(:whitelabel_mission, whitelabel_domain: 'test.host', require_invitation: false) }
+
+          it { is_expected.to have_http_status(200) }
+        end
+
+        context 'and requires invitation' do
+          let!(:whitelabel_mission) { create(:whitelabel_mission, whitelabel_domain: 'test.host', require_invitation: true) }
+
+          context 'and current_account is present' do
+            before do
+              login(create(:account, managed_mission: whitelabel_mission))
+            end
+
+            it { is_expected.to have_http_status(200) }
+          end
+
+          context 'and current_account is not present' do
+            it { is_expected.to have_http_status(302) }
+          end
+        end
+      end
+    end
+  end
+
+  describe 'project_scope' do
     let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
     let!(:whitelabel_project) { create(:project, mission: whitelabel_mission) }
     let!(:project) { create(:project) }
