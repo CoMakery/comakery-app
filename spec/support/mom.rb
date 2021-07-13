@@ -1021,6 +1021,7 @@ class Mom
       :mission,
       whitelabel: true,
       whitelabel_domain: whitelabel_domain,
+      whitelabel_logo: dummy_image,
       whitelabel_api_public_key: build(:api_public_key),
       whitelabel_api_key: build(:api_key)
     )

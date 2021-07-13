@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'accounts index page', js: true do
   context 'with white label mission accounts' do
-    let!(:whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: '') }
+    let!(:whitelabel_mission) { create(:whitelabel_mission, whitelabel_domain: '') }
     let!(:account) { create(:account, managed_mission: whitelabel_mission, comakery_admin: true) }
     let!(:verification) { create(:verification, account: account, passed: false) }
     let!(:wallet) { create(:wallet, account: account) }
