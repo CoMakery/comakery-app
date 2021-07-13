@@ -85,18 +85,12 @@ class AwardDecorator < Draper::Decorator
       issuer.last_name,
       latest_blockchain_transaction&.source,
       total_amount,
-      transaction_hash,
+      paid? ? ethereum_transaction_address : nil,
       token&.blockchain&.name,
       status,
       transferred_at,
       created_at
     ]
-  end
-
-  def transaction_hash
-    return unless paid?
-
-    ethereum_transaction_address
   end
 
   def part_of_email
