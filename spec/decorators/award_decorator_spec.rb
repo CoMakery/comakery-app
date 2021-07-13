@@ -516,6 +516,7 @@ describe AwardDecorator do
         'Recipient Id',
         'Recipient First Name',
         'Recipient Last Name',
+        'Recipient Email',
         'Recipient Blockchain Address',
         'Recipient Verification',
         'Sender Id',
@@ -525,6 +526,7 @@ describe AwardDecorator do
         "Total Amount #{award.token&.symbol}",
         'Transaction Hash',
         'Transaction Blockchain',
+        'Transfer Status',
         'Transferred At',
         'Created At'
       ]
@@ -554,6 +556,7 @@ describe AwardDecorator do
         award.account&.managed_account_id || award.account&.id,
         award.account&.first_name,
         award.account&.last_name,
+        award.account&.email,
         award.recipient_wallet&.address,
         award.account&.decorate&.verification_state,
         award.issuer.managed_account_id || award.issuer.id,
@@ -563,6 +566,7 @@ describe AwardDecorator do
         award.total_amount,
         award.latest_blockchain_transaction&.tx_hash,
         award.token&.blockchain&.name,
+        award.status,
         award.transferred_at,
         award.created_at
       ]

@@ -54,6 +54,7 @@ class AwardDecorator < Draper::Decorator
       'Recipient Id',
       'Recipient First Name',
       'Recipient Last Name',
+      'Recipient Email',
       'Recipient Blockchain Address',
       'Recipient Verification',
       'Sender Id',
@@ -63,6 +64,7 @@ class AwardDecorator < Draper::Decorator
       "Total Amount #{token&.symbol}",
       'Transaction Hash',
       'Transaction Blockchain',
+      'Transfer Status',
       'Transferred At',
       'Created At'
     ]
@@ -75,6 +77,7 @@ class AwardDecorator < Draper::Decorator
       account&.managed_account_id || account&.id,
       account&.first_name,
       account&.last_name,
+      account&.email,
       recipient_wallet&.address,
       account&.decorate&.verification_state,
       issuer.managed_account_id || issuer.id,
@@ -82,11 +85,18 @@ class AwardDecorator < Draper::Decorator
       issuer.last_name,
       latest_blockchain_transaction&.source,
       total_amount,
-      ethereum_transaction_address,
+      transaction_hash,
       token&.blockchain&.name,
+      status,
       transferred_at,
       created_at
     ]
+  end
+
+  def transaction_hash
+    return unless paid?
+
+    ethereum_transaction_address
   end
 
   def part_of_email
