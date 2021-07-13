@@ -407,7 +407,7 @@ describe Project do
       context 'when transfer batch size is changed' do
         let(:new_attributes) { { title: 'New Title', transfer_batch_size: 100 } }
 
-        it 'should broadcast hot wallet mode' do
+        it 'should broadcast batch size' do
           expect(project)
             .to have_received(:broadcast_replace_later_to)
             .with 'project_transfer_batch_size',
