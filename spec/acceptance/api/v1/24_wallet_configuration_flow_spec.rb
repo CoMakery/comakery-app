@@ -9,12 +9,8 @@ resource 'XIII. Full Wallet configurations flow' do
     allow_any_instance_of(Comakery::APISignature).to receive(:nonce).and_return('0242d70898bcf3fbb5fa334d1d87804f')
   end
 
-  after do
-    Timecop.return
-  end
-
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
-  let!(:account) { create(:static_account, id: 65, managed_mission: active_whitelabel_mission) }
+  let!(:account) { create(:static_account, id: 11111112, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
@@ -59,7 +55,7 @@ resource 'XIII. Full Wallet configurations flow' do
 
   post '/api/v1/accounts/:id/wallets/:wallet_id/password_reset' do
     let!(:id) { account.managed_account_id }
-    let!(:wallet) { create(:ore_id_wallet, id: 50, account: account) }
+    let!(:wallet) { create(:ore_id_wallet, id: 11111111, account: account) }
     let(:wallet_id) { wallet.id.to_s }
     let!(:redirect_url) { 'localhost' }
 

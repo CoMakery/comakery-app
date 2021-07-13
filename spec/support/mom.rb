@@ -124,7 +124,7 @@ class Mom
     defaults = {
       token: token,
       name: "RegGroup #{SecureRandom.hex(20)}",
-      blockchain_id: RegGroup.maximum(:id).to_i + 1000
+      blockchain_id: RegGroup.maximum(:id).to_i + SecureRandom.hex(20).to_i(16)
     }
     RegGroup.new(defaults.merge(attrs))
   end
@@ -1009,7 +1009,8 @@ class Mom
       subtitle: 'test1',
       description: 'test1',
       image: dummy_image,
-      logo: dummy_image
+      logo: dummy_image,
+      require_invitation: false
     }
     Mission.new(defaults.merge(attrs))
   end
@@ -1022,7 +1023,8 @@ class Mom
       whitelabel: true,
       whitelabel_domain: whitelabel_domain,
       whitelabel_api_public_key: build(:api_public_key),
-      whitelabel_api_key: build(:api_key)
+      whitelabel_api_key: build(:api_key),
+      require_invitation: attrs[:require_invitation] ? true : false
     )
   end
 

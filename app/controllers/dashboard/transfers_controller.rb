@@ -73,7 +73,7 @@ class Dashboard::TransfersController < ApplicationController
   def fetch_chart_data
     authorize @project, :transfers?
     @page = (params[:page] || 1).to_i
-    @transfers_totals = query.result(distinct: true).reorder('')
+    @transfers_totals = query.result(distinct: true).not_burned.reorder('')
     ordered_transfers = @transfers_totals.includes(:issuer, :transfer_type, :token).ransack_reorder(params.dig(:q, :s))
     @transfers = ordered_transfers.page(@page).per(10)
     @transfers = ordered_transfers.page(1).per(10) if (@page > 1) && @transfers.out_of_range?
@@ -102,7 +102,6 @@ class Dashboard::TransfersController < ApplicationController
         .completed_or_cancelled
 
       @transfers_unfiltered = @transfers_unfiltered.not_cancelled unless params.fetch(:q, {}).fetch(:filter, nil) == 'cancelled'
-      @transfers_unfiltered = @transfers_unfiltered.not_burned unless transfer_type_name == 'burn'
       @q = @transfers_unfiltered.ransack(params[:q])
     end
 

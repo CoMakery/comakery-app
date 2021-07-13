@@ -71,6 +71,8 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
 
     context 'with unknown blockchain' do
       let(:create_params) { { wallets: [{ blockchain: :unknown, address: build(:constellation_address_1), name: 'Wallet' }] } }
+      let(:token) { create(:asa_token) }
+      let(:ore_id_params) { { wallets: [{ blockchain: :unknown, source: 'ore_id', tokens_to_provision: [{ token_id: token.id.to_s }], name: 'Algotest wallet' }] } }
 
       it 'renders an error' do
         params = build(:api_signed_request, create_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
@@ -79,6 +81,15 @@ RSpec.describe Api::V1::WalletsController, type: :controller do
         post :create, params: params
         expect(response).to have_http_status(400)
         expect(assigns[:errors][0][:_blockchain]).to eq ['unknown blockchain value']
+      end
+
+      it 'for ore_id also renders errors' do
+        params = build(:api_signed_request, ore_id_params, api_v1_account_wallets_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params
+        expect(response).to have_http_status(400)
+        expect(assigns[:errors][0][:_blockchain]).to eq ['unknown blockchain value', 'is not supported with ore_id source']
       end
     end
 

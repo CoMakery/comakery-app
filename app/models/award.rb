@@ -84,7 +84,7 @@ class Award < ApplicationRecord
   before_validation :populate_recipient_wallet, if: -> { paid? && !recipient_wallet }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
-  after_save :add_account_as_observer, if: -> { account }
+  after_save :add_account_as_interested, if: -> { account }
 
   after_update_commit :broadcast_update, if: :saved_change_to_transferred_at?
 
@@ -423,8 +423,8 @@ class Award < ApplicationRecord
       Experience.increment_for(account, specialty)
     end
 
-    def add_account_as_observer
-      project.project_observers << account unless account.involved?(project.id)
+    def add_account_as_interested
+      project.project_interested << account unless account.involved?(project.id)
     end
 
     def store_license_hash
