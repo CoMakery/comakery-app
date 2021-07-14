@@ -16,9 +16,11 @@ RSpec.describe Projects::Transfers::SettingsController, type: :controller do
 
   describe 'GET #show' do
     context 'when user is unauthorized' do
-      get :show, params: params
+      it 'returns a response with found status' do
+        get :show, params: params
 
-      it { expect(response).to have_http_status(:not_found) }
+        expect(response).to have_http_status(:found)
+      end
     end
 
     context 'when user is authorized' do
