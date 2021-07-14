@@ -59,21 +59,39 @@ describe 'Transfer settings', js: true do
         end
       end
 
-      context 'with enabled hot wallet and created or cancelled transaction' do
-        let(:hot_wallet) { FactoryBot.create(:wallet) }
+      context 'and transaction with created or cancelled status' do
+        before { transfer.latest_blockchain_transaction.created! }
 
-        before do
-          project.update(hot_wallet: hot_wallet)
+        context 'without hot wallet' do
+          before { open_settings }
 
-          project.update(hot_wallet_mode: :auto_sending)
-
-          transfer.latest_blockchain_transaction.created!
-
-          open_settings
+          it { expect(dropdown_menu).not_to have_content('Prioritize') }
         end
 
-        it 'shows link to prioritize' do
-          expect(dropdown_menu).to have_content('Prioritize')
+        context 'with hot wallet' do
+          let(:hot_wallet) { FactoryBot.create(:wallet) }
+
+          before { project.update(hot_wallet: hot_wallet) }
+
+          context 'and auto sending mode' do
+            before do
+              project.update(hot_wallet_mode: :auto_sending)
+
+              open_settings
+            end
+
+            it { expect(dropdown_menu).to have_content('Prioritize') }
+          end
+
+          context 'and manual sending mode' do
+            before do
+              project.update(hot_wallet_mode: :manual_sending)
+
+              open_settings
+            end
+
+            it { expect(dropdown_menu).to have_content('Pay by Hot Wallet') }
+          end
         end
       end
     end
