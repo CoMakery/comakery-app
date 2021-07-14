@@ -1012,8 +1012,14 @@ body .content *:hover::-webkit-scrollbar-thumb {
   }
   .navbar-vertical.navbar-expand-lg .navbar-collapse .navbar-nav {
     /* TODO: items below were commented, need to check behaviour */
-    /* margin-left: calc( -1 * var(--tblr-gutter-x, 1.5rem)); */
-    margin-right: calc( -1 * var(--tblr-gutter-x, 1.5rem));  
+    /* margin-left: calc( -1 * var(--tblr-gutter-x, 1.5rem));
+    margin-right: calc( -1 * var(--tblr-gutter-x, 1.5rem)); */
+  }
+  .navbar-collapse .navbar-nav {
+    /* TODO: items below were commented, need to check behaviour */
+    /* margin-left: calc( -1 * var(--tblr-gutter-x, 1.5rem));
+    margin-right: calc( -1 * var(--tblr-gutter-x, 1.5rem)); */
+    padding: 24px;
   }
   .navbar-vertical.navbar-expand-lg .navbar-collapse .navbar-nav .nav-link {
     padding: 0.5rem 12.5px; }
@@ -2204,6 +2210,12 @@ Secondary Sidebar
 }
 .navbar-collapsed .nav-link .nav-link-title{
   display: none;
+}
+.nav-link-title{
+  font-family: var(--tblr-font-sans-serif);
+  font-weight: 500;
+  font-style: normal;
+  color: #FFFFFF;
 }
 .navbar-ms-0{
   -webkit-margin-start: 56px !important;
