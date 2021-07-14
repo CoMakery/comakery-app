@@ -70,7 +70,9 @@ class AwardDecorator < Draper::Decorator
     ]
   end
 
-  def to_csv # rubocop:todo Metrics/CyclomaticComplexity
+  # rubocop:todo Metrics/CyclomaticComplexity
+  # rubocop:todo Metrics/PerceivedComplexity
+  def to_csv
     [
       id,
       transfer_type&.name,
