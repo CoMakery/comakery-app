@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Transfer settings', js: true do
-  let!(:transfer) { build(:algorand_app_transfer_tx).blockchain_transaction.blockchain_transactable }
+  let(:transfer) { build(:algorand_app_transfer_tx).blockchain_transaction.blockchain_transactable }
 
   let(:project) { transfer.project }
 
