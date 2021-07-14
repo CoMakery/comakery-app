@@ -26,7 +26,7 @@ class BlockchainTransactionQuery
     transactions
   end
 
-  def next_transactions_for(transactable_class) # rubocop:todo Metrics/CyclomaticComplexity
+  def next_transactions_for(transactable_class)
     joins_sql = <<~SQL
       LEFT JOIN batch_transactables
       ON batch_transactables.id = (
