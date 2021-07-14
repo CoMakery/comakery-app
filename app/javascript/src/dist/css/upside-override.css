@@ -1008,13 +1008,12 @@ body .content *:hover::-webkit-scrollbar-thumb {
   .navbar-vertical.navbar-expand-lg {
     width: 16rem; }
   .navbar-vertical.navbar-expand-lg .navbar-brand {
-    /* TODO: items below were commented, need to check behaviour */
-    /* justify-content: center;  */
+    justify-content: flex-start;
   }
   .navbar-vertical.navbar-expand-lg .navbar-collapse .navbar-nav {
     /* TODO: items below were commented, need to check behaviour */
-    /* margin-left: calc( -1 * var(--tblr-gutter-x, 1.5rem));
-    margin-right: calc( -1 * var(--tblr-gutter-x, 1.5rem));  */
+    /* margin-left: calc( -1 * var(--tblr-gutter-x, 1.5rem)); */
+    margin-right: calc( -1 * var(--tblr-gutter-x, 1.5rem));  
   }
   .navbar-vertical.navbar-expand-lg .navbar-collapse .navbar-nav .nav-link {
     padding: 0.5rem 12.5px; }
@@ -2241,4 +2240,12 @@ Secondary Sidebar
     position: initial;
     width: 100%;
   }
+}
+
+#main-side > div.container-fluid > .handbar{
+  visibility:hidden;
+}
+
+#main-side:hover > div.container-fluid > .handbar{
+  visibility:visible;
 }
