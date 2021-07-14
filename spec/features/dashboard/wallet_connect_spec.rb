@@ -22,6 +22,10 @@ shared_examples 'having wallet connect button' do |attrs|
     end
   end
 
+  it 'loads stimulus controllers' do
+    expect(page).to have_css('div[data-controller="sign--wallet-connect sign--metamask sign--ore-id"]', count: 1)
+  end
+
   context 'with a token supported by OREID' do
     context 'and logged in as project admin' do
       before do
