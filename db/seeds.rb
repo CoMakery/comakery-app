@@ -76,4 +76,5 @@ if Rails.env.development? || Rails.env.test?
                          mission: dummy_mission))
 
   FactoryBot.create :project, :using_security_token, account: Account.first
+  FactoryBot.create :wallet, :ropsten, account: Account.first
 end

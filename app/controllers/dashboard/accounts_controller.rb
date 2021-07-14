@@ -129,7 +129,7 @@ class Dashboard::AccountsController < ApplicationController
       if @project.token&.token_type&.operates_with_account_records?
         @q = @q.joins(:account_token_records)
                .where(account_token_records: { token_id: @project.object.token_id })
-               .includes(account_token_records: [:reg_group])
+               .includes(account_token_records: [:reg_group]).distinct
       end
 
       @q = @q.ransack(params[:q])
