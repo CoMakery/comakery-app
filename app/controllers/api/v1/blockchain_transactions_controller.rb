@@ -6,7 +6,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
-    return head :no_content if creation_disabled?
+    return head :no_content if creation_disabled? || hot_wallet_disabled?
 
     if transactable.any?
       @transaction = transaction_class.new(transaction_create_params)
@@ -60,14 +60,13 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def transactable
-      return [] if hot_wallet_disabled?
-
-      @transactable ||= BlockchainTransactionQuery.new(
-        project: project,
-        transactable_classes: transactable_classes,
-        target: { for: :hot_wallet },
-        verified_accounts_only: false # TODO: change me to true
-      ).next_transactions
+      @transactable ||=
+        BlockchainTransactionQuery.new(
+          project: project,
+          transactable_classes: transactable_classes,
+          target: { for: :hot_wallet },
+          verified_accounts_only: false # TODO: change me to true
+        ).next_transactions
     end
 
     def transaction_create_params

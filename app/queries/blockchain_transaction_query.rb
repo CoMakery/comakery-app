@@ -65,6 +65,7 @@ class BlockchainTransactionQuery
     end
 
     q = filter_unverified_accounts(q, transactable_class) if options[:verified_accounts_only]
+    q = filter_for_batch_tx(q) if options[:batch]
     q.limit(project.transfer_batch_size)
   end
 
@@ -103,6 +104,15 @@ class BlockchainTransactionQuery
       SQL
 
       scope.joins(verified_joins_sql).where('account_verified.passed = true')
+    end
+
+    def filter_for_batch_tx(scope)
+      scope
+        .joins(:transfer_type).where.not('transfer_types.name': %w[mint burn])
+        .joins(:token).where <<~SQL
+          (tokens.batch_contract_address IS NOT NULL) OR
+          (tokens._token_type = 13)
+        SQL
     end
 
     def hot_wallet_manual?
