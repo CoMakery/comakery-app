@@ -49,30 +49,6 @@ describe AwardPolicy do
         expect(AwardPolicy::Scope.new(account, Award).resolve).to match_array(account.accessable_awards)
       end
     end
-
-    describe '#index?' do
-      context 'when whitelabel mission is present' do
-        let(:whitelabel_mission) { create :whitelabel_mission, whitelabel_domain: 'www.example.com' }
-
-        subject(:policy_scope) { AwardPolicy::Scope.new(account, Award, whitelabel_mission) }
-
-        context 'and awards are hidden' do
-          it { expect(policy_scope.index?).to eq(false) }
-        end
-
-        context 'and awards are visible' do
-          before { whitelabel_mission.update(project_awards_visible: true) }
-
-          it { expect(policy_scope.index?).to eq(true) }
-        end
-      end
-
-      context 'when whitelabel mission is blank' do
-        subject(:policy_scope) { AwardPolicy::Scope.new(account, Award) }
-
-        it { expect(policy_scope.index?).to eq(true) }
-      end
-    end
   end
 
   describe 'create?' do

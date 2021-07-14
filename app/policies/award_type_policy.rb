@@ -7,12 +7,11 @@ class AwardTypePolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    attr_reader :account, :project, :whitelabel_mission, :scope
+    attr_reader :account, :project, :scope
 
-    def initialize(account, project, whitelabel_mission, scope)
+    def initialize(account, project, scope)
       @account = account
       @project = project
-      @whitelabel_mission = whitelabel_mission
       @scope = scope
     end
 
@@ -21,14 +20,6 @@ class AwardTypePolicy < ApplicationPolicy
         scope.all
       else
         scope.where.not(state: :draft)
-      end
-    end
-
-    def index?
-      if whitelabel_mission.present?
-        (project_policy.show? || project_policy.unlisted?) && whitelabel_mission.project_awards_visible?
-      else
-        project_policy.show? || project_policy.unlisted?
       end
     end
 

@@ -33,13 +33,7 @@ class AwardsController < ApplicationController
   before_action :create_project_role_from_session, only: %i[index]
 
   def index
-    policy_scope = AwardPolicy::Scope.new(current_account, Award, @whitelabel_mission)
-
-    if policy_scope.index?
-      policy_scope.resolve
-    else
-      raise Pundit::NotAuthorizedError
-    end
+    authorize(@project, :show_whitelabel_awards?) if @whitelabel_mission.present?
   end
 
   def show

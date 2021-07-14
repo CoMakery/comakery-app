@@ -1,5 +1,5 @@
 class AwardPolicy < ApplicationPolicy
-  attr_reader :account, :award, :project, :mission
+  attr_reader :account, :award, :project
 
   def initialize(account, award)
     @account = account
@@ -8,12 +8,11 @@ class AwardPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    attr_reader :account, :scope, :whitelabel_mission
+    attr_reader :account, :scope
 
-    def initialize(account, scope, whitelabel_mission = nil)
+    def initialize(account, scope)
       @account = account
       @scope = scope
-      @whitelabel_mission = whitelabel_mission
     end
 
     def resolve
@@ -22,12 +21,6 @@ class AwardPolicy < ApplicationPolicy
       else
         scope.none
       end
-    end
-
-    def index?
-      return true if whitelabel_mission.blank?
-
-      whitelabel_mission.project_awards_visible?
     end
   end
 
