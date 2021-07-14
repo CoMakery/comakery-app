@@ -6,7 +6,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
-    return head :no_content if creation_disabled? || hot_wallet_disabled?
+    return head :no_content if creation_disabled?
 
     if transactable.any?
       @transaction = transaction_class.new(transaction_create_params)
