@@ -135,7 +135,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
             params[:project_id] = project.id
 
             post :create, params: params
-            expect(response).to have_http_status(:created)
+            expect(response).to have_http_status(:no_content)
           end
         end
 
