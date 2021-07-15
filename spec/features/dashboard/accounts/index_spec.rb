@@ -119,11 +119,13 @@ describe 'project accounts page' do
           find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
         ).to have_text('Project Member')
 
+        page.find("#project_#{project.id}_account_#{account.id} a.dropdown").click
         execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #change_permissions_btn').click()")
 
         within('#account_permissions_modal') do
           select 'Admin', from: 'project_role[role]'
 
+          expect(page).to have_css('#account_permissions_modal input[type=submit]')
           execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
         end
 
@@ -139,11 +141,13 @@ describe 'project accounts page' do
       let!(:project_role) { project.project_roles.find_by(account: project_admin) }
 
       it 'deny action with flash message' do
+        page.find("#project_#{project.id}_account_#{project_admin.id} a.dropdown").click
         execute_script("document.querySelector('#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn').click()")
 
         within('#account_permissions_modal') do
           select 'Read Only Admin', from: 'project_role[role]'
 
+          expect(page).to have_css('#account_permissions_modal input[type=submit]')
           execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
         end
 
