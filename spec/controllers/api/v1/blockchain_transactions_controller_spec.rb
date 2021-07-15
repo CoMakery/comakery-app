@@ -155,7 +155,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     end
 
     context 'with award batch available for transaction' do
-      let!(:project) { create(:project, token: create(:lockup_token), transfer_batch_size: transfer_batch_size) }
+      let!(:project) { create(:project, token: create(:lockup_token, batch_contract_address: build(:ethereum_address_1)), transfer_batch_size: transfer_batch_size) }
       let!(:award) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
       let!(:award2) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
       let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
