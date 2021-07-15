@@ -84,12 +84,11 @@ export default class extends Controller {
     
     if (button.dataset.txOreidNewUrl) {
       dataset = button.dataset
+      const txNewUrl = dataset.txOreidNewUrl
+      window.location.href = txNewUrl
     } else {
-      dataset = await this.saveTransactable(e)
+      await this.saveTransactable(e)
     }
-
-    const txNewUrl = dataset.txOreidNewUrl
-    window.open(txNewUrl)
   }
 
   async saveTransactable(e) {
@@ -107,6 +106,8 @@ export default class extends Controller {
       }
     )
 
-    return await response.json()
+    if (response.redirected) {
+      window.location.href = response.url
+    }
   }
 }
