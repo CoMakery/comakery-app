@@ -8,21 +8,24 @@ class BlockchainTransactablesQuery
     @verified_accounts_only = verified_accounts_only
   end
 
-  def next_transactables # rubocop:todo Metrics/CyclomaticComplexity
+  def next_transactables
     transactions = []
     transactable_classes.each do |transactable_class|
-      next if target[:for] == :hot_wallet && transactable_class == TransferRule
-      next if options[:batch] && transactable_class != Award
+      next unless hot_wallet_support?(transactable_class)
+
+      if batch_support?(transactable_class)
+        transactions = next_transactables_for(transactable_class, batch_size: project.transfer_batch_size)
+        break if transactions.any?
+      end
 
       transactions = next_transactables_for(transactable_class)
-
       break if transactions.any?
     end
 
     transactions
   end
 
-  def next_transactables_for(transactable_class)
+  def next_transactables_for(transactable_class, batch_size: 1)
     joins_sql = <<~SQL
       LEFT JOIN batch_transactables
       ON batch_transactables.id = (
@@ -61,8 +64,8 @@ class BlockchainTransactablesQuery
     end
 
     q = filter_unverified_accounts(q, transactable_class) if verified_accounts_only
-    q = filter_for_batch_tx(q) if options[:batch]
-    q.limit(project.transfer_batch_size)
+    q = filter_for_batch_tx(q) if batch_size > 1
+    q.limit(batch_size)
   end
 
   private
@@ -118,6 +121,16 @@ class BlockchainTransactablesQuery
 
     def hot_wallet_auto?
       target[:for] == :hot_wallet && project.hot_wallet_auto_sending?
+    end
+
+    def hot_wallet_support?(transactable_class)
+      return true if target[:for] != :hot_wallet
+
+      transactable_class != TransferRule
+    end
+
+    def batch_support?(transactable_class)
+      transactable_class == Award && project.transfer_batch_size > 1
     end
 
     def include_failed?
