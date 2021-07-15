@@ -1,24 +1,23 @@
-class BlockchainTransactionQuery
+class BlockchainTransactablesQuery
   attr_reader :project, :transactable_classes, :target, :options
 
-  def initialize(project:, transactable_classes:, target:, include_failed: false, verified_accounts_only: true, batch: false)
+  def initialize(project:, transactable_classes:, target:, verified_accounts_only: true, batch: false)
     @project = project
     @transactable_classes = transactable_classes
     @target = target
     @options = {
-      include_failed: include_failed,
       verified_accounts_only: verified_accounts_only,
       batch: batch && project.transfer_batch_size > 1
     }
   end
 
-  def next_transactions # rubocop:todo Metrics/CyclomaticComplexity
+  def next_transactables # rubocop:todo Metrics/CyclomaticComplexity
     transactions = []
     transactable_classes.each do |transactable_class|
       next if target[:for] == :hot_wallet && transactable_class == TransferRule
       next if options[:batch] && transactable_class != Award
 
-      transactions = next_transactions_for(transactable_class)
+      transactions = next_transactables_for(transactable_class)
 
       break if transactions.any?
     end
@@ -26,7 +25,7 @@ class BlockchainTransactionQuery
     transactions
   end
 
-  def next_transactions_for(transactable_class)
+  def next_transactables_for(transactable_class)
     joins_sql = <<~SQL
       LEFT JOIN batch_transactables
       ON batch_transactables.id = (
@@ -73,7 +72,7 @@ class BlockchainTransactionQuery
 
     def blockchain_transactions_cancelled_statuses
       statuses = [BlockchainTransaction.statuses[:cancelled]]
-      statuses << BlockchainTransaction.statuses[:failed] if options[:include_failed]
+      statuses << BlockchainTransaction.statuses[:failed] if include_failed?
       statuses
     end
 
@@ -93,6 +92,7 @@ class BlockchainTransactionQuery
       scope.not_synced
     end
 
+    # TODO: Decide what we should consider as validated
     def filter_unverified_accounts(scope, transactable_class)
       verified_joins_sql = <<~SQL
         LEFT JOIN (
@@ -109,13 +109,21 @@ class BlockchainTransactionQuery
     def filter_for_batch_tx(scope)
       scope
         .joins(:transfer_type).where.not('transfer_types.name': %w[mint burn])
-        .joins(:token).where <<~SQL
+        .joins(:token).where(<<~SQL, token_release_schedule: Token._token_types[:token_release_schedule])
           (tokens.batch_contract_address IS NOT NULL) OR
-          (tokens._token_type = 13)
+          (tokens._token_type = :token_release_schedule)
         SQL
     end
 
     def hot_wallet_manual?
       target[:for] == :hot_wallet && project.hot_wallet_manual_sending?
+    end
+
+    def hot_wallet_auto?
+      target[:for] == :hot_wallet && project.hot_wallet_auto_sending?
+    end
+
+    def include_failed?
+      !hot_wallet_auto?
     end
 end

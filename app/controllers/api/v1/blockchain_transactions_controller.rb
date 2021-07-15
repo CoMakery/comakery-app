@@ -10,7 +10,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
     if transactable.any?
       @transaction = transaction_class.new(transaction_create_params)
-      @transaction.blockchain_transactables = transactable.count > 1 ? transactable : transactable.first
+      @transaction.blockchain_transactables = transactable
       @transaction.save
     end
 
@@ -61,12 +61,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
     def transactable
       @transactable ||=
-        BlockchainTransactionQuery.new(
+        BlockchainTransactablesQuery.new(
           project: project,
           transactable_classes: transactable_classes,
           target: { for: :hot_wallet },
-          verified_accounts_only: false # TODO: change me to true
-        ).next_transactions
+          verified_accounts_only: false # TODO: change me to true then ready
+        ).next_transactables
     end
 
     def transaction_create_params
