@@ -56,6 +56,24 @@ RSpec.describe AwardsController, type: :controller do
       login(issuer.account)
     end
 
+    context 'when whitelabel mission is present' do
+      let!(:whitelabel_mission) { create :whitelabel_mission, whitelabel_domain: 'test.host' }
+
+      subject { get :index }
+
+      context 'with hidden awards' do
+        it { is_expected.to have_http_status(:found) }
+
+        it { is_expected.to redirect_to(root_path) }
+      end
+
+      context 'with visible awards' do
+        before { whitelabel_mission.update(project_awards_visible: true) }
+
+        it { is_expected.to have_http_status(:success) }
+      end
+    end
+
     it 'returns my tasks' do
       get :index
       expect(response.status).to eq(200)

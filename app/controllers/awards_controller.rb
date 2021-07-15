@@ -1,7 +1,7 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
   before_action :unavailable_for_lockup_token, except: %i[index confirm]
-  before_action :unavailable_for_whitelabel
+  before_action :unavailable_for_whitelabel, except: [:index]
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
@@ -33,7 +33,7 @@ class AwardsController < ApplicationController
   before_action :create_project_role_from_session, only: %i[index]
 
   def index
-    authorize(@project, :show_whitelabel_awards?) if @whitelabel_mission.present?
+    raise Pundit::NotAuthorizedError if @whitelabel_mission.present? && !@whitelabel_mission.project_awards_visible?
   end
 
   def show

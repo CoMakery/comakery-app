@@ -330,62 +330,6 @@ describe ProjectPolicy do
     end
   end
 
-  describe 'show_whitelabel_awards?' do
-    let(:whitelabel_mission) { create :whitelabel_mission }
-
-    before { projects.each { |project| project.update(mission: whitelabel_mission) } }
-
-    context 'when project awards is visible' do
-      before { projects.each { |project| project.mission.update(project_awards_visible: true) } }
-
-      it 'show awards' do
-        expect(described_class.new(nil, my_public_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(nil, my_public_unlisted_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(nil, others_private_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(nil, others_archived_project).show_whitelabel_awards?).to be_truthy
-
-        expect(described_class.new(project_account, my_public_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(project_account, my_public_unlisted_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(project_account, my_private_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(project_account, my_archived_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(project_account, others_private_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(project_account, others_archived_project).show_whitelabel_awards?).to be true
-
-        expect(described_class.new(other_team_member, others_public_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(other_team_member, my_private_project).show_whitelabel_awards?).to be true
-
-        expect(described_class.new(different_team_account, my_public_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(different_team_account, my_public_unlisted_project).show_whitelabel_awards?).to be true
-        expect(described_class.new(different_team_account, my_private_project).show_whitelabel_awards?).to be_truthy
-      end
-    end
-
-    context 'when project awards visibility is hidden' do
-      before { projects.each { |project| project.mission.update(project_awards_visible: false) } }
-
-      it 'prohibits show awards' do
-        expect(described_class.new(nil, my_public_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(nil, my_public_unlisted_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(nil, others_private_project).show_whitelabel_awards?).to be_falsey
-        expect(described_class.new(nil, others_archived_project).show_whitelabel_awards?).to be_falsey
-
-        expect(described_class.new(project_account, my_public_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(project_account, my_public_unlisted_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(project_account, my_private_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(project_account, my_archived_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(project_account, others_private_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(project_account, others_archived_project).show_whitelabel_awards?).to be false
-
-        expect(described_class.new(other_team_member, others_public_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(other_team_member, my_private_project).show_whitelabel_awards?).to be false
-
-        expect(described_class.new(different_team_account, my_public_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(different_team_account, my_public_unlisted_project).show_whitelabel_awards?).to be false
-        expect(described_class.new(different_team_account, my_private_project).show_whitelabel_awards?).to be_falsey
-      end
-    end
-  end
-
   describe 'edit? update? send_award? accesses? regenerate_api_key? add_admin? remove_admin? create_transfer? edit_reg_groups? edit_transfer_rules? freeze_token? transfer_types? export_transfers?' do
     it 'only allows managing projects that are owned or administrated by the current account' do
       %i[edit? update? send_award? accesses? regenerate_api_key? add_admin? remove_admin? create_transfer? edit_reg_groups? edit_transfer_rules? freeze_token? transfer_types? export_transfers?].each do |action|

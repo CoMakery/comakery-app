@@ -57,10 +57,6 @@ class ProjectPolicy < ApplicationPolicy
     show_award_types? && project.mission.project_awards_visible?
   end
 
-  def show_whitelabel_awards?
-    project.mission.project_awards_visible?
-  end
-
   def show_transfer_rules?
     show_contributions? && project.supports_transfer_rules?
   end
