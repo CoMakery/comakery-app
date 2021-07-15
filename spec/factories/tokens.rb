@@ -25,5 +25,11 @@ FactoryBot.define do
     trait :ropsten do
       _blockchain { :ethereum_ropsten }
     end
+
+    trait :erc20_with_batch do
+      _blockchain { :ethereum_ropsten }
+      _token_type { :erc20 }
+      batch_contract_address { '0x68ac9a329c688afbf1fc2e5d3e8cb6e88989e2cc' }
+    end
   end
 end

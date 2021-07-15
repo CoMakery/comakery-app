@@ -1,9 +1,9 @@
 class NextBlockchainTransactables
   attr_reader :project, :transactable_classes, :target, :verified_accounts_only
 
-  def initialize(project:, transactable_classes:, target:, verified_accounts_only: true)
+  def initialize(project:, target:, transactable_classes: [], verified_accounts_only: true)
     @project = project
-    @transactable_classes = transactable_classes
+    @transactable_classes = transactable_classes.any? ? transactable_classes : default_transactable_classes
     @target = target
     @verified_accounts_only = verified_accounts_only
   end
@@ -115,6 +115,10 @@ class NextBlockchainTransactables
         SQL
     end
 
+    def default_transactable_classes
+      [AccountTokenRecord, Award]
+    end
+
     def hot_wallet_manual?
       target[:for] == :hot_wallet && project.hot_wallet_manual_sending?
     end
@@ -126,11 +130,11 @@ class NextBlockchainTransactables
     def hot_wallet_support?(transactable_class)
       return true if target[:for] != :hot_wallet
 
-      transactable_class != TransferRule
+      !project.hot_wallet_disabled? && transactable_class != TransferRule
     end
 
     def batch_support?(transactable_class)
-      transactable_class == Award && project.transfer_batch_size > 1
+      transactable_class == Award && project.transfer_batch_size > 1 && project.token.batch_contract_address.present?
     end
 
     def include_failed?

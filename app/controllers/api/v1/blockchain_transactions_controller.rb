@@ -50,10 +50,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       @transaction ||= project.blockchain_transactions.find(params[:id])
     end
 
-    def transactable_classes
-      [AccountTokenRecord, Award]
-    end
-
     def transaction_class
       t = transactable.respond_to?(:first) ? transactable.first : transactable
       t.blockchain_transaction_class
@@ -63,7 +59,6 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       @transactable ||=
         NextBlockchainTransactables.new(
           project: project,
-          transactable_classes: transactable_classes,
           target: { for: :hot_wallet },
           verified_accounts_only: false # TODO: change me to true then ready
         ).call
