@@ -1,14 +1,11 @@
 class BlockchainTransactablesQuery
-  attr_reader :project, :transactable_classes, :target, :options
+  attr_reader :project, :transactable_classes, :target, :verified_accounts_only
 
-  def initialize(project:, transactable_classes:, target:, verified_accounts_only: true, batch: false)
+  def initialize(project:, transactable_classes:, target:, verified_accounts_only: true)
     @project = project
     @transactable_classes = transactable_classes
     @target = target
-    @options = {
-      verified_accounts_only: verified_accounts_only,
-      batch: batch && project.transfer_batch_size > 1
-    }
+    @verified_accounts_only = verified_accounts_only
   end
 
   def next_transactables # rubocop:todo Metrics/CyclomaticComplexity
@@ -63,7 +60,7 @@ class BlockchainTransactablesQuery
       q = scopes_for_transfer_rules(q)
     end
 
-    q = filter_unverified_accounts(q, transactable_class) if options[:verified_accounts_only]
+    q = filter_unverified_accounts(q, transactable_class) if verified_accounts_only
     q = filter_for_batch_tx(q) if options[:batch]
     q.limit(project.transfer_batch_size)
   end
