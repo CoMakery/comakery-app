@@ -312,7 +312,8 @@ class Mom
 
   def static_blockchain_transaction(**attrs)
     token = create(:comakery_dummy_token)
-    project = create(:project, id: 45, token: token)
+    hot_wallet = build(:wallet, account: nil, source: :hot_wallet, _blockchain: token._blockchain, address: build(:ethereum_address_1))
+    project = create(:project, id: 45, token: token, hot_wallet: hot_wallet, hot_wallet_mode: :auto_sending)
     account = create(:account)
 
     account.wallets.find_by(_blockchain: project.token._blockchain) || create(
