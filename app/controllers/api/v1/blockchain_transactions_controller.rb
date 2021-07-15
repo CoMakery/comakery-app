@@ -61,12 +61,12 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
     def transactable
       @transactable ||=
-        BlockchainTransactablesQuery.new(
+        NextBlockchainTransactables.new(
           project: project,
           transactable_classes: transactable_classes,
           target: { for: :hot_wallet },
           verified_accounts_only: false # TODO: change me to true then ready
-        ).next_transactables
+        ).call
     end
 
     def transaction_create_params

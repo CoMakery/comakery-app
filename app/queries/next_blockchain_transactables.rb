@@ -1,4 +1,4 @@
-class BlockchainTransactablesQuery
+class NextBlockchainTransactables
   attr_reader :project, :transactable_classes, :target, :verified_accounts_only
 
   def initialize(project:, transactable_classes:, target:, verified_accounts_only: true)
@@ -8,7 +8,7 @@ class BlockchainTransactablesQuery
     @verified_accounts_only = verified_accounts_only
   end
 
-  def next_transactables
+  def call
     transactions = []
     transactable_classes.each do |transactable_class|
       next unless hot_wallet_support?(transactable_class)
