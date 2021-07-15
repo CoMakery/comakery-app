@@ -90,6 +90,9 @@ Rails.application.routes.draw do
     resources :project_roles, only: %i[create destroy], defaults: { format: :json }
 
     namespace :dashboard do
+      namespace :transfers do
+        resources :charts, only: [:index]
+      end
       resources :transfers, only: %i[index show edit update new create] do
         collection do
           get :fetch_chart_data
