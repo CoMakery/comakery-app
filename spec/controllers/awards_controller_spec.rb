@@ -127,7 +127,8 @@ RSpec.describe AwardsController, type: :controller do
       create :active_whitelabel_mission
 
       get :index
-      expect(response).to redirect_to(projects_url)
+
+      expect(response).to redirect_to(root_url)
     end
 
     it 'doesnt include whitelabel tasks' do
