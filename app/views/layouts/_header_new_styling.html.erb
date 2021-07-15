@@ -100,9 +100,9 @@
     </div>
     <% if current_account %>
       <a class="nav-link" href="/account">
-        <div class="profile d-flex flex-row align-items-center">
+        <div class="profile d-flex flex-row align-items-center nav-link-avatar">
           <img class="rounded-circle" src="<%= account_image_url(current_account, 30) %>">
-          <span class="ms-2 nav-link-title nav-link-avatar"><%= current_account.name %></span>
+          <span class="ms-2 nav-link-title"><%= current_account.name %></span>
         </div>
       </a>
     <% end %>

@@ -2255,6 +2255,21 @@ Secondary Sidebar
 @media (max-width: 992px) {
   #main-side > div.container-fluid > .handbar{
     display: none;}
+
+  .navbar-brand.navbar-brand-autodark{
+    position: absolute;
+    right: 40%;
+    top: 8px;
+  }
+
+  .nav-link-avatar{
+    position: absolute;
+    right: 15px;
+    top: 20px;
+  }
+  .nav-link-avatar > .nav-link-title{
+    display: none;
+  }
 }
 
 @media (min-width: 992px) {

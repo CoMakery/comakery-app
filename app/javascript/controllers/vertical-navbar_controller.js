@@ -8,7 +8,6 @@ export default class extends Controller {
     var DropdownMenu = document.querySelector('.dropdown-menu');
     var Dropdown = document.querySelector('.dropdown');
     var DropdownBtn = document.querySelector('.dropdown-btn');
-    // var Avatar = document.querySelector(".nav-link-avatar")
 
     Handbar.addEventListener('click', (event) => {
       event.preventDefault();
