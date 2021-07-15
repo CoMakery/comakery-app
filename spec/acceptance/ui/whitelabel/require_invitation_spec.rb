@@ -49,6 +49,14 @@ describe 'require invitation', type: :feature, js: false do
 
         it { is_expected.to have_current_path unsubscription_path }
       end
+
+      context 'when trying to reset password' do
+        before do
+          visit new_password_reset_path
+        end
+
+        it { is_expected.to have_current_path new_password_reset_path }
+      end
     end
 
     context 'and user is signed in' do
