@@ -10,6 +10,11 @@ shared_examples 'having wallet connect button' do |attrs|
 
   subject { visit send(attrs[:path_helper], project) }
 
+  it 'loads stimulus controllers' do
+    subject
+    expect(page).to have_css('div[data-controller="sign--wallet-connect sign--metamask sign--ore-id"]', count: 1)
+  end
+
   context 'without a token', unless: attrs[:requires_token] do
     before do
       transfer.ready!

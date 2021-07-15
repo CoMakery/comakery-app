@@ -130,6 +130,7 @@ class Dashboard::AccountsController < ApplicationController
         @q = @q.joins(:account_token_records)
                .where(account_token_records: { token_id: @project.object.token_id })
                .includes(account_token_records: [:reg_group])
+               .distinct
       end
 
       @q = @q.ransack(params[:q])

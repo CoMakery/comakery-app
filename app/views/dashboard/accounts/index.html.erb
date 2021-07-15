@@ -1,7 +1,11 @@
 <%= tag.div nil, id: :account_permissions_modal %>
 
 <%= render layout: 'projects/project_settings' do %>
-  <div data-controller="sign--wallet-connect sign--metamask">
+  <div
+    data-controller="sign--wallet-connect sign--metamask sign--ore-id"
+    data-sign--ore-id-address-value='<%= current_account&.ore_id_address_for_blockchain(@project.token&._blockchain) %>'
+    data-sign--ore-id-link-url-value='<%= wallets_path(ore_id_required: true) %>'>
+
     <%= render partial: "filters" %>
 
     <div class="transfer-rules__buttons">

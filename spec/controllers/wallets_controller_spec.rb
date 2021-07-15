@@ -45,6 +45,12 @@ RSpec.describe WalletsController, type: :controller do
         expect(response).to have_http_status(200)
       end
     end
+
+    context 'when ore_id_required param is present' do
+      before { get :index, params: { ore_id_required: 'true' } }
+
+      it { is_expected.to set_flash.now[:error].to(/To sign transactions/) }
+    end
   end
 
   describe 'GET /show' do

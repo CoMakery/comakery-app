@@ -20,6 +20,15 @@ RSpec.describe UserMailer, type: :mailer do
         To accept the invitation follow this
       ).squish)
     end
+
+    context 'when sent from whitelabel' do
+      let(:whitelabel_mission) { create(:whitelabel_mission) }
+      let(:mail) { UserMailer.with(whitelabel_mission: whitelabel_mission).send_invite_to_platform(project_role) }
+
+      it 'uses whitelabel domain' do
+        expect(mail.body.encoded).to include(whitelabel_mission.whitelabel_domain)
+      end
+    end
   end
 
   describe '#send_invite_to_project' do
