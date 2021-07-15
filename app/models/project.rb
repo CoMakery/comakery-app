@@ -74,11 +74,11 @@ class Project < ApplicationRecord
   after_update_commit :broadcast_batch_size, if: :saved_change_to_transfer_batch_size?
 
   scope :featured, -> { order :featured }
-  scope :unlisted, -> { where 'projects.visibility in(2,3)' }
-  scope :listed, -> { where 'projects.visibility not in(2,3)' }
-  scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
-  scope :unarchived, -> { where.not visibility: 4 }
-  scope :publics, -> { where 'projects.visibility in(1)' }
+  scope :unlisted, -> { where(visibility: %i[member_unlisted public_unlisted]) }
+  scope :listed, -> { where.not(visibility: %i[member_unlisted public_unlisted]) }
+  scope :visible, -> { where(visibility: %i[member public_listed]) }
+  scope :unarchived, -> { where.not(visibility: :archived) }
+  scope :publics, -> { where(visibility: :public_listed) }
   scope :with_all_attached_images, -> { with_attached_image.with_attached_square_image.with_attached_panoramic_image }
   scope :non_confidential, -> { where(require_confidentiality: false) }
 
@@ -117,10 +117,6 @@ class Project < ApplicationRecord
 
   def add_account(account)
     accounts << account unless account.involved?(id)
-  end
-
-  def total_awards_earned(all_accounts)
-    Award.joins(project: :account).completed.where('projects.id =? AND accounts.id IN(?)', id, all_accounts.ids).sum(:total_amount).to_f
   end
 
   def top_contributors
@@ -170,20 +166,14 @@ class Project < ApplicationRecord
     public_listed? || public_unlisted?
   end
 
-  def unarchived?
-    Project.unarchived.where(id: id).present?
-  end
-
   def unlisted?
     member_unlisted? || public_unlisted?
   end
 
   def percent_awarded
-    if maximum_tokens
-      total_awarded * 100.0 / maximum_tokens
-    else
-      0
-    end
+    return 0 if maximum_tokens.to_i.zero?
+
+    total_awarded * 100.0 / maximum_tokens
   end
 
   def awards_for_chart(max: 1000) # rubocop:todo Metrics/CyclomaticComplexity

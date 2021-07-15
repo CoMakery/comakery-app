@@ -60,6 +60,7 @@ module Comakery
     config.react.camelize_props = true
     config.middleware.use OliveBranch::Middleware, inflection: 'camel', camelize: CustomCamelize.method(:camelize)
 
+    config.middleware.use HTMLProofer::Middleware if Rails.env.development? || Rails.env.test?
     # Use Redis for Cache Store
     redis_provider = ENV.fetch("REDIS_PROVIDER") { "REDIS_URL" }
     redis_url = ENV.fetch(redis_provider) { "redis://localhost:6379/1" }

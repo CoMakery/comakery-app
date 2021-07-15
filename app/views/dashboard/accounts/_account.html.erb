@@ -182,18 +182,15 @@
         <div class='transfer-button'>
           <% if project.token.token_frozen? %>
             frozen
-          <% elsif project.token.blockchain.supported_by_ore_id? %>
-            <%= f.button type: :submit, class: 'transfer-algo-btn', data: { turbo: "false" } do %>
-              <%= render partial: "shared/wallet_logo", locals: { project: project, size: 12 } %>
-              <span>Save</span>
-            <% end %>
-          <% elsif project.token.blockchain.supported_by_wallet_connect? %>
+          <% elsif project.token.blockchain.supported_by_wallet_connect? || @project.token.blockchain.supported_by_ore_id? %>
             <a
               href='javascript:void(0)'
               class="transfer-tokens-btn transfer-tokens-btn-skip-legacy"
-              data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx"
+              data-action="click->sign--wallet-connect#sendTx click->sign--metamask#sendTx click->sign--ore-id#sendTx"
               data-sign--wallet-connect-target='txButtons'
               data-sign--metamask-target='txButtons'
+              data-sign--ore-id-target='txButtons'
+              data-tx-oreid-new-url=""
               data-tx-new-url=""
               data-tx-receive-url="">
               <span>Save</span>
