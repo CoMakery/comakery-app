@@ -1,12 +1,15 @@
 <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark navbar-collapsed">
   <div class="container-fluid" data-controller="vertical-navbar">
-    <a id="main-side-handbar" class="handbar" role="button" data-bs-toggle="collapse" href="#navbar-menu" aria-expanded="false" aria-controls="#navbar-menu"></a>
+    <a class="handbar main-side-handbar" role="button" data-bs-toggle="collapse" href="#navbar-menu" aria-expanded="false" aria-controls="#navbar-menu"></a>
+    <button class="navbar-toggler main-side-handbar" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <h1 class="navbar-brand navbar-brand-autodark">
+      <a href="">
+        <img src="/static/logo-white.svg" alt="Tabler" class="navbar-brand-image">
+      </a>
+    </h1>
     <div class="collapse navbar-collapse" id="navbar-menu" data-bs-toggle="collapse">
-      <h1 class="navbar-brand navbar-brand-autodark">
-        <a href=".">
-          <img src="Logo-Header.svg" alt="Tabler" class="navbar-brand-image">
-        </a>
-      </h1>
       <ul class="navbar-nav pt-lg-3">
         <li class="nav-item <%= active_class(projects_path) %>">
           <a class="nav-link" href="/projects/mine">
@@ -94,14 +97,14 @@
           <% end %>
         <% end %>
       </ul>
-      <% if current_account %>
-        <a class="nav-link" href="/account">
-          <div class="profile d-flex flex-row align-items-center">
-            <img class="rounded-circle" src="<%= account_image_url(current_account, 30) %>">
-            <span class="ms-2 nav-link-title"><%= current_account.name %></span>
-          </div>
-        </a>
-      <% end %>
     </div>
+    <% if current_account %>
+      <a class="nav-link" href="/account">
+        <div class="profile d-flex flex-row align-items-center">
+          <img class="rounded-circle" src="<%= account_image_url(current_account, 30) %>">
+          <span class="ms-2 nav-link-title nav-link-avatar"><%= current_account.name %></span>
+        </div>
+      </a>
+    <% end %>
   </div>
 </aside>

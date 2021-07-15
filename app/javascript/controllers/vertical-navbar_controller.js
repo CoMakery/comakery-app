@@ -2,12 +2,13 @@ import { Controller } from 'stimulus'
 
 export default class extends Controller {
   initialize() {
-    var Handbar = document.querySelector('#main-side-handbar');
-    var MainSide = document.querySelector('#main-side')
-    var Content = document.querySelector('.content')
-    var DropdownMenu = document.querySelector('.dropdown-menu')
-    var Dropdown = document.querySelector('.dropdown')
-    var DropdownBtn = document.querySelector('.dropdown-btn')
+    var Handbar = document.querySelector('.main-side-handbar');
+    var MainSide = document.querySelector('#main-side');
+    var Content = document.querySelector('.content');
+    var DropdownMenu = document.querySelector('.dropdown-menu');
+    var Dropdown = document.querySelector('.dropdown');
+    var DropdownBtn = document.querySelector('.dropdown-btn');
+    // var Avatar = document.querySelector(".nav-link-avatar")
 
     Handbar.addEventListener('click', (event) => {
       event.preventDefault();
