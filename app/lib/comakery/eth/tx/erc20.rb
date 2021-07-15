@@ -12,11 +12,11 @@ class Comakery::Eth::Tx::Erc20 < Comakery::Eth::Tx
   end
 
   def method_name
-    ''
+    raise NotImplementedError, 'This method should be defined in a child class'
   end
 
   def method_params
-    []
+    raise NotImplementedError, 'This method should be defined in a child class'
   end
 
   def method_abi
