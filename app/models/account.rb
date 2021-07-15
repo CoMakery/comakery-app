@@ -361,11 +361,11 @@ class Account < ApplicationRecord
   private
 
     def validate_invite_email
-      errors.add(:email, 'must match invite email') if invite&.force_email? && invite.email != email
+      errors.add(:email, 'must match invite email') if invite&.force_email? && !invite.email.casecmp?(email)
     end
 
     def confirm_on_invite
-      self.email_confirm_token = nil if !confirmed? && invite&.email == email
+      self.email_confirm_token = nil if !confirmed? && invite&.email&.casecmp?(email)
     end
 
     def validate_age

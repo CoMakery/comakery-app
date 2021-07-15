@@ -24,6 +24,6 @@ class Invite < ApplicationRecord
   private
 
     def validate_account_email
-      errors.add(:account, 'must have the same email') if force_email? && email != account.email
+      errors.add(:account, 'must have the same email') if force_email? && !email.casecmp?(account.email)
     end
 end

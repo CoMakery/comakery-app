@@ -38,6 +38,13 @@ RSpec.describe Invite, type: :model do
 
           it { is_expected.to be_valid }
         end
+
+        context 'and account email matches in different case' do
+          subject { FactoryBot.build :invite, :accepted_with_forced_email }
+          before { subject.email = subject.account.email.upcase }
+
+          it { is_expected.to be_valid }
+        end
       end
     end
 
