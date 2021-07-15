@@ -1007,6 +1007,9 @@ body .content *:hover::-webkit-scrollbar-thumb {
   .navbar-vertical.navbar-expand-lg .navbar-brand {
     justify-content: flex-start;
   }
+  .navbar-vertical.navbar-expand-lg.navbar-collapsed .navbar-brand {
+    justify-content: center;
+  }
   .navbar-vertical.navbar-expand-lg .navbar-collapse .navbar-nav {
     /* TODO: items below were commented, need to check behaviour */
     /* margin-left: calc( -1 * var(--tblr-gutter-x, 1.5rem));
@@ -2194,15 +2197,13 @@ Secondary Sidebar
   width: 56px;
 }
 .navbar-collapsed .container-fluid{
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 .navbar-collapsed .nav-item .nav-link .nav-link-icon{
   margin: 0;
 }
-.navbar-collapsed .navbar-brand{
-  justify-content: center;
-}
+
 .nav-link-title{
   font-family: var(--tblr-font-sans-serif);
   font-weight: 500;
@@ -2252,23 +2253,27 @@ Secondary Sidebar
 #main-side:hover > div.container-fluid > .handbar{
   visibility:visible;}
 
-@media (max-width: 992px) {
+@media (max-width: 991.98px) {
   #main-side > div.container-fluid > .handbar{
     display: none;}
 
   .navbar-brand.navbar-brand-autodark{
     position: absolute;
-    right: 40%;
+    right: 45%;
     top: 8px;
   }
 
   .nav-link-avatar{
     position: absolute;
     right: 15px;
-    top: 20px;
+    top: 11.5px;
   }
   .nav-link-avatar > .nav-link-title{
     display: none;
+  }
+
+  .navbar-collapse .navbar-nav .nav-link {
+    justify-content: center !important;
   }
 }
 

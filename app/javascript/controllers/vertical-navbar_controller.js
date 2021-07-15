@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 
 export default class extends Controller {
   initialize() {
-    var Handbar = document.querySelector('.main-side-handbar');
+    var Handbar = document.querySelector('.handbar');
     var MainSide = document.querySelector('#main-side');
     var Content = document.querySelector('.content');
     var DropdownMenu = document.querySelector('.dropdown-menu');

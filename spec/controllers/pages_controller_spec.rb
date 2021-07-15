@@ -64,6 +64,8 @@ RSpec.describe PagesController, type: :controller do
     get :styleguide
     Rails.env = env_backup
     expect(response.status).to eq(200)
+    expect(response).to render_template('pages/styleguide')
+    expect(response).to render_template('layouts/layout_new_styling')
   end
 
   it 'is unavailable_for_whitelabel' do
