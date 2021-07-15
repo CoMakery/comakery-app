@@ -79,7 +79,7 @@ class AwardDecorator < Draper::Decorator
       account&.managed_account_id || account&.id,
       account&.first_name,
       account&.last_name,
-      account&.email,
+      account&.email || email,
       recipient_wallet&.address,
       account&.decorate&.verification_state,
       issuer.managed_account_id || issuer.id,
