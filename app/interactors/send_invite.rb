@@ -29,7 +29,7 @@ class SendInvite
       )
 
       invite.save!
-      UserMailer.send_invite_to_platform(invite.invitable.reload).deliver_now
+      UserMailer.with(whitelabel_mission: whitelabel_mission).send_invite_to_platform(invite.invitable.reload).deliver_now
     end
 
     def email_valid?
