@@ -21,7 +21,7 @@ RSpec.describe InvitesController, type: :controller do
     end
 
     context 'when not logged in' do
-      it { is_expected.to redirect_to new_account_path }
+      it { is_expected.to redirect_to new_account_path(invited: true) }
 
       specify do
         subject
