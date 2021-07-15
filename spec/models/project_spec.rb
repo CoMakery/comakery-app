@@ -356,6 +356,82 @@ describe Project do
         expect(project.accounts).to include(project.account)
       end
     end
+
+    describe 'broadcast_hot_wallet_mode' do
+      let(:project) { FactoryBot.create :project }
+
+      before do
+        allow(project).to receive(:broadcast_replace_later_to)
+
+        project.update(new_attributes)
+      end
+
+      context 'when hot wallet mode is changed' do
+        let(:new_attributes) { { title: 'New Title', hot_wallet_mode: :manual_sending } }
+
+        it 'should broadcast hot wallet mode' do
+          expect(project)
+            .to have_received(:broadcast_replace_later_to)
+            .with 'project_hot_wallet_modes',
+                  target: "project_#{project.id}_hot_wallet_mode",
+                  partial: 'dashboard/transfers/hot_wallet_mode',
+                  locals: { project: project }
+          expect(project)
+            .to have_received(:broadcast_replace_later_to)
+            .with "transfer_project_#{project.id}_hot_wallet_mode",
+                  target: "transfer_project_#{project.id}_hot_wallet_mode",
+                  partial: 'shared/transfer_prioritize_button/mode',
+                  locals: { project: project }
+          expect(project).to have_received(:broadcast_replace_later_to).twice
+        end
+      end
+
+      context 'when hot wallet mode is not changed' do
+        let(:new_attributes) { { title: 'New Title' } }
+
+        it 'should not broadcast hot wallet mode' do
+          expect(project).not_to have_received(:broadcast_replace_later_to)
+        end
+      end
+    end
+
+    describe 'broadcast_batch_size' do
+      let(:project) { FactoryBot.create :project }
+
+      before do
+        allow(project).to receive(:broadcast_replace_later_to)
+
+        project.update(new_attributes)
+      end
+
+      context 'when transfer batch size is changed' do
+        let(:new_attributes) { { title: 'New Title', transfer_batch_size: 100 } }
+
+        it 'should broadcast batch size' do
+          expect(project)
+            .to have_received(:broadcast_replace_later_to)
+            .with 'project_transfer_batch_size',
+                  target: "project_#{project.id}_transfer_batch_size",
+                  partial: 'dashboard/transfers/batch_size',
+                  locals: { project: project }
+          expect(project)
+            .to have_received(:broadcast_replace_later_to)
+            .with 'project_transfer_batch_size_modal_form',
+                  target: "project_#{project.id}_transfer_batch_size_modal_form",
+                  partial: 'projects/batch_size_modal_form',
+                  locals: { project: project }
+          expect(project).to have_received(:broadcast_replace_later_to).twice
+        end
+      end
+
+      context 'when transfer batch size is not changed' do
+        let(:new_attributes) { { title: 'New Title' } }
+
+        it 'should not broadcast batch size' do
+          expect(project).not_to have_received(:broadcast_replace_later_to)
+        end
+      end
+    end
   end
 
   describe 'scopes' do
@@ -368,6 +444,194 @@ describe Project do
         # rubocop:enable Lint/UselessAssignment
 
         expect(project.community_award_types).to eq([community_award_type])
+      end
+    end
+  end
+
+  describe '#safe_add_admin' do
+    subject(:safe_add_admin) { project.safe_add_admin(new_admin) }
+
+    let(:project) { FactoryBot.create(:project) }
+    let(:new_admin) { FactoryBot.create(:account) }
+
+    context 'when new admin is existing admin in the project' do
+      let!(:admin_role) do
+        FactoryBot.create :project_role, :admin, project: project, account: new_admin
+      end
+
+      it 'should not add admin twice to the project' do
+        expect { safe_add_admin }.not_to(change { project.reload.project_admins.count })
+
+        expect(project.project_admins.where(id: new_admin.id).exists?).to eq true
+      end
+    end
+
+    context 'when new admin is existing interested role in the project' do
+      let!(:contributor_role) do
+        FactoryBot.create :project_role, :interested, project: project, account: new_admin
+      end
+
+      it 'should raise error and not add account twice to the project' do
+        prev_admins_count = project.project_admins.count
+
+        expect { safe_add_admin }.to raise_error
+
+        expect(project.reload.project_admins.count).to eq prev_admins_count
+      end
+    end
+
+    context 'when new admin is existing observer role in the project' do
+      let!(:contributor_role) do
+        FactoryBot.create :project_role, :observer, project: project, account: new_admin
+      end
+
+      it 'should raise error and not add account twice to the project' do
+        prev_admins_count = project.project_admins.count
+
+        expect { safe_add_admin }.to raise_error
+
+        expect(project.reload.project_admins.count).to eq prev_admins_count
+      end
+    end
+
+    context 'when new admin is truly new admin in the project' do
+      it 'should add new admin to the project' do
+        expect { safe_add_admin }.to change { project.reload.project_admins.count }.by(1)
+
+        expect(project.project_admins.where(id: new_admin.id).exists?).to eq true
+      end
+    end
+  end
+
+  describe '#add_account' do
+    subject(:add_account) { project.add_account(account) }
+
+    let(:project) { FactoryBot.create(:project) }
+    let(:account) { FactoryBot.create(:account) }
+
+    shared_examples 'not add account twice to the project' do
+      it do
+        expect { add_account }.not_to(change { project.reload.accounts.count })
+
+        expect(project.accounts.where(id: account.id).exists?).to eq true
+      end
+    end
+
+    context 'when account is existing admin role in the project' do
+      let!(:admin_role) do
+        FactoryBot.create :project_role, :admin, project: project, account: account
+      end
+
+      it_behaves_like 'not add account twice to the project'
+    end
+
+    context 'when new admin is existing interested role in the project' do
+      let!(:contributor_role) do
+        FactoryBot.create :project_role, :interested, project: project, account: account
+      end
+
+      it_behaves_like 'not add account twice to the project'
+    end
+
+    context 'when new admin is existing observer role in the project' do
+      let!(:contributor_role) do
+        FactoryBot.create :project_role, :observer, project: project, account: account
+      end
+
+      it_behaves_like 'not add account twice to the project'
+    end
+
+    context 'when account is not involved in the project' do
+      it 'should add new admin to the project' do
+        expect { add_account }.to change { project.reload.accounts.count }.by(1)
+
+        expect(project.accounts.where(id: account.id).exists?).to eq true
+      end
+    end
+  end
+
+  describe '#public?' do
+    subject(:public?) { project.public? }
+
+    let(:project) { FactoryBot.build_stubbed :project, visibility: visibility }
+
+    context 'when project is visible for member' do
+      let(:visibility) { :member }
+
+      it 'should return false' do
+        expect(public?).to eq false
+      end
+    end
+
+    context 'when project is public listed' do
+      let(:visibility) { :public_listed }
+
+      it 'should return true' do
+        expect(public?).to eq true
+      end
+    end
+
+    context 'when project is visible for member but unlisted' do
+      let(:visibility) { :member_unlisted }
+
+      it 'should return false' do
+        expect(public?).to eq false
+      end
+    end
+
+    context 'when project is public but unlisted' do
+      let(:visibility) { :public_unlisted }
+
+      it 'should return true' do
+        expect(public?).to eq true
+      end
+    end
+
+    context 'when project is archived' do
+      let(:visibility) { :archived }
+
+      it 'should return false' do
+        expect(public?).to eq false
+      end
+    end
+  end
+
+  describe '#percent_awarded' do
+    subject(:percent_awarded) { project.percent_awarded }
+
+    let(:account) { FactoryBot.create(:account) }
+    let(:transfer_type) { FactoryBot.create(:transfer_type, project: project) }
+    let(:award_type) { FactoryBot.create(:award_type, project: project) }
+    let!(:award1) do
+      FactoryBot.create :award, account: account, award_type: award_type, status: :paid,
+                                transfer_type: transfer_type, issuer: account, amount: 40
+    end
+    let!(:award2) do
+      FactoryBot.create :award, account: account, award_type: award_type, status: :paid,
+                                transfer_type: transfer_type, issuer: account, amount: 17
+    end
+
+    context 'when project has maximum accounts value set up' do
+      let(:project) { FactoryBot.create :project, maximum_tokens: 100, account: account }
+
+      it 'should return correct awarded percentage' do
+        expect(percent_awarded).to eq 57
+      end
+    end
+
+    context 'when project has maximum accounts value set to zero' do
+      let(:project) { FactoryBot.create :project, maximum_tokens: 0, account: account }
+
+      it 'should return zero' do
+        expect(percent_awarded).to eq 0
+      end
+    end
+
+    context 'when project has maximum accounts value set to nil' do
+      let(:project) { FactoryBot.create :project, maximum_tokens: nil, account: account }
+
+      it 'should return zero' do
+        expect(percent_awarded).to eq 0
       end
     end
   end
