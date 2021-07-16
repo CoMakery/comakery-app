@@ -45,16 +45,6 @@ class Views::Layouts::Legacy < Views::Base
 
         render partial: 'layouts/project_search_form' unless @whitelabel_mission
 
-        div(class: "app-container row#{' home' if current_account && action_name == 'join_us'}") do
-          message unless current_page?(accounts_path)
-          content_for?(:pre_body) ? yield(:pre_body) : ''
-          div(class: 'main') do
-            div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad', style: 'max-width: 1535px;') do
-              content_for?(:body) ? yield(:body) : yield
-            end
-          end
-        end
-
         text react_component('IntercomButton') unless @whitelabel_mission
 
         text react_component(
