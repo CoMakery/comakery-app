@@ -1,11 +1,10 @@
 class NextBlockchainTransactables
-  attr_reader :project, :transactable_classes, :target, :verified_accounts_only
+  attr_reader :project, :transactable_classes, :target
 
-  def initialize(project:, target:, transactable_classes: [], verified_accounts_only: true)
+  def initialize(project:, target:, transactable_classes: [])
     @project = project
     @transactable_classes = transactable_classes.any? ? transactable_classes : default_transactable_classes
     @target = target
-    @verified_accounts_only = verified_accounts_only
   end
 
   def call # rubocop:todo Metrics/CyclomaticComplexity
@@ -79,7 +78,7 @@ class NextBlockchainTransactables
     def scopes_for_awards(scope, batch_size)
       scope = scope.accepted.order('awards.prioritized_at DESC nulls last, awards.created_at ASC')
       scope = scope.where('awards.prioritized_at is not null') if hot_wallet_manual?
-      scope = filter_unverified_accounts(scope) if verified_accounts_only
+      scope = filter_unverified_accounts(scope) if verified_accounts_only?
       scope = filter_for_batch_tx(scope) if batch_size > 1
       scope.limit(batch_size)
     end
@@ -137,6 +136,10 @@ class NextBlockchainTransactables
 
     def batch_support?(transactable_class)
       transactable_class == Award && project.transfer_batch_size > 1 && project.token.supports_batch_transfers?
+    end
+
+    def verified_accounts_only?
+      hot_wallet_auto?
     end
 
     def include_failed?
