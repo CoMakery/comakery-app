@@ -1,7 +1,6 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
   before_action :unavailable_for_lockup_token, except: %i[index confirm]
-  before_action :unavailable_for_whitelabel
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
@@ -28,11 +27,13 @@ class AwardsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm show]
   skip_after_action :verify_authorized, only: %i[confirm]
-  skip_after_action :verify_policy_scoped, only: %(index)
+  skip_after_action :verify_policy_scoped, only: [:index]
   before_action :redirect_back_to_session, only: %i[index]
   before_action :create_project_role_from_session, only: %i[index]
 
-  def index; end
+  def index
+    raise Pundit::NotAuthorizedError if @whitelabel_mission.present? && !@whitelabel_mission.project_awards_visible?
+  end
 
   def show
     @skip_search_box = true

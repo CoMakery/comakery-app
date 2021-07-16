@@ -39,6 +39,7 @@ export default class MissionForm extends React.Component {
       name                       : props.mission.name || '',
       subtitle                   : props.mission.subtitle || '',
       description                : props.mission.description || '',
+      projectAwardsVisible       : props.mission.projectAwardsVisible ? 'true' : 'false',
       whitelabel                 : props.mission.whitelabel ? 'true' : 'false',
       requireInvitation          : props.mission.requireInvitation ? 'true' : 'false',
       whitelabelDomain           : props.mission.whitelabelDomain || '',
@@ -111,6 +112,7 @@ export default class MissionForm extends React.Component {
       name,
       subtitle,
       description,
+      projectAwardsVisible,
       whitelabel,
       requireInvitation,
       whitelabelDomain,
@@ -127,6 +129,7 @@ export default class MissionForm extends React.Component {
     formData.append('mission[name]', name)
     formData.append('mission[subtitle]', subtitle)
     formData.append('mission[description]', description)
+    formData.append('mission[project_awards_visible]', projectAwardsVisible)
     formData.append('mission[whitelabel]', whitelabel)
     formData.append('mission[require_invitation]', requireInvitation)
     formData.append('mission[whitelabel_domain]', whitelabelDomain)
@@ -269,6 +272,7 @@ export default class MissionForm extends React.Component {
       name,
       subtitle,
       description,
+      projectAwardsVisible,
       whitelabel,
       requireInvitation,
       whitelabelDomain,
@@ -356,6 +360,16 @@ export default class MissionForm extends React.Component {
             imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}
             errors={errors.image}
+          />
+
+          <InputFieldDropdown
+            title='Project Tasks Visibility'
+            required
+            name='projectAwardsVisible'
+            value={projectAwardsVisible}
+            eventHandler={this.handleChangeFormData}
+            selectEntries={Object.entries({'Visible': 'true', 'Hidden': 'false'})}
+            symbolLimit={0}
           />
 
           <InputFieldDropdown

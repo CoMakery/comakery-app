@@ -2,7 +2,6 @@ class AwardTypesController < ApplicationController
   before_action :assign_project
   before_action :unavailable_for_lockup_token
   before_action :authorize_project_edit, except: %i[index]
-  before_action :authorize_project_show, only: %i[index]
   before_action :set_award_type, only: %i[edit update destroy]
   before_action :set_award_types, only: %i[index]
   before_action :set_form_props, only: %i[new edit]
@@ -10,7 +9,13 @@ class AwardTypesController < ApplicationController
   skip_after_action :verify_policy_scoped, only: %i[index]
   skip_before_action :require_login, only: %i[index]
 
-  def index; end
+  def index
+    if @whitelabel_mission.present?
+      authorize(@project, :show_whitelabel_award_types?)
+    else
+      authorize(@project, :show_award_types?)
+    end
+  end
 
   def new; end
 
@@ -53,10 +58,6 @@ class AwardTypesController < ApplicationController
 
     def authorize_project_edit
       authorize @project, :edit?
-    end
-
-    def authorize_project_show
-      authorize @project, :show_award_types?
     end
 
     def set_award_type

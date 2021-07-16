@@ -86,6 +86,7 @@ class MissionsController < ApplicationController
         :logo,
         :image,
         :status,
+        :project_awards_visible,
         :whitelabel,
         :require_invitation,
         :whitelabel_domain,
