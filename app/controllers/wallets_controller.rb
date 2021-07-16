@@ -1,5 +1,6 @@
 class WalletsController < ApplicationController
   before_action :set_hide_zero_balances
+  before_action :set_flash, only: :index
   before_action :set_wallet, only: %i[show edit update destroy algorand_opt_ins make_primary]
   after_action :authorize_wallet, only: %i[new create show edit update destroy algorand_opt_ins make_primary]
   helper_method :back_path
@@ -103,6 +104,10 @@ class WalletsController < ApplicationController
       else
         policy_scope(Wallet)
       end
+    end
+
+    def set_flash
+      flash.now[:error] = "To sign transactions with ORE ID, please link your ORE ID wallet and make sure it's set as primary." if params[:ore_id_required]
     end
 
     def set_wallet

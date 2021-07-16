@@ -1,4 +1,5 @@
 class Auth::EthController < ApplicationController
+  skip_before_action :require_login_strict
   skip_before_action :require_login, :check_age, :require_build_profile
   skip_after_action :verify_authorized, :verify_policy_scoped
   before_action :redirect_if_signed_in

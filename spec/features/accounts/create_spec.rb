@@ -11,7 +11,7 @@ describe 'account creation', js: true do
 
     subject { page }
 
-    it { is_expected.to have_current_path(new_account_path) }
+    it { is_expected.to have_current_path(new_account_path(invited: true)) }
 
     context 'and creating the account' do
       before do

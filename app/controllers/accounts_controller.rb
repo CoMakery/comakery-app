@@ -4,6 +4,8 @@ class AccountsController < ApplicationController
   include ProtectedWithRecaptcha
   include Rails::Pagination
 
+  before_action :cleanup_invite, only: [:new]
+  skip_before_action :require_login_strict, if: :invite
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
   skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
@@ -245,7 +247,11 @@ class AccountsController < ApplicationController
       )
     end
 
+    def cleanup_invite
+      session.delete(:invite_id) unless params[:invited]
+    end
+
     def invite
-      @invite ||= Invite.pending.find_by(id: session[:invite_id])
+      Invite.pending.find_by(id: session[:invite_id])
     end
 end

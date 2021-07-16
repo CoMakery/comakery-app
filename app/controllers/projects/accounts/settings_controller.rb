@@ -1,4 +1,6 @@
 class Projects::Accounts::SettingsController < ApplicationController
+  skip_before_action :require_login
+
   skip_after_action :verify_authorized, :verify_policy_scoped
 
   def show
