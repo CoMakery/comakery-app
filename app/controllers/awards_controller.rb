@@ -1,7 +1,6 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
   before_action :unavailable_for_lockup_token, except: %i[index confirm]
-  before_action :unavailable_for_whitelabel, except: [:index]
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign destroy]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
