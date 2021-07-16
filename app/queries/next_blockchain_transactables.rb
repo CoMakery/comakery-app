@@ -110,8 +110,8 @@ class NextBlockchainTransactables
     def filter_for_batch_tx(scope)
       scope
         .joins(:transfer_type).where.not('transfer_types.name': %w[mint burn])
-        .joins(:token).where(<<~SQL, token_release_schedule: Token._token_types[:token_release_schedule])
-          (tokens.batch_contract_address IS NOT NULL) OR
+        .joins(:token).where(<<~SQL, erc20: Token._token_types[:erc20], token_release_schedule: Token._token_types[:token_release_schedule])
+          (tokens._token_type = :erc20 AND tokens.batch_contract_address IS NOT NULL) OR
           (tokens._token_type = :token_release_schedule)
         SQL
     end
