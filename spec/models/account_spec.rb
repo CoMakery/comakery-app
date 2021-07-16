@@ -31,6 +31,17 @@ describe Account do
       it { is_expected.to be_valid }
     end
 
+    context 'and email matches invite email in a different case' do
+      subject { FactoryBot.build(:account, :unconfirmed, email: invite.email.upcase, invite: invite) }
+
+      before do
+        subject.valid?
+      end
+
+      it { is_expected.to be_confirmed }
+      it { is_expected.to be_valid }
+    end
+
     context 'and email doesnt match invite email' do
       subject { FactoryBot.build(:account, :unconfirmed, invite: invite) }
 
