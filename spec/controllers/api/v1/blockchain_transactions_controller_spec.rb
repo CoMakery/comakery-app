@@ -21,7 +21,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       }
     }
   end
-  let(:verified_account) { create :account, verifications: [build(:verification, provider: nil)]}
+  let(:verified_account) { create :account, verifications: [build(:verification, provider: nil)] }
 
   before do
     project.update(mission: active_whitelabel_mission, hot_wallet_mode: :auto_sending)
