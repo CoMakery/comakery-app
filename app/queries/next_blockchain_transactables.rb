@@ -10,6 +10,7 @@ class NextBlockchainTransactables
 
   def call
     transactions = []
+
     transactable_classes.each do |transactable_class|
       next unless hot_wallet_support?(transactable_class)
 
@@ -133,8 +134,12 @@ class NextBlockchainTransactables
       !project.hot_wallet_disabled? && transactable_class != TransferRule
     end
 
+    def token_supports_batch?(token)
+      token._token_type == 'token_release_schedule' || token.batch_contract_address.present?
+    end
+
     def batch_support?(transactable_class)
-      transactable_class == Award && project.transfer_batch_size > 1 && project.token.batch_contract_address.present?
+      transactable_class == Award && project.transfer_batch_size > 1 && token_supports_batch?(project.token)
     end
 
     def include_failed?

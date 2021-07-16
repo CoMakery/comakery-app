@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe NextBlockchainTransactables do
   describe '#call' do
-    let(:call) { described_class.new(project: project, target: { for: :hot_wallet }, verified_accounts_only: false).call }
     subject { described_class.new(project: project, target: { for: :hot_wallet }, verified_accounts_only: false).call }
 
     context 'with awards available for transaction' do
@@ -23,14 +22,24 @@ describe NextBlockchainTransactables do
         let(:hot_wallet_mode) { 'auto_sending' }
 
         it 'returns the first transfer' do
-          is_expected.to eq [award1]
+          is_expected.to match_array [award1]
         end
 
         context 'with batch enabled' do
           let(:batch_size) { 100 }
 
           it 'returns all exist transfers' do
-            is_expected.to eq [award1, award2]
+            is_expected.to match_array [award1, award2]
+          end
+
+          context 'with lockup_token w/o batch_contract_address' do
+            let!(:award1) { FactoryBot.create :award, project: project, status: :accepted, lockup_schedule_id: 0, commencement_date: Time.zone.now }
+            let!(:award2) { FactoryBot.create :award, project: project, status: :accepted, lockup_schedule_id: 0, commencement_date: Time.zone.now }
+            let(:token) { FactoryBot.create :token, :lockup, batch_contract_address: nil }
+
+            it 'returns all exist transfers' do
+              is_expected.to match_array [award1, award2]
+            end
           end
         end
 
@@ -39,7 +48,7 @@ describe NextBlockchainTransactables do
           let(:token) { FactoryBot.create :token, :ropsten }
 
           it 'returns the first transfers only (ignore batch)' do
-            is_expected.to eq [award1]
+            is_expected.to match_array [award1]
           end
         end
 
@@ -47,7 +56,7 @@ describe NextBlockchainTransactables do
           let!(:prioritized_award) { FactoryBot.create :award, project: project, status: :accepted, prioritized_at: Time.zone.now }
 
           it 'returns prioritized transfer' do
-            is_expected.to eq [prioritized_award]
+            is_expected.to match_array [prioritized_award]
           end
         end
       end
@@ -63,7 +72,7 @@ describe NextBlockchainTransactables do
           let!(:prioritized_award) { FactoryBot.create :award, project: project, status: :accepted, prioritized_at: Time.zone.now }
 
           it 'returns prioritized award' do
-            is_expected.to eq [prioritized_award]
+            is_expected.to match_array [prioritized_award]
           end
         end
 
@@ -73,7 +82,7 @@ describe NextBlockchainTransactables do
           let(:batch_size) { 100 }
 
           it 'returns all prioritized transfers' do
-            is_expected.to eq [prioritized_award1, prioritized_award2]
+            is_expected.to match_array [prioritized_award1, prioritized_award2]
           end
         end
 
@@ -83,7 +92,7 @@ describe NextBlockchainTransactables do
           let(:token) { FactoryBot.create :token, :ropsten }
 
           it 'returns the first prioritized transfers only (ignore batch)' do
-            is_expected.to eq [prioritized_award]
+            is_expected.to match_array [prioritized_award]
           end
         end
       end
