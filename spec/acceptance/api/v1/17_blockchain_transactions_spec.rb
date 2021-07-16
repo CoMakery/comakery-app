@@ -14,6 +14,7 @@ resource 'VII. Blockchain Transactions' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:blockchain_transaction) { create(:static_blockchain_transaction, id: 11111111) }
   let!(:project) { blockchain_transaction.blockchain_transactable.project }
+  let(:verified_account) { create :account, verifications: [build(:verification, provider: nil)]}
 
   before do
     header 'API-Key', build(:api_key)
@@ -58,7 +59,7 @@ resource 'VII. Blockchain Transactions' do
 
     context '201' do
       let!(:project_id) { project.id }
-      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project), account: verified_account) }
       let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
       let!(:transaction) do

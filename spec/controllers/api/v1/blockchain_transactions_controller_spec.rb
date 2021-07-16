@@ -13,7 +13,6 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:blockchain_transaction) { create(:blockchain_transaction) }
   let!(:project) { blockchain_transaction.blockchain_transactable.project }
-
   let!(:valid_create_attributes) do
     {
       transaction: {
@@ -22,6 +21,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       }
     }
   end
+  let(:verified_account) { create :account, verifications: [build(:verification, provider: nil)]}
 
   before do
     project.update(mission: active_whitelabel_mission, hot_wallet_mode: :auto_sending)
@@ -30,7 +30,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
 
   describe 'POST #create', vcr: true do
     context 'with awards available for transaction' do
-      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project), account: verified_account) }
       let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
       it 'creates a new BlockchainTransaction' do
@@ -156,8 +156,8 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
 
     context 'with award batch available for transaction' do
       let!(:project) { create(:project, token: create(:lockup_token), transfer_batch_size: transfer_batch_size) }
-      let!(:award) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
-      let!(:award2) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project)) }
+      let!(:award) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project), account: verified_account) }
+      let!(:award2) { create(:award, lockup_schedule_id: 0, commencement_date: Time.current, status: :accepted, award_type: create(:award_type, project: project), account: verified_account) }
       let!(:wallet) { create(:wallet, account: award.account, _blockchain: project.token._blockchain, address: build(:ethereum_address_1)) }
 
       context 'and transfer_batch_size is one' do
