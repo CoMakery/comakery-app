@@ -8,10 +8,11 @@ class NextBlockchainTransactables
     @verified_accounts_only = verified_accounts_only
   end
 
-  def call
+  def call # rubocop:todo Metrics/CyclomaticComplexity
     transactions = []
 
     transactable_classes.each do |transactable_class|
+      next if hot_wallet_disabled?
       next unless hot_wallet_support?(transactable_class)
 
       if batch_support?(transactable_class)
@@ -120,18 +121,24 @@ class NextBlockchainTransactables
       [AccountTokenRecord, Award]
     end
 
+    def target_hot_wallet?
+      target[:for] == :hot_wallet
+    end
+
+    def hot_wallet_disabled?
+      target_hot_wallet? && project.hot_wallet_disabled?
+    end
+
     def hot_wallet_manual?
-      target[:for] == :hot_wallet && project.hot_wallet_manual_sending?
+      target_hot_wallet? && project.hot_wallet_manual_sending?
     end
 
     def hot_wallet_auto?
-      target[:for] == :hot_wallet && project.hot_wallet_auto_sending?
+      target_hot_wallet? && project.hot_wallet_auto_sending?
     end
 
     def hot_wallet_support?(transactable_class)
-      return true if target[:for] != :hot_wallet
-
-      !project.hot_wallet_disabled? && transactable_class != TransferRule
+      target_hot_wallet? && transactable_class.in?([Award, AccountTokenRecord])
     end
 
     def batch_support?(transactable_class)
