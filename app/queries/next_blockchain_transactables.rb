@@ -58,16 +58,14 @@ class NextBlockchainTransactables
         )
 
     if transactable_class == Award
-      q = scopes_for_awards(q)
+      q = scopes_for_awards(q, batch_size)
     elsif transactable_class == AccountTokenRecord
       q = scopes_for_account_token_records(q)
     elsif transactable_class == TransferRule
       q = scopes_for_transfer_rules(q)
     end
 
-    q = filter_unverified_accounts(q, transactable_class) if verified_accounts_only
-    q = filter_for_batch_tx(q) if batch_size > 1
-    q.limit(batch_size)
+    q
   end
 
   private
@@ -78,10 +76,12 @@ class NextBlockchainTransactables
       statuses
     end
 
-    def scopes_for_awards(scope)
+    def scopes_for_awards(scope, batch_size)
       scope = scope.accepted.order('awards.prioritized_at DESC nulls last, awards.created_at ASC')
       scope = scope.where('awards.prioritized_at is not null') if hot_wallet_manual?
-      scope
+      scope = filter_unverified_accounts(scope, transactable_class) if verified_accounts_only
+      scope = filter_for_batch_tx(scope) if batch_size > 1
+      scope.limit(batch_size)
     end
 
     def scopes_for_account_token_records(scope)
