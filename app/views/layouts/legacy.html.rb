@@ -2,6 +2,7 @@ class Views::Layouts::Legacy < Views::Base
   use_instance_variables_for_assigns true
   needs :whitelabel_mission
 
+  # rubocop:todo Metrics/PerceivedComplexity
   def content
     doctype!
     html(lang: 'en') do
@@ -43,6 +44,16 @@ class Views::Layouts::Legacy < Views::Base
         )
 
         render partial: 'layouts/project_search_form' unless @whitelabel_mission
+
+        div(class: "app-container row") do
+          message unless current_page?(accounts_path)
+          content_for?(:pre_body) ? yield(:pre_body) : ''
+          div(class: 'main') do
+            div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad', style: 'max-width: 1535px;') do
+              content_for?(:body) ? yield(:body) : yield
+            end
+          end
+        end
 
         text react_component('IntercomButton') unless @whitelabel_mission
 
