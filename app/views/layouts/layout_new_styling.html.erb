@@ -35,11 +35,11 @@
   </head>
 
   <body class="antialiased">
-    <div class="wrapper">
+    <div class="wrapper" data-controller="vertical-navbar">
 
       <%= render 'layouts/header_new_styling' %>
 
-      <div class="page-wrapper content navbar-ms-0">
+      <div class="page-wrapper content closed-nav-vertical" data-vertical-navbar-target='Content'>
         <%= yield %>
       </div>
     </div>

@@ -68,6 +68,22 @@ RSpec.describe PagesController, type: :controller do
     expect(response).to render_template('layouts/layout_new_styling')
   end
 
+  it 'returns styleguide view page in dev env' do
+    env_backup = Rails.env
+    Rails.env  = 'development'
+    get :styleguide
+    Rails.env = env_backup
+    expect(response).to render_template('pages/styleguide')
+  end
+
+  it 'returns layout_new_styling for styleguide page in dev env' do
+    env_backup = Rails.env
+    Rails.env  = 'development'
+    get :styleguide
+    Rails.env = env_backup
+    expect(response).to render_template('layouts/layout_new_styling')
+  end
+
   it 'is unavailable_for_whitelabel' do
     create :active_whitelabel_mission
 
