@@ -79,7 +79,7 @@ class NextBlockchainTransactables
     def scopes_for_awards(scope, batch_size)
       scope = scope.accepted.order('awards.prioritized_at DESC nulls last, awards.created_at ASC')
       scope = scope.where('awards.prioritized_at is not null') if hot_wallet_manual?
-      scope = filter_unverified_accounts(scope, transactable_class) if verified_accounts_only
+      scope = filter_unverified_accounts(scope) if verified_accounts_only
       scope = filter_for_batch_tx(scope) if batch_size > 1
       scope.limit(batch_size)
     end
@@ -94,18 +94,12 @@ class NextBlockchainTransactables
       scope.not_synced
     end
 
-    # TODO: Decide what we should consider as validated
-    def filter_unverified_accounts(scope, transactable_class)
-      verified_joins_sql = <<~SQL
-        LEFT JOIN (
-          select distinct on (account_id) *
-          from verifications
-          where passed = true
-        ) as account_verified
-        ON account_verified.account_id = #{transactable_class.table_name}.account_id
+    def filter_unverified_accounts(scope)
+      join_sql = <<~SQL
+        INNER JOIN verifications AS latest_verification
+          ON latest_verification.account_id = awards.account_id
       SQL
-
-      scope.joins(verified_joins_sql).where('account_verified.passed = true')
+      scope.joins(join_sql).where('latest_verification.passed = true')
     end
 
     def filter_for_batch_tx(scope)
