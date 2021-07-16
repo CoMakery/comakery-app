@@ -19,10 +19,10 @@ describe 'require invitation', type: :feature, js: false do
         context 'and user has correct invite' do
           before do
             page.set_rack_session(invite_id: FactoryBot.create(:invite).id)
-            visit new_account_path
+            visit new_account_path(invited: true)
           end
 
-          it { is_expected.to have_current_path new_account_path }
+          it { is_expected.to have_current_path new_account_path(invited: true) }
         end
       end
 
@@ -39,7 +39,7 @@ describe 'require invitation', type: :feature, js: false do
           visit invite_path(FactoryBot.create(:invite).token)
         end
 
-        it { is_expected.to have_current_path new_account_path }
+        it { is_expected.to have_current_path new_account_path(invited: true) }
       end
 
       context 'when trying to unsubscribe' do
@@ -48,6 +48,14 @@ describe 'require invitation', type: :feature, js: false do
         end
 
         it { is_expected.to have_current_path unsubscription_path }
+      end
+
+      context 'when trying to reset password' do
+        before do
+          visit new_password_reset_path
+        end
+
+        it { is_expected.to have_current_path new_password_reset_path }
       end
     end
 

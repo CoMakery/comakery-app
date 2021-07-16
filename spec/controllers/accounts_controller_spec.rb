@@ -71,7 +71,7 @@ describe AccountsController do
     context 'when signing up from invite' do
       let(:invite) { FactoryBot.create :invite }
 
-      subject { get :new }
+      subject { get :new, params: { invited: true } }
 
       before do
         session[:invite_id] = invite.id
@@ -80,6 +80,17 @@ describe AccountsController do
       specify do
         subject
         expect(assigns[:account].email).to eq(invite.email)
+      end
+
+      context 'and visiting sign up again after a not finished invite sign up' do
+        subject { get :new }
+
+        specify do
+          subject
+
+          expect(session[:invite_id]).to be_nil
+          expect(assigns[:account].email).to be_nil
+        end
       end
     end
   end
