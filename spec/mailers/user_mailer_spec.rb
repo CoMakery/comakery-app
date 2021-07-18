@@ -13,7 +13,7 @@ RSpec.describe UserMailer, type: :mailer do
 
     it 'renders the body' do
       expect(mail.body.encoded).to match(%(
-        You have been invited to have the role '#{project_role.role.capitalize}' for the project #{project_role.project.title} on CoMakery.
+        You have been invited to have the role '#{project_role.decorate.role_pretty}' for the project #{project_role.project.title} on CoMakery.
       ).squish)
 
       expect(mail.body.encoded).to match(%(
@@ -42,7 +42,7 @@ RSpec.describe UserMailer, type: :mailer do
 
     it 'renders the body' do
       expect(mail.body.encoded).to match(%(
-        You now have the role '#{project_role.role.capitalize}' for the project #{project_role.project.title} on CoMakery.
+        You now have the role '#{project_role.decorate.role_pretty}' for the project #{project_role.project.title} on CoMakery.
       ).squish)
     end
   end

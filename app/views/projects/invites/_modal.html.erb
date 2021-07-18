@@ -24,7 +24,7 @@
             <%= label_tag :role, 'Role', class: 'h11 font-weight-medium n10-color mt-2' %>
             <div class="choices">
               <%= select_tag :role,
-                             options_for_select(role_options_for_select),
+                             options_for_select(ProjectRoleDecorator.role_options_for_select),
                              class: 'form-select form-control' %>
             </div>
           </div>
