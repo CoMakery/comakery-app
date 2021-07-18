@@ -109,6 +109,22 @@ describe MissionsController do
         expect(response.status).to eq(200)
         expect(assigns[:mission]).to eq(mission1)
       end
+
+      describe 'props' do
+        subject { assigns[:props][:mission] }
+
+        let(:mission) { create :whitelabel_mission }
+
+        before do
+          get :edit, params: { id: mission.id }
+        end
+
+        specify { expect(subject[:logo_url]).to include(mission.logo.filename.sanitized) }
+        specify { expect(subject[:image_url]).to include(mission.image.filename.sanitized) }
+        specify { expect(subject[:whitelabel_logo_url]).to include(mission.whitelabel_logo.filename.sanitized) }
+        specify { expect(subject[:whitelabel_logo_dark_url]).to include(mission.whitelabel_logo_dark.filename.sanitized) }
+        specify { expect(subject[:whitelabel_favicon_url]).to include(mission.whitelabel_favicon.filename.sanitized) }
+      end
     end
   end
 
