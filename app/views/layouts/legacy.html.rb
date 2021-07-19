@@ -38,6 +38,7 @@ class Views::Layouts::Legacy < Views::Base
             is_logged_in: (current_account ? true : false),
             is_whitelabel: @whitelabel_mission.present?,
             whitelabel_logo: Attachment::GetPath.call(attachment: @whitelabel_mission&.whitelabel_logo).path,
+            project_awards_visible: (@whitelabel_mission&.project_awards_visible? ? true : false),
             current_path: request.fullpath
           },
           prerender: true
