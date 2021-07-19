@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Dashboard
   class TransfersController < ApplicationController
     skip_before_action :require_login, only: %i[index show]
@@ -10,19 +12,26 @@ module Dashboard
     def index
       authorize @project, :transfers?
 
-      @q = TransfersQuery.new(
+      @q = SearchTransfersQuery.new(
         @project.awards.completed_or_cancelled,
         params
       ).call
 
-      @transfers = OrderedTransfersQuery.new(
-        @q.result(distinct: true),
+      begin
+        @unfiltered_transfers = @q.result(distinct: true).reorder('')
+      rescue ActiveRecord::StatementInvalid
+        head :not_found
+      end
+
+      @transfers = ReorderTransfersQuery.new(
+        @unfiltered_transfers,
         params
       ).call
 
-      if params.fetch(:page, 1).to_i > 1 && @transfers.out_of_range?
-        flash[:notice] = "Displaying first page of filtered results. " \
-                         "Not enough results to display page #{params.fetch(:page, 1).to_i}."
+      @transfers = @transfers.page(page).per(10)
+
+      if page > 1 && @transfers.out_of_range?
+        flash[:notice] = "Displaying first page of filtered results. Not enough results to display page #{page}."
       end
     end
 
@@ -35,7 +44,9 @@ module Dashboard
     def update
       authorize @project, :update_transfer?
 
-      result = Transfers::Update.call(project: @project, award_id: params[:id], transfer_params: transfer_params)
+      @transfer = @project.awards.find(params[:id])
+
+      result = Transfers::Update.call(transfer: @transfer, transfer_params: transfer_params)
 
       if result.success?
         redirect_to project_dashboard_transfers_path(@project), notice: 'Transfer Updated'
@@ -49,8 +60,8 @@ module Dashboard
 
       result = Transfers::Create.call(
         issuer: current_account,
-        award_type: @project.default_award_type,
         account_id: params[:award][:account_id],
+        award_type: @project.default_award_type,
         transfer_params: transfer_params
       )
 
@@ -73,22 +84,6 @@ module Dashboard
       @transfer = @project.awards.find(params[:id])
     end
 
-    def export
-      authorize @project, :export_transfers?
-
-      ProjectExportTransfersJob.perform_later(@project.id, current_account.id)
-
-      redirect_to project_dashboard_transfers_path(@project), notice: "CSV will be sent to #{current_account.email}"
-    end
-
-    def prioritize
-      authorize @project, :update_transfer?
-      @transfer = @project.awards.find(params[:id])
-
-      @transfer.update(prioritized_at: Time.zone.now)
-      redirect_to project_dashboard_transfers_path(@project), flash: { notice: 'Transfer will be sent soon' }
-    end
-
     private
 
     def transfer_params
@@ -104,6 +99,10 @@ module Dashboard
         :lockup_schedule_id,
         :commencement_date
       )
+    end
+
+    def page
+      @page ||= params.fetch(:page, 1).to_i
     end
   end
 end
