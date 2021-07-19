@@ -2274,6 +2274,9 @@ Secondary Sidebar
   .nav-link-icon-active {
     text-align:center;
   }
+  .nav-link-icon-wallet {
+    margin-left: 2px;
+  }
 }
 
 @media (min-width: 992px) {
