@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-class TransfersQuery
+class SearchTransfersQuery
   def initialize(relation, params)
     @relation = relation
     @params = params
   end
 
   def call
-    relation = @relation.not_cancelled unless filter_params.eql?('cancelled')
-
-    relation = @relation.ransack(search_params)
-
-    relation
+    if filter_params.eql?('cancelled')
+      relation.ransack(search_params)
+    else
+      relation.not_cancelled.ransack(search_params)
+    end
   end
 
   private

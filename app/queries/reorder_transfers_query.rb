@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-class OrderedTransfersQuery
+class ReorderTransfersQuery
   def initialize(relation, params)
     @relation = relation
     @params = params
   end
 
   def call
-    relation
-      .includes(relationships)
-      .ransack_reorder(reorder_params)
-      .page(page)
-      .per(10)
+    return Award.none if relation.blank?
+
+    relation.includes(relationships).ransack_reorder(reorder_params)
   end
 
   private
@@ -40,9 +38,5 @@ class OrderedTransfersQuery
 
     def reorder_params
       params.dig(:q, :s)
-    end
-
-    def page
-      params.fetch(:page, 1).to_i
     end
 end
