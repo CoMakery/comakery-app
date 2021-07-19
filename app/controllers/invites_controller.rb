@@ -11,7 +11,7 @@ class InvitesController < ApplicationController
       accept_invite
     else
       set_session_invite_id
-      redirect_to new_account_path
+      redirect_to new_account_path(invited: true)
     end
   end
 

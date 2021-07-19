@@ -3,5 +3,5 @@
 </p>
 
 <p>
-  To accept the invitation follow this <%= link_to 'link', invite_url(@project_role.invite.token) %>.
+  To accept the invitation follow this <%= link_to 'link', invite_url(@project_role.invite.token, host: @host) %>.
 </p>

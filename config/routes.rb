@@ -70,6 +70,10 @@ Rails.application.routes.draw do
       resource :settings, only: [:show], controller: 'projects/accounts/settings'
     end
 
+    resources :transfers do
+      resource :settings, only: [:show], controller: 'projects/transfers/settings'
+    end
+
     resources :award_types, path: 'batches', except: [:show] do
       resources :awards, path: 'tasks', except: [:index] do
         post :recipient_address

@@ -22,7 +22,7 @@ describe 'transfers_index_page', js: true do
         click_button('Save')
       end
 
-      expect(page).to have_field('project_transfer_batch_size_input', with: '105', wait: 30)
+      expect(page).to have_field('project_transfer_batch_size_input', with: '105', wait: 90)
     end
   end
 end

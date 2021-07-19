@@ -1,4 +1,5 @@
 class PasswordResetsController < ApplicationController
+  skip_before_action :require_login_strict
   skip_before_action :require_login
   skip_after_action :verify_authorized
 

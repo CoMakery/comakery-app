@@ -56,6 +56,24 @@ RSpec.describe AwardsController, type: :controller do
       login(issuer.account)
     end
 
+    context 'when whitelabel mission is present' do
+      let!(:whitelabel_mission) { create :whitelabel_mission, whitelabel_domain: 'test.host' }
+
+      subject { get :index }
+
+      context 'with hidden awards' do
+        it { is_expected.to have_http_status(:found) }
+
+        it { is_expected.to redirect_to(root_path) }
+      end
+
+      context 'with visible awards' do
+        before { whitelabel_mission.update(project_awards_visible: true) }
+
+        it { is_expected.to have_http_status(:success) }
+      end
+    end
+
     it 'returns my tasks' do
       get :index
       expect(response.status).to eq(200)
@@ -87,7 +105,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'do not show wl projects for main' do
-      wl_mission = create :mission, whitelabel_domain: 'wl.test.host', whitelabel: true, whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)
+      wl_mission = create :mission, whitelabel_domain: 'wl.test.host', whitelabel: true, whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key), project_awards_visible: true
       wl_project = create :project, mission: wl_mission, title: 'WL project title'
 
       get :index, params: { project_id: wl_project.id }
@@ -109,7 +127,8 @@ RSpec.describe AwardsController, type: :controller do
       create :active_whitelabel_mission
 
       get :index
-      expect(response).to redirect_to(projects_url)
+
+      expect(response).to redirect_to(root_url)
     end
 
     it 'doesnt include whitelabel tasks' do
