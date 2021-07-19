@@ -79,7 +79,16 @@
           </li>
           <% if current_account.comakery_admin? %>
             <li class="nav-item dropdown" data-vertical-navbar-target='Dropdown'>
-              <a class="nav-link dropdown-btn dropdown-toggle" role="button" data-bs-toggle="dropdown">
+              <div class="collapsed-dropdown" data-vertical-navbar-target='collapsedDropdown'>
+                <a class="nav-link collapsed-dropdown" role="button" data-action="click->vertical-navbar#toggleVerticalNavbar" data-bs-toggle="collapse" aria-expanded="false" aria-controls="#navbar-menu">
+                  <div class="nav-link-icon-active">
+                    <span class="nav-link-icon d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3" /><line x1="12" y1="12" x2="20" y2="7.5" /><line x1="12" y1="12" x2="12" y2="21" /><line x1="12" y1="12" x2="4" y2="7.5" /><line x1="16" y1="5.25" x2="8" y2="9.75" /></svg>
+                    </span>
+                  </div>
+                </a>
+              </div>
+              <a class="nav-link dropdown-btn dropdown-toggle collapsed-full-dropdown" role="button" data-bs-toggle="dropdown" data-vertical-navbar-target='collapsedFullDropdown'>
                 <div class="nav-link-icon-active">
                   <span class="nav-link-icon d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3" /><line x1="12" y1="12" x2="20" y2="7.5" /><line x1="12" y1="12" x2="12" y2="21" /><line x1="12" y1="12" x2="4" y2="7.5" /><line x1="16" y1="5.25" x2="8" y2="9.75" /></svg>

@@ -2277,9 +2277,16 @@ Secondary Sidebar
   .nav-link-icon-wallet {
     margin-left: 2px;
   }
+  .collapsed-dropdown {
+    display: none;
+  }
 }
 
 @media (min-width: 992px) {
+  .collapsed-full-dropdown {
+    display: none;
+  }
+
   .navbar-collapsed .nav-item .nav-link .nav-link-title{
     display: none;
   }
