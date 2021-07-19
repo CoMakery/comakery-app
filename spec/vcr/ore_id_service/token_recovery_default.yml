@@ -5,7 +5,7 @@ http_interactions:
     uri: https://service.oreid.io/api/app-token
     body:
       encoding: UTF-8
-      string: ''
+      string: '{"secrets":[{"type":"RepublicAccountRecoveryToken","value":"dummmyrecovery"},{"type":"RepublicAccountRecoveryEnvironment","value":"test"}]}'
     headers:
       Api-Key:
       - ENV[ORE_ID_API_KEY]
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sat, 17 Jul 2021 02:16:15 GMT
+      - Mon, 19 Jul 2021 00:06:23 GMT
       Content-Type:
       - application/json; charset=utf-8
       Vary:
@@ -35,14 +35,14 @@ http_interactions:
       Access-Control-Allow-Origin:
       - "*"
       Etag:
-      - W/"54-9fgzM3IAaA71Wn3wNhhQjhpZVJo"
+      - W/"54-fUe83cogoqtk+Dtj62kTLLFRXPg"
       Via:
       - 1.1 google
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"processId":"95de24c4072a","appAccessToken":"01d42ea6-76a6-4b4e-a112-b32dd9da209d"}'
+      string: '{"processId":"04dd9e7b9ec2","appAccessToken":"5db40ce6-6d39-4ae4-91c4-6b80b7b3e67a"}'
     http_version: null
-  recorded_at: Sat, 17 Jul 2021 02:16:15 GMT
+  recorded_at: Mon, 19 Jul 2021 00:06:23 GMT
 recorded_with: VCR 5.1.0

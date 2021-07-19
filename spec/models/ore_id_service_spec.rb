@@ -202,7 +202,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
         expect(subject.recovery_env).to eq('test')
 
         VCR.use_cassette('ore_id_service/token_recovery_default', match_requests_on: %i[method uri]) do
-          expect(subject.create_token).to be_an(String)
+          expect(subject.create_token('dummmyrecovery')).to be_an(String)
         end
       end
     end
@@ -218,7 +218,7 @@ RSpec.describe OreIdService, type: :model, vcr: true do
         expect(subject.recovery_env).to eq(custom_env)
 
         VCR.use_cassette('ore_id_service/token_recovery_prod', match_requests_on: %i[method uri]) do
-          expect(subject.create_token).to be_an(String)
+          expect(subject.create_token('dummmyrecovery')).to be_an(String)
         end
       end
     end
