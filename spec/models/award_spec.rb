@@ -1167,18 +1167,6 @@ describe Award do
     end
   end
 
-  describe 'ready_for_blockchain_transaction scope' do
-    let!(:award_accepted) { create(:award, status: :accepted) }
-    let!(:award_paid) { create(:award, status: :paid) }
-    let!(:blockchain_transaction) { create(:blockchain_transaction) }
-
-    it 'doesnt return awards with latest blockchain_transaction Failed' do
-      create(:blockchain_transaction, status: :failed, blockchain_transactables: blockchain_transaction.blockchain_transactable)
-
-      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
-    end
-  end
-
   describe 'ready_for_batch_blockchain_transaction scope' do
     let(:token) { create(:erc20_token, batch_contract_address: '0x0') }
     let(:project) { create(:project, token: token, transfer_batch_size: 100) }
