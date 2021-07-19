@@ -73,6 +73,49 @@ describe NextBlockchainTransactables do
 
           it { is_expected.to be_empty }
         end
+
+        context 'ignore paid awards' do
+          let!(:award1) { FactoryBot.create :award, :with_verified_account, project: project, status: :paid }
+
+          it { is_expected.to match_array [award2] }
+        end
+
+        context 'with previous blockchain transactions exists' do
+          let(:batch_size) { 100 }
+          let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :created, blockchain_transactables: award1 }
+
+          it { is_expected.not_to include(award1) }
+
+          context 'return an award if latest blockchain transaction was cancelled' do
+            let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :cancelled, blockchain_transactables: award1 }
+
+            it { is_expected.to include(award1) }
+          end
+
+          context 'return the same award if previous was created more than 10 minutes ago' do
+            let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :created, blockchain_transactables: award1, created_at: 20.minutes.ago }
+
+            it { is_expected.to include(award1) }
+          end
+
+          context 'doesnt return awards with lates blockchain_transaction Created less than 10 minutes ago' do
+            let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :created, blockchain_transactables: award1, created_at: 1.minute.ago }
+
+            it { is_expected.not_to include(award1) }
+          end
+
+          context 'doesnt return awards with latest blockchain_transaction is pending' do
+            let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :pending, blockchain_transactables: award1, created_at: 20.minutes.ago }
+
+            it { is_expected.not_to include(award1) }
+          end
+
+          context 'return awards with latest blockchain_transaction is failed' do
+            let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :failed, blockchain_transactables: award1, created_at: 20.minutes.ago }
+
+            it { is_expected.to include(award1) }
+          end
+        end
       end
 
       context 'with hot wallet in manual_sending mode' do

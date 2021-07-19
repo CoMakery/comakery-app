@@ -1172,45 +1172,6 @@ describe Award do
     let!(:award_paid) { create(:award, status: :paid) }
     let!(:blockchain_transaction) { create(:blockchain_transaction) }
 
-    it 'returns only accepted awards' do
-      expect(described_class.ready_for_blockchain_transaction).to include(award_accepted)
-      expect(described_class.ready_for_blockchain_transaction).not_to include(award_paid)
-    end
-
-    it 'returns awards without blockchain_transaction' do
-      expect(described_class.ready_for_blockchain_transaction).to include(award_accepted)
-    end
-
-    it 'returns awards with latest blockchain_transaction Cancelled' do
-      create(:blockchain_transaction, status: :cancelled, blockchain_transactables: blockchain_transaction.blockchain_transactable)
-
-      expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
-    end
-
-    it 'returns awards with latest blockchain_transaction Created more than 10 minutes ago' do
-      create(:blockchain_transaction, blockchain_transactables: blockchain_transaction.blockchain_transactable, created_at: 20.minutes.ago)
-
-      expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
-    end
-
-    it 'doesnt return awards with lates blockchain_transaction Created less than 10 minutes ago' do
-      create(:blockchain_transaction, blockchain_transactables: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
-
-      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
-    end
-
-    it 'doesnt return awards with latest blockchain_transaction Pending' do
-      create(:blockchain_transaction, status: :pending, blockchain_transactables: blockchain_transaction.blockchain_transactable, tx_hash: '0')
-
-      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
-    end
-
-    it 'doesnt return awards with latest blockchain_transaction Succeed' do
-      create(:blockchain_transaction, status: :succeed, blockchain_transactables: blockchain_transaction.blockchain_transactable, tx_hash: '0')
-
-      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
-    end
-
     it 'doesnt return awards with latest blockchain_transaction Failed' do
       create(:blockchain_transaction, status: :failed, blockchain_transactables: blockchain_transaction.blockchain_transactable)
 
@@ -1218,38 +1179,30 @@ describe Award do
     end
   end
 
-  describe 'ready_for_manual_blockchain_transaction scope' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction) }
-
-    it 'returns awards with latest blockchain_transaction Failed' do
-      create(:blockchain_transaction, status: :failed, blockchain_transactables: blockchain_transaction.blockchain_transactable)
-
-      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
-    end
-  end
-
   describe 'ready_for_batch_blockchain_transaction scope' do
-    let(:token) { create(:token, batch_contract_address: '0x0') }
-    let(:project) { create(:project, token: token) }
+    let(:token) { create(:erc20_token, batch_contract_address: '0x0') }
+    let(:project) { create(:project, token: token, transfer_batch_size: 100) }
     let(:award_type) { create(:award_type, project: project) }
-    let(:lockup_transfer) { create(:transfer, award_type: award_type) }
-    let(:erc20_transfer) { create(:transfer, award_type: award_type) }
-    let(:erc20_mint_transfer) { create(:transfer, award_type: award_type) }
-    let(:erc20_burn_transfer) { create(:transfer, award_type: award_type) }
-    let(:erc20_transfer_without_batch_contract) { create(:transfer) }
+    let!(:lockup_transfer) { create(:transfer, award_type: award_type) }
+    let!(:erc20_transfer) { create(:transfer, award_type: award_type) }
+    let!(:erc20_mint_transfer) { create(:transfer, award_type: award_type) }
+    let!(:erc20_burn_transfer) { create(:transfer, award_type: award_type) }
+    let!(:erc20_transfer_without_batch_contract) { create(:transfer) }
 
     before do
       erc20_mint_transfer.update(transfer_type: erc20_mint_transfer.project.transfer_types.find_or_create_by(name: 'mint'))
       erc20_burn_transfer.update(transfer_type: erc20_burn_transfer.project.transfer_types.find_or_create_by(name: 'burn'))
     end
 
-    subject { described_class.ready_for_batch_blockchain_transaction }
+    subject { described_class.ready_for_batch_blockchain_transaction(project) }
 
-    it { is_expected.to include(lockup_transfer) }
-    it { is_expected.to include(erc20_transfer) }
-    it { is_expected.not_to include(erc20_transfer_without_batch_contract) }
-    it { is_expected.not_to include(erc20_mint_transfer) }
-    it { is_expected.not_to include(erc20_burn_transfer) }
+    example 'return available for batch tx ' do
+      is_expected.to include(lockup_transfer)
+      is_expected.to include(erc20_transfer)
+      is_expected.not_to include(erc20_transfer_without_batch_contract)
+      is_expected.not_to include(erc20_mint_transfer)
+      is_expected.not_to include(erc20_burn_transfer)
+    end
   end
 
   describe '.ransack_reorder' do

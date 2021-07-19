@@ -12,7 +12,7 @@ class NextBlockchainTransactables
 
     transactable_classes.each do |transactable_class|
       next if hot_wallet_disabled?
-      next unless hot_wallet_support?(transactable_class)
+      next if target_hot_wallet? && !hot_wallet_support?(transactable_class)
 
       if batch_support?(transactable_class)
         transactions = next_transactables_for(transactable_class, batch_size: project.transfer_batch_size)
@@ -115,7 +115,7 @@ class NextBlockchainTransactables
     end
 
     def target_hot_wallet?
-      target[:for] == :hot_wallet
+      target == :hot_wallet
     end
 
     def hot_wallet_disabled?
@@ -131,7 +131,7 @@ class NextBlockchainTransactables
     end
 
     def hot_wallet_support?(transactable_class)
-      target_hot_wallet? && transactable_class.in?([Award, AccountTokenRecord])
+      transactable_class.in?([Award, AccountTokenRecord])
     end
 
     def batch_support?(transactable_class)
