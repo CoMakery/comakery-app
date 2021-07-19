@@ -30,9 +30,7 @@ module Dashboard
 
       @transfers = @transfers.page(page).per(10)
 
-      if page > 1 && @transfers.out_of_range?
-        flash[:notice] = "Displaying first page of filtered results. Not enough results to display page #{page}."
-      end
+      flash[:notice] = "Displaying first page of filtered results. Not enough results to display page #{page}." if page > 1 && @transfers.out_of_range?
     end
 
     def new
@@ -86,23 +84,23 @@ module Dashboard
 
     private
 
-    def transfer_params
-      params.fetch(:award, {}).permit(
-        :amount,
-        :quantity,
-        :price,
-        :why,
-        :description,
-        :requirements,
-        :recipient_wallet_id,
-        :transfer_type_id,
-        :lockup_schedule_id,
-        :commencement_date
-      )
-    end
+      def transfer_params
+        params.fetch(:award, {}).permit(
+          :amount,
+          :quantity,
+          :price,
+          :why,
+          :description,
+          :requirements,
+          :recipient_wallet_id,
+          :transfer_type_id,
+          :lockup_schedule_id,
+          :commencement_date
+        )
+      end
 
-    def page
-      @page ||= params.fetch(:page, 1).to_i
-    end
+      def page
+        @page ||= params.fetch(:page, 1).to_i
+      end
   end
 end

@@ -26,4 +26,3 @@ class SearchTransfersQuery
       params[:q]
     end
 end
-
