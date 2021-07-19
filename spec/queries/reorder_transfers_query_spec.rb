@@ -15,9 +15,9 @@ describe ReorderTransfersQuery do
 
   let(:issuer2) { FactoryBot.create(:account, first_name: 'Florian', last_name: 'Lynch') }
 
-  let(:award1) { FactoryBot.create(:award, status: :paid, project: project, account: recipient1, issuer: issuer1) }
+  let!(:award1) { FactoryBot.create(:award, status: :paid, project: project, account: recipient1, issuer: issuer1) }
 
-  let(:award2) { FactoryBot.create(:award, status: :paid, project: project, account: recipient2, issuer: issuer2) }
+  let!(:award2) { FactoryBot.create(:award, status: :paid, project: project, account: recipient2, issuer: issuer2) }
 
   let(:relation) { project.awards }
 

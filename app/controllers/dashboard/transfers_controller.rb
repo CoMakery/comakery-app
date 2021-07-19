@@ -44,7 +44,7 @@ module Dashboard
 
       @transfer = @project.awards.find(params[:id])
 
-      result = Transfers::Update.call(transfer: @transfer, transfer_params: transfer_params)
+      result = ::Transfers::Update.call(transfer: @transfer, transfer_params: transfer_params)
 
       if result.success?
         redirect_to project_dashboard_transfers_path(@project), notice: 'Transfer Updated'
@@ -56,7 +56,7 @@ module Dashboard
     def create
       authorize @project, :create_transfer?
 
-      result = Transfers::Create.call(
+      result = ::Transfers::Create.call(
         issuer: current_account,
         account_id: params[:award][:account_id],
         award_type: @project.default_award_type,
