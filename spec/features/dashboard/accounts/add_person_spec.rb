@@ -7,7 +7,7 @@ describe 'Add person', js: true do
 
   let(:project) { create(:project) }
 
-  before do 
+  before do
     project.project_admins << admin
     login(admin)
     visit project_dashboard_accounts_path(project)
