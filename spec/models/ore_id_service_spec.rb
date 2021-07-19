@@ -196,6 +196,32 @@ RSpec.describe OreIdService, type: :model, vcr: true do
         end
       end
     end
+
+    context 'with default OREID_RECOVERY_ENV' do
+      specify do
+        expect(subject.recovery_env).to eq('test')
+
+        VCR.use_cassette('ore_id_service/token_recovery_default', match_requests_on: %i[method uri]) do
+          expect(subject.create_token('dummmyrecovery')).to be_an(String)
+        end
+      end
+    end
+
+    context 'with a custom OREID_RECOVERY_ENV' do
+      let(:custom_env) { 'production' }
+
+      before do
+        stub_const('ENV', ENV.to_hash.merge('OREID_RECOVERY_ENV' => custom_env))
+      end
+
+      specify do
+        expect(subject.recovery_env).to eq(custom_env)
+
+        VCR.use_cassette('ore_id_service/token_recovery_prod', match_requests_on: %i[method uri]) do
+          expect(subject.create_token('dummmyrecovery')).to be_an(String)
+        end
+      end
+    end
   end
 
   describe '#authorization_url' do

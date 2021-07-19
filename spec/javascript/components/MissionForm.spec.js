@@ -39,12 +39,13 @@ describe('MissionForm', () => {
 
   it('renders correctly with props', () => {
     const mission = {
-      'id'         : 0,
-      'name'       : 'Test Mission',
-      'subtitle'   : 'test subtitle',
-      'description': 'test description',
-      'logoUrl'    : '/logo.png',
-      'imageUrl'   : '/image.png'
+      'id'                    : 0,
+      'name'                  : 'Test Mission',
+      'subtitle'              : 'test subtitle',
+      'description'           : 'test description',
+      'project_awards_visible': 'false',
+      'logoUrl'               : '/logo.png',
+      'imageUrl'              : '/image.png'
     }
     const wrapper = mount(<MissionForm mission={mission} />)
 
@@ -57,6 +58,9 @@ describe('MissionForm', () => {
     expect(wrapper.find(
       'InputFieldDescription[title="Description"][required][name="description"]'
     ).props().value).toBe('test description')
+    expect(wrapper.find(
+      'InputFieldDropdown[title="Project Tasks Visibility"][required][name="projectAwardsVisible"]'
+    ).props().value).toBe('false')
     expect(wrapper.find(
       'InputFieldUploadFile[title="Mission Logo"][required][name="logo"]'
     ).props().imgPreviewUrl).toBe('/logo.png')

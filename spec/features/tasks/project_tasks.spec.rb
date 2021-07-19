@@ -2,27 +2,70 @@ require 'rails_helper'
 
 describe 'project page', :js do
   let!(:ready_task) { create(:award, status: 'ready', experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills']) }
+  let!(:account) { ready_task.account }
+  let!(:project) { ready_task.project }
 
   before do
     ready_task.project.update(visibility: :public_listed)
   end
 
-  it 'shows tasks link if env whitelabel is not true' do
-    login(ready_task.account)
-    visit(project_path(ready_task.project))
+  context 'when project without mission' do
+    before do
+      login(account)
+      visit project_path(project)
+    end
 
-    expect(page).to have_link('Tasks')
-    visit(project_award_types_path(ready_task.project))
-    expect(page).to have_current_path(project_award_types_path(ready_task.project))
+    it 'shows tasks link' do
+      expect(page).to have_link('Tasks')
+    end
   end
 
-  it 'shows tasks link if env whitelabel is set to true' do
-    login(ready_task.account)
-    visit(project_path(ready_task.project))
+  context 'when project with mission' do
+    let!(:mission) { create :mission }
 
-    expect(page).not_to have_link('Tasks')
-    visit(project_award_types_path(ready_task.project))
-    expect(page).to have_current_path(root_path)
+    before do
+      login(account)
+
+      project.update(mission: mission)
+
+      visit project_path(project)
+    end
+
+    it 'shows tasks link' do
+      expect(page).to have_link('Tasks')
+    end
+  end
+
+  context 'when project with whitelabel mission' do
+    let!(:whitelabel_mission) { create :whitelabel_mission }
+
+    before { project.update(mission: whitelabel_mission) }
+
+    context 'and awards hidden' do
+      before do
+        login(account)
+
+        visit project_path(project)
+      end
+
+      it 'doesnt show tasks link' do
+        expect(page).not_to have_link('Tasks')
+      end
+    end
+
+    context 'and awards visible' do
+      before do
+        project.mission.update(project_awards_visible: true)
+
+        login(account)
+
+        visit project_path(project)
+      end
+
+      it 'shows tasks link' do
+        expect(page).to have_link('Tasks')
+      end
+    end
   end
 
   it 'shows ready tasks to a contributor' do

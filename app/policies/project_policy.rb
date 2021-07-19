@@ -50,9 +50,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_award_types?
-    return false if ENV['WHITELABEL'] == true
+    show? || unlisted?
+  end
 
-    (show? || unlisted?)
+  def show_whitelabel_award_types?
+    show_award_types? && project.mission.project_awards_visible?
   end
 
   def show_transfer_rules?

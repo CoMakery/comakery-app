@@ -133,7 +133,7 @@ describe 'project accounts page' do
 
         expect(
           find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
-        ).to have_text('Admin')
+        ).to have_text('Admin', wait: 60)
       end
     end
 

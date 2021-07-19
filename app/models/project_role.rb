@@ -1,12 +1,6 @@
 class ProjectRole < ApplicationRecord
   include Invitable
 
-  HUMANIZED_ROLE_NAMES = {
-    interested: 'Project Member',
-    admin: 'Admin',
-    observer: 'Read Only Admin'
-  }.freeze
-
   belongs_to :account, optional: true
   belongs_to :project, counter_cache: true
 

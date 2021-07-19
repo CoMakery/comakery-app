@@ -119,6 +119,7 @@ class ProjectDecorator < Draper::Decorator
       require_confidentiality: require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
+      project_awards_visible: project_awards_visible?,
       token_lockup: token&.token_type&.is_a?(TokenType::TokenReleaseSchedule),
       github_url: github_url,
       documentation_url: documentation_url,
@@ -132,6 +133,12 @@ class ProjectDecorator < Draper::Decorator
       interested: policy.project_interested?,
       show_contributions: policy.show_contributions?
     }.merge(token_props)
+  end
+
+  def project_awards_visible?
+    return true unless mission.present? && mission.whitelabel?
+
+    mission.project_awards_visible?
   end
 
   def token_props

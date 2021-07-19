@@ -86,6 +86,7 @@ class MissionsController < ApplicationController
         :logo,
         :image,
         :status,
+        :project_awards_visible,
         :whitelabel,
         :require_invitation,
         :whitelabel_domain,
@@ -199,10 +200,10 @@ class MissionsController < ApplicationController
     def mission_images
       {
         logo_url: mission_image_path(@mission.logo, 800, 800),
-        image_url: mission_image_path(@mission.logo, 1200, 800),
-        whitelabel_logo_url: mission_image_path(@mission.logo, 1000, 200),
-        whitelabel_logo_dark_url: mission_image_path(@mission.logo, 1000, 200),
-        whitelabel_favicon_url: mission_image_path(@mission.logo, 64, 64)
+        image_url: mission_image_path(@mission.image, 1200, 800),
+        whitelabel_logo_url: mission_image_path(@mission.whitelabel_logo, 1000, 200),
+        whitelabel_logo_dark_url: mission_image_path(@mission.whitelabel_logo_dark, 1000, 200),
+        whitelabel_favicon_url: mission_image_path(@mission.whitelabel_favicon, 64, 64)
       }
     end
 
