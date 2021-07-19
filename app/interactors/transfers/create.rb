@@ -7,11 +7,11 @@ module Transfers
     def call
       transfer = context.award_type.awards.new(context.transfer_params)
 
-      transfer.name = transfer.transfer_type.name.titlecase
+      transfer.name = transfer.transfer_type&.name&.titlecase
 
       transfer.account_id = context.account_id
 
-      transfer.issuer = context.current_account
+      transfer.issuer = context.issuer
 
       transfer.status = :accepted
 

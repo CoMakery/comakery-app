@@ -5,13 +5,7 @@ module Transfers
     include Interactor
 
     def call
-      transfer = context.project.awards.find(context.award_id)
-
-      if transfer.update(context.transfer_params)
-        context.transfer = transfer
-      else
-        context.fail!(error: transfer.errors.full_messages.join(', '))
-      end
+      context.fail!(error: context.transfer.errors.full_messages.join(', ')) unless context.transfer.update(context.transfer_params)
     end
   end
 end
