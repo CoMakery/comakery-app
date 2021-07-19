@@ -142,6 +142,10 @@ class OreIdService
     append_hmac_to_url "https://#{BASE_DOMAIN}/sign?#{params.to_query}"
   end
 
+  def recovery_env
+    ENV.fetch('OREID_RECOVERY_ENV', 'test')
+  end
+
   private
 
     def create_remote_params
@@ -169,10 +173,16 @@ class OreIdService
     def create_token_params(recovery_token = nil)
       if recovery_token
         {
-          secrets: [{
-            type: 'RepublicAccountRecoveryToken',
-            value: recovery_token
-          }]
+          secrets: [
+            {
+              type: 'RepublicAccountRecoveryToken',
+              value: recovery_token
+            },
+            {
+              type: 'RepublicAccountRecoveryEnvironment',
+              value: recovery_env
+            }
+          ]
         }
       end
     end

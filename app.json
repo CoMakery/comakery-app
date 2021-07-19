@@ -81,6 +81,10 @@
       "required": true,
       "value": "false"
     },
+    "OREID_RECOVERY_ENV": {
+      "description": "Aikon ORE ID API recovery environment (default: test)",
+      "required": false
+    },
     "OREID_BASE_DOMAIN": {
       "description": "Aikon ORE ID API domain (default: service.oreid.io)",
       "required": false
