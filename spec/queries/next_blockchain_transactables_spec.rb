@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe NextBlockchainTransactables do
   describe '#call' do
-    subject { described_class.new(project: project, target: { for: :hot_wallet }).call }
+    subject { described_class.new(project: project, target: :hot_wallet).call }
 
     context 'with awards available for transaction' do
       let!(:award1) { FactoryBot.create :award, :with_verified_account, project: project, status: :accepted }
@@ -110,10 +110,10 @@ describe NextBlockchainTransactables do
             it { is_expected.not_to include(award1) }
           end
 
-          context 'return awards with latest blockchain_transaction is failed' do
+          context 'doesnt return awards with latest blockchain_transaction is failed' do
             let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :failed, blockchain_transactables: award1, created_at: 20.minutes.ago }
 
-            it { is_expected.to include(award1) }
+            it { is_expected.not_to include(award1) }
           end
         end
       end
@@ -152,6 +152,69 @@ describe NextBlockchainTransactables do
             is_expected.to match_array [prioritized_award]
           end
         end
+
+        context 'return awards with latest blockchain_transaction is failed' do
+          let!(:prioritized_award) { FactoryBot.create :award, project: project, status: :accepted, prioritized_at: Time.zone.now }
+          let!(:blockchain_transaction) { FactoryBot.create :blockchain_transaction, :erc20_with_batch, :failed, blockchain_transactables: prioritized_award, created_at: 20.minutes.ago }
+
+          it { is_expected.to include(prioritized_award) }
+        end
+      end
+    end
+
+    context 'with account token records available for transaction' do
+      let!(:account_token_record) { create(:account_token_record, token: token) }
+      let(:project) { FactoryBot.create :project, token: token, hot_wallet: hot_wallet, hot_wallet_mode: hot_wallet_mode }
+      let(:hot_wallet) { build(:wallet, account: nil, source: :hot_wallet, _blockchain: token._blockchain, address: build(:ethereum_address_1)) }
+      let(:token) { FactoryBot.create :token, :security_token }
+      let(:hot_wallet_mode) { 'auto_sending' }
+
+      context 'without blockchain_transaction' do
+        let!(:blockchain_transaction) { nil }
+
+        it { is_expected.to include(account_token_record) }
+      end
+
+      context 'return account_token_records with latest blockchain_transaction Cancelled' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record, status: :cancelled, blockchain_transactables: account_token_record) }
+
+        it { is_expected.to include(account_token_record) }
+      end
+
+      context 'return account_token_records with latest blockchain_transaction Created more than 10 minutes ago' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record, blockchain_transactables: account_token_record, created_at: 20.minutes.ago) }
+
+        it { is_expected.to include(account_token_record) }
+      end
+
+      context 'doesnt return synced account_token_records without blockchain_transaction' do
+        before { account_token_record.synced! }
+
+        it { is_expected.not_to include(account_token_record) }
+      end
+
+      context 'doesnt return account_token_records with latest blockchain_transaction Created less than 10 minutes ago' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record, blockchain_transactables: account_token_record, created_at: 1.second.ago) }
+
+        it { is_expected.not_to include(account_token_record) }
+      end
+
+      context 'doesnt return account_token_records with latest blockchain_transaction Pending' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record, status: :pending, blockchain_transactables: account_token_record, tx_hash: '0') }
+
+        it { is_expected.not_to include(account_token_record) }
+      end
+
+      context 'doesnt return account_token_records with latest blockchain_transaction Succeed' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record, status: :succeed, blockchain_transactables: account_token_record, tx_hash: '0') }
+
+        it { is_expected.not_to include(account_token_record) }
+      end
+
+      context 'doesnt return account_token_records with latest blockchain_transaction Failed' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record, status: :failed, blockchain_transactables: account_token_record) }
+
+        it { is_expected.not_to include(account_token_record) }
       end
     end
   end

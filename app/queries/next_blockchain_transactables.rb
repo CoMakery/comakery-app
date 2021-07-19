@@ -45,16 +45,21 @@ class NextBlockchainTransactables
       (blockchain_transactions.status = :blockchain_transaction_created_status AND blockchain_transactions.created_at < :timestamp)
     SQL
 
-    q = project
-        .public_send(transactable_class.table_name)
-        .joins(ApplicationRecord.sanitize_sql_array([joins_sql]))
-        .distinct
-        .where(
-          where_sql,
-          blockchain_transactions_cancelled_statuses: blockchain_transactions_cancelled_statuses,
-          blockchain_transaction_created_status: BlockchainTransaction.statuses[:created],
-          timestamp: 10.minutes.ago
-        )
+    q =
+      if transactable_class == Award
+        project.public_send(transactable_class.table_name)
+      else
+        project.token.public_send(transactable_class.table_name)
+      end
+
+    q = q.joins(ApplicationRecord.sanitize_sql_array([joins_sql]))
+         .distinct
+         .where(
+           where_sql,
+           blockchain_transactions_cancelled_statuses: blockchain_transactions_cancelled_statuses,
+           blockchain_transaction_created_status: BlockchainTransaction.statuses[:created],
+           timestamp: 10.minutes.ago
+         )
 
     if transactable_class == Award
       q = scopes_for_awards(q, batch_size)
@@ -63,7 +68,6 @@ class NextBlockchainTransactables
     elsif transactable_class == TransferRule
       q = scopes_for_transfer_rules(q)
     end
-
     q
   end
 
@@ -143,6 +147,6 @@ class NextBlockchainTransactables
     end
 
     def include_failed?
-      !hot_wallet_auto?
+      hot_wallet_manual?
     end
 end
