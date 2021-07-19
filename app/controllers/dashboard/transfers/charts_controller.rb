@@ -3,6 +3,8 @@
 module Dashboard
   module Transfers
     class ChartsController < ApplicationController
+      skip_before_action :require_login, only: [:index]
+
       skip_after_action :verify_policy_scoped, only: [:index]
 
       before_action :assign_project
@@ -10,18 +12,16 @@ module Dashboard
       def index
         authorize @project, :transfers?
 
-        @q = ::TransfersQuery.new(
-          @project.awards.completed_or_cancelled.not_burned,
+        @unfiltered_transfers = @project.awards.completed_or_cancelled.not_burned
+
+        @q = ::SearchTransfersQuery.new(
+          @unfiltered_transfers,
           params
         ).call
 
-        relation = @q.result(distinct: true)
+        @transfers = @q.result(distinct: true).reorder('')
 
-        @transfers = ::ReorderTransfersChartDataQuery.new(relation, params).call
-
-        @transfers_not_burned_total = relation.sum(&:total_amount)
-
-        @transfer_types_and_counts = relation.group(:source).pluck('awards.source, count(awards.source)').to_h
+        @transfer_type_counts = @transfers.group(:source).pluck(:source, 'count(awards.source)').to_h
 
         @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
 
