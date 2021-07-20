@@ -1,7 +1,7 @@
 <aside id="main-side" class="navbar navbar-vertical navbar-expand-lg navbar-dark navbar-collapsed" data-vertical-navbar-target='mainSide'>
   <div class="container-fluid">
     <a class="handbar" role="button" data-action="click->vertical-navbar#toggleVerticalNavbar" data-bs-toggle="collapse" aria-expanded="false" aria-controls="#navbar-menu"></a>
-    <a class="navbar-toggler main-side-handbar" role="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-expanded="false">
+    <a class="navbar-toggler main-side-handbar" role="button" aria-expanded="false" data-action="click->vertical-navbar#toggleHorizontalNavbar" data-vertical-navbar-target='mainSideToggler'>
       <span class="navbar-toggler-icon"></span>
     </a>
     <h1 class="navbar-brand navbar-brand-autodark">
@@ -9,7 +9,7 @@
         <img src="/static/logo-white.svg" alt="Tabler" class="navbar-brand-image">
       </a>
     </h1>
-    <div class="collapse navbar-collapse" id="navbar-menu" data-bs-toggle="collapse">
+    <div class="collapse navbar-collapse" id="navbar-menu" data-bs-toggle="collapse" data-vertical-navbar-target='mainSideBody'>
       <ul class="navbar-nav pt-lg-3">
         <li class="nav-item <%= active_class(projects_path) %>">
           <a class="nav-link" href="/projects/mine">
