@@ -2249,7 +2249,8 @@ Secondary Sidebar
 
   .navbar-brand.navbar-brand-autodark{
     position: absolute;
-    right: 45%;
+    left: 50%;
+    transform: translateX(-50%);
     top: 8px;
   }
 
