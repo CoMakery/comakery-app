@@ -265,10 +265,10 @@ describe NextBlockchainTransactables do
         it { is_expected.not_to include(transfer_rule) }
       end
 
-      context 'doesnt return transfer_rules with latest blockchain_transaction Failed' do
+      context 'return transfer_rules with latest blockchain_transaction Failed' do
         let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, status: :failed, blockchain_transactables: transfer_rule) }
 
-        it { is_expected.not_to include(transfer_rule) }
+        it { is_expected.to include(transfer_rule) }
       end
     end
   end
