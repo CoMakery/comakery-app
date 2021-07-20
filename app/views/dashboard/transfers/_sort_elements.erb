@@ -11,7 +11,7 @@
                 { include_blank: 'All' },
                 { class: 'sort-select', id: 'category-selector',
                   data: { controller: 'transfers-sort', action: 'change->transfers-sort#visitSelectedCategory' } } do %>
-        <% @project.transfers_chart_colors_objects.each do |type, _| %>
+        <% @transfers_chart_colors_objects.each do |type, _| %>
           <%= tag.option type.name.capitalize,
                         { selected: params.dig(:q, :transfer_type_id_eq).to_i == type.id,
                           data: { url: project_dashboard_transfers_path(@project, q: { transfer_type_id_eq: type.id }) } } %>

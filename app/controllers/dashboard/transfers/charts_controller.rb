@@ -23,8 +23,6 @@ module Dashboard
 
         @transfer_type_counts = @transfers.group(:source).pluck(:source, 'count(awards.source)').to_h
 
-        @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
-
         @transfer_type_name = TransferType.find_by(id: params.dig(:q, :transfer_type_id_eq))&.name
 
         render partial: 'dashboard/transfers/chart'

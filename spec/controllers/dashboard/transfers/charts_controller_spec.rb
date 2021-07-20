@@ -38,7 +38,6 @@ RSpec.describe Dashboard::Transfers::ChartsController, type: :controller do
           expect(assigns(:q)).to be_an_instance_of Ransack::Search
           expect(assigns(:unfiltered_transfers)).to eq project.awards.completed_or_cancelled.not_burned
           expect(assigns(:transfer_type_counts)).to eq({})
-          expect(assigns(:transfers_chart_colors_objects).values).to match_array %w[#73C30E #7B00D7]
           expect(assigns(:transfer_type_name)).to eq nil
 
           expect(response).to render_template 'dashboard/transfers/_chart'

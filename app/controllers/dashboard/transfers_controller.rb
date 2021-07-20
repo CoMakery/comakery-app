@@ -12,6 +12,8 @@ module Dashboard
     def index
       authorize @project, :transfers?
 
+      @transfers_chart_colors_objects = @project.transfers_chart_colors_objects
+
       @q = SearchTransfersQuery.new(
         @project.awards.completed_or_cancelled,
         params
