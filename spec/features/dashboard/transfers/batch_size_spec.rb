@@ -25,4 +25,3 @@ RSpec.feature 'Batch size', type: :feature, js: true do
     expect(page).to have_field('project_transfer_batch_size_input', with: '105')
   end
 end
-
