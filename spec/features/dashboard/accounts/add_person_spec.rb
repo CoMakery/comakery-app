@@ -7,22 +7,16 @@ describe 'Add person', js: true do
 
   let(:project) { create(:project) }
 
-  before { project.project_admins << admin }
-
-  before { login(admin) }
-
-  before { visit project_dashboard_accounts_path(project) }
-
-  before(:each) do
-    open_modal
-
-    add_person
+  before do
+    project.project_admins << admin
+    login(admin)
+    visit project_dashboard_accounts_path(project)
   end
 
   context 'when send an invitation to an invalid email' do
-    let(:open_modal) { find('[data-target="#invite-person"]').click }
+    before do
+      find('[data-target="#invite-person"]').click
 
-    let(:add_person) do
       within('#invite-person form') do
         fill_in 'email', with: 'invalid'
 
@@ -38,9 +32,8 @@ describe 'Add person', js: true do
   end
 
   context 'when assign a role to an existing account' do
-    let(:open_modal) { find('[data-target="#invite-person"]').click }
-
-    let(:add_person) do
+    before do
+      find('[data-target="#invite-person"]').click
       within('#invite-person form') do
         fill_in 'email', with: account.email
 
@@ -58,9 +51,8 @@ describe 'Add person', js: true do
   end
 
   context 'when assign a role to an unregistered user' do
-    let(:open_modal) { find('[data-target="#invite-person"]').click }
-
-    let(:add_person) do
+    before do
+      find('[data-target="#invite-person"]').click
       within('#invite-person form') do
         fill_in 'email', with: 'example@gmail.com'
 
