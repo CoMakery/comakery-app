@@ -14,18 +14,6 @@ module BlockchainTransactable
       NextBlockchainTransactables.new(project: project, target: :manual, transactable_classes: [Award]).call
     }
 
-    scope :ready_for_manual_blockchain_transaction, lambda {
-      ready_for_blockchain_transaction(true)
-    }
-
-    scope :ready_for_hw_manual_blockchain_transaction, lambda {
-      if table_name.in?(%w[awards account_token_records])
-        ready_for_blockchain_transaction(true).where("#{table_name}.prioritized_at is not null")
-      else
-        self.class.none
-      end
-    }
-
     def blockchain_transaction_class
       "BlockchainTransaction#{self.class}".constantize
     end

@@ -217,5 +217,59 @@ describe NextBlockchainTransactables do
         it { is_expected.not_to include(account_token_record) }
       end
     end
+
+    context 'with transfer rule ready available for transaction' do
+      subject { described_class.new(project: project, target: :manual, transactable_classes: [TransferRule]).call }
+
+      let!(:transfer_rule) { create(:transfer_rule, token: token) }
+      let(:project) { FactoryBot.create :project, token: token }
+      let(:token) { FactoryBot.create :token, :security_token }
+
+      it 'returns transfer_rules without blockchain_transaction' do
+        is_expected.to include(transfer_rule)
+      end
+
+      context 'return transfer_rules with latest blockchain_transaction Cancelled' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, status: :cancelled, blockchain_transactables: transfer_rule) }
+
+        it { is_expected.to include(transfer_rule) }
+      end
+
+      context 'return transfer_rules with latest blockchain_transaction Created more than 10 minutes ago' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, blockchain_transactables: transfer_rule, created_at: 20.minutes.ago) }
+
+        it { is_expected.to include(transfer_rule) }
+      end
+
+      context 'doesnt return synced transfer_rules without blockchain_transaction' do
+        before { transfer_rule.synced! }
+
+        it { is_expected.not_to include(transfer_rule) }
+      end
+
+      context 'doesnt return transfer_rules with latest blockchain_transaction Created less than 10 minutes ago' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, blockchain_transactables: transfer_rule, created_at: 1.minute.ago) }
+
+        it { is_expected.not_to include(transfer_rule) }
+      end
+
+      context 'doesnt return transfer_rules with latest blockchain_transaction Pending' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, status: :pending, blockchain_transactables: transfer_rule, tx_hash: '0') }
+
+        it { is_expected.not_to include(transfer_rule) }
+      end
+
+      context 'doesnt return transfer_rules with latest blockchain_transaction Succeed' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, status: :succeed, blockchain_transactables: transfer_rule, tx_hash: '0') }
+
+        it { is_expected.not_to include(transfer_rule) }
+      end
+
+      context 'doesnt return transfer_rules with latest blockchain_transaction Failed' do
+        let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule, status: :failed, blockchain_transactables: transfer_rule) }
+
+        it { is_expected.not_to include(transfer_rule) }
+      end
+    end
   end
 end

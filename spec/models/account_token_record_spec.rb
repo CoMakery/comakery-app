@@ -84,16 +84,6 @@ describe AccountTokenRecord do
     end
   end
 
-  describe 'ready_for_manual_blockchain_transaction scope' do
-    let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record) }
-
-    it 'returns account_token_records with latest blockchain_transaction Failed' do
-      create(:blockchain_transaction_account_token_record, status: :failed, blockchain_transactables: blockchain_transaction.blockchain_transactable)
-
-      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
-    end
-  end
-
   describe 'replace_existing_record' do
     let!(:account_token_record) { create(:account_token_record) }
     let!(:account_token_record_dup) { create(:account_token_record, token: account_token_record.token, account: account_token_record.account, status: :synced) }

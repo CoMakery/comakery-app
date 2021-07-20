@@ -122,6 +122,10 @@ class NextBlockchainTransactables
       target == :hot_wallet
     end
 
+    def target_manual?
+      target == :manual
+    end
+
     def hot_wallet_disabled?
       target_hot_wallet? && project.hot_wallet_disabled?
     end
@@ -147,6 +151,6 @@ class NextBlockchainTransactables
     end
 
     def include_failed?
-      hot_wallet_manual?
+      hot_wallet_manual? || target_manual?
     end
 end
