@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Batch size input', type: :feature, js: true do
+RSpec.feature 'Batch size', type: :feature, js: true do
   let!(:project) { FactoryBot.create(:project, token: nil, transfer_batch_size: 99) }
   let!(:project_award_type) { FactoryBot.create(:award_type, project: project) }
   let!(:wallet) { FactoryBot.create(:wallet, source: :hot_wallet, project_id: project.id) }
@@ -25,3 +25,4 @@ RSpec.feature 'Batch size input', type: :feature, js: true do
     expect(page).to have_field('project_transfer_batch_size_input', with: '105')
   end
 end
+
