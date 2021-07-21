@@ -213,7 +213,7 @@ class ProjectSetupHeader extends React.Component {
               }
               {owner &&
               <NavLink current={current === 'accesses'} href={project.accessUrl}>
-                access
+                API
               </NavLink>
               }
               {owner &&
