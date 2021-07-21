@@ -64,7 +64,7 @@ class Dashboard::TransferRulesController < ApplicationController
     if @project.token.transfer_rules.fresh?
       notice = 'Transfer rules were already synced'
     else
-      @project.token.transfer_rules.destroy_all # clear all transfer_rules
+      @project.token.transfer_rules.update_all(status: :outdated) # rubocop:todo Rails/SkipsModelValidations
       @project.token.token_type.transfer_rule_sync_job&.perform_now(@project.token)
       notice = 'Transfer rules were synced from the blockchain'
     end
