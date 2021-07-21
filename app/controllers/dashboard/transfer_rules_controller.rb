@@ -80,14 +80,14 @@ class Dashboard::TransferRulesController < ApplicationController
 
     def set_transfer_rules
       @page = (params[:page] || 1).to_i
-      @q = @project.token.transfer_rules.ransack(params[:q])
+      @q = @project.token.transfer_rules.not_outdated.ransack(params[:q])
       @transfer_rules_all = @q.result.includes(:sending_group, :receiving_group)
       @transfer_rules = @transfer_rules_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @transfer_rules.out_of_range?
     end
 
     def set_transfer_rule
-      @transfer_rule = @project.token.transfer_rules.find(params[:id])
+      @transfer_rule = @project.token.transfer_rules.not_outdated.find(params[:id])
     end
 
     def transfer_rule_params
