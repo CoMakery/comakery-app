@@ -23,7 +23,6 @@ class AccountTokenRecord < ApplicationRecord
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }
 
   enum status: { created: 0, pending: 1, synced: 2, failed: 3, outdated: 4 }
-  scope :not_synced, -> { where.not(status: :synced) }
 
   delegate :_blockchain, :blockchain, to: :token
 
@@ -60,6 +59,6 @@ class AccountTokenRecord < ApplicationRecord
       AccountTokenRecord
         .where(account_id: account_id, token_id: token_id, status: :synced)
         .where.not(id: id)
-        .update_all(status: :outdated) # rubocop:todo Rails/SkipsModelValidations
+        .outdate_all
     end
 end

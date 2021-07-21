@@ -45,7 +45,7 @@ class TransferRule < ApplicationRecord
       TransferRule
         .where(sending_group: sending_group, receiving_group: receiving_group, status: :synced)
         .where.not(id: id)
-        .update_all(status: :outdated) # rubocop:todo Rails/SkipsModelValidations
+        .outdate_all
     end
 
     def destroy_self_if_lockup_zero
