@@ -63,7 +63,7 @@
                 <% type_count = @transfer_type_counts[type.name] %>
                 <%= type_count %>
                 <div style="color: <%= color %>; float: right;">
-                  <% percentage = @unfiltered_transfers.size == 0 ? 0 : ((type_count.to_f / @unfiltered_transfers.size.to_f) * 100).to_i %>
+                  <% percentage = @unfiltered_transfers.size.zero? ? 0 : ((type_count.to_f / @unfiltered_transfers.size.to_f) * 100).to_i %>
                   <%= "#{percentage}%" %>
                 </div>
               </div>

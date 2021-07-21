@@ -12,7 +12,7 @@ RSpec.describe Dashboard::Transfers::ChartsController, type: :controller do
                                 require_confidentiality: false)
   end
 
-  let(:earned_transfer_type) { TransferType.find_by(name: 'earned') }
+  let(:earned_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'earned') }
 
   let(:burn_transfer_type) { FactoryBot.create(:transfer_type, project: project, name: 'burn') }
 

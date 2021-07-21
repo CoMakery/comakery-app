@@ -21,9 +21,13 @@ module Dashboard
 
         @transfers = @q.result(distinct: true).reorder('')
 
-        @transfer_type_counts = @transfers.group(:source).pluck(:source, 'count(awards.source)').to_h
-
         @transfer_type_name = TransferType.find_by(id: params.dig(:q, :transfer_type_id_eq))&.name
+
+        @transfer_type_counts = @transfers
+                                  .group(:transfer_type)
+                                  .pluck(:transfer_type, 'count(awards.transfer_type)')
+                                  .to_h
+
 
         render partial: 'dashboard/transfers/chart'
       end
