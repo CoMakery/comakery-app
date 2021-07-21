@@ -149,6 +149,10 @@ class Award < ApplicationRecord
     "issuers.first_name #{direction}, issuers.last_name #{direction}, awards.created_at ASC"
   end
 
+  def self.grouped_type_counts
+    group(:transfer_type_id).pluck(:transfer_type_id, 'count(awards.transfer_type_id)').to_h
+  end
+
   def ensure_proof_id_exists
     self.proof_id ||= SecureRandom.base58(44) # 58^44 > 2^256
   end
