@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
+import { toSnakeCase } from './utils'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
@@ -184,7 +185,7 @@ export default class MissionForm extends React.Component {
       } else {
         response.json().then(data => {
           this.setState(state => ({
-            errors       : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
+            errors       : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [toSnakeCase(k)]: [v] }), {}),
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['submit', 'submit_and_close'])

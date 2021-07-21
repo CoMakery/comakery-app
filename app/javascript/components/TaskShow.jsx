@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ProjectSetup from './layouts/ProjectSetup'
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
-import {Decimal} from 'decimal.js'
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
+import { toSnakeCase } from './utils'
+import { Decimal } from 'decimal.js'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
@@ -198,7 +199,7 @@ class TaskShow extends React.Component {
         response.json().then(data => {
           this.setState(state => ({
             detailsFetched: false,
-            errors        : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
+            errors        : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [toSnakeCase(k)]: [v] }), {}),
             flashMessages : state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['task[submit]'])
