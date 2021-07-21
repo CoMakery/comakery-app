@@ -24,10 +24,9 @@ module Dashboard
         @transfer_type_name = TransferType.find_by(id: params.dig(:q, :transfer_type_id_eq))&.name
 
         @transfer_type_counts = @transfers
-                                  .group(:transfer_type)
-                                  .pluck(:transfer_type, 'count(awards.transfer_type)')
+                                  .group(:transfer_type_id)
+                                  .pluck(:transfer_type_id, 'count(awards.transfer_type_id)')
                                   .to_h
-
 
         render partial: 'dashboard/transfers/chart'
       end
