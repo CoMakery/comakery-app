@@ -1167,32 +1167,6 @@ describe Award do
     end
   end
 
-  describe 'ready_for_batch_blockchain_transaction scope' do
-    let(:token) { create(:erc20_token, batch_contract_address: '0x0') }
-    let(:project) { create(:project, token: token, transfer_batch_size: 100) }
-    let(:award_type) { create(:award_type, project: project) }
-    let!(:lockup_transfer) { create(:transfer, award_type: award_type) }
-    let!(:erc20_transfer) { create(:transfer, award_type: award_type) }
-    let!(:erc20_mint_transfer) { create(:transfer, award_type: award_type) }
-    let!(:erc20_burn_transfer) { create(:transfer, award_type: award_type) }
-    let!(:erc20_transfer_without_batch_contract) { create(:transfer) }
-
-    before do
-      erc20_mint_transfer.update(transfer_type: erc20_mint_transfer.project.transfer_types.find_or_create_by(name: 'mint'))
-      erc20_burn_transfer.update(transfer_type: erc20_burn_transfer.project.transfer_types.find_or_create_by(name: 'burn'))
-    end
-
-    subject { described_class.ready_for_batch_blockchain_transaction(project) }
-
-    example 'return available for batch tx ' do
-      is_expected.to include(lockup_transfer)
-      is_expected.to include(erc20_transfer)
-      is_expected.not_to include(erc20_transfer_without_batch_contract)
-      is_expected.not_to include(erc20_mint_transfer)
-      is_expected.not_to include(erc20_burn_transfer)
-    end
-  end
-
   describe '.ransack_reorder' do
     let!(:awards) do
       issuer1 = create(:account, first_name: 'John', last_name: 'Snow')

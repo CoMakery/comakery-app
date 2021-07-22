@@ -41,6 +41,15 @@ describe NextBlockchainTransactables do
               is_expected.to match_array [award1, award2]
             end
           end
+
+          context 'ignore mint and burn transfers' do
+            let!(:mint_transfer) { FactoryBot.create :award, :with_verified_account, project: project, status: :accepted, transfer_type: project.transfer_types.find_or_create_by(name: 'mint') }
+            let!(:burn_transfer) { FactoryBot.create :award, :with_verified_account, project: project, status: :accepted, transfer_type: project.transfer_types.find_or_create_by(name: 'burn') }
+
+            it 'does not include mint and burn transfers' do
+              is_expected.to match_array [award1, award2]
+            end
+          end
         end
 
         context 'with batch enabled for unsupported token' do

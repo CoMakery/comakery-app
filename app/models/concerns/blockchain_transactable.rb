@@ -10,10 +10,6 @@ module BlockchainTransactable
     has_one :latest_transaction_batch, through: :latest_batch_transactable, source: :transaction_batch
     has_one :latest_blockchain_transaction, -> { order(created_at: :desc) }, through: :latest_transaction_batch, source: :blockchain_transaction
 
-    scope :ready_for_batch_blockchain_transaction, lambda { |project|
-      NextBlockchainTransactables.new(project: project, target: :manual, transactable_classes: [Award]).call
-    }
-
     def blockchain_transaction_class
       "BlockchainTransaction#{self.class}".constantize
     end
