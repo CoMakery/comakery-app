@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_104324) do
+ActiveRecord::Schema.define(version: 2021_07_22_095118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -366,18 +366,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.index ["specialty_id"], name: "index_experiences_on_specialty_id"
   end
 
-  create_table "interests", force: :cascade do |t|
-    t.bigint "account_id"
-    t.string "protocol"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "project_id"
-    t.integer "specialty_id"
-    t.index ["account_id"], name: "index_interests_on_account_id"
-    t.index ["project_id"], name: "index_interests_on_project_id"
-    t.index ["specialty_id"], name: "index_interests_on_specialty_id"
-  end
-
   create_table "invites", force: :cascade do |t|
     t.string "email", null: false
     t.string "token", limit: 72, null: false
@@ -536,7 +524,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
-    t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
     t.boolean "auto_add_account", default: false, null: false
     t.text "github_url"
@@ -747,7 +734,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
   add_foreign_key "blockchain_transactions", "transaction_batches"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
-  add_foreign_key "interests", "accounts"
   add_foreign_key "invites", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "project_roles", "accounts"
