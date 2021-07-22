@@ -121,14 +121,14 @@ describe 'project accounts page' do
       it 'successfully updates permissions' do
         expect(role_cell).to have_text('Project Member')
 
-        find("#project_#{project.id}_account_#{account.id} a.dropdown").click()
+        find("#project_#{project.id}_account_#{account.id} a.dropdown").click
 
-        find("#project_#{project.id}_account_#{account.id} #change_permissions_btn").click()
+        find("#project_#{project.id}_account_#{account.id} #change_permissions_btn").click
 
         within('#account_permissions_modal') do
           select 'Admin', from: 'project_role[role]'
 
-          find('.btn-primary').click()
+          find('.btn-primary').click
         end
 
         expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
@@ -145,14 +145,14 @@ describe 'project accounts page' do
       it 'denies action' do
         expect(role_cell).to have_text('Admin')
 
-        find("#project_#{project.id}_account_#{project_admin.id} a.dropdown").click()
+        find("#project_#{project.id}_account_#{project_admin.id} a.dropdown").click
 
-        find("#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn").click()
+        find("#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn").click
 
         within('#account_permissions_modal') do
           select 'Read Only Admin', from: 'project_role[role]'
 
-          find('.btn-primary').click()
+          find('.btn-primary').click
         end
 
         expect(find('.flash-message-container')).to have_content('You are not authorized to perform this action')
