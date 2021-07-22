@@ -8,9 +8,9 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   def create
     return head :no_content if creation_disabled?
 
-    if transactable.any?
+    if transactables.any?
       @transaction = transaction_class.new(transaction_create_params)
-      @transaction.blockchain_transactables = transactable
+      @transaction.blockchain_transactables = transactables
       @transaction.save
     end
 
@@ -51,12 +51,11 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def transaction_class
-      t = transactable.respond_to?(:first) ? transactable.first : transactable
-      t.blockchain_transaction_class
+      transactables.first.blockchain_transaction_class
     end
 
-    def transactable
-      @transactable ||= NextBlockchainTransactables.new(project: project, target: :hot_wallet).call
+    def transactables
+      @transactables ||= NextBlockchainTransactables.new(project: project, target: :hot_wallet).call
     end
 
     def transaction_create_params
