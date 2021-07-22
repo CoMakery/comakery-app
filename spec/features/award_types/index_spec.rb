@@ -35,7 +35,7 @@ describe 'Award Types index' do
         visit_batches_page
       end
 
-      it { expect(page).to have_current_path(projects_path) }
+      it { expect(page).to have_current_path(root_path) }
     end
 
     context 'with whitelabel mission and project awards visible' do
