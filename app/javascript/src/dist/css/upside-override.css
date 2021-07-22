@@ -2281,11 +2281,14 @@ Secondary Sidebar
   .collapsed-dropdown {
     display: none;
   }
+  .nav-link-a{
+    text-align: start;
+  }
 }
 
 @media (min-width: 992px) {
   .collapsed-full-dropdown {
-    display: none;
+    display: none  !important;
   }
 
   .navbar-collapsed .nav-item .nav-link .nav-link-title{
@@ -2342,4 +2345,14 @@ Secondary Sidebar
     padding: 5px;
     text-align:center;
   }
+  .nav-link-a{
+    text-align:start;
+  }
+  .navbar-collapsed .nav-link-a{
+    text-align:center;
+  }
+}
+
+a.nav-link{
+  display: block;
 }
