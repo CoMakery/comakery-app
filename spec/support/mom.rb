@@ -19,6 +19,11 @@ class Mom
       verifications: [Verification.new(passed: true, provider: nil, max_investment_usd: 100000)]
     }
 
+    if attrs[:unverified]
+      defaults.delete(:verifications)
+      attrs.delete(:unverified)
+    end
+
     Account.new(defaults.merge(attrs))
   end
 

@@ -121,9 +121,9 @@ describe AccountDecorator do
   end
 
   describe 'verification_state' do
-    let!(:passed_account) { create(:account) }
-    let!(:failed_account) { create(:account) }
-    let!(:unknown_account) { create(:account) }
+    let(:passed_account) { create(:account, unverified: true) }
+    let(:failed_account) { create(:account, unverified: true) }
+    let(:unknown_account) { create(:account, unverified: true) }
 
     it 'returns passed for passed_account' do
       create(:verification, account: passed_account, passed: true)

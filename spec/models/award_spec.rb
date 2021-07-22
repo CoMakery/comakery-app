@@ -1078,15 +1078,19 @@ describe Award do
   end
 
   describe 'account_verification_unknown?' do
-    let!(:verification) { create(:verification) }
-    let!(:award) { create(:award, account: verification.account) }
+    subject { award.account_verification_unknown? }
+    let(:verification) { create(:verification) }
 
-    it 'returns true if account latest_verification is nil' do
-      expect(create(:award).account_verification_unknown?).to be_truthy
+    context 'returns true if account latest_verification is nil' do
+      let(:award) { create(:award, account: build(:account, unverified: true)) }
+
+      it { is_expected.to be true }
     end
 
-    it 'returns false if account latest_verification is not nil' do
-      expect(award.account_verification_unknown?).to be_falsey
+    context 'returns false if account latest_verification is not nil' do
+      let(:award) { create(:award, account: verification.account) }
+
+      it { is_expected.to be false }
     end
   end
 
