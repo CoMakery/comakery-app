@@ -99,15 +99,6 @@ class Mom
     Specialty.new(defaults.merge(attrs))
   end
 
-  def experience(**attrs)
-    defaults = {
-      specialty: create(:specialty),
-      account: create(:account),
-      level: 1
-    }
-    Experience.new(defaults.merge(attrs))
-  end
-
   def verification(**attrs)
     defaults = {
       account: create(:account),
