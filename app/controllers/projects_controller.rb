@@ -33,8 +33,13 @@ class ProjectsController < ApplicationController
 
   def index
     @project_contributors = TopContributors.call(projects: @projects).contributors
+
     @meta_title = 'CoMakery Projects - Work at the Cutting Edge'
-    @meta_desc = 'Projects from around the world are looking to achieve great things, often leveraging the blockchain to do so. At CoMakery, you can search and find projects to work on and earn tokens or USDC, or even start your own project.'
+
+    @meta_desc = 'Projects from around the world are looking to achieve great things, often leveraging the blockchain ' \
+                 'to do so. At CoMakery, you can search and find projects to work on and earn tokens or USDC, or even ' \
+                 'start your own project.'
+
     @meta_image = '/comakery-projects.jpg'
   end
 
