@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  root 'projects#landing'
+  root 'projects#index'
 
   resources :tokens, only: [:index, :new, :create, :show, :edit, :update] do
     collection do
