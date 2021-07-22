@@ -100,60 +100,64 @@ describe 'project accounts page' do
     end
   end
 
-  context 'with settings', js: true do
-    let!(:project) { create(:project) }
+  context 'when navigate to three dots menu settings', js: true do
+    let(:project) { create(:project) }
 
-    let!(:project_admin) { create(:account) }
+    let(:project_admin) { create(:account) }
 
-    let!(:account) { create(:account) }
+    let(:account) { create(:account) }
 
     before do
       project.project_admins << project_admin
+
       login(project_admin)
+
       subject
     end
 
-    context 'change follower permissions' do
-      it 'updates project role' do
-        expect(
-          find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
-        ).to have_text('Project Member')
+    context 'and change project participant role' do
+      let(:role_cell) { find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role") }
 
-        page.find("#project_#{project.id}_account_#{account.id} a.dropdown").click
-        execute_script("document.querySelector('#project_#{project.id}_account_#{account.id} #change_permissions_btn').click()")
+      it 'successfully updates permissions' do
+        expect(role_cell).to have_text('Project Member')
+
+        find("#project_#{project.id}_account_#{account.id} a.dropdown").click()
+
+        find("#project_#{project.id}_account_#{account.id} #change_permissions_btn").click()
 
         within('#account_permissions_modal') do
           select 'Admin', from: 'project_role[role]'
 
-          expect(page).to have_css('#account_permissions_modal input[type=submit]')
-          execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
+          find('.btn-primary').click()
         end
 
         expect(find('.flash-message-container')).to have_content('Permissions successfully updated')
 
-        expect(
-          find("#project_#{project.id}_account_#{account.id} .transfers-table__transfer__role")
-        ).to have_text('Admin', wait: 60)
+        expect(role_cell).to have_text('Admin')
       end
     end
 
-    context 'change own permissions' do
-      let!(:project_role) { project.project_roles.find_by(account: project_admin) }
+    context 'and change own role' do
+      let(:project_role) { project.project_roles.find_by(account: project_admin) }
 
-      it 'deny action with flash message' do
-        page.find("#project_#{project.id}_account_#{project_admin.id} a.dropdown").click
-        execute_script("document.querySelector('#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn').click()")
+      let(:role_cell) { find("#project_#{project.id}_account_#{project_admin.id} .transfers-table__transfer__role") }
+
+      it 'denies action' do
+        expect(role_cell).to have_text('Admin')
+
+        find("#project_#{project.id}_account_#{project_admin.id} a.dropdown").click()
+
+        find("#project_#{project.id}_account_#{project_admin.id} #change_permissions_btn").click()
 
         within('#account_permissions_modal') do
           select 'Read Only Admin', from: 'project_role[role]'
 
-          expect(page).to have_css('#account_permissions_modal input[type=submit]')
-          execute_script("document.querySelector('#account_permissions_modal input[type=submit]').click()")
+          find('.btn-primary').click()
         end
 
         expect(find('.flash-message-container')).to have_content('You are not authorized to perform this action')
 
-        expect(project_role.reload.role).to eq('admin')
+        expect(role_cell).to have_text('Admin')
       end
     end
   end
