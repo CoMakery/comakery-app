@@ -142,7 +142,7 @@ describe AccountDecorator do
 
   describe 'verification_date' do
     let!(:passed_account) { create(:account) }
-    let!(:unknown_account) { create(:account) }
+    let!(:unknown_account) { create(:account, unverified: true) }
 
     it 'returns date for passed_account' do
       create(:verification, account: passed_account, passed: true)
@@ -156,7 +156,7 @@ describe AccountDecorator do
 
   describe 'verification_max_investment_usd' do
     let!(:passed_account) { create(:account) }
-    let!(:unknown_account) { create(:account) }
+    let!(:unknown_account) { create(:account, unverified: true) }
 
     it 'returns max_investment_usd for passed_account' do
       max_investment_usd = 100
