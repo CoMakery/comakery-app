@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_22_103824) do
+ActiveRecord::Schema.define(version: 2021_07_22_104534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,14 +77,12 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
     t.string "cardano_wallet"
     t.string "bitcoin_wallet"
     t.string "eos_wallet"
-    t.string "deprecated_specialty"
     t.string "occupation"
     t.string "linkedin_url"
     t.string "github_url"
     t.string "dribble_url"
     t.string "behance_url"
     t.string "tezos_wallet"
-    t.integer "specialty_id"
     t.bigint "latest_verification_id"
     t.string "managed_account_id", limit: 256
     t.bigint "managed_mission_id"
@@ -100,7 +98,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
     t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
-    t.index ["specialty_id"], name: "index_accounts_on_specialty_id"
   end
 
   create_table "accounts_projects", id: false, force: :cascade do |t|
@@ -198,7 +195,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
-    t.integer "specialty_id"
     t.text "goal"
     t.string "diagram_id"
     t.string "diagram_filename"
@@ -208,7 +204,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
     t.integer "state", default: 0
     t.index ["diagram_id"], name: "index_award_types_on_diagram_id"
     t.index ["project_id"], name: "index_award_types_on_project_id"
-    t.index ["specialty_id"], name: "index_award_types_on_specialty_id"
   end
 
   create_table "awards", id: :serial, force: :cascade do |t|
@@ -248,7 +243,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
     t.integer "number_of_assignments", default: 1
     t.integer "cloned_on_assignment_from_id"
     t.integer "number_of_assignments_per_user", default: 1
-    t.bigint "specialty_id"
     t.string "agreed_to_license_hash"
     t.datetime "expires_at"
     t.integer "expires_in_days", default: 10
@@ -272,7 +266,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
     t.index ["proof_id"], name: "index_awards_on_proof_id"
     t.index ["recipient_wallet_id"], name: "index_awards_on_recipient_wallet_id"
-    t.index ["specialty_id"], name: "index_awards_on_specialty_id"
     t.index ["submission_image_id"], name: "index_awards_on_submission_image_id"
     t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
   end
@@ -712,7 +705,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_103824) do
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_ore_id_wallet_recoveries", "api_request_logs"
-  add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
   add_foreign_key "awards", "wallets", column: "recipient_wallet_id"
   add_foreign_key "balances", "tokens"
