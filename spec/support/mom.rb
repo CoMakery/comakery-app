@@ -92,22 +92,6 @@ class Mom
     o
   end
 
-  def specialty(**attrs)
-    defaults = {
-      name: "Specialty #{SecureRandom.hex(20)}"
-    }
-    Specialty.new(defaults.merge(attrs))
-  end
-
-  def experience(**attrs)
-    defaults = {
-      specialty: create(:specialty),
-      account: create(:account),
-      level: 1
-    }
-    Experience.new(defaults.merge(attrs))
-  end
-
   def verification(**attrs)
     defaults = {
       account: create(:account),
@@ -860,17 +844,6 @@ class Mom
       t.save!
     end
     t
-  end
-
-  def interest(**attrs)
-    params = {
-      protocol: 'Moms protocol',
-      account: create(:account),
-      project: create(:project),
-      specialty: create(:specialty)
-    }.merge(attrs)
-
-    Interest.new(params)
   end
 
   def project_role(**attrs)

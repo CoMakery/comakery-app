@@ -29,8 +29,6 @@ class Account < ApplicationRecord
   # rubocop:todo Rails/InverseOf
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # rubocop:enable Rails/InverseOf
-  has_many :interests, dependent: :destroy
-  has_many :projects_interested, through: :interests, source: :project
   has_many :project_roles, dependent: :destroy
   has_many :projects_involved, through: :project_roles, source: :project
   has_many :admin_projects, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :project
@@ -52,7 +50,6 @@ class Account < ApplicationRecord
   has_many :balances, through: :wallets
   has_one :ore_id_account, dependent: :destroy
 
-  belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
   has_many :invites, dependent: :destroy
 

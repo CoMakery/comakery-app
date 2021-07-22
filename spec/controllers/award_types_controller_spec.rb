@@ -4,12 +4,10 @@ require 'controllers/unavailable_for_lockup_token_spec'
 RSpec.describe AwardTypesController, type: :controller do
   let(:issuer) { create(:authentication) }
   let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, _token_type: 'eth', _blockchain: :ethereum_ropsten)) }
-  let(:specialty) { create(:specialty) }
 
   let(:valid_attributes) do
     {
       project_id: project.to_param,
-      specialty_id: specialty.to_param,
       name: 'test',
       goal: 'none',
       description: 'none'

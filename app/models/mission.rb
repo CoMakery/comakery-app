@@ -20,7 +20,6 @@ class Mission < ApplicationRecord
   has_many :ready_award_types, -> { where state: 'public' }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :awards, through: :award_types
-  has_many :interests, through: :public_projects
   has_many :interested, -> { distinct }, through: :public_projects
   has_many :project_roles, through: :public_projects
 

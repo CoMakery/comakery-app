@@ -8,7 +8,6 @@ describe 'landing page' do
   let!(:authentication1) { create :authentication, account: account1 }
   let!(:swarmbot_account) { create(:account, email: 'swarm@example.com') }
   let(:swarmbot_authentication) { create :authentication, account: swarmbot_account }
-  let!(:interest) { create(:interest, account: account) }
 
   before do
     team.build_authentication_team authentication

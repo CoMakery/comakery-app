@@ -240,15 +240,7 @@ class AwardsController < ApplicationController
     def authorize_award_start
       authorize @award, :start?
     rescue Pundit::NotAuthorizedError
-      redirect_to my_tasks_path, notice: unlock_award_notice
-    end
-
-    def unlock_award_notice
-      if @award.specialty == Specialty.default
-        "Complete #{current_account.tasks_to_unlock(@award)} more tasks to access General tasks that require the #{Award::EXPERIENCE_LEVELS.key(@award.experience_level)} skill level"
-      else
-        "Complete #{current_account.tasks_to_unlock(@award)} more #{@award.specialty.name} tasks to access tasks that require the #{Award::EXPERIENCE_LEVELS.key(@award.experience_level)} skill level"
-      end
+      redirect_to my_tasks_path
     end
 
     def authorize_award_submit
@@ -302,7 +294,7 @@ class AwardsController < ApplicationController
         current_account
         .accessable_awards(projects_involved)
         .includes(
-          :specialty, :issuer, :award_type, :cloned_from,
+          :issuer, :award_type, :cloned_from,
           project: [:account, :mission, :token, :project_admins, channels: [:team]],
           account: [image_attachment: :blob]
         ).filtered_for_view(@filter, current_account)
@@ -329,7 +321,6 @@ class AwardsController < ApplicationController
         :amount,
         :number_of_assignments,
         :number_of_assignments_per_user,
-        :specialty_id,
         :transfer_type_id,
         :proof_link,
         :expires_in_days
@@ -460,7 +451,6 @@ class AwardsController < ApplicationController
         project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
         experience_levels: Award::EXPERIENCE_LEVELS,
-        specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
         types: @project.transfer_types.reject { |t| t.name.in? %w[mint burn] }.collect { |t| [t.name.titlecase, t.id] }.to_h,
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',

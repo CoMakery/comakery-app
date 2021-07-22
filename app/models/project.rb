@@ -18,8 +18,6 @@ class Project < ApplicationRecord
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
 
-  has_many :interests # rubocop:todo Rails/HasManyOrHasOneDependent
-  has_many :interested, -> { distinct }, through: :interests, source: :account
   has_many :project_roles, dependent: :destroy
   has_many :accounts, through: :project_roles, source: :account
   has_many :project_admins, -> { where(project_roles: { role: :admin }) }, through: :project_roles, source: :account
@@ -128,7 +126,7 @@ class Project < ApplicationRecord
       left join projects on award_types.project_id=projects.id")
       .where('projects.id=?', id)
       .group('accounts.id')
-      .order('total_awarded desc, last_awarded_at desc').includes(:specialty).first(5)
+      .order('total_awarded desc, last_awarded_at desc').first(5)
   end
 
   def total_month_awarded
@@ -198,10 +196,6 @@ class Project < ApplicationRecord
       result << item
     end
     result
-  end
-
-  def ready_tasks_by_specialty(limit_per_specialty = 5)
-    awards.ready.includes(:specialty, :project, :issuer, :account, :award_type).group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
   end
 
   def stats

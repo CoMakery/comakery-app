@@ -16,7 +16,6 @@ if Rails.env.development? || Rails.env.test?
     last_name: 'Devvy',
     date_of_birth: 18.years.ago,
     country: 'United States',
-    specialty: Specialty.find_or_create_by(name: 'General'),
     comakery_admin: true
   )
 

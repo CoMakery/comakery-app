@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_104324) do
+ActiveRecord::Schema.define(version: 2021_07_22_104838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,14 +77,12 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.string "cardano_wallet"
     t.string "bitcoin_wallet"
     t.string "eos_wallet"
-    t.string "deprecated_specialty"
     t.string "occupation"
     t.string "linkedin_url"
     t.string "github_url"
     t.string "dribble_url"
     t.string "behance_url"
     t.string "tezos_wallet"
-    t.integer "specialty_id"
     t.bigint "latest_verification_id"
     t.string "managed_account_id", limit: 256
     t.bigint "managed_mission_id"
@@ -100,7 +98,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
-    t.index ["specialty_id"], name: "index_accounts_on_specialty_id"
   end
 
   create_table "accounts_projects", id: false, force: :cascade do |t|
@@ -198,7 +195,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
-    t.integer "specialty_id"
     t.text "goal"
     t.string "diagram_id"
     t.string "diagram_filename"
@@ -208,7 +204,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.integer "state", default: 0
     t.index ["diagram_id"], name: "index_award_types_on_diagram_id"
     t.index ["project_id"], name: "index_award_types_on_project_id"
-    t.index ["specialty_id"], name: "index_award_types_on_specialty_id"
   end
 
   create_table "awards", id: :serial, force: :cascade do |t|
@@ -248,7 +243,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.integer "number_of_assignments", default: 1
     t.integer "cloned_on_assignment_from_id"
     t.integer "number_of_assignments_per_user", default: 1
-    t.bigint "specialty_id"
     t.string "agreed_to_license_hash"
     t.datetime "expires_at"
     t.integer "expires_in_days", default: 10
@@ -272,7 +266,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
     t.index ["proof_id"], name: "index_awards_on_proof_id"
     t.index ["recipient_wallet_id"], name: "index_awards_on_recipient_wallet_id"
-    t.index ["specialty_id"], name: "index_awards_on_specialty_id"
     t.index ["submission_image_id"], name: "index_awards_on_submission_image_id"
     t.index ["transfer_type_id"], name: "index_awards_on_transfer_type_id"
   end
@@ -354,28 +347,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
-  create_table "experiences", force: :cascade do |t|
-    t.bigint "account_id"
-    t.bigint "specialty_id"
-    t.integer "level", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_experiences_on_account_id"
-    t.index ["specialty_id"], name: "index_experiences_on_specialty_id"
-  end
-
-  create_table "interests", force: :cascade do |t|
-    t.bigint "account_id"
-    t.string "protocol"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "project_id"
-    t.integer "specialty_id"
-    t.index ["account_id"], name: "index_interests_on_account_id"
-    t.index ["project_id"], name: "index_interests_on_project_id"
-    t.index ["specialty_id"], name: "index_interests_on_specialty_id"
   end
 
   create_table "invites", force: :cascade do |t|
@@ -536,7 +507,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
-    t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
     t.boolean "auto_add_account", default: false, null: false
     t.text "github_url"
@@ -588,10 +558,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
-  end
-
-  create_table "specialties", force: :cascade do |t|
-    t.string "name"
   end
 
   create_table "synchronisations", force: :cascade do |t|
@@ -735,7 +701,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_ore_id_wallet_recoveries", "api_request_logs"
-  add_foreign_key "awards", "specialties"
   add_foreign_key "awards", "transfer_types"
   add_foreign_key "awards", "wallets", column: "recipient_wallet_id"
   add_foreign_key "balances", "tokens"
@@ -745,9 +710,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_104324) do
   add_foreign_key "blockchain_transactions", "awards"
   add_foreign_key "blockchain_transactions", "tokens"
   add_foreign_key "blockchain_transactions", "transaction_batches"
-  add_foreign_key "experiences", "accounts"
-  add_foreign_key "experiences", "specialties"
-  add_foreign_key "interests", "accounts"
   add_foreign_key "invites", "accounts"
   add_foreign_key "ore_id_accounts", "accounts"
   add_foreign_key "project_roles", "accounts"
