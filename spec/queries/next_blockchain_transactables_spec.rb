@@ -280,5 +280,16 @@ describe NextBlockchainTransactables do
         it { is_expected.to include(transfer_rule) }
       end
     end
+
+    context 'with token as transactable' do
+      subject { described_class.new(project: project, target: :manual, transactable_classes: [Token]).call }
+
+      let(:project) { FactoryBot.create :project, token: token }
+      let(:token) { FactoryBot.create :token, :security_token }
+
+      it 'returns transfer_rules without blockchain_transaction' do
+        is_expected.to include(token)
+      end
+    end
   end
 end

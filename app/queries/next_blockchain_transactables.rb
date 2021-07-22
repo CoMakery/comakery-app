@@ -26,7 +26,9 @@ class NextBlockchainTransactables
     transactions
   end
 
-  def next_transactables_for(transactable_class, batch_size: 1)
+  def next_transactables_for(transactable_class, batch_size: 1) # rubocop:todo Metrics/CyclomaticComplexity
+    return Token.where(id: project.token_id) if transactable_class == Token
+
     joins_sql = <<~SQL
       LEFT JOIN batch_transactables
       ON batch_transactables.id = (
@@ -47,7 +49,9 @@ class NextBlockchainTransactables
 
     q =
       if transactable_class == Award
-        project.public_send(transactable_class.table_name)
+        project.awards
+      elsif transactable_class == Token
+        project.token
       else
         project.token.public_send(transactable_class.table_name)
       end
