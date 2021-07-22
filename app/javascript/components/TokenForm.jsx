@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Layout from './layouts/Layout'
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
+import { toSnakeCase } from './utils'
 import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
 import InputFieldHalfed from './styleguide/InputFieldHalfed'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
@@ -259,7 +260,7 @@ class TokenForm extends React.Component {
       } else {
         response.json().then(data => {
           this.setState(state => ({
-            errors       : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [k]: [v] }), {}),
+            errors       : Object.entries(data.errors).reduce((obj, [k, v]) => ({ ...obj, [toSnakeCase(k)]: [v] }), {}),
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['token[submit]', 'token[submit_and_close]'])
