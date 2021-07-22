@@ -70,8 +70,8 @@ describe NextBlockchainTransactables do
         end
 
         context 'when non validate account' do
-          let!(:award1) { FactoryBot.create :award, :with_unverified_account, project: project, status: :accepted }
-          let!(:award2) { FactoryBot.create :award, :with_unverified_account, project: project, status: :accepted }
+          let!(:award1) { FactoryBot.create :award, :with_verification_failed_account, project: project, status: :accepted }
+          let!(:award2) { FactoryBot.create :award, :with_verification_failed_account, project: project, status: :accepted }
 
           it { is_expected.to be_empty }
         end
@@ -135,7 +135,7 @@ describe NextBlockchainTransactables do
         end
 
         context 'with prioritized transfers' do
-          let!(:prioritized_award) { FactoryBot.create :award, :with_unverified_account, project: project, status: :accepted, prioritized_at: Time.zone.now }
+          let!(:prioritized_award) { FactoryBot.create :award, :with_verification_failed_account, project: project, status: :accepted, prioritized_at: Time.zone.now }
 
           it 'returns prioritized award' do
             is_expected.to match_array [prioritized_award]

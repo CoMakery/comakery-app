@@ -39,7 +39,6 @@ FactoryBot.define do
       _token_type { :token_release_schedule }
       _blockchain { :ethereum_rinkeby }
       decimal_places { 10 }
-      token_frozen { false }
     end
   end
 end

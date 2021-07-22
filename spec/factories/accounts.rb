@@ -14,7 +14,7 @@ FactoryBot.define do
       verifications { [association(:verification)] }
     end
 
-    trait :unverified do
+    trait :verification_failed do
       verifications { [association(:verification, passed: false)] }
     end
   end

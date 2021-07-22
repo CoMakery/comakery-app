@@ -15,8 +15,10 @@ class Mom
       date_of_birth: '1990/01/01',
       country: 'United States of America',
       specialty: Specialty.find_or_create_by(name: 'General'),
-      password: valid_password
+      password: valid_password,
+      verifications: [Verification.new(passed: true, provider: nil, max_investment_usd: 100000)]
     }
+
     Account.new(defaults.merge(attrs))
   end
 
@@ -30,7 +32,8 @@ class Mom
       country: 'United States of America',
       specialty: Specialty.find_or_create_by(name: 'General'),
       password: valid_password,
-      managed_account_id: '1c182a7b-4f22-4636-9047-8bab32352949'
+      managed_account_id: '1c182a7b-4f22-4636-9047-8bab32352949',
+      verifications: [Verification.new(passed: true, provider: nil, max_investment_usd: 100000)]
     }
     Account.new(defaults.merge(attrs))
   end

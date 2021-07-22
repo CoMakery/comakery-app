@@ -24,8 +24,8 @@ FactoryBot.define do
       association :account, :verified
     end
 
-    trait :with_unverified_account do
-      association :account, :unverified
+    trait :with_verification_failed_account do
+      association :account, :verification_failed
     end
   end
 end
