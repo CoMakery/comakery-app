@@ -142,7 +142,6 @@ class AwardTypesController < ApplicationController
           diagram_url: award_type_diagram_path(@award_type || @project.award_types.new, 300)
         ),
         project: @project.serializable_hash,
-        specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
         states: AwardType.states.map { |k, _| [k, k] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',

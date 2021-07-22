@@ -2,92 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ProfileModal from '../components/ProfileModal'
 import ProjectSetupHeader from './layouts/ProjectSetupHeader'
-import MyTask from './MyTask'
 import * as d3 from 'd3'
-import styled from 'styled-components'
 import ProjectRolesController from '../controllers/project_roles_controller'
-
-const Tasks = styled.div`
-  padding: 15px;
-  max-width: 680px;
-  margin: auto;
-`
-
-const TasksTitle = styled.div`
-  margin: 40px;
-
-  h2 {
-    font-family: Montserrat;
-    font-size: 24px;
-    font-weight: 900;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: center;
-    text-transform: uppercase;
-    color: #3a3a3a;
-  }
-
-  p {
-    font-family: Georgia;
-    font-size: 16px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.63;
-    letter-spacing: normal;
-    text-align: center;
-    color: #4a4a4a;
-  }
-`
-
-const TasksSpecialty = styled.div`
-  margin-top: 40px;
-  margin-bottom: 60px;
-
-  h3 {
-    font-family: Montserrat;
-    font-size: 20px;
-    font-weight: 900;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: center;
-    color: #4a4a4a;
-    text-transform: uppercase;
-
-    img {
-      display: block;
-      margin: auto;
-      margin-bottom: 10px;
-      max-height: 30px;
-      max-width: 30px;
-    }
-  }
-`
-
-const AllTasks = styled.a`
-  font-family: Montserrat;
-  font-size: 14px;
-  font-weight: 900;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: #0089f4;
-  display: block;
-  text-align: right;
-  margin-top: 20px;
-  margin-bottom: 10px;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
 
 const chartColors = [
   '#0089F4',
@@ -300,34 +216,6 @@ export default class Project extends React.Component {
         </div>
         }
       </div>
-      {this.props.tasksBySpecialty.length > 0 &&
-        <Tasks>
-          <TasksTitle>
-            <h2>Tasks</h2>
-            <p>Find a task that’s right for your talents, review the details, and get to work!</p>
-          </TasksTitle>
-
-          {this.props.tasksBySpecialty.map(specialty =>
-            <TasksSpecialty key={specialty[0]}>
-              <h3>
-                {/* <img src={require(`src/images/specialties/${specialty[0]}.svg`)} /> */}
-
-                {specialty[0]}
-              </h3>
-
-              {specialty[1].map(task =>
-                <MyTask
-                  key={task.id}
-                  task={task}
-                  displayParents={false}
-                />
-              )}
-            </TasksSpecialty>
-          )}
-
-          <AllTasks href={this.props.myTasksPath}>see all available tasks</AllTasks>
-        </Tasks>
-      }
 
       {projectData.displayTeam &&
         <div className='project-team'>
@@ -347,7 +235,7 @@ export default class Project extends React.Component {
               <div className='project-team__contributors' >
                 {projectData.team.map((contributor, index) =>
                   <div key={contributor.id} className='project-team__contributor-container'>
-                    <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: projectData.team.length - index}} src={contributor.imageUrl} />
+                    <img className='project-team__contributor__avatar' style={{zIndex: projectData.team.length - index}} src={contributor.imageUrl} />
                     <div className='project-team__contributor__modal'>
                       <ProfileModal profile={contributor} />
                     </div>
@@ -384,7 +272,6 @@ export default class Project extends React.Component {
 }
 
 Project.propTypes = {
-  tasksBySpecialty: PropTypes.array,
   projectData     : PropTypes.shape({}),
   tokenData       : PropTypes.shape({}),
   follower        : PropTypes.bool,
@@ -398,7 +285,6 @@ Project.propTypes = {
 }
 
 Project.defaultProps = {
-  tasksBySpecialty: [ [ null, [] ] ],
   projectData     : {
     description: '',
     team       : [],
@@ -410,7 +296,6 @@ Project.defaultProps = {
   missionData        : null,
   tokenData          : null,
   follower           : false,
-  specialtyInterested: [],
   csrfToken          : '',
   editable           : true,
   contributorsPath   : '',

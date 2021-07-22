@@ -64,7 +64,6 @@ export default class Account extends React.Component {
     formData.append('account[date_of_birth]', this.dateInput.current.value || '')
     formData.append('account[country]', this.state.country || '')
     formData.append('account[ethereum_auth_address]', this.state.ethereumAuthAddress || '')
-    formData.append('account[specialty_id]', this.state.specialtyId || '')
     formData.append('account[occupation]', this.state.occupation || '')
     formData.append('account[linkedin_url]', this.state.linkedinUrl || '')
     formData.append('account[github_url]', this.state.githubUrl || '')

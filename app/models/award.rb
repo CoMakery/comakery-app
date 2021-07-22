@@ -7,12 +7,6 @@ class Award < ApplicationRecord
   include RansackReorder
   include PrepareImage
 
-  EXPERIENCE_LEVELS = {
-    'New Contributor' => 0,
-    'Demonstrated Skills' => 3,
-    'Established Contributor' => 10
-  }.freeze
-
   STARTED_TASKS_PER_CONTRIBUTOR = 5
   QUANTITY_PRECISION = 2
 

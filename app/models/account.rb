@@ -50,7 +50,6 @@ class Account < ApplicationRecord
   has_many :balances, through: :wallets
   has_one :ore_id_account, dependent: :destroy
 
-  belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
   has_many :invites, dependent: :destroy
 

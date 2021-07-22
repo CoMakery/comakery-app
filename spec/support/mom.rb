@@ -92,13 +92,6 @@ class Mom
     o
   end
 
-  def specialty(**attrs)
-    defaults = {
-      name: "Specialty #{SecureRandom.hex(20)}"
-    }
-    Specialty.new(defaults.merge(attrs))
-  end
-
   def verification(**attrs)
     defaults = {
       account: create(:account),

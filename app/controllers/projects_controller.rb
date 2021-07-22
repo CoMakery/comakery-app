@@ -224,24 +224,9 @@ class ProjectsController < ApplicationController
       end
     end
 
-    def project_tasks_by_specialty
-      @project.ready_tasks_by_specialty.map do |specialty, awards|
-        [
-          specialty&.name&.downcase || 'general',
-          awards.map do |task|
-            task_to_props(task).merge(
-              allowed_to_start: policy(task).start?,
-              reached_maximum_assignments: task.reached_maximum_assignments_for?(current_account)
-            )
-          end
-        ]
-      end
-    end
-
     def set_show_props # rubocop:todo Metrics/CyclomaticComplexity
       @props = {
         whitelabel: ENV['WHITELABEL'] || false,
-        tasks_by_specialty: project_tasks_by_specialty,
         follower: current_account&.involved?(@project.id),
         project_data: project_props(@project),
         token_data: token_props(@project&.token&.decorate),
@@ -310,22 +295,11 @@ class ProjectsController < ApplicationController
       @can_award = awardable_types_result.can_award
     end
 
-    def contributor_props(account, project)
-      a = account.decorate.serializable_hash(
+    def contributor_props(account)
+      account.decorate.serializable_hash(
         only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
-        include: :specialty,
         methods: :image_url
       )
-
-      a['specialty'] ||= {}
-
-      if project.account == account || project.project_admins.include?(account)
-        a['specialty']['name'] = 'Team Leader'
-      elsif !project.contributors_distinct.include?(account)
-        a['specialty']['name'] = 'Interested'
-      end
-
-      a
     end
 
     def project_props(project)
@@ -339,7 +313,7 @@ class ProjectsController < ApplicationController
         maximum_tokens: project.maximum_tokens,
         awarded_tokens: project.total_awarded_pretty,
         team_size: project.team_size,
-        team: project.team_top.map { |contributor| contributor_props(contributor, project) },
+        team: project.team_top.map { |contributor| contributor_props(contributor) },
         chart_data: GetContributorData.call(project: @project).award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a },
         stats: project.stats
       )
