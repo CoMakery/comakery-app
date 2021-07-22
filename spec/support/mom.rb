@@ -862,17 +862,6 @@ class Mom
     t
   end
 
-  def interest(**attrs)
-    params = {
-      protocol: 'Moms protocol',
-      account: create(:account),
-      project: create(:project),
-      specialty: create(:specialty)
-    }.merge(attrs)
-
-    Interest.new(params)
-  end
-
   def project_role(**attrs)
     params = {
       account: create(:account),
