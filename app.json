@@ -51,6 +51,10 @@
       "required": true,
       "value": "configure_infura_to_get_ethereum_blockchain_data"
     },
+    "INFURA_HOT_WALLET_KEY": {
+      "description": "A separate infura project id which will use for a hot wallet deploy button for ethereum blockchain",
+      "required": false
+    },
     "APP_HOST": {
       "description": "Domain name of the app. If you don't know it at the time of deployment you can put in a dummy value. But you will want to change it once you have a domain name for your Heroku app.",
       "required": true,

@@ -82,7 +82,7 @@ module ApplicationHelper
           # when 'token_release_schedule' then ???
         end
 
-      params[:env][:INFURA_PROJECT_ID] = ENV['INFURA_PROJECT_ID']
+      params[:env][:INFURA_PROJECT_ID] = ENV['INFURA_HOT_WALLET_KEY']
       params[:env][:ETHEREUM_TOKEN_TYPE] = token_type
       params[:env][:ETHEREUM_TOKEN_SYMBOL] = token.symbol
       params[:env][:ETHEREUM_CONTRACT_ADDRESS] = token.contract_address
