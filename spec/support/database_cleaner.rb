@@ -3,7 +3,15 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before(:each) do
+  config.before do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each, type: :task) do
     DatabaseCleaner.strategy = :truncation
   end
 
@@ -11,7 +19,7 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
 
-  config.after do
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 end
